@@ -11,6 +11,7 @@ import {
   TouchableOpacity,
   ImageBackground,
   StatusBar,
+  Dimensions,
 } from 'react-native';
 import {Searchbar} from 'react-native-paper';
 import {Colors, Typography} from '../../../theme';
@@ -76,124 +77,139 @@ const ContentLibrary = props => {
         translucent={false}
       />
       <View style={styles.container}>
-        <View style={{marginBottom: 20}}>
-          <View
-            style={{
-              display: 'flex',
-              flexDirection: 'row',
-              marginTop: 20,
-              alignContent: 'center',
-              marginLeft: 10,
-            }}>
-            <TouchableOpacity onPress={() => navigation.goBack()}>
+        {/* Search Header */}
+        <View
+          style={{
+            height: 70,
+            paddingLeft: 4,
+            paddingRight: 20,
+            flexDirection: 'row',
+            alignItems: 'center',
+            shadowColor: '#000000',
+            shadowOffset: {width: 0, height: 3},
+            shadowRadius: 9,
+            shadowOpacity: 0.1,
+            elevation: 5,
+            backgroundColor: Colors.PRIMARY_BACKGROUND_COLOR,
+          }}>
+          <TouchableOpacity onPress={() => navigation.goBack()}>
+            <Ionicons name="chevron-back-outline" size={30} color="#B2B3B9" />
+          </TouchableOpacity>
+          <Searchbar
+            style={styles.input}
+            placeholder="Search"
+            placeholderTextColor="#B2B3B9"
+            iconColor="#B2B3B9"
+            value={search}
+            onChangeText={text => searchFilterFunction(text)}
+          />
+        </View>
+
+        <View
+          style={{
+            margin: 15,
+            paddingBottom: 10,
+            borderBottomWidth: 0.3,
+          }}>
+          <View style={{flexDirection: 'row'}}>
+            <View style={{flexDirection: 'row', alignItems: 'center'}}>
+              <Text style={{fontSize: 9}}>Content Library</Text>
               <Ionicons
-                name="chevron-back-outline"
-                size={30}
+                name="chevron-forward-outline"
+                size={15}
                 color="#B2B3B9"
-                style={{marginTop: 5}}
               />
-            </TouchableOpacity>
-            <Searchbar
-              style={styles.input}
-              placeholder="Search"
-              value={search}
-              onChangeText={text => searchFilterFunction(text)}
-            />
-          </View>
-          <View
-            style={{
-              borderBottomWidth: 0.3,
-              marginHorizontal: 20,
-              paddingBottom: 10,
-            }}>
-            <View style={{flexDirection: 'row'}}>
-              <View style={{flexDirection: 'row', alignItems: 'center'}}>
-                <Text style={{fontSize: 9}}>Content Library</Text>
-                <Ionicons
-                  name="chevron-forward-outline"
-                  size={15}
-                  color="#B2B3B9"
-                />
-              </View>
-              <View style={{flexDirection: 'row', alignItems: 'center'}}>
-                <Text style={{fontSize: 9, color: '#14A2E2'}}>
-                  {breadcrumbName}
-                </Text>
-              </View>
+            </View>
+            <View style={{flexDirection: 'row', alignItems: 'center'}}>
+              <Text style={{fontSize: 9, color: '#14A2E2'}}>
+                {breadcrumbName}
+              </Text>
             </View>
           </View>
         </View>
 
         <ScrollView
-          contentContainerStyle={{
-            flexGrow: 1,
+          style={{
+            flex: 1,
             backgroundColor: Colors.PRIMARY_BACKGROUND_COLOR,
-            paddingLeft: 20,
-            paddingRight: 20,
-            paddingBottom: 20,
-          }}>
+          }}
+          contentContainerStyle={{paddingBottom: 20}}>
           {contentLibraryLoading && (
             <View style={styles.loading1}>
               <BubblesLoader color={Colors.SECONDARY_TEXT_COLOR} size={80} />
             </View>
           )}
-          {/* <FlatList
-            showsHorizontalScrollIndicator={false}
-            data={filteredDataSource}
-            renderItem={_renderContent}
-          /> */}
-          {filteredDataSource.map(item => {
-            const itemname = item?.name;
-            return (
-              <TouchableOpacity
-                onPress={() =>
-                  navigation.navigate('LibraryDetail', {
-                    breadcrumbName,
-                    resources: item?.term_id,
-                    itemname,
-                  })
-                }>
-                <View style={[styles.content, styles.shadowProp]}>
+          <View style={{alignItems: 'center'}}>
+            {filteredDataSource.map(item => {
+              const itemname = item?.name;
+              return (
+                <TouchableOpacity
+                  style={[styles.content, styles.shadowProp]}
+                  onPress={() =>
+                    navigation.navigate('LibraryDetail', {
+                      breadcrumbName,
+                      resources: item?.term_id,
+                      itemname,
+                    })
+                  }>
                   {item?.image === null && (
-                    <ImageBackground
-                      style={{width: '100%', height: 190, borderRadius: 16}}
-                      source={require('../../../assets/img/library.png')}>
+                    <>
+                      <Image
+                        style={{
+                          width: '100%',
+                          height: 170,
+                          borderTopLeftRadius: 14,
+                          borderTopRightRadius: 14,
+                        }}
+                        source={require('../../../assets/img/library.png')}
+                      />
                       <View style={styles.contentWrapper}>
                         <Text>{item?.count}</Text>
-                        <Text style={{fontSize: 10, color: 'black'}}>
+                        <Text
+                          style={{
+                            fontFamily: 'SFProText-Regular',
+                            fontSize: 10,
+                            color: 'black',
+                          }}>
                           Article
                         </Text>
                       </View>
                       <View style={styles.wrapper}>
-                        <HTMLView
-                          value={item?.name}
-                          style={{fontSize: 14, color: 'black'}}
-                        />
+                        <HTMLView value={item?.name} />
                       </View>
-                    </ImageBackground>
+                    </>
                   )}
                   {item?.image !== null && (
-                    <ImageBackground
-                      style={{width: '100%', height: 190, borderRadius: 16}}
-                      source={item?.image}>
+                    <>
+                      <Image
+                        style={{
+                          width: '100%',
+                          height: 170,
+                          borderTopLeftRadius: 14,
+                          borderTopRightRadius: 14,
+                        }}
+                        source={item?.image}
+                      />
                       <View style={styles.contentWrapper}>
                         <Text>{item?.count}</Text>
-                        <Text style={{fontSize: 10, color: 'black'}}>
+                        <Text
+                          style={{
+                            fontFamily: 'SFProText-Regular',
+                            fontSize: 10,
+                            color: 'black',
+                          }}>
                           Article
                         </Text>
                       </View>
                       <View style={styles.wrapper}>
-                        <HTMLView
-                          value={item?.name}
-                          style={{fontSize: 14, color: 'black'}}
-                        />
+                        <HTMLView value={item?.name} />
                       </View>
-                    </ImageBackground>
+                    </>
                   )}
-                </View>
-              </TouchableOpacity>
-            );
-          })}
+                </TouchableOpacity>
+              );
+            })}
+          </View>
           <View style={{marginTop: 10}}>
             <Footer />
           </View>
@@ -205,51 +221,51 @@ const ContentLibrary = props => {
 };
 const styles = StyleSheet.create({
   container: {
-    // ...CommonStyles.container,
-    backgroundColor: Colors.PRIMARY_BACKGROUND_COLOR,
     flex: 1,
+    backgroundColor: Colors.PRIMARY_BACKGROUND_COLOR,
   },
   input: {
-    height: 45,
-    width: '85%',
+    flex: 1,
+    height: 38,
     marginLeft: 10,
-    marginBottom: 20,
-    borderRadius: 20,
+    borderRadius: 19,
+    color: 'black',
     backgroundColor: '#F5F5F5',
   },
   content: {
-    width: '98%',
-    height: 190,
-    marginLeft: 5,
-    borderRadius: 16,
-    overflow: 'hidden',
-    marginTop: 20,
-    marginBottom: 5,
+    width: Dimensions.get('window').width - 30,
+    marginBottom: 20,
+    borderRadius: 14,
+    overflow: Platform.OS === 'android' ? 'hidden' : 'visible',
     backgroundColor: 'white',
   },
   contentWrapper: {
-    width: 50,
-    height: 60,
-    backgroundColor: '#ECECEC',
-    borderRadius: 10,
-    alignItems: 'center',
-    justifyContent: 'center',
-    zIndex: 30,
     position: 'absolute',
+    width: 55,
+    height: 60,
+    top: 10,
     right: 10,
-    top: 20,
+    borderRadius: 14,
+    justifyContent: 'center',
+    alignItems: 'center',
     opacity: 0.7,
+    backgroundColor: '#ECECEC',
   },
   wrapper: {
-    padding: 10,
-    zIndex: 30,
-    height: 40,
-    bottom: 1,
-    width: '100%',
-    borderBottomLeftRadius: 16,
-    borderBottomRightRadius: 16,
-    backgroundColor: 'white',
-    position: 'absolute',
+    paddingHorizontal: 15,
+    paddingVertical: 10,
+    borderBottomLeftRadius: 14,
+    borderBottomRightRadius: 14,
+  },
+  shadowProp: {
+    shadowColor: '#000000',
+    shadowOffset: {
+      width: 0,
+      height: 3,
+    },
+    shadowOpacity: 0.2,
+    shadowRadius: 6,
+    elevation: 5,
   },
   shadowProp: {
     shadowColor: '#000',

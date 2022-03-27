@@ -79,7 +79,7 @@ const SignInForm = props => {
   );
 
   return (
-    <ScrollView contentContainerStyle={{flexGrow: 1, height: screenHeight}}>
+    <ScrollView style={{flex: 1}} contentContainerStyle={{paddingBottom: 120}}>
       <View style={styles.container}>
         <ImageBackground
           source={require('../../../assets/img/splash-screen.png')}

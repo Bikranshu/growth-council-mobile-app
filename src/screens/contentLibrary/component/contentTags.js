@@ -97,6 +97,8 @@ const ContactTags = props => {
             <Searchbar
               style={styles.input}
               placeholder="Search"
+              placeholderTextColor="#B2B3B9"
+              iconColor="#B2B3B9"
               value={search}
               onChangeText={text => searchFilterFunction(text)}
             />

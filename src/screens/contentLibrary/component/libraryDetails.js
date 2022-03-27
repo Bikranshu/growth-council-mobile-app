@@ -11,6 +11,7 @@ import {
   TouchableOpacity,
   ImageBackground,
   StatusBar,
+  Dimensions,
 } from 'react-native';
 import {Searchbar} from 'react-native-paper';
 import {Colors, Typography} from '../../../theme';
@@ -83,147 +84,155 @@ const LibraryDetail = props => {
         translucent={false}
       />
       <View style={styles.container}>
-        <View style={{marginBottom: 20}}>
-          <View
-            style={{
-              display: 'flex',
-              flexDirection: 'row',
-              alignContent: 'center',
-            }}>
-            <TouchableOpacity onPress={() => navigation.goBack()}>
-              <Ionicons
-                name="chevron-back-outline"
-                size={30}
-                color="#B2B3B9"
-                style={{marginTop: 5}}
-              />
-            </TouchableOpacity>
+        {/* Search Header */}
+        <View
+          style={{
+            height: 70,
+            paddingLeft: 4,
+            paddingRight: 20,
+            flexDirection: 'row',
+            alignItems: 'center',
+            shadowColor: '#000000',
+            shadowOffset: {width: 0, height: 3},
+            shadowRadius: 9,
+            shadowOpacity: 0.1,
+            elevation: 5,
+            backgroundColor: Colors.PRIMARY_BACKGROUND_COLOR,
+          }}>
+          <TouchableOpacity onPress={() => navigation.goBack()}>
+            <Ionicons name="chevron-back-outline" size={30} color="#B2B3B9" />
+          </TouchableOpacity>
 
-            <Searchbar
-              style={styles.input}
-              placeholder="Search"
-              value={search}
-              onChangeText={text => searchFilterFunction(text)}
+          <Searchbar
+            style={styles.input}
+            placeholder="Search"
+            placeholderTextColor="#B2B3B9"
+            iconColor="#B2B3B9"
+            value={search}
+            onChangeText={text => searchFilterFunction(text)}
+          />
+        </View>
+
+        <View
+          style={{
+            margin: 15,
+            paddingBottom: 10,
+            flexDirection: 'row',
+            alignItems: 'center',
+            borderBottomWidth: 0.3,
+          }}>
+          <View style={{flexDirection: 'row', alignItems: 'center'}}>
+            <Text style={{fontSize: 9}}>Content Library</Text>
+            <Ionicons
+              name="chevron-forward-outline"
+              size={15}
+              color="#B2B3B9"
             />
           </View>
-
-          <View
-            style={{
-              flexDirection: 'row',
-              alignItems: 'center',
-              borderBottomWidth: 0.3,
-              paddingBottom: 10,
-            }}>
+          {route.params.breadcrumbName !== undefined && (
             <View style={{flexDirection: 'row', alignItems: 'center'}}>
-              <Text style={{fontSize: 9}}>Content Library</Text>
+              <Text style={{fontSize: 9}}>{route.params.breadcrumbName}</Text>
               <Ionicons
                 name="chevron-forward-outline"
                 size={15}
                 color="#B2B3B9"
               />
             </View>
-            {route.params.breadcrumbName !== undefined && (
-              <View style={{flexDirection: 'row', alignItems: 'center'}}>
-                <Text style={{fontSize: 9}}>{route.params.breadcrumbName}</Text>
-                <Ionicons
-                  name="chevron-forward-outline"
-                  size={15}
-                  color="#B2B3B9"
-                />
-              </View>
-            )}
-
-            <View style={{flex: 1, flexDirection: 'row', alignItems: 'center'}}>
-              <Text
-                style={{
-                  fontSize: 9,
-                  color: '#14A2E2',
-                }}>
-                {route.params.itemname}
-              </Text>
-            </View>
+          )}
+          <View style={{flex: 1, flexDirection: 'row', alignItems: 'center'}}>
+            <Text
+              style={{
+                fontSize: 9,
+                color: '#14A2E2',
+              }}>
+              {route.params.itemname}
+            </Text>
           </View>
         </View>
+
         <ScrollView
-          contentContainerStyle={{
-            flexGrow: 1,
-            backgroundColor: Colors.PRIMARY_BACKGROUND_COLOR,
-            paddingBottom: 20,
-          }}>
+          style={{flex: 1, backgroundColor: Colors.PRIMARY_BACKGROUND_COLOR}}
+          contentContainerStyle={{paddingBottom: 20}}>
           {libraryDetailsLoading && (
             <View style={styles.loading1}>
               <BubblesLoader color={Colors.SECONDARY_TEXT_COLOR} size={80} />
             </View>
           )}
 
-          {filteredDataSource.map(item => {
-            return (
-              <TouchableOpacity
-                onPress={() =>
-                  navigation.navigate('ContentLibraryDetail', {
-                    id: item?.ID,
-                    title: item?.post_title,
-                    itemname: route?.params?.itemname,
-                    resourceId: route?.params?.resources,
-                  })
-                }>
-                <View>
-                  <View style={[styles.eventCard, styles.shadowProp]}>
-                    <View
-                      style={[styles.eventTheme, {borderColor: '#19325A'}]}
-                    />
-                    <View style={styles.eventDetails}>
-                      <View style={styles.eventInfo}>
-                        <Text style={styles.eventTitle}>
-                          {item?.post_title}
-                        </Text>
-                        {/* <Text style={{fontSize: 8, color: '#041C3E'}}>
+          <View style={{alignItems: 'center'}}>
+            {filteredDataSource.map(item => {
+              return (
+                <TouchableOpacity
+                  onPress={() =>
+                    navigation.navigate('ContentLibraryDetail', {
+                      id: item?.ID,
+                      title: item?.post_title,
+                      itemname: route?.params?.itemname,
+                      resourceId: route?.params?.resources,
+                    })
+                  }>
+                  <View>
+                    <View style={[styles.eventCard, styles.shadowProp]}>
+                      <View
+                        style={[styles.eventTheme, {borderColor: '#19325A'}]}
+                      />
+                      <View style={styles.eventDetails}>
+                        <View style={styles.eventInfo}>
+                          <Text style={styles.eventTitle}>
+                            {item?.post_title}
+                          </Text>
+                          {/* <Text style={{fontSize: 8, color: '#041C3E'}}>
 								{item.post_excerpt}
 							  </Text> */}
-                        <HTMLView
-                          value={'<p>' + item?.post_excerpt + '</p>'}
-                          stylesheet={webViewStyle}
-                        />
-                        {/* <Text style={styles.eventParagraph}>{item.text1}</Text> */}
-                      </View>
-                      <View
-                        style={{
-                          width: 50,
-                          height: 60,
-                          backgroundColor: '#EBECF0',
-                          borderRadius: 10,
-                          padding: 10,
-                          alignItems: 'center',
-                        }}>
-                        {item?.video_url !== null && item?.video_url !== '' && (
-                          <Image
-                            source={require('../../../assets/img/file-play.png')}
-                            style={{width: 20, height: 20, color: '#9B9CA0'}}
-                            resizeMode="contain"
+                          <HTMLView
+                            value={'<p>' + item?.post_excerpt + '</p>'}
+                            stylesheet={webViewStyle}
                           />
-                        )}
-                        {item?.video_url === '' && (
-                          <FontAwesome5
-                            name="file-pdf"
-                            size={20}
-                            color="#9B9CA0"
-                          />
-                        )}
-                        {item?.video_url === null && (
-                          <FontAwesome5
-                            name="file-pdf"
-                            size={20}
-                            color="#9B9CA0"
-                          />
-                        )}
-                        <Text style={{fontSize: 8, marginTop: 2}}>View</Text>
+                          {/* <Text style={styles.eventParagraph}>{item.text1}</Text> */}
+                        </View>
+                        <View
+                          style={{
+                            width: 50,
+                            height: 60,
+                            backgroundColor: '#EBECF0',
+                            borderRadius: 10,
+                            padding: 10,
+                            alignItems: 'center',
+                          }}>
+                          {item?.video_url !== null && item?.video_url !== '' && (
+                            <Image
+                              source={require('../../../assets/img/file-play.png')}
+                              style={{
+                                width: 20,
+                                height: 20,
+                                color: '#9B9CA0',
+                              }}
+                              resizeMode="contain"
+                            />
+                          )}
+                          {item?.video_url === '' && (
+                            <FontAwesome5
+                              name="file-pdf"
+                              size={20}
+                              color="#9B9CA0"
+                            />
+                          )}
+                          {item?.video_url === null && (
+                            <FontAwesome5
+                              name="file-pdf"
+                              size={20}
+                              color="#9B9CA0"
+                            />
+                          )}
+                          <Text style={{fontSize: 8, marginTop: 2}}>View</Text>
+                        </View>
                       </View>
                     </View>
                   </View>
-                </View>
-              </TouchableOpacity>
-            );
-          })}
+                </TouchableOpacity>
+              );
+            })}
+          </View>
 
           <View style={{marginTop: 10}}>
             <Footer />
@@ -239,15 +248,13 @@ const styles = StyleSheet.create({
     // ...CommonStyles.container,
     backgroundColor: Colors.PRIMARY_BACKGROUND_COLOR,
     flex: 1,
-    padding: 15,
   },
   input: {
-    height: 45,
-    width: '88%',
-    marginBottom: 20,
-    borderRadius: 20,
-    backgroundColor: '#F5F5F5',
+    flex: 1,
+    height: 38,
     marginLeft: 10,
+    borderRadius: 19,
+    backgroundColor: '#F5F5F5',
   },
   content: {
     width: '100%',
@@ -273,7 +280,7 @@ const styles = StyleSheet.create({
   },
 
   eventCard: {
-    width: '99%',
+    width: Dimensions.get('window').width - 20,
     marginTop: 5,
     flexDirection: 'row',
     flexWrap: 'nowrap',

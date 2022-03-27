@@ -9,7 +9,7 @@ import {
   TouchableOpacity,
   Modal,
   Pressable,
-
+  Dimensions,
 } from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import ButtonToggleGroup from 'react-native-button-toggle-group';
@@ -124,7 +124,11 @@ const CoachingSession = props => {
         />
         <View>
           <View style={[styles.content, {height: 'auto'}]}>
-            <View style={{display: 'flex', flexDirection: 'row'}}>
+            <View
+              style={{
+                flexDirection: 'row',
+                alignItems: 'center',
+              }}>
               <View style={styles.buttonWrapper}>
                 <ButtonToggleGroup
                   highlightBackgroundColor={'white'}
@@ -145,16 +149,15 @@ const CoachingSession = props => {
                     }
                   }}
                   style={{
+                    marginHorizontal: 10,
                     height: 30,
-                    marginTop: 5,
-                    width: '90%',
-                    marginLeft: 10,
                     fontSize: 12,
                     borderRadius: 15,
                   }}
                 />
               </View>
               <TouchableOpacity
+                style={{marginLeft: 5}}
                 onPress={() => setModalVisible(!modalVisible)}
                 onPressIn={() => {
                   setDisplay(!display);
@@ -163,92 +166,8 @@ const CoachingSession = props => {
                   name={modalVisible ? 'close' : 'menu'}
                   size={35}
                   color={'black'}
-                  //   style={{marginLeft: 5}}
                 />
               </TouchableOpacity>
-
-              <View style={styles.centeredView}>
-                <Modal
-                  animationType="slide"
-                  transparent={true}
-                  visible={modalVisible}
-                  onRequestClose={() => {
-                    setModalVisible(false);
-                  }}>
-                  <View>
-                    <View style={styles.modalView}>
-                      {traits?.map((trait, index1) => (
-                        <View key={index1}>
-                          <View style={styles.wrapper}>
-                            <View style={styles.traitWrapper}>
-                              <View style={[styles.traitW, styles.shadowProp]}>
-                                <Image
-                                  source={{uri: trait?.image}}
-                                  style={{width: 20, height: 20}}
-                                />
-                              </View>
-
-                              <Text
-                                style={{
-                                  paddingLeft: 10,
-                                  fontSize: 12,
-                                  width: '53%',
-                                }}>
-                                {trait?.title}
-                              </Text>
-                            </View>
-                            {index1 === 0 && (
-                              <View style={{flexDirection: 'row'}}>
-                                <Text style={{marginTop: 15, fontSize: 12}}>
-                                  Score
-                                </Text>
-                                <View
-                                  style={{
-                                    width: 40,
-                                    height: 30,
-                                    marginLeft: 5,
-                                    backgroundColor: 'orange',
-                                    borderRadius: 50,
-                                    padding: 5,
-                                    marginTop: 10,
-                                    alignItems: 'center',
-                                  }}>
-                                  <Text style={{fontSize: 12}}>{num}</Text>
-                                </View>
-                              </View>
-                            )}
-                          </View>
-                          <View style={{marginTop: 10, marginLeft: 50}}>
-                            {trait?.sub_traits?.map((subTrait, index2) => (
-                              <View
-                                style={[styles.textStyle, styles.shadowProp]}
-                                key={index2}>
-                                <Text style={{fontSize: 12}}>
-                                  {subTrait?.title}
-                                </Text>
-                                {(checkMark(index1, index2) ||
-                                  sessions?.completed_status) && (
-                                  <Ionicons
-                                    name={'checkmark-outline'}
-                                    size={20}
-                                    color={'#A1BA68'}
-                                  />
-                                )}
-                              </View>
-                            ))}
-                          </View>
-                        </View>
-                      ))}
-
-                      <Pressable
-                        style={[styles.button, styles.buttonClose]}
-                        onPress={() => setModalVisible(false)}>
-                        <Text style={styles.textS}>Close</Text>
-                      </Pressable>
-                    </View>
-                  </View>
-                </Modal>
-              </View>
             </View>
 
             <View style={{marginTop: 32}}>
@@ -292,6 +211,89 @@ const CoachingSession = props => {
             </View>
           </View>
         </View>
+
+        <Modal
+          animationType="slide"
+          transparent={true}
+          visible={modalVisible}
+          onRequestClose={() => {
+            setModalVisible(false);
+          }}>
+          <ScrollView
+            contentContainerStyle={{
+              flex: 1,
+              backgroundColor: 'rgba(0,0,0,0.3)',
+              justifyContent: 'center',
+              alignItems: 'center',
+            }}>
+            <View style={styles.modalView}>
+              {traits?.map((trait, index1) => (
+                <View key={index1}>
+                  <View style={styles.wrapper}>
+                    <View style={styles.traitWrapper}>
+                      <View style={[styles.traitW, styles.shadowProp]}>
+                        <Image
+                          source={{uri: trait?.image}}
+                          style={{width: 20, height: 20}}
+                        />
+                      </View>
+
+                      <Text
+                        style={{
+                          paddingLeft: 10,
+                          fontSize: 12,
+                          width: '53%',
+                        }}>
+                        {trait?.title}
+                      </Text>
+                    </View>
+                    {index1 === 0 && (
+                      <View style={{flexDirection: 'row'}}>
+                        <Text style={{marginTop: 15, fontSize: 12}}>Score</Text>
+                        <View
+                          style={{
+                            width: 40,
+                            height: 30,
+                            marginLeft: 5,
+                            backgroundColor: 'orange',
+                            borderRadius: 50,
+                            padding: 5,
+                            marginTop: 10,
+                            alignItems: 'center',
+                          }}>
+                          <Text style={{fontSize: 12}}>{num}</Text>
+                        </View>
+                      </View>
+                    )}
+                  </View>
+                  <View style={{marginTop: 10, marginLeft: 50}}>
+                    {trait?.sub_traits?.map((subTrait, index2) => (
+                      <View
+                        style={[styles.textStyle, styles.shadowProp]}
+                        key={index2}>
+                        <Text style={{fontSize: 12}}>{subTrait?.title}</Text>
+                        {(checkMark(index1, index2) ||
+                          sessions?.completed_status) && (
+                          <Ionicons
+                            name={'checkmark-outline'}
+                            size={20}
+                            color={'#A1BA68'}
+                          />
+                        )}
+                      </View>
+                    ))}
+                  </View>
+                </View>
+              ))}
+
+              <Pressable
+                style={[styles.button, styles.buttonClose]}
+                onPress={() => setModalVisible(false)}>
+                <Text style={styles.textS}>Close</Text>
+              </Pressable>
+            </View>
+          </ScrollView>
+        </Modal>
       </View>
     </ScrollView>
   );
@@ -428,9 +430,10 @@ const styles = StyleSheet.create({
     paddingLeft: 110,
   },
   buttonWrapper: {
-    width: 310,
+    width: '90%',
     height: 40,
     backgroundColor: '#ECECEC',
+    justifyContent: 'center',
     borderRadius: 15,
   },
   centeredView: {
@@ -462,14 +465,13 @@ const styles = StyleSheet.create({
     overflow: 'hidden',
   },
   modalView: {
-    width: 295,
-    margin: 20,
+    width: Dimensions.get('window').width - 10,
+    marginTop: 100,
+    marginBottom: 10,
     backgroundColor: 'white',
     borderRadius: 20,
     padding: 10,
     shadowColor: '#000',
-    marginTop: 110,
-    marginLeft: 80,
     shadowOffset: {
       width: 0,
       height: 2,
