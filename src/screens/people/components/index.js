@@ -22,9 +22,6 @@ import {useToast} from 'native-base';
 import {useIsFocused, useFocusEffect} from '@react-navigation/native';
 import {Colors, Typography} from '../../../theme';
 import ToastMessage from '../../../shared/toast';
-import {Dialog} from 'react-native-paper';
-import {BubblesLoader} from 'react-native-indicator';
-import Footer from '../../../shared/footer';
 import {Searchbar} from 'react-native-paper';
 import BottomNav from '../../../layout/BottomLayout';
 import Loading from '../../../shared/loading';
@@ -63,22 +60,28 @@ const People = props => {
   const [sorting, setSorting] = useState('ASC');
   const [memberConnection, setMemberConnection] = useState([]);
 
-  useEffect(() => {
-    const fetchAllUsersAsync = async () => {
-      await fetchAllUsers({
-        s: searchKey,
-        sort: sorting,
-        expertise_areas: category,
-        account: account,
-        region: region,
-      });
-    };
-    fetchAllUsersAsync();
-    return () => {
-      cleanUser();
-    };
-  }, [isFocused]);
+  useFocusEffect(
+    useCallback(() => {
+      const fetchAllUsersAsync = async () => {
+        await fetchAllUsers({
+          s: searchKey,
+          sort: sorting,
+          expertise_areas: category,
+          account: account,
+          region: region,
+        });
+      };
+      fetchAllUsersAsync();
+      return () => {
+        cleanUser();
+      };
+    }, [isFocused]),
+  );
 
+  console.log({searchKey});
+  console.log({category});
+  console.log({account});
+  console.log({region});
   useEffect(() => {
     setMemberConnection(users);
   }, [users]);
@@ -316,29 +319,20 @@ const People = props => {
                 itemTextStyle={{fontSize: 12}}
                 onValueChange={async itemValue => {
                   setCategory(itemValue);
-                  if (itemValue === 'Expertise Areas') {
-                    fetchAllUsers({
-                      s: searchKey,
-                      sort: sorting,
-                      expertise_areas: '',
-                      account: account,
-                      region: region,
-                    });
-                  } else {
-                    fetchAllUsers({
-                      s: searchKey,
-                      sort: sorting,
-                      expertise_areas: itemValue,
-                      account: account,
-                      region: region,
-                    });
-                  }
+
+                  await fetchAllUsers({
+                    s: searchKey,
+                    sort: sorting,
+                    expertise_areas: itemValue,
+                    account: account,
+                    region: region,
+                  });
                 }}>
                 {Object.keys(expertise).map(key => {
                   return (
                     <Picker.Item
                       label={expertise[key]}
-                      value={key}
+                      value={expertise[key]}
                       key={key}
                       style={{fontSize: 14}}
                     />
@@ -382,30 +376,21 @@ const People = props => {
                 selectedValue={account}
                 mode="dropdown"
                 itemTextStyle={{fontSize: 12}}
-                onValueChange={async (itemValue, itemIndex) => {
+                onValueChange={async itemValue => {
                   setAccount(itemValue);
-                  if (itemValue === 'Account Type') {
-                    fetchAllUsers({
-                      s: searchKey,
-                      sort: sorting,
-                      account: '',
-                      expertise_areas: category,
-                      region: region,
-                    });
-                  } else {
-                    fetchAllUsers({
-                      s: searchKey,
-                      sort: sorting,
-                      account: itemValue,
-                      expertise_areas: category,
-                      region: region,
-                    });
-                  }
+
+                  await fetchAllUsers({
+                    s: searchKey,
+                    sort: sorting,
+                    expertise_areas: category,
+                    account: itemValue,
+                    region: region,
+                  });
                 }}>
                 {Object.keys(pillar).map(key => {
                   return (
                     <Picker.Item
-                      label={key}
+                      label={pillar[key]}
                       value={pillar[key]}
                       key={key}
                       style={{fontSize: 14}}
@@ -452,28 +437,19 @@ const People = props => {
                 itemTextStyle={{fontSize: 12}}
                 onValueChange={async itemValue => {
                   setRegion(itemValue);
-                  if (itemValue === 'Region') {
-                    fetchAllUsers({
-                      s: searchKey,
-                      sort: sorting,
-                      region: '',
-                      expertise_areas: category,
-                      account: account,
-                    });
-                  } else {
-                    fetchAllUsers({
-                      s: searchKey,
-                      sort: sorting,
-                      region: itemValue,
-                      expertise_areas: category,
-                      account: account,
-                    });
-                  }
+
+                  await fetchAllUsers({
+                    s: searchKey,
+                    sort: sorting,
+                    expertise_areas: category,
+                    account: account,
+                    region: itemValue,
+                  });
                 }}>
                 {Object.keys(countries).map(key => {
                   return (
                     <Picker.Item
-                      label={key}
+                      label={countries[key]}
                       value={countries[key]}
                       key={key}
                       style={{fontSize: 14}}

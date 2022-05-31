@@ -267,7 +267,7 @@ const CoachingSession = props => {
                         if (previousSessionID === undefined) {
                           return setValue(val);
                         } else {
-                          ToastMessage.show('Please complete previous session');
+                          ToastMessage.show('Please complete the previous session');
                         }
                       } else {
                         return setValue(val);
