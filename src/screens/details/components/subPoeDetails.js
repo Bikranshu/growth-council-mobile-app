@@ -293,7 +293,7 @@ const SubPOEDetails = props => {
                   },
                 }}
               />
-{/* 
+              {/* 
               {poeDetails !== null &&
                 pillarPOEs !== null &&
                 pillarPOEs !== false &&
@@ -323,25 +323,27 @@ const SubPOEDetails = props => {
                     />
                   </View>
                 )}
-              <View style={styles.buttonWrapper}>
-                <TouchableOpacity
-                  onPress={() =>
-                    navigation.navigate('SubPoeList', {
-                      poeId: poeDetails?.term_id,
-                      id: route?.params?.poeId,
-                    })
-                  }>
-                  <View style={styles.signupbutton}>
-                    <FontAwesome5
-                      name="toolbox"
-                      size={25}
-                      color="white"
-                      style={{paddingRight: 40}}
-                    />
-                    <Text style={styles.signinbuttonText}>Toolkits</Text>
-                  </View>
-                </TouchableOpacity>
-              </View>
+              {poeDetails?.slug === '10-growth-processes' && (
+                <View style={styles.buttonWrapper}>
+                  <TouchableOpacity
+                    onPress={() =>
+                      navigation.navigate('SubPoeList', {
+                        poeId: poeDetails?.term_id,
+                        id: route?.params?.poeId,
+                      })
+                    }>
+                    <View style={styles.signupbutton}>
+                      <FontAwesome5
+                        name="toolbox"
+                        size={25}
+                        color="white"
+                        style={{paddingRight: 40}}
+                      />
+                      <Text style={styles.signinbuttonText}>Toolkits</Text>
+                    </View>
+                  </TouchableOpacity>
+                </View>
+              )}
 
               {/* <Footer /> */}
             </View>

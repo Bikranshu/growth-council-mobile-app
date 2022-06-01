@@ -68,19 +68,19 @@ const UserList = props => {
       if (!userID) console.log('USER ID NOT FOUND');
 
       const fbUsers = await firestore().collection('rooms').get();
-      console.log('FB USERS');
-      console.log(fbUsers);
-      console.log('*****************');
+    //   console.log('FB USERS');
+    //   console.log(fbUsers);
+    //   console.log('*****************');
 
       const docs = fbUsers.docs.filter(doc => doc.id.includes(userID));
-      console.log('DOC USERS');
-      console.log(docs);
-      console.log('*****************');
+    //   console.log('DOC USERS');
+    //   console.log(docs);
+    //   console.log('*****************');
 
       const data = docs.map(doc => ({id: doc.id, ...doc.data()}));
-      console.log('MAP USERS');
-      console.log(data);
-      console.log('*****************');
+    //   console.log('MAP USERS');
+    //   console.log(data);
+    //   console.log('*****************');
 
       let __users = [];
       for (let i = 0; i < data.length; i++) {
@@ -91,9 +91,9 @@ const UserList = props => {
         __users.push({...user, ...data[i]});
       }
 
-      console.log('ACTUAL USERS');
-      console.log(__users);
-      console.log('*****************');
+    //   console.log('ACTUAL USERS');
+    //   console.log(__users);
+    //   console.log('*****************');
 
       setUsers(__users);
     } catch (error) {
@@ -156,24 +156,6 @@ const UserList = props => {
       );
     else setReload(!reload);
   }, [text]);
-
-  const connectMemberByMemberID = async (memberID, index) => {
-    const response = await connectMemberByIdentifier({member_id: memberID});
-    if (response?.payload?.code === 200) {
-      let items = [...memberConnection];
-      let item = {...items[index]};
-      item.connection = true;
-      items[index] = item;
-      setMemberConnection(items);
-      fetchAllUsers({
-        s: searchKey,
-      });
-      ToastMessage.show('You have successfully connected.');
-    } else {
-      toast.closeAll();
-      ToastMessage.show(response?.payload?.response);
-    }
-  };
 
   const _renderItems = ({item, index}) => {
     return (
