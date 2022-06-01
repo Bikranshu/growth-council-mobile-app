@@ -311,7 +311,7 @@ const SubPOEListDetails = props => {
                 pillarPOEs !== undefined &&
                 pillarPOEs?.length !== 0 && (
                   <View style={styles.top}>
-                    <Text style={styles.title}> Sub Points of Engagement</Text>
+                    {/* <Text style={styles.title}> Sub Points of Engagement</Text> */}
                     <FlatList
                       numColumns={4}
                       showsHorizontalScrollIndicator={false}
@@ -321,7 +321,7 @@ const SubPOEListDetails = props => {
                     />
                   </View>
                 )}
-              {/* {poeDetails?.attachments?.length !== 0 &&
+              {poeDetails?.attachments?.length !== 0 &&
                 poeDetails?.attachments !== null &&
                 poeDetails?.attachments !== false && (
                   <View style={styles.sectionContainer}>
@@ -332,7 +332,7 @@ const SubPOEListDetails = props => {
                       renderItem={_renderContent}
                     />
                   </View>
-                )} */}
+                )}
               {/* {poeDetails?.pillar_contents?.length !== 0 &&
                 poeDetails?.pillar_contents !== null &&
                 poeDetails?.pillar_contents !== false &&
