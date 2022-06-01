@@ -131,9 +131,10 @@ const Radar = props => {
             <View style={styles.mainContent}>
               <View>
                 {radarMemberDetails?.present_growth_index
-                  ?.user_radar_growth_index !== "" &&
+                  ?.user_radar_growth_index !== '' &&
                   radarMemberDetails?.present_growth_index
-                    ?.user_radar_innovation_index !== "" && (
+                    ?.user_radar_innovation_index !== '' &&
+                  radarMemberDetails?.present_growth_index !== null && (
                     <View>
                       <View style={{flexDirection: 'row', flex: 1}}>
                         <View style={{flex: 2}}>
@@ -183,11 +184,10 @@ const Radar = props => {
                           />
                         </View>
                       </View>
-					  <View style={styles.seperationline} />
+                      <View style={styles.seperationline} />
                     </View>
                   )}
 
-            
                 <View style={{marginTop: 10}}>
                   {radarMemberDetails?.member_details?.map(item => {
                     const memberData = () => {

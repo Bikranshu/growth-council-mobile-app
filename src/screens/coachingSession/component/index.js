@@ -122,12 +122,12 @@ const CoachingSession = props => {
     if (isNaN(num)) num = 0.0;
   }
   let previousSession =
-    profile?.session_score !== false
+    profile?.session_score !== false && profile?.session_score !== null
       ? profile?.session_score?.map(item => item?.session)
       : [0];
 
   let Growth =
-    profile?.session_score !== false
+    profile?.session_score !== false && profile?.session_score !== null
       ? profile?.session_score?.map(item => {
           let grow = item?.session === sessions.ID ? item?.growth_index : null;
           return grow;
@@ -135,7 +135,7 @@ const CoachingSession = props => {
       : 0;
 
   let Innovation =
-    profile?.session_score !== false
+    profile?.session_score !== false && profile?.session_score !== null
       ? profile?.session_score?.map(item => {
           let inn =
             item?.session === sessions.ID ? item?.innovative_index : null;
@@ -171,7 +171,7 @@ const CoachingSession = props => {
     //     break;
     // }
     let backgroundColor =
-      item?.score_color !==  "" ? item?.score_color : '#63C5DA';
+      item?.score_color !== '' ? item?.score_color : '#63C5DA';
     return (
       <View
         style={{
@@ -267,7 +267,9 @@ const CoachingSession = props => {
                         if (previousSessionID === undefined) {
                           return setValue(val);
                         } else {
-                          ToastMessage.show('Please complete the previous session');
+                          ToastMessage.show(
+                            'Please complete the previous session',
+                          );
                         }
                       } else {
                         return setValue(val);
