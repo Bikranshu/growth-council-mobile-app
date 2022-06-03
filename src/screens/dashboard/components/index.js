@@ -376,7 +376,7 @@ const Dashboard = props => {
     );
   };
   return (
-    <SafeAreaView style={{flex: 1}}>
+    <View style={{flex: 1}}>
       <StatusBar
         barStyle="light-content"
         hidden={false}
@@ -404,7 +404,7 @@ const Dashboard = props => {
           <ImageBackground
             style={{
               width: '100%',
-              height: (Dimensions.get('screen').height - 100) / 3,
+              height: (Dimensions.get('screen').height - 80) / 3,
               paddingTop: Dimensions.get('screen').height / 10,
             }}
             source={require('../../../assets/img/appBG.png')}>
@@ -498,7 +498,7 @@ const Dashboard = props => {
         </View>
       </ScrollView>
       <BottomNav {...props} navigation={navigation} />
-    </SafeAreaView>
+    </View>
   );
 };
 
@@ -637,11 +637,12 @@ const styles = StyleSheet.create({
     bottom: 4,
   },
   content: {
+    
     marginLeft: 20,
     marginTop: 15,
     justifyContent: 'center',
     borderRadius: 20,
-    marginBottom: 30,
+    marginBottom: 80,
     paddingBottom: 5,
   },
   ContentWrapper: {
