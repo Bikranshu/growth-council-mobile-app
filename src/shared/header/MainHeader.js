@@ -19,7 +19,7 @@ import HeaderRight from './HeaderRight';
 
 const MainHeader = props => {
   const dispatch = useDispatch();
-  const navigation = useNavigation();
+  const {navigation} = props;
   const {profile, profileLoading, profileError} = useSelector(
     state => state.profile,
   );
@@ -41,7 +41,7 @@ const MainHeader = props => {
           flexDirection: 'row',
           justifyContent: 'space-between',
           alignItems: 'center',
-          paddingTop: Platform.OS === 'ios' ? 40 : 40,
+          paddingTop: Platform.OS === 'ios' ? 15 : 15,
           paddingHorizontal: 15,
           backgroundColor: 'rgba(0,0,0,0)',
         }}>
