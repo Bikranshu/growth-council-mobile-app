@@ -376,12 +376,12 @@ const Dashboard = props => {
     );
   };
   return (
-    <View style={{flex: 1}}>
+    <SafeAreaView style={{flex: 1}}>
       <StatusBar
         barStyle="light-content"
         hidden={false}
         backgroundColor="#001D3F"
-        translucent={true}
+        translucent={false}
       />
       <ScrollView
         onScroll={e => {
@@ -396,13 +396,15 @@ const Dashboard = props => {
             });
           }
         }}
-        showsVerticalScrollIndicator={false}
-        style={styles.container}>
+        contentContainerStyle={{
+          flexGrow: 1,
+          backgroundColor: Colors.PRIMARY_BACKGROUND_COLOR,
+        }}>
         <View>
           <ImageBackground
             style={{
               width: '100%',
-              height: (Dimensions.get('screen').height -100)/ 3,
+              height: (Dimensions.get('screen').height - 100) / 3,
               paddingTop: Dimensions.get('screen').height / 10,
             }}
             source={require('../../../assets/img/appBG.png')}>
@@ -496,7 +498,7 @@ const Dashboard = props => {
         </View>
       </ScrollView>
       <BottomNav {...props} navigation={navigation} />
-    </View>
+    </SafeAreaView>
   );
 };
 
@@ -534,7 +536,6 @@ const styles = StyleSheet.create({
     marginTop: 60,
     justifyContent: 'center',
     marginLeft: 5,
-	
   },
 
   topWrapper: {

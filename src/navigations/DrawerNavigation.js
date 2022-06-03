@@ -152,7 +152,6 @@ const DrawerNavigation = () => {
         drawerActiveBackgroundColor: 'rgba(0,0,0,0)',
         drawerActiveTintColor: '#888',
         drawerInactiveTintColor: '#888',
-
       })}
       drawerContent={props => {
         // const filteredProps = {...props,  state: {...props.state, routeNames: props.state.routeNames.filter(routeName => routeName !== 'Account' && routeName !== "People" && routeName !== "UserList"), routes: props.state.routes.filter(route => route.name !== "Account" && route.name !== "People" && route.name !== "UserList")}};
@@ -163,12 +162,7 @@ const DrawerNavigation = () => {
         component={DashboardStackScreen}
         options={() => ({
           drawerIcon: ({focused, size}) => (
-            <Material
-              name="inbox"
-              color={'#00008B'}
-              size={20}
-              
-            />
+            <Material name="inbox" color={'#00008B'} size={20} />
           ),
           headerShown: false,
         })}
@@ -176,7 +170,8 @@ const DrawerNavigation = () => {
       <Drawer.Screen
         name="Growth Community"
         component={HomeCommunityScreen}
-        options={({navigation}) => ({
+        options={({navigation, route}) => ({
+          pillarId: route?.params?.pillarId,
           drawerIcon: ({focused, size}) => (
             <Material name="group-work" color={'#14A2E2'} size={19} />
           ),
@@ -192,7 +187,8 @@ const DrawerNavigation = () => {
       <Drawer.Screen
         name="Growth Content"
         component={BestPracticeScreen}
-        options={({navigation}) => ({
+        options={({navigation, route}) => ({
+          pillarId: route?.params?.pillarId,
           drawerIcon: ({focused, size}) => (
             <Feature name="thumbs-up" color={'#f26722'} size={19} />
           ),
@@ -208,7 +204,8 @@ const DrawerNavigation = () => {
       <Drawer.Screen
         name="Growth Coaching"
         component={GrowthCoachingScreen}
-        options={({navigation}) => ({
+        options={({navigation, route}) => ({
+          pillarId: route?.params?.pillarId,
           drawerIcon: ({focused, size}) => (
             <Image
               source={require('../../src/assets/img/GrowthCoaching-01.png')}

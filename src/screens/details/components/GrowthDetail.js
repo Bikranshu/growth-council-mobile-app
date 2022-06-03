@@ -393,7 +393,7 @@ const GrowthDetail = props => {
                         navigation.navigate('Radar');
                       }}>
                       <Text style={styles.buttonText}>
-                        View Frost Radar on Growth Leader
+                        Click Here
                       </Text>
                     </Button>
                   </View>

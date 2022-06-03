@@ -101,7 +101,7 @@ const About = props => {
           </View>
           <View style={styles.aboutImage}>
             <Image
-              source={{uri: about.image}}
+              source={{uri: about?.image}}
               style={{
                 width: imageContainerWidth,
                 height: 220,
