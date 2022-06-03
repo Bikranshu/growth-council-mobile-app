@@ -83,12 +83,12 @@ const Content = props => {
                 }}
                 source={{uri: item?.image}}
               />
-              <View style={styles.contentWrapper}>
+              {/* <View style={styles.contentWrapper}>
                 <Text style={{color: 'black'}}>
                   {item?.children_count === 0
                     ? item?.count
                     : item?.children_count}
-                  {/* {item?.count} */}
+              
                 </Text>
 
                 {item?.children_count === 1 ? (
@@ -111,7 +111,7 @@ const Content = props => {
                     Articles{' '}
                   </Text>
                 )}
-              </View>
+              </View> */}
               <View style={styles.wrapper}>
                 <HTMLView
                   value={item?.name}

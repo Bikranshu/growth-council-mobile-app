@@ -171,7 +171,7 @@ const ContentLibrary = props => {
                           source={{uri: item?.image}}
                           resizeMode="stretch"
                         />
-                        <View style={styles.contentWrapper}>
+                        {/* <View style={styles.contentWrapper}>
                           <Text style={{color: 'black'}}>{item?.count}</Text>
                           {item?.count === 1 ? (
                             <Text
@@ -193,7 +193,7 @@ const ContentLibrary = props => {
                               Articles{' '}
                             </Text>
                           )}
-                        </View>
+                        </View> */}
                         <View style={styles.wrapper}>
                           <HTMLView
                             value={item?.name}

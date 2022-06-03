@@ -70,7 +70,7 @@ const HomeCommunity = props => {
   const isFocused = useIsFocused();
 
   const [memberConnection, setMemberConnection] = useState(
-    pillarMemberContents.members,
+    pillarMemberContents?.members,
   );
 
   useFocusEffect(
