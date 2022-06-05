@@ -267,7 +267,7 @@ const SubPOEDetails = props => {
           </View>
 
           <ScrollView
-            style={[styles.content, {backgroundColor: backgroundColor}]}>
+            style={styles.content}>
             <View style={styles.contentWrapper}>
               <Text
                 style={{
@@ -389,9 +389,11 @@ const styles = StyleSheet.create({
     borderTopLeftRadius: 15,
     borderTopRightRadius: 15,
     marginBottom: 20,
+	backgroundColor:Colors.PRACTICE_COLOR,
   },
   contentWrapper: {
     width: '100%',
+    height: (Dimensions.get('screen').height + 50) / 2,
     backgroundColor: 'white',
     overflow: 'scroll',
     marginTop: 10,
@@ -553,8 +555,10 @@ const styles = StyleSheet.create({
   },
   buttonWrapper: {
     alignItems: 'center',
-    justifyContent: 'space-around',
-    marginTop: 30,
+    position: 'absolute',
+    right: 15,
+    bottom: 0,
+    // justifyContent: 'space-around',
   },
   signupbutton: {
     ...CommonStyles.button,

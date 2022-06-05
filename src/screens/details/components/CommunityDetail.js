@@ -488,7 +488,7 @@ const CommunityDetail = props => {
                 pillarPOEs !== undefined &&
                 pillarPOEs?.length !== 0 && (
                   <View style={styles.top}>
-                    <Text style={styles.title}> Sub Points of Engagement</Text>
+                    {/* <Text style={styles.title}> Sub Points of Engagement</Text> */}
                     <FlatList
                       numColumns={4}
                       showsHorizontalScrollIndicator={false}
@@ -543,25 +543,6 @@ const CommunityDetail = props => {
                 </View>
               )} */}
 
-              {/* {poeDetails?.pillar_contents?.length !== 0 &&
-                poeDetails?.pillar_contents !== false &&
-                poeDetails?.pillar_contents !== null && (
-                  <View style={styles.growthContent}>
-                    <Text style={styles.title}> Contents Library</Text>
-                    <View
-                      style={{
-                        display: 'flex',
-                        flexDirection: 'row',
-                      }}>
-                      <FlatList
-                        horizontal
-                        showsHorizontalScrollIndicator={false}
-                        data={pillarMemberContents?.pillar_contents}
-                        renderItem={_renderContentItem}
-                      />
-                    </View>
-                  </View>
-                )} */}
 
               {/* <Footer /> */}
             </View>
