@@ -78,10 +78,6 @@ const People = props => {
     }, [isFocused]),
   );
 
-  console.log({searchKey});
-  console.log({category});
-  console.log({account});
-  console.log({region});
   useEffect(() => {
     setMemberConnection(users);
   }, [users]);
@@ -274,12 +270,12 @@ const People = props => {
           }}>
           <View style={{marginTop: 10}}>
             {memberConnectionLoading && <Loading />}
-            <FlatList
-              vertical
-              showsVerticalScrollIndicator={false}
-              data={users}
-              renderItem={_renderItem}
-            />
+              <FlatList
+                vertical
+                showsVerticalScrollIndicator={false}
+                data={users}
+                renderItem={_renderItem}
+              />
           </View>
           {/* <Footer /> */}
         </ScrollView>

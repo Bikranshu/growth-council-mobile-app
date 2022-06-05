@@ -1,6 +1,6 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useCallback} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
-import {useIsFocused} from '@react-navigation/native';
+import {useIsFocused, useFocusEffect} from '@react-navigation/native';
 import CoachingSession from './component';
 import {fetchAllTraits, resetTraits} from './slice/sessionTraitsSlice';
 import {fetchSessionByID, resetSession} from '../sessions/slice/sessionSlice';
@@ -26,19 +26,23 @@ const CoachingSessionDetailScreen = props => {
     state => state.profile,
   );
 
-  useEffect(() => {
-    fetchSessionByIdentifier(route.params.id);
-    return () => {
-      cleanSession();
-    };
-  }, [isFocused]);
+  useFocusEffect(
+    useCallback(() => {
+      fetchSessionByIdentifier(route.params.id);
+      return () => {
+        cleanSession();
+      };
+    }, [isFocused]),
+  );
 
-  useEffect(() => {
-    fetchAllTraitBySessionId(sessions.ID);
-    return () => {
-      cleanTraits();
-    };
-  }, [sessions]);
+  useFocusEffect(
+    useCallback(() => {
+      fetchAllTraitBySessionId(sessions.ID);
+      return () => {
+        cleanTraits();
+      };
+    }, [sessions]),
+  );
 
   const fetchAllTraitBySessionId = sessionId => {
     dispatch(fetchAllTraits(sessionId));
@@ -90,12 +94,11 @@ const CoachingSessionDetailScreen = props => {
       sessionRegisterError={sessionRegisterError}
       registerSessionByIdentifier={registerSessionByIdentifier}
       cleanSessionRegister={cleanSessionRegister}
-
-	  profile={profile}
-	  profileLoading={profileLoading}
-	  profileError={profileError}
-	  fetchProfile={fetchProfile}
-	  cleanProfile={cleanProfile}
+      profile={profile}
+      profileLoading={profileLoading}
+      profileError={profileError}
+      fetchProfile={fetchProfile}
+      cleanProfile={cleanProfile}
     />
   );
 };

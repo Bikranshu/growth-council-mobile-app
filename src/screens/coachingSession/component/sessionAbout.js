@@ -134,35 +134,39 @@ const sessionAbout = props => {
         translucent={false}
       />
       <View style={{flexDirection: 'column'}}>
-        <View
-          style={{
-            flex: 1,
-            paddingTop: 5,
-            paddingBottom: 5,
-            flexDirection: 'row',
-          }}>
-          <View
-            style={{
-              flex: 1,
-              backgroundColor: '#A1BA68',
-              height: 50,
-              width: 40,
-              borderRadius: 15,
-              justifyContent: 'center',
-              alignItems: 'center',
-            }}>
-            <MaterialIcons name={'event'} size={30} color={'white'} />
-          </View>
+        {sessions?.event_start !== undefined &&
+          sessions?.event_start !== undefined &&
+          sessions?.event_start !== '' &&
+          sessions?.event_start !== '' && (
+            <View
+              style={{
+                flex: 1,
+                paddingTop: 5,
+                paddingBottom: 5,
+                flexDirection: 'row',
+              }}>
+              <View
+                style={{
+                  flex: 1,
+                  backgroundColor: '#A1BA68',
+                  height: 50,
+                  width: 40,
+                  borderRadius: 15,
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                }}>
+                <MaterialIcons name={'event'} size={30} color={'white'} />
+              </View>
 
-          <View
-            style={{
-              flex: 4,
-              paddingLeft: 5,
-              justifyContent: 'center',
-            }}>
-            {/* <Text style={styles.eventDetails}>{GobalDate} </Text> */}
-            <Text style={styles.eventDetails}>
-              {/* {GobalStartMonth === GobalEndMonth
+              <View
+                style={{
+                  flex: 4,
+                  paddingLeft: 5,
+                  justifyContent: 'center',
+                }}>
+                {/* <Text style={styles.eventDetails}>{GobalDate} </Text> */}
+                <Text style={styles.eventDetails}>
+                  {/* {GobalStartMonth === GobalEndMonth
                 ? GobalDate + GobalEndTime
                 : GobalStartMonth +
                   GobalDate.split(/(\s+)/)[7] +
@@ -170,48 +174,51 @@ const sessionAbout = props => {
                   GobalDate.split(/(\s+)/)[7] +
                   GobalEndMonth}{' '}
               ({deviceTimeZone}) /  */}
-              {/* {EventDate.split(/(\s+)/)[7]} */}
-              {EventStartMonth === EventEndMonth
-                ? EventDate + EventEndTime
-                : EventStartMonth +
-                  EventDate.split(/(\s+)/)[7] +
-                  EventDate.split(/(\s+)/)[8] +
-                  EventDate.split(/(\s+)/)[7] +
-                  EventEndMonth +
-                  EventDate.split(/(\s+)/)[7]}
-              {sessions?.event_meta?.evo_event_timezone}
-            </Text>
-          </View>
-          {!sessionStatus && (
-            <View
-              style={{
-                flex: 1,
-                alignItems: 'center',
-              }}>
-              <TouchableOpacity
-                onPress={() => registerSessionBySessionID(route?.params?.id)}>
-                <Feather
-                  name={'plus-circle'}
-                  size={30}
-                  color={'rgba(54,147,172,1)'}
-                />
-              </TouchableOpacity>
+                  {/* {EventDate.split(/(\s+)/)[7]} */}
+                  {EventStartMonth === EventEndMonth
+                    ? EventDate + EventEndTime
+                    : EventStartMonth +
+                      EventDate.split(/(\s+)/)[7] +
+                      EventDate.split(/(\s+)/)[8] +
+                      EventDate.split(/(\s+)/)[7] +
+                      EventEndMonth +
+                      EventDate.split(/(\s+)/)[7]}
+                  {sessions?.event_meta?.evo_event_timezone}
+                </Text>
+              </View>
+              {!sessionStatus && (
+                <View
+                  style={{
+                    flex: 1,
+                    alignItems: 'center',
+                  }}>
+                  <TouchableOpacity
+                    onPress={() =>
+                      registerSessionBySessionID(route?.params?.id)
+                    }>
+                    <Feather
+                      name={'plus-circle'}
+                      size={30}
+                      color={'rgba(54,147,172,1)'}
+                    />
+                  </TouchableOpacity>
+                </View>
+              )}
+              {sessionStatus && (
+                <View
+                  style={{
+                    flex: 1,
+                    alignItems: 'center',
+                  }}>
+                  <Feather
+                    name={'check-circle'}
+                    size={35}
+                    color={'rgba(54,147,172,1)'}
+                  />
+                </View>
+              )}
             </View>
           )}
-          {sessionStatus && (
-            <View
-              style={{
-                flex: 1,
-                alignItems: 'center',
-              }}>
-              <Feather
-                name={'check-circle'}
-                size={35}
-                color={'rgba(54,147,172,1)'}
-              />
-            </View>
-          )}
-        </View>
         {sessions?.location?.location_address !== undefined &&
           sessions?.location?.location_address !== '' && (
             <View
