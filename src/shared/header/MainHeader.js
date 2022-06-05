@@ -41,7 +41,7 @@ const MainHeader = props => {
           flexDirection: 'row',
           justifyContent: 'space-between',
           alignItems: 'center',
-          paddingTop: Platform.OS === 'ios' ? 15 : 15,
+          paddingTop: Platform.OS === 'ios' ? 40 : 20,
           paddingHorizontal: 15,
           backgroundColor: 'rgba(0,0,0,0)',
         }}>
