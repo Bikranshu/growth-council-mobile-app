@@ -488,7 +488,7 @@ const CommunityDetail = props => {
                 pillarPOEs !== undefined &&
                 pillarPOEs?.length !== 0 && (
                   <View style={styles.top}>
-                    <Text style={styles.title}> Sub Points of Engagement</Text>
+                    {/* <Text style={styles.title}> Sub Points of Engagement</Text> */}
                     <FlatList
                       numColumns={4}
                       showsHorizontalScrollIndicator={false}

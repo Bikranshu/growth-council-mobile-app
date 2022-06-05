@@ -140,7 +140,7 @@ const GrowthDetail = props => {
       </View>
     );
   };
-  
+
   const _renderMiddleItem = ({item, index}) => {
     const actualDate = moment(item?.event_start).format('ll').split(',', 3);
     const date = actualDate[0].split(' ', 3);
@@ -149,15 +149,14 @@ const GrowthDetail = props => {
       <View>
         <TouchableOpacity
           onPress={
-            (() =>
+            () =>
               navigation.navigate('coachingSession', {
                 id: item.ID,
                 sessionId: item?.ID,
                 title: item?.title,
-				previousSessionID:coachingSession[index-1]?.ID
+                previousSessionID: coachingSession[index - 1]?.ID,
               })
             // abcd())
-			)
           }>
           <View
             style={{
@@ -332,7 +331,7 @@ const GrowthDetail = props => {
                 coachingSession !== null &&
                 coachingSession !== false && (
                   <View style={styles.middle}>
-                    <Text style={styles.title}>Growth Coaching Sessions</Text>
+                    <Text style={styles.title}>Sessions</Text>
                     <View
                       style={{
                         display: 'flex',
@@ -347,7 +346,7 @@ const GrowthDetail = props => {
                     </View>
                   </View>
                 )}
-              {poeSelfLearns?.length !== 0 &&
+              {/* {poeSelfLearns?.length !== 0 &&
                 poeSelfLearns !== false &&
                 poeSelfLearns !== null && (
                   <View style={styles.learn}>
@@ -365,7 +364,7 @@ const GrowthDetail = props => {
                       />
                     </View>
                   </View>
-                )}
+                )} */}
 
               {pillarMemberContents.members?.length !== 0 &&
                 pillarMemberContents.members !== false &&
@@ -393,7 +392,7 @@ const GrowthDetail = props => {
                         navigation.navigate('Radar');
                       }}>
                       <Text style={styles.buttonText}>
-                        Click Here
+                        Generate Your Frost Radar for Leadership
                       </Text>
                     </Button>
                   </View>
