@@ -125,6 +125,8 @@ const sessionAbout = props => {
     setTimeToEnd(convertedToLocalTimeEnd);
   }, [sessions]);
 
+  console.log('show', sessions.show_date_in_app);
+
   return (
     <View>
       <StatusBar
@@ -134,10 +136,8 @@ const sessionAbout = props => {
         translucent={false}
       />
       <View style={{flexDirection: 'column'}}>
-        {sessions?.event_start !== undefined &&
-          sessions?.event_start !== undefined &&
-          sessions?.event_start !== '' &&
-          sessions?.event_start !== '' && (
+        {sessions?.show_date_in_app !== false &&
+          sessions?.show_date_in_app !== undefined && (
             <View
               style={{
                 flex: 1,
