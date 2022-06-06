@@ -148,19 +148,18 @@ const GrowthDetail = props => {
     return (
       <View>
         <TouchableOpacity
-          onPress={
-            () =>
-              navigation.navigate('coachingSession', {
-                id: item.ID,
-                sessionId: item?.ID,
-                title: item?.title,
-                previousSessionID: coachingSession[index - 1]?.ID,
-              })
-          
+          onPress={() =>
+            navigation.navigate('coachingSession', {
+              id: item.ID,
+              sessionId: item?.ID,
+              title: item?.title,
+              previousSessionID: coachingSession[index - 1]?.ID,
+            })
           }>
           <View
             style={{
               alignContent: 'center',
+              alignItems: 'center',
               borderWidth: 1.3,
               borderColor: '#9EBD6D',
               marginLeft: 10,
@@ -295,8 +294,7 @@ const GrowthDetail = props => {
         <View style={styles.container}>
           <ImageBackground
             source={{uri: poeDetails?.pillar_detail_image}}
-            style={{height: 240, width: '100%'}}>
-          </ImageBackground>
+            style={{height: 240, width: '100%'}}></ImageBackground>
 
           <View style={[styles.icon, styles.shadowProp]}>
             <Image
@@ -402,7 +400,7 @@ const GrowthDetail = props => {
                         navigation.navigate('Radar');
                       }}>
                       <Text style={styles.buttonText}>
-                        Generate Your Frost Radar for Leadership
+                        Click here to generate your Frost Radar for Leadership
                       </Text>
                     </Button>
                   </View>
@@ -616,8 +614,9 @@ const styles = StyleSheet.create({
     borderRadius: 10,
   },
   buttonText: {
-    ...CommonStyles.buttonText,
-    marginHorizontal: 10,
-    padding: 5,
+    color: Colors.PRIMARY_BUTTON_TEXT_COLOR,
+    marginHorizontal: 2,
+	fontSize:13,
+    
   },
 });
