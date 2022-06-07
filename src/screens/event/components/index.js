@@ -226,7 +226,7 @@ const Event = props => {
                           eventDate.split(/(\s+)/)[7] +
                           eventEndMonth}
                       {events?.event_meta?.evo_event_timezone !== undefined
-                        ? (events?.event_meta?.evo_event_timezone)
+                        ? events?.event_meta?.evo_event_timezone
                         : ''}
                     </Text>
                   </View>
@@ -379,7 +379,12 @@ const Event = props => {
                   </View>
                 )}
 
-              <View style={{justifyContent: 'center', alignItems: 'center'}}>
+              <View
+                style={{
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  marginTop: 10,
+                }}>
                 {eventRegisterLoading && <Loading />}
                 {!eventStatus && (
                   <Button
