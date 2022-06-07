@@ -153,20 +153,22 @@ const GrowthDetail = props => {
               id: item.ID,
               sessionId: item?.ID,
               title: item?.title,
+              previousSessionID: coachingSession[index - 1]?.ID,
             })
           }>
           <View
             style={{
-              justifyContent: 'center',
               alignContent: 'center',
               alignItems: 'center',
               borderWidth: 1.3,
               borderColor: '#9EBD6D',
-              marginLeft: 15,
+              marginLeft: 10,
               borderRadius: 14,
               marginTop: 10,
               padding: 10,
-              paddingHorizontal: 20,
+              width: 180,
+              height: 70,
+              flexDirection: 'row',
             }}>
             <Text
               style={{
@@ -178,6 +180,21 @@ const GrowthDetail = props => {
               }}>
               {item?.title}
             </Text>
+            <View
+              style={{
+                width: 40,
+                height: 50,
+                marginTop: 10,
+                position: 'absolute',
+                right: 10,
+                backgroundColor: '#EBECF0',
+                borderRadius: 15,
+                padding: 5,
+                alignItems: 'center',
+              }}>
+              <Text>{date[0]}</Text>
+              <Text>{date[1]}</Text>
+            </View>
           </View>
         </TouchableOpacity>
       </View>
@@ -214,34 +231,34 @@ const GrowthDetail = props => {
                   selfLearnId: item?.ID,
                 })
               }> */}
-              <View>
-                <Text
-                  style={{
-                    fontWeight: '500',
-                    fontSize: 16,
-                    marginTop: 10,
-                    color: 'black',
-                    width: '80%',
-                  }}>
-                  {item?.title}
-                </Text>
-                <Text
-                  style={{
-                    fontSize: 12,
-                    marginTop: 5,
-                    width: 180,
-                  }}>
-                  {item.subtitle}
-                </Text>
-                <Text
-                  style={{
-                    marginTop: 10,
-                    fontSize: 11,
-                    width: 180,
-                  }}>
-                  {item.author}
-                </Text>
-              </View>
+            <View>
+              <Text
+                style={{
+                  fontWeight: '500',
+                  fontSize: 16,
+                  marginTop: 10,
+                  color: 'black',
+                  width: '80%',
+                }}>
+                {item?.title}
+              </Text>
+              <Text
+                style={{
+                  fontSize: 12,
+                  marginTop: 5,
+                  width: 180,
+                }}>
+                {item.subtitle}
+              </Text>
+              <Text
+                style={{
+                  marginTop: 10,
+                  fontSize: 11,
+                  width: 180,
+                }}>
+                {item.author}
+              </Text>
+            </View>
             {/* </TouchableOpacity> */}
             <View
               style={{
@@ -270,20 +287,14 @@ const GrowthDetail = props => {
       <StatusBar
         barStyle="light-content"
         hidden={false}
-        backgroundColor="grey"
+        backgroundColor="#001D3F"
         translucent={false}
       />
       <ScrollView style={{backgroundColor: Colors.PRIMARY_BACKGROUND_COLOR}}>
         <View style={styles.container}>
           <ImageBackground
             source={{uri: poeDetails?.pillar_detail_image}}
-            style={{height: 240, width: '100%'}}>
-            {/* <TouchableOpacity onPress={() => navigation.goBack()}>
-              <View style={styles.arrow}>
-                <Ionicons name={'arrow-back'} size={50} color="white" />
-              </View>
-            </TouchableOpacity> */}
-          </ImageBackground>
+            style={{height: 240, width: '100%'}}></ImageBackground>
 
           <View style={[styles.icon, styles.shadowProp]}>
             <Image
@@ -319,6 +330,7 @@ const GrowthDetail = props => {
                     padding: 15,
                     textAlign: 'left',
                     color: '#77838F',
+                    textAlign: 'justify',
                   },
                 }}
               />
@@ -327,7 +339,7 @@ const GrowthDetail = props => {
                 coachingSession !== null &&
                 coachingSession !== false && (
                   <View style={styles.middle}>
-                    <Text style={styles.title}>Growth Coaching Sessions</Text>
+                    <Text style={styles.title}>Sessions</Text>
                     <View
                       style={{
                         display: 'flex',
@@ -342,7 +354,7 @@ const GrowthDetail = props => {
                     </View>
                   </View>
                 )}
-              {poeSelfLearns?.length !== 0 &&
+              {/* {poeSelfLearns?.length !== 0 &&
                 poeSelfLearns !== false &&
                 poeSelfLearns !== null && (
                   <View style={styles.learn}>
@@ -360,7 +372,7 @@ const GrowthDetail = props => {
                       />
                     </View>
                   </View>
-                )}
+                )} */}
 
               {pillarMemberContents.members?.length !== 0 &&
                 pillarMemberContents.members !== false &&
@@ -380,7 +392,7 @@ const GrowthDetail = props => {
 
               {showChartButton && (
                 <View style={styles.bottom}>
-                  <Text style={styles.title}>Radar</Text>
+                  <Text style={styles.title}>Frost Radar for Leadership</Text>
                   <View style={styles.buttonWrapper}>
                     <Button
                       style={[styles.button, {marginLeft: 15}]}
@@ -388,7 +400,7 @@ const GrowthDetail = props => {
                         navigation.navigate('Radar');
                       }}>
                       <Text style={styles.buttonText}>
-                        View Frost Radar on Growth Leader
+                        Click here to generate your Frost Radar for Leadership
                       </Text>
                     </Button>
                   </View>
@@ -487,6 +499,7 @@ const styles = StyleSheet.create({
   },
   middle: {
     marginTop: 10,
+    marginRight: 5,
     justifyContent: 'center',
   },
   middleWrapper: {
@@ -521,6 +534,7 @@ const styles = StyleSheet.create({
   },
   bottom: {
     marginTop: 25,
+    marginBottom: 20,
   },
   bottomWrapper: {
     width: Dimensions.get('window').width / 4,
@@ -589,7 +603,6 @@ const styles = StyleSheet.create({
     elevation: 5,
   },
   buttonWrapper: {
-    ...CommonStyles.buttonWrapper,
     alignItems: 'flex-start',
     marginTop: 10,
   },
@@ -601,7 +614,9 @@ const styles = StyleSheet.create({
     borderRadius: 10,
   },
   buttonText: {
-    ...CommonStyles.buttonText,
-    marginHorizontal: 10,
+    color: Colors.PRIMARY_BUTTON_TEXT_COLOR,
+    marginHorizontal: 2,
+	fontSize:13,
+    
   },
 });

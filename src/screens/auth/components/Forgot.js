@@ -6,6 +6,8 @@ import {
   ScrollView,
   StatusBar,
   Dimensions,
+  KeyboardAvoidingView,
+  Keyboard,
   Image,
 } from 'react-native';
 import {Button} from 'native-base';
@@ -42,7 +44,6 @@ const ForgotForm = props => {
     initialValues: {email: ''},
     onSubmit: async values => {
       await forgotPassword(values).then(response => {
-        
         if (response?.payload?.code === 200) {
           navigation.navigate('SignIn');
           ToastMessage.show('Email sent successfully to reset password.');
@@ -54,46 +55,50 @@ const ForgotForm = props => {
   });
 
   return (
-    <ScrollView contentContainerStyle={{flexGrow: 1}}>
-      <View style={styles.container}>
-        <Image
-          source={require('../../../assets/img/GIL.png')}
-          style={{width: '80%', height: 50}}
-          resizeMode="contain"
-        />
-        <View style={styles.header}>
-          <Text style={styles.headingText1}>Reset Password</Text>
-          <Text style={styles.headingText2}>
-            To reset your password, please enter your email.
-          </Text>
-        </View>
-
-        <View style={styles.message}>
-          {error && <Text style={styles.errorText}>{error}</Text>}
-        </View>
-
-        {loading && <Spinner />}
-
-        <View style={styles.body}>
-          <FlatTextInput
-            label="Email"
-            value={values.email}
-            onChangeText={handleChange('email')}
-            onFocus={handleBlur('email')}
-            error={errors.email}
-            touched={touched.email}
+    <KeyboardAvoidingView
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+      style={{flex: 1}}>
+      <ScrollView
+        contentContainerStyle={{flexGrow: 1}}
+        onPress={Keyboard.dismiss}>
+        <View style={styles.container}>
+          <Image
+            source={require('../../../assets/img/GILCouncil.jpg')}
+            style={{width: '80%', height: 50}}
+            resizeMode="contain"
           />
+          <View style={styles.header}>
+            <Text style={styles.headingText1}>Reset Password</Text>
+
+            <Text style={styles.headingText2}>
+              To reset your password, please enter your email.
+            </Text>
+          </View>
+          <View style={styles.body}>
+            <FlatTextInput
+              label="Email"
+              value={values.email}
+              onChangeText={handleChange('email')}
+              onFocus={handleBlur('email')}
+              error={errors.email}
+              touched={touched.email}
+            />
+          </View>
+
+          <View style={styles.message}>
+            {error && <Text style={styles.errorText}>{error}</Text>}
+          </View>
+
+          {loading && <Spinner />}
+
+          <View style={styles.submitButtonWrapper}>
+            <Button style={styles.submitButton} onPress={handleSubmit}>
+              <Text style={styles.submitButtonText}>Reset Password</Text>
+            </Button>
+          </View>
         </View>
-        <View style={styles.submitButtonWrapper}>
-          <Button
-            style={styles.submitButton}
-            onPress={handleSubmit}
-            disabled={!isValid}>
-            <Text style={styles.submitButtonText}>Reset Password</Text>
-          </Button>
-        </View>
-      </View>
-    </ScrollView>
+      </ScrollView>
+    </KeyboardAvoidingView>
   );
 };
 
@@ -117,6 +122,7 @@ const styles = StyleSheet.create({
   },
   message: {
     ...CommonStyles.message,
+    margin: 15,
   },
   headingText1: {
     fontFamily: Typography.FONT_BOLD,

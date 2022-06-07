@@ -27,6 +27,8 @@ const Traits = props => {
     traitsAnswerError,
     fetchTraitsAnswer,
     UpdateTraitsAnswer,
+
+	scrollRef
 	
   } = props;
 
@@ -45,7 +47,7 @@ const Traits = props => {
           questionIndex={index}
           key={index}
 		  
-		  
+		  scrollRef={scrollRef}
         />
       ))}
 

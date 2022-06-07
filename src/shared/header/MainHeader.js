@@ -1,4 +1,4 @@
-import {useNavigation} from '@react-navigation/native';
+import {DrawerActions, useNavigation} from '@react-navigation/native';
 import React from 'react';
 import {
   View,
@@ -19,6 +19,7 @@ import HeaderRight from './HeaderRight';
 
 const MainHeader = props => {
   const dispatch = useDispatch();
+  const {navigation} = props;
   const {profile, profileLoading, profileError} = useSelector(
     state => state.profile,
   );
@@ -27,31 +28,42 @@ const MainHeader = props => {
   };
 
   return (
-    <ImageBackground
-      source={require('../../assets/img/appBG.png')}
-      style={{width: Dimensions.get('window').width}}>
-      <SafeAreaView style={{marginTop: -15}} />
+    <View
+      style={{
+        width: Dimensions.get('window').width,
+        backgroundColor: 'rgba(0,0,0,0)',
+        position: 'absolute',
+        top: 0,
+        left: 0,
+      }}>
       <View
         style={{
           flexDirection: 'row',
           justifyContent: 'space-between',
           alignItems: 'center',
-          paddingTop: Platform.OS === 'ios' ? 40 : 30,
-          paddingBottom: 10,
+          paddingTop: Platform.OS === 'ios' ? 40 : 20,
           paddingHorizontal: 15,
+          backgroundColor: 'rgba(0,0,0,0)',
         }}>
         <View
           style={{
             flex: 1,
             flexDirection: 'row',
             alignItems: 'center',
+            backgroundColor: 'rgba(0,0,0,0)',
           }}>
-          <TouchableOpacity onPress={() => props.navigation.toggleDrawer()}>
-            <IonIcon name="menu-outline" color={'white'} size={30} />
-          </TouchableOpacity>
-
+          {props.title === undefined ? (
+            <TouchableOpacity onPress={() => navigation.toggleDrawer()}>
+              <IonIcon name="menu-outline" color={'white'} size={30} />
+            </TouchableOpacity>
+          ) : (
+            <TouchableOpacity onPress={() => navigation.goBack()}>
+              <IonIcon name="arrow-back-sharp" size={30} color="white" />
+            </TouchableOpacity>
+          )}
           <HeaderTitle
             {...props}
+            title={props.title}
             profile={profile}
             profileLoading={profileLoading}
             fetchProfileByIdentifier={fetchProfileByIdentifier}
@@ -60,12 +72,12 @@ const MainHeader = props => {
 
         <HeaderRight
           {...props}
-          navigation={props.navigation}
+          navigation={navigation}
           profile={profile}
           fetchProfileByIdentifier={fetchProfileByIdentifier}
         />
       </View>
-    </ImageBackground>
+    </View>
   );
 };
 

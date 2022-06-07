@@ -1,8 +1,8 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 
 import UserList from './components/UserList';
-
+import firestore from '@react-native-firebase/firestore'
 import {fetchAllConnections, resetConnection} from './slice/connetionSlice';
 import {fetchUsersByKey, resetUser} from '../account/slice/userSlice';
 import {
@@ -14,6 +14,8 @@ const UserListScreen = props => {
   const dispatch = useDispatch();
 
   const {users, userLoading, userError} = useSelector(state => state.users);
+
+
   const {connection, connectionLoading, connectionError} = useSelector(
     state => state.connection,
   );
@@ -43,7 +45,7 @@ const UserListScreen = props => {
     dispatch(resetConnectMember());
   };
 
-  return (
+  return  (
     <UserList
       {...props}
       connection={connection}

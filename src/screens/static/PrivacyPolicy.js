@@ -11,7 +11,7 @@ const PrivacyPolicyScreen = ({navigation}) => {
     return (
         <ScrollView contentContainerStyle={{flexGrow: 1, height: screenHeight}}>
             <View style={styles.container}>
-                <StatusBar barStyle="light-content" backgroundColor={Colors.PRIMARY_BACKGROUND_COLOR}/>
+                <StatusBar barStyle="light-content" backgroundColor={"#001D3F"}/>
                 <View style={styles.meta}>
                     <TouchableOpacity>
                         <Text onPress={() => navigation.goBack()}>

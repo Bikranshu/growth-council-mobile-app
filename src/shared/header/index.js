@@ -9,7 +9,7 @@ const HeaderTitle = props => {
   const [username, setUsername] = useState(null);
   const isFocused = useIsFocused();
 
-  const {profile, fetchProfileByIdentifier, profileLoading} = props;
+  const {profile, fetchProfileByIdentifier, profileLoading, title} = props;
 
   useEffect(() => {
     fetchProfileByIdentifier();
@@ -17,14 +17,18 @@ const HeaderTitle = props => {
 
   return (
     <View style={{marginLeft: 10}}>
-      <Text
-        style={{
-          color: 'white',
-          fontSize: Platform.OS === 'ios' ? 10 : 12,
-          fontFamily: Typography.FONT_SF_MEDIUM,
-        }}>
-        Hello,
-      </Text>
+      {title === undefined ? (
+        <Text
+          style={{
+            color: 'white',
+            fontSize: Platform.OS === 'ios' ? 10 : 12,
+            fontFamily: Typography.FONT_SF_MEDIUM,
+          }}>
+          Hello,
+        </Text>
+      ) : (
+        <></>
+      )}
       <Text
         style={{
           fontFamily: Typography.FONT_SF_MEDIUM,
@@ -32,7 +36,7 @@ const HeaderTitle = props => {
           fontSize: Platform.OS === 'ios' ? 16 : 18,
           fontWeight: 'normal',
         }}>
-        {profile?.user_meta?.first_name} {profile?.user_meta?.last_name}
+        {title === undefined ? profile?.display_name : title}
       </Text>
     </View>
   );

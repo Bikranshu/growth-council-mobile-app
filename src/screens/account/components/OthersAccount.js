@@ -8,15 +8,16 @@ import {
   Image,
   TouchableOpacity,
   Button,
+  Dimensions,
 } from 'react-native';
-
+import {useIsFocused} from '@react-navigation/native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import Feather from 'react-native-vector-icons/Feather';
-import {BubblesLoader} from 'react-native-indicator';
+import {getAsyncStorage} from '../../../utils/storageUtil';
+import {JWT_TOKEN, USER_NAME, USER_AVATAR} from '../../../constants';
+import {decodeUserID} from '../../../utils/jwtUtil';
 import {CommonStyles, Colors, Typography} from '../../../theme';
 import {PRIMARY_BACKGROUND_COLOR} from '../../../theme/colors';
-import Footer from '../../../shared/footer';
-import ToastMessage from '../../../shared/toast';
+
 import Loading from '../../../shared/loading';
 
 const OthersAccount = props => {
@@ -35,6 +36,8 @@ const OthersAccount = props => {
     cleanConnectMember,
   } = props;
 
+  let title = otherProfiles?.user_meta?.title;
+  let company = otherProfiles?.user_meta?.company;
   let Location = otherProfiles?.user_meta?.Location;
 
   let favorite_quote = otherProfiles?.user_meta?.favorite_quote;
@@ -56,8 +59,38 @@ const OthersAccount = props => {
     fetchOtherProfileAsync();
   }, []);
 
+  const [userID, setUserID] = useState(null);
+  const [avatarImg, setAvatarImg] = useState(null);
+  const [userName, setUserName] = useState(null);
+
+  const isFocused = useIsFocused();
+
+  useEffect(() => {
+    const setLoggedInUserInfoAsync = async () => {
+      let token = await getAsyncStorage(JWT_TOKEN);
+      setUserID(decodeUserID(token));
+      let avatar = await getAsyncStorage(USER_AVATAR);
+      setAvatarImg(avatar);
+      let username = await getAsyncStorage(USER_NAME);
+      setUserName(username);
+    };
+    setLoggedInUserInfoAsync();
+  }, [isFocused]);
+
   return (
     <ScrollView
+      onScroll={e => {
+        const offset = e.nativeEvent.contentOffset.y;
+        if (offset >= 70) {
+          navigation.setOptions({
+            headerShown: false,
+          });
+        } else {
+          navigation.setOptions({
+            headerShown: true,
+          });
+        }
+      }}
       contentContainerStyle={{
         flexGrow: 1,
         backgroundColor: PRIMARY_BACKGROUND_COLOR,
@@ -65,13 +98,17 @@ const OthersAccount = props => {
       <View style={{backgroundColor: PRIMARY_BACKGROUND_COLOR}}>
         <Image
           source={require('../../../assets/img/appBG.png')}
-          style={{height: 160}}
+          style={{
+            width: '100%',
+            height: Dimensions.get('screen').height / 4,
+            paddingTop: Dimensions.get('screen').height / 4,
+          }}
         />
 
         <View
           style={{
             display: 'flex',
-            marginTop: -90,
+            marginTop: -80,
             alignContent: 'center',
             marginLeft: 'auto',
             marginRight: 'auto',
@@ -86,9 +123,10 @@ const OthersAccount = props => {
             </View>
             <View style={styles.header}>
               <Text style={styles.headingText1}>
-                {otherProfiles?.display_name}
+                {otherProfiles?.user_meta?.first_name}{' '}
+                {otherProfiles?.user_meta?.last_name}
               </Text>
-              <Text>{otherProfiles?.user_email}</Text>
+              <Text>{otherProfiles?.user_meta?.title}</Text>
             </View>
           </View>
         </View>
@@ -114,29 +152,37 @@ const OthersAccount = props => {
                 />
               </View>
               <View style={styles.TextWrapper}>
-                <Text style={styles.title}>Username</Text>
+                <Text style={styles.title}>Title</Text>
                 <TextInput
                   style={styles.input}
                   keyboardType="default"
-                  value={otherProfiles?.display_name}
+                  value={
+                    typeof title === 'undefined'
+                      ? ''
+                      : otherProfiles?.user_meta?.title[0]
+                  }
                   editable={false}
                 />
 
-                <Text style={styles.title}>First Name</Text>
+                <Text style={styles.title}>Company</Text>
                 <TextInput
                   style={styles.input}
                   keyboardType="default"
-                  value={otherProfiles?.user_meta?.first_name[0]}
+                  value={
+                    typeof company === 'undefined'
+                      ? ''
+                      : otherProfiles?.user_meta?.company[0]
+                  }
                   editable={false}
                 />
 
-                <Text style={styles.title}>Last Name</Text>
+                {/* <Text style={styles.title}>Last Name</Text>
                 <TextInput
                   style={styles.input}
                   keyboardType="default"
                   value={otherProfiles?.user_meta?.last_name[0]}
                   editable={false}
-                />
+                /> */}
 
                 <Text style={styles.title}>Email</Text>
                 <TextInput
@@ -146,7 +192,7 @@ const OthersAccount = props => {
                   editable={false}
                 />
 
-                <Text style={styles.title}>Location</Text>
+                <Text style={styles.title}>Region</Text>
                 <TextInput
                   style={styles.input}
                   keyboardType="default"
@@ -158,7 +204,7 @@ const OthersAccount = props => {
                   editable={false}
                 />
 
-                <Text style={styles.title}>Favorite Quote</Text>
+                {/* <Text style={styles.title}>Favorite Quote</Text>
                 <TextInput
                   multiline={true}
                   numberOfLines={4}
@@ -170,7 +216,7 @@ const OthersAccount = props => {
                       : otherProfiles?.user_meta?.favorite_quote[0]
                   }
                   editable={false}
-                />
+                /> */}
 
                 <Text style={styles.title}>Professional Summary</Text>
                 <TextInput
@@ -186,7 +232,7 @@ const OthersAccount = props => {
                   editable={false}
                 />
 
-                <Text style={styles.title}>Expertise Areas</Text>
+                <Text style={styles.title}>Areas of Expertise</Text>
 
                 <TextInput
                   multiline={true}
@@ -197,7 +243,7 @@ const OthersAccount = props => {
                   editable={false}
                 />
 
-                <Text style={styles.title}>
+                {/* <Text style={styles.title}>
                   Most Recent Growth/Innovation Initative
                 </Text>
                 <TextInput
@@ -211,9 +257,9 @@ const OthersAccount = props => {
                       : otherProfiles?.user_meta?.initatives[0]
                   }
                   editable={false}
-                />
+                /> */}
 
-                <Text style={styles.title}>I'm Seeking Insights On</Text>
+                {/* <Text style={styles.title}>I'm Seeking Insights On</Text>
                 <TextInput
                   multiline={true}
                   numberOfLines={4}
@@ -225,7 +271,35 @@ const OthersAccount = props => {
                       : otherProfiles?.user_meta?.insights[0]
                   }
                   editable={false}
-                />
+                /> */}
+
+                <View>
+                  <TouchableOpacity
+                    onPress={() =>
+                      navigation.navigate('Chat', {
+                        friendID: otherProfiles?.ID,
+                        friendName: otherProfiles?.display_name,
+                        friendAvatar: otherProfiles?.avatar,
+                        userID: userID,
+                        userName: userName,
+                        userAvatar: avatarImg,
+                      })
+                    }>
+                    <View style={[styles.loginWrapper, {borderBottomWidth: 0}]}>
+                      <View style={styles.chatImage}>
+                        <Ionicons name="chatbubbles" color="white" size={20} />
+                      </View>
+                      <Text
+                        style={{
+                          fontSize: 16,
+                          fontWeight: '500',
+                          color: 'white',
+                        }}>
+                        Chat
+                      </Text>
+                    </View>
+                  </TouchableOpacity>
+                </View>
               </View>
             </View>
           </View>
@@ -332,15 +406,22 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     borderColor: '#707070',
   },
-  loginButtonWrapper: {
-    marginLeft: 10,
-    marginTop: 18,
+  loginWrapper: {
+    width: '30%',
+    display: 'flex',
+    flexDirection: 'row',
+    paddingVertical: 5,
+    borderRadius: 20,
+    alignItems: 'center',
+    position: 'relative',
+    backgroundColor: Colors.PRACTICE_COLOR,
   },
-  loginButton: {
-    width: '50%',
+  chatImage: {
+    width: 40,
+    height: 40,
+    justifyContent: 'center',
+    alignItems: 'center',
     borderRadius: 10,
-    height: 50,
-    backgroundColor: '#3A9BDC',
   },
   loginButtonText: {
     color: Colors.PRIMARY_BUTTON_TEXT_COLOR,

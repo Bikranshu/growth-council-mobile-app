@@ -1,24 +1,15 @@
 import React, {useState, useCallback, useLayoutEffect, useEffect} from 'react';
 import {StyleSheet, View, Text, Image} from 'react-native';
 import {GiftedChat, Send} from 'react-native-gifted-chat';
-import {
-  collection,
-  addDoc,
-  query,
-  orderBy,
-  onSnapshot,
-  getDocs,
-  where,
-  updateDoc,
-  doc,
-  setDoc,
-  getDoc,
-} from 'firebase/firestore';
+
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 
+import firestore from '@react-native-firebase/firestore'
+
 import {CommonStyles, Colors} from '../../../theme';
-import {database} from '../../../utils/firebaseUtil';
+import { getFCMTOkenForUser } from '../../../utils/httpUtil';
+import { sendNotification } from '../../../utils/sendNotification';
 
 const Chat = props => {
   const {
@@ -40,6 +31,7 @@ const Chat = props => {
 
   const [userScreen, setUserScreen] = useState(false);
   const [friendScreen, setFriendScreen] = useState(false);
+  const [friendToken, setFriendToken] = useState("");
 
   const chatID = () => {
     const chatIDPre = [];
@@ -51,25 +43,45 @@ const Chat = props => {
 
   const [messages, setMessages] = useState([]);
 
+
+  useEffect(() => {
+    getFCMTOkenForUser(friendID).then(res => {
+      const token = res?.data?.data;
+      setFriendToken(typeof token == "string" ? token : token[0]);
+    }).catch(error => {
+      console.log(error);
+    })
+  }, [])
+
   useLayoutEffect(() => {
     let unsubscribe = null;
     const fetchMessageAsync = async () => {
-      const chatsCol = await collection(
-        database,
-        'rooms',
-        chatID(),
-        'messages',
-      );
-      const q = await query(chatsCol, orderBy('createdAt', 'desc'));
-      unsubscribe = onSnapshot(q, querySnapshot => {
-        const messageList = querySnapshot?.docs?.map(doc => ({
+      const chatsCol = firestore().collection(`rooms/${chatID()}/messages`);
+      // const chatsCol = await collection(
+      //   database,
+      //   'rooms',
+      //   chatID(),
+      //   'messages',
+      // );
+      unsubscribe = chatsCol.orderBy('createdAt', 'desc').onSnapshot(snap => {
+        const messageList = snap.docs?.map(doc => ({
           _id: doc.data()._id,
           createdAt: doc.data().createdAt.toDate(),
           text: doc.data().text,
           user: doc.data().user,
-        }));
+        }))
         setMessages(messageList);
-      });
+      })
+      // const q = await query(chatsCol, orderBy('createdAt', 'desc'));
+      // unsubscribe = onSnapshot(q, querySnapshot => {
+      //   const messageList = querySnapshot?.docs?.map(doc => ({
+      //     _id: doc.data()._id,
+      //     createdAt: doc.data().createdAt.toDate(),
+      //     text: doc.data().text,
+      //     user: doc.data().user,
+      //   }));
+      //   setMessages(messageList);
+      // });
     };
     fetchMessageAsync();
 
@@ -79,32 +91,36 @@ const Chat = props => {
   useEffect(() => {
     const fetchMessage2Async = async () => {
       let docIds = [];
-      const chatsCol = await collection(
-        database,
-        'rooms',
-        chatID(),
-        'messages',
-      );
-      const chatSnapshot = await getDocs(
-        query(
-          chatsCol,
-          where('status', '==', 'unread'),
-          where('user._id', '==', friendID),
-        ),
-      );
-      chatSnapshot.docs.map(async record => {
-        if (record.exists) {
-          const taskDocRef = doc(
-            database,
-            'rooms',
-            chatID(),
-            'messages',
-            record.id,
-          );
+      const chatsCol = firestore().collection(`rooms/${chatID()}/messages`);
 
-          await updateDoc(taskDocRef, {status: 'read'});
-        }
-      });
+      chatsCol.where('status', "==", 'unread').where('user._id', '==', friendID).onSnapshot(snapShot => {
+        snapShot.docs?.map(async record => {
+          if(record.exists){
+            const taskDocRef = await record.ref.update({...record.data(), status: 'read'});
+          }
+        })
+      })
+
+      // const chatSnapshot = await getDocs(
+      //   query(
+      //     chatsCol,
+      //     where('status', '==', 'unread'),
+      //     where('user._id', '==', friendID),
+      //   ),
+      // );
+      // chatSnapshot.docs.map(async record => {
+      //   if (record.exists) {
+      //     const taskDocRef = doc(
+      //       database,
+      //       'rooms',
+      //       chatID(),
+      //       'messages',
+      //       record.id,
+      //     );
+
+      //     await updateDoc(taskDocRef, {status: 'read'});
+      //   }
+      // });
     };
 
     fetchMessage2Async();
@@ -114,17 +130,20 @@ const Chat = props => {
     const isActive = async action => {
       if (action === 'add') {
         const addPayload = {is_active: true};
-        await setDoc(
-          doc(database, `rooms/${chatID()}/screens`, userID),
-          addPayload,
-          {merge: true},
-        );
+        await firestore().collection(`rooms/${chatID()}/screens}`).doc(userID).set(addPayload, {merge: true});
+        // await setDoc(
+        //   doc(database, `rooms/${chatID()}/screens`, userID),
+        //   addPayload,
+        //   {merge: true},
+        // );
       } else {
         const updatePayload = {is_active: false};
-        await updateDoc(
-          doc(database, `rooms/${chatID()}/screens`, userID),
-          updatePayload,
-        );
+        await firestore().collection(`rooms/${chatID()}/screens`).doc(userID).set(updatePayload, {merge: true});
+
+        // await updateDoc(
+        //   doc(database, `rooms/${chatID()}/screens`, userID),
+        //   updatePayload,
+        // );
       }
     };
     isActive('add');
@@ -138,22 +157,24 @@ const Chat = props => {
       GiftedChat.append(previousMessages, messages),
     );
     const {_id, createdAt, text, user} = messages[0];
-    const chatsCol = await collection(database, 'rooms', chatID(), 'messages');
 
-    const userIDSnap = await getDoc(
-      doc(database, `rooms/${chatID()}/screens`, userID),
-    );
-    if (userIDSnap.exists()) {
+    const userIDSnap = await firestore().collection(`rooms/${chatID()}/screens`).doc(userID).get();
+    const friendIDSnap = await firestore().collection(`rooms/${chatID()}/screens`).doc(friendID).get();
+
+    // const userIDSnap = await getDoc(
+    //   doc(database, `rooms/${chatID()}/screens`, userID),
+    // );
+    if (userIDSnap.exists) {
       if (userIDSnap.data().is_active) {
         setUserScreen(true);
       }
     } else {
     }
 
-    const friendIDSnap = await getDoc(
-      doc(database, `rooms/${chatID()}/screens`, friendID),
-    );
-    if (friendIDSnap.exists()) {
+    // const friendIDSnap = await getDoc(
+    //   doc(database, `rooms/${chatID()}/screens`, friendID),
+    // );
+    if (friendIDSnap.exists) {
       if (friendIDSnap.data().is_active) {
         setFriendScreen(true);
       }
@@ -161,18 +182,26 @@ const Chat = props => {
     }
 
     if (userScreen && friendScreen) {
-      await addDoc(chatsCol, {_id, createdAt, text, user, status: 'read'});
+      await firestore().collection(`rooms/${chatID()}/messages`).add({_id, createdAt, text, user, status: 'read'})
+      // await addDoc(chatsCol, {_id, createdAt, text, user, status: 'read'});
     } else {
-      await addDoc(chatsCol, {_id, createdAt, text, user, status: 'unread'});
+      await firestore().collection(`rooms/${chatID()}/messages`).add({_id, createdAt, text, user, status: 'read'})
+      // await addDoc(chatsCol, {_id, createdAt, text, user, status: 'unread'});
     }
 
-    const response = await sendNotificationByIdentifier({
-      user_id: friendID,
-      title: `Message From ${userName}`,
-      message: text,
-      notification_type: 'chat',
+    // update the last message Status
+    await firestore().collection(`rooms`).doc(chatID()).set({lastUpdated: Date.now(), roomId: chatID().split("_")}, {merge: true});
+
+    sendNotification(friendToken, `New Message from ${userName}`, text, {
+      type: 'chat',
+      friendID: userID,
+      friendName: userName,
+      friendAvatar: userAvatar,
+      userID: friendID,
+      userAvatar: friendAvatar,
+      userName: friendName,
     });
-  }, []);
+})
 
   return (
     <View style={styles.container}>

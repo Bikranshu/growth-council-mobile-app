@@ -111,9 +111,7 @@ const SelfAssessment = props => {
       })
         .then(response => {
           if (response?.data?.code === 200) {
-            ToastMessage.show(
-              'You score has submitted.',
-            );
+            ToastMessage.show('You score has been submitted.');
             setAnswers({
               questions: {
                 growthIndex: [],
@@ -124,7 +122,7 @@ const SelfAssessment = props => {
             navigation.goBack();
 
             if (sessions.title === 'Session 10') {
-            //   ToastMessage.show('You score has submitted.');
+              //   ToastMessage.show('You score has submitted.');
               navigation.navigate('SessionCompleted');
             }
           } else {
@@ -183,7 +181,6 @@ const SelfAssessment = props => {
     }
   };
 
-
   return (
     <View>
       <StatusBar
@@ -195,13 +192,22 @@ const SelfAssessment = props => {
       <View style={{flex: 1, backgroundColor: Colors.PRIMARY_BACKGROUND_COLOR}}>
         {traits?.length > 0 ? (
           <View style={{flex: 1}}>
+            <Text
+              style={{
+                textAlign: 'center',
+                fontSize: 14,
+                marginBottom: 20,
+                color: '#0B0B45',
+              }}>
+              Traits : {traits[index.traitIndex].title}
+            </Text>
             <View style={styles.Wrapper}>
               <ButtonToggleGroup
                 highlightBackgroundColor={'white'}
                 highlightTextColor={'#0B0B45'}
                 inactiveBackgroundColor={'transparent'}
                 inactiveTextColor={'grey'}
-                values={[sub, 'Yellow Questions']}
+                values={[sub, 'Yellow Benchmark Questions']}
                 value={value}
                 onSelect={val => setValue(val)}
                 style={{
@@ -217,6 +223,9 @@ const SelfAssessment = props => {
                   paddingLeft: 5,
                   fontSize: 10,
                   width: '100%',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  textAlign: 'center',
                 }}
               />
             </View>
@@ -242,9 +251,10 @@ const SelfAssessment = props => {
                   fetchTraitsAnswer={fetchTraitsAnswer}
                   updateTraitsAnswer={updateTraitsAnswer}
                   cleanTraitsAnswer={cleanTraitsAnswer}
+                  scrollRef={scrollRef}
                 />
               )}
-              {value === 'Yellow Questions' && (
+              {value === 'Yellow Benchmark Questions' && (
                 <Question
                   {...props}
                   subTraits={traits[index.traitIndex]}

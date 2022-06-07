@@ -1,7 +1,8 @@
 import React from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 
-import Privacy from './component';
+import Privacy from './component/index';
+
 
 import {fetchPrivacy, resetPrivacy} from './slice/privacySlice';
 

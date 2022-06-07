@@ -7,7 +7,7 @@ const WhoWeAreScreen = () => {
 
     return (
         <View style={styles.container}>
-            <StatusBar barStyle="light-content" backgroundColor={Colors.PRIMARY_BACKGROUND_COLOR}/>
+            <StatusBar barStyle="light-content" backgroundColor={"#001D3F"}/>
             <View style={styles.contentWrapper}>
             <ScrollView
                 style={styles.scrollContainer}

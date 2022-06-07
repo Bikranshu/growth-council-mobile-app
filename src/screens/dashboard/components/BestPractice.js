@@ -22,7 +22,8 @@ import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome';
 import moment from 'moment';
 import {BubblesLoader} from 'react-native-indicator';
 import {useFocusEffect, useIsFocused} from '@react-navigation/native';
-import ReactNativeBlobUtil from 'react-native-blob-util';
+// import ReactNativeBlobUtil from 'react-native-blob-util';
+import RNFetchBlob from 'react-native-blob-util';
 import ToastMessage from '../../../shared/toast';
 import YoutubePlayer from '../../../shared/youtube';
 import Footer from '../../../shared/footer';
@@ -55,7 +56,7 @@ const BestPractice = props => {
     cleanPillarPOE,
   } = props;
 
-  const pillarId = 118;
+  const pillarId = 170;
   const isFocused = useIsFocused();
 
   const [memberConnection, setMemberConnection] = useState([]);
@@ -205,8 +206,8 @@ const BestPractice = props => {
       <TouchableOpacity
         onPress={() => {
           if (
-            item.slug === 'annual-ceo-survey' ||
-            item.slug === 'innovation-generator'
+            item.slug === 'companies-to-action' ||
+            item.slug === 'growth-opportunity'
           ) {
             navigation.navigate('Growth Content');
           } else if (item.slug === 'content-library') {
@@ -273,34 +274,70 @@ const BestPractice = props => {
     };
 
     const downloadFile = () => {
-      let date = new Date();
+      const {config, fs} = RNFetchBlob;
+      const {
+        dirs: {DownloadDir, DocumentDir},
+      } = RNFetchBlob.fs;
+      const isIOS = Platform.OS === 'ios';
+      const aPath =
+        Platform.OS === 'ios' ? fs.dirs.DocumentDir : fs.dirs.PictureDir;
+      // Platform.select({ios: DocumentDir, android: DocumentDir});
 
+      let date = new Date();
       let FILE_URL = fileUrl;
 
       let file_ext = getFileExtention(FILE_URL);
 
       file_ext = '.' + file_ext[0];
 
-      const {config, fs} = ReactNativeBlobUtil;
-      let RootDir = fs.dirs.PictureDir;
-      let options = {
-        fileCache: true,
-        addAndroidDownloads: {
+      const configOptions = Platform.select({
+        ios: {
+          fileCache: true,
           path:
-            RootDir +
+            aPath +
             '/file_' +
             Math.floor(date.getTime() + date.getSeconds() / 2) +
             file_ext,
           description: 'downloading file...',
-          notification: true,
-          useDownloadManager: true,
         },
-      };
-      config(options)
-        .fetch('GET', FILE_URL, ToastMessage.show('PDF File Download Started.'))
-        .then(res => {
-          ToastMessage.show('PDF File Downloaded Successfully.');
-        });
+        android: {
+          fileCache: false,
+          addAndroidDownloads: {
+            path:
+              aPath +
+              '/file_' +
+              Math.floor(date.getTime() + date.getSeconds() / 2) +
+              file_ext,
+            description: 'downloading file...',
+            notification: true,
+            useDownloadManager: true,
+          },
+        },
+      });
+
+      if (isIOS) {
+        RNFetchBlob.config(configOptions)
+          .fetch('GET', FILE_URL)
+          .then(res => {
+            console.log('file', res);
+            RNFetchBlob.ios.previewDocument('file://' + res.path());
+          });
+        return;
+      } else {
+        config(configOptions)
+          .fetch('GET', FILE_URL)
+          .progress((received, total) => {
+            console.log('progress', received / total);
+          })
+
+          .then(res => {
+            console.log('file download', res);
+            RNFetchBlob.android.actionViewIntent(res.path());
+          })
+          .catch((errorMessage, statusCode) => {
+            console.log('error with downloading file', errorMessage);
+          });
+      }
     };
 
     const getFileExtention = fileUrl => {
@@ -332,7 +369,7 @@ const BestPractice = props => {
 
   const _renderContentItem = ({item, index}) => {
     const file = item?.file;
-    const link = file.split('=', 2);
+    const link = file?.split('=', 2);
     let videoLink = link[1].split('&', 2);
     return <Player {...props} item={item} file={file} videoLink={videoLink} />;
   };
@@ -401,7 +438,7 @@ const BestPractice = props => {
               renderItem={item => _renderMiddleItem(item, navigation)}
             />
           </View>
-          {pillarMemberContents?.attachments?.length !== 0 &&
+          {pillarMemberContents?.attachments !== undefined &&
             pillarMemberContents?.attachments !== false && (
               <View style={styles.sectionContainer}>
                 <FlatList
@@ -412,7 +449,7 @@ const BestPractice = props => {
                 />
               </View>
             )}
-          {pillarMemberContents?.external_link?.length !== 0 &&
+          {pillarMemberContents?.external_link !== undefined &&
             pillarMemberContents?.external_link !== false &&
             pillarMemberContents?.external_link !== null && (
               <View style={styles.content}>
@@ -440,7 +477,7 @@ const BestPractice = props => {
             </View>
           )} */}
 
-          {pillarMemberContents?.pillar_contents?.length !== 0 &&
+          {pillarMemberContents?.pillar_contents !== undefined &&
             pillarMemberContents?.pillar_contents !== null &&
             pillarMemberContents?.pillar_contents !== false && (
               <View style={styles.content}>

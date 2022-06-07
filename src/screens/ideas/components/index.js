@@ -39,10 +39,10 @@ const Ideas = props => {
 
   return (
     <>
-	 <StatusBar
+      <StatusBar
         barStyle="light-content"
         hidden={false}
-        backgroundColor="grey"
+        backgroundColor="#001D3F"
         translucent={false}
       />
       <ScrollView
@@ -55,7 +55,10 @@ const Ideas = props => {
               <Text style={styles.titleText}>{idea.heading1}</Text>
               <View style={styles.titleBorder}></View>
             </View>
-            <HTMLView value={description} textComponentProps={{ style: {fontSize:14} }}/>
+            <HTMLView
+              value={description}
+              textComponentProps={{style: {fontSize: 14}}}
+            />
           </View>
 
           <View style={styles.cta}>
@@ -65,7 +68,7 @@ const Ideas = props => {
                 styles.plainButton,
                 {backgroundColor: Colors.SECONDARY_BUTTON_COLOR},
               ]}
-              onPress={() => Linking.openURL('mailto:Councils@frost.com')}>
+              onPress={() => navigation.navigate('Gmail')}>
               <Text style={[styles.buttonText, styles.plainButtonText]}>
                 Email Us
               </Text>
@@ -91,11 +94,11 @@ const styles = StyleSheet.create({
   },
   ideas: {
     paddingLeft: 30,
-	paddingRight: 30,
+    paddingRight: 30,
   },
   title: {
-	marginTop:30,
-	marginBottom: 30,
+    marginTop: 30,
+    marginBottom: 30,
   },
   titleText: {
     color: '#000',

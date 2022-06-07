@@ -47,7 +47,7 @@ const Home = props => {
       case 'community':
         borderColor = Colors.COMMUNITY_COLOR;
         break;
-      case 'best-practices':
+      case 'growth-content':
         borderColor = Colors.PRACTICE_COLOR;
         break;
       case 'growth-coaching':
