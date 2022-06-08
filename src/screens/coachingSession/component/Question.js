@@ -42,7 +42,7 @@ const Question = props => {
 
   useEffect(() => {}, [count, answers]);
 
-  console.log({subTraits});
+
 
   return (
     <View>
