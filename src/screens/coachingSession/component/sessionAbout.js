@@ -314,7 +314,7 @@ const sessionAbout = props => {
       {sessions?.descirption !== undefined && sessions?.descirption !== '' && (
         <View style={{marginTop: 20}}>
           <Text style={styles.contentHeading}>Session Brief</Text>
-          {!isSessionLoaded && (
+          
             <HTMLView
               value={description}
               textComponentProps={{
@@ -328,7 +328,7 @@ const sessionAbout = props => {
                 },
               }}
             />
-          )}
+          
         </View>
       )}
       <View style={{justifyContent: 'center', alignItems: 'center'}}>

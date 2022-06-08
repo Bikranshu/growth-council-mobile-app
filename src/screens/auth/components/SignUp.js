@@ -33,12 +33,12 @@ const signUpSchema = Yup.object().shape({
     .email('Please enter valid email.')
     .trim()
     .required('Email Address is Required.'),
-  phone: Yup.string()
-    .matches(phoneRegExp, 'Phone number is not valid.')
-    .required('Phone Number is required.'),
-  title: Yup.string().required('Title is required.'),
-  company: Yup.string().required('Company is required.'),
-  country: Yup.string().required('Country is required.'),
+  // phone: Yup.string()
+  //   .matches(phoneRegExp, 'Phone number is not valid.')
+  //   .required('Phone Number is required.'),
+  // title: Yup.string().required('Title is required.'),
+  // company: Yup.string().required('Company is required.'),
+  // country: Yup.string().required('Country is required.'),
   checked: Yup.boolean()
     .required('Please agree to terms and condition for signup.')
     .oneOf([true], 'Please agree to terms and condition for signup.'),
