@@ -159,6 +159,7 @@ const GrowthDetail = props => {
           <View
             style={{
               alignContent: 'center',
+              justifyContent: 'center',
               alignItems: 'center',
               borderWidth: 1.3,
               borderColor: '#9EBD6D',
@@ -167,34 +168,19 @@ const GrowthDetail = props => {
               marginTop: 10,
               padding: 10,
               width: 180,
-              height: 70,
+              height: 60,
               flexDirection: 'row',
             }}>
             <Text
               style={{
                 fontWeight: '500',
-                fontSize: 14,
+                fontSize: 16,
                 color: 'black',
                 alignItems: 'center',
                 alignContent: 'center',
               }}>
               {item?.title}
             </Text>
-            <View
-              style={{
-                width: 40,
-                height: 50,
-                marginTop: 10,
-                position: 'absolute',
-                right: 10,
-                backgroundColor: '#EBECF0',
-                borderRadius: 15,
-                padding: 5,
-                alignItems: 'center',
-              }}>
-              <Text>{date[0]}</Text>
-              <Text>{date[1]}</Text>
-            </View>
           </View>
         </TouchableOpacity>
       </View>
@@ -393,17 +379,21 @@ const GrowthDetail = props => {
               {showChartButton && (
                 <View style={styles.bottom}>
                   <Text style={styles.title}>Frost Radar for Leadership</Text>
-                  <View style={styles.buttonWrapper}>
-                    <Button
-                      style={[styles.button, {marginLeft: 15}]}
-                      onPress={() => {
-                        navigation.navigate('Radar');
-                      }}>
-                      <Text style={styles.buttonText}>
-                        Click here to generate your Frost Radar for Leadership
-                      </Text>
-                    </Button>
-                  </View>
+                  <TouchableOpacity
+                    onPress={() => {
+                      navigation.navigate('Radar');
+                    }}>
+                    <View style={styles.buttonWrapper}>
+                      <View style={[styles.button, {marginLeft: 15}]}>
+                        <Text style={styles.buttonText}>
+                          Click here to Generate
+                        </Text>
+                        <Text style={styles.buttonText}>
+                          Your Frost Radar for Leadership
+                        </Text>
+                      </View>
+                    </View>
+                  </TouchableOpacity>
                 </View>
               )}
               {pillarMemberContents?.pillar_contents?.length !== 0 &&
@@ -603,20 +593,23 @@ const styles = StyleSheet.create({
     elevation: 5,
   },
   buttonWrapper: {
+    justifyContent: 'center',
     alignItems: 'flex-start',
     marginTop: 10,
   },
   button: {
+    width: '93%',
     alignItems: 'center',
+    textAlign: 'center',
     justifyContent: 'center',
     backgroundColor: Colors.PRIMARY_BUTTON_COLOR,
     marginBottom: 15,
     borderRadius: 10,
+    padding: 10,
   },
   buttonText: {
     color: Colors.PRIMARY_BUTTON_TEXT_COLOR,
-    marginHorizontal: 2,
-	fontSize:13,
-    
+    marginHorizontal: 5,
+    fontSize: 14,
   },
 });

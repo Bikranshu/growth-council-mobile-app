@@ -65,7 +65,7 @@ const HomeCommunity = props => {
     cleanUser,
   } = props;
 
-  const pillarId = 117;
+  const pillarId = 169;
 
   const isFocused = useIsFocused();
 

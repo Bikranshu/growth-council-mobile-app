@@ -144,7 +144,6 @@ const EventCalendar = props => {
 
     const today = moment().tz(deviceTimeZone);
     const currentTimeZoneOffsetInHours = today.utcOffset() / 60;
-    console.log('a', startdate[1]);
 
     let convertedToLocalTime = formatTimeByOffset(
       backStartTimeStamp,

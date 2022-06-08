@@ -1,4 +1,4 @@
-import React,{useEffect} from 'react';
+import React, {useEffect} from 'react';
 import {ScrollView, StyleSheet, Text, View} from 'react-native';
 import HTMLView from 'react-native-htmlview';
 import {Typography} from '../../../theme';
@@ -28,36 +28,41 @@ const Traits = props => {
     fetchTraitsAnswer,
     UpdateTraitsAnswer,
 
-	scrollRef
-	
+    scrollRef,
   } = props;
 
   useEffect(() => {}, [count, answers]);
- 
-  return (
-	<ScrollView style={styles.scrollBox}>
-    <View >
-      {subTraits?.sub_traits[count]?.questions?.map((question, index) => (
-        <TraitsQuestion
-          {...props}
-          answers={answers}
-          setAnswers={setAnswers}
-          traitIndex={traitIndex}
-          question={question}
-          questionIndex={index}
-          key={index}
-		  
-		  scrollRef={scrollRef}
-        />
-      ))}
 
-      
+  
+ return (
+    <ScrollView style={styles.scrollBox}>
+      <View>
+        {subTraits?.sub_traits[count]?.questions !== '' &&
+          subTraits?.sub_traits[count]?.questions !== undefined &&
+          subTraits?.sub_traits[count]?.questions !== false && (
+            <View>
+              {subTraits?.sub_traits[count]?.questions?.map(
+                (question, index) => (
+                  <TraitsQuestion
+                    {...props}
+                    answers={answers}
+                    setAnswers={setAnswers}
+                    traitIndex={traitIndex}
+                    question={question}
+                    questionIndex={index}
+                    key={index}
+                    scrollRef={scrollRef}
+                  />
+                ),
+              )}
+            </View>
+          )}
+
         <View style={{marginTop: 25}}>
           <HTMLView value={subTraits?.sub_traits[count]?.content} />
         </View>
-     
-    </View>
-	 </ScrollView>
+      </View>
+    </ScrollView>
   );
 };
 
