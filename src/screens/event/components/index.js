@@ -76,11 +76,11 @@ const Event = props => {
     : '';
   switch (pillarCategory) {
     case 0:
-    case 117:
+    case 169:
       backgroundColor = Colors.COMMUNITY_COLOR;
       break;
     case 0:
-    case 118:
+    case 170:
       backgroundColor = Colors.PRACTICE_COLOR;
       break;
 
@@ -140,17 +140,20 @@ const Event = props => {
       events?.pillar_categories[0]?.parent
     : '';
   switch (pillarname) {
-    case 117:
+    case 169:
+    case 0:
       title =
         events?.pillar_categories[1]?.name ||
         events?.pillar_categories[0]?.name;
       break;
-    case 118:
+    case 170:
+    case 0:
       title =
         events?.pillar_categories[1]?.name ||
         events?.pillar_categories[0]?.name;
       break;
-    case 119:
+    case 171:
+    case 0:
       title =
         events?.pillar_categories[0]?.name ||
         events?.pillar_categories[0]?.name;
@@ -222,9 +225,10 @@ const Event = props => {
                         ? eventDate + eventEndTime
                         : eventStartMonth +
                           eventDate.split(/(\s+)/)[7] +
-                          eventDate.split(/(\s+)/)[6] +
+                          eventDate.split(/(\s+)/)[8] +
                           eventDate.split(/(\s+)/)[7] +
                           eventEndMonth}
+                      {eventDate.split(/(\s+)/)[5]}
                       {events?.event_meta?.evo_event_timezone !== undefined
                         ? events?.event_meta?.evo_event_timezone
                         : ''}

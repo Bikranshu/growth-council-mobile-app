@@ -57,7 +57,7 @@ const Ideas = props => {
             </View>
             <HTMLView
               value={description}
-              textComponentProps={{style: {fontSize: 14}}}
+              textComponentProps={{style: {fontSize: 14, textAlign: 'justify'}}}
             />
           </View>
 
