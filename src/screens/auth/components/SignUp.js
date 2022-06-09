@@ -1,4 +1,4 @@
-import React, {useState, useRef} from 'react';
+import React, {useState, useRef, useCallback} from 'react';
 import {
   Platform,
   StyleSheet,
@@ -10,6 +10,7 @@ import {
   Modal,
   Image,
 } from 'react-native';
+import {useFocusEffect} from '@react-navigation/native';
 import {Button} from 'native-base';
 import {useFormik} from 'formik';
 import * as Yup from 'yup';
@@ -21,7 +22,7 @@ import {CommonStyles, Colors, Typography} from '../../../theme';
 import FlatTextInput from '../../../shared/form/FlatTextInput';
 import CheckBox from '../../../shared/form/Checkbox';
 import ToastMessage from '../../../shared/toast';
-import auth from '@react-native-firebase/auth'
+import auth from '@react-native-firebase/auth';
 
 const phoneRegExp =
   /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/;
@@ -45,7 +46,14 @@ const signUpSchema = Yup.object().shape({
 });
 
 const SignUpForm = props => {
-  const {navigation, loading, error, registerCustomer, cleanCustomer} = props;
+  const {
+    navigation,
+    loading,
+    error,
+    registerCustomer,
+    cleanCustomer,
+    setLoading,
+  } = props;
   const phoneInput = useRef(null);
 
   const min = 1;
@@ -80,25 +88,31 @@ const SignUpForm = props => {
     },
     onSubmit: async values => {
       values.name = values.first_name + ' ' + values.last_name;
-      values.username = values.email.substring(
-        0,
-        values.email.lastIndexOf('@'),
-      );
+      values.username = values.first_name + ' ' + values.last_name;
+
+      //   values.email.substring(
+      //     0,
+      //     values.email.lastIndexOf('@'),
+      //   );
       try {
-        const response = await auth().createUserWithEmailAndPassword(values?.email?.trim(),
-        values?.password);
-        const token = await response.user.getIdToken();
-        if (token) {
-          await registerCustomer(values).then(response => {
-            if (response?.payload?.code === 200) {
+        // const response = await auth().createUserWithEmailAndPassword(
+        //   values?.email?.trim(),
+        //   values?.password,
+        // );
+        // const token = await response.user.getIdToken();
+        const response = await registerCustomer(values);
+        console.log(response);
+        if (response?.payload?.code === 200) {
+        //   await registerCustomer(values).then(response => {
+            // if (response?.payload?.code === 200) {
               navigation.navigate('SignIn');
               ToastMessage.show(
                 'You have successfully registered. Please wait for admin approval.',
               );
             } else {
-              ToastMessage.show(response?.payload?.response);
-            }
-          });
+              ToastMessage.show('Same Username or Email Address already exits');
+            // }
+        //   });
         }
       } catch (error) {
         switch (error.code) {
@@ -337,7 +351,6 @@ const SignUpForm = props => {
     values.phone != '' &&
     values.country != '';
 
-
   return (
     <View style={styles.container}>
       <ImageBackground
@@ -517,11 +530,14 @@ const SignUpForm = props => {
 
             <View style={styles.loginButtonWrapper}>
               <Button
-                style={
-                  !areAllFieldsFilled ? styles.loginButton1 : styles.loginButton
-                }
+                style={[
+                  !areAllFieldsFilled
+                    ? styles.loginButton1
+                    : styles.loginButton,
+                  loading && {backgroundColor: 'grey'},
+                ]}
                 onPress={handleSubmit}
-                disabled={!areAllFieldsFilled}>
+                disabled={!areAllFieldsFilled || loading}>
                 <Text style={styles.loginButtonText}>Join Now</Text>
               </Button>
             </View>
