@@ -338,9 +338,11 @@ const SubPOEDetails = props => {
                           name="toolbox"
                           size={25}
                           color="white"
-                          style={{paddingRight: 40}}
+                          style={{paddingLeft: 40}}
                         />
-                        <Text style={styles.signinbuttonText}>Toolkits</Text>
+                        <Text style={styles.signinbuttonText}>
+                          Read Growth Process Toolkits, {'\n'}access via one click
+                        </Text>
                       </View>
                     </TouchableOpacity>
 
@@ -352,6 +354,7 @@ const SubPOEDetails = props => {
                           color="#f26722"
                           style={{paddingRight: 40}}
                         />
+						
                         <Text style={styles.guidebuttonText}>GuideBook</Text>
                       </View>
                     </TouchableOpacity>
@@ -585,10 +588,10 @@ const styles = StyleSheet.create({
   },
   signinbuttonText: {
     fontFamily: Typography.FONT_SF_BOLD,
-    fontSize: 18,
+    fontSize: 16,
     color: 'white',
     alignItems: 'center',
-    paddingRight: 50,
+    paddingLeft: 20,
   },
   guidebutton: {
     alignItems: 'center',
