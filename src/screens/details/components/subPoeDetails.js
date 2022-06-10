@@ -263,11 +263,11 @@ const SubPOEDetails = props => {
                 alignItems: 'center',
                 justifyContent: 'center',
               }}
+			  resizeMode="contain"
             />
           </View>
 
-          <ScrollView
-            style={styles.content}>
+          <ScrollView style={styles.content}>
             <View style={styles.contentWrapper}>
               <Text
                 style={{
@@ -325,23 +325,25 @@ const SubPOEDetails = props => {
                 )}
               {poeDetails?.slug === '10-growth-processes' && (
                 <View style={styles.buttonWrapper}>
-                  <TouchableOpacity
-                    onPress={() =>
-                      navigation.navigate('SubPoeList', {
-                        poeId: poeDetails?.term_id,
-                        id: route?.params?.poeId,
-                      })
-                    }>
-                    <View style={styles.signupbutton}>
-                      <FontAwesome5
-                        name="toolbox"
-                        size={25}
-                        color="white"
-                        style={{paddingRight: 40}}
-                      />
-                      <Text style={styles.signinbuttonText}>Toolkits</Text>
-                    </View>
-                  </TouchableOpacity>
+                  <View style={{position: 'absolute', bottom: 10}}>
+                    <TouchableOpacity
+                      onPress={() =>
+                        navigation.navigate('SubPoeList', {
+                          poeId: poeDetails?.term_id,
+                          id: route?.params?.poeId,
+                        })
+                      }>
+                      <View style={styles.signupbutton}>
+                        <FontAwesome5
+                          name="toolbox"
+                          size={25}
+                          color="white"
+                          style={{paddingRight: 40}}
+                        />
+                        <Text style={styles.signinbuttonText}>Toolkits</Text>
+                      </View>
+                    </TouchableOpacity>
+                  </View>
                 </View>
               )}
 
@@ -389,11 +391,11 @@ const styles = StyleSheet.create({
     borderTopLeftRadius: 15,
     borderTopRightRadius: 15,
     marginBottom: 20,
-	backgroundColor:Colors.PRACTICE_COLOR,
+    backgroundColor: Colors.PRACTICE_COLOR,
   },
   contentWrapper: {
     width: '100%',
-    height: (Dimensions.get('screen').height + 50) / 2,
+    height: '100%',
     backgroundColor: 'white',
     overflow: 'scroll',
     marginTop: 10,
@@ -554,9 +556,9 @@ const styles = StyleSheet.create({
     marginTop: 20,
   },
   buttonWrapper: {
+    height: Dimensions.get('screen').height / 3,
     alignItems: 'center',
-    position: 'absolute',
-    right: 15,
+
     bottom: 0,
     // justifyContent: 'space-around',
   },

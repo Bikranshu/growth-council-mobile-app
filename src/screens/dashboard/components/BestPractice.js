@@ -182,7 +182,7 @@ const BestPractice = props => {
               {item?.user_meta?.first_name} {item?.user_meta?.last_name}
             </Text>
             <Text style={{fontSize: 6, color: '#030303'}}>
-              Frost and Sullivan
+			{item?.user_meta?.Title}
             </Text>
           </View>
         </TouchableOpacity>
