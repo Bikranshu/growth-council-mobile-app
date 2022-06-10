@@ -85,8 +85,9 @@ import searchContentReducer from '../screens/contentLibrary/slice/searchContentS
 
 import criticalIssueReducer from '../screens/criticalIssue/slice/criticalIssueSlice';
 import contentTagsReducer from '../screens/contentLibrary/slice/contentTagsSlice';
-
+import sendMailReducer from '../screens/email/slice/emailSlice';
 import radarReducer from '../screens/details/slice/radarSlice';
+import termsReducer from '../screens/terms/component/termsSlice';
 
 const persistConfig = {
   key: 'root',
@@ -155,7 +156,9 @@ const reducers = combineReducers({
   latestContent: latestContentReducer,
   searchContent: searchContentReducer,
   contentTags: contentTagsReducer,
-  radarMemberDetails:radarReducer,
+  radarMemberDetails: radarReducer,
+  sendMail: sendMailReducer,
+  terms: termsReducer,
 });
 
 const persistedReducer = persistReducer(persistConfig, reducers);

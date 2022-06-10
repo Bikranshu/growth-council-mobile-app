@@ -42,7 +42,7 @@ const EventCalendar = props => {
   //   const [markedDay, setMarkedDay] = useState([]);
 
   useEffect(() => {
-    const fetchCalendarEventAsync = async () => {
+    const fetchAllCalendarEventAsync = async () => {
       await fetchAllCalendarEvent({
         year: moment().format('YYYY'),
         month: moment().format('MM'),
@@ -59,7 +59,7 @@ const EventCalendar = props => {
           setCurrentEvents([]);
         });
     };
-    fetchCalendarEventAsync();
+    fetchAllCalendarEventAsync();
   }, []);
 
   const getDates = (startDate, endDate) => {
@@ -88,11 +88,11 @@ const EventCalendar = props => {
       : '';
     switch (pillarCategory) {
       case 0:
-      case 117:
+      case 169:
         backgroundColor = Colors.COMMUNITY_COLOR;
         break;
       case 0:
-      case 118:
+      case 170:
         backgroundColor = Colors.PRACTICE_COLOR;
         break;
       default:
@@ -103,6 +103,7 @@ const EventCalendar = props => {
       markedDay[startDate] = {
         color: backgroundColor,
         textColor: 'white',
+        borderRadius: 10,
       };
     } else {
       const dates = getDates(
@@ -115,17 +116,20 @@ const EventCalendar = props => {
             startingDay: true,
             color: backgroundColor,
             textColor: 'white',
+            borderRadius: 10,
           };
         } else if (dates?.length - 1 === index) {
           markedDay[moment(item).format('YYYY-MM-DD')] = {
             endingDay: true,
             color: backgroundColor,
             textColor: 'white',
+            borderRadius: 10,
           };
         } else {
           markedDay[moment(item).format('YYYY-MM-DD')] = {
             color: backgroundColor,
             textColor: 'white',
+            borderRadius: 10,
           };
         }
       });
@@ -139,12 +143,12 @@ const EventCalendar = props => {
     const startdate = eventStart.split(' ', 3)[1].split('', 3);
     const enddate = eventEnd.split(' ', 3)[1].split('', 3);
 
+    console.log(eventEnd.substring(0, 3).split(' ', 3)[0]);
     const backStartTimeStamp = item?.event_start;
     const deviceTimeZone = RNLocalize.getTimeZone();
 
     const today = moment().tz(deviceTimeZone);
     const currentTimeZoneOffsetInHours = today.utcOffset() / 60;
-    console.log('a', startdate[1]);
 
     let convertedToLocalTime = formatTimeByOffset(
       backStartTimeStamp,
@@ -174,13 +178,13 @@ const EventCalendar = props => {
       ? item?.pillar_categories[0]?.parent || item?.pillar_categories[1]?.parent
       : '';
     switch (pillarCategory) {
-      case 117:
+      case 169:
       case 0:
         borderColor = Colors.COMMUNITY_COLOR;
         pillarname = 'Growth Community';
         backgroundImage = require('../../../assets/img/Rectangle2.png');
         break;
-      case 118:
+      case 170:
       case 0:
         borderColor = Colors.PRACTICE_COLOR;
         pillarname = 'Growth Content';
@@ -213,7 +217,7 @@ const EventCalendar = props => {
           <View style={[styles.eventCard, styles.shadowProp]} key={index}>
             <Text
               style={{
-                marginTop: 30,
+                paddingVertical: 20,
                 marginLeft: 5,
                 marginRight: 5,
                 fontSize: 12,
@@ -232,20 +236,28 @@ const EventCalendar = props => {
               <View style={styles.eventDate}>
                 <Text style={styles.eventDateText}>
                   {actualDate === eventEnd
-                    ? actualDate.split(' ', 3)[0] +
+                    ? actualDate.substring(0, 3).split(' ', 3)[0] +
                       actualDate.split(/(\s+)/)[1] +
                       startdate[0] +
                       startdate[1]
                     : eventStart.split(/(\s+)/)[2] ===
                       eventEnd.split(/(\s+)/)[2]
-                    ? eventStart.split(/(\s+)/)[0] +
+                    ? eventStart.substring(0, 3).split(/(\s+)/)[0] +
                       eventStart.split(/(\s+)/)[4] +
-                      eventEnd.split(' ', 3)[0] +
+                      eventEnd.substring(0, 3).split(' ', 3)[0] +
                       eventEnd.split(/(\s+)/)[1] +
                       enddate[0] +
                       enddate[1] +
                       enddate[2]
-                    : actualDate + eventStart.split(/(\s+)/)[4] + eventEnd}
+                    : actualDate.substring(0, 3).split(' ', 3)[0] +
+                      actualDate.split(/(\s+)/)[1] +
+                      startdate[0] +
+                      startdate[1] +
+                      eventStart.split(/(\s+)/)[4] +
+                      eventEnd.substring(0, 3).split(' ', 3)[0] +
+                      eventEnd.split(/(\s+)/)[1] +
+                      enddate[0] +
+                      enddate[1]}
                 </Text>
               </View>
             </View>
@@ -260,7 +272,7 @@ const EventCalendar = props => {
       <StatusBar
         barStyle="light-content"
         hidden={false}
-        backgroundColor="grey"
+        backgroundColor="#001D3F"
         translucent={false}
       />
       <ScrollView style={{backgroundColor: Colors.PRIMARY_BACKGROUND_COLOR}}>
@@ -279,8 +291,6 @@ const EventCalendar = props => {
               }}>
               <Text style={{fontSize: 12, color: '#030303'}}>
                 {showAllEvents ? 'All Events' : 'My Events'}
-
-                {/* Select Events */}
               </Text>
             </TouchableOpacity>
           </View>
@@ -302,14 +312,10 @@ const EventCalendar = props => {
                     if (response?.payload?.code === 200) {
                       setCurrentEvents(response?.payload?.data);
                     } else {
-                      //   setMarkedDay([]);
                       setCurrentEvents([]);
                     }
                   })
                   .catch(e => {
-                    //   ToastMessage.show(e?.response?.payload?.response);
-
-                    // setMarkedDay([]);
                     setCurrentEvents([]);
                   });
               }}
@@ -463,6 +469,9 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     borderRadius: 10,
     marginBottom: 10,
+    justifyContent: 'center',
+    alignContent: 'center',
+    textAlign: 'center',
   },
   eventTheme: {
     height: '100%',
@@ -472,7 +481,6 @@ const styles = StyleSheet.create({
   },
   eventDetails: {
     flex: 1,
-    height: 80,
     flexDirection: 'row',
     flexWrap: 'nowrap',
     padding: 10,

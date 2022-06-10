@@ -21,7 +21,8 @@ import moment from 'moment';
 import {Linking} from 'react-native';
 import {BubblesLoader} from 'react-native-indicator';
 import {useFocusEffect, useIsFocused} from '@react-navigation/native';
-import ReactNativeBlobUtil from 'react-native-blob-util';
+// import ReactNativeBlobUtil from 'react-native-blob-util';
+import RNFetchBlob from 'react-native-blob-util';
 import ToastMessage from '../../../shared/toast';
 import YoutubePlayer from '../../../shared/youtube';
 import Footer from '../../../shared/footer';
@@ -56,7 +57,7 @@ const GrowthCoaching = props => {
     cleanPillarPOE,
   } = props;
 
-  const pillarId = 119;
+  const pillarId = 171;
 
   const isFocused = useIsFocused();
   const [memberConnection, setMemberConnection] = useState([]);
@@ -127,7 +128,7 @@ const GrowthCoaching = props => {
               {item?.user_meta?.first_name} {item?.user_meta?.last_name}
             </Text>
             <Text style={{fontSize: 6, color: '#030303'}}>
-              Frost and Sullivan
+			{item?.user_meta?.Title}
             </Text>
           </View>
         </TouchableOpacity>
@@ -175,7 +176,7 @@ const GrowthCoaching = props => {
           <Text
             style={{
               marginTop: 10,
-              fontSize: 10,
+              fontSize: 9,
               marginHorizontal: 10,
               textAlign: 'center',
               color: '#222B45',
@@ -252,7 +253,7 @@ const GrowthCoaching = props => {
 
   const _renderContentItem = ({item, index}) => {
     const file = item?.file;
-    const link = file.split('=', 2);
+    const link = file?.split('=', 2);
     let videoLink = link[1].split('&', 2);
     return <Player {...props} item={item} file={file} videoLink={videoLink} />;
   };
@@ -285,21 +286,37 @@ const GrowthCoaching = props => {
     };
 
     const downloadFile = () => {
-      let date = new Date();
+        const {config, fs} = RNFetchBlob;
+    const {
+      dirs: {DownloadDir, DocumentDir},
+    } = RNFetchBlob.fs;
+    const isIOS = Platform.OS === 'ios';
+    const aPath =
+      Platform.OS === 'ios' ? fs.dirs.DocumentDir : fs.dirs.PictureDir;
+    // Platform.select({ios: DocumentDir, android: DocumentDir});
 
-      let FILE_URL = fileUrl;
+    let date = new Date();
+    let FILE_URL = fileUrl;
 
-      let file_ext = getFileExtention(FILE_URL);
+    let file_ext = getFileExtention(FILE_URL);
 
-      file_ext = '.' + file_ext[0];
+    file_ext = '.' + file_ext[0];
 
-      const {config, fs} = ReactNativeBlobUtil;
-      let RootDir = fs.dirs.PictureDir;
-      let options = {
+    const configOptions = Platform.select({
+      ios: {
         fileCache: true,
+        path:
+          aPath +
+          '/file_' +
+          Math.floor(date.getTime() + date.getSeconds() / 2) +
+          file_ext,
+        description: 'downloading file...',
+      },
+      android: {
+        fileCache: false,
         addAndroidDownloads: {
           path:
-            RootDir +
+            aPath +
             '/file_' +
             Math.floor(date.getTime() + date.getSeconds() / 2) +
             file_ext,
@@ -307,13 +324,34 @@ const GrowthCoaching = props => {
           notification: true,
           useDownloadManager: true,
         },
-      };
-      config(options)
-        .fetch('GET', FILE_URL, ToastMessage.show('PDF File Download Started.'))
+      },
+    });
+
+    if (isIOS) {
+      RNFetchBlob.config(configOptions)
+        .fetch('GET', FILE_URL)
         .then(res => {
-          console.log('res -> ', JSON.stringify(res));
-          ToastMessage.show('PDF File Downloaded Successfully.');
+          console.log('file', res);
+          RNFetchBlob.ios.previewDocument('file://' + res.path());
         });
+      return;
+    } else {
+      config(configOptions)
+        .fetch('GET', FILE_URL)
+        .progress((received, total) => {
+          console.log('progress', received / total);
+        })
+
+        .then(res => {
+          console.log('file download', res);
+          RNFetchBlob.android.actionViewIntent(res.path());
+        })
+        .catch((errorMessage, statusCode) => {
+          console.log('error with downloading file', errorMessage);
+        });
+    }
+
+     
     };
 
     const getFileExtention = fileUrl => {
@@ -353,7 +391,9 @@ const GrowthCoaching = props => {
             marginLeft: 20,
             marginTop: 10,
           }}>
-          <Text style={{fontSize: 14, fontWeight: '600',color:"blue"}}>{item?.link}</Text>
+          <Text style={{fontSize: 14, fontWeight: '600', color: 'blue'}}>
+            {item?.link}
+          </Text>
         </View>
       </TouchableOpacity>
     );
@@ -371,6 +411,7 @@ const GrowthCoaching = props => {
         style={{backgroundColor: Colors.PRIMARY_BACKGROUND_COLOR}}>
         <View style={styles.container}>
           {pillarEvents?.length !== 0 &&
+            pillarEvents !== undefined &&
             pillarEvents !== null &&
             pillarEvents !== false && (
               <View style={styles.top}>
@@ -409,7 +450,7 @@ const GrowthCoaching = props => {
               />
             </View>
           )}
-		   {pillarMemberContents?.external_link?.length !== 0 &&
+          {pillarMemberContents?.external_link !== undefined &&
             pillarMemberContents?.external_link !== false &&
             pillarMemberContents?.external_link !== null && (
               <View style={styles.content}>
@@ -436,7 +477,7 @@ const GrowthCoaching = props => {
               </View>
             </View>
           )} */}
-          {pillarMemberContents?.attachments?.length !== 0 &&
+          {pillarMemberContents?.attachments !== undefined &&
             pillarMemberContents?.attachments !== null &&
             pillarMemberContents?.attachments !== false && (
               <View style={styles.sectionContainer}>
@@ -449,7 +490,7 @@ const GrowthCoaching = props => {
               </View>
             )}
 
-          {pillarMemberContents?.pillar_contents?.length !== 0 &&
+          {pillarMemberContents?.pillar_contents !== undefined &&
             pillarMemberContents?.pillar_contents !== null &&
             pillarMemberContents?.pillar_contents !== false && (
               <View style={styles.content}>

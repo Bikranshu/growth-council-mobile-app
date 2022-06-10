@@ -46,7 +46,6 @@ const ContactTags = props => {
       };
     }, []),
   );
-  
 
   useEffect(() => {
     setFilteredDataSource(contentTags);
@@ -152,7 +151,7 @@ const ContactTags = props => {
             return (
               <TouchableOpacity
                 onPress={() =>
-                  navigation.navigate('ContentLibraryDetail', {
+                  navigation.navigate('TabDetail', {
                     id: item?.ID,
                     title: item?.post_title,
                     itemname: route?.params?.itemname,

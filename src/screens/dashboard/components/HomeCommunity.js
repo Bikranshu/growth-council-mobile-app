@@ -27,7 +27,8 @@ import Player from './Player';
 import {getAsyncStorage} from '../../../utils/storageUtil';
 import {JWT_TOKEN} from '../../../constants';
 import {decodeUserID} from '../../../utils/jwtUtil';
-import ReactNativeBlobUtil from 'react-native-blob-util';
+import RNFetchBlob from 'react-native-blob-util';
+// import ReactNativeBlobUtil from 'react-native-blob-util';
 import ToastMessage from '../../../shared/toast';
 import {CommonStyles, Colors, Typography} from '../../../theme';
 import Loading from '../../../shared/loading';
@@ -56,14 +57,20 @@ const HomeCommunity = props => {
     pillarPOEError,
     fetchAllPillarPOE,
     cleanPillarPOE,
+
+    users,
+    userLoading,
+    userError,
+    fetchAllUsers,
+    cleanUser,
   } = props;
 
-  const pillarId = 117;
+  const pillarId = 169;
 
   const isFocused = useIsFocused();
 
   const [memberConnection, setMemberConnection] = useState(
-    pillarMemberContents.members,
+    pillarMemberContents?.members,
   );
 
   useFocusEffect(
@@ -103,9 +110,24 @@ const HomeCommunity = props => {
     }, [isFocused]),
   );
 
+  useFocusEffect(
+    useCallback(() => {
+      const fetchAllUsersAsync = async () => {
+        await fetchAllUsers({
+          sort: 'ASC',
+        });
+      };
+      fetchAllUsersAsync();
+
+      return () => {
+        cleanUser();
+      };
+    }, [isFocused]),
+  );
+
   useEffect(() => {
-    setMemberConnection(pillarMemberContents.members);
-  }, [pillarMemberContents]);
+    setMemberConnection(users);
+  }, [users]);
 
   const _renderItem = ({item, index}) => {
     return (
@@ -129,8 +151,8 @@ const HomeCommunity = props => {
               }}>
               {item?.user_meta?.first_name} {item?.user_meta?.last_name}
             </Text>
-            <Text style={{fontSize: 6, color: '#030303'}}>
-              Frost and Sullivan
+            <Text style={{fontSize: 6, color: '#030303', marginTop: 5}}>
+              {item?.user_meta?.Title}
             </Text>
           </View>
         </TouchableOpacity>
@@ -159,7 +181,7 @@ const HomeCommunity = props => {
             navigation.navigate('CommunityDetail', {
               poeId: item?.term_id,
               pillarId: item?.parent,
-			  
+
               title: 'Growth Community',
               image: require('../../../assets/img/Rectangle2.png'),
             });
@@ -176,8 +198,8 @@ const HomeCommunity = props => {
           <Text
             style={{
               marginTop: 10,
-              fontSize: 10,
-              marginHorizontal: 10,
+              fontSize: 8,
+              marginHorizontal: 9,
               textAlign: 'center',
               color: '#222B45',
             }}>
@@ -253,7 +275,7 @@ const HomeCommunity = props => {
 
   const _renderContentItem = ({item, index}) => {
     const file = item?.file;
-    const link = file.split('=', 2);
+    const link = file?.split('=', 2);
     let videoLink = link[1].split('&', 2);
     return <Player {...props} item={item} file={file} videoLink={videoLink} />;
   };
@@ -286,35 +308,70 @@ const HomeCommunity = props => {
     };
 
     const downloadFile = () => {
-      let date = new Date();
+      const {config, fs} = RNFetchBlob;
+      const {
+        dirs: {DownloadDir, DocumentDir},
+      } = RNFetchBlob.fs;
+      const isIOS = Platform.OS === 'ios';
+      const aPath =
+        Platform.OS === 'ios' ? fs.dirs.DocumentDir : fs.dirs.PictureDir;
+      // Platform.select({ios: DocumentDir, android: DocumentDir});
 
+      let date = new Date();
       let FILE_URL = fileUrl;
 
       let file_ext = getFileExtention(FILE_URL);
 
       file_ext = '.' + file_ext[0];
 
-      const {config, fs} = ReactNativeBlobUtil;
-      let RootDir = fs.dirs.PictureDir;
-      let options = {
-        fileCache: true,
-        addAndroidDownloads: {
+      const configOptions = Platform.select({
+        ios: {
+          fileCache: true,
           path:
-            RootDir +
+            aPath +
             '/file_' +
             Math.floor(date.getTime() + date.getSeconds() / 2) +
             file_ext,
           description: 'downloading file...',
-          notification: true,
-          useDownloadManager: true,
         },
-      };
-      config(options)
-        .fetch('GET', FILE_URL, ToastMessage.show('PDF File Download Started.'))
-        .then(res => {
-          console.log('res -> ', JSON.stringify(res));
-          ToastMessage.show('PDF File Downloaded Successfully.');
-        });
+        android: {
+          fileCache: false,
+          addAndroidDownloads: {
+            path:
+              aPath +
+              '/file_' +
+              Math.floor(date.getTime() + date.getSeconds() / 2) +
+              file_ext,
+            description: 'downloading file...',
+            notification: true,
+            useDownloadManager: true,
+          },
+        },
+      });
+
+      if (isIOS) {
+        RNFetchBlob.config(configOptions)
+          .fetch('GET', FILE_URL)
+          .then(res => {
+            console.log('file', res);
+            RNFetchBlob.ios.previewDocument('file://' + res.path());
+          });
+        return;
+      } else {
+        config(configOptions)
+          .fetch('GET', FILE_URL)
+          .progress((received, total) => {
+            console.log('progress', received / total);
+          })
+
+          .then(res => {
+            console.log('file download', res);
+            RNFetchBlob.android.actionViewIntent(res.path());
+          })
+          .catch((errorMessage, statusCode) => {
+            console.log('error with downloading file', errorMessage);
+          });
+      }
     };
 
     const getFileExtention = fileUrl => {
@@ -353,7 +410,9 @@ const HomeCommunity = props => {
             marginLeft: 20,
             marginTop: 10,
           }}>
-          <Text style={{fontSize: 14, fontWeight: '600',color:"blue"}}>{item?.link}</Text>
+          <Text style={{fontSize: 14, fontWeight: '600', color: 'blue'}}>
+            {item?.link}
+          </Text>
         </View>
       </TouchableOpacity>
     );
@@ -391,7 +450,7 @@ const HomeCommunity = props => {
               </View>
             )}
 
-          {pillarEventLoading && (
+          {pillarMemberContentLoading && (
             <View style={{marginTop: 40}}>
               <Loading />
             </View>
@@ -414,7 +473,7 @@ const HomeCommunity = props => {
               />
             </View>
           )}
-          {pillarMemberContents?.attachments?.length !== 0 &&
+          {pillarMemberContents?.attachments !== undefined &&
             pillarMemberContents?.attachments !== null &&
             pillarMemberContents?.attachments !== false && (
               <View style={styles.sectionContainer}>
@@ -426,7 +485,7 @@ const HomeCommunity = props => {
                 />
               </View>
             )}
-          {pillarMemberContents?.external_link?.length !== 0 &&
+          {pillarMemberContents?.external_link !== undefined &&
             pillarMemberContents?.external_link !== false &&
             pillarMemberContents?.external_link !== null && (
               <View style={styles.content}>
@@ -439,25 +498,23 @@ const HomeCommunity = props => {
                 />
               </View>
             )}
-          {pillarMemberContents?.members?.length !== 0 &&
-            pillarMemberContents?.members !== null &&
-            pillarMemberContents?.members !== false && (
-              <View style={styles.bottom}>
-                <Text style={styles.title}>Growth Community Members</Text>
-                <View>
-                  <FlatList
-                    horizontal
-                    showsHorizontalScrollIndicator={false}
-                    data={pillarMemberContents.members}
-                    renderItem={_renderItem}
-                  />
-                </View>
+          {users !== undefined && users !== null && users !== false && (
+            <View style={styles.bottom}>
+              <Text style={styles.title}>Growth Community Members</Text>
+              <View>
+                <FlatList
+                  horizontal
+                  showsHorizontalScrollIndicator={false}
+                  data={users}
+                  renderItem={_renderItem}
+                />
               </View>
-            )}
+            </View>
+          )}
 
           {/* external_links */}
 
-          {pillarMemberContents?.pillar_contents?.length !== 0 &&
+          {pillarMemberContents?.pillar_contents !== undefined &&
             pillarMemberContents?.pillar_contents !== null &&
             pillarMemberContents?.pillar_contents !== false && (
               <View style={styles.content}>
@@ -533,7 +590,7 @@ const styles = StyleSheet.create({
     marginTop: 20,
   },
   middleWrapper: {
-    width: (Dimensions.get('window').width - 10) / 4,
+    width: Dimensions.get('window').width / 4,
     borderRadius: 20,
     marginTop: 15,
     justifyContent: 'center',
@@ -554,6 +611,7 @@ const styles = StyleSheet.create({
   },
   bottom: {
     marginTop: 15,
+    marginRight: 5,
   },
   bottomWrapper: {
     position: 'relative',
@@ -562,7 +620,7 @@ const styles = StyleSheet.create({
     marginTop: 15,
     marginLeft: 15,
     marginRight: 2,
-    marginBottom: 10,
+    marginBottom: 20,
     backgroundColor: 'white',
   },
   chatIcon: {

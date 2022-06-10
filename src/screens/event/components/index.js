@@ -76,11 +76,11 @@ const Event = props => {
     : '';
   switch (pillarCategory) {
     case 0:
-    case 117:
+    case 169:
       backgroundColor = Colors.COMMUNITY_COLOR;
       break;
     case 0:
-    case 118:
+    case 170:
       backgroundColor = Colors.PRACTICE_COLOR;
       break;
 
@@ -104,13 +104,13 @@ const Event = props => {
   const today = moment().tz(deviceTimeZone);
   const currentTimeZoneOffsetInHours = today.utcOffset() / 60;
 
-  const eventDate = moment(events?.event_start).format('MMMM D, h:mma - ');
-  const eventEnd = moment(events?.event_end).format('MMMM D, h:mma');
+  const eventDate = moment(events?.event_start).format('MMMM D dddd, h:mma - ');
+  const eventEnd = moment(events?.event_end).format('MMMM D dddd, h:mma');
 
-  const eventStartMonth = moment(events?.event_start).format('MMMM D');
+  const eventStartMonth = moment(events?.event_start).format('MMMM D dddd');
 
   const eventEndTime = moment(events?.event_end).format('h:mma ');
-  const eventEndMonth = moment(events?.event_end).format('MMMM D');
+  const eventEndMonth = moment(events?.event_end).format('MMMM D dddd');
 
   const GobalDate = moment(timeToDisplay).format('MMMM D, h:mma - ');
   const GobalStartMonth = moment(timeToDisplay).format('MMMM D');
@@ -140,17 +140,20 @@ const Event = props => {
       events?.pillar_categories[0]?.parent
     : '';
   switch (pillarname) {
-    case 117:
+    case 169:
+    case 0:
       title =
         events?.pillar_categories[1]?.name ||
         events?.pillar_categories[0]?.name;
       break;
-    case 118:
+    case 170:
+    case 0:
       title =
         events?.pillar_categories[1]?.name ||
         events?.pillar_categories[0]?.name;
       break;
-    case 119:
+    case 171:
+    case 0:
       title =
         events?.pillar_categories[0]?.name ||
         events?.pillar_categories[0]?.name;
@@ -210,22 +213,25 @@ const Event = props => {
                     }}>
                     {/* <Text style={styles.eventDetails}>{GobalDate} /</Text> */}
                     <Text style={styles.eventDetails}>
-                      {GobalStartMonth === GobalEndMonth
+                      {/* {GobalStartMonth === GobalEndMonth
                         ? GobalDate + GobalEndTime
                         : GobalStartMonth +
                           GobalDate.split(/(\s+)/)[7] +
                           GobalDate.split(/(\s+)/)[6] +
                           GobalDate.split(/(\s+)/)[7] +
                           GobalEndMonth}{' '}
-                      ({deviceTimeZone}) /{' '}
+                      ({deviceTimeZone}) /{' '} */}
                       {eventStartMonth === eventEndMonth
                         ? eventDate + eventEndTime
                         : eventStartMonth +
                           eventDate.split(/(\s+)/)[7] +
-                          eventDate.split(/(\s+)/)[6] +
+                          eventDate.split(/(\s+)/)[8] +
                           eventDate.split(/(\s+)/)[7] +
                           eventEndMonth}
-                      (America)
+                      {eventDate.split(/(\s+)/)[5]}
+                      {events?.event_meta?.evo_event_timezone !== undefined
+                        ? events?.event_meta?.evo_event_timezone
+                        : ''}
                     </Text>
                   </View>
                   {!eventStatus && (
@@ -262,6 +268,7 @@ const Event = props => {
                     </View>
                   )}
                 </View>
+                {eventLoading && <Loading />}
                 {events?.location?.location_city !== undefined &&
                   events?.location?.location_address !== '' && (
                     <View
@@ -295,8 +302,6 @@ const Event = props => {
                           <Text>{events?.location?.location_address}</Text>
                         </View>
                       )}
-
-                      {eventLoading && <Loading />}
                     </View>
                   )}
               </View>
@@ -314,35 +319,38 @@ const Event = props => {
                     </View>
 
                     <View style={styles.hostdetail}>
-                      <View
-                        style={[
-                          styles.hostimage,
-                          {backgroundColor: backgroundColor},
-                        ]}>
-                        <Image
-                          source={{
-                            uri:
-                              typeof events?.organizer_image === 'boolean'
-                                ? null
-                                : events?.organizer_image,
-                          }}
-                          style={{
-                            width: '100%',
-                            height: '100%',
-                          }}
-                        />
-                      </View>
+                      {events?.organizer_image !== false &&
+                        events?.organizer_image !== null && (
+                          <View
+                            style={[
+                              styles.hostimage,
+                              {backgroundColor: backgroundColor},
+                            ]}>
+                            <Image
+                              source={{
+                                uri:
+                                  typeof events?.organizer_image === 'boolean'
+                                    ? null
+                                    : events?.organizer_image,
+                              }}
+                              style={{
+                                width: '100%',
+                                height: '100%',
+                              }}
+                            />
+                          </View>
+                        )}
 
                       <View
                         style={{
                           flex: 3,
-                          paddingLeft: 20,
+
                           justifyContent: 'center',
                         }}>
                         <Text style={styles.contentTitle}>
                           {events?.organizer?.term_name}
                         </Text>
-                        <Text style={{fontSize: 14}}>
+                        <Text style={{fontSize: 14, fontStyle: 'italic'}}>
                           {events?.organizer?.description}
                         </Text>
                       </View>
@@ -361,14 +369,26 @@ const Event = props => {
                       <HTMLView
                         value={description}
                         textComponentProps={{
-                          style: {fontSize: 14},
+                          style: {
+                            fontSize: 12,
+                            lineHeight: 20,
+                            fontWeight: 'regular',
+                            color: '#666767',
+                            alignItems: 'center',
+                            textAlign: 'justify',
+                          },
                         }}
                       />
                     )}
                   </View>
                 )}
 
-              <View style={{justifyContent: 'center', alignItems: 'center'}}>
+              <View
+                style={{
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  marginTop: 10,
+                }}>
                 {eventRegisterLoading && <Loading />}
                 {!eventStatus && (
                   <Button
@@ -430,14 +450,14 @@ const styles = StyleSheet.create({
     ...CommonStyles.headingText1,
     fontFamily: Typography.FONT_NORMAL,
     fontWeight: 'bold',
-    fontSize: 16,
+    fontSize: 14,
     color: '#ffff',
   },
   eventDetails: {
     fontFamily: Typography.FONT_SF_MEDIUM,
     color: Colors.NONARY_TEXT_COLOR,
     marginLeft: 5,
-    fontSize: 12,
+    fontSize: 13,
     color: '#1E2022',
     fontWeight: 'bold',
   },
@@ -452,7 +472,7 @@ const styles = StyleSheet.create({
     ...CommonStyles.headingText1,
     fontFamily: Typography.FONT_SF_MEDIUM,
     color: Colors.NONARY_TEXT_COLOR,
-    fontSize: 14,
+    fontSize: 15,
     marginBottom: 15,
     fontWeight: 'bold',
   },
@@ -461,7 +481,7 @@ const styles = StyleSheet.create({
     fontFamily: Typography.FONT_SF_MEDIUM,
     color: Colors.NONARY_TEXT_COLOR,
     fontSize: 14,
-    fontWeight: 'bold',
+    fontStyle: 'italic',
   },
   contentText: {
     fontFamily: Typography.FONT_NORMAL,
@@ -515,7 +535,7 @@ const styles = StyleSheet.create({
     marginTop: 100,
     marginBottom: 20,
     borderRadius: 14,
-    padding: 20,
+    padding: 15,
     position: 'relative',
   },
 
@@ -564,6 +584,7 @@ const styles = StyleSheet.create({
     borderRadius: 14,
     justifyContent: 'center',
     alignItems: 'center',
+    marginRight: 15,
   },
   eventaddress: {
     flex: 2,

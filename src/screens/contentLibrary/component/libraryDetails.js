@@ -48,7 +48,6 @@ const LibraryDetail = props => {
     }, []),
   );
 
-
   useEffect(() => {
     setFilteredDataSource(libraryDetails);
   }, [libraryDetails]);
@@ -136,7 +135,7 @@ const LibraryDetail = props => {
           </View>
           {route.params.breadcrumbName !== undefined && (
             <View style={{flexDirection: 'row', alignItems: 'center'}}>
-              <Text style={{fontSize: 9}}>{route.params.breadcrumbName}</Text>
+              <Text style={{fontSize: 9}}>{route.params.breadcrumbName} </Text>
               <Ionicons
                 name="chevron-forward-outline"
                 size={15}
@@ -188,14 +187,11 @@ const LibraryDetail = props => {
                           <Text style={styles.eventTitle}>
                             {item?.post_title}
                           </Text>
-                          {/* <Text style={{fontSize: 8, color: '#041C3E'}}>
-								{item.post_excerpt}
-							  </Text> */}
+
                           <HTMLView
                             value={'<p>' + item?.post_excerpt + '</p>'}
                             stylesheet={webViewStyle}
                           />
-                          {/* <Text style={styles.eventParagraph}>{item.text1}</Text> */}
                         </View>
                         <View
                           style={{

@@ -42,22 +42,31 @@ const Question = props => {
 
   useEffect(() => {}, [count, answers]);
 
+
+
   return (
     <View>
-      {subTraits?.sub_traits[count]?.yellow_benchmark_questions?.map(
-        (question, key) => (
-          <YellowQuestion
-            {...props}
-            traitIndex={traitIndex}
-            answers={answers}
-            setAnswers={setAnswers}
-            question={question}
-            questionIndex={key}
-            count={count}
-            key={key}
-          />
-        ),
-      )}
+      {subTraits?.sub_traits[count]?.yellow_benchmark_questions !== '' &&
+        subTraits?.sub_traits[count]?.yellow_benchmark_questions !==
+          undefined &&
+        subTraits?.sub_traits[count]?.yellow_benchmark_questions !== false && (
+          <View>
+            {subTraits?.sub_traits[count]?.yellow_benchmark_questions?.map(
+              (question, key) => (
+                <YellowQuestion
+                  {...props}
+                  traitIndex={traitIndex}
+                  answers={answers}
+                  setAnswers={setAnswers}
+                  question={question}
+                  questionIndex={key}
+                  count={count}
+                  key={key}
+                />
+              ),
+            )}{' '}
+          </View>
+        )}
     </View>
   );
 };

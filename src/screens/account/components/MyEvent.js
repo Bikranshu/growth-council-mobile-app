@@ -142,21 +142,25 @@ const Profile = props => {
               </View>
 
               <View style={styles.iconWrapper}>
-                <View
-                  style={{
-                    flexDirection: 'row',
-                    alignItems: 'flex-start',
-                    marginRight: 10,
-                  }}>
-                  <Ionicon name={'person'} size={20} color="#0B0B45" />
-                  <Text style={[styles.text, {fontSize: 10, width: 100}]}>
-                    {organizer} {description}
-                  </Text>
-                </View>
-                <View style={{flexDirection: 'row', alignItems: 'center'}}>
-                  <Ionicon name={'time'} size={20} color="#0B0B45" />
-                  <Text style={[styles.text, {fontSize: 12}]}>{time}</Text>
-                </View>
+                {item?.organizer !== undefined && (
+                  <View
+                    style={{
+                      flexDirection: 'row',
+                      alignItems: 'flex-start',
+                      marginRight: 10,
+                    }}>
+                    <Ionicon name={'person'} size={20} color="#0B0B45" />
+                    <Text style={[styles.text, {fontSize: 10, width: 100}]}>
+                      {organizer} {description}
+                    </Text>
+                  </View>
+                )}
+                {item?.event_start !== undefined && item?.event_start !== null && (
+                  <View style={{flexDirection: 'row', alignItems: 'center'}}>
+                    <Ionicon name={'time'} size={20} color="#0B0B45" />
+                    <Text style={[styles.text, {fontSize: 12}]}>{time}</Text>
+                  </View>
+                )}
               </View>
               <View style={styles.iconWrapper}>
                 <View
@@ -170,13 +174,15 @@ const Profile = props => {
                     {date[1]} {date[2]}
                   </Text>
                 </View>
-
-                <View style={{flexDirection: 'row', alignItems: 'center'}}>
-                  <Ionicon name={'location'} size={20} color="#0B0B45" />
-                  <Text style={[styles.text, {fontSize: 12, width: 120}]}>
-                    {item.location?.location_address}
-                  </Text>
-                </View>
+                {item?.location?.location_address !== undefined &&
+                  item?.location?.location_address !== null && (
+                    <View style={{flexDirection: 'row', alignItems: 'center'}}>
+                      <Ionicon name={'location'} size={20} color="#0B0B45" />
+                      <Text style={[styles.text, {fontSize: 12, width: 120}]}>
+                        {item?.location?.location_address}
+                      </Text>
+                    </View>
+                  )}
               </View>
             </View>
           </View>

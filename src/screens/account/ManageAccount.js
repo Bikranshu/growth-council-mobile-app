@@ -82,6 +82,7 @@ const ManageAccountScreen = props => {
       profileError={profileError}
       fetchProfileByIdentifier={fetchProfileByIdentifier}
       updateUser={updateUser}
+	  userLoading={userLoading}
       cleanProfile={cleanProfile}
       uploadProfileImages={uploadProfileImages}
       uploadProfileImageLoading={uploadProfileImageLoading}

@@ -1,4 +1,4 @@
-import React, {useState, useRef} from 'react';
+import React, {useState, useRef, useCallback} from 'react';
 import {
   Platform,
   StyleSheet,
@@ -10,19 +10,19 @@ import {
   Modal,
   Image,
 } from 'react-native';
+import {useFocusEffect} from '@react-navigation/native';
 import {Button} from 'native-base';
 import {useFormik} from 'formik';
 import * as Yup from 'yup';
 import {Picker} from '@react-native-picker/picker';
 import {BubblesLoader} from 'react-native-indicator';
 import uuid from 'react-native-uuid';
-import {createUserWithEmailAndPassword} from 'firebase/auth';
 import PhoneInput from 'react-native-phone-number-input';
 import {CommonStyles, Colors, Typography} from '../../../theme';
 import FlatTextInput from '../../../shared/form/FlatTextInput';
 import CheckBox from '../../../shared/form/Checkbox';
 import ToastMessage from '../../../shared/toast';
-import {auth} from '../../../utils/firebaseUtil';
+import auth from '@react-native-firebase/auth';
 
 const phoneRegExp =
   /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/;
@@ -34,19 +34,26 @@ const signUpSchema = Yup.object().shape({
     .email('Please enter valid email.')
     .trim()
     .required('Email Address is Required.'),
-  phone: Yup.string()
-    .matches(phoneRegExp, 'Phone number is not valid.')
-    .required('Phone Number is required.'),
-  title: Yup.string().required('Title is required.'),
-  company: Yup.string().required('Company is required.'),
-  country: Yup.string().required('Country is required.'),
+  // phone: Yup.string()
+  //   .matches(phoneRegExp, 'Phone number is not valid.')
+  //   .required('Phone Number is required.'),
+  // title: Yup.string().required('Title is required.'),
+  // company: Yup.string().required('Company is required.'),
+  // country: Yup.string().required('Country is required.'),
   checked: Yup.boolean()
     .required('Please agree to terms and condition for signup.')
     .oneOf([true], 'Please agree to terms and condition for signup.'),
 });
 
 const SignUpForm = props => {
-  const {navigation, loading, error, registerCustomer, cleanCustomer} = props;
+  const {
+    navigation,
+    loading,
+    error,
+    registerCustomer,
+    cleanCustomer,
+    setLoading,
+  } = props;
   const phoneInput = useRef(null);
 
   const min = 1;
@@ -75,40 +82,43 @@ const SignUpForm = props => {
       company: '',
       phone: '',
       email: '',
-      country: '',
+      country: 'United States',
       checked: false,
       firebase_password: uuid.v4(),
     },
     onSubmit: async values => {
       values.name = values.first_name + ' ' + values.last_name;
-      values.username = values.email.substring(
-        0,
-        values.email.lastIndexOf('@'),
-      );
+      values.username = values.first_name + ' ' + values.last_name;
+
+      //   values.email.substring(
+      //     0,
+      //     values.email.lastIndexOf('@'),
+      //   );
       try {
-        const response = await createUserWithEmailAndPassword(
-          auth,
-          values?.email?.trim(),
-          values?.password,
-        );
-        const token = await response.user.getIdToken();
-        if (token) {
-          await registerCustomer(values).then(response => {
-            if (response?.payload?.code === 200) {
+        // const response = await auth().createUserWithEmailAndPassword(
+        //   values?.email?.trim(),
+        //   values?.password,
+        // );
+        // const token = await response.user.getIdToken();
+        const response = await registerCustomer(values);
+        console.log(response);
+        if (response?.payload?.code === 200) {
+        //   await registerCustomer(values).then(response => {
+            // if (response?.payload?.code === 200) {
               navigation.navigate('SignIn');
               ToastMessage.show(
                 'You have successfully registered. Please wait for admin approval.',
               );
             } else {
-              ToastMessage.show(response?.payload?.response);
-            }
-          });
+              ToastMessage.show('Same Username or Email Address already exits');
+            // }
+        //   });
         }
       } catch (error) {
         switch (error.code) {
           case 'auth/email-already-in-use':
             ToastMessage.show(
-              'The email address is already in use by another account.',
+              'The email address is already used by another account.',
             );
             break;
           case 'auth/argument-error':
@@ -332,6 +342,14 @@ const SignUpForm = props => {
   ];
 
   const [isPickerVisible, setIsPickerVisible] = useState(false);
+  const areAllFieldsFilled =
+    values.first_name != '' &&
+    values.last_name != '' &&
+    values.title != '' &&
+    values.company &&
+    values.email != '' &&
+    values.phone != '' &&
+    values.country != '';
 
   return (
     <View style={styles.container}>
@@ -512,9 +530,14 @@ const SignUpForm = props => {
 
             <View style={styles.loginButtonWrapper}>
               <Button
-                style={styles.loginButton}
+                style={[
+                  !areAllFieldsFilled
+                    ? styles.loginButton1
+                    : styles.loginButton,
+                  loading && {backgroundColor: 'grey'},
+                ]}
                 onPress={handleSubmit}
-                disabled={!isValid}>
+                disabled={!areAllFieldsFilled || loading}>
                 <Text style={styles.loginButtonText}>Join Now</Text>
               </Button>
             </View>
@@ -655,6 +678,15 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     backgroundColor: Colors.PRACTICE_COLOR,
+    marginLeft: 5,
+  },
+  loginButton1: {
+    width: '50%',
+    borderRadius: 25,
+    height: 56,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: 'grey',
     marginLeft: 5,
   },
   loginButtonText: {

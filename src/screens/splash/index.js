@@ -78,7 +78,7 @@ const SplashScreen = () => {
           <Text style={styles.poweredBy}>Powered by</Text>
           <Image
             style={styles.footerLogo1}
-            source={require('../../assets/img/splashFooter.png')}
+            source={require('../../assets/img/bluewhite-16.png')}
             resizeMode="cover"
           />
         </View>

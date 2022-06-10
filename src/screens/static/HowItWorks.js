@@ -7,7 +7,7 @@ const HowItWorksScreen = () => {
 
     return (
         <View style={styles.container}>
-            <StatusBar barStyle="dark-content" backgroundColor={Colors.PRIMARY_BACKGROUND_COLOR}/>
+            <StatusBar barStyle="dark-content" backgroundColor={"#001D3F"}/>
 
             <View style={styles.header}>
                 <Text style={styles.headingText1}>How It Works</Text>

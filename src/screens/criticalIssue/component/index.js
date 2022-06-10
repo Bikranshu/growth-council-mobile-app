@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useRef, useState, useCallback} from 'react';
 import {
   Platform,
   Text,
@@ -21,28 +21,45 @@ import HTMLView from 'react-native-htmlview';
 import {BubblesLoader} from 'react-native-indicator';
 import Entypo from 'react-native-vector-icons/Entypo';
 import Loading from '../../../shared/loading';
+import { useFocusEffect } from '@react-navigation/native';
 
 const CriticalIssue = props => {
   const {
     navigation,
-	route,
+    route,
     criticalIssue,
     criticalIssueLoading,
     criticalIssueError,
     fetchCritcalIssue,
     cleanCriticalIssue,
+    index
   } = props;
+
+  const listRef = useRef(null);
 
 
   useEffect(() => {
     fetchCritcalIssue();
   }, []);
 
+  useFocusEffect(useCallback(() => {wait(500).then(() => scrollToIndex())}, [criticalIssueLoading]))
+
+  const wait = (ms) => new Promise(resolve => {
+    setTimeout(() => {
+       resolve(true);
+    }, ms)
+  })
+
+  const scrollToIndex = () => {
+      listRef.current.scrollToIndex({animated: true, index});
+  }
+
 
   const _renderCritical = ({item, index}) => {
     return (
-      <View
-        style={styles.content}>
+      <View style={styles.content} 
+
+	  >
         <Image
           style={{
             width: Dimensions.get('window').width - 40,
@@ -52,6 +69,7 @@ const CriticalIssue = props => {
           source={{uri: item?.image}}
         />
         <View style={styles.contentWrapper}>
+          
           <Text style={{color: 'black', fontSize: 14, marginBottom: 10}}>
             {item?.heading}
           </Text>
@@ -86,42 +104,38 @@ const CriticalIssue = props => {
       <StatusBar
         barStyle="light-content"
         hidden={false}
-        backgroundColor="grey"
+        backgroundColor="#001D3F"
         translucent={false}
       />
-      <ScrollView
-        contentContainerStyle={{
-          flexGrow: 1,
-          backgroundColor: Colors.PRIMARY_BACKGROUND_COLOR,
-        }}>
         <View style={styles.container}>
-          <View style={styles.title}>
-            <Text
-              style={{
-                color: 'black',
-                fontSize: 24,
-                paddingBottom: 30,
-                fontWeight: '600',
-              }}>
-              {criticalIssue?.critical_issue_mobile_title}
-            </Text>
-            <View style={styles.titleBorder} />
-
-            <Text style={styles.titleText}>
-              {criticalIssue?.critical_issue_mobile_description}
-            </Text>
-          </View>
-
           {criticalIssueLoading && <Loading />}
           <View>
             <FlatList
+              ref={listRef}
+              ListHeaderComponent={() => (
+                <View style={styles.title}>
+                <Text
+                  style={{
+                    color: 'black',
+                    fontSize: 24,
+                    paddingBottom: 30,
+                    fontWeight: '600',
+                  }}>
+                  {criticalIssue?.critical_issue_mobile_title}
+                </Text>
+                <View style={styles.titleBorder} />
+    
+                <Text style={styles.titleText}>
+                  {criticalIssue?.critical_issue_mobile_description}
+                </Text>
+              </View>
+              )}
               showsVerticalScrollIndicator={false}
               data={criticalIssue?.critical_issue_mobile_lists}
               renderItem={_renderCritical}
             />
           </View>
         </View>
-      </ScrollView>
 
       <BottomNav {...props} navigation={navigation} />
     </SafeAreaView>

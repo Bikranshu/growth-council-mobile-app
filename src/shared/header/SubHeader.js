@@ -1,3 +1,4 @@
+import { DrawerActions, useNavigation } from '@react-navigation/native';
 import React from 'react';
 import {
   View,
@@ -12,6 +13,7 @@ import IonIcon from 'react-native-vector-icons/Ionicons';
 import {useDispatch, useSelector} from 'react-redux';
 
 import {fetchProfileByID} from '../../screens/account/slice/profileSlice';
+import { navigationRef, toggleDrawer } from '../../utils/navigationUtil';
 import HeaderRight from './HeaderRight';
 
 const SubHeader = props => {
@@ -19,6 +21,8 @@ const SubHeader = props => {
   const {profile, profileLoading, profileError} = useSelector(
     state => state.profile,
   );
+  const {navigation} = props;
+
   const fetchProfileByIdentifier = () => {
     dispatch(fetchProfileByID());
   };
@@ -41,11 +45,11 @@ const SubHeader = props => {
             alignItems: 'center',
           }}>
           {props?.noDrawer ? (
-            <TouchableOpacity onPress={() => props.navigation.goBack()}>
+            <TouchableOpacity onPress={() => navigation.goBack()}>
               <IonIcon name="arrow-back-sharp" size={30} color="white" />
             </TouchableOpacity>
           ) : (
-            <TouchableOpacity onPress={() => props.navigation.toggleDrawer()}>
+            <TouchableOpacity onPress={() => navigation.openDrawer()}>
               <IonIcon name="menu-outline" color={'white'} size={30} />
             </TouchableOpacity>
           )}

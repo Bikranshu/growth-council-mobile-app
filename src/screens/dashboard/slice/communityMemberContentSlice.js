@@ -4,8 +4,8 @@ import {fetch} from '../../../utils/httpUtil';
 
 export const fetchAllCommunityMemberContents = createAsyncThunk(
   'communityMemberContent/fetchAll',
-  (_, {rejectWithValue}) => {
-    return fetch(`jwt-auth/v1/pillars/117`)
+  (pillarId, {rejectWithValue}) => {
+    return fetch(`jwt-auth/v1/pillars/169`)
       .then(response => response.data)
       .catch(error => rejectWithValue(error?.response?.data || error));
   },

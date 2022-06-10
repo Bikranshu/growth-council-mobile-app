@@ -191,6 +191,7 @@ const Search = props => {
             <Image
               source={{uri: item?.image}}
               style={{width: 30, height: 35}}
+			  resizeMode="contain"
             />
           </View>
           <Text style={{marginTop: 8, fontSize: 10}}>{item?.name}</Text>
@@ -204,7 +205,7 @@ const Search = props => {
       <StatusBar
         barStyle="light-content"
         hidden={false}
-        backgroundColor="grey"
+        backgroundColor="#001D3F"
         translucent={false}
       />
       <View style={styles.container}>

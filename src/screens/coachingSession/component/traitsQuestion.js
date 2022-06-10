@@ -5,8 +5,15 @@ import {Typography} from '../../../theme';
 import {ScrollView} from 'native-base';
 
 const TraitsQuestion = props => {
-  const {question, answers, count, setAnswers, questionIndex, traitIndex} =
-    props;
+  const {
+    question,
+    answers,
+    count,
+    setAnswers,
+    questionIndex,
+    traitIndex,
+    scrollRef,
+  } = props;
   const [status, setStatus] = useState(0);
 
   useEffect(() => {
@@ -25,41 +32,14 @@ const TraitsQuestion = props => {
       {question?.options?.map((option1, index) => (
         <View style={styles.wrapper} key={index}>
           <View style={{display: 'flex', flexDirection: 'row'}}>
-            {/* <RadioButton
-              value={option1?.score}
-              styles={{borderWidth: 1, borderColor: 'red', borderStyle:'solid'}}
-              status={status === option1.score ? 'checked' : 'unchecked'}
-              onPress={() => {
-                let newAnswers = answers;
-                if (traitIndex.traitIndex === 0) {
-                  let newGrowthIndex = answers.questions.growthIndex;
-                  newGrowthIndex[count] = option1.score;
-                  setAnswers({
-                    ...newAnswers,
-                    questions: {
-                      ...newAnswers.questions,
-                      growthIndex: newGrowthIndex,
-                    },
-                  });
-                } else {
-                  let newInnovativeIndex = answers.questions.innovativeIndex;
-                  newInnovativeIndex[count] = option1.score;
-                  setAnswers({
-                    ...newAnswers,
-                    questions: {
-                      ...newAnswers.questions,
-                      innovativeIndex: newInnovativeIndex,
-                    },
-                  });
-                }
-              }}
-            /> */}
             <View style={styles.rbWrapper}>
               <TouchableOpacity
                 style={styles.rbStyle}
                 onPress={() => {
                   let newAnswers = answers;
                   if (traitIndex.traitIndex === 0) {
+                    scrollRef.current?.scrollToEnd({animated: true});
+					
                     let newGrowthIndex = answers.questions.growthIndex;
                     newGrowthIndex[count] = option1.score;
                     setAnswers({
@@ -70,6 +50,8 @@ const TraitsQuestion = props => {
                       },
                     });
                   } else {
+                    scrollRef.current?.scrollToEnd({animated: true});
+
                     let newInnovativeIndex = answers.questions.innovativeIndex;
                     newInnovativeIndex[count] = option1.score;
                     setAnswers({
