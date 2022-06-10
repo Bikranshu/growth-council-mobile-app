@@ -176,7 +176,7 @@ const GrowthCoaching = props => {
           <Text
             style={{
               marginTop: 10,
-              fontSize: 10,
+              fontSize: 9,
               marginHorizontal: 10,
               textAlign: 'center',
               color: '#222B45',

@@ -263,7 +263,7 @@ const SubPOEDetails = props => {
                 alignItems: 'center',
                 justifyContent: 'center',
               }}
-			  resizeMode="contain"
+              resizeMode="contain"
             />
           </View>
 
@@ -341,6 +341,18 @@ const SubPOEDetails = props => {
                           style={{paddingRight: 40}}
                         />
                         <Text style={styles.signinbuttonText}>Toolkits</Text>
+                      </View>
+                    </TouchableOpacity>
+
+                    <TouchableOpacity>
+                      <View style={styles.guidebutton}>
+                        <Ionicons
+                          name="book-outline"
+                          size={25}
+                          color="#f26722"
+                          style={{paddingRight: 40}}
+                        />
+                        <Text style={styles.guidebuttonText}>GuideBook</Text>
                       </View>
                     </TouchableOpacity>
                   </View>
@@ -575,6 +587,24 @@ const styles = StyleSheet.create({
     fontFamily: Typography.FONT_SF_BOLD,
     fontSize: 18,
     color: 'white',
+    alignItems: 'center',
+    paddingRight: 50,
+  },
+  guidebutton: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    width: buttonContainerWidth,
+    marginBottom: Platform.OS === 'ios' ? 10 : 20,
+    borderRadius: 10,
+    height: 56,
+    flexDirection: 'row',
+    borderColor: Colors.PRACTICE_COLOR,
+    borderWidth: 1,
+  },
+  guidebuttonText: {
+    fontFamily: Typography.FONT_SF_BOLD,
+    fontSize: 18,
+    color: Colors.PRACTICE_COLOR,
     alignItems: 'center',
     paddingRight: 50,
   },

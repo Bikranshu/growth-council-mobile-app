@@ -88,11 +88,11 @@ const EventCalendar = props => {
       : '';
     switch (pillarCategory) {
       case 0:
-      case 117:
+      case 169:
         backgroundColor = Colors.COMMUNITY_COLOR;
         break;
       case 0:
-      case 118:
+      case 170:
         backgroundColor = Colors.PRACTICE_COLOR;
         break;
       default:
@@ -103,6 +103,7 @@ const EventCalendar = props => {
       markedDay[startDate] = {
         color: backgroundColor,
         textColor: 'white',
+        borderRadius: 10,
       };
     } else {
       const dates = getDates(
@@ -115,17 +116,20 @@ const EventCalendar = props => {
             startingDay: true,
             color: backgroundColor,
             textColor: 'white',
+            borderRadius: 10,
           };
         } else if (dates?.length - 1 === index) {
           markedDay[moment(item).format('YYYY-MM-DD')] = {
             endingDay: true,
             color: backgroundColor,
             textColor: 'white',
+            borderRadius: 10,
           };
         } else {
           markedDay[moment(item).format('YYYY-MM-DD')] = {
             color: backgroundColor,
             textColor: 'white',
+            borderRadius: 10,
           };
         }
       });
@@ -139,6 +143,7 @@ const EventCalendar = props => {
     const startdate = eventStart.split(' ', 3)[1].split('', 3);
     const enddate = eventEnd.split(' ', 3)[1].split('', 3);
 
+    console.log(eventEnd.substring(0, 3).split(' ', 3)[0]);
     const backStartTimeStamp = item?.event_start;
     const deviceTimeZone = RNLocalize.getTimeZone();
 
@@ -173,13 +178,13 @@ const EventCalendar = props => {
       ? item?.pillar_categories[0]?.parent || item?.pillar_categories[1]?.parent
       : '';
     switch (pillarCategory) {
-      case 117:
+      case 169:
       case 0:
         borderColor = Colors.COMMUNITY_COLOR;
         pillarname = 'Growth Community';
         backgroundImage = require('../../../assets/img/Rectangle2.png');
         break;
-      case 118:
+      case 170:
       case 0:
         borderColor = Colors.PRACTICE_COLOR;
         pillarname = 'Growth Content';
@@ -231,20 +236,28 @@ const EventCalendar = props => {
               <View style={styles.eventDate}>
                 <Text style={styles.eventDateText}>
                   {actualDate === eventEnd
-                    ? actualDate.split(' ', 3)[0] +
+                    ? actualDate.substring(0, 3).split(' ', 3)[0] +
                       actualDate.split(/(\s+)/)[1] +
                       startdate[0] +
                       startdate[1]
                     : eventStart.split(/(\s+)/)[2] ===
                       eventEnd.split(/(\s+)/)[2]
-                    ? eventStart.split(/(\s+)/)[0] +
+                    ? eventStart.substring(0, 3).split(/(\s+)/)[0] +
                       eventStart.split(/(\s+)/)[4] +
-                      eventEnd.split(' ', 3)[0] +
+                      eventEnd.substring(0, 3).split(' ', 3)[0] +
                       eventEnd.split(/(\s+)/)[1] +
                       enddate[0] +
                       enddate[1] +
                       enddate[2]
-                    : actualDate + eventStart.split(/(\s+)/)[4] + eventEnd}
+                    : actualDate.substring(0, 3).split(' ', 3)[0] +
+                      actualDate.split(/(\s+)/)[1] +
+                      startdate[0] +
+                      startdate[1] +
+                      eventStart.split(/(\s+)/)[4] +
+                      eventEnd.substring(0, 3).split(' ', 3)[0] +
+                      eventEnd.split(/(\s+)/)[1] +
+                      enddate[0] +
+                      enddate[1]}
                 </Text>
               </View>
             </View>
@@ -278,8 +291,6 @@ const EventCalendar = props => {
               }}>
               <Text style={{fontSize: 12, color: '#030303'}}>
                 {showAllEvents ? 'All Events' : 'My Events'}
-
-                {/* Select Events */}
               </Text>
             </TouchableOpacity>
           </View>
@@ -301,14 +312,10 @@ const EventCalendar = props => {
                     if (response?.payload?.code === 200) {
                       setCurrentEvents(response?.payload?.data);
                     } else {
-                      //   setMarkedDay([]);
                       setCurrentEvents([]);
                     }
                   })
                   .catch(e => {
-                    //   ToastMessage.show(e?.response?.payload?.response);
-
-                    // setMarkedDay([]);
                     setCurrentEvents([]);
                   });
               }}

@@ -350,7 +350,7 @@ const Event = props => {
                         <Text style={styles.contentTitle}>
                           {events?.organizer?.term_name}
                         </Text>
-                        <Text style={{fontSize: 14}}>
+                        <Text style={{fontSize: 14, fontStyle: 'italic'}}>
                           {events?.organizer?.description}
                         </Text>
                       </View>
@@ -481,7 +481,6 @@ const styles = StyleSheet.create({
     fontFamily: Typography.FONT_SF_MEDIUM,
     color: Colors.NONARY_TEXT_COLOR,
     fontSize: 14,
-    fontWeight: 'bold',
     fontStyle: 'italic',
   },
   contentText: {
