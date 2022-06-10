@@ -268,7 +268,7 @@ const CoachingSession = props => {
                           return setValue(val);
                         } else {
                           ToastMessage.show(
-                            'Please complete the previous session to access the further sessions',
+                            'Please complete the previous session to access the next sessions',
                           );
                         }
                       } else {

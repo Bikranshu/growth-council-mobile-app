@@ -206,7 +206,7 @@ const ManageAccount = props => {
       await updateUser(values).then(response => {
         if (response?.payload?.code === 200) {
           navigation.navigate('Account');
-          ToastMessage.show('Profile has been successfully updated.');
+          ToastMessage.show('Your profile has been successfully updated.');
         }
       });
     },
