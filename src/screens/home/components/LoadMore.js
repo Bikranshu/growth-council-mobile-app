@@ -59,11 +59,11 @@ const CouncilAllDetail = props => {
       item?.pillar_categories[0]?.parent || item?.pillar_categories[1]?.parent;
     switch (pillarCategory) {
       case 0:
-      case 169:
+      case 194:
         backgroundColor = Colors.COMMUNITY_COLOR;
         break;
       case 0:
-      case 170:
+      case 171:
         backgroundColor = Colors.PRACTICE_COLOR;
         break;
       default:
