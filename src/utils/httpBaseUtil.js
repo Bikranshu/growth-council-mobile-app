@@ -17,9 +17,9 @@ export const httpBase = (isDownloadable = false) => {
   api.interceptors.request.use(
     async config => {
       let token = await getAsyncStorage(JWT_TOKEN);
-	  if(token){
-		config.headers.authorization = `Bearer ${token}`;
-	  }
+      if (token) {
+        config.headers.authorization = `Bearer ${token}`;
+      }
       config.headers['Accept'] = 'application/json';
       if (isDownloadable) {
         config.headers['Content-Type'] = 'multipart/form-data';

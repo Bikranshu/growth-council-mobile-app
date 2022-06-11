@@ -59,11 +59,11 @@ const CouncilAllDetail = props => {
       item?.pillar_categories[0]?.parent || item?.pillar_categories[1]?.parent;
     switch (pillarCategory) {
       case 0:
-      case 117:
+      case 169:
         backgroundColor = Colors.COMMUNITY_COLOR;
         break;
       case 0:
-      case 118:
+      case 170:
         backgroundColor = Colors.PRACTICE_COLOR;
         break;
       default:
@@ -73,23 +73,23 @@ const CouncilAllDetail = props => {
       <View>
         <TouchableOpacity
           onPress={() =>
-            ToastMessage.show('Log in as Council membership to review')
+            ToastMessage.show('Please login to review further.')
           }>
           <View style={styles.eventCard} key={index}>
             <View style={[styles.eventTheme, {borderColor: backgroundColor}]} />
             <View style={styles.eventDetails}>
               <View style={styles.eventInfo}>
                 <Text style={styles.eventTitle}>{item.title}</Text>
-                <Text style={styles.eventParagraph}>
+                {/* <Text style={styles.eventParagraph}>
                   Hosted by {item?.organizer?.term_name}{' '}
                   {item?.organizer?.description}
-                </Text>
+                </Text> */}
               </View>
               <View style={styles.eventDate}>
                 <Text style={styles.eventDateText}>
-                  {date[1]}
-                  {'\n'}
                   {date[0]}
+                  {'\n'}
+                  {date[1]}
                 </Text>
               </View>
             </View>
@@ -104,7 +104,7 @@ const CouncilAllDetail = props => {
       <View>
         <TouchableOpacity
           onPress={() =>
-            ToastMessage.show('Log in as Council membership to review')
+            ToastMessage.show('Please login to review further.')
           }>
           <View style={styles.poeCard} key={index}>
             <View style={[styles.poeTheme, styles.shadowProp]}>
@@ -130,35 +130,41 @@ const CouncilAllDetail = props => {
 
   return (
     <>
-      <StatusBar
-        barStyle="dark-content"
-        backgroundColor={Colors.PRIMARY_BACKGROUND_COLOR}
-      />
+      <StatusBar barStyle="dark-content" backgroundColor={'#001D3F'} />
       <View style={styles.container}>
         <ScrollView>
-          <View style={styles.events}>
-            <Text style={styles.poeTitle}>POINTS OF ENGAGEMENT </Text>
-            <View styles={styles.eventList}>
-              <FlatList
-                vertical
-                showsHorizontalScrollIndicator={false}
-                data={pillarPOEs}
-                renderItem={_renderPOE}
-              />
-            </View>
-          </View>
-
-          <View style={styles.events}>
-            <Text style={styles.eventsTitle}>UPCOMING EVENTS</Text>
-            <View styles={styles.eventList}>
-              <FlatList
-                vertical
-                showsHorizontalScrollIndicator={false}
-                data={upcomingEvents}
-                renderItem={_renderItem}
-              />
-            </View>
-          </View>
+          {pillarPOEs?.length !== 0 &&
+            pillarPOEs !== null &&
+            pillarPOEs !== false &&
+            pillarPOEs !== undefined && (
+              <View style={styles.events}>
+                <Text style={styles.poeTitle}>POINTS OF ENGAGEMENT </Text>
+                <View styles={styles.eventList}>
+                  <FlatList
+                    vertical
+                    showsHorizontalScrollIndicator={false}
+                    data={pillarPOEs}
+                    renderItem={_renderPOE}
+                  />
+                </View>
+              </View>
+            )}
+          {/* {upcomingEvents?.length !== 0 &&
+            upcomingEvents !== null &&
+            upcomingEvents !== false &&
+            upcomingEvents !== undefined && (
+              <View style={styles.events}>
+                <Text style={styles.eventsTitle}>UPCOMING EVENTS</Text>
+                <View styles={styles.eventList}>
+                  <FlatList
+                    vertical
+                    showsHorizontalScrollIndicator={false}
+                    data={upcomingEvents}
+                    renderItem={_renderItem}
+                  />
+                </View>
+              </View>
+            )} */}
         </ScrollView>
       </View>
     </>
@@ -214,13 +220,13 @@ const styles = StyleSheet.create({
   eventsTitle: {
     marginBottom: 34,
     fontWeight: '600',
-	color:'black'
+    color: 'black',
   },
   poeTitle: {
     marginTop: 10,
     marginBottom: 30,
     fontWeight: '600',
-	color:'black'
+    color: 'black',
   },
   eventList: {},
   eventCard: {

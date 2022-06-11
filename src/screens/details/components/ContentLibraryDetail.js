@@ -17,7 +17,8 @@ import FeatherIcon from 'react-native-vector-icons/Feather';
 import Entypo from 'react-native-vector-icons/Entypo';
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome';
 import ToastMessage from '../../../shared/toast';
-import ReactNativeBlobUtil from 'react-native-blob-util';
+// import ReactNativeBlobUtil from 'react-native-blob-util';
+import RNFetchBlob from 'react-native-blob-util';
 import BottomNav from '../../../layout/BottomLayout';
 import ArticleFeedbackCard from '../../../shared/card/ArticleFeedbackCard';
 import Footer from '../../../shared/footer';
@@ -26,7 +27,7 @@ import {Colors, CommonStyles} from '../../../theme';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import {Searchbar} from 'react-native-paper';
 import {useFocusEffect, useIsFocused} from '@react-navigation/native';
-
+import {Linking} from 'react-native';
 import {BubblesLoader} from 'react-native-indicator';
 import WebView from 'react-native-autoheight-webview';
 import HTMLView from 'react-native-htmlview';
@@ -59,7 +60,6 @@ const ContentLibraryDetail = props => {
     setIsTrue(value);
   };
 
-
   const _renderItem = ({item, index}) => {
     const fileUrl = item?.file?.url;
 
@@ -82,41 +82,76 @@ const ContentLibraryDetail = props => {
             Alert.alert('Error', 'Storage Permission Not Granted');
           }
         } catch (err) {
-			ToastMessage.show(err);
+          ToastMessage.show(err);
         }
       }
     };
 
     const downloadFile = () => {
-      let date = new Date();
+      const {config, fs} = RNFetchBlob;
+      const {
+        dirs: {DownloadDir, DocumentDir},
+      } = RNFetchBlob.fs;
+      const isIOS = Platform.OS === 'ios';
+      const aPath =
+        Platform.OS === 'ios' ? fs.dirs.DocumentDir : fs.dirs.PictureDir;
+      // Platform.select({ios: DocumentDir, android: DocumentDir});
 
+      let date = new Date();
       let FILE_URL = fileUrl;
 
       let file_ext = getFileExtention(FILE_URL);
 
       file_ext = '.' + file_ext[0];
 
-      const {config, fs} = ReactNativeBlobUtil;
-      let RootDir = fs.dirs.PictureDir;
-      let options = {
-        fileCache: true,
-        addAndroidDownloads: {
+      const configOptions = Platform.select({
+        ios: {
+          fileCache: true,
           path:
-            RootDir +
+            aPath +
             '/file_' +
             Math.floor(date.getTime() + date.getSeconds() / 2) +
             file_ext,
           description: 'downloading file...',
-          notification: true,
-          useDownloadManager: true,
         },
-      };
-      config(options)
-        .fetch('GET', FILE_URL, ToastMessage.show('PDF File Download Started.'))
-        .then(res => {
-			console.log('res -> ', JSON.stringify(res));
-          ToastMessage.show('PDF File Downloaded Successfully.');
-        });
+        android: {
+          fileCache: false,
+          addAndroidDownloads: {
+            path:
+              aPath +
+              '/file_' +
+              Math.floor(date.getTime() + date.getSeconds() / 2) +
+              file_ext,
+            description: 'downloading file...',
+            notification: true,
+            useDownloadManager: true,
+          },
+        },
+      });
+
+      if (isIOS) {
+        RNFetchBlob.config(configOptions)
+          .fetch('GET', FILE_URL)
+          .then(res => {
+            console.log('file', res);
+            RNFetchBlob.ios.previewDocument('file://' + res.path());
+          });
+        return;
+      } else {
+        config(configOptions)
+          .fetch('GET', FILE_URL)
+          .progress((received, total) => {
+            console.log('progress', received / total);
+          })
+
+          .then(res => {
+            console.log('file download', res);
+            RNFetchBlob.android.actionViewIntent(res.path());
+          })
+          .catch((errorMessage, statusCode) => {
+            console.log('error with downloading file', errorMessage);
+          });
+      }
     };
 
     const getFileExtention = fileUrl => {
@@ -187,6 +222,15 @@ const ContentLibraryDetail = props => {
       </View>
     );
   };
+  const _renderExternal = ({item, index}) => {
+    return (
+      <TouchableOpacity onPress={() => Linking.openURL(item?.link)}>
+        <View style={{marginBottom: 10, flexDirection: 'row'}}>
+          <Text style={{color: 'blue'}}>{item?.label}</Text>
+        </View>
+      </TouchableOpacity>
+    );
+  };
 
   let video = contentLibraryDetails?.video_url;
   if (video !== undefined) {
@@ -199,7 +243,7 @@ const ContentLibraryDetail = props => {
       <StatusBar
         barStyle="light-content"
         hidden={false}
-        backgroundColor="grey"
+        backgroundColor="#001D3F"
         translucent={false}
       />
 
@@ -258,7 +302,8 @@ const ContentLibraryDetail = props => {
             )}
           {contentLibraryDetails?.presenter !== false &&
             contentLibraryDetails?.presenter !== null &&
-            contentLibraryDetails?.presenter !== '' && (
+            contentLibraryDetails?.presenter !== '' &&
+            contentLibraryDetails?.presenter !== undefined && (
               <View style={styles.sectionContainerBorder}>
                 <Text style={styles.bodyTitleText}>Presented By:</Text>
                 <View style={{flexDirection: 'row', alignItems: 'center'}}>
@@ -275,7 +320,6 @@ const ContentLibraryDetail = props => {
 
                   <View
                     style={{
-                      marginLeft: 20,
                       width: '85%',
                     }}>
                     <Text style={styles.userNameText}>
@@ -285,7 +329,18 @@ const ContentLibraryDetail = props => {
                 </View>
               </View>
             )}
-
+          {/* Coshots */}
+          {contentLibraryDetails?.coshots !== undefined &&
+            contentLibraryDetails?.coshots !== '' &&
+            contentLibraryDetails?.coshots !== false &&
+            contentLibraryDetails?.coshots !== null && (
+              <View style={styles.sectionContainer}>
+                <Text style={styles.bodyTitleText}>Co-Hosts:</Text>
+                <Text style={styles.abstractDescriptionText}>
+                  {contentLibraryDetails?.coshots}
+                </Text>
+              </View>
+            )}
           {/* Abstract Section */}
           {contentLibraryDetails?.abstract !== undefined &&
             contentLibraryDetails?.abstract !== '' &&
@@ -298,13 +353,69 @@ const ContentLibraryDetail = props => {
                 </Text>
               </View>
             )}
+          {/* external_links */}
+          {contentLibraryDetails?.external_links?.length !== 0 &&
+            contentLibraryDetails?.external_links !== false &&
+            contentLibraryDetails?.external_links !== null && (
+              <View style={styles.sectionContainer}>
+                {/* <Text style={styles.bodyTitleText}>External Links:</Text> */}
+                <FlatList
+                  showsHorizontalScrollIndicator={false}
+                  showsVerticalScrollIndicator={false}
+                  data={contentLibraryDetails?.external_links}
+                  renderItem={_renderExternal}
+                />
+              </View>
+            )}
+
+          {/* Panelists */}
+          {contentLibraryDetails?.panelists !== undefined &&
+            contentLibraryDetails?.panelists !== '' &&
+            contentLibraryDetails?.panelists !== false &&
+            contentLibraryDetails?.panelists !== null && (
+              <View style={styles.sectionContainer}>
+                <Text style={styles.bodyTitleText}>Panelists:</Text>
+                <Text style={styles.abstractDescriptionText}>
+                  {contentLibraryDetails?.panelists}
+                </Text>
+              </View>
+            )}
+
+          {/* Agendas */}
+          {contentLibraryDetails?.agendas !== undefined &&
+            contentLibraryDetails?.agendas !== '' &&
+            contentLibraryDetails?.agendas !== false &&
+            contentLibraryDetails?.agendas !== null && (
+              <View style={styles.sectionContainer}>
+                <Text style={styles.bodyTitleText}>Agendas:</Text>
+                <Text style={styles.abstractDescriptionText}>
+                  {contentLibraryDetails?.agendas}
+                </Text>
+              </View>
+            )}
+
+          {/* Notes */}
+          {contentLibraryDetails?.notes !== undefined &&
+            contentLibraryDetails?.notes !== '' &&
+            contentLibraryDetails?.notes !== false &&
+            contentLibraryDetails?.notes !== null && (
+              <View style={styles.sectionContainer}>
+                <Text style={styles.bodyTitleText}>Notes:</Text>
+                <Text style={styles.abstractDescriptionText}>
+                  {contentLibraryDetails?.notes}
+                </Text>
+              </View>
+            )}
+
           {contentLibraryDetailsLoading && <Loading />}
+
           {/* Call To Action Section */}
           {contentLibraryDetails?.call_to_action?.length !== 0 &&
             contentLibraryDetails?.call_to_action !== false &&
-            contentLibraryDetails?.call_to_action !== null && (
+            contentLibraryDetails?.call_to_action !== null &&
+            contentLibraryDetails?.call_to_action !== undefined && (
               <View style={styles.sectionContainer}>
-                <Text style={styles.bodyTitleText}>Call to Action:</Text>
+                <Text style={styles.bodyTitleText}>Key Take-Aways:</Text>
                 <FlatList
                   showsHorizontalScrollIndicator={false}
                   showsVerticalScrollIndicator={false}
@@ -317,7 +428,8 @@ const ContentLibraryDetail = props => {
           {/* Attachments Section */}
           {contentLibraryDetails?.attachment?.length !== 0 &&
             contentLibraryDetails?.attachment !== false &&
-            contentLibraryDetails?.attachment !== null && (
+            contentLibraryDetails?.attachment !== null &&
+            contentLibraryDetails?.attachment !== undefined && (
               <View style={styles.sectionContainer}>
                 <Text style={styles.bodyTitleText}>Attachments:</Text>
                 <FlatList
@@ -332,7 +444,8 @@ const ContentLibraryDetail = props => {
           {/* Tags Section */}
           {contentLibraryDetails?.tags?.length !== 0 &&
             contentLibraryDetails?.tags?.length !== false &&
-            contentLibraryDetails?.tags?.length !== null && (
+            contentLibraryDetails?.tags?.length !== null &&
+            contentLibraryDetails?.tags?.length !== undefined && (
               <View style={styles.sectionContainerBorder}>
                 <Text style={styles.bodyTitleText}>Tags:</Text>
 
@@ -354,7 +467,6 @@ const ContentLibraryDetail = props => {
             isTrue={isTrue}
             handleValue={handleFeedbackChange}
           />
-
         </ScrollView>
       </View>
 
@@ -370,7 +482,7 @@ const styles = StyleSheet.create({
   bodyContainer: {
     ...CommonStyles.container,
     marginTop: 25,
-	marginBottom:20
+    marginBottom: 20,
   },
   breadcrumbContainer: {
     marginHorizontal: 25,
@@ -409,11 +521,13 @@ const styles = StyleSheet.create({
     marginBottom: 20,
     fontFamily: 'SFProText-SemiBold',
     color: Colors.PRIMARY_TEXT_COLOR,
+    fontWeight: '700',
   },
   userImage: {
     width: 60,
     height: 60,
     borderRadius: 14,
+    marginRight: 15,
     resizeMode: 'contain',
   },
   userNameText: {
@@ -427,7 +541,6 @@ const styles = StyleSheet.create({
     color: Colors.SECONDARY_TEXT_COLOR,
   },
   sectionContainer: {
-    marginBottom: 20,
     marginTop: 20,
   },
   abstractDescriptionText: {
@@ -437,7 +550,8 @@ const styles = StyleSheet.create({
     color: Colors.SECONDARY_TEXT_COLOR,
   },
   attachmentContainer: {
-    margin: 1,
+    marginVertical: 5,
+    marginHorizontal: 2,
     height: 63,
     paddingLeft: 20,
     paddingRight: 8,

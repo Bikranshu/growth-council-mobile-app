@@ -22,9 +22,6 @@ import {useToast} from 'native-base';
 import {useIsFocused, useFocusEffect} from '@react-navigation/native';
 import {Colors, Typography} from '../../../theme';
 import ToastMessage from '../../../shared/toast';
-import {Dialog} from 'react-native-paper';
-import {BubblesLoader} from 'react-native-indicator';
-import Footer from '../../../shared/footer';
 import {Searchbar} from 'react-native-paper';
 import BottomNav from '../../../layout/BottomLayout';
 import Loading from '../../../shared/loading';
@@ -70,12 +67,11 @@ const People = props => {
           s: searchKey,
           sort: sorting,
           expertise_areas: category,
-          // category: account,
-          // country: region,
+          account: account,
+          region: region,
         });
       };
       fetchAllUsersAsync();
-
       return () => {
         cleanUser();
       };
@@ -87,10 +83,7 @@ const People = props => {
   }, [users]);
 
   useEffect(() => {
-    const fetchAllExpertisesAsync = async () => {
-      await fetchAllExpertises();
-    };
-    fetchAllExpertisesAsync();
+    fetchAllExpertises();
   }, []);
 
   const connectMemberByMemberID = async (memberID, index) => {
@@ -105,8 +98,8 @@ const People = props => {
         s: searchKey,
         sort: sorting,
         expertise_areas: category,
-        // category: account,
-        // country: region,
+        account: account,
+        region: region,
       });
       ToastMessage.show('You have successfully connected.');
     } else {
@@ -115,206 +108,18 @@ const People = props => {
     }
   };
 
-  const countries = [
-    'Afghanistan',
-    'Albania',
-    'Algeria',
-    'Andorra',
-    'Angola',
-    'Antigua & Deps',
-    'Argentina',
-    'Armenia',
-    'Australia',
-    'Austria',
-    'Azerbaijan',
-    'Bahamas',
-    'Bahrain',
-    'Bangladesh',
-    'Barbados',
-    'Belarus',
-    'Belgium',
-    'Belize',
-    'Benin',
-    'Bhutan',
-    'Bolivia',
-    'Bosnia Herzegovina',
-    'Botswana',
-    'Brazil',
-    'Brunei',
-    'Bulgaria',
-    'Burkina',
-    'Burundi',
-    'Cambodia',
-    'Cameroon',
-    'Canada',
-    'Cape Verde',
-    'Central African Rep',
-    'Chad',
-    'Chile',
-    'China',
-    'Colombia',
-    'Comoros',
-    'Congo',
-    'Congo {Democratic Rep}',
-    'Costa Rica',
-    'Croatia',
-    'Cuba',
-    'Cyprus',
-    'Czech Republic',
-    'Denmark',
-    'Djibouti',
-    'Dominica',
-    'Dominican Republic',
-    'East Timor',
-    'Ecuador',
-    'Egypt',
-    'El Salvador',
-    'Equatorial Guinea',
-    'Eritrea',
-    'Estonia',
-    'Ethiopia',
-    'Fiji',
-    'Finland',
-    'France',
-    'Gabon',
-    'Gambia',
-    'Georgia',
-    'Germany',
-    'Ghana',
-    'Greece',
-    'Grenada',
-    'Guatemala',
-    'Guinea',
-    'Guinea-Bissau',
-    'Guyana',
-    'Haiti',
-    'Honduras',
-    'Hungary',
-    'Iceland',
-    'India',
-    'Indonesia',
-    'Iran',
-    'Iraq',
-    'Ireland {Republic}',
-    'Israel',
-    'Italy',
-    'Ivory Coast',
-    'Jamaica',
-    'Japan',
-    'Jordan',
-    'Kazakhstan',
-    'Kenya',
-    'Kiribati',
-    'Korea North',
-    'Korea South',
-    'Kosovo',
-    'Kuwait',
-    'Kyrgyzstan',
-    'Laos',
-    'Latvia',
-    'Lebanon',
-    'Lesotho',
-    'Liberia',
-    'Libya',
-    'Liechtenstein',
-    'Lithuania',
-    'Luxembourg',
-    'Macedonia',
-    'Madagascar',
-    'Malawi',
-    'Malaysia',
-    'Maldives',
-    'Mali',
-    'Malta',
-    'Marshall Islands',
-    'Mauritania',
-    'Mauritius',
-    'Mexico',
-    'Micronesia',
-    'Moldova',
-    'Monaco',
-    'Mongolia',
-    'Montenegro',
-    'Morocco',
-    'Mozambique',
-    'Myanmar, {Burma}',
-    'Namibia',
-    'Nauru',
-    'Nepal',
-    'Netherlands',
-    'New Zealand',
-    'Nicaragua',
-    'Niger',
-    'Nigeria',
-    'Norway',
-    'Oman',
-    'Pakistan',
-    'Palau',
-    'Panama',
-    'Papua New Guinea',
-    'Paraguay',
-    'Peru',
-    'Philippines',
-    'Poland',
-    'Portugal',
-    'Qatar',
-    'Romania',
-    'Russian Federation',
-    'Rwanda',
-    'St Kitts & Nevis',
-    'St Lucia',
-    'Saint Vincent & the Grenadines',
-    'Samoa',
-    'San Marino',
-    'Sao Tome & Principe',
-    'Saudi Arabia',
-    'Senegal',
-    'Serbia',
-    'Seychelles',
-    'Sierra Leone',
-    'Singapore',
-    'Slovakia',
-    'Slovenia',
-    'Solomon Islands',
-    'Somalia',
-    'South Africa',
-    'South Sudan',
-    'Spain',
-    'Sri Lanka',
-    'Sudan',
-    'Suriname',
-    'Swaziland',
-    'Sweden',
-    'Switzerland',
-    'Syria',
-    'Taiwan',
-    'Tajikistan',
-    'Tanzania',
-    'Thailand',
-    'Togo',
-    'Tonga',
-    'Trinidad & Tobago',
-    'Tunisia',
-    'Turkey',
-    'Turkmenistan',
-    'Tuvalu',
-    'Uganda',
-    'Ukraine',
-    'United Arab Emirates',
-    'United Kingdom',
-    'United States',
-    'Uruguay',
-    'Uzbekistan',
-    'Vanuatu',
-    'Vatican City',
-    'Venezuela',
-    'Vietnam',
-    'Yemen',
-    'Zambia',
-    'Zimbabwe',
-  ];
+  const countries = {
+    Region: 'Region',
+    'NORTH AMERICA': 'NORTH AMERICA',
+    APAC: 'APAC',
+    MEASA: 'MEASA',
+  };
 
-  const pillar = ['Community', 'Best Practice', 'Growth Coaching'];
+  const pillar = {
+    'Account Type': 'Account Type',
+    'Council Member': 'Council Member',
+    'Associate Member': 'Associate Member',
+  };
 
   const _renderItem = ({item, index}) => {
     return (
@@ -380,7 +185,7 @@ const People = props => {
       <StatusBar
         barStyle="light-content"
         hidden={false}
-        backgroundColor="grey"
+        backgroundColor="#001D3F"
         translucent={false}
       />
       <View style={styles.container}>
@@ -397,35 +202,11 @@ const People = props => {
                   s: text,
                   sort: sorting,
                   expertise_areas: category,
-                  category: account,
-                  country: region,
+                  account: account,
+                  region: region,
                 });
               }}
             />
-            {/* <TouchableOpacity style={styles.icon}
-              onPress={async () => {
-                let newSorting = 'DESC';
-                if( sorting === 'DESC'){
-                  newSorting = 'ASC'
-                }
-                setSorting(newSorting);
-                
-                await fetchAllUsers({
-                  s: searchKey,
-                  sort: newSorting,
-                  expertise_areas: category,
-                  category: account,
-                  country: region,
-                });
-              }}
-            >
-              <Ionicons
-                name="swap-vertical-outline"
-                size={25}
-                color="#7E7F84"
-              />
-              <Text style={styles.textWrapper}>Sort</Text>
-            </TouchableOpacity> */}
           </View>
           <View style={styles.iconWrapper}>
             <TouchableOpacity
@@ -434,14 +215,14 @@ const People = props => {
                 flex: 1,
                 alignItems: 'center',
                 borderWidth: 0.3,
-                paddingVertical: 10,
+                paddingVertical: 5,
                 borderColor: 'gray',
                 height: 60,
                 borderBottomLeftRadius: 10,
                 borderTopLeftRadius: 10,
                 justifyContent: 'center',
               }}>
-              <Text style={{fontSize: 14, color: '#222B45'}}>
+              <Text style={{fontSize: 11, color: '#222B45'}}>
                 {category ? category : 'Expertise Areas'}
               </Text>
             </TouchableOpacity>
@@ -451,12 +232,12 @@ const People = props => {
                 flex: 1,
                 alignItems: 'center',
                 borderWidth: 0.3,
-                paddingVertical: 10,
+                paddingVertical: 5,
                 borderColor: 'gray',
                 height: 60,
                 justifyContent: 'center',
               }}>
-              <Text style={{fontSize: 14, color: '#222B45'}}>
+              <Text style={{fontSize: 11, color: '#222B45'}}>
                 {account ? account : 'Account Type'}
               </Text>
             </TouchableOpacity>
@@ -466,14 +247,14 @@ const People = props => {
                 flex: 1,
                 alignItems: 'center',
                 borderWidth: 0.3,
-                paddingVertical: 10,
+                paddingVertical: 5,
                 borderColor: 'gray',
                 height: 60,
                 justifyContent: 'center',
                 borderBottomRightRadius: 10,
                 borderTopRightRadius: 10,
               }}>
-              <Text style={{fontSize: 14, color: '#222B45'}}>
+              <Text style={{fontSize: 11, color: '#222B45'}}>
                 {region ? region : 'Region'}
               </Text>
             </TouchableOpacity>
@@ -489,12 +270,12 @@ const People = props => {
           }}>
           <View style={{marginTop: 10}}>
             {memberConnectionLoading && <Loading />}
-            <FlatList
-              vertical
-              showsVerticalScrollIndicator={false}
-              data={users}
-              renderItem={_renderItem}
-            />
+              <FlatList
+                vertical
+                showsVerticalScrollIndicator={false}
+                data={users}
+                renderItem={_renderItem}
+              />
           </View>
           {/* <Footer /> */}
         </ScrollView>
@@ -534,25 +315,20 @@ const People = props => {
                 itemTextStyle={{fontSize: 12}}
                 onValueChange={async itemValue => {
                   setCategory(itemValue);
-                  if (itemValue === 'Expertise Areas') {
-                    fetchAllUsers({
-                      s: searchKey,
-                      sort: sorting,
-                      expertise_areas: '',
-                    });
-                  } else {
-                    fetchAllUsers({
-                      s: searchKey,
-                      sort: sorting,
-                      expertise_areas: itemValue,
-                    });
-                  }
+
+                  await fetchAllUsers({
+                    s: searchKey,
+                    sort: sorting,
+                    expertise_areas: itemValue,
+                    account: account,
+                    region: region,
+                  });
                 }}>
                 {Object.keys(expertise).map(key => {
                   return (
                     <Picker.Item
                       label={expertise[key]}
-                      value={key}
+                      value={expertise[key]}
                       key={key}
                       style={{fontSize: 14}}
                     />
@@ -598,10 +374,13 @@ const People = props => {
                 itemTextStyle={{fontSize: 12}}
                 onValueChange={async itemValue => {
                   setAccount(itemValue);
+
                   await fetchAllUsers({
                     s: searchKey,
-                    sort: 'ASC',
-                    category: account,
+                    sort: sorting,
+                    expertise_areas: category,
+                    account: itemValue,
+                    region: region,
                   });
                 }}>
                 {Object.keys(pillar).map(key => {
@@ -652,12 +431,15 @@ const People = props => {
                 selectedValue={region}
                 mode="dropdown"
                 itemTextStyle={{fontSize: 12}}
-                onValueChange={async (itemValue, itemIndex) => {
+                onValueChange={async itemValue => {
                   setRegion(itemValue);
+
                   await fetchAllUsers({
                     s: searchKey,
-                    sort: 'ASC',
-                    country: region,
+                    sort: sorting,
+                    expertise_areas: category,
+                    account: account,
+                    region: itemValue,
                   });
                 }}>
                 {Object.keys(countries).map(key => {

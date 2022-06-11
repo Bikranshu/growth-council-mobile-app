@@ -26,6 +26,8 @@ import {Button} from 'native-base';
 import Loading from '../../../shared/loading';
 
 const screenHeight = Math.round(Dimensions.get('window').height);
+const win = Dimensions.get('window');
+const contentContainerWidth = win.width - 30;
 
 const GrowthDetail = props => {
   const {
@@ -151,25 +153,28 @@ const GrowthDetail = props => {
               id: item.ID,
               sessionId: item?.ID,
               title: item?.title,
+              previousSessionID: coachingSession[index - 1]?.ID,
             })
           }>
           <View
             style={{
-              justifyContent: 'center',
               alignContent: 'center',
+              justifyContent: 'center',
               alignItems: 'center',
               borderWidth: 1.3,
               borderColor: '#9EBD6D',
-              marginLeft: 15,
+              marginLeft: 10,
               borderRadius: 14,
               marginTop: 10,
               padding: 10,
-              paddingHorizontal: 20,
+              width: 180,
+              height: 60,
+              flexDirection: 'row',
             }}>
             <Text
               style={{
                 fontWeight: '500',
-                fontSize: 14,
+                fontSize: 16,
                 color: 'black',
                 alignItems: 'center',
                 alignContent: 'center',
@@ -192,66 +197,66 @@ const GrowthDetail = props => {
   const _renderLearnItem = ({item, index}) => {
     return (
       <View>
-        <TouchableOpacity
-          onPress={() =>
-            navigation.navigate('selflearn', {
-              id: item.ID,
-              selfLearnId: item?.ID,
-            })
-          }>
-          <View style={styles.learnWrapper}>
-            <Image
-              source={{uri: item?.image}}
-              style={{
-                width: 72,
-                height: 102,
-                margin: 10,
-                borderRadius: 10,
-              }}
-            />
+        <View style={styles.learnWrapper}>
+          <Image
+            source={{uri: item?.image}}
+            style={{
+              width: 150,
+              height: 180,
+              margin: 10,
+              borderRadius: 10,
+            }}
+            resizeMode="contain"
+          />
+
+          <View>
+            {/* <TouchableOpacity
+              onPress={() =>
+                navigation.navigate('selflearn', {
+                  id: item.ID,
+                  selfLearnId: item?.ID,
+                })
+              }> */}
             <View>
-              <View style={{width: '80%'}}>
-                <Text
-                  style={{
-                    fontWeight: '500',
-                    fontSize: 12,
-                    marginTop: 10,
-                    color: 'black',
-                  }}>
-                  {item?.title}
-                </Text>
-                <Text
-                  style={{
-                    fontSize: 8,
-                    marginTop: 5,
-                  }}>
-                  {item.subtitle}
-                </Text>
-                <Text
-                  style={{
-                    marginTop: 10,
-                    fontSize: 8,
-                  }}>
-                  {item.author}
-                </Text>
-              </View>
-              <View
+              <Text
                 style={{
-                  display: 'flex',
-                  flexDirection: 'row',
-                  marginLeft: 10,
-                  fontSize: 8,
+                  fontWeight: '500',
+                  fontSize: 16,
+                  marginTop: 10,
+                  color: 'black',
+                  width: '80%',
                 }}>
-                <Ionicons
-                  name={'book-outline'}
-                  size={18}
-                  color="#cccccc"
-                  style={{right: 0, marginLeft: 80}}
-                />
-              </View>
+                {item?.title}
+              </Text>
+              <Text
+                style={{
+                  fontSize: 12,
+                  marginTop: 5,
+                  width: 180,
+                }}>
+                {item.subtitle}
+              </Text>
+              <Text
+                style={{
+                  marginTop: 10,
+                  fontSize: 11,
+                  width: 180,
+                }}>
+                {item.author}
+              </Text>
+            </View>
+            {/* </TouchableOpacity> */}
+            <View
+              style={{
+                justifyContent: 'center',
+                position: 'absolute',
+                right: 25,
+                bottom: 10,
+              }}>
+              <Ionicons name={'book-outline'} size={20} color="#cccccc" />
             </View>
           </View>
-        </TouchableOpacity>
+        </View>
       </View>
     );
   };
@@ -268,20 +273,14 @@ const GrowthDetail = props => {
       <StatusBar
         barStyle="light-content"
         hidden={false}
-        backgroundColor="grey"
+        backgroundColor="#001D3F"
         translucent={false}
       />
       <ScrollView style={{backgroundColor: Colors.PRIMARY_BACKGROUND_COLOR}}>
         <View style={styles.container}>
           <ImageBackground
             source={{uri: poeDetails?.pillar_detail_image}}
-            style={{height: 240, width: '100%'}}>
-            {/* <TouchableOpacity onPress={() => navigation.goBack()}>
-              <View style={styles.arrow}>
-                <Ionicons name={'arrow-back'} size={50} color="white" />
-              </View>
-            </TouchableOpacity> */}
-          </ImageBackground>
+            style={{height: 240, width: '100%'}}></ImageBackground>
 
           <View style={[styles.icon, styles.shadowProp]}>
             <Image
@@ -317,32 +316,35 @@ const GrowthDetail = props => {
                     padding: 15,
                     textAlign: 'left',
                     color: '#77838F',
+                    textAlign: 'justify',
                   },
                 }}
               />
               {coachingSessionLoading && <Loading />}
-              {coachingSession?.length !== 0 && (
-                <View style={styles.middle}>
-                  <Text style={styles.title}>Growth Coaching Sessions</Text>
-                  <View
-                    style={{
-                      display: 'flex',
-                      flexDirection: 'row',
-                    }}>
-                    <FlatList
-                      horizontal
-                      showsHorizontalScrollIndicator={false}
-                      data={coachingSession}
-                      renderItem={_renderMiddleItem}
-                    />
+              {coachingSession?.length !== 0 &&
+                coachingSession !== null &&
+                coachingSession !== false && (
+                  <View style={styles.middle}>
+                    <Text style={styles.title}>Sessions</Text>
+                    <View
+                      style={{
+                        display: 'flex',
+                        flexDirection: 'row',
+                      }}>
+                      <FlatList
+                        horizontal
+                        showsHorizontalScrollIndicator={false}
+                        data={coachingSession}
+                        renderItem={_renderMiddleItem}
+                      />
+                    </View>
                   </View>
-                </View>
-              )}
-              {poeSelfLearns?.length !== 0 &&
+                )}
+              {/* {poeSelfLearns?.length !== 0 &&
                 poeSelfLearns !== false &&
                 poeSelfLearns !== null && (
                   <View style={styles.learn}>
-                    <Text style={styles.title}>Growth Leader</Text>
+                    <Text style={styles.title}>Be a Growth Leader</Text>
                     <View
                       style={{
                         display: 'flex',
@@ -356,7 +358,7 @@ const GrowthDetail = props => {
                       />
                     </View>
                   </View>
-                )}
+                )} */}
 
               {pillarMemberContents.members?.length !== 0 &&
                 pillarMemberContents.members !== false &&
@@ -376,16 +378,22 @@ const GrowthDetail = props => {
 
               {showChartButton && (
                 <View style={styles.bottom}>
-                  <Text style={styles.title}>Radar</Text>
-                  <View style={styles.buttonWrapper}>
-                    <Button
-                      style={[styles.button, {marginLeft: 15}]}
-                      onPress={() => {
-                        navigation.navigate('Radar');
-                      }}>
-                      <Text style={styles.buttonText}>View Frost chart</Text>
-                    </Button>
-                  </View>
+                  <Text style={styles.title}>Frost Radar for Leadership</Text>
+                  <TouchableOpacity
+                    onPress={() => {
+                      navigation.navigate('Radar');
+                    }}>
+                    <View style={styles.buttonWrapper}>
+                      <View style={[styles.button, {marginLeft: 15}]}>
+                        <Text style={styles.buttonText}>
+                          Click here to generate
+                        </Text>
+                        <Text style={styles.buttonText}>
+                          your Frost Radar for Leadership
+                        </Text>
+                      </View>
+                    </View>
+                  </TouchableOpacity>
                 </View>
               )}
               {pillarMemberContents?.pillar_contents?.length !== 0 &&
@@ -443,7 +451,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontFamily: Typography.FONT_SF_REGULAR,
     color: Colors.PRIMARY_TEXT_COLOR,
-    fontWeight: '650',
+    fontWeight: '700',
     marginLeft: 15,
   },
 
@@ -481,6 +489,7 @@ const styles = StyleSheet.create({
   },
   middle: {
     marginTop: 10,
+    marginRight: 5,
     justifyContent: 'center',
   },
   middleWrapper: {
@@ -495,13 +504,11 @@ const styles = StyleSheet.create({
     borderColor: '#9EBD6D',
   },
   learn: {
-    height: 140,
     marginTop: 30,
     justifyContent: 'center',
   },
   learnWrapper: {
-    height: 118,
-    width: 224,
+    width: contentContainerWidth,
     marginTop: 20,
     marginLeft: 15,
     borderRadius: 10,
@@ -517,6 +524,7 @@ const styles = StyleSheet.create({
   },
   bottom: {
     marginTop: 25,
+    marginBottom: 20,
   },
   bottomWrapper: {
     width: Dimensions.get('window').width / 4,
@@ -585,18 +593,23 @@ const styles = StyleSheet.create({
     elevation: 5,
   },
   buttonWrapper: {
-    ...CommonStyles.buttonWrapper,
+    justifyContent: 'center',
     alignItems: 'flex-start',
     marginTop: 10,
   },
   button: {
-    ...CommonStyles.button,
-    height: 40,
+    width: '93%',
+    alignItems: 'center',
+    textAlign: 'center',
+    justifyContent: 'center',
+    backgroundColor: Colors.PRIMARY_BUTTON_COLOR,
     marginBottom: 15,
     borderRadius: 10,
-    width: '50%',
+    padding: 10,
   },
   buttonText: {
-    ...CommonStyles.buttonText,
+    color: Colors.PRIMARY_BUTTON_TEXT_COLOR,
+    marginHorizontal: 5,
+    fontSize: 14,
   },
 });

@@ -40,13 +40,25 @@ const selfAbout = props => {
   } else {
     title = '';
   }
+  let summary = selfLearns?.summary;
+  if (summary !== undefined) {
+    summary = selfLearns?.summary;
+  } else {
+    summary = '';
+  }
+  let keypoints = selfLearns?.keypoints;
+  if (keypoints !== undefined) {
+    keypoints = selfLearns?.keypoints;
+  } else {
+    keypoints = '';
+  }
 
   return (
     <ScrollView>
       <StatusBar
         barStyle="light-content"
         hidden={false}
-        backgroundColor="grey"
+        backgroundColor="#001D3F"
         translucent={false}
       />
       <View style={styles.container}>
@@ -96,41 +108,58 @@ const selfAbout = props => {
         </View>
 
         {selfLearnLoading && <Loading />}
-        <View>
-          <HTMLView
-            value={selfLearns?.description}
-            textComponentProps={{
-              style: {
-                fontSize: 14,
-                fontFamily: Typography.FONT_SF_REGULAR,
-              },
-            }}
-          />
-          {/* <Text
-            style={{
-              marginTop: 10,
-              fontSize: 14,
-              fontFamily: Typography.FONT_SF_REGULAR,
-            }}></Text> */}
-        </View>
 
-        {/* <View style={{marginTop: 20}}>
-          <Text
-            style={{
-              fontSize: 14,
-              fontFamily: Typography.FONT_SF_SEMIBOLD,
-              color: 'black',
-            }}>
-            Key Take-Aways:
-          </Text>
+        {selfLearns?.summary !== '' &&
+          selfLearns?.summary !== false &&
+          selfLearns?.summary !== null && (
+            <View style={{marginTop: 20}}>
+              <Text
+                style={{
+                  fontSize: 16,
+                  fontFamily: Typography.FONT_SF_SEMIBOLD,
+                  color: 'black',
+                  fontWeight: '700',
+                }}>
+                Book Summary
+              </Text>
+              <HTMLView
+                value={summary}
+                textComponentProps={{
+                  style: {
+                    fontSize: 14,
+                    fontFamily: Typography.FONT_SF_REGULAR,
+                    marginTop: 15,
+                  },
+                }}
+              />
+            </View>
+          )}
+        {selfLearns?.keypoints !== '' &&
+          selfLearns?.keypoints !== false &&
+          selfLearns?.keypoints !== null && (
+            <View style={{marginTop: 20}}>
+              <Text
+                style={{
+                  fontSize: 16,
+                  fontFamily: Typography.FONT_SF_SEMIBOLD,
+                  color: 'black',
+                  fontWeight: '700',
+                }}>
+                Key Take-Aways:
+              </Text>
 
-          <Text
-            style={{
-              marginTop: 10,
-              fontSize: 14,
-              fontFamily: Typography.FONT_SF_REGULAR,
-            }}></Text>
-        </View> */}
+              <HTMLView
+                value={keypoints}
+                textComponentProps={{
+                  style: {
+                    fontSize: 14,
+                    marginTop: 15,
+                    fontFamily: Typography.FONT_SF_REGULAR,
+                  },
+                }}
+              />
+            </View>
+          )}
       </View>
     </ScrollView>
   );

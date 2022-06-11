@@ -33,20 +33,30 @@ const Search = props => {
   const eventItems = ({item, index}) => {
     const actualDate = moment(item.event_start).format('ll').split(',', 3);
     const date = actualDate[0].split(' ', 3);
+
     let backgroundColor = '';
+    let backgroundImage = '';
+    let pillarname = '';
     switch (item?.pillar_categories[0]?.parent) {
       case 0:
       case 117:
         backgroundColor = Colors.COMMUNITY_COLOR;
+        pillarname = 'Growth Community';
+        backgroundImage = require('../../../assets/img/Rectangle2.png');
+
         break;
 
       case 0:
       case 118:
         backgroundColor = Colors.PRACTICE_COLOR;
+        pillarname = 'Growth Content';
+        backgroundImage = require('../../../assets/img/best-practice-bg.png');
         break;
 
       default:
         backgroundColor = Colors.COACHING_COLOR;
+        pillarname = 'Growth Coaching';
+        backgroundImage = require('../../../assets/img/Rectangle.png');
     }
 
     let organizer = item?.organizer?.term_name;
@@ -65,7 +75,13 @@ const Search = props => {
     return (
       <View>
         <TouchableOpacity
-          onPress={() => navigation.navigate('EventDetail', {id: item.ID})}>
+          onPress={() =>
+            navigation.navigate('EventDetail', {
+              id: item.ID,
+              title: pillarname,
+              image: backgroundImage,
+            })
+          }>
           <View style={[styles.eventCard, styles.shadowProp]} key={index}>
             <View
               style={[styles.eventTheme, {backgroundColor: backgroundColor}]}
@@ -79,9 +95,9 @@ const Search = props => {
               </View>
               <View style={styles.eventDate}>
                 <Text style={styles.eventDateText}>
-                  {date[1]}
-                  {'\n'}
                   {date[0]}
+                  {'\n'}
+                  {date[1]}
                 </Text>
               </View>
             </View>
@@ -93,22 +109,34 @@ const Search = props => {
 
   const searchTag = ({item, index}) => {
     let navigationPath = '';
+    let backgroundImage = '';
+    let pillarname = '';
 
     switch (item?.slug) {
       case 'community':
-        navigationPath = 'Community';
+        navigationPath = 'Growth Community';
+        pillarname = 'Growth Community';
+        backgroundImage = require('../../../assets/img/Rectangle2.png');
         break;
       case 'best-practices':
         navigationPath = 'Growth Content';
+        pillarname = 'Growth Content';
+        backgroundImage = require('../../../assets/img/best-practice-bg.png');
         break;
       case 'growth-coaching':
         navigationPath = 'Growth Coaching';
+        pillarname = 'Growth Coaching';
+        backgroundImage = require('../../../assets/img/Rectangle.png');
     }
     return (
       <View>
         <TouchableOpacity
           onPress={() =>
-            navigation.navigate(navigationPath, {pillarId: item.term_id})
+            navigation.navigate(navigationPath, {
+              pillarId: item.term_id,
+              title: pillarname,
+              image: backgroundImage,
+            })
           }>
           <View style={[styles.searchTagBtn, styles.shadowProp]}>
             <Text style={styles.searchTabBtnText}>{item.name}</Text>
@@ -119,23 +147,51 @@ const Search = props => {
   };
 
   const _renderMiddleItem = ({item, index}) => {
+    let backgroundImage = require('../../../assets/img/Rectangle2.png');
+    let pillarname = 'Growth Community';
     let poePage = 'CommunityDetail';
+
     if (item?.parent === 119) {
-      poePage = 'GrowthDetail';
+      if (item?.slug === 'executive-coaching-clinic') {
+        poePage = 'CommunityDetail';
+        pillarname = 'Growth Coaching';
+        backgroundImage = require('../../../assets/img/Rectangle.png');
+      } else {
+        poePage = 'GrowthDetail';
+        pillarname = 'Growth Coaching';
+        backgroundImage = require('../../../assets/img/Rectangle.png');
+      }
+    } else if (item?.parent === 118 || item?.parent === 133) {
+      poePage = 'CommunityDetail';
+      pillarname = 'Growth Content';
+      backgroundImage = require('../../../assets/img/best-practice-bg.png');
     }
+
     return (
       <TouchableOpacity
-        onPress={() =>
-          navigation.navigate(poePage, {
-            poeId: item?.term_id,
-            pillarId: item?.parent,
-          })
-        }>
+        onPress={() => {
+          if (
+            item.slug === 'annual-ceo-survey' ||
+            item.slug === 'innovation-generator'
+          ) {
+            navigation.navigate('Search');
+          } else if (item.slug === 'content-library') {
+            navigation.navigate('ContentLibrary');
+          } else {
+            navigation.navigate(poePage, {
+              poeId: item?.term_id,
+              pillarId: item?.parent,
+              title: pillarname,
+              image: backgroundImage,
+            });
+          }
+        }}>
         <View style={styles.middleWrapper}>
           <View style={[styles.middleW, styles.shadowProp]}>
             <Image
               source={{uri: item?.image}}
-              style={{width: 30, height: 30}}
+              style={{width: 30, height: 35}}
+			  resizeMode="contain"
             />
           </View>
           <Text style={{marginTop: 8, fontSize: 10}}>{item?.name}</Text>
@@ -149,7 +205,7 @@ const Search = props => {
       <StatusBar
         barStyle="light-content"
         hidden={false}
-        backgroundColor="grey"
+        backgroundColor="#001D3F"
         translucent={false}
       />
       <View style={styles.container}>
@@ -353,6 +409,7 @@ const styles = StyleSheet.create({
   },
   eventDate: {
     flex: 1,
+    height: 60,
     padding: 10,
     backgroundColor: 'rgba(245,245,245,1)',
     borderRadius: 10,

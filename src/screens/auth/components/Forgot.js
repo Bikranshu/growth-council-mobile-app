@@ -6,17 +6,22 @@ import {
   ScrollView,
   StatusBar,
   Dimensions,
+  KeyboardAvoidingView,
+  Keyboard,
   Image,
 } from 'react-native';
 import {Button} from 'native-base';
 import {useFormik} from 'formik';
 import * as Yup from 'yup';
+import {getAuth, deleteUser} from 'firebase/auth';
+
 
 import {CommonStyles, Colors, Typography} from '../../../theme';
 import Spinner from '../../../shared/spinner';
 import FlatTextInput from '../../../shared/form/FlatTextInput';
 import ToastMessage from '../../../shared/toast';
 import Footer from '../../../shared/footer';
+import auth from '../../../utils/firebaseUtil';
 
 const screenHeight = Math.round(Dimensions.get('window').height);
 
@@ -42,58 +47,96 @@ const ForgotForm = props => {
     initialValues: {email: ''},
     onSubmit: async values => {
       await forgotPassword(values).then(response => {
-        
         if (response?.payload?.code === 200) {
           navigation.navigate('SignIn');
           ToastMessage.show('Email sent successfully to reset password.');
         } else {
-          ToastMessage.show(response?.payload?.response);
+			ToastMessage.show(response?.payload?.response);
         }
       });
+    //   getAuth()
+    //     .deleteUser()
+    //     .then(() => {
+    //       console.log('Successfully deleted user');
+    //     })
+    //     .catch(error => {
+    //       console.log('Error deleting user:', error);
+    //     });
+
+      //   var ref = new firebase('https://yourfirebase.firebaseio.com');
+      //   var authData = ref.getAuth();
+
+      //   if (authData) {
+      //     console.log(
+      //       'User ' + authData.uid + ' is logged in with ' + authData.provider,
+      //     );
+      //   } else {
+      //     console.log('User is logged out');
+      //   }
+
+      //   const user = firebase.auth().currentUser;
+
+      //   if (user) {
+      //     console.log('User email: ', user.email);
+      //   }
+    //   console.log(firebase.auth());
+      //   await getAuth(app)
+      //     .getUserByEmail(values.email)
+      //     .then(userRecord => {
+      //       // See the UserRecord reference doc for the contents of userRecord.
+      //       console.log(`Successfully fetched user data: ${userRecord.toJSON()}`);
+      //     })
+      //     .catch(error => {
+      //       console.log('Error fetching user data:', error);
+      //     });
     },
   });
 
   return (
-    <ScrollView contentContainerStyle={{flexGrow: 1}}>
-      <View style={styles.container}>
-        <Image
-          source={require('../../../assets/img/GIL.png')}
-          style={{width: '80%', height: 50}}
-          resizeMode="contain"
-        />
-        <View style={styles.header}>
-          <Text style={styles.headingText1}>Reset Password</Text>
-          <Text style={styles.headingText2}>
-            To reset your password, please enter your email.
-          </Text>
-        </View>
-
-        <View style={styles.message}>
-          {error && <Text style={styles.errorText}>{error}</Text>}
-        </View>
-
-        {loading && <Spinner />}
-
-        <View style={styles.body}>
-          <FlatTextInput
-            label="Email"
-            value={values.email}
-            onChangeText={handleChange('email')}
-            onFocus={handleBlur('email')}
-            error={errors.email}
-            touched={touched.email}
+    <KeyboardAvoidingView
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+      style={{flex: 1}}>
+      <ScrollView
+        contentContainerStyle={{flexGrow: 1}}
+        onPress={Keyboard.dismiss}>
+        <View style={styles.container}>
+          <Image
+            source={require('../../../assets/img/GILCouncil.jpg')}
+            style={{width: '80%', height: 50}}
+            resizeMode="contain"
           />
+          <View style={styles.header}>
+            <Text style={styles.headingText1}>Reset Password</Text>
+
+            <Text style={styles.headingText2}>
+              To reset your password, please enter your email.
+            </Text>
+          </View>
+          <View style={styles.body}>
+            <FlatTextInput
+              label="Email"
+              value={values.email}
+              onChangeText={handleChange('email')}
+              onFocus={handleBlur('email')}
+              error={errors.email}
+              touched={touched.email}
+            />
+          </View>
+
+          <View style={styles.message}>
+            {error && <Text style={styles.errorText}>{error}</Text>}
+          </View>
+
+          {loading && <Spinner />}
+
+          <View style={styles.submitButtonWrapper}>
+            <Button style={styles.submitButton} onPress={handleSubmit}>
+              <Text style={styles.submitButtonText}>Reset Password</Text>
+            </Button>
+          </View>
         </View>
-        <View style={styles.submitButtonWrapper}>
-          <Button
-            style={styles.submitButton}
-            onPress={handleSubmit}
-            disabled={!isValid}>
-            <Text style={styles.submitButtonText}>Reset Password</Text>
-          </Button>
-        </View>
-      </View>
-    </ScrollView>
+      </ScrollView>
+    </KeyboardAvoidingView>
   );
 };
 
@@ -117,6 +160,7 @@ const styles = StyleSheet.create({
   },
   message: {
     ...CommonStyles.message,
+    margin: 15,
   },
   headingText1: {
     fontFamily: Typography.FONT_BOLD,

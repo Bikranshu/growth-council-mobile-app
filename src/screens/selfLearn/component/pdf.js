@@ -7,98 +7,123 @@ import {
   Text,
   PermissionsAndroid,
   PermissionStatus,
+  Platform,
+  ActivityIndicator,
 } from 'react-native';
 import Pdf from 'react-native-pdf';
 import ToastMessage from '../../../shared/toast';
-import ReactNativeBlobUtil from 'react-native-blob-util';
+import RNFetchBlob from 'react-native-blob-util';
 
 const pdf = props => {
   const {navigation, route} = props;
 
   const source = {uri: route.params.paramsFile, cache: true};
 
-  const fileUrl = route.params.paramsFile;
+    const fileUrl = route.params.paramsFile;
 
-  const checkPermission = async () => {
-    if (Platform.OS === 'ios') {
-      downloadFile();
-    } else {
-      try {
-        const granted = await PermissionsAndroid.request(
-          PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
-          {
-            title: 'Storage Permission Required',
-            message:
-              'Application needs access to your storage to download File',
-          },
-        );
-        if (granted === PermissionsAndroid.RESULTS.GRANTED) {
-          downloadFile();
-        } else {
-          Alert.alert('Error', 'Storage Permission Not Granted');
+    const checkPermission = async () => {
+      if (Platform.OS === 'ios') {
+        downloadFile();
+      } else {
+        try {
+          const granted = await PermissionsAndroid.request(
+            PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
+            {
+              title: 'Storage Permission Required',
+              message:
+                'Application needs access to your storage to download File',
+            },
+          );
+          if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+            downloadFile();
+          } else {
+            Alert.alert('Error', 'Storage Permission Not Granted');
+          }
+        } catch (err) {
+          ToastMessage.show(err);
         }
-      } catch (err) {
-		ToastMessage.show( err);
       }
-    }
-  };
+    };
 
-  const downloadFile = () => {
-    let date = new Date();
+    const downloadFile = () => {
+      const {config, fs} = RNFetchBlob;
+      const {
+        dirs: {DownloadDir, DocumentDir},
+      } = RNFetchBlob.fs;
+      const isIOS = Platform.OS === 'ios';
+      const aPath =
+        Platform.OS === 'ios' ? fs.dirs.DocumentDir : fs.dirs.PictureDir;
 
-    let FILE_URL = fileUrl;
+      let date = new Date();
+      let FILE_URL = fileUrl;
 
-    let file_ext = getFileExtention(FILE_URL);
+      let file_ext = getFileExtention(FILE_URL);
 
-    file_ext = '.' + file_ext[0];
+      file_ext = '.' + file_ext[0];
 
-    const {config, fs} = ReactNativeBlobUtil;
-    let RootDir =
-      Platform.OS === 'ios' ? fs.dirs.DocumentDir : fs.dirs.PictureDir;
-    let options = Platform.select({
-      ios: {
-        fileCache: true,
-        path:
-          RootDir +
-          '/file_' +
-          Math.floor(date.getTime() + date.getSeconds() / 2) +
-          file_ext,
-        description: 'downloading file...',
-        notification: true,
-      },
-      android: {
-        fileCache: true,
-        addAndroidDownloads: {
+      const configOptions = Platform.select({
+        ios: {
+          fileCache: true,
           path:
-            RootDir +
+            aPath +
             '/file_' +
             Math.floor(date.getTime() + date.getSeconds() / 2) +
             file_ext,
           description: 'downloading file...',
-          notification: true,
-          useDownloadManager: true,
         },
-      },
-    });
-    config(options)
-      .fetch('GET', FILE_URL, ToastMessage.show('PDF File Download Started.'))
-      .then(res => {
-		console.log('res -> ', JSON.stringify(res));
-        ToastMessage.show('PDF File Downloaded Successfully.');
+        android: {
+          fileCache: false,
+          addAndroidDownloads: {
+            path:
+              aPath +
+              '/file_'+
+              Math.floor(date.getTime() + date.getSeconds() / 2) +
+              file_ext,
+			
+            description: 'downloading file...',
+            notification: true,
+            useDownloadManager: true,
+          },
+        },
       });
-  };
 
-  const getFileExtention = fileUrl => {
-    return /[.]/.exec(fileUrl) ? /[^.]+$/.exec(fileUrl) : undefined;
-  };
+      if (isIOS) {
+        RNFetchBlob.config(configOptions)
+          .fetch('GET', FILE_URL)
+          .then(res => {
+            console.log('file', res);
+            RNFetchBlob.ios.previewDocument('file://' + res.path());
+          });
+        return;
+      } else {
+        config(configOptions)
+          .fetch('GET', FILE_URL)
+        //   .progress((received, total) => {
+        //     console.log('progress', received / total);
+        //   })
+
+          .then(res => {
+            console.log('file download', res);
+            RNFetchBlob.android.actionViewIntent(res.path());
+          })
+          .catch((errorMessage, statusCode) => {
+            console.log('error with downloading file', errorMessage);
+          });
+      }
+    };
+
+    const getFileExtention = fileUrl => {
+      return /[.]/.exec(fileUrl) ? /[^.]+$/.exec(fileUrl) : undefined;
+    };
 
   return (
     <View style={styles.container}>
       <Pdf
         source={source}
         style={styles.pdf}
+        renderActivityIndicator={() => <ActivityIndicator size={40} />}
       />
-
+      
       <TouchableOpacity style={styles.buttonWrapper} onPress={checkPermission}>
         <Text style={styles.text}>Download File</Text>
       </TouchableOpacity>

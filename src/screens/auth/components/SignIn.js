@@ -24,6 +24,8 @@ import {CommonStyles, Colors, Typography} from '../../../theme';
 import {useAuthentication} from '../../../context/auth';
 import FlatTextInput from '../../../shared/form/FlatTextInput';
 import {API_URL} from '../../../constants';
+import {createUserWithEmailAndPassword} from 'firebase/auth';
+import {auth} from '../../../utils/firebaseUtil';
 
 const screenHeight = Math.round(Dimensions.get('window').height);
 
@@ -50,19 +52,21 @@ const SignInForm = props => {
     isValid,
   } = useFormik({
     validationSchema: signInSchema,
-    // initialValues: {username: 'bikranshu.t@gmail.com', password: '123456'},
     initialValues: {username: '', password: ''},
     onSubmit: async values => {
+     
       const messageToken = await messaging().getToken();
       const firebasePayload = {
         username: values.username,
         token: messageToken,
       };
       const resp = await postToAPI(firebasePayload);
-    
+
       await signIn(values);
     },
   });
+
+  const areAllFieldsFilled = values.username != '' && values.password != '';
 
   const postToAPI = async data => {
     return await axios.get(
@@ -171,7 +175,14 @@ const SignInForm = props => {
               )}
 
               <View style={styles.loginButtonWrapper}>
-                <Button style={styles.loginButton} onPress={handleSubmit}>
+                <Button
+                  style={
+                    [!areAllFieldsFilled
+                      ? styles.loginButton1
+                      : styles.loginButton, loading && {backgroundColor: "grey"}]
+                  }
+                  onPress={handleSubmit}
+                  disabled={!areAllFieldsFilled || loading}>
                   <Text style={styles.loginButtonText}>Sign In</Text>
                 </Button>
               </View>
@@ -202,7 +213,7 @@ const SignInForm = props => {
                 <Text>Need Help? </Text>
                 <Text
                   style={{color: '#31ade5', fontWeight: '700'}}
-                  onPress={() => Linking.openURL('mailto:contact@frost.com')}>
+                  onPress={() => navigation.navigate('Email')}>
                   {' '}
                   Contact Us{' '}
                 </Text>
@@ -262,6 +273,15 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     backgroundColor: Colors.PRACTICE_COLOR,
+    height: 40,
+    marginBottom: 15,
+    borderRadius: 10,
+    width: '50%',
+  },
+  loginButton1: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: 'grey',
     height: 40,
     marginBottom: 15,
     borderRadius: 10,

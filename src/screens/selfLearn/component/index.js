@@ -49,7 +49,7 @@ const SelfLearn = props => {
       <View style={styles.container}>
         <StatusBar
           barStyle="dark-content"
-          backgroundColor={Colors.PRIMARY_BACKGROUND_COLOR}
+          backgroundColor={"#001D3F"}
         />
 
         <View>

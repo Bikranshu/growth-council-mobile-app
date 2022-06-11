@@ -69,7 +69,7 @@ const SessionCompleted = props => {
             width: '100%',
             height: 250,
           }}
-          resizeMode="center"
+          resizeMode="contain"
         />
       </View>
       <View
@@ -79,7 +79,7 @@ const SessionCompleted = props => {
           width: '90%',
           marginTop: 30,
         }}>
-        <Text style={{fontSize: 12, marginBottom: 10}}>View your score</Text>
+        <Text style={{fontSize: 12, marginBottom: 10}}>View Frost Radar</Text>
         <TouchableOpacity
           onPress={() => {
             navigation.navigate('Radar');

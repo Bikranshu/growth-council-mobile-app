@@ -36,6 +36,10 @@ const AboutMe = props => {
     fetchProfileByIdentifier();
   }, [isFocused]);
 
+  let title = profile?.user_meta?.title;
+
+  let company = profile?.user_meta?.company;
+
   let Location = profile?.user_meta?.Location;
 
   let favorite_quote = profile?.user_meta?.favorite_quote;
@@ -55,7 +59,7 @@ const AboutMe = props => {
         <View>
           <View style={styles.middle}>
             <View style={styles.wrapper}>
-              {profileLoading && <Loading />}
+              {/* {profileLoading && <Loading />} */}
 
               <View style={styles.TextWrapper}>
                 <Text
@@ -65,11 +69,13 @@ const AboutMe = props => {
                     fontSize: 10,
                     color: '#8F9BB3',
                   }}>
-                  Username
+                  Title
                 </Text>
                 <TextInput
                   style={styles.input}
-                  value={profile.display_name}
+                  value={typeof title === 'undefined'
+				  ? ''
+				  : profile?.user_meta?.title[0]}
                   editable={false}
                 />
 
@@ -80,15 +86,18 @@ const AboutMe = props => {
                     fontSize: 10,
                     color: '#8F9BB3',
                   }}>
-                  First Name
+                  Company
                 </Text>
                 <TextInput
                   style={styles.input}
-                  value={profile.user_meta?.first_name[0]}
+                  value={
+					typeof company === 'undefined'
+					? ''
+					: profile?.user_meta?.company[0]}
                   editable={false}
                 />
 
-                <Text
+                {/* <Text
                   style={{
                     size: 7,
                     marginLeft: 10,
@@ -102,7 +111,7 @@ const AboutMe = props => {
                   keyboardType="default"
                   value={profile?.user_meta?.last_name[0]}
                   editable={false}
-                />
+                /> */}
 
                 <Text style={{marginLeft: 10, fontSize: 10, color: '#8F9BB3'}}>
                   Email Address
@@ -115,7 +124,7 @@ const AboutMe = props => {
                 />
 
                 <Text style={{marginLeft: 10, fontSize: 10, color: '#8F9BB3'}}>
-                  Location
+                  Region
                 </Text>
                 <TextInput
                   style={styles.input}
@@ -161,7 +170,7 @@ const AboutMe = props => {
                 />
 
                 <Text style={{marginLeft: 10, fontSize: 10, color: '#8F9BB3'}}>
-                  Expertise Areas
+                  Areas of Expertise
                 </Text>
                 <TextInput
                   multiline={true}
@@ -172,7 +181,7 @@ const AboutMe = props => {
                   editable={false}
                 />
 
-                <Text style={{marginLeft: 10, fontSize: 10, color: '#8F9BB3'}}>
+                {/* <Text style={{marginLeft: 10, fontSize: 10, color: '#8F9BB3'}}>
                   Most Recent Growth/Innovation Initative
                 </Text>
                 <TextInput
@@ -186,9 +195,9 @@ const AboutMe = props => {
                       : profile?.user_meta?.initatives[0]
                   }
                   editable={false}
-                />
+                /> */}
 
-                <Text style={{marginLeft: 10, fontSize: 10, color: '#8F9BB3'}}>
+                {/* <Text style={{marginLeft: 10, fontSize: 10, color: '#8F9BB3'}}>
                   I'm Seeking Insights On
                 </Text>
                 <TextInput
@@ -202,7 +211,7 @@ const AboutMe = props => {
                       : profile?.user_meta?.insights[0]
                   }
                   editable={false}
-                />
+                /> */}
               </View>
             </View>
           </View>

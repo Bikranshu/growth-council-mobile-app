@@ -33,15 +33,10 @@ const Content = props => {
   } = props;
   const [search, setSearch] = useState('');
   const [filteredDataSource, setFilteredDataSource] = useState(content);
-  const [count, setCount] = useState(false);
 
   useEffect(() => {
     setFilteredDataSource(content);
   }, [content]);
-
-  useEffect(() => {
-    setCount(filteredDataSource?.children_count);
-  }, [filteredDataSource]);
 
   const searchFilterFunction = text => {
     if (text) {
@@ -60,58 +55,78 @@ const Content = props => {
 
   const _renderContent = ({item, index}) => {
     return (
-      <TouchableOpacity
-        key={index}
-        style={[styles.content, styles.shadowProp]}
-        onPress={() => {
-          if (item.children_count === 0) {
-            navigation.navigate('LibraryDetail', {
-              resources: item?.term_id,
-              itemname: item?.name,
-            });
-          } else {
-            navigation.navigate('ContentDetail', {
-              resourceId: item?.term_id,
-              resourcesName: item?.name,
-            });
-          }
-        }}>
-        <>
-          <Image
-            style={{
-              width: '100%',
-              height: 170,
-              borderTopLeftRadius: 14,
-              borderTopRightRadius: 14,
-            }}
-            source={require('../../../assets/img/image.png')}
-          />
-          <View style={styles.contentWrapper}>
-            <Text style={{color: 'black'}}>
-              {item?.children_count === 0 ? item?.count : item?.children_count}
-            </Text>
-            <Text
-              style={{
-                fontFamily: 'SFProText-Regular',
-                fontSize: 10,
-                color: 'black',
-              }}>
-              Article
-            </Text>
-          </View>
-          <View style={styles.wrapper}>
-            <HTMLView
-              value={item?.name}
-              textComponentProps={{
-                style: {
-                  color: 'black',
-                  fontWeight: '600',
-                },
-              }}
-            />
-          </View>
-        </>
-      </TouchableOpacity>
+      <>
+        {item?.children_count !== 0 && (
+          <TouchableOpacity
+            key={index}
+            style={[styles.content, styles.shadowProp]}
+            onPress={() => {
+              if (item?.count !== 0) {
+                navigation.navigate('LibraryDetail', {
+                  resources: item?.term_id,
+                  itemname: item?.name,
+                });
+              } else {
+                navigation.navigate('ContentDetail', {
+                  resourceId: item?.term_id,
+                  resourcesName: item?.name,
+                });
+              }
+            }}>
+            <>
+              <Image
+                style={{
+                  width: '100%',
+                  height: 170,
+                  borderTopLeftRadius: 14,
+                  borderTopRightRadius: 14,
+                }}
+                source={{uri: item?.image}}
+              />
+              {/* <View style={styles.contentWrapper}>
+                <Text style={{color: 'black'}}>
+                  {item?.children_count === 0
+                    ? item?.count
+                    : item?.children_count}
+              
+                </Text>
+
+                {item?.children_count === 1 ? (
+                  <Text
+                    style={{
+                      fontFamily: 'SFProText-Regular',
+                      fontSize: 10,
+                      color: 'black',
+                    }}>
+                    Article
+                  </Text>
+                ) : (
+                  <Text
+                    style={{
+                      fontFamily: 'SFProText-Regular',
+                      fontSize: 10,
+                      color: 'black',
+                    }}>
+                    {' '}
+                    Articles{' '}
+                  </Text>
+                )}
+              </View> */}
+              <View style={styles.wrapper}>
+                <HTMLView
+                  value={item?.name}
+                  textComponentProps={{
+                    style: {
+                      color: 'black',
+                      fontWeight: '600',
+                    },
+                  }}
+                />
+              </View>
+            </>
+          </TouchableOpacity>
+        )}
+      </>
     );
   };
 
@@ -120,7 +135,7 @@ const Content = props => {
       <StatusBar
         barStyle="light-content"
         hidden={false}
-        backgroundColor="grey"
+        backgroundColor="#001D3F"
         translucent={false}
       />
       <View style={styles.container}>
@@ -181,14 +196,12 @@ const Content = props => {
           )}
           {/* {loader} */}
 
-          {!count && (
-            <FlatList
-              contentContainerStyle={{alignItems: 'center'}}
-              showsVerticalScrollIndicator={false}
-              data={filteredDataSource}
-              renderItem={_renderContent}
-            />
-          )}
+          <FlatList
+            contentContainerStyle={{alignItems: 'center'}}
+            showsVerticalScrollIndicator={false}
+            data={filteredDataSource}
+            renderItem={_renderContent}
+          />
 
           {/* <View style={{marginVertical:5}}>
             <Footer />

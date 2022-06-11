@@ -14,7 +14,7 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import HTMLView from 'react-native-htmlview';
 import {formatTimeByOffset} from '../../event/components/timezone';
-import moment from 'moment';
+import moment from 'moment-timezone';
 import 'moment-timezone';
 import * as RNLocalize from 'react-native-localize';
 import {BubblesLoader} from 'react-native-indicator';
@@ -59,7 +59,7 @@ const sessionAbout = props => {
     const response = await registerSessionByIdentifier({session_id: sessionID});
     if (response?.payload?.code === 200) {
       setSessionStatus(true);
-      ToastMessage.show('You have successfully RSVP this event.');
+      ToastMessage.show('You have successfully RSVP’d  this event.');
     } else {
       toast.closeAll();
       ToastMessage.show(response?.payload?.response);
@@ -94,19 +94,23 @@ const sessionAbout = props => {
   const today = moment().tz(deviceTimeZone);
   const currentTimeZoneOffsetInHours = today.utcOffset() / 60;
 
-  const GobalDate = moment(timeToDisplay).format('D MMMM, dddd, h:mma - ');
-  const GobalStartMonth = moment(timeToDisplay).format('D MMMM (h:mma)');
+  const GobalDate = moment(timeToDisplay).format('MMMM D, dddd, h:mma - ');
+  const GobalStartMonth = moment(timeToDisplay).format('MMMM D');
 
-  const GobalDateEnd = moment(timeToEnd).format('D MMMM, dddd, h:mm a ');
+  const GobalDateEnd = moment(timeToEnd).format('MMMM D, dddd, h:mm a ');
   const GobalEndTime = moment(timeToEnd).format('h:mma ');
-  const GobalEndMonth = moment(timeToEnd).format('D MMMM (h:mma)');
+  const GobalEndMonth = moment(timeToEnd).format('MMMM D');
 
-  const EventDate = moment(sessions?.event_start).format('D MMMM, dddd, h:mma - ');
-  const EventStartMonth = moment(sessions?.event_start).format('D MMMM (h:mma)');
+  const EventDate = moment(sessions?.event_start).format(
+    'MMMM D, dddd, h:mma - ',
+  );
+  const EventStartMonth = moment(sessions?.event_start).format('MMMM D');
 
-  const EventDateEnd = moment(sessions?.event_end).format('D MMMM, dddd, h:mm a ');
+  const EventDateEnd = moment(sessions?.event_end).format(
+    'MMMM D, dddd, h:mm a ',
+  );
   const EventEndTime = moment(sessions?.event_end).format('h:mma ');
-  const EventEndMonth = moment(sessions?.event_end).format('D MMMM (h:mma)');
+  const EventEndMonth = moment(sessions?.event_end).format('MMMM D');
 
   useEffect(() => {
     const convertedToLocalTime = formatTimeByOffset(
@@ -121,6 +125,8 @@ const sessionAbout = props => {
     setTimeToEnd(convertedToLocalTimeEnd);
   }, [sessions]);
 
+  console.log('show', sessions.show_date_in_app);
+
   return (
     <View>
       <StatusBar
@@ -129,84 +135,91 @@ const sessionAbout = props => {
         backgroundColor="grey"
         translucent={false}
       />
-      <View style={{height: 150, flexDirection: 'column'}}>
-        <View
-          style={{
-            flex: 1,
-            paddingTop: 5,
-            paddingBottom: 5,
-            flexDirection: 'row',
-          }}>
-          <View
-            style={{
-              flex: 1,
-              backgroundColor: '#A1BA68',
-              height: 60,
-              width: 30,
-              borderRadius: 15,
-              justifyContent: 'center',
-              alignItems: 'center',
-            }}>
-            <MaterialIcons name={'event'} size={35} color={'white'} />
-          </View>
+      <View style={{flexDirection: 'column'}}>
+        {sessions?.show_date_in_app !== false &&
+          sessions?.show_date_in_app !== undefined && (
+            <View
+              style={{
+                flex: 1,
+                paddingTop: 5,
+                paddingBottom: 5,
+                flexDirection: 'row',
+              }}>
+              <View
+                style={{
+                  flex: 1,
+                  backgroundColor: '#A1BA68',
+                  height: 50,
+                  width: 40,
+                  borderRadius: 15,
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                }}>
+                <MaterialIcons name={'event'} size={30} color={'white'} />
+              </View>
 
-          <View
-            style={{
-              flex: 4,
-              paddingLeft: 5,
-            }}>
-            {/* <Text style={styles.eventDetails}>{GobalDate} </Text> */}
-            <Text style={styles.eventDetails}>
-              {GobalStartMonth === GobalEndMonth
+              <View
+                style={{
+                  flex: 4,
+                  paddingLeft: 5,
+                  justifyContent: 'center',
+                }}>
+                {/* <Text style={styles.eventDetails}>{GobalDate} </Text> */}
+                <Text style={styles.eventDetails}>
+                  {/* {GobalStartMonth === GobalEndMonth
                 ? GobalDate + GobalEndTime
                 : GobalStartMonth +
                   GobalDate.split(/(\s+)/)[7] +
                   GobalDate.split(/(\s+)/)[8] +
                   GobalDate.split(/(\s+)/)[7] +
                   GobalEndMonth}{' '}
-              ({deviceTimeZone}) / {EventDate.split(/(\s+)/)[7] }
-              {EventStartMonth === EventEndMonth
-                ? EventDate + EventEndTime
-                : EventStartMonth +
-                  EventDate.split(/(\s+)/)[7] +
-                  EventDate.split(/(\s+)/)[8] +
-                  EventDate.split(/(\s+)/)[7] +
-                  EventEndMonth}
-            </Text>
-          </View>
-          {!sessionStatus && (
-            <View
-              style={{
-                flex: 1,
-                justifyContent: 'center',
-                alignItems: 'center',
-              }}>
-              <TouchableOpacity
-                onPress={() => registerSessionBySessionID(route?.params?.id)}>
-                <Feather
-                  name={'plus-circle'}
-                  size={30}
-                  color={'rgba(54,147,172,1)'}
-                />
-              </TouchableOpacity>
+              ({deviceTimeZone}) /  */}
+                  {/* {EventDate.split(/(\s+)/)[7]} */}
+                  {EventStartMonth === EventEndMonth
+                    ? EventDate + EventEndTime
+                    : EventStartMonth +
+                      EventDate.split(/(\s+)/)[7] +
+                      EventDate.split(/(\s+)/)[8] +
+                      EventDate.split(/(\s+)/)[7] +
+                      EventEndMonth +
+                      EventDate.split(/(\s+)/)[7]}
+                  {sessions?.event_meta?.evo_event_timezone}
+                </Text>
+              </View>
+              {!sessionStatus && (
+                <View
+                  style={{
+                    flex: 1,
+                    alignItems: 'center',
+                  }}>
+                  <TouchableOpacity
+                    onPress={() =>
+                      registerSessionBySessionID(route?.params?.id)
+                    }>
+                    <Feather
+                      name={'plus-circle'}
+                      size={30}
+                      color={'rgba(54,147,172,1)'}
+                    />
+                  </TouchableOpacity>
+                </View>
+              )}
+              {sessionStatus && (
+                <View
+                  style={{
+                    flex: 1,
+                    alignItems: 'center',
+                  }}>
+                  <Feather
+                    name={'check-circle'}
+                    size={35}
+                    color={'rgba(54,147,172,1)'}
+                  />
+                </View>
+              )}
             </View>
           )}
-          {sessionStatus && (
-            <View
-              style={{
-                flex: 1,
-                justifyContent: 'center',
-                alignItems: 'center',
-              }}>
-              <Feather
-                name={'check-circle'}
-                size={35}
-                color={'rgba(54,147,172,1)'}
-              />
-            </View>
-          )}
-        </View>
-        {sessions?.location?.location_city !== undefined &&
+        {sessions?.location?.location_address !== undefined &&
           sessions?.location?.location_address !== '' && (
             <View
               style={{
@@ -218,13 +231,13 @@ const sessionAbout = props => {
                 style={{
                   flex: 1,
                   backgroundColor: '#A1BA68',
-                  height: 60,
+                  height: 50,
                   width: 48,
                   borderRadius: 14,
                   justifyContent: 'center',
                   alignItems: 'center',
                 }}>
-                <Ionicons name={'location-outline'} size={35} color={'white'} />
+                <Ionicons name={'location-outline'} size={30} color={'white'} />
               </View>
 
               {!isSessionLoaded && (
@@ -232,13 +245,16 @@ const sessionAbout = props => {
                   style={{
                     flex: 5,
                     paddingLeft: 10,
+                    justifyContent: 'center',
                   }}>
-                  <Text style={styles.eventLocationDetails}>
+                  {/* <Text style={styles.eventLocationDetails}>
                     {sessions?.location?.location_city}
                     {sessions?.location?.location_state}
                     {sessions?.location?.location_country}
+                  </Text> */}
+                  <Text style={styles.eventLocationDetails}>
+                    {sessions?.location?.location_address}
                   </Text>
-                  <Text>{sessions?.location?.location_address}</Text>
                 </View>
               )}
             </View>
@@ -257,11 +273,11 @@ const sessionAbout = props => {
           renderItem={item => _renderItem(item, navigation)}
         />
       </View>
-      {sessions?.organizer?.term_name !== undefined &&
+      {/* {sessions?.organizer?.term_name !== undefined &&
         sessions?.organizer?.term_name !== '' && (
           <View style={{height: 150}}>
             <View style={{marginTop: 25}}>
-              <Text style={styles.contentHeading}>Coached By</Text>
+              <Text style={styles.contentHeading}>Coach By</Text>
             </View>
             <View style={styles.hostdetail}>
               <View style={styles.hostimage}>
@@ -293,14 +309,26 @@ const sessionAbout = props => {
               />
             </View>
           </View>
-        )}
+        )} */}
 
       {sessions?.descirption !== undefined && sessions?.descirption !== '' && (
-        <View>
+        <View style={{marginTop: 20}}>
           <Text style={styles.contentHeading}>Session Brief</Text>
-          {!isSessionLoaded && (
-            <HTMLView value={description} stylesheet={styles} />
-          )}
+          
+            <HTMLView
+              value={description}
+              textComponentProps={{
+                style: {
+                  fontSize: 12,
+                  lineHeight: 20,
+                  fontWeight: 'regular',
+                  color: '#666767',
+                  alignItems: 'center',
+                  textAlign: 'justify',
+                },
+              }}
+            />
+          
         </View>
       )}
       <View style={{justifyContent: 'center', alignItems: 'center'}}>
@@ -309,7 +337,7 @@ const sessionAbout = props => {
           <Button
             style={styles.acceptButton}
             onPress={() => registerSessionBySessionID(route?.params?.id)}>
-            <Text style={styles.acceptButtonText}>Sign Up in One Click</Text>
+            <Text style={styles.acceptButtonText}>RSVP</Text>
           </Button>
         )}
         {sessionStatus && (
@@ -318,7 +346,7 @@ const sessionAbout = props => {
               source={require('../../../assets/img/tick-icon.png')}
               style={{width: 30, height: 30}}
             />
-            <Text style={styles.registeredButtonText}>RSVP</Text>
+            <Text style={styles.registeredButtonText}>RSVP'd</Text>
           </TouchableOpacity>
         )}
       </View>
@@ -371,7 +399,7 @@ const styles = StyleSheet.create({
     color: Colors.NONARY_TEXT_COLOR,
     fontWeight: 'bold',
     marginLeft: 5,
-    fontSize: 12,
+    fontSize: 13,
   },
   eventLocationDetails: {
     fontFamily: Typography.FONT_NORMAL,

@@ -6,7 +6,7 @@
  */
 
 import * as React from 'react';
-import {StackActions} from '@react-navigation/native';
+import {DrawerActions, StackActions} from '@react-navigation/native';
 
 export const navigationRef = React.createRef();
 

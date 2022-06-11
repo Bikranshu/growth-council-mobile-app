@@ -30,6 +30,13 @@
             {
               "client_id": "377923277535-nl27jjuj76ve5b30ecaj9gmnbq55n254.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "377923277535-qc1an7qhen6tnjdk7ar7vrn9dlakckct.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.growthcouncil"
+              }
             }
           ]
         }

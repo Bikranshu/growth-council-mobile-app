@@ -47,7 +47,7 @@ const Home = props => {
       case 'community':
         borderColor = Colors.COMMUNITY_COLOR;
         break;
-      case 'best-practices':
+      case 'growth-content':
         borderColor = Colors.PRACTICE_COLOR;
         break;
       case 'growth-coaching':
@@ -80,8 +80,7 @@ const Home = props => {
             source={require('../../../assets/img/GILCouncil.jpg')}
             resizeMode="contain"
           />
-          {/* <Text style={styles.headingText1}>Welcome</Text>
-          <Text style={styles.headingText2}>The Growth Council</Text> */}
+        
         </View>
         <View styyle={styles.sliderView}>
           {!pillarSliderLoading ? (
@@ -234,7 +233,7 @@ const styles = StyleSheet.create({
     height: 56,
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: Colors.PRIMARY_BUTTON_COLOR,
+    backgroundColor: Colors.PRACTICE_COLOR,
   },
   signupbuttonText: {
     ...CommonStyles.buttonText,

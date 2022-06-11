@@ -50,7 +50,6 @@ const BottomLayout = ({focused, navigation}) => {
             <View
               style={{
                 top: Platform.OS === 'ios' ? 8 : 0,
-             
               }}>
               <Ionicons
                 name="chatbox-outline"
@@ -67,12 +66,11 @@ const BottomLayout = ({focused, navigation}) => {
             <View
               style={{
                 top: Platform.OS === 'ios' ? 8 : 0,
-              
               }}>
               <Ionicons
                 name="people-outline"
                 color={'#000'}
-                size={30}
+                size={35}
                 style={{color: focused ? 'black' : '#FFFFFF'}}
               />
             </View>
@@ -83,13 +81,12 @@ const BottomLayout = ({focused, navigation}) => {
           <View>
             <View
               style={{
-                top: Platform.OS === 'ios' ? 8 : 0,
-               
+                top: Platform.OS === 'ios' ? 10 : 3,
               }}>
               <Ionicons
                 name="person-outline"
                 color={'#000'}
-                size={30}
+                size={28}
                 style={{color: focused ? 'black' : '#FFFFFF'}}
               />
             </View>
@@ -104,7 +101,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     bottom: 5,
     // backgroundColor: '#0C336C',
-	backgroundColor:'rgba(12,51,108,0.98)',
+    backgroundColor: 'rgba(12,51,108,0.98)',
     height: 60,
     alignContent: 'center',
     left: 10,

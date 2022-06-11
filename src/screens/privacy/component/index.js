@@ -28,9 +28,7 @@ const privacy = props => {
   const win = Dimensions.get('window');
 
   useEffect(() => {
-  
-      fetchPrivacyPolicy();
-    
+    fetchPrivacyPolicy();
   }, []);
 
   let description = privacy.content1;
@@ -45,18 +43,27 @@ const privacy = props => {
       <StatusBar
         barStyle="light-content"
         hidden={false}
-        backgroundColor="grey"
+        backgroundColor="#001D3F"
         translucent={false}
       />
-      <ScrollView
-       >
+      <ScrollView>
         <View style={styles.container}>
           <View style={styles.privacy}>
             <View style={styles.title}>
               <Text style={styles.titleText}>{privacy.heading1}</Text>
               <View style={styles.titleBorder}></View>
             </View>
-            <HTMLView value={description} style={styles.paragraph} />
+            <HTMLView
+              value={description}
+              textComponentProps={{
+                style: {
+                  color: 'black',
+                  fontSize: 16,
+                  paddingBottom: 30,
+                  textAlign: 'justify',
+                },
+              }}
+            />
           </View>
           <View style={styles.cta}>
             <Button
@@ -65,7 +72,7 @@ const privacy = props => {
                 styles.plainButton,
                 {backgroundColor: Colors.SECONDARY_BUTTON_COLOR},
               ]}
-              onPress={() => Linking.openURL('mailto:contact@frost.com')}>
+              onPress={() => navigation.navigate('Gmail')}>
               <Text style={[styles.buttonText, styles.plainButtonText]}>
                 Contact Our Program Team
               </Text>
@@ -81,7 +88,7 @@ export default privacy;
 const styles = StyleSheet.create({
   container: {
     ...CommonStyles.container,
-	paddingBottom: 20,
+    paddingBottom: 20,
   },
   header: {
     ...CommonStyles.header,
