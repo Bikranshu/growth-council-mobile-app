@@ -103,22 +103,22 @@ const SignUpForm = props => {
         const response = await registerCustomer(values);
         console.log(response);
         if (response?.payload?.code === 200) {
-        //   await registerCustomer(values).then(response => {
-            // if (response?.payload?.code === 200) {
-              navigation.navigate('SignIn');
-              ToastMessage.show(
-                'You have successfully registered. Please wait for admin approval.',
-              );
-            } else {
-              ToastMessage.show('Same Username or Email Address already exits');
-            // }
-        //   });
+          //   await registerCustomer(values).then(response => {
+          // if (response?.payload?.code === 200) {
+          navigation.navigate('SignIn');
+          ToastMessage.show(
+            'You have successfully registered. Please wait for admin approval.',
+          );
+        } else {
+          ToastMessage.show('This email address is already in use');
+          // }
+          //   });
         }
       } catch (error) {
         switch (error.code) {
           case 'auth/email-already-in-use':
             ToastMessage.show(
-              'The email address is already used by another account.',
+              'The email address is already use by another account.',
             );
             break;
           case 'auth/argument-error':
