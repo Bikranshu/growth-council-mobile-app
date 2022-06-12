@@ -109,10 +109,10 @@ const People = props => {
   };
 
   const countries = {
-    Region: 'Region',
+    'Region': 'Region',
     'NORTH AMERICA': 'NORTH AMERICA',
-    APAC: 'APAC',
-    MEASA: 'MEASA',
+    'APAC': 'APAC',
+    'MEASA': 'MEASA',
   };
 
   const pillar = {
