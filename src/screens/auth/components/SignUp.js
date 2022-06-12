@@ -95,24 +95,24 @@ const SignUpForm = props => {
       //     values.email.lastIndexOf('@'),
       //   );
       try {
-        // const response = await auth().createUserWithEmailAndPassword(
-        //   values?.email?.trim(),
-        //   values?.password,
-        // );
-        // const token = await response.user.getIdToken();
-        const response = await registerCustomer(values);
+        const response = await auth().createUserWithEmailAndPassword(
+          values?.email?.trim(),
+          "6AWgM#.Y(fE8Q2=",
+        );
+        const token = await response.user.getIdToken();
+        // const response = await registerCustomer(values);
         console.log(response);
-        if (response?.payload?.code === 200) {
-          //   await registerCustomer(values).then(response => {
-          // if (response?.payload?.code === 200) {
+        if (token) {
+            await registerCustomer(values).then(response => {
+          if (response?.payload?.code === 200) {
           navigation.navigate('SignIn');
           ToastMessage.show(
             'You have successfully registered. Please wait for admin approval.',
           );
         } else {
           ToastMessage.show('This email address is already in use');
-          // }
-          //   });
+          }
+            });
         }
       } catch (error) {
         switch (error.code) {

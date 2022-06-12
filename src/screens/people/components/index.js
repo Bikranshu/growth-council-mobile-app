@@ -57,7 +57,7 @@ const People = props => {
   const [account, setAccount] = useState('');
   const [region, setRegion] = useState('');
   const [searchKey, setSearchKey] = useState('');
-  const [sorting, setSorting] = useState('Desc');
+  const [sorting, setSorting] = useState('ASC');
   const [memberConnection, setMemberConnection] = useState([]);
 
   useFocusEffect(
