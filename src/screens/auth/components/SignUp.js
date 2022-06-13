@@ -118,7 +118,7 @@ const SignUpForm = props => {
         switch (error.code) {
           case 'auth/email-already-in-use':
             ToastMessage.show(
-              'The email address is already use by another account.',
+              'This email address is already in use',
             );
             break;
           case 'auth/argument-error':
