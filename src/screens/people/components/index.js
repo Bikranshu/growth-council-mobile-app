@@ -71,7 +71,7 @@ const People = props => {
         });
       };
       fetchAllUsersAsync();
-      return () => {
+	  return () => {
         cleanUser();
       };
     }, []),
@@ -108,7 +108,7 @@ const People = props => {
   };
 
   const countries = {
-    'Region': 'Region',
+	'Region': 'Region',
     'AMERICAS': 'AMERICAS',
     'APAC': 'APAC',
     'MEASA': 'MEASA',
@@ -269,12 +269,12 @@ const People = props => {
           }}>
           <View style={{marginTop: 10}}>
             {memberConnectionLoading && <Loading />}
-              <FlatList
-                vertical
-                showsVerticalScrollIndicator={false}
-                data={users}
-                renderItem={_renderItem}
-              />
+            <FlatList
+              vertical
+              showsVerticalScrollIndicator={false}
+              data={users}
+              renderItem={_renderItem}
+            />
           </View>
           {/* <Footer /> */}
         </ScrollView>
@@ -314,14 +314,15 @@ const People = props => {
                 itemTextStyle={{fontSize: 12}}
                 onValueChange={async itemValue => {
                   setCategory(itemValue);
-
-                  await fetchAllUsers({
-                    s: searchKey,
-                    sort: sorting,
-                    expertise_areas: itemValue,
-                    account: account,
-                    region: region,
-                  });
+              
+                    await fetchAllUsers({
+                      s: searchKey,
+                      sort: sorting,
+                      expertise_areas: itemValue,
+                      account: account,
+                      region: region,
+                    });
+                  
                 }}>
                 {Object.keys(expertise).map(key => {
                   return (
@@ -398,7 +399,7 @@ const People = props => {
         </View>
       </Modal>
 
-	  <Modal transparent visible={regionVisible}>
+      <Modal transparent visible={regionVisible}>
         <View
           style={{
             flex: 1,
@@ -457,64 +458,7 @@ const People = props => {
         </View>
       </Modal>
 
-      {/* <Modal transparent visible={regionVisible}>
-        <View
-          style={{
-            flex: 1,
-            backgroundColor: 'rgba(56,56,56,0.3)',
-            justifyContent: 'flex-end',
-          }}>
-          <View
-            style={{
-              height: 300,
-              backgroundColor: 'white',
-              borderTopLeftRadius: 20,
-              borderTopRightRadius: 20,
-              padding: 20,
-            }}>
-            <TouchableOpacity
-              activeOpacity={0.7}
-              onPress={() => setRegionVisible(false)}
-              style={{alignItems: 'flex-end'}}>
-              <Text
-                style={{
-                  padding: 15,
-                  fontSize: 18,
-                }}>
-                Done
-              </Text>
-            </TouchableOpacity>
-            <View style={{marginBottom: 40}}>
-              <Picker
-                selectedValue={region}
-                mode="dropdown"
-                itemTextStyle={{fontSize: 12}}
-                onValueChange={async itemValue => {
-                  setRegion(itemValue);
 
-                  await fetchAllUsers({
-                    s: searchKey,
-                    sort: sorting,
-                    expertise_areas: category,
-                    account: account,
-                    region: itemValue,
-                  });
-                }}>
-                {Object.keys(countries).map(key => {
-                  return (
-                    <Picker.Item
-                      label={countries[key]}
-                      value={countries[key]}
-                      key={key}
-                      style={{fontSize: 14}}
-                    />
-                  );
-                })}
-              </Picker>
-            </View>
-          </View>
-        </View>
-      </Modal> */}
 
       <BottomNav {...props} navigation={navigation} />
     </SafeAreaView>
