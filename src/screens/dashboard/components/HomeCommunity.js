@@ -65,7 +65,7 @@ const HomeCommunity = props => {
     cleanUser,
   } = props;
 
-  const pillarId = 169;
+  const pillarId = 194;
 
   const isFocused = useIsFocused();
 
@@ -563,21 +563,24 @@ const styles = StyleSheet.create({
   },
 
   topWrapper: {
-    height: 144,
+    height: 180,
     width: 256,
-    marginTop: 20,
     marginLeft: 15,
-    borderRadius: 20,
+    borderRadius: 16,
+    overflow: 'hidden',
+    marginRight: 5,
+    marginTop: 15,
   },
   header: {
-    margin: 10,
+    marginLeft: 10,
   },
   headingText1: {
-    fontFamily: Typography.FONT_SF_MEDIUM,
-    marginTop: 5,
+	fontFamily: Typography.FONT_SF_MEDIUM,
+    marginTop: 10,
     fontWeight: '600',
+    width: '98%',
     color: 'white',
-    fontSize: 12,
+    fontSize: 11,
   },
   headingText2: {
     ...CommonStyles.headingText2,
@@ -585,6 +588,7 @@ const styles = StyleSheet.create({
     fontWeight: '400',
     color: 'white',
     fontSize: 8,
+	lineHeight: 8,
   },
   middle: {
     marginTop: 20,

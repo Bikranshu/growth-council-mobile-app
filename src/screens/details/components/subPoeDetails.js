@@ -325,7 +325,7 @@ const SubPOEDetails = props => {
                 )}
               {poeDetails?.slug === '10-growth-processes' && (
                 <View style={styles.buttonWrapper}>
-                  <View style={{position: 'absolute', bottom: 10}}>
+                  <View style={{position: 'absolute', bottom: 5}}>
                     <TouchableOpacity
                       onPress={() =>
                         navigation.navigate('SubPoeList', {
@@ -580,7 +580,7 @@ const styles = StyleSheet.create({
   signupbutton: {
     ...CommonStyles.button,
     width: buttonContainerWidth,
-    marginBottom: Platform.OS === 'ios' ? 10 : 20,
+    marginBottom: Platform.OS === 'ios' ? 10 : 10,
     borderRadius: 10,
     height: 56,
     flexDirection: 'row',
@@ -597,12 +597,12 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     width: buttonContainerWidth,
-    marginBottom: Platform.OS === 'ios' ? 10 : 20,
+    marginBottom: Platform.OS === 'ios' ? 10 : 10,
     borderRadius: 10,
     height: 56,
     flexDirection: 'row',
     borderColor: Colors.PRACTICE_COLOR,
-    borderWidth: 1,
+    borderWidth: 2,
   },
   guidebuttonText: {
     fontFamily: Typography.FONT_SF_BOLD,

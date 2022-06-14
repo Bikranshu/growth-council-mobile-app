@@ -535,6 +535,7 @@ const styles = StyleSheet.create({
     fontFamily: 'SFProText-Medium',
     color: Colors.SECONDARY_TEXT_COLOR,
     width: '75%',
+	fontStyle: 'italic'
   },
   userInfoText: {
     fontFamily: 'SFProText-Medium',

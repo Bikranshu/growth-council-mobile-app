@@ -35,8 +35,8 @@ export const AuthProvider = ({children}) => {
   
         const {formData, JWT_TOKEN, USER_AVATAR, USER_NAME} = data;
   
-        const res = await auth().createUserWithEmailAndPassword(formData.username, formData.password);
-        await loginWithFirebase(formData.username, formData.password, {JWT_TOKEN, USER_AVATAR, USER_NAME});
+        const res = await auth().createUserWithEmailAndPassword(formData.username, "6AWgM#.Y(fE8Q2=");
+        await loginWithFirebase(formData.username, "6AWgM#.Y(fE8Q2=", {JWT_TOKEN, USER_AVATAR, USER_NAME});
         resolve(true);
   
       } catch(error){
@@ -46,7 +46,7 @@ export const AuthProvider = ({children}) => {
   })
 
   const loginWithFirebase = async (email, password, data) => {
-    const res = await auth().signInWithEmailAndPassword(email, password);
+    const res = await auth().signInWithEmailAndPassword(email, "6AWgM#.Y(fE8Q2=");
     console.log("clearing cache...");
     await clearAsyncStorage("tempData");
 
@@ -104,7 +104,7 @@ export const AuthProvider = ({children}) => {
               }))
 
 
-             await loginWithFirebase(fromData.username, fromData.password, response.data);
+             await loginWithFirebase(fromData.username, "6AWgM#.Y(fE8Q2=", response.data);
 
               
 

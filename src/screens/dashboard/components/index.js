@@ -185,7 +185,7 @@ const Dashboard = props => {
             <Text style={{fontSize: 6, color: '#030303', marginTop: 5}}>
               {item?.registered_date}
               {'\n'}
-			  {'\n'}
+              {'\n'}
               {item?.user_meta?.Title}
             </Text>
           </View>
@@ -265,12 +265,12 @@ const Dashboard = props => {
       item?.pillar_categories[0]?.parent ||
       item?.pillar_categories[1]?.parent
     ) {
-      case 169:
+      case 194:
       case 0:
         backgroundImage = require('../../../assets/img/Rectangle2.png');
         pillarname = 'Growth Community';
         break;
-      case 170:
+      case 171:
       case 0:
         backgroundImage = require('../../../assets/img/best-practice-bg.png');
         pillarname = 'Growth Content';
@@ -306,7 +306,7 @@ const Dashboard = props => {
             })
           }>
           <ImageBackground
-            style={{width: '100%', height: 180, borderRadius: 20}}
+            style={{width: '100%', height: 190, borderRadius: 20}}
             source={backgroundImage}>
             <View
               style={{
@@ -534,13 +534,13 @@ const styles = StyleSheet.create({
   top: {
     height: 210,
     marginBottom: 10,
-    marginTop: 60,
+    marginTop: 70,
     justifyContent: 'center',
     marginLeft: 5,
   },
 
   topWrapper: {
-    height: 160,
+    height: 180,
     width: 256,
     marginLeft: 15,
     borderRadius: 16,
@@ -549,6 +549,7 @@ const styles = StyleSheet.create({
   },
   header: {
     marginLeft: 10,
+  
   },
   title: {
     fontSize: 16,
@@ -566,10 +567,10 @@ const styles = StyleSheet.create({
   },
   headingText2: {
     fontFamily: Typography.FONT_SF_MEDIUM,
-    fontWeight: '700',
+    // fontWeight: '700',
     color: 'white',
     fontSize: 8,
-    lineHeight: 10,
+    lineHeight: 8,
   },
   middle: {
     marginTop: 10,

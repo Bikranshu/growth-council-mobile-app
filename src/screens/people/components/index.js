@@ -11,7 +11,6 @@ import {
   Dimensions,
   Modal,
   SafeAreaView,
-  RefreshControl,
   StatusBar,
 } from 'react-native';
 
@@ -72,10 +71,10 @@ const People = props => {
         });
       };
       fetchAllUsersAsync();
-      return () => {
+	  return () => {
         cleanUser();
       };
-    }, [isFocused]),
+    }, []),
   );
 
   useEffect(() => {
@@ -109,10 +108,10 @@ const People = props => {
   };
 
   const countries = {
-    Region: 'Region',
-    'NORTH AMERICA': 'NORTH AMERICA',
-    APAC: 'APAC',
-    MEASA: 'MEASA',
+	'Region': 'Region',
+    'AMERICAS': 'AMERICAS',
+    'APAC': 'APAC',
+    'MEASA': 'MEASA',
   };
 
   const pillar = {
@@ -270,12 +269,12 @@ const People = props => {
           }}>
           <View style={{marginTop: 10}}>
             {memberConnectionLoading && <Loading />}
-              <FlatList
-                vertical
-                showsVerticalScrollIndicator={false}
-                data={users}
-                renderItem={_renderItem}
-              />
+            <FlatList
+              vertical
+              showsVerticalScrollIndicator={false}
+              data={users}
+              renderItem={_renderItem}
+            />
           </View>
           {/* <Footer /> */}
         </ScrollView>
@@ -315,14 +314,15 @@ const People = props => {
                 itemTextStyle={{fontSize: 12}}
                 onValueChange={async itemValue => {
                   setCategory(itemValue);
-
-                  await fetchAllUsers({
-                    s: searchKey,
-                    sort: sorting,
-                    expertise_areas: itemValue,
-                    account: account,
-                    region: region,
-                  });
+              
+                    await fetchAllUsers({
+                      s: searchKey,
+                      sort: sorting,
+                      expertise_areas: itemValue,
+                      account: account,
+                      region: region,
+                    });
+                  
                 }}>
                 {Object.keys(expertise).map(key => {
                   return (
@@ -457,6 +457,8 @@ const People = props => {
           </View>
         </View>
       </Modal>
+
+
 
       <BottomNav {...props} navigation={navigation} />
     </SafeAreaView>
