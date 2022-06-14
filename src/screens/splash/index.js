@@ -25,7 +25,7 @@ const SplashScreen = () => {
   const startAnimation = () => {
     Animated.timing(animation, {
       toValue: 1,
-      duration: 1500,
+      duration: 3000,
       useNativeDriver: true,
     }).start();
   };
