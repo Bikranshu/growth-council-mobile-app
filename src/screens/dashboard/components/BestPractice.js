@@ -56,7 +56,7 @@ const BestPractice = props => {
     cleanPillarPOE,
   } = props;
 
-  const pillarId = 170;
+  const pillarId = 171;
   const isFocused = useIsFocused();
 
   const [memberConnection, setMemberConnection] = useState([]);

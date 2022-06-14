@@ -88,11 +88,11 @@ const EventCalendar = props => {
       : '';
     switch (pillarCategory) {
       case 0:
-      case 169:
+      case 194:
         backgroundColor = Colors.COMMUNITY_COLOR;
         break;
       case 0:
-      case 170:
+      case 171:
         backgroundColor = Colors.PRACTICE_COLOR;
         break;
       default:
@@ -178,13 +178,13 @@ const EventCalendar = props => {
       ? item?.pillar_categories[0]?.parent || item?.pillar_categories[1]?.parent
       : '';
     switch (pillarCategory) {
-      case 169:
+      case 194:
       case 0:
         borderColor = Colors.COMMUNITY_COLOR;
         pillarname = 'Growth Community';
         backgroundImage = require('../../../assets/img/Rectangle2.png');
         break;
-      case 170:
+      case 171:
       case 0:
         borderColor = Colors.PRACTICE_COLOR;
         pillarname = 'Growth Content';

@@ -199,13 +199,13 @@ const CommunityDetail = props => {
       item?.pillar_categories[1]?.parent
     ) {
       case 0:
-      case 169:
+      case 194:
         backgroundImage = require('../../../assets/img/Rectangle2.png');
         pillarname = 'Growth Community';
         break;
 
       case 0:
-      case 170:
+      case 171:
         backgroundImage = require('../../../assets/img/best-practice-bg.png');
         pillarname = 'Growth Content';
         break;
@@ -405,15 +405,15 @@ const CommunityDetail = props => {
   const parent = poeDetails?.parent;
   const slug = poeDetails?.slug;
   switch (parent) {
-    case 170:
+    case 171:
       backgroundColor = Colors.PRACTICE_COLOR;
       title = 'Best Practices';
       break;
-    case 169:
+    case 194:
       backgroundColor = Colors.COMMUNITY_COLOR;
       title = 'Growth Community';
       break;
-    case 171:
+    case 172:
       backgroundColor = Colors.COACHING_COLOR;
       title = 'Growth Coaching';
     case 133:
