@@ -10,6 +10,7 @@ import {
   Dimensions,
   TouchableOpacity,
   TextInput,
+  SafeAreaView
 } from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import {useIsFocused} from '@react-navigation/native';
@@ -71,7 +72,8 @@ const Email = props => {
       />
       <ScrollView style={{backgroundColor: 'white'}}>
         <View style={styles.container}>
-          <View style={styles.wrapper}>
+          <SafeAreaView style={{backgroundColor: '#02B0F0', top: -15}}>
+            <View style={styles.wrapper}>
             <TouchableOpacity onPress={() => navigation.goBack()}>
               <Ionicons
                 name="chevron-back-outline"
@@ -92,14 +94,15 @@ const Email = props => {
             </View>
 
             {/**/}
-          </View>
+            </View>
+          </SafeAreaView>
           <View style={{padding: 20, backgroundColor: 'white'}}>
-            <View style={{flexDirection: 'row'}}>
+          <View style={{marginTop: 10}}>
               <Text style={{fontSize: 18, marginTop: 10}}>From :</Text>
               <TextInput
                 multiline={true}
                 numberOfLines={1}
-                style={[styles.input, {color: 'blue'}]}
+                style={[styles.textarea, {color: 'blue'}]}
                 value={values.sender}
                 onChangeText={handleChange('sender')}
                 onFocus={handleBlur('sender')}
@@ -128,7 +131,7 @@ const Email = props => {
               <TextInput
                 multiline={true}
                 numberOfLines={15}
-                style={styles.textarea}
+                style={[styles.textarea, styles.large]}
                 value={values.message}
                 onChangeText={handleChange('message')}
                 onFocus={handleBlur('message')}
@@ -181,6 +184,7 @@ const styles = StyleSheet.create({
     borderWidth: 0.2,
     marginTop: 10,
     borderRadius: 5,
+    padding: 10
   },
   buttonWrapper: {
     width: 200,
@@ -198,4 +202,7 @@ const styles = StyleSheet.create({
     color: 'white',
     fontSize: 16,
   },
+  large: {
+    minHeight: 120
+  }
 });

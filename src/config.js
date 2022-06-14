@@ -1,6 +1,5 @@
 import PushNotification from 'react-native-push-notification';
 import PushNotificationIOS from '@react-native-community/push-notification-ios';
-import {notificationAlert} from '../redux/actions';
 import { navigate } from './utils/navigationUtil';
 
 // import moment from 'moment';
@@ -25,6 +24,7 @@ const PushNotificationsConfigs = {
                 navigate("EventDetail", {id: notification.data.post_id});
             }
           }
+          notification.finish(PushNotificationIOS.FetchResult.NoData);
       },
       onAction: notification => {
         console.log('NOTIFICATION:', notification);
