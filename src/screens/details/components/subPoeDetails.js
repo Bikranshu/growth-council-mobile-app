@@ -263,11 +263,11 @@ const SubPOEDetails = props => {
                 alignItems: 'center',
                 justifyContent: 'center',
               }}
+              resizeMode="contain"
             />
           </View>
 
-          <ScrollView
-            style={styles.content}>
+          <ScrollView style={styles.content}>
             <View style={styles.contentWrapper}>
               <Text
                 style={{
@@ -325,23 +325,40 @@ const SubPOEDetails = props => {
                 )}
               {poeDetails?.slug === '10-growth-processes' && (
                 <View style={styles.buttonWrapper}>
-                  <TouchableOpacity
-                    onPress={() =>
-                      navigation.navigate('SubPoeList', {
-                        poeId: poeDetails?.term_id,
-                        id: route?.params?.poeId,
-                      })
-                    }>
-                    <View style={styles.signupbutton}>
-                      <FontAwesome5
-                        name="toolbox"
-                        size={25}
-                        color="white"
-                        style={{paddingRight: 40}}
-                      />
-                      <Text style={styles.signinbuttonText}>Toolkits</Text>
-                    </View>
-                  </TouchableOpacity>
+                  <View style={{position: 'absolute', bottom: 10}}>
+                    <TouchableOpacity
+                      onPress={() =>
+                        navigation.navigate('SubPoeList', {
+                          poeId: poeDetails?.term_id,
+                          id: route?.params?.poeId,
+                        })
+                      }>
+                      <View style={styles.signupbutton}>
+                        <FontAwesome5
+                          name="toolbox"
+                          size={25}
+                          color="white"
+                          style={{paddingLeft: 40}}
+                        />
+                        <Text style={styles.signinbuttonText}>
+                          Read Growth Process Toolkits, {'\n'}access via one click
+                        </Text>
+                      </View>
+                    </TouchableOpacity>
+
+                    <TouchableOpacity>
+                      <View style={styles.guidebutton}>
+                        <Ionicons
+                          name="book-outline"
+                          size={25}
+                          color="#f26722"
+                          style={{paddingRight: 40}}
+                        />
+						
+                        <Text style={styles.guidebuttonText}>GuideBook</Text>
+                      </View>
+                    </TouchableOpacity>
+                  </View>
                 </View>
               )}
 
@@ -389,11 +406,11 @@ const styles = StyleSheet.create({
     borderTopLeftRadius: 15,
     borderTopRightRadius: 15,
     marginBottom: 20,
-	backgroundColor:Colors.PRACTICE_COLOR,
+    backgroundColor: Colors.PRACTICE_COLOR,
   },
   contentWrapper: {
     width: '100%',
-    height: (Dimensions.get('screen').height + 50) / 2,
+    height: '100%',
     backgroundColor: 'white',
     overflow: 'scroll',
     marginTop: 10,
@@ -554,9 +571,9 @@ const styles = StyleSheet.create({
     marginTop: 20,
   },
   buttonWrapper: {
+    height: Dimensions.get('screen').height / 3,
     alignItems: 'center',
-    position: 'absolute',
-    right: 15,
+
     bottom: 0,
     // justifyContent: 'space-around',
   },
@@ -571,8 +588,26 @@ const styles = StyleSheet.create({
   },
   signinbuttonText: {
     fontFamily: Typography.FONT_SF_BOLD,
-    fontSize: 18,
+    fontSize: 16,
     color: 'white',
+    alignItems: 'center',
+    paddingLeft: 20,
+  },
+  guidebutton: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    width: buttonContainerWidth,
+    marginBottom: Platform.OS === 'ios' ? 10 : 20,
+    borderRadius: 10,
+    height: 56,
+    flexDirection: 'row',
+    borderColor: Colors.PRACTICE_COLOR,
+    borderWidth: 1,
+  },
+  guidebuttonText: {
+    fontFamily: Typography.FONT_SF_BOLD,
+    fontSize: 18,
+    color: Colors.PRACTICE_COLOR,
     alignItems: 'center',
     paddingRight: 50,
   },

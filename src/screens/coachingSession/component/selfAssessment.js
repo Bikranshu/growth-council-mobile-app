@@ -111,7 +111,7 @@ const SelfAssessment = props => {
       })
         .then(response => {
           if (response?.data?.code === 200) {
-            ToastMessage.show('You score has been submitted.');
+            ToastMessage.show('Your score has been submitted.');
             setAnswers({
               questions: {
                 growthIndex: [],

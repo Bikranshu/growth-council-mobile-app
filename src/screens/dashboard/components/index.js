@@ -185,7 +185,8 @@ const Dashboard = props => {
             <Text style={{fontSize: 6, color: '#030303', marginTop: 5}}>
               {item?.registered_date}
               {'\n'}
-              Frost and Sullivan
+			  {'\n'}
+              {item?.user_meta?.Title}
             </Text>
           </View>
         </TouchableOpacity>
@@ -637,7 +638,6 @@ const styles = StyleSheet.create({
     bottom: 4,
   },
   content: {
-    
     marginLeft: 20,
     marginTop: 15,
     justifyContent: 'center',

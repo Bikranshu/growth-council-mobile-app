@@ -59,11 +59,11 @@ const CouncilAllDetail = props => {
       item?.pillar_categories[0]?.parent || item?.pillar_categories[1]?.parent;
     switch (pillarCategory) {
       case 0:
-      case 117:
+      case 169:
         backgroundColor = Colors.COMMUNITY_COLOR;
         break;
       case 0:
-      case 118:
+      case 170:
         backgroundColor = Colors.PRACTICE_COLOR;
         break;
       default:
@@ -73,7 +73,7 @@ const CouncilAllDetail = props => {
       <View>
         <TouchableOpacity
           onPress={() =>
-            ToastMessage.show('Log in as Council Member to Review.')
+            ToastMessage.show('Please login to review further.')
           }>
           <View style={styles.eventCard} key={index}>
             <View style={[styles.eventTheme, {borderColor: backgroundColor}]} />
@@ -104,7 +104,7 @@ const CouncilAllDetail = props => {
       <View>
         <TouchableOpacity
           onPress={() =>
-            ToastMessage.show('Log in as Council Member to Review.')
+            ToastMessage.show('Please login to review further.')
           }>
           <View style={styles.poeCard} key={index}>
             <View style={[styles.poeTheme, styles.shadowProp]}>
@@ -149,7 +149,7 @@ const CouncilAllDetail = props => {
                 </View>
               </View>
             )}
-          {upcomingEvents?.length !== 0 &&
+          {/* {upcomingEvents?.length !== 0 &&
             upcomingEvents !== null &&
             upcomingEvents !== false &&
             upcomingEvents !== undefined && (
@@ -164,7 +164,7 @@ const CouncilAllDetail = props => {
                   />
                 </View>
               </View>
-            )}
+            )} */}
         </ScrollView>
       </View>
     </>

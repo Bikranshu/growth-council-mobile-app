@@ -56,7 +56,7 @@ const DashboardScreen = props => {
 
   useEffect(() => {
     let content = pillarSliders?.flatMap((value, key) => {
-      console.log(value);
+      
       return value?.pillar_contents;
     });
     setContentSlider(content);

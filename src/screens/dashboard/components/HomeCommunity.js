@@ -151,8 +151,8 @@ const HomeCommunity = props => {
               }}>
               {item?.user_meta?.first_name} {item?.user_meta?.last_name}
             </Text>
-            <Text style={{fontSize: 6, color: '#030303'}}>
-              Frost and Sullivan
+            <Text style={{fontSize: 6, color: '#030303', marginTop: 5}}>
+              {item?.user_meta?.Title}
             </Text>
           </View>
         </TouchableOpacity>
@@ -198,8 +198,8 @@ const HomeCommunity = props => {
           <Text
             style={{
               marginTop: 10,
-              fontSize: 9,
-              marginHorizontal: 10,
+              fontSize: 8,
+              marginHorizontal: 9,
               textAlign: 'center',
               color: '#222B45',
             }}>
@@ -450,7 +450,7 @@ const HomeCommunity = props => {
               </View>
             )}
 
-          {pillarEventLoading && (
+          {pillarMemberContentLoading && (
             <View style={{marginTop: 40}}>
               <Loading />
             </View>
@@ -620,7 +620,7 @@ const styles = StyleSheet.create({
     marginTop: 15,
     marginLeft: 15,
     marginRight: 2,
-    marginBottom: 10,
+    marginBottom: 20,
     backgroundColor: 'white',
   },
   chatIcon: {
