@@ -198,6 +198,7 @@ const ManageAccount = props => {
       company: company,
       email: profile?.user_email,
       Location: Location,
+      favorite_quote: favorite_quote,
       expertise_areas1: expertise_areas1,
       professional_summary: professional_summary,
     },
@@ -205,7 +206,7 @@ const ManageAccount = props => {
       await updateUser(values).then(response => {
         if (response?.payload?.code === 200) {
           navigation.navigate('Account');
-          ToastMessage.show('Profile has been successfully updated.');
+          ToastMessage.show('Your profile has been successfully updated.');
         }
       });
     },
@@ -268,7 +269,8 @@ const ManageAccount = props => {
             style={{
               height: Dimensions.get('screen').height / 4,
               paddingTop: Dimensions.get('screen').height / 9,
-            }}/>
+            }}
+          />
           <View
             style={{
               display: 'flex',
@@ -448,20 +450,20 @@ const ManageAccount = props => {
                       touched={touched.Location}
                     />
 
-                    {/* <Text
-                    style={{marginLeft: 10, fontSize: 10, color: '#8F9BB3'}}>
-                    Favorite Quote
-                  </Text>
-                  <TextInput
-                    multiline={true}
-                    numberOfLines={4}
-                    style={styles.textarea}
-                    value={values.favorite_quote}
-                    onChangeText={handleChange('favorite_quote')}
-                    onBlur={handleBlur('favorite_quote')}
-                    error={errors.favorite_quote}
-                    touched={touched.favorite_quote}
-                  /> */}
+                    <Text
+                      style={{marginLeft: 10, fontSize: 10, color: '#8F9BB3'}}>
+                      Favorite Quote
+                    </Text>
+                    <TextInput
+                      multiline={true}
+                      numberOfLines={4}
+                      style={styles.textarea}
+                      value={values.favorite_quote}
+                      onChangeText={handleChange('favorite_quote')}
+                      onBlur={handleBlur('favorite_quote')}
+                      error={errors.favorite_quote}
+                      touched={touched.favorite_quote}
+                    />
 
                     <Text
                       style={{marginLeft: 10, fontSize: 10, color: '#8F9BB3'}}>

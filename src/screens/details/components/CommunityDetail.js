@@ -193,22 +193,26 @@ const CommunityDetail = props => {
     const date = actualDate[0].split(' ', 3);
 
     let backgroundImage = '';
+	let pillarname = '';
     switch (
       item?.pillar_categories[0]?.parent ||
       item?.pillar_categories[1]?.parent
     ) {
       case 0:
-      case 117:
+      case 169:
         backgroundImage = require('../../../assets/img/Rectangle2.png');
+        pillarname = 'Growth Community';
         break;
 
       case 0:
-      case 118:
+      case 170:
         backgroundImage = require('../../../assets/img/best-practice-bg.png');
+        pillarname = 'Growth Content';
         break;
 
       default:
         backgroundImage = require('../../../assets/img/Rectangle.png');
+        pillarname = 'Growth Coaching';
     }
 
     let organizer = item?.organizer?.term_name;
@@ -227,7 +231,13 @@ const CommunityDetail = props => {
     return (
       <View style={styles.topWrapper}>
         <TouchableOpacity
-          onPress={() => navigation.navigate('EventDetail', {id: item.ID})}>
+          onPress={() =>
+            navigation.navigate('EventDetail', {
+              id: item.ID,
+              title: pillarname,
+              image: backgroundImage,
+            })
+          }>
           <ImageBackground
             style={{
               width: '100%',
@@ -448,6 +458,7 @@ const CommunityDetail = props => {
                 alignItems: 'center',
                 justifyContent: 'center',
               }}
+			  resizeMode="contain"
             />
           </View>
 
@@ -542,7 +553,6 @@ const CommunityDetail = props => {
                   </View>
                 </View>
               )} */}
-
 
               {/* <Footer /> */}
             </View>

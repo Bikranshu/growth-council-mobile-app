@@ -16,7 +16,7 @@ const HeaderTitle = props => {
   }, [isFocused]);
 
   return (
-    <View style={{marginLeft: 10}}>
+    <View style={{marginLeft: 10, width: '80%'}}>
       {title === undefined ? (
         <Text
           style={{

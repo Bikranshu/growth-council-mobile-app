@@ -257,6 +257,7 @@ const ToolkitDetails = props => {
                 alignItems: 'center',
                 justifyContent: 'center',
               }}
+			  resizeMode="contain"
             />
           </View>
 
