@@ -33,6 +33,7 @@ import BestPracticeScreen from '../screens/dashboard/BestPractice';
 import GrowthCoachingScreen from '../screens/dashboard/GrowthCoaching';
 import SettingScreen from '../screens/setting/index';
 import SubHeader from '../shared/header/SubHeader';
+import ContentLibraryScreen from '../screens/contentLibrary/contentLibrary';
 
 import {fetchProfileByID} from '../screens/account/slice/profileSlice';
 import DashboardScreen from '../screens/dashboard';
@@ -186,7 +187,7 @@ const DrawerNavigation = () => {
       />
       <Drawer.Screen
         name="Growth Content"
-        component={BestPracticeScreen}
+        component={ContentScreen}
         options={({navigation, route}) => ({
           pillarId: route?.params?.pillarId,
           drawerIcon: ({focused, size}) => (
