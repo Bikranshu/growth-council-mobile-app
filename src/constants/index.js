@@ -1,5 +1,8 @@
+
 export const API_URL = 'https://gilcouncil.com/wp-json';
+// // export const API_URL = 'https://staging.gilcouncil.com/wp-json';
 // export const API_URL = 'https://beta.gilcouncil.com/wp-json';
+ 
 export const JWT_TOKEN = 'growth-council-token';
 export const USER_NAME = 'user-name';
 export const USER_AVATAR = 'user-avatar';
