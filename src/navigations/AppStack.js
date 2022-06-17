@@ -183,7 +183,7 @@ const AppStack = () => (
         ),
       })}
     />
-	 <Screen
+    <Screen
       name="ToolKit"
       component={ToolKitDetailScreen}
       options={() => ({
@@ -197,8 +197,6 @@ const AppStack = () => (
         ),
       })}
     />
-	
-
     <Screen
       name="ManageAccount"
       component={ManageAccountScreen}
@@ -352,14 +350,14 @@ const AppStack = () => (
       component={EventDetailScreen}
       options={({navigation, route}) => ({
         id: route?.params?.id,
-		header: () => (
-			<SubHeader
-			  title={route?.params?.title}
-			  image={route?.params?.image}
-			  navigation={navigation}
-			  noDrawer
-			/>
-		  ),
+        header: () => (
+          <SubHeader
+            title={route?.params?.title}
+            image={route?.params?.image}
+            navigation={navigation}
+            noDrawer
+          />
+        ),
       })}
     />
     <Screen
