@@ -29,6 +29,7 @@ import ToastMessage from '../../../shared/toast';
 
 const win = Dimensions.get('window');
 const contentContainerWidth = win.width - 30;
+const buttonContainerWidth = win.width - 150;
 
 const CommunityDetail = props => {
   const {
@@ -193,7 +194,7 @@ const CommunityDetail = props => {
     const date = actualDate[0].split(' ', 3);
 
     let backgroundImage = '';
-	let pillarname = '';
+    let pillarname = '';
     switch (
       item?.pillar_categories[0]?.parent ||
       item?.pillar_categories[1]?.parent
@@ -458,7 +459,7 @@ const CommunityDetail = props => {
                 alignItems: 'center',
                 justifyContent: 'center',
               }}
-			  resizeMode="contain"
+              resizeMode="contain"
             />
           </View>
 
@@ -540,19 +541,32 @@ const CommunityDetail = props => {
                     />
                   </View>
                 )}
-              {/* {pillarMemberContents?.members?.length !== 0 && (
-                <View style={styles.bottom}>
-                  <Text style={styles.title}> Members</Text>
-                  <View>
-                    <FlatList
-                      horizontal
-                      showsHorizontalScrollIndicator={false}
-                      data={pillarMemberContents?.members}
-                      renderItem={item => _renderItem(item, navigation)}
-                    />
-                  </View>
+              {poeDetails?.slug === 'peer-to-peer-interactions' && (
+                <View style={styles.buttonWrapper}>
+                  <TouchableOpacity
+                    onPress={() => navigation.navigate('UserList')}>
+                    <View style={styles.chatbutton}>
+                      <Ionicons name="chatbox" size={25} color="white" />
+                      <Text style={styles.chatbuttonText}>Chat</Text>
+                    </View>
+                  </TouchableOpacity>
                 </View>
-              )} */}
+              )}
+
+              <View style={styles.buttonWrapper}>
+                <TouchableOpacity
+                  onPress={() =>
+                    navigation.navigate('ContentDetail', {
+                      resourceId: poeDetails?.term_id,
+                      resourcesName: poeDetails?.name,
+                    })
+                  }>
+                  <View style={styles.chatbutton}>
+                    {/* <Ionicons name="chatbox" size={25} color="white" /> */}
+                    <Text style={styles.chatbuttonText}>On-Demand Context</Text>
+                  </View>
+                </TouchableOpacity>
+              </View>
 
               {/* <Footer /> */}
             </View>
@@ -760,6 +774,28 @@ const styles = StyleSheet.create({
   sectionContainer: {
     marginBottom: 20,
     marginTop: 20,
+  },
+  buttonWrapper: {
+    alignItems: 'center',
+    marginTop: 20,
+    bottom: 0,
+  },
+  chatbutton: {
+    ...CommonStyles.button,
+    width: buttonContainerWidth,
+    marginBottom: Platform.OS === 'ios' ? 10 : 10,
+    borderRadius: 10,
+    height: 56,
+    flexDirection: 'row',
+    backgroundColor: Colors.PRACTICE_COLOR,
+  },
+
+  chatbuttonText: {
+    fontFamily: Typography.FONT_SF_BOLD,
+    fontSize: 16,
+    color: 'white',
+    alignItems: 'center',
+    paddingLeft: 20,
   },
 });
 

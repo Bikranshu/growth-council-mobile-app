@@ -66,14 +66,6 @@ const Content = props => {
                   resources: item?.term_id,
                   itemname: item?.name,
                 });
-              } else if (item.slug === 'best-practices') {
-                navigation.navigate('CommunityDetail', {
-                  poeId: item?.term_id,
-                  //   pillarId: item?.parent,
-
-                  title: 'Growth Content',
-                  image: require('../../../assets/img/best-practice-bg.png'),
-                });
               } else {
                 navigation.navigate('ContentDetail', {
                   resourceId: item?.term_id,
