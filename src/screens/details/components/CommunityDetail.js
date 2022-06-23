@@ -596,12 +596,40 @@ const CommunityDetail = props => {
                   <View style={styles.buttonWrapper}>
                     <View style={styles.btnWrapper}>
                       <TouchableOpacity
-                        onPress={() =>
-                          navigation.navigate('ContentDetail', {
-                            resourceId: poeDetails?.term_id,
-                            resourcesName: poeDetails?.name,
-                          })
-                        }>
+                        onPress={() => {
+                          if (poeDetails?.slug === 'innovative-center-tours') {
+                            navigation.navigate('LibraryDetail', {
+								resources: 205,
+								itemname: poeDetails?.name,
+                            });
+                          } else if (
+                            poeDetails?.slug === 'council-virtual-events'
+                          ) {
+                            navigation.navigate('LibraryDetail', {
+								resources: 44,
+								itemname: poeDetails?.name,
+                            });
+                          } else if (
+                            poeDetails?.slug === 'transformational-think-tanks'
+                          ) {
+                            navigation.navigate('LibraryDetail', {
+								resources: 119,
+								itemname: poeDetails?.name,
+                            });
+                          } else if (
+                            poeDetails?.slug === 'mega-trends-workshop'
+                          ) {
+                            navigation.navigate('LibraryDetail', {
+								resources: 204,
+								itemname: poeDetails?.name,
+                            });
+                          } else {
+                            navigation.navigate('LibraryDetail', {
+								resources: poeDetails?.term_id,
+								itemname: poeDetails?.name,
+                            });
+                          }
+                        }}>
                         <ImageBackground
                           style={{width: '100%', height: 120, borderRadius: 20}}
                           source={require('../../../assets/img/digital-content.jpg')}>

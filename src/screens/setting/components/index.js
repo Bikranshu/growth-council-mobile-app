@@ -143,7 +143,7 @@ const Setting = props => {
                     </View>
                   </TouchableOpacity>
 
-                  <View style={[styles.middleWrapper, {borderBottomWidth: 0}]}>
+                  {/* <View style={[styles.middleWrapper, {borderBottomWidth: 0}]}>
                     <View style={styles.middleImage}>
                       <Ionicons
                         name={'notifications'}
@@ -164,7 +164,7 @@ const Setting = props => {
                         position: 'absolute',
                       }}
                     />
-                  </View>
+                  </View> */}
                 </View>
                 <View style={styles.wrapper}>
                   <TouchableOpacity
