@@ -29,7 +29,7 @@ import ToastMessage from '../../../shared/toast';
 
 const win = Dimensions.get('window');
 const contentContainerWidth = win.width - 30;
-const buttonContainerWidth = win.width - 150;
+const buttonContainerWidth = win.width - 50;
 
 const CommunityDetail = props => {
   const {
@@ -543,19 +543,48 @@ const CommunityDetail = props => {
                 )}
               {poeDetails?.slug === 'peer-to-peer-interactions' && (
                 <View style={styles.buttonWrapper}>
+                  <View style={styles.memberWrapper}>
+                    <TouchableOpacity
+                      onPress={() => navigation.navigate('People')}>
+                      <ImageBackground
+                        style={{width: '100%', height: 160, borderRadius: 20}}
+                        source={require('../../../assets/img/people.jpg')}>
+                        <View
+                          style={{
+                            width: buttonContainerWidth,
+                            marginBottom: Platform.OS === 'ios' ? 10 : 10,
+                            borderRadius: 10,
+                            height: 45,
+                            flexDirection: 'row',
+                            position: 'absolute',
+                            bottom: -5,
+                            left: 5,
+                          }}>
+                          <Ionicons
+                            name="people-outline"
+                            size={25}
+                            color="white"
+                          />
+                          <Text
+                            style={{
+                              fontFamily: Typography.FONT_SF_BOLD,
+                              fontSize: 14,
+                              color: 'white',
+                              alignItems: 'center',
+                              paddingLeft: 10,
+                            }}>
+                            Growth Community Members
+                          </Text>
+                        </View>
+                      </ImageBackground>
+                    </TouchableOpacity>
+                  </View>
                   <TouchableOpacity
                     onPress={() => navigation.navigate('UserList')}>
                     <View style={styles.chatbutton}>
                       <Ionicons name="chatbox" size={20} color="white" />
-                      <Text style={styles.chatbuttonText}>Chat</Text>
-                    </View>
-                  </TouchableOpacity>
-                  <TouchableOpacity
-                    onPress={() => navigation.navigate('People')}>
-                    <View style={styles.chatbutton}>
-                      <Ionicons name="people-outline" size={25} color="white" />
                       <Text style={styles.chatbuttonText}>
-                        Member Connection
+                        Connect With Growth Council Member
                       </Text>
                     </View>
                   </TouchableOpacity>
@@ -565,20 +594,48 @@ const CommunityDetail = props => {
                 poeDetails?.slug !== 'executive-mindxchange-events' &&
                 poeDetails?.slug !== 'annual-council-meeting' && (
                   <View style={styles.buttonWrapper}>
-                    <TouchableOpacity
-                      onPress={() =>
-                        navigation.navigate('ContentDetail', {
-                          resourceId: poeDetails?.term_id,
-                          resourcesName: poeDetails?.name,
-                        })
-                      }>
-                      <View style={styles.chatbutton}>
-                        {/* <Ionicons name="chatbox" size={25} color="white" /> */}
-                        <Text style={styles.chatbuttonText}>
-                          On-Demand Context
-                        </Text>
-                      </View>
-                    </TouchableOpacity>
+                    <View style={styles.btnWrapper}>
+                      <TouchableOpacity
+                        onPress={() =>
+                          navigation.navigate('ContentDetail', {
+                            resourceId: poeDetails?.term_id,
+                            resourcesName: poeDetails?.name,
+                          })
+                        }>
+                        <ImageBackground
+                          style={{width: '100%', height: 120, borderRadius: 20}}
+                          source={require('../../../assets/img/digital-content.jpg')}>
+                          <View
+                            style={{
+                              width: buttonContainerWidth,
+                              marginBottom: Platform.OS === 'ios' ? 10 : 10,
+                              borderRadius: 10,
+                              height: 45,
+                              flexDirection: 'row',
+                              position: 'absolute',
+                              bottom: -15,
+                              left: 5,
+                            }}>
+                            <Ionicons
+                              name="people-outline"
+                              size={25}
+                              color="white"
+                            />
+                            <Text
+                              style={{
+                                fontFamily: Typography.FONT_SF_BOLD,
+                                fontSize: 16,
+                                color: 'white',
+                                alignItems: 'center',
+                                paddingLeft: 10,
+                                fontWeight: '700',
+                              }}>
+                              On-Demand Content
+                            </Text>
+                          </View>
+                        </ImageBackground>
+                      </TouchableOpacity>
+                    </View>
                   </View>
                 )}
 
@@ -812,6 +869,24 @@ const styles = StyleSheet.create({
     color: 'white',
     alignItems: 'center',
     paddingLeft: 10,
+  },
+  memberWrapper: {
+    height: 150,
+    width: 330,
+    marginLeft: 15,
+    borderRadius: 16,
+    overflow: 'hidden',
+    marginRight: 5,
+    marginBottom: 15,
+  },
+  btnWrapper: {
+    height: 120,
+    width: 300,
+    marginLeft: 15,
+    borderRadius: 16,
+    overflow: 'hidden',
+    marginRight: 5,
+    marginBottom: 15,
   },
 });
 
