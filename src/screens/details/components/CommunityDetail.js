@@ -242,7 +242,7 @@ const CommunityDetail = props => {
           <ImageBackground
             style={{
               width: '100%',
-              height: 150,
+              height: 190,
               borderRadius: 20,
             }}
             source={backgroundImage}>
@@ -546,27 +546,41 @@ const CommunityDetail = props => {
                   <TouchableOpacity
                     onPress={() => navigation.navigate('UserList')}>
                     <View style={styles.chatbutton}>
-                      <Ionicons name="chatbox" size={25} color="white" />
+                      <Ionicons name="chatbox" size={20} color="white" />
                       <Text style={styles.chatbuttonText}>Chat</Text>
+                    </View>
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                    onPress={() => navigation.navigate('People')}>
+                    <View style={styles.chatbutton}>
+                      <Ionicons name="people-outline" size={25} color="white" />
+                      <Text style={styles.chatbuttonText}>
+                        Member Connection
+                      </Text>
                     </View>
                   </TouchableOpacity>
                 </View>
               )}
-
-              <View style={styles.buttonWrapper}>
-                <TouchableOpacity
-                  onPress={() =>
-                    navigation.navigate('ContentDetail', {
-                      resourceId: poeDetails?.term_id,
-                      resourcesName: poeDetails?.name,
-                    })
-                  }>
-                  <View style={styles.chatbutton}>
-                    {/* <Ionicons name="chatbox" size={25} color="white" /> */}
-                    <Text style={styles.chatbuttonText}>On-Demand Context</Text>
+              {poeDetails?.slug !== 'peer-to-peer-interactions' &&
+                poeDetails?.slug !== 'executive-mindxchange-events' &&
+                poeDetails?.slug !== 'annual-council-meeting' && (
+                  <View style={styles.buttonWrapper}>
+                    <TouchableOpacity
+                      onPress={() =>
+                        navigation.navigate('ContentDetail', {
+                          resourceId: poeDetails?.term_id,
+                          resourcesName: poeDetails?.name,
+                        })
+                      }>
+                      <View style={styles.chatbutton}>
+                        {/* <Ionicons name="chatbox" size={25} color="white" /> */}
+                        <Text style={styles.chatbuttonText}>
+                          On-Demand Context
+                        </Text>
+                      </View>
+                    </TouchableOpacity>
                   </View>
-                </TouchableOpacity>
-              </View>
+                )}
 
               {/* <Footer /> */}
             </View>
@@ -629,18 +643,20 @@ const styles = StyleSheet.create({
     color: '#77838F',
   },
   top: {
+    height: 210,
+    marginBottom: 10,
     marginTop: 10,
     justifyContent: 'center',
-    marginBottom: 10,
+    marginLeft: 5,
   },
   topWrapper: {
-    height: 144,
+    height: 180,
     width: 256,
     marginLeft: 15,
     borderRadius: 16,
     overflow: 'hidden',
     marginRight: 5,
-    marginTop: 15,
+    marginTop: 10,
   },
   middleWrapper: {
     width: (Dimensions.get('window').width - 10) / 4,
@@ -785,7 +801,7 @@ const styles = StyleSheet.create({
     width: buttonContainerWidth,
     marginBottom: Platform.OS === 'ios' ? 10 : 10,
     borderRadius: 10,
-    height: 56,
+    height: 45,
     flexDirection: 'row',
     backgroundColor: Colors.PRACTICE_COLOR,
   },
@@ -795,7 +811,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: 'white',
     alignItems: 'center',
-    paddingLeft: 20,
+    paddingLeft: 10,
   },
 });
 
