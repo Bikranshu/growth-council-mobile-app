@@ -123,7 +123,6 @@ const GrowthDetail = props => {
     fetchRadarMemberDetail();
   }, []);
 
-  console.log(radarMemberDetails?.display_name);
 
   // useEffect(()=>{
   //   for(let value of coachingSession){

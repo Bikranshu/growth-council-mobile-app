@@ -5,8 +5,8 @@ import {store} from '../../../utils/httpUtil';
 export const getIdBySlug = createAsyncThunk(
   'getSlug/getIdBySlug',
   (formData, {rejectWithValue}) => {
-    return store(`jwt-auth/v1/content-library/get_id_by_slug`, formData)
-      .then(response => response.data)
+    return store(`jwt-auth/v1/content-library/get_id_by_slug`,formData)
+      .then(response => response.data.data)
       .catch(error => rejectWithValue(error?.response?.data || error));
   },
 );

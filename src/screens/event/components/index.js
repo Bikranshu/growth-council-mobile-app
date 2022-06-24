@@ -65,7 +65,6 @@ const Event = props => {
       slug: Slug,
     });
     if (response?.payload?.code === 200) {
-      console.log(response);
       setEventStatus(true);
       ToastMessage.show('You have successfully RSVP’d this event.');
     } else {

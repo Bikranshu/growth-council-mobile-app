@@ -70,6 +70,7 @@ const CommunityDetail = props => {
 
   const isFocused = useIsFocused();
   const [memberConnection, setMemberConnection] = useState([]);
+  const [slugName, setSlugName] = useState('');
 
   useFocusEffect(
     useCallback(() => {
@@ -115,6 +116,18 @@ const CommunityDetail = props => {
       };
     }, [isFocused]),
   );
+
+  //   useEffect(() => {
+  //  GetIdBySlug({
+  //       slug: poeDetails?.slug,
+  //     }).then(response => {
+  //       console.log('a', response);
+  //     });
+  //   }, [poeDetails]);
+
+  //     useEffect(() => {
+  //       setSlugName(poeDetails?.slug);
+  //     }, [poeDetails]);
 
   //   const _renderItem = ({item, index}, navigation) => {
   //     return (
@@ -433,17 +446,6 @@ const CommunityDetail = props => {
     poeDescription = '';
   }
 
-  const GetSlug = async slug => {
-    const response = await GetIdBySlug({slug});
-    if (response?.payload?.code === 200) {
-      console.log(response);
-      const slugresponse = response;
-      ToastMessage.show('You have successfully RSVP’d this event.');
-    } else {
-      toast.closeAll();
-      ToastMessage.show(response?.payload?.response);
-    }
-  };
   return (
     <>
       <StatusBar
@@ -602,44 +604,52 @@ const CommunityDetail = props => {
                 </View>
               )}
               {poeDetails?.slug !== 'peer-to-peer-interactions' &&
-                poeDetails?.slug !== 'executive-mindxchange-events' &&
+                // poeDetails?.slug !== 'executive-mindxchange-events' &&
                 poeDetails?.slug !== 'annual-council-meeting' && (
                   <View style={styles.buttonWrapper}>
                     <View style={styles.btnWrapper}>
                       <TouchableOpacity
-                        onPress={
-                          () => GetSlug(slugresponse)
-
-                          //   if (poeDetails?.slug === 'innovative-center-tours') {
-
-                          //   } else if (
-                          //     poeDetails?.slug === 'council-virtual-events'
-                          //   ) {
-                          //     navigation.navigate('LibraryDetail', {
-                          // 		resources: 44,
-                          // 		itemname: poeDetails?.name,
-                          //     });
-                          //   } else if (
-                          //     poeDetails?.slug === 'transformational-think-tanks'
-                          //   ) {
-                          //     navigation.navigate('LibraryDetail', {
-                          // 		resources: 119,
-                          // 		itemname: poeDetails?.name,
-                          //     });
-                          //   } else if (
-                          //     poeDetails?.slug === 'mega-trends-workshop'
-                          //   ) {
-                          //     navigation.navigate('LibraryDetail', {
-                          // 		resources: 204,
-                          // 		itemname: poeDetails?.name,
-                          //     });
-                          //   } else {
-                          //     navigation.navigate('LibraryDetail', {
-                          // 		resources: poeDetails?.term_id,
-                          // 		itemname: poeDetails?.name,
-                          //     });
-                          //   }
-                        }>
+                        onPress={() => {
+                          if (poeDetails?.slug === 'innovative-center-tours') {
+                            navigation.navigate('LibraryDetail', {
+                              resources: 44,
+                              itemname: poeDetails?.name,
+                            });
+                          } else if (
+                            poeDetails?.slug === 'council-virtual-events'
+                          ) {
+                            navigation.navigate('LibraryDetail', {
+                              resources: 44,
+                              itemname: poeDetails?.name,
+                            });
+                          } else if (
+                            poeDetails?.slug === 'transformational-think-tanks'
+                          ) {
+                            navigation.navigate('LibraryDetail', {
+                              resources: 119,
+                              itemname: poeDetails?.name,
+                            });
+                          } else if (
+                            poeDetails?.slug === 'mega-trends-workshop'
+                          ) {
+                            navigation.navigate('LibraryDetail', {
+                              resources: 204,
+                              itemname: poeDetails?.name,
+                            });
+                          } else if (
+                            poeDetails?.slug === 'executive-mindxchange-events'
+                          ) {
+                            navigation.navigate('LibraryDetail', {
+                              resources: 35,
+                              itemname: poeDetails?.name,
+                            });
+                          } else {
+                            navigation.navigate('LibraryDetail', {
+                              resources: poeDetails?.term_id,
+                              itemname: poeDetails?.name,
+                            });
+                          }
+                        }}>
                         <ImageBackground
                           style={{width: '100%', height: 120, borderRadius: 20}}
                           source={require('../../../assets/img/digital-content.jpg')}>
