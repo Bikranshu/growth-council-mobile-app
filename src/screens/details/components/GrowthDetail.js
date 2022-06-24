@@ -123,6 +123,7 @@ const GrowthDetail = props => {
     fetchRadarMemberDetail();
   }, []);
 
+
   // useEffect(()=>{
   //   for(let value of coachingSession){
   //     if(!value?.completed_status){
@@ -412,7 +413,7 @@ const GrowthDetail = props => {
                       lineHeight: 24,
                       padding: 15,
                       textAlign: 'left',
-                      color: Colors.PRIMARY_TEXT_COLOR,
+                      color: 'black',
                       textAlign: 'justify',
                     }}>
                     {radarMemberDetails?.radar_text}
@@ -421,7 +422,7 @@ const GrowthDetail = props => {
                   <View style={{height: 400, backgroundColor: 'white'}}>
                     <WebView
                       source={{
-                        uri: `https://gilcouncil.com/frost-radar?user_id=${userId}`,
+                        uri: `https://gilcouncil.com/frost-radar/`,
                       }}
                       renderLoading={LoadingIndicatorView}
                       startInLoadingState={true}

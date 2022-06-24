@@ -7,7 +7,10 @@ import {fetchAllPOEEvents, resetPOEEvent} from './slice/poeEventListSlice';
 
 import {fetchAllPOEDetails, resetPOEDetail} from './slice/poeDetailSlice';
 
-import { fetchcoachingSession ,resetcoachingSession } from './slice/sessionlistSlice';
+import {
+  fetchcoachingSession,
+  resetcoachingSession,
+} from './slice/sessionlistSlice';
 
 import {
   fetchPoeSelfLearns,
@@ -19,7 +22,11 @@ import {
   resetPillarMemberContent,
 } from './slice/pillarMembersContentsSlice';
 
-import {fetchRadarMemberDetails, resetRadarMemberDetails} from './slice/radarSlice';
+
+import {
+  fetchRadarMemberDetails,
+  resetRadarMemberDetails,
+} from './slice/radarSlice';
 
 const GrowthDetailScreen = props => {
   const dispatch = useDispatch();
@@ -38,14 +45,19 @@ const GrowthDetailScreen = props => {
     pillarMemberContentError,
   } = useSelector(state => state.pillarMemberContents);
 
-  const {coachingSession, coachingSessionLoading ,coachingSessionError} = useSelector(state=>state.coachingSession)
+  const {coachingSession, coachingSessionLoading, coachingSessionError} =
+    useSelector(state => state.coachingSession);
   const {poeSelfLearns, poeSelfLearnLoading, poeSelfLearnError} = useSelector(
     state => state.poeSelfLearns,
   );
 
-  const {radarMemberDetails, radarMemberDetailsLoading, radarMemberDetailsError} = useSelector(
-    state => state.radarMemberDetails,
-  );
+  const {
+    radarMemberDetails,
+    radarMemberDetailsLoading,
+    radarMemberDetailsError,
+  } = useSelector(state => state.radarMemberDetails);
+
+  
 
   /**
    * Fetch event data.
@@ -74,9 +86,9 @@ const GrowthDetailScreen = props => {
     dispatch(fetchAllPillarMemberContents(pillarId));
   };
 
-  const fetchCoachingSessions = poeId =>{
-	  dispatch(fetchcoachingSession(poeId));
-  }
+  const fetchCoachingSessions = poeId => {
+    dispatch(fetchcoachingSession(poeId));
+  };
 
   const cleanPOEDetail = () => {
     dispatch(resetPOEDetail());
@@ -90,9 +102,9 @@ const GrowthDetailScreen = props => {
     dispatch(resetPillarMemberContent());
   };
 
-  const cleanCoachingSession =() =>{
-	  dispatch(resetcoachingSession());
-  }
+  const cleanCoachingSession = () => {
+    dispatch(resetcoachingSession());
+  };
   const cleanPoeSelfLearn = () => {
     dispatch(resetPoeSelfLearn());
   };
@@ -101,6 +113,7 @@ const GrowthDetailScreen = props => {
     dispatch(fetchRadarMemberDetails());
   };
 
+ 
 
   return (
     <GrowthDetail
@@ -120,24 +133,22 @@ const GrowthDetailScreen = props => {
       pillarMemberContentError={pillarMemberContentError}
       fetchAllPillarMemberContent={fetchAllPillarMemberContent}
       cleanPillarMemberContent={cleanPillarMemberContent}
-
-	  coachingSession={coachingSession}
-	  coachingSessionLoading={coachingSessionLoading}
-	  coachingSessionError={coachingSessionError}
-	  fetchCoachingSessions={fetchCoachingSessions}
-	  cleanCoachingSession={cleanCoachingSession}
-	  
+      coachingSession={coachingSession}
+      coachingSessionLoading={coachingSessionLoading}
+      coachingSessionError={coachingSessionError}
+      fetchCoachingSessions={fetchCoachingSessions}
+      cleanCoachingSession={cleanCoachingSession}
       poeSelfLearns={poeSelfLearns}
       poeSelfLearnLoading={poeSelfLearnLoading}
       poeSelfLearnError={poeSelfLearnError}
       fetchPoeSelfLearn={fetchPoeSelfLearn}
       cleanPoeSelfLearn={cleanPoeSelfLearn}
-
-	  radarMemberDetails={radarMemberDetails}
+      radarMemberDetails={radarMemberDetails}
       radarMemberDetailsLoading={radarMemberDetailsLoading}
       radarMemberDetailsError={radarMemberDetailsError}
       fetchRadarMemberDetail={fetchRadarMemberDetail}
- 
+
+	
     />
   );
 };

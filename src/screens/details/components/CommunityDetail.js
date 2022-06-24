@@ -60,10 +60,17 @@ const CommunityDetail = props => {
     pillarPOEError,
     fetchAllPillarPOE,
     cleanPillarPOE,
+
+    getSlug,
+    getSlugLoading,
+    getSlugError,
+    GetIdBySlug,
+    cleanSlug,
   } = props;
 
   const isFocused = useIsFocused();
   const [memberConnection, setMemberConnection] = useState([]);
+  const [slugName, setSlugName] = useState('');
 
   useFocusEffect(
     useCallback(() => {
@@ -110,40 +117,52 @@ const CommunityDetail = props => {
     }, [isFocused]),
   );
 
-  const _renderItem = ({item, index}, navigation) => {
-    return (
-      <View style={[styles.bottomWrapper, styles.shadowProp]} key={index}>
-        <TouchableOpacity
-          onPress={() => navigation.navigate('OthersAccount', {id: item.ID})}>
-          <Image
-            source={{uri: item.avatar}}
-            style={{
-              width: '100%',
-              height: 83,
-              borderRadius: 10,
-            }}
-          />
-          <View style={{padding: 10, paddingBottom: 20}}>
-            <Text
-              style={{
-                fontSize: 10,
-                fontFamily: Typography.FONT_SF_SEMIBOLD,
-                color: Colors.TERTIARY_TEXT_COLOR,
-              }}>
-              {item?.user_meta?.first_name} {item?.user_meta?.last_name}
-            </Text>
-            <Text style={{fontSize: 6}}>Frost and Sullivan</Text>
-          </View>
-        </TouchableOpacity>
+  //   useEffect(() => {
+  //  GetIdBySlug({
+  //       slug: poeDetails?.slug,
+  //     }).then(response => {
+  //       console.log('a', response);
+  //     });
+  //   }, [poeDetails]);
 
-        {/* <View style={styles.chatIcon}>
-          <TouchableOpacity onPress={() => navigation.navigate('People')}>
-            <Ionicons name={'add'} size={15} color="#B1AFAF" />
-          </TouchableOpacity>
-        </View> */}
-      </View>
-    );
-  };
+  //     useEffect(() => {
+  //       setSlugName(poeDetails?.slug);
+  //     }, [poeDetails]);
+
+  //   const _renderItem = ({item, index}, navigation) => {
+  //     return (
+  //       <View style={[styles.bottomWrapper, styles.shadowProp]} key={index}>
+  //         <TouchableOpacity
+  //           onPress={() => navigation.navigate('OthersAccount', {id: item.ID})}>
+  //           <Image
+  //             source={{uri: item.avatar}}
+  //             style={{
+  //               width: '100%',
+  //               height: 83,
+  //               borderRadius: 10,
+  //             }}
+  //           />
+  //           <View style={{padding: 10, paddingBottom: 20}}>
+  //             <Text
+  //               style={{
+  //                 fontSize: 10,
+  //                 fontFamily: Typography.FONT_SF_SEMIBOLD,
+  //                 color: Colors.TERTIARY_TEXT_COLOR,
+  //               }}>
+  //               {item?.user_meta?.first_name} {item?.user_meta?.last_name}
+  //             </Text>
+  //             <Text style={{fontSize: 6}}>Frost and Sullivan</Text>
+  //           </View>
+  //         </TouchableOpacity>
+
+  //         {/* <View style={styles.chatIcon}>
+  //           <TouchableOpacity onPress={() => navigation.navigate('People')}>
+  //             <Ionicons name={'add'} size={15} color="#B1AFAF" />
+  //           </TouchableOpacity>
+  //         </View> */}
+  //       </View>
+  //     );
+  //   };
 
   const _renderMiddleItem = ({item, index}, navigation) => {
     return (
@@ -273,13 +292,6 @@ const CommunityDetail = props => {
     );
   };
 
-  const _renderContentItem = ({item, index}) => {
-    const file = item?.file;
-    const link = file.split('=', 2);
-    let videoLink = link[1]?.split('&', 2);
-    return <Player {...props} item={item} file={file} videoLink={videoLink} />;
-  };
-
   const _renderContent = ({item, index}) => {
     const fileUrl = item?.file?.url;
 
@@ -377,6 +389,7 @@ const CommunityDetail = props => {
     const getFileExtention = fileUrl => {
       return /[.]/.exec(fileUrl) ? /[^.]+$/.exec(fileUrl) : undefined;
     };
+
     return (
       <TouchableOpacity
         onPress={() =>
@@ -591,7 +604,7 @@ const CommunityDetail = props => {
                 </View>
               )}
               {poeDetails?.slug !== 'peer-to-peer-interactions' &&
-                poeDetails?.slug !== 'executive-mindxchange-events' &&
+                // poeDetails?.slug !== 'executive-mindxchange-events' &&
                 poeDetails?.slug !== 'annual-council-meeting' && (
                   <View style={styles.buttonWrapper}>
                     <View style={styles.btnWrapper}>
@@ -599,34 +612,41 @@ const CommunityDetail = props => {
                         onPress={() => {
                           if (poeDetails?.slug === 'innovative-center-tours') {
                             navigation.navigate('LibraryDetail', {
-								resources: 205,
-								itemname: poeDetails?.name,
+                              resources: 44,
+                              itemname: poeDetails?.name,
                             });
                           } else if (
                             poeDetails?.slug === 'council-virtual-events'
                           ) {
                             navigation.navigate('LibraryDetail', {
-								resources: 44,
-								itemname: poeDetails?.name,
+                              resources: 44,
+                              itemname: poeDetails?.name,
                             });
                           } else if (
                             poeDetails?.slug === 'transformational-think-tanks'
                           ) {
                             navigation.navigate('LibraryDetail', {
-								resources: 119,
-								itemname: poeDetails?.name,
+                              resources: 119,
+                              itemname: poeDetails?.name,
                             });
                           } else if (
                             poeDetails?.slug === 'mega-trends-workshop'
                           ) {
                             navigation.navigate('LibraryDetail', {
-								resources: 204,
-								itemname: poeDetails?.name,
+                              resources: 204,
+                              itemname: poeDetails?.name,
+                            });
+                          } else if (
+                            poeDetails?.slug === 'executive-mindxchange-events'
+                          ) {
+                            navigation.navigate('LibraryDetail', {
+                              resources: 35,
+                              itemname: poeDetails?.name,
                             });
                           } else {
                             navigation.navigate('LibraryDetail', {
-								resources: poeDetails?.term_id,
-								itemname: poeDetails?.name,
+                              resources: poeDetails?.term_id,
+                              itemname: poeDetails?.name,
                             });
                           }
                         }}>
