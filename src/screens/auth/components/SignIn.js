@@ -55,7 +55,9 @@ const SignInForm = props => {
     initialValues: {username: '', password: ''},
     onSubmit: async values => {
      
-      const messageToken = await messaging().getToken();
+      try {
+        const messageToken = await messaging().getToken();
+        console.log(messageToken);
       const firebasePayload = {
         username: values.username,
         token: messageToken,
@@ -63,6 +65,9 @@ const SignInForm = props => {
       const resp = await postToAPI(firebasePayload);
 
       await signIn(values);
+      } catch(error){
+        console.log(error);
+      }
     },
   });
 
