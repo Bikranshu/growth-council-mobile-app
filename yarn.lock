@@ -913,10 +913,10 @@
     minimatch "^3.0.4"
     strip-json-comments "^3.1.1"
 
-"@expo/config-plugins@^4.1.1":
-  version "4.1.4"
-  resolved "https://registry.yarnpkg.com/@expo/config-plugins/-/config-plugins-4.1.4.tgz#08e1a6314dc0f96cd165a748b5997b5ec75a84d0"
-  integrity sha512-fkOjXnSieQfVSWVLKhst0DnCAyeHksvWky1CldFCQllhDB1HHBiP09Z8pamVB783n3qr/1HNZiSp6k2iUcaSoA==
+"@expo/config-plugins@^4.1.5":
+  version "4.1.5"
+  resolved "https://registry.yarnpkg.com/@expo/config-plugins/-/config-plugins-4.1.5.tgz#9d357d2cda9c095e511b51583ede8a3b76174068"
+  integrity sha512-RVvU40RtZt12HavuDAe+LDIq9lHj7sheOfMEHdmpJ/uTA8pgvkbc56XF6JHQD+yRr6+uhhb+JnAasGq49dsQbw==
   dependencies:
     "@expo/config-types" "^45.0.0"
     "@expo/json-file" "8.2.36"
@@ -2750,26 +2750,26 @@
   resolved "https://registry.yarnpkg.com/@react-native-firebase/analytics/-/analytics-14.9.1.tgz#0f756da8a90f4c1a296b9e73803cf8dc9aa00be8"
   integrity sha512-FlvzqSoDNcrtH2ZYIMi3Wq70dXJtJrf4WcUpHFyNVijIdEWRnI2zuCzXCnnXstPogwdUBqoQs4qboi9K4toSUQ==
 
-"@react-native-firebase/app@^14.9.1":
-  version "14.9.1"
-  resolved "https://registry.yarnpkg.com/@react-native-firebase/app/-/app-14.9.1.tgz#8a40af4dcea88a1c41d8c1a9b179e8260999bdb0"
-  integrity sha512-EmBFJnlpG8uhJhAwh624Q/1Ta+bvoKZjFckpt7uuJZ51wH3CzYudt+DmLbV6E/Frc1z2ogmcZnET7ELSxr6BOg==
+"@react-native-firebase/app@^14.11.0":
+  version "14.11.0"
+  resolved "https://registry.yarnpkg.com/@react-native-firebase/app/-/app-14.11.0.tgz#41b1b7d41f51b6880ebad6a12ff87c85bcdab0d6"
+  integrity sha512-LzqgZNx+WcNGYRZG6LB9BkJAx4LE+LsbPF9p65TMSagWYd/iJafoXl4d6KWQeUMIFZQH7Ke/eJ/fIZkc+4eMRw==
   dependencies:
-    "@expo/config-plugins" "^4.1.1"
+    "@expo/config-plugins" "^4.1.5"
     opencollective-postinstall "^2.0.1"
     superstruct "^0.6.2"
 
-"@react-native-firebase/auth@^14.9.1":
-  version "14.9.1"
-  resolved "https://registry.yarnpkg.com/@react-native-firebase/auth/-/auth-14.9.1.tgz#368b48bbfdae2b64246591ae42e70ff38a3fb17f"
-  integrity sha512-pTZZ80xx4ionhBa7kj7YhUvZdvJazDHqPH1K+j648tlU/1iytM/N2Ius7Ty40O0m29GVp0l+fEdWpzSeaV775w==
+"@react-native-firebase/auth@^14.11.0":
+  version "14.11.0"
+  resolved "https://registry.yarnpkg.com/@react-native-firebase/auth/-/auth-14.11.0.tgz#cc5748777224dd81f87d005a71c887098e0f1e63"
+  integrity sha512-h4JJI3DKKpiVLX+FDiFNprUHquoBkZUZA+bpIZoRGHOr9V8GzcD4IGBs2biWOYYGfEvGZvTVlHXlZOo4rmWEuA==
 
-"@react-native-firebase/crashlytics@^14.9.1":
-  version "14.9.1"
-  resolved "https://registry.yarnpkg.com/@react-native-firebase/crashlytics/-/crashlytics-14.9.1.tgz#4aae9352fc2594e770cb9f2f5bec36826557d630"
-  integrity sha512-0oJSROBZG8kq9iL5xLaKuuZj3/SCw/eLeAsjuFIo7pHzdslH9I/a3XiiAHQmJSX3zvKJOmS982rlWMWajKlWkQ==
+"@react-native-firebase/crashlytics@^14.11.0":
+  version "14.11.0"
+  resolved "https://registry.yarnpkg.com/@react-native-firebase/crashlytics/-/crashlytics-14.11.0.tgz#73c9c02154b50bcb34b77d67c7f5e0393ec2ae2e"
+  integrity sha512-HNLJE+XvMt7dNvV5n+M+tDv7n9xER050KtayJoKjzkyFTyPTQzf1IEKqckSZS1PHSG+Sqcbe2nfoMF2GwNAAhA==
   dependencies:
-    "@expo/config-plugins" "^4.1.1"
+    "@expo/config-plugins" "^4.1.5"
     stacktrace-js "^2.0.0"
 
 "@react-native-firebase/database@^14.9.2":
@@ -2782,10 +2782,10 @@
   resolved "https://registry.yarnpkg.com/@react-native-firebase/firestore/-/firestore-14.9.2.tgz#e421d371f950bcedc026339d11b6d8640ef8f888"
   integrity sha512-XGINWiuwpjl44oXgNM9LIBXhtscjbGmv+VxSuLorAtA4D4HKjmBUfEajmaA9/yViWcfOtqrHBaX1Mn0wNT6bsw==
 
-"@react-native-firebase/messaging@^14.9.1":
-  version "14.9.1"
-  resolved "https://registry.yarnpkg.com/@react-native-firebase/messaging/-/messaging-14.9.1.tgz#cb0c14f38d6ac1804b24f72b7c1a281997ebe523"
-  integrity sha512-hmRkCUa2crwfL0mGQ1zOPRkpRunEkjvkLNn0Lo0SN1QSkI1dSTOtkwtt1Pl2XJlY+5KNsvggKiBuq/kPEyADOg==
+"@react-native-firebase/messaging@^14.11.0":
+  version "14.11.0"
+  resolved "https://registry.yarnpkg.com/@react-native-firebase/messaging/-/messaging-14.11.0.tgz#868b64156ea80ec0afc3c9a2b9745f3f777d0eec"
+  integrity sha512-9d3fMXlz+J8mHJk1ouipSGpeH2YeSYYITKnp0WjtrT1VYm/pdW8bVydmfTNigpXw9enUmRoErbzKd+6VlSnvmw==
 
 "@react-native-masked-view/masked-view@^0.2.6":
   version "0.2.6"

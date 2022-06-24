@@ -5,7 +5,7 @@ import {fetch} from '../../../utils/httpUtil';
 export const fetchAllbestPractices = createAsyncThunk(
     'bestPractices/fetchAll',
     (_, {rejectWithValue}) => {
-        return fetch(`jwt-auth/v1/pillars/171/events`)
+        return fetch(`jwt-auth/v1/pillars/170/events`)
             .then(response => response.data.data)
             .catch(error => rejectWithValue(error?.response?.data || error));
     },

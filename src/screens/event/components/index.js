@@ -80,11 +80,11 @@ const Event = props => {
     : '';
   switch (pillarCategory) {
     case 0:
-    case 194:
+    case 169:
       backgroundColor = Colors.COMMUNITY_COLOR;
       break;
     case 0:
-    case 171:
+    case 170:
       backgroundColor = Colors.PRACTICE_COLOR;
       break;
 
@@ -144,19 +144,19 @@ const Event = props => {
       events?.pillar_categories[0]?.parent
     : '';
   switch (pillarname) {
-    case 194:
+    case 169:
+    case 0:
+      title =
+        events?.pillar_categories[1]?.name ||
+        events?.pillar_categories[0]?.name;
+      break;
+    case 170:
     case 0:
       title =
         events?.pillar_categories[1]?.name ||
         events?.pillar_categories[0]?.name;
       break;
     case 171:
-    case 0:
-      title =
-        events?.pillar_categories[1]?.name ||
-        events?.pillar_categories[0]?.name;
-      break;
-    case 172:
     case 0:
       title =
         events?.pillar_categories[0]?.name ||
