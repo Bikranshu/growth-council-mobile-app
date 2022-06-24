@@ -265,12 +265,12 @@ const Dashboard = props => {
       item?.pillar_categories[0]?.parent ||
       item?.pillar_categories[1]?.parent
     ) {
-      case 194:
+      case 169:
       case 0:
         backgroundImage = require('../../../assets/img/Rectangle2.png');
         pillarname = 'Growth Community';
         break;
-      case 171:
+      case 170:
       case 0:
         backgroundImage = require('../../../assets/img/best-practice-bg.png');
         pillarname = 'Growth Content';
