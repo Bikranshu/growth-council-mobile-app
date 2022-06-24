@@ -12,6 +12,7 @@ import {store, persistor} from './store';
 import MainNavigation from './navigations';
 import {AuthProvider} from './context/auth';
 import SplashScreen from './screens/splash';
+import { Platform } from 'react-native';
 
 XMLHttpRequest = GLOBAL.originalXMLHttpRequest
   ? GLOBAL.originalXMLHttpRequest
@@ -29,6 +30,17 @@ const App = () => {
 
   useEffect(() => {
     getNotifications();
+
+    (async () => {
+      if(Platform.OS == 'ios'){
+        const authorizationStatus = await messaging().requestPermission();
+        
+        if (authorizationStatus) {
+          console.log('Permission status:', authorizationStatus);
+        }
+      }
+    })()
+
     Platform.OS === 'android' && _createChannel();
     const unsubscribe = messaging().onMessage(remoteMessage => {
       Platform.OS === 'ios' &&
