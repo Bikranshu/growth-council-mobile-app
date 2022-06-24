@@ -49,6 +49,7 @@ const Event = props => {
   const [timeToEnd, setTimeToEnd] = useState('');
 
   const eventID = route?.params?.id;
+  const Slug = events?.slug !== undefined ? events?.slug : '';
 
   useEffect(() => {
     fetchEventByIdentifier(eventID);
@@ -59,8 +60,12 @@ const Event = props => {
   }, [events]);
 
   const registerEventByEventID = async eventID => {
-    const response = await registerEventByIdentifier({event_id: eventID});
+    const response = await registerEventByIdentifier({
+      event_id: eventID,
+      slug: Slug,
+    });
     if (response?.payload?.code === 200) {
+      console.log(response);
       setEventStatus(true);
       ToastMessage.show('You have successfully RSVP’d this event.');
     } else {
