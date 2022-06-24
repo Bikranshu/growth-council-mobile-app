@@ -54,10 +54,7 @@ const SignInForm = props => {
     validationSchema: signInSchema,
     initialValues: {username: '', password: ''},
     onSubmit: async values => {
-     
-      try {
-        const messageToken = await messaging().getToken();
-        console.log(messageToken);
+      const messageToken = await messaging().getToken();
       const firebasePayload = {
         username: values.username,
         token: messageToken,
@@ -65,9 +62,6 @@ const SignInForm = props => {
       const resp = await postToAPI(firebasePayload);
 
       await signIn(values);
-      } catch(error){
-        console.log(error);
-      }
     },
   });
 
@@ -87,6 +81,7 @@ const SignInForm = props => {
     }, []),
   );
 
+ 
   return (
     <ScrollView
       contentContainerStyle={{flexGrow: 1, height: screenHeight + 100}}>
@@ -127,7 +122,7 @@ const SignInForm = props => {
                   </View>
                 )}
                 <FlatTextInput
-                  label="Email *"
+                  label="Email or Username*"
                   value={values.username}
                   onChangeText={handleChange('username')}
                   onFocus={handleBlur('username')}
@@ -181,11 +176,12 @@ const SignInForm = props => {
 
               <View style={styles.loginButtonWrapper}>
                 <Button
-                  style={
-                    [!areAllFieldsFilled
+                  style={[
+                    !areAllFieldsFilled
                       ? styles.loginButton1
-                      : styles.loginButton, loading && {backgroundColor: "grey"}]
-                  }
+                      : styles.loginButton,
+                    loading && {backgroundColor: 'grey'},
+                  ]}
                   onPress={handleSubmit}
                   disabled={!areAllFieldsFilled || loading}>
                   <Text style={styles.loginButtonText}>Sign In</Text>
