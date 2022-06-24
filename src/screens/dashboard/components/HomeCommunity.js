@@ -523,7 +523,7 @@ const HomeCommunity = props => {
             )}
           {users !== undefined && users !== null && users !== false && (
             <View style={styles.bottom}>
-              <Text style={styles.title}>Growth Community Members</Text>
+              <Text style={styles.title}>New Community Members</Text>
               <View>
                 <FlatList
                   horizontal

@@ -294,7 +294,7 @@ const DrawerNavigation = () => {
           drawerItemStyle: {height: 0},
           header: ({navigation}) => (
             <SubHeader
-              title="Chat"
+              title="Connect with Growth Council Members"
               image={require('../assets/img/appBG.png')}
               navigation={navigation}
             />
@@ -313,7 +313,7 @@ const DrawerNavigation = () => {
           drawerItemStyle: {height: 0},
           header: ({navigation}) => (
             <SubHeader
-              title="Member Connection"
+              title="Growth Community Members"
               image={require('../assets/img/appBG.png')}
               navigation={navigation}
             />

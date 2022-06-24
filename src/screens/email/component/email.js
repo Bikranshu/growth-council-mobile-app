@@ -95,7 +95,7 @@ const Email = props => {
           </View>
           <View style={{padding: 20, backgroundColor: 'white'}}>
             <View style={{flexDirection: 'row'}}>
-              <Text style={{fontSize: 18, marginTop: 10}}>From :</Text>
+              <Text style={{fontSize: 18, marginTop: 10}}>From:</Text>
               <TextInput
                 multiline={true}
                 numberOfLines={1}
@@ -110,7 +110,7 @@ const Email = props => {
             {sendMailLoading && <Loading />}
 
             <View style={{marginTop: 10}}>
-              <Text style={{fontSize: 18}}>Subject :</Text>
+              <Text style={{fontSize: 18}}>Subject:</Text>
               <TextInput
                 multiline={true}
                 numberOfLines={2}
@@ -124,7 +124,7 @@ const Email = props => {
             </View>
 
             <View style={{marginTop: 10}}>
-              <Text style={{fontSize: 18}}>Messages :</Text>
+              <Text style={{fontSize: 18}}>Messages:</Text>
               <TextInput
                 multiline={true}
                 numberOfLines={15}
@@ -155,11 +155,12 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
   },
   wrapper: {
-    height: 80,
+    minHeight: 80,
+    height: 'auto',
     backgroundColor: '#02B0F0',
     borderTopWidth: 0.2,
     padding: 10,
-
+    paddingTop: Platform.OS === 'ios' ? 30 : 10,
     display: 'flex',
     flexDirection: 'row',
   },

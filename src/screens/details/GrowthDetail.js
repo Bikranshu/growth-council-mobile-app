@@ -19,6 +19,8 @@ import {
   resetPillarMemberContent,
 } from './slice/pillarMembersContentsSlice';
 
+import {fetchRadarMemberDetails, resetRadarMemberDetails} from './slice/radarSlice';
+
 const GrowthDetailScreen = props => {
   const dispatch = useDispatch();
 
@@ -39,6 +41,10 @@ const GrowthDetailScreen = props => {
   const {coachingSession, coachingSessionLoading ,coachingSessionError} = useSelector(state=>state.coachingSession)
   const {poeSelfLearns, poeSelfLearnLoading, poeSelfLearnError} = useSelector(
     state => state.poeSelfLearns,
+  );
+
+  const {radarMemberDetails, radarMemberDetailsLoading, radarMemberDetailsError} = useSelector(
+    state => state.radarMemberDetails,
   );
 
   /**
@@ -91,6 +97,11 @@ const GrowthDetailScreen = props => {
     dispatch(resetPoeSelfLearn());
   };
 
+  const fetchRadarMemberDetail = () => {
+    dispatch(fetchRadarMemberDetails());
+  };
+
+
   return (
     <GrowthDetail
       {...props}
@@ -121,6 +132,12 @@ const GrowthDetailScreen = props => {
       poeSelfLearnError={poeSelfLearnError}
       fetchPoeSelfLearn={fetchPoeSelfLearn}
       cleanPoeSelfLearn={cleanPoeSelfLearn}
+
+	  radarMemberDetails={radarMemberDetails}
+      radarMemberDetailsLoading={radarMemberDetailsLoading}
+      radarMemberDetailsError={radarMemberDetailsError}
+      fetchRadarMemberDetail={fetchRadarMemberDetail}
+ 
     />
   );
 };

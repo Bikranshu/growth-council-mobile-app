@@ -150,7 +150,7 @@ const Profile = props => {
                       marginRight: 10,
                     }}>
                     <Ionicon name={'person'} size={20} color="#0B0B45" />
-                    <Text style={[styles.text, {fontSize: 10, width: 100}]}>
+                    <Text style={[styles.text, {fontSize: 10, width: 190}]}>
                       {organizer} {description}
                     </Text>
                   </View>

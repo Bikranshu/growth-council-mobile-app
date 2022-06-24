@@ -446,7 +446,7 @@ const Dashboard = props => {
           latestContent !== false && (
             <View style={styles.middle}>
               <Text style={[styles.title, {marginLeft: 15}]}>
-                Latest Content
+                Latest Growth Content
               </Text>
 
               <FlatList

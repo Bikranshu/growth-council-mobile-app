@@ -59,6 +59,11 @@ const GrowthDetail = props => {
     poeSelfLearnError,
     fetchPoeSelfLearn,
     cleanPoeSelfLearn,
+
+    radarMemberDetails,
+    radarMemberDetailsLoading,
+    radarMemberDetailsError,
+    fetchRadarMemberDetail,
   } = props;
 
   const isFocused = useIsFocused();
@@ -113,6 +118,10 @@ const GrowthDetail = props => {
   useEffect(() => {
     setMemberConnection(pillarMemberContents);
   }, [pillarMemberContents]);
+
+  useEffect(() => {
+    fetchRadarMemberDetail();
+  }, []);
 
   // useEffect(()=>{
   //   for(let value of coachingSession){
@@ -406,8 +415,7 @@ const GrowthDetail = props => {
                       color: Colors.PRIMARY_TEXT_COLOR,
                       textAlign: 'justify',
                     }}>
-                    It is a tool that benchmarks leaders based on their growth
-                    implementation and innovative Leadership traits
+                    {radarMemberDetails?.radar_text}
                   </Text>
 
                   <View style={{height: 400, backgroundColor: 'white'}}>

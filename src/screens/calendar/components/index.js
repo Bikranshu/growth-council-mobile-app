@@ -37,7 +37,7 @@ const EventCalendar = props => {
   const [calendarMonth, setCalendarMonth] = useState(moment().format('MM'));
   const [calendarYear, setCalendarYear] = useState(moment().format('YYYY'));
   const [currentEvents, setCurrentEvents] = useState([]);
-  const [showAllEvents, setShowAllEvents] = useState(false);
+  const [showAllEvents, setShowAllEvents] = useState(true);
   const [pickerVisible, setPickerVisible] = useState(false);
   //   const [markedDay, setMarkedDay] = useState([]);
 
@@ -143,7 +143,7 @@ const EventCalendar = props => {
     const startdate = eventStart.split(' ', 3)[1].split('', 3);
     const enddate = eventEnd.split(' ', 3)[1].split('', 3);
 
-    console.log(eventEnd.substring(0, 3).split(' ', 3)[0]);
+	
     const backStartTimeStamp = item?.event_start;
     const deviceTimeZone = RNLocalize.getTimeZone();
 
