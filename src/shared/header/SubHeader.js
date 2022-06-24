@@ -60,7 +60,7 @@ const SubHeader = props => {
               fontFamily: 'SFProText-Medium',
               fontSize: 18,
               color: 'white',
-              width: '80%',
+              width: '90%',
             }}>
             {props.title}
           </Text>

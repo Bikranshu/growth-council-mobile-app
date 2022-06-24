@@ -22,6 +22,8 @@ import {
   resetPillarPOE,
 } from '../dashboard/slice/pillarPOESlice';
 
+import {getIdBySlug, resetGetSlug} from './slice/getIdBySlug';
+
 const CommunityDetailScreen = props => {
   const dispatch = useDispatch();
 
@@ -44,6 +46,10 @@ const CommunityDetailScreen = props => {
 
   const {pillarPOEs, pillarPOELoading, pillarPOEError} = useSelector(
     state => state.pillarPOEs,
+  );
+
+  const {getSlug, getSlugLoading, getSlugError} = useSelector(
+    state => state.getSlug,
   );
 
   /**
@@ -105,6 +111,14 @@ const CommunityDetailScreen = props => {
     dispatch(resetPillarPOE());
   };
 
+  const GetIdBySlug = () => {
+    dispatch(getIdBySlug());
+  };
+
+  const cleanSlug = () => {
+    dispatch(resetGetSlug());
+  };
+
   return (
     <CommunityDetail
       {...props}
@@ -133,6 +147,13 @@ const CommunityDetailScreen = props => {
       pillarPOEError={pillarPOEError}
       fetchAllPillarPOE={fetchAllPillarPOE}
       cleanPillarPOE={cleanPillarPOE}
+
+
+	  getSlug={getSlug}
+	  getSlugLoading={getSlugLoading}
+	  getSlugError={getSlugError}
+	  GetIdBySlug={GetIdBySlug}
+	  cleanSlug={cleanSlug}
     />
   );
 };

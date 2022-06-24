@@ -25,6 +25,7 @@ import {Searchbar} from 'react-native-paper';
 import BottomNav from '../../../layout/BottomLayout';
 import Loading from '../../../shared/loading';
 
+
 const win = Dimensions.get('window');
 const contentContainerWidth = win.width - 30;
 
@@ -71,7 +72,7 @@ const People = props => {
         });
       };
       fetchAllUsersAsync();
-	  return () => {
+      return () => {
         cleanUser();
       };
     }, []),
@@ -108,10 +109,10 @@ const People = props => {
   };
 
   const countries = {
-	'Region': 'Region',
-    'AMERICAS': 'AMERICAS',
-    'APAC': 'APAC',
-    'MEASA': 'MEASA',
+    Region: 'Region',
+    AMERICAS: 'AMERICAS',
+    APAC: 'APAC',
+    MEASA: 'MEASA',
   };
 
   const pillar = {
@@ -178,6 +179,8 @@ const People = props => {
   const [pickerVisible, setPickerVisible] = useState(false);
   const [accountVisible, setAccountVisible] = useState(false);
   const [regionVisible, setRegionVisible] = useState(false);
+
+  console.log({users});
 
   return (
     <SafeAreaView style={{flex: 1}}>
@@ -269,12 +272,26 @@ const People = props => {
           }}>
           <View style={{marginTop: 10}}>
             {memberConnectionLoading && <Loading />}
-            <FlatList
-              vertical
-              showsVerticalScrollIndicator={false}
-              data={users}
-              renderItem={_renderItem}
-            />
+            {users === null &&  users === [] ? (
+              <View style={{justifyContent: 'center', alignItems: 'center'}}>
+                <Text
+                  style={{
+                    justifyContent: 'center',
+                    fontSize: 16,
+                    alignItems: 'center',
+					color:'black'
+                  }}>
+                  No User{' '}
+                </Text>
+              </View>
+            ) : (
+              <FlatList
+                vertical
+                showsVerticalScrollIndicator={false}
+                data={users}
+                renderItem={_renderItem}
+              />
+            )}
           </View>
           {/* <Footer /> */}
         </ScrollView>
@@ -314,15 +331,14 @@ const People = props => {
                 itemTextStyle={{fontSize: 12}}
                 onValueChange={async itemValue => {
                   setCategory(itemValue);
-              
-                    await fetchAllUsers({
-                      s: searchKey,
-                      sort: sorting,
-                      expertise_areas: itemValue,
-                      account: account,
-                      region: region,
-                    });
-                  
+
+                  await fetchAllUsers({
+                    s: searchKey,
+                    sort: sorting,
+                    expertise_areas: itemValue,
+                    account: account,
+                    region: region,
+                  });
                 }}>
                 {Object.keys(expertise).map(key => {
                   return (
@@ -457,8 +473,6 @@ const People = props => {
           </View>
         </View>
       </Modal>
-
-
 
       <BottomNav {...props} navigation={navigation} />
     </SafeAreaView>

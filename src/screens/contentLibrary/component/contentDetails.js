@@ -69,6 +69,8 @@ const ContentLibrary = props => {
     }
   };
 
+  console.log({filteredDataSource});
+
   return (
     <SafeAreaView style={{flex: 1}}>
       <StatusBar
@@ -150,64 +152,39 @@ const ContentLibrary = props => {
               const itemname = item?.name;
               return (
                 <>
-                  {item?.count !== 0 && (
-                    <TouchableOpacity
-                      style={[styles.content, styles.shadowProp]}
-                      onPress={() =>
-                        navigation.navigate('LibraryDetail', {
-                          breadcrumbName,
-                          resources: item?.term_id,
-                          itemname,
-                        })
-                      }>
-                      <>
-                        <Image
-                          style={{
-                            width: '100%',
-                            height: 170,
-                            borderTopLeftRadius: 14,
-                            borderTopRightRadius: 14,
+                  <TouchableOpacity
+                    style={[styles.content, styles.shadowProp]}
+                    onPress={() =>
+                      navigation.navigate('LibraryDetail', {
+                        breadcrumbName,
+                        resources: item?.term_id,
+                        itemname,
+                      })
+                    }>
+                    <>
+                      <Image
+                        style={{
+                          width: '100%',
+                          height: 170,
+                          borderTopLeftRadius: 14,
+                          borderTopRightRadius: 14,
+                        }}
+                        source={{uri: item?.image}}
+                        resizeMode="stretch"
+                      />
+                      <View style={styles.wrapper}>
+                        <HTMLView
+                          value={item?.name}
+                          textComponentProps={{
+                            style: {
+                              color: 'black',
+                              fontWeight: '600',
+                            },
                           }}
-                          source={{uri: item?.image}}
-                          resizeMode="stretch"
                         />
-                        {/* <View style={styles.contentWrapper}>
-                          <Text style={{color: 'black'}}>{item?.count}</Text>
-                          {item?.count === 1 ? (
-                            <Text
-                              style={{
-                                fontFamily: 'SFProText-Regular',
-                                fontSize: 10,
-                                color: 'black',
-                              }}>
-                              Article
-                            </Text>
-                          ) : (
-                            <Text
-                              style={{
-                                fontFamily: 'SFProText-Regular',
-                                fontSize: 10,
-                                color: 'black',
-                              }}>
-                              {' '}
-                              Articles{' '}
-                            </Text>
-                          )}
-                        </View> */}
-                        <View style={styles.wrapper}>
-                          <HTMLView
-                            value={item?.name}
-                            textComponentProps={{
-                              style: {
-                                color: 'black',
-                                fontWeight: '600',
-                              },
-                            }}
-                          />
-                        </View>
-                      </>
-                    </TouchableOpacity>
-                  )}
+                      </View>
+                    </>
+                  </TouchableOpacity>
                 </>
               );
             })}

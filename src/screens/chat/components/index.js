@@ -1,5 +1,5 @@
 import React, {useState, useCallback, useLayoutEffect, useEffect} from 'react';
-import {StyleSheet, View, Text, Image} from 'react-native';
+import {StyleSheet, View, Text, Image, SafeAreaView} from 'react-native';
 import {GiftedChat, Send} from 'react-native-gifted-chat';
 
 import Ionicons from 'react-native-vector-icons/Ionicons';
@@ -45,9 +45,14 @@ const Chat = props => {
 
 
   useEffect(() => {
+    console.log("The friend ID is " + friendID);
     getFCMTOkenForUser(friendID).then(res => {
       const token = res?.data?.data;
-      setFriendToken(typeof token == "string" ? token : token[0]);
+      if(token == null){
+        console.log(res.data?.message)
+      }
+      console.log(token);
+      setFriendToken(typeof token == "string" ? token : token?.[0]);
     }).catch(error => {
       console.log(error);
     })
@@ -205,6 +210,7 @@ const Chat = props => {
 
   return (
     <View style={styles.container}>
+      <SafeAreaView style={{top: -20, backgroundColor: 'white'}}>
       <View style={styles.wrapper}>
         <TouchableOpacity onPress={() => navigation.goBack()}>
           <Ionicons
@@ -238,6 +244,7 @@ const Chat = props => {
 
         {/**/}
       </View>
+      </SafeAreaView>
       <GiftedChat
         messages={messages}
         onSend={messages => onSend(messages)}
@@ -287,7 +294,6 @@ const styles = StyleSheet.create({
   wrapper: {
     height: 80,
     backgroundColor: Colors.PRIMARY_BACKGROUND_COLOR,
-    borderTopWidth: 0.2,
     padding: 10,
 
     display: 'flex',

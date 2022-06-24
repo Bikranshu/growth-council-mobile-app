@@ -10,7 +10,7 @@ import {
   Switch,
   TouchableOpacity,
   StatusBar,
-  Dimensions
+  Dimensions,
 } from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import AntDesign from 'react-native-vector-icons/AntDesign';
@@ -143,7 +143,7 @@ const Setting = props => {
                     </View>
                   </TouchableOpacity>
 
-                  <View style={[styles.middleWrapper, {borderBottomWidth: 0}]}>
+                  {/* <View style={[styles.middleWrapper, {borderBottomWidth: 0}]}>
                     <View style={styles.middleImage}>
                       <Ionicons
                         name={'notifications'}
@@ -164,12 +164,14 @@ const Setting = props => {
                         position: 'absolute',
                       }}
                     />
-                  </View>
+                  </View> */}
                 </View>
                 <View style={styles.wrapper}>
                   <TouchableOpacity
                     onPress={() =>
-						navigation.navigate('Gmail')
+                      navigation.navigate('Gmail', {
+                        title: 'Account Assistance',
+                      })
                     }>
                     <View style={styles.middleWrapper}>
                       <View style={styles.middleImage1}>

@@ -10,6 +10,7 @@ import {
   Dimensions,
   TouchableOpacity,
   TextInput,
+  SafeAreaView
 } from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import {useIsFocused} from '@react-navigation/native';
@@ -19,6 +20,7 @@ import {Button} from 'native-base';
 import ToastMessage from '../../../shared/toast';
 import {CommonStyles, Colors, Typography} from '../../../theme';
 import Loading from '../../../shared/loading';
+import autoMergeLevel1 from 'redux-persist/es/stateReconciler/autoMergeLevel1';
 
 const emailSchema = Yup.object().shape({
   subject: Yup.string().required('Subject is required.'),
@@ -28,6 +30,7 @@ const emailSchema = Yup.object().shape({
 const Email = props => {
   const {
     navigation,
+    route,
     profile,
     profileLoading,
     profileError,
@@ -73,6 +76,11 @@ const Email = props => {
     };
   }, [isFocused]);
 
+  let defaultValue =
+    route?.params?.title !== undefined && route?.params?.title !== null
+      ? route?.params?.title
+      : '';
+
   return (
     <>
       <StatusBar
@@ -83,6 +91,7 @@ const Email = props => {
       />
       <ScrollView style={{backgroundColor: 'white'}}>
         <View style={styles.container}>
+        <SafeAreaView style={{backgroundColor: '#02B0F0', top: -15}}>
           <View style={styles.wrapper}>
             <TouchableOpacity onPress={() => navigation.goBack()}>
               <Ionicons
@@ -108,12 +117,15 @@ const Email = props => {
 
             {/**/}
           </View>
+          </SafeAreaView>
           <View style={{padding: 20, backgroundColor: 'white'}}>
+
             <View style={{flexDirection: 'row'}}>
-              <Text style={{fontSize: 18, marginTop: 10}}>From :</Text>
+              <Text style={{fontSize: 18, marginTop: 10}}>From:</Text>
+
               <TextInput
                 multiline={true}
-                style={[styles.input, {color: 'blue'}]}
+                style={[styles.textarea, {color: 'blue'}]}
                 value={values.sender}
                 onChangeText={handleChange('sender')}
                 onFocus={handleBlur('sender')}
@@ -124,11 +136,12 @@ const Email = props => {
             {sendMailLoading && <Loading />}
 
             <View style={{marginTop: 10}}>
-              <Text style={{fontSize: 18}}>Subject :</Text>
+              <Text style={{fontSize: 18}}>Subject:</Text>
               <TextInput
                 multiline={true}
                 numberOfLines={2}
                 style={styles.textarea}
+                placeholder={defaultValue}
                 value={values.subject}
                 onChangeText={handleChange('subject')}
                 onFocus={handleBlur('subject')}
@@ -138,11 +151,12 @@ const Email = props => {
             </View>
 
             <View style={{marginTop: 10}}>
-              <Text style={{fontSize: 18}}>Messages :</Text>
+              <Text style={{fontSize: 18}}>Messages:</Text>
               <TextInput
                 multiline={true}
                 numberOfLines={15}
                 style={styles.textarea1}
+                defaultValue={route?.params?.title}
                 value={values.message}
                 onChangeText={handleChange('message')}
                 onFocus={handleBlur('message')}
@@ -169,11 +183,12 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
   },
   wrapper: {
-    height: 80,
+    minHeight: 80,
+    height: 'auto',
     backgroundColor: '#02B0F0',
     borderTopWidth: 0.2,
     padding: 10,
-
+    paddingTop: Platform.OS === 'ios' ? 30 : 10,
     display: 'flex',
     flexDirection: 'row',
   },
@@ -188,11 +203,8 @@ const styles = StyleSheet.create({
     marginLeft: 5,
   },
   textarea: {
-    minHeight: 50,
-    height: 'auto',
+    padding: 10,
     fontSize: 16,
-    textAlignVertical: 'top',
-    lineHeight: 20,
     borderWidth: 0.2,
     marginTop: 10,
     borderRadius: 5,
@@ -201,6 +213,7 @@ const styles = StyleSheet.create({
     minHeight: 300,
     height: 'auto',
     fontSize: 16,
+    padding: 10,
     textAlignVertical: 'top',
     lineHeight: 30,
     borderWidth: 0.2,
