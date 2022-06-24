@@ -55,7 +55,7 @@ const Email = props => {
         await sendMailUser(values).then(response => {
           if (response?.payload?.code === 200) {
             navigation.navigate('Dashboard');
-            ToastMessage.show(response?.payload?.message);
+            ToastMessage.show('Your message has been sent successfully');
           }
         });
       },

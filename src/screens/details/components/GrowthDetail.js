@@ -386,10 +386,7 @@ const GrowthDetail = props => {
                     <View style={styles.buttonWrapper}>
                       <View style={[styles.button, {marginLeft: 15}]}>
                         <Text style={styles.buttonText}>
-                          Click here to Generate
-                        </Text>
-                        <Text style={styles.buttonText}>
-                          Your Frost Radar for Leadership
+                          View Frost Radar for Leadership
                         </Text>
                       </View>
                     </View>

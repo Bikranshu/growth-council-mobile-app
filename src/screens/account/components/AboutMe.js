@@ -137,7 +137,7 @@ const AboutMe = props => {
                   editable={false}
                 />
 
-                {/* <Text style={{marginLeft: 10, fontSize: 10, color: '#8F9BB3'}}>
+                <Text style={{marginLeft: 10, fontSize: 10, color: '#8F9BB3'}}>
                   Favorite Quote
                 </Text>
                 <TextInput
@@ -151,7 +151,7 @@ const AboutMe = props => {
                       : profile?.user_meta?.favorite_quote[0]
                   }
                   editable={false}
-                /> */}
+                />
 
                 <Text style={{marginLeft: 10, fontSize: 10, color: '#8F9BB3'}}>
                   Professional Summary

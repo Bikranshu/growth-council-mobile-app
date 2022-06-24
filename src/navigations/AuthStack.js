@@ -10,7 +10,7 @@ import SignInScreen from '../screens/auth/SignIn';
 import ForgotScreen from '../screens/auth/Forgot';
 import SignUpScreen from '../screens/auth/SignUp';
 import TermScreen from '../screens/terms';
-import PrivacyScreen from '../screens/privacy';
+import PrivacyScreen from '../screens/privacy/pivacy';
 import EmailScreen from '../screens/email/email';
 
 import OptionHeader from '../shared/header/optionHeader';

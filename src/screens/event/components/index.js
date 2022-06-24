@@ -62,7 +62,7 @@ const Event = props => {
     const response = await registerEventByIdentifier({event_id: eventID});
     if (response?.payload?.code === 200) {
       setEventStatus(true);
-      ToastMessage.show('You have successfully RSVP’d for this event.');
+      ToastMessage.show('You have successfully RSVP’d this event.');
     } else {
       toast.closeAll();
       ToastMessage.show(response?.payload?.response);
@@ -76,11 +76,11 @@ const Event = props => {
     : '';
   switch (pillarCategory) {
     case 0:
-    case 169:
+    case 194:
       backgroundColor = Colors.COMMUNITY_COLOR;
       break;
     case 0:
-    case 170:
+    case 171:
       backgroundColor = Colors.PRACTICE_COLOR;
       break;
 
@@ -140,19 +140,19 @@ const Event = props => {
       events?.pillar_categories[0]?.parent
     : '';
   switch (pillarname) {
-    case 169:
-    case 0:
-      title =
-        events?.pillar_categories[1]?.name ||
-        events?.pillar_categories[0]?.name;
-      break;
-    case 170:
+    case 194:
     case 0:
       title =
         events?.pillar_categories[1]?.name ||
         events?.pillar_categories[0]?.name;
       break;
     case 171:
+    case 0:
+      title =
+        events?.pillar_categories[1]?.name ||
+        events?.pillar_categories[0]?.name;
+      break;
+    case 172:
     case 0:
       title =
         events?.pillar_categories[0]?.name ||
@@ -350,7 +350,7 @@ const Event = props => {
                         <Text style={styles.contentTitle}>
                           {events?.organizer?.term_name}
                         </Text>
-                        <Text style={{fontSize: 14}}>
+                        <Text style={{fontSize: 14, fontStyle: 'italic'}}>
                           {events?.organizer?.description}
                         </Text>
                       </View>
@@ -481,7 +481,6 @@ const styles = StyleSheet.create({
     fontFamily: Typography.FONT_SF_MEDIUM,
     color: Colors.NONARY_TEXT_COLOR,
     fontSize: 14,
-    fontWeight: 'bold',
     fontStyle: 'italic',
   },
   contentText: {

@@ -56,7 +56,7 @@ const BestPractice = props => {
     cleanPillarPOE,
   } = props;
 
-  const pillarId = 170;
+  const pillarId = 171;
   const isFocused = useIsFocused();
 
   const [memberConnection, setMemberConnection] = useState([]);
@@ -182,7 +182,7 @@ const BestPractice = props => {
               {item?.user_meta?.first_name} {item?.user_meta?.last_name}
             </Text>
             <Text style={{fontSize: 6, color: '#030303'}}>
-              Frost and Sullivan
+              {item?.user_meta?.Title}
             </Text>
           </View>
         </TouchableOpacity>
@@ -207,7 +207,7 @@ const BestPractice = props => {
         onPress={() => {
           if (
             item.slug === 'companies-to-action' ||
-            item.slug === 'growth-opportunity'
+            item.slug === 'growth-opportunities'
           ) {
             navigation.navigate('Growth Content');
           } else if (item.slug === 'content-library') {
@@ -233,7 +233,7 @@ const BestPractice = props => {
           <Text
             style={{
               marginTop: 10,
-              fontSize: 10,
+              fontSize: 9,
               marginHorizontal: 10,
               textAlign: 'center',
               color: '#030303',

@@ -193,22 +193,26 @@ const CommunityDetail = props => {
     const date = actualDate[0].split(' ', 3);
 
     let backgroundImage = '';
+	let pillarname = '';
     switch (
       item?.pillar_categories[0]?.parent ||
       item?.pillar_categories[1]?.parent
     ) {
       case 0:
-      case 117:
+      case 194:
         backgroundImage = require('../../../assets/img/Rectangle2.png');
+        pillarname = 'Growth Community';
         break;
 
       case 0:
-      case 118:
+      case 171:
         backgroundImage = require('../../../assets/img/best-practice-bg.png');
+        pillarname = 'Growth Content';
         break;
 
       default:
         backgroundImage = require('../../../assets/img/Rectangle.png');
+        pillarname = 'Growth Coaching';
     }
 
     let organizer = item?.organizer?.term_name;
@@ -227,7 +231,13 @@ const CommunityDetail = props => {
     return (
       <View style={styles.topWrapper}>
         <TouchableOpacity
-          onPress={() => navigation.navigate('EventDetail', {id: item.ID})}>
+          onPress={() =>
+            navigation.navigate('EventDetail', {
+              id: item.ID,
+              title: pillarname,
+              image: backgroundImage,
+            })
+          }>
           <ImageBackground
             style={{
               width: '100%',
@@ -395,15 +405,15 @@ const CommunityDetail = props => {
   const parent = poeDetails?.parent;
   const slug = poeDetails?.slug;
   switch (parent) {
-    case 170:
+    case 171:
       backgroundColor = Colors.PRACTICE_COLOR;
       title = 'Best Practices';
       break;
-    case 169:
+    case 194:
       backgroundColor = Colors.COMMUNITY_COLOR;
       title = 'Growth Community';
       break;
-    case 171:
+    case 172:
       backgroundColor = Colors.COACHING_COLOR;
       title = 'Growth Coaching';
     case 133:
@@ -448,6 +458,7 @@ const CommunityDetail = props => {
                 alignItems: 'center',
                 justifyContent: 'center',
               }}
+			  resizeMode="contain"
             />
           </View>
 
@@ -542,7 +553,6 @@ const CommunityDetail = props => {
                   </View>
                 </View>
               )} */}
-
 
               {/* <Footer /> */}
             </View>

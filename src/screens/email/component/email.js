@@ -50,7 +50,7 @@ const Email = props => {
         await sendMailUser(values).then(response => {
           if (response?.payload?.code === 200) {
             navigation.navigate('Dashboard');
-            ToastMessage.show(response?.payload?.message);
+            ToastMessage.show('Your message has been sent successfully');
           }
         });
       },
@@ -131,7 +131,9 @@ const Email = props => {
               <TextInput
                 multiline={true}
                 numberOfLines={15}
+
                 style={[styles.textarea, styles.large]}
+
                 value={values.message}
                 onChangeText={handleChange('message')}
                 onFocus={handleBlur('message')}
@@ -177,7 +179,18 @@ const styles = StyleSheet.create({
     marginLeft: 5,
   },
   textarea: {
-    paddingTop: 10,
+    minHeight: 50,
+    height: 'auto',
+    fontSize: 16,
+    textAlignVertical: 'top',
+    lineHeight: 20,
+    borderWidth: 0.2,
+    marginTop: 10,
+    borderRadius: 5,
+  },
+  textarea1: {
+    minHeight: 300,
+    height: 'auto',
     fontSize: 16,
     textAlignVertical: 'top',
     lineHeight: 30,

@@ -57,7 +57,7 @@ const GrowthCoaching = props => {
     cleanPillarPOE,
   } = props;
 
-  const pillarId = 171;
+  const pillarId = 172;
 
   const isFocused = useIsFocused();
   const [memberConnection, setMemberConnection] = useState([]);
@@ -128,7 +128,7 @@ const GrowthCoaching = props => {
               {item?.user_meta?.first_name} {item?.user_meta?.last_name}
             </Text>
             <Text style={{fontSize: 6, color: '#030303'}}>
-              Frost and Sullivan
+			{item?.user_meta?.Title}
             </Text>
           </View>
         </TouchableOpacity>
@@ -176,7 +176,7 @@ const GrowthCoaching = props => {
           <Text
             style={{
               marginTop: 10,
-              fontSize: 10,
+              fontSize: 9,
               marginHorizontal: 10,
               textAlign: 'center',
               color: '#222B45',

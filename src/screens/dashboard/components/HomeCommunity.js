@@ -65,7 +65,7 @@ const HomeCommunity = props => {
     cleanUser,
   } = props;
 
-  const pillarId = 169;
+  const pillarId = 194;
 
   const isFocused = useIsFocused();
 
@@ -151,8 +151,8 @@ const HomeCommunity = props => {
               }}>
               {item?.user_meta?.first_name} {item?.user_meta?.last_name}
             </Text>
-            <Text style={{fontSize: 6, color: '#030303'}}>
-              Frost and Sullivan
+            <Text style={{fontSize: 6, color: '#030303', marginTop: 5}}>
+              {item?.user_meta?.Title}
             </Text>
           </View>
         </TouchableOpacity>
@@ -198,8 +198,8 @@ const HomeCommunity = props => {
           <Text
             style={{
               marginTop: 10,
-              fontSize: 9,
-              marginHorizontal: 10,
+              fontSize: 8,
+              marginHorizontal: 9,
               textAlign: 'center',
               color: '#222B45',
             }}>
@@ -450,7 +450,7 @@ const HomeCommunity = props => {
               </View>
             )}
 
-          {pillarEventLoading && (
+          {pillarMemberContentLoading && (
             <View style={{marginTop: 40}}>
               <Loading />
             </View>
@@ -563,21 +563,24 @@ const styles = StyleSheet.create({
   },
 
   topWrapper: {
-    height: 144,
+    height: 180,
     width: 256,
-    marginTop: 20,
     marginLeft: 15,
-    borderRadius: 20,
+    borderRadius: 16,
+    overflow: 'hidden',
+    marginRight: 5,
+    marginTop: 15,
   },
   header: {
-    margin: 10,
+    marginLeft: 10,
   },
   headingText1: {
-    fontFamily: Typography.FONT_SF_MEDIUM,
-    marginTop: 5,
+	fontFamily: Typography.FONT_SF_MEDIUM,
+    marginTop: 10,
     fontWeight: '600',
+    width: '98%',
     color: 'white',
-    fontSize: 12,
+    fontSize: 11,
   },
   headingText2: {
     ...CommonStyles.headingText2,
@@ -585,6 +588,7 @@ const styles = StyleSheet.create({
     fontWeight: '400',
     color: 'white',
     fontSize: 8,
+	lineHeight: 8,
   },
   middle: {
     marginTop: 20,
@@ -620,7 +624,7 @@ const styles = StyleSheet.create({
     marginTop: 15,
     marginLeft: 15,
     marginRight: 2,
-    marginBottom: 10,
+    marginBottom: 20,
     backgroundColor: 'white',
   },
   chatIcon: {
