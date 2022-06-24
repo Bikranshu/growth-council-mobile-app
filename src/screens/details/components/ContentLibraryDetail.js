@@ -463,10 +463,12 @@ const ContentLibraryDetail = props => {
             )}
 
           {/* Article Feedback Section */}
-          <ArticleFeedbackCard
-            isTrue={isTrue}
-            handleValue={handleFeedbackChange}
-          />
+          <View style={{marginTop: 20}}>
+            <ArticleFeedbackCard
+              isTrue={isTrue}
+              handleValue={handleFeedbackChange}
+            />
+          </View>
         </ScrollView>
       </View>
 
@@ -535,7 +537,7 @@ const styles = StyleSheet.create({
     fontFamily: 'SFProText-Medium',
     color: Colors.SECONDARY_TEXT_COLOR,
     width: '75%',
-	fontStyle: 'italic'
+    fontStyle: 'italic',
   },
   userInfoText: {
     fontFamily: 'SFProText-Medium',

@@ -46,7 +46,13 @@ const HomeCommunity = props => {
     fetchAllPillarEvent,
     cleanPillarEvent,
 
-    pillarMemberContents,
+    communityMembers,
+    communityMemberLoading,
+    communityMemberError,
+    fetchAllCommunityMember,
+    cleanCommunityMember,
+
+	pillarMemberContents,
     pillarMemberContentLoading,
     pillarMemberContentError,
     fetchAllPillarMemberContent,
@@ -99,16 +105,30 @@ const HomeCommunity = props => {
     }, []),
   );
 
-  useFocusEffect(
-    useCallback(() => {
-      const fetchAllPillarMemberContentAsync = async () => {
-        let token = await getAsyncStorage(JWT_TOKEN);
-        let userID = decodeUserID(token);
-        await fetchAllPillarMemberContent(pillarId);
-      };
-      fetchAllPillarMemberContentAsync();
-    }, [isFocused]),
-  );
+    useFocusEffect(
+      useCallback(() => {
+        const fetchAllPillarMemberContentAsync = async () => {
+          let token = await getAsyncStorage(JWT_TOKEN);
+          let userID = decodeUserID(token);
+          await fetchAllPillarMemberContent(pillarId);
+        };
+        fetchAllPillarMemberContentAsync();
+      }, [isFocused]),
+    );
+
+  useEffect(() => {
+    const fetchAllCommunityMemberAsync = async () => {
+      await fetchAllCommunityMember({
+        s: '',
+        sort: 'Desc',
+      });
+    };
+    fetchAllCommunityMemberAsync();
+
+    return () => {
+      cleanCommunityMember();
+    };
+  }, []);
 
   useFocusEffect(
     useCallback(() => {
@@ -152,6 +172,9 @@ const HomeCommunity = props => {
               {item?.user_meta?.first_name} {item?.user_meta?.last_name}
             </Text>
             <Text style={{fontSize: 6, color: '#030303', marginTop: 5}}>
+              {item?.registered_date}
+              {'\n'}
+              {'\n'}
               {item?.user_meta?.Title}
             </Text>
           </View>
@@ -500,12 +523,12 @@ const HomeCommunity = props => {
             )}
           {users !== undefined && users !== null && users !== false && (
             <View style={styles.bottom}>
-              <Text style={styles.title}>Growth Community Members</Text>
+              <Text style={styles.title}>New Community Members</Text>
               <View>
                 <FlatList
                   horizontal
                   showsHorizontalScrollIndicator={false}
-                  data={users}
+                  data={communityMembers}
                   renderItem={_renderItem}
                 />
               </View>
@@ -575,7 +598,7 @@ const styles = StyleSheet.create({
     marginLeft: 10,
   },
   headingText1: {
-	fontFamily: Typography.FONT_SF_MEDIUM,
+    fontFamily: Typography.FONT_SF_MEDIUM,
     marginTop: 10,
     fontWeight: '600',
     width: '98%',
@@ -588,7 +611,7 @@ const styles = StyleSheet.create({
     fontWeight: '400',
     color: 'white',
     fontSize: 8,
-	lineHeight: 8,
+    lineHeight: 8,
   },
   middle: {
     marginTop: 20,

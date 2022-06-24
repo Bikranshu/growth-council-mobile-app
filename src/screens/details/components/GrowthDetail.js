@@ -11,6 +11,7 @@ import {
   TouchableOpacity,
   Pressable,
   StatusBar,
+  ActivityIndicator,
 } from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import moment from 'moment';
@@ -58,11 +59,26 @@ const GrowthDetail = props => {
     poeSelfLearnError,
     fetchPoeSelfLearn,
     cleanPoeSelfLearn,
+
+    radarMemberDetails,
+    radarMemberDetailsLoading,
+    radarMemberDetailsError,
+    fetchRadarMemberDetail,
   } = props;
 
   const isFocused = useIsFocused();
   const [memberConnection, setMemberConnection] = useState([]);
   const [showChartButton, setShowChartButton] = useState(true);
+  const webviewRef = React.useRef(null);
+  const [userId, setUserId] = useState(0);
+
+  useEffect(async () => {
+    let token = await getAsyncStorage(JWT_TOKEN);
+    let ID = decodeUserID(token);
+    if (ID) {
+      setUserId(ID);
+    }
+  }, []);
 
   useEffect(() => {
     const fetchAllPOEDetailAsync = async () => {
@@ -103,6 +119,11 @@ const GrowthDetail = props => {
     setMemberConnection(pillarMemberContents);
   }, [pillarMemberContents]);
 
+  useEffect(() => {
+    fetchRadarMemberDetail();
+  }, []);
+
+
   // useEffect(()=>{
   //   for(let value of coachingSession){
   //     if(!value?.completed_status){
@@ -111,6 +132,16 @@ const GrowthDetail = props => {
   //     }
   //   };
   // },[coachingSession]);
+
+  function LoadingIndicatorView() {
+    return (
+      <ActivityIndicator
+        color="#009b88"
+        size="large"
+        style={styles.ActivityIndicatorStyle}
+      />
+    );
+  }
 
   const _renderItem = ({item, index}, navigation) => {
     return (
@@ -320,6 +351,29 @@ const GrowthDetail = props => {
                   },
                 }}
               />
+
+              <View>
+                <TouchableOpacity
+                //   onPress={() => {
+                //     navigation.navigate('Radar');
+                //   }}
+                >
+                  <View style={styles.buttonWrapper}>
+                    <View
+                      style={[
+                        styles.button,
+                        {
+                          marginLeft: 15,
+                          backgroundColor: Colors.PRACTICE_COLOR,
+                        },
+                      ]}>
+                      <Text style={styles.buttonText}>
+                        Sign Up for Growth Leader Coaching
+                      </Text>
+                    </View>
+                  </View>
+                </TouchableOpacity>
+              </View>
               {coachingSessionLoading && <Loading />}
               {coachingSession?.length !== 0 &&
                 coachingSession !== null &&
@@ -340,6 +394,44 @@ const GrowthDetail = props => {
                     </View>
                   </View>
                 )}
+              {showChartButton && (
+                <View style={{marginTop: 10, paddingBottom: 20}}>
+                  <Text
+                    style={{
+                      fontSize: 14,
+                      fontFamily: Typography.FONT_SF_REGULAR,
+                      color: Colors.PRIMARY_TEXT_COLOR,
+                      fontWeight: '700',
+                      marginLeft: 15,
+                    }}>
+                    Frost Radar for Leadership
+                  </Text>
+                  <Text
+                    style={{
+                      fontFamily: Typography.FONT_SF_REGULAR,
+                      fontSize: 14,
+                      lineHeight: 24,
+                      padding: 15,
+                      textAlign: 'left',
+                      color: 'black',
+                      textAlign: 'justify',
+                    }}>
+                    {radarMemberDetails?.radar_text}
+                  </Text>
+
+                  <View style={{height: 400, backgroundColor: 'white'}}>
+                    <WebView
+                      source={{
+                        uri: `https://gilcouncil.com/frost-radar/`,
+                      }}
+                      renderLoading={LoadingIndicatorView}
+                      startInLoadingState={true}
+                      ref={webviewRef}
+                    />
+                  </View>
+                </View>
+              )}
+
               {/* {poeSelfLearns?.length !== 0 &&
                 poeSelfLearns !== false &&
                 poeSelfLearns !== null && (
@@ -360,23 +452,7 @@ const GrowthDetail = props => {
                   </View>
                 )} */}
 
-              {pillarMemberContents.members?.length !== 0 &&
-                pillarMemberContents.members !== false &&
-                pillarMemberContents.members !== null && (
-                  <View style={styles.bottom}>
-                    <Text style={styles.title}>Coaches</Text>
-                    <View>
-                      <FlatList
-                        horizontal
-                        showsHorizontalScrollIndicator={false}
-                        data={pillarMemberContents.members}
-                        renderItem={item => _renderItem(item, navigation)}
-                      />
-                    </View>
-                  </View>
-                )}
-
-              {showChartButton && (
+              {/* {showChartButton && (
                 <View style={styles.bottom}>
                   <Text style={styles.title}>Frost Radar for Leadership</Text>
                   <TouchableOpacity
@@ -392,28 +468,7 @@ const GrowthDetail = props => {
                     </View>
                   </TouchableOpacity>
                 </View>
-              )}
-              {pillarMemberContents?.pillar_contents?.length !== 0 &&
-                pillarMemberContents?.pillar_contents !== false &&
-                pillarMemberContents?.pillar_contents !== null && (
-                  <View style={styles.growthContent}>
-                    <Text style={styles.title}>
-                      Growth Leadership Coaching Content Library
-                    </Text>
-                    <View
-                      style={{
-                        display: 'flex',
-                        flexDirection: 'row',
-                      }}>
-                      <FlatList
-                        horizontal
-                        showsHorizontalScrollIndicator={false}
-                        data={pillarMemberContents?.pillar_contents}
-                        renderItem={_renderContentItem}
-                      />
-                    </View>
-                  </View>
-                )}
+              )} */}
             </View>
           </ScrollView>
         </View>
@@ -608,5 +663,9 @@ const styles = StyleSheet.create({
     color: Colors.PRIMARY_BUTTON_TEXT_COLOR,
     marginHorizontal: 5,
     fontSize: 14,
+  },
+  ActivityIndicatorStyle: {
+    flex: 1,
+    justifyContent: 'center',
   },
 });

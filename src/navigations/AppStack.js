@@ -183,7 +183,7 @@ const AppStack = () => (
         ),
       })}
     />
-	 <Screen
+    <Screen
       name="ToolKit"
       component={ToolKitDetailScreen}
       options={() => ({
@@ -197,8 +197,6 @@ const AppStack = () => (
         ),
       })}
     />
-	
-
     <Screen
       name="ManageAccount"
       component={ManageAccountScreen}
@@ -263,8 +261,8 @@ const AppStack = () => (
       options={() => ({
         header: ({navigation}) => (
           <SubHeader
-            title="Content Library"
-            image={require('../assets/img/appBG.png')}
+            title="Growth Content"
+            image={require('../assets/img/best-practice-bg.png')}
             navigation={navigation}
             noDrawer
           />
@@ -278,8 +276,8 @@ const AppStack = () => (
         resourceId: route?.params?.resourceId,
         header: () => (
           <SubHeader
-            title="Content Library"
-            image={require('../assets/img/appBG.png')}
+            title="Growth Content"
+            image={require('../assets/img/best-practice-bg.png')}
             navigation={navigation}
             noDrawer
           />
@@ -293,8 +291,8 @@ const AppStack = () => (
         resourceId: route?.params?.resourceId,
         header: () => (
           <SubHeader
-            title="Content Library"
-            image={require('../assets/img/appBG.png')}
+            title="Growth Content"
+            image={require('../assets/img/best-practice-bg.png')}
             navigation={navigation}
             noDrawer
           />
@@ -309,8 +307,8 @@ const AppStack = () => (
         animationEnabled: false,
         header: () => (
           <SubHeader
-            title="Content Library"
-            image={require('../assets/img/appBG.png')}
+            title="Growth Content"
+            image={require('../assets/img/best-practice-bg.png')}
             navigation={navigation}
             noDrawer
           />
@@ -352,14 +350,14 @@ const AppStack = () => (
       component={EventDetailScreen}
       options={({navigation, route}) => ({
         id: route?.params?.id,
-		header: () => (
-			<SubHeader
-			  title={route?.params?.title}
-			  image={route?.params?.image}
-			  navigation={navigation}
-			  noDrawer
-			/>
-		  ),
+        header: () => (
+          <SubHeader
+            title={route?.params?.title}
+            image={route?.params?.image}
+            navigation={navigation}
+            noDrawer
+          />
+        ),
       })}
     />
     <Screen
