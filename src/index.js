@@ -2,17 +2,18 @@ import 'react-native-gesture-handler';
 import React, {useEffect, useRef} from 'react';
 import {Provider} from 'react-redux';
 import {PersistGate} from 'redux-persist/integration/react';
+import {NavigationContainer} from '@react-navigation/native';
 import {NativeBaseProvider} from 'native-base';
 import RNBootSplash from 'react-native-bootsplash';
 import {Provider as PaperProvider} from 'react-native-paper';
 import messaging from '@react-native-firebase/messaging';
+import analytics from '@react-native-firebase/analytics';
 import PushNotification, {Importance} from 'react-native-push-notification';
 import PushNotificationIOS from '@react-native-community/push-notification-ios';
 import {store, persistor} from './store';
 import MainNavigation from './navigations';
 import {AuthProvider} from './context/auth';
 import SplashScreen from './screens/splash';
-import { Platform } from 'react-native';
 
 XMLHttpRequest = GLOBAL.originalXMLHttpRequest
   ? GLOBAL.originalXMLHttpRequest
@@ -30,17 +31,6 @@ const App = () => {
 
   useEffect(() => {
     getNotifications();
-
-    (async () => {
-      if(Platform.OS == 'ios'){
-        const authorizationStatus = await messaging().requestPermission();
-        
-        if (authorizationStatus) {
-          console.log('Permission status:', authorizationStatus);
-        }
-      }
-    })()
-
     Platform.OS === 'android' && _createChannel();
     const unsubscribe = messaging().onMessage(remoteMessage => {
       Platform.OS === 'ios' &&
