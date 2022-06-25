@@ -12,6 +12,12 @@ import {
   fetchAllPillarMemberContents,
   resetPillarMemberContent,
 } from '../details/slice/pillarMembersContentsSlice';
+
+import {
+  fetchAllCommunityMembers,
+  resetCommunityMember,
+} from './slice/communityMemberSlice';
+
 import {fetchUsersByKey, resetUser} from '../account/slice/userSlice';
 
 import {fetchAllPillarPOEs, resetPillarPOE} from './slice/pillarPOESlice';
@@ -22,17 +28,21 @@ const HomeCommunityScreen = props => {
     state => state.pillarEvents,
   );
 
-  const {
-    pillarMemberContents,
-    pillarMemberContentLoading,
-    pillarMemberContentError,
-  } = useSelector(state => state.pillarMemberContents);
+  const {communityMembers, communityMemberLoading, communityMemberError} =
+    useSelector(state => state.communityMembers);
 
   const {pillarPOEs, pillarPOELoading, pillarPOEError} = useSelector(
     state => state.pillarPOEs,
   );
 
   const {users, userLoading, userError} = useSelector(state => state.users);
+
+  const {
+    pillarMemberContents,
+    pillarMemberContentLoading,
+    pillarMemberContentError,
+  } = useSelector(state => state.pillarMemberContents);
+
   const fetchAllPillarEvent = pillarId => {
     dispatch(fetchAllPillarEvents(pillarId));
   };
@@ -49,12 +59,12 @@ const HomeCommunityScreen = props => {
     dispatch(resetPillarEvent());
   };
 
-  const fetchAllPillarMemberContent = pillarId => {
-    dispatch(fetchAllPillarMemberContents(pillarId));
+  const fetchAllCommunityMember = () => {
+    dispatch(fetchAllCommunityMembers());
   };
 
-  const cleanPillarMemberContent = () => {
-    dispatch(resetPillarMemberContent());
+  const cleanCommunityMember = () => {
+    dispatch(resetCommunityMember());
   };
 
   const fetchAllUsers = formData => {
@@ -64,6 +74,15 @@ const HomeCommunityScreen = props => {
   const cleanUser = () => {
     dispatch(resetUser());
   };
+
+  const fetchAllPillarMemberContent = pillarId => {
+    dispatch(fetchAllPillarMemberContents(pillarId));
+  };
+
+  const cleanPillarMemberContent = () => {
+    dispatch(resetPillarMemberContent());
+  };
+
   return (
     <HomeCommunity
       {...props}
@@ -72,22 +91,26 @@ const HomeCommunityScreen = props => {
       pillarEventError={pillarEventError}
       fetchAllPillarEvent={fetchAllPillarEvent}
       cleanPillarEvent={cleanPillarEvent}
-      pillarMemberContents={pillarMemberContents}
-      pillarMemberContentLoading={pillarMemberContentLoading}
-      pillarMemberContentError={pillarMemberContentError}
-      fetchAllPillarMemberContent={fetchAllPillarMemberContent}
-      cleanPillarMemberContent={cleanPillarMemberContent}
+      communityMembers={communityMembers}
+      communityMemberLoading={communityMemberLoading}
+      communityMemberError={communityMemberError}
+      fetchAllCommunityMember={fetchAllCommunityMember}
+      cleanCommunityMember={cleanCommunityMember}
       pillarPOEs={pillarPOEs}
       pillarPOELoading={pillarPOELoading}
       pillarPOEError={pillarPOEError}
       fetchAllPillarPOE={fetchAllPillarPOE}
       cleanPillarPOE={cleanPillarPOE}
-
-	  users={users}
+      users={users}
       userLoading={userLoading}
       userError={userError}
       fetchAllUsers={fetchAllUsers}
       cleanUser={cleanUser}
+      pillarMemberContents={pillarMemberContents}
+      pillarMemberContentLoading={pillarMemberContentLoading}
+      pillarMemberContentError={pillarMemberContentError}
+      fetchAllPillarMemberContent={fetchAllPillarMemberContent}
+      cleanPillarMemberContent={cleanPillarMemberContent}
     />
   );
 };

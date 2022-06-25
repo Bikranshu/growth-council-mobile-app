@@ -188,7 +188,7 @@ const Radar = props => {
                     </View>
                   )}
 
-                <View style={{marginTop: 10}}>
+                {/* <View style={{marginTop: 10}}>
                   {radarMemberDetails?.member_details?.map(item => {
                     const memberData = () => {
                       setDescription(item?.member_description);
@@ -214,12 +214,12 @@ const Radar = props => {
                       </View>
                     );
                   })}
-                </View>
+                </View> */}
               </View>
             </View>
           </View>
 
-          <View style={styles.centeredView}>
+          {/* <View style={styles.centeredView}>
             <Modal
               animationType="slide"
               transparent={true}
@@ -251,7 +251,7 @@ const Radar = props => {
                 </View>
               </View>
             </Modal>
-          </View>
+          </View> */}
         </View>
       </ScrollView>
     </SafeAreaView>

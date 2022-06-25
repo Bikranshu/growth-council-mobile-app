@@ -49,6 +49,7 @@ const Event = props => {
   const [timeToEnd, setTimeToEnd] = useState('');
 
   const eventID = route?.params?.id;
+  const Slug = events?.slug !== undefined ? events?.slug : '';
 
   useEffect(() => {
     fetchEventByIdentifier(eventID);
@@ -59,7 +60,10 @@ const Event = props => {
   }, [events]);
 
   const registerEventByEventID = async eventID => {
-    const response = await registerEventByIdentifier({event_id: eventID});
+    const response = await registerEventByIdentifier({
+      event_id: eventID,
+      slug: Slug,
+    });
     if (response?.payload?.code === 200) {
       setEventStatus(true);
       ToastMessage.show('You have successfully RSVP’d this event.');
@@ -76,11 +80,11 @@ const Event = props => {
     : '';
   switch (pillarCategory) {
     case 0:
-    case 194:
+    case 169:
       backgroundColor = Colors.COMMUNITY_COLOR;
       break;
     case 0:
-    case 171:
+    case 170:
       backgroundColor = Colors.PRACTICE_COLOR;
       break;
 
@@ -140,19 +144,19 @@ const Event = props => {
       events?.pillar_categories[0]?.parent
     : '';
   switch (pillarname) {
-    case 194:
+    case 169:
+    case 0:
+      title =
+        events?.pillar_categories[1]?.name ||
+        events?.pillar_categories[0]?.name;
+      break;
+    case 170:
     case 0:
       title =
         events?.pillar_categories[1]?.name ||
         events?.pillar_categories[0]?.name;
       break;
     case 171:
-    case 0:
-      title =
-        events?.pillar_categories[1]?.name ||
-        events?.pillar_categories[0]?.name;
-      break;
-    case 172:
     case 0:
       title =
         events?.pillar_categories[0]?.name ||

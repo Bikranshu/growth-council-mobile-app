@@ -108,14 +108,7 @@ const DashboardScreen = props => {
     dispatch(resetCriticalIssue());
   };
 
-  const fetchNewMember = () => {
-    dispatch(fetchAllNewMember());
-  };
-
-  const cleanNewMember = () =>{
-	  dispatch(resetNewMember())
-  }
-
+  
   return (
     <Dashboard
       {...props}
