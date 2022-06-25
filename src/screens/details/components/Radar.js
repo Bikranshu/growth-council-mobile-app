@@ -18,7 +18,7 @@ import FlatTextInput from '../../../shared/form/FlatTextInput';
 import {WebView} from 'react-native-webview';
 import {getAsyncStorage} from '../../../utils/storageUtil';
 import {decodeUserID} from '../../../utils/jwtUtil';
-import {JWT_TOKEN} from '../../../constants';
+import {HOME_URL, JWT_TOKEN} from '../../../constants';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import {Column} from 'native-base';
@@ -119,7 +119,7 @@ const Radar = props => {
         <View style={{height: 400}}>
           <WebView
             source={{
-              uri: `https://gilcouncil.com/frost-radar?user_id=${userId}`,
+              uri: `${HOME_URL}/frost-radar?user_id=${userId}`,
             }}
             renderLoading={LoadingIndicatorView}
             startInLoadingState={true}
