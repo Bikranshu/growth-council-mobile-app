@@ -555,7 +555,7 @@ const CommunityDetail = props => {
                     />
                   </View>
                 )}
-              {poeDetails?.slug === 'peer-to-peer-interactions' && (
+              {poeDetails?.slug === 'peer-to-peer-digital-network' && (
                 <View style={styles.buttonWrapper}>
                   <View style={styles.memberWrapper}>
                     <TouchableOpacity
@@ -564,7 +564,7 @@ const CommunityDetail = props => {
                         style={{width: '100%', height: 160, borderRadius: 20}}
                         source={require('../../../assets/img/people.jpg')}>
                         <LinearGradient
-                          colors={['#000000', '#000000']}
+                          colors={['#00000000', '#000000']}
                           style={{height: '100%', width: '100%'}}
                         />
                         <View
@@ -608,7 +608,7 @@ const CommunityDetail = props => {
                   </TouchableOpacity>
                 </View>
               )}
-              {poeDetails?.slug !== 'peer-to-peer-interactions' &&
+              {poeDetails?.slug !== 'peer-to-peer-digital-network' &&
                 poeDetails?.slug !== 'executive-coaching-clinic' &&
                 poeDetails?.slug !== 'annual-council-meeting' && (
                   <View style={styles.buttonWrapper}>
@@ -659,7 +659,7 @@ const CommunityDetail = props => {
                           style={{width: '100%', height: 120, borderRadius: 20}}
                           source={require('../../../assets/img/digital-content.jpg')}>
                           <LinearGradient
-                            colors={['#000000', '#000000']}
+                            colors={['#00000000', '#000000']}
                             style={{height: '100%', width: '100%'}}
                           />
                           <View
