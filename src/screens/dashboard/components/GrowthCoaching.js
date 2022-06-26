@@ -57,7 +57,7 @@ const GrowthCoaching = props => {
     cleanPillarPOE,
   } = props;
 
-  const pillarId = 172;
+  const pillarId = 171;
 
   const isFocused = useIsFocused();
   const [memberConnection, setMemberConnection] = useState([]);
