@@ -344,7 +344,7 @@ const GrowthDetail = props => {
                 }}
               />
 
-              <View>
+              {/* <View>
                 <TouchableOpacity>
                   <View style={styles.buttonWrapper}>
                     <View
@@ -361,7 +361,7 @@ const GrowthDetail = props => {
                     </View>
                   </View>
                 </TouchableOpacity>
-              </View>
+              </View> */}
 
               {coachingSessionLoading && <Loading />}
               {coachingSession?.length !== 0 &&
@@ -384,7 +384,7 @@ const GrowthDetail = props => {
                   </View>
                 )}
 
-              {showChartButton && (
+              {/* {showChartButton && (
                 <View style={{marginTop: 10, paddingBottom: 20}}>
                   <Text
                     style={{
@@ -420,7 +420,7 @@ const GrowthDetail = props => {
                     />
                   </View>
                 </View>
-              )}
+              )} */}
 
               {/* {poeSelfLearns?.length !== 0 &&
                 poeSelfLearns !== false &&

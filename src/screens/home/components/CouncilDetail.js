@@ -103,10 +103,7 @@ const CouncilDetail = props => {
           )}
         </View>
         <View style={styles.container}>
-          <StatusBar
-            barStyle="dark-content"
-            backgroundColor={"#001D3F"}
-          />
+          <StatusBar barStyle="dark-content" backgroundColor={'#001D3F'} />
 
           <View style={{marginLeft: 20, marginRight: 20, flex: 1}}>
             {pillarLoading && <Loading />}
@@ -119,7 +116,7 @@ const CouncilDetail = props => {
                   fontWeight: 'regular',
                   color: '#666767',
                   alignItems: 'center',
-				  textAlign:'justify'
+                  textAlign: 'justify',
                 },
               }}
               style={styles.paragraph}
@@ -134,7 +131,10 @@ const CouncilDetail = props => {
               </Button>
             </View>
           )}
-          {loadMore && <LoadMore {...props} pillar_id={route?.params?.id} />}
+
+          {loadMore && pillars.slug !== 'growth-content' && (
+            <LoadMore {...props} pillar_id={route?.params?.id} />
+          )}
         </View>
       </ScrollView>
     </SafeAreaView>

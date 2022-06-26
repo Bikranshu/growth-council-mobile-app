@@ -174,14 +174,14 @@ const Content = props => {
           />
         </View>
 
-        <View
+        {/* <View
           style={{
             margin: 15,
             paddingBottom: 10,
             borderBottomWidth: 0.3,
           }}>
           <Text style={{fontSize: 9, color: '#14A2E2'}}>Content Library</Text>
-        </View>
+        </View> */}
 
         <ScrollView
           style={{

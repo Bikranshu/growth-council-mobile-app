@@ -116,6 +116,7 @@ const Email = props => {
                 numberOfLines={2}
                 style={styles.textarea}
                 value={values.subject}
+                placeholder="Account Assistance"
                 onChangeText={handleChange('subject')}
                 onFocus={handleBlur('subject')}
                 error={errors.subject}
