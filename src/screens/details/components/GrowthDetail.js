@@ -94,12 +94,12 @@ const GrowthDetail = props => {
     fetchAllPOEEventAsync();
   }, []);
 
-  useEffect(() => {
-    const fetchAllPillarMemberContentAsync = async () => {
-      await fetchAllPillarMemberContent(route.params.pillarId);
-    };
-    fetchAllPillarMemberContentAsync();
-  }, [isFocused]);
+  //   useEffect(() => {
+  //     const fetchAllPillarMemberContentAsync = async () => {
+  //       await fetchAllPillarMemberContent(route.params.pillarId);
+  //     };
+  //     fetchAllPillarMemberContentAsync();
+  //   }, [isFocused]);
 
   useEffect(() => {
     const fetchCoachingSessionAsync = async () => {
@@ -115,14 +115,13 @@ const GrowthDetail = props => {
     fetchPoeSelfLearnAsync();
   }, []);
 
-  useEffect(() => {
-    setMemberConnection(pillarMemberContents);
-  }, [pillarMemberContents]);
+  //   useEffect(() => {
+  //     setMemberConnection(pillarMemberContents);
+  //   }, [pillarMemberContents]);
 
   useEffect(() => {
     fetchRadarMemberDetail();
   }, []);
-
 
   // useEffect(()=>{
   //   for(let value of coachingSession){
@@ -216,13 +215,6 @@ const GrowthDetail = props => {
         </TouchableOpacity>
       </View>
     );
-  };
-
-  const _renderContentItem = ({item, index}) => {
-    const file = item?.file;
-    const link = file.split('=', 2);
-    let videoLink = link[1].split('&', 2);
-    return <Player {...props} item={item} file={file} videoLink={videoLink} />;
   };
 
   const _renderLearnItem = ({item, index}) => {
@@ -353,11 +345,7 @@ const GrowthDetail = props => {
               />
 
               <View>
-                <TouchableOpacity
-                //   onPress={() => {
-                //     navigation.navigate('Radar');
-                //   }}
-                >
+                <TouchableOpacity>
                   <View style={styles.buttonWrapper}>
                     <View
                       style={[
@@ -374,6 +362,7 @@ const GrowthDetail = props => {
                   </View>
                 </TouchableOpacity>
               </View>
+
               {coachingSessionLoading && <Loading />}
               {coachingSession?.length !== 0 &&
                 coachingSession !== null &&
@@ -394,6 +383,7 @@ const GrowthDetail = props => {
                     </View>
                   </View>
                 )}
+
               {showChartButton && (
                 <View style={{marginTop: 10, paddingBottom: 20}}>
                   <Text
@@ -422,7 +412,7 @@ const GrowthDetail = props => {
                   <View style={{height: 400, backgroundColor: 'white'}}>
                     <WebView
                       source={{
-                        uri: `https://gilcouncil.com/frost-radar/`,
+                        uri: `https://gilcouncil.com/frost-radar?user_id=${userId}`,
                       }}
                       renderLoading={LoadingIndicatorView}
                       startInLoadingState={true}

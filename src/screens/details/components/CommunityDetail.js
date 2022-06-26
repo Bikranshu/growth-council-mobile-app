@@ -604,7 +604,7 @@ const CommunityDetail = props => {
                 </View>
               )}
               {poeDetails?.slug !== 'peer-to-peer-interactions' &&
-                // poeDetails?.slug !== 'executive-mindxchange-events' &&
+                poeDetails?.slug !== 'executive-coaching-clinic' &&
                 poeDetails?.slug !== 'annual-council-meeting' && (
                   <View style={styles.buttonWrapper}>
                     <View style={styles.btnWrapper}>

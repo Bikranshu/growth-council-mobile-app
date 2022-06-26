@@ -160,7 +160,7 @@ const GrowthCoaching = props => {
         onPress={() =>
           navigation.navigate(navigationPath, {
             poeId: item?.term_id,
-            pillarId: item?.parent,
+            // pillarId: item?.parent,
             title: 'Growth Coaching',
             image: require('../../../assets/img/Rectangle.png'),
           })

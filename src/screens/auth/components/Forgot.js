@@ -54,41 +54,7 @@ const ForgotForm = props => {
 			ToastMessage.show(response?.payload?.response);
         }
       });
-    //   getAuth()
-    //     .deleteUser()
-    //     .then(() => {
-    //       console.log('Successfully deleted user');
-    //     })
-    //     .catch(error => {
-    //       console.log('Error deleting user:', error);
-    //     });
-
-      //   var ref = new firebase('https://yourfirebase.firebaseio.com');
-      //   var authData = ref.getAuth();
-
-      //   if (authData) {
-      //     console.log(
-      //       'User ' + authData.uid + ' is logged in with ' + authData.provider,
-      //     );
-      //   } else {
-      //     console.log('User is logged out');
-      //   }
-
-      //   const user = firebase.auth().currentUser;
-
-      //   if (user) {
-      //     console.log('User email: ', user.email);
-      //   }
-    //   console.log(firebase.auth());
-      //   await getAuth(app)
-      //     .getUserByEmail(values.email)
-      //     .then(userRecord => {
-      //       // See the UserRecord reference doc for the contents of userRecord.
-      //       console.log(`Successfully fetched user data: ${userRecord.toJSON()}`);
-      //     })
-      //     .catch(error => {
-      //       console.log('Error fetching user data:', error);
-      //     });
+ 
     },
   });
 

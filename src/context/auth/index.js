@@ -10,7 +10,7 @@ import {
   getAsyncStorage,
 } from '../../utils/storageUtil';
 import {JWT_TOKEN, API_URL, USER_NAME, USER_AVATAR} from '../../constants';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+
 
 export const AuthContext = createContext({});
 
@@ -99,7 +99,6 @@ export const AuthProvider = ({children}) => {
             );
 
             console.log('a', response);
-            console.log('avatar', response.data.user_display_name);
 
             if (response.data.token) {
               await setAsyncStorage(
