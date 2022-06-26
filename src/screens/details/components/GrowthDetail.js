@@ -442,7 +442,7 @@ const GrowthDetail = props => {
                   </View>
                 )} */}
 
-              {/* {showChartButton && (
+              {showChartButton && (
                 <View style={styles.bottom}>
                   <Text style={styles.title}>Frost Radar for Leadership</Text>
                   <TouchableOpacity
@@ -458,7 +458,7 @@ const GrowthDetail = props => {
                     </View>
                   </TouchableOpacity>
                 </View>
-              )} */}
+              )}
             </View>
           </ScrollView>
         </View>
@@ -532,6 +532,7 @@ const styles = StyleSheet.create({
   middle: {
     marginTop: 10,
     marginRight: 5,
+    marginBottom: 10,
     justifyContent: 'center',
   },
   middleWrapper: {
@@ -565,7 +566,7 @@ const styles = StyleSheet.create({
     marginTop: 30,
   },
   bottom: {
-    marginTop: 25,
+    marginTop: 15,
     marginBottom: 20,
   },
   bottomWrapper: {

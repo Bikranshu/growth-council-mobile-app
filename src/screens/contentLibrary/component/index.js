@@ -195,13 +195,14 @@ const Content = props => {
             </View>
           )}
           {/* {loader} */}
-
-          <FlatList
-            contentContainerStyle={{alignItems: 'center'}}
-            showsVerticalScrollIndicator={false}
-            data={filteredDataSource}
-            renderItem={_renderContent}
-          />
+          <View style={{marginTop: 15}}>
+            <FlatList
+              contentContainerStyle={{alignItems: 'center'}}
+              showsVerticalScrollIndicator={false}
+              data={filteredDataSource}
+              renderItem={_renderContent}
+            />
+          </View>
 
           {/* <View style={{marginVertical:5}}>
             <Footer />
