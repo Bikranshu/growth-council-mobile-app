@@ -21,6 +21,7 @@ import Footer from '../../../shared/footer';
 import ToastMessage from '../../../shared/toast';
 import {formatTimeByOffset} from '../../event/components/timezone';
 import Loading from '../../../shared/loading';
+import { GROWTH_COMMUNITY_ID, GROWTH_CONTENT_ID } from '../../../constants';
 
 const EventCalendar = props => {
   const {
@@ -88,11 +89,11 @@ const EventCalendar = props => {
       : '';
     switch (pillarCategory) {
       case 0:
-      case 169:
+      case GROWTH_COMMUNITY_ID:
         backgroundColor = Colors.COMMUNITY_COLOR;
         break;
       case 0:
-      case 170:
+      case GROWTH_CONTENT_ID:
         backgroundColor = Colors.PRACTICE_COLOR;
         break;
       default:
@@ -178,13 +179,13 @@ const EventCalendar = props => {
       ? item?.pillar_categories[0]?.parent || item?.pillar_categories[1]?.parent
       : '';
     switch (pillarCategory) {
-      case 169:
+      case GROWTH_COMMUNITY_ID:
       case 0:
         borderColor = Colors.COMMUNITY_COLOR;
         pillarname = 'Growth Community';
         backgroundImage = require('../../../assets/img/Rectangle2.png');
         break;
-      case 170:
+      case GROWTH_CONTENT_ID:
       case 0:
         borderColor = Colors.PRACTICE_COLOR;
         pillarname = 'Growth Content';

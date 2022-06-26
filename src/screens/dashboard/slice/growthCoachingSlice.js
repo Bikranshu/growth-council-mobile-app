@@ -1,11 +1,12 @@
 import {createAsyncThunk, createSlice} from '@reduxjs/toolkit';
+import { GROWTH_COACHING_ID } from '../../../constants';
 
 import {fetch} from '../../../utils/httpUtil';
 
 export const fetchAllgrowthCoachings = createAsyncThunk(
     'growthCoachings/fetchAll',
     (_, {rejectWithValue}) => {
-        return fetch(`jwt-auth/v1/pillars/171/events`)
+        return fetch(`jwt-auth/v1/pillars/${GROWTH_COACHING_ID}/events`)
             .then(response => response.data.data)
             .catch(error => rejectWithValue(error?.response?.data || error));
     },
