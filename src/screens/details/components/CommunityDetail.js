@@ -27,6 +27,7 @@ import RNFetchBlob from 'react-native-blob-util';
 import LinearGradient from 'react-native-linear-gradient';
 // import ReactNativeBlobUtil from 'react-native-blob-util';
 import ToastMessage from '../../../shared/toast';
+import { GROWTH_COACHING_ID, GROWTH_COMMUNITY_ID, GROWTH_CONTENT_ID } from '../../../constants';
 
 const win = Dimensions.get('window');
 const contentContainerWidth = win.width - 30;
@@ -220,13 +221,13 @@ const CommunityDetail = props => {
       item?.pillar_categories[1]?.parent
     ) {
       case 0:
-      case 169:
+      case GROWTH_COMMUNITY_ID:
         backgroundImage = require('../../../assets/img/Rectangle2.png');
         pillarname = 'Growth Community';
         break;
 
       case 0:
-      case 170:
+      case GROWTH_CONTENT_ID:
         backgroundImage = require('../../../assets/img/best-practice-bg.png');
         pillarname = 'Growth Content';
         break;
@@ -420,15 +421,15 @@ const CommunityDetail = props => {
   const parent = poeDetails?.parent;
   const slug = poeDetails?.slug;
   switch (parent) {
-    case 170:
+    case GROWTH_CONTENT_ID:
       backgroundColor = Colors.PRACTICE_COLOR;
       title = 'Best Practices';
       break;
-    case 169:
+    case GROWTH_COMMUNITY_ID:
       backgroundColor = Colors.COMMUNITY_COLOR;
       title = 'Growth Community';
       break;
-    case 171:
+    case GROWTH_COACHING_ID:
       backgroundColor = Colors.COACHING_COLOR;
       title = 'Growth Coaching';
     case 133:

@@ -25,7 +25,7 @@ import Footer from '../../../shared/footer';
 import BottomNav from '../../../layout/BottomLayout';
 import Player from './Player';
 import {getAsyncStorage} from '../../../utils/storageUtil';
-import {JWT_TOKEN} from '../../../constants';
+import {GROWTH_COMMUNITY_ID, JWT_TOKEN} from '../../../constants';
 import {decodeUserID} from '../../../utils/jwtUtil';
 import RNFetchBlob from 'react-native-blob-util';
 // import ReactNativeBlobUtil from 'react-native-blob-util';
@@ -71,7 +71,7 @@ const HomeCommunity = props => {
     cleanUser,
   } = props;
 
-  const pillarId = 169;
+  const pillarId = GROWTH_COMMUNITY_ID;
 
   const isFocused = useIsFocused();
 

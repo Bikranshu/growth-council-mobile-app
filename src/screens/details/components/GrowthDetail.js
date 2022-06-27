@@ -25,6 +25,7 @@ import {CommonStyles, Colors, Typography} from '../../../theme';
 import {WebView} from 'react-native-webview';
 import {Button} from 'native-base';
 import Loading from '../../../shared/loading';
+import { HOME_URL } from '../../../constants';
 
 const screenHeight = Math.round(Dimensions.get('window').height);
 const win = Dimensions.get('window');

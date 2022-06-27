@@ -32,6 +32,7 @@ import Player from './Player';
 import {CommonStyles, Colors, Typography} from '../../../theme';
 import {isEmptyArray} from 'formik';
 import Loading from '../../../shared/loading';
+import { GROWTH_COACHING_ID } from '../../../constants';
 
 const win = Dimensions.get('window');
 const contentContainerWidth = win.width - 30;
@@ -57,7 +58,7 @@ const GrowthCoaching = props => {
     cleanPillarPOE,
   } = props;
 
-  const pillarId = 171;
+  const pillarId = GROWTH_COACHING_ID;
 
   const isFocused = useIsFocused();
   const [memberConnection, setMemberConnection] = useState([]);

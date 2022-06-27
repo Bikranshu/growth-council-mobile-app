@@ -33,6 +33,7 @@ import Loading from '../../../shared/loading';
 import {sendNotification} from '../../../utils/sendNotification';
 import MainHeader from '../../../shared/header/MainHeader';
 import messaging from '@react-native-firebase/messaging';
+import { GROWTH_COMMUNITY_ID, GROWTH_CONTENT_ID } from '../../../constants';
 
 const win = Dimensions.get('window').width;
 const contentContainerWidth = win / 2;
@@ -265,12 +266,12 @@ const Dashboard = props => {
       item?.pillar_categories[0]?.parent ||
       item?.pillar_categories[1]?.parent
     ) {
-      case 169:
+      case GROWTH_COMMUNITY_ID:
       case 0:
         backgroundImage = require('../../../assets/img/Rectangle2.png');
         pillarname = 'Growth Community';
         break;
-      case 170:
+      case GROWTH_CONTENT_ID:
       case 0:
         backgroundImage = require('../../../assets/img/best-practice-bg.png');
         pillarname = 'Growth Content';
