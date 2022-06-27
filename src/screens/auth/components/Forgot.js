@@ -15,7 +15,6 @@ import {useFormik} from 'formik';
 import * as Yup from 'yup';
 import {getAuth, deleteUser} from 'firebase/auth';
 
-
 import {CommonStyles, Colors, Typography} from '../../../theme';
 import Spinner from '../../../shared/spinner';
 import FlatTextInput from '../../../shared/form/FlatTextInput';
@@ -49,12 +48,13 @@ const ForgotForm = props => {
       await forgotPassword(values).then(response => {
         if (response?.payload?.code === 200) {
           navigation.navigate('SignIn');
-          ToastMessage.show('Email sent successfully to reset password.');
+          ToastMessage.show(
+            'Email to reset password has been sent successfully.',
+          );
         } else {
-			ToastMessage.show(response?.payload?.response);
+          ToastMessage.show(response?.payload?.response);
         }
       });
- 
     },
   });
 

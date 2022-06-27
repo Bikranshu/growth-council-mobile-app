@@ -25,7 +25,6 @@ import {Searchbar} from 'react-native-paper';
 import BottomNav from '../../../layout/BottomLayout';
 import Loading from '../../../shared/loading';
 
-
 const win = Dimensions.get('window');
 const contentContainerWidth = win.width - 30;
 
@@ -198,6 +197,7 @@ const People = props => {
               placeholder="Search"
               keyboardType="default"
               value={searchKey}
+              iconColor="black"
               onChangeText={async text => {
                 setSearchKey(text);
                 await fetchAllUsers({
@@ -208,6 +208,7 @@ const People = props => {
                   region: region,
                 });
               }}
+
             />
           </View>
           <View style={styles.iconWrapper}>
@@ -272,14 +273,14 @@ const People = props => {
           }}>
           <View style={{marginTop: 10}}>
             {memberConnectionLoading && <Loading />}
-            {users === null &&  users === [] ? (
+            {users === null && users === [] ? (
               <View style={{justifyContent: 'center', alignItems: 'center'}}>
                 <Text
                   style={{
                     justifyContent: 'center',
                     fontSize: 16,
                     alignItems: 'center',
-					color:'black'
+                    color: 'black',
                   }}>
                   No User{' '}
                 </Text>
