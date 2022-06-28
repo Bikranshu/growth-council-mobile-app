@@ -72,12 +72,7 @@ const privacy = props => {
                 styles.plainButton,
                 {backgroundColor: Colors.SECONDARY_BUTTON_COLOR},
               ]}
-              onPress={
-                (() => navigation.navigate('Email'),
-                {
-                  title: 'Account Assistance',
-                })
-              }>
+              onPress={() => navigation.navigate('Email')}>
               <Text style={[styles.buttonText, styles.plainButtonText]}>
                 Contact Our Program Team
               </Text>

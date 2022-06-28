@@ -104,7 +104,7 @@ const Email = props => {
               <TextInput
                 multiline={true}
                 numberOfLines={1}
-                style={[styles.textarea, {color: 'blue'}]}
+                style={[styles.input, {color: 'blue'}]}
                 value={values.sender}
                 onChangeText={handleChange('sender')}
                 onFocus={handleBlur('sender')}

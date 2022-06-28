@@ -214,8 +214,7 @@ const SignInForm = props => {
                 <Text
                   style={{color: '#31ade5', fontWeight: '700'}}
                   onPress={() => navigation.navigate('Email')}>
-                  {' '}
-                  Contact Us{' '}
+                  Contact Us
                 </Text>
               </View>
             </View>

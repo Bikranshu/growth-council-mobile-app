@@ -295,7 +295,7 @@ const OthersAccount = props => {
                       </View>
                       <Text
                         style={{
-                          fontSize: 16,
+                          fontSize: 14,
                           fontWeight: '500',
                           color: 'white',
                         }}>
@@ -413,7 +413,7 @@ const styles = StyleSheet.create({
     borderColor: '#707070',
   },
   loginWrapper: {
-    width: '80%',
+    width: '100%',
     display: 'flex',
     flexDirection: 'row',
     paddingVertical: 5,
