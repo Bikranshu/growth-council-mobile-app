@@ -3,6 +3,7 @@ import axios from 'axios';
 import uuid from 'react-native-uuid';
 import crashlytics from '@react-native-firebase/crashlytics';
 import auth from '@react-native-firebase/auth';
+import messaging from '@react-native-firebase/messaging';
 
 import {
   setAsyncStorage,
@@ -106,8 +107,8 @@ export const AuthProvider = ({children}) => {
               },
             );
             // setEmailId(response?.data?.user_email);
-
-            await postToAPI(response.data.user_email, response.data.token);
+            const messageToken = await messaging().getToken();
+            await postToAPI(response.data.user_email, messageToken);
 
             if (response.data.token) {
               await setAsyncStorage(
