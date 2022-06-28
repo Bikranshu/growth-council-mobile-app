@@ -15,19 +15,17 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import {useFormik} from 'formik';
 import * as Yup from 'yup';
 import {BubblesLoader} from 'react-native-indicator';
-import {Linking} from 'react-native';
 import messaging from '@react-native-firebase/messaging';
-
 import axios from 'axios';
 import {CommonStyles, Colors, Typography} from '../../../theme';
 import {useAuthentication} from '../../../context/auth';
 import FlatTextInput from '../../../shared/form/FlatTextInput';
-import {API_URL, USER_AVATAR} from '../../../constants';
+import {API_URL} from '../../../constants';
 
 const screenHeight = Math.round(Dimensions.get('window').height);
 
 const signInSchema = Yup.object().shape({
-  username: Yup.string().required('Email is required.'),
+  username: Yup.string().required('Email or Username is required.'),
   password: Yup.string().required('Password is required.'),
 });
 
@@ -50,33 +48,36 @@ const SignInForm = props => {
   } = useFormik({
     validationSchema: signInSchema,
     initialValues: {username: '', password: ''},
-    onSubmit: async values => {
-      const messageToken = await messaging().getToken();
-      const firebasePayload = {
-        username: values.username,
-        token: messageToken,
-      };
-      const resp = await postToAPI(firebasePayload);
 
-      await signIn(values);
+    onSubmit: async values => {
+    //   const messageToken = await messaging().getToken();
+    //   const firebasePayload = {
+    //     email: emailId,
+    //     token: messageToken,
+    //   };
+      
+    //   const resp = await postToAPI(firebasePayload);
+    //   console.log('c', resp);
+	  await signIn(values);
     },
   });
 
-  console.log('B', emailId);
+
   const areAllFieldsFilled = values.username != '' && values.password != '';
 
-  const postToAPI = async data => {
-    return await axios.get(
-      `${API_URL}/pd/fcm/subscribe?api_secret_key=s3D6nHoU9AUw%jjTHy0K@UO)&user_email=${emailId}&device_token=${data.token}&subscribed=UserNotification`,
-    );
-  };
-
+//   const postToAPI = async data => {
+//     return axios.get(
+//       `${API_URL}/pd/fcm/subscribe?api_secret_key=s3D6nHoU9AUw%jjTHy0K@UO)&user_email=${data.email}&device_token=${data.token}&subscribed=UserNotification`,
+//     );
+//   };
 
   useFocusEffect(
     useCallback(() => {
       setMessage(null);
       ``;
       setLoading(false);
+
+      emailId;
     }, []),
   );
 

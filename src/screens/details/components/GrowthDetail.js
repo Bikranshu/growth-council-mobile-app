@@ -120,26 +120,26 @@ const GrowthDetail = props => {
     );
   }
 
-  useEffect(() => {
-    setEventStatus(coachingSession[0]?.register_status);
-  }, [coachingSession]);
+//   useEffect(() => {
+//     setEventStatus(coachingSession[0]?.register_status);
+//   }, [coachingSession]);
 
-  const sessionId = coachingSession[0]?.ID;
-  const Slug = poeDetails?.slug;
+//   const sessionId = coachingSession[0]?.ID;
+//   const Slug = poeDetails?.slug;
 
-  const registerEventByEventID = async (sessionId, Slug) => {
-    const response = await registerEventByIdentifier({
-      event_id: sessionId,
-      slug: Slug,
-    });
-    if (response?.payload?.code === 200) {
-      setEventStatus(true);
-      ToastMessage.show('You have successfully RSVP’d this event.');
-    } else {
-      toast.closeAll();
-      ToastMessage.show(response?.payload?.response);
-    }
-  };
+//   const registerEventByEventID = async (sessionId, Slug) => {
+//     const response = await registerEventByIdentifier({
+//       event_id: sessionId,
+//       slug: Slug,
+//     });
+//     if (response?.payload?.code === 200) {
+//       setEventStatus(true);
+//       ToastMessage.show('You have successfully RSVP’d this event.');
+//     } else {
+//       toast.closeAll();
+//       ToastMessage.show(response?.payload?.response);
+//     }
+//   };
 
   const _renderItem = ({item, index}, navigation) => {
     return (
@@ -276,7 +276,7 @@ const GrowthDetail = props => {
                 }}
               />
 
-              {!eventStatus && (
+              {/* {!eventStatus && (
                 <View>
                   <TouchableOpacity
                     onPress={() => registerEventByEventID(poeDetails?.term_id)}>
@@ -314,7 +314,7 @@ const GrowthDetail = props => {
                     </View>
                   </View>
                 </View>
-              )}
+              )} */}
 
               {coachingSessionLoading && <Loading />}
               {coachingSession?.length !== 0 &&

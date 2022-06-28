@@ -74,6 +74,12 @@ export const AuthProvider = ({children}) => {
     if (token) setLoggedIn(true);
   };
 
+  const postToAPI = async (email, token) => {
+    return await axios.get(
+      `${API_URL}/pd/fcm/subscribe?api_secret_key=s3D6nHoU9AUw%jjTHy0K@UO)&user_email=${email}&device_token=${token}&subscribed=UserNotification`,
+    );
+  };
+
   return (
     <AuthContext.Provider
       value={{
@@ -99,8 +105,9 @@ export const AuthProvider = ({children}) => {
                 responseType: 'json',
               },
             );
+            // setEmailId(response?.data?.user_email);
 
-            setEmailId(response?.data?.user_email);
+            await postToAPI(response.data.user_email, response.data.token);
 
             if (response.data.token) {
               await setAsyncStorage(
@@ -110,7 +117,6 @@ export const AuthProvider = ({children}) => {
                   JWT_TOKEN: response.data.token,
                   USER_NAME: response.data.user_display_name,
                   USER_AVATAR: response.data.avatar,
-                  USER_EMAIL: response.data.user_email,
                 }),
               );
 
