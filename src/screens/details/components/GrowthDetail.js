@@ -13,19 +13,17 @@ import {
   StatusBar,
   ActivityIndicator,
 } from 'react-native';
+import {Button, useToast} from 'native-base';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import moment from 'moment';
-import {BubblesLoader} from 'react-native-indicator';
-import YoutubePlayer from '../../../shared/youtube';
-import Footer from '../../../shared/footer';
-import Player from '../../dashboard/components/Player';
+
 import {useIsFocused} from '@react-navigation/native';
 import HTMLView from 'react-native-htmlview';
 import {CommonStyles, Colors, Typography} from '../../../theme';
 import {WebView} from 'react-native-webview';
-import {Button} from 'native-base';
+import ToastMessage from '../../../shared/toast';
 import Loading from '../../../shared/loading';
-import { HOME_URL } from '../../../constants';
+import {HOME_URL} from '../../../constants';
 
 const screenHeight = Math.round(Dimensions.get('window').height);
 const win = Dimensions.get('window');
@@ -55,38 +53,44 @@ const GrowthDetail = props => {
     coachingSessionError,
     fetchCoachingSessions,
     cleanCoachingSession,
-    poeSelfLearns,
-    poeSelfLearnLoading,
-    poeSelfLearnError,
-    fetchPoeSelfLearn,
-    cleanPoeSelfLearn,
 
     radarMemberDetails,
     radarMemberDetailsLoading,
     radarMemberDetailsError,
     fetchRadarMemberDetail,
+
+    eventRegisters,
+    eventRegisterLoading,
+    eventRegisterError,
+    registerEventByIdentifier,
+    cleanEventRegister,
   } = props;
 
+  const toast = useToast();
   const isFocused = useIsFocused();
-  const [memberConnection, setMemberConnection] = useState([]);
+  const [eventStatus, setEventStatus] = useState(
+    coachingSession[0]?.register_status,
+  );
   const [showChartButton, setShowChartButton] = useState(true);
   const webviewRef = React.useRef(null);
   const [userId, setUserId] = useState(0);
 
-  useEffect(async () => {
-    let token = await getAsyncStorage(JWT_TOKEN);
-    let ID = decodeUserID(token);
-    if (ID) {
-      setUserId(ID);
-    }
-  }, []);
+  //   useEffect(async () => {
+  //     let token = await getAsyncStorage(JWT_TOKEN);
+  //     let ID = decodeUserID(token);
+  //     if (ID) {
+  //       setUserId(ID);
+  //     }
+  //   }, []);
+
+  const eventID = route.params.poeId;
 
   useEffect(() => {
     const fetchAllPOEDetailAsync = async () => {
-      await fetchAllPOEDetail(route.params.poeId);
+      await fetchAllPOEDetail(eventID);
     };
     fetchAllPOEDetailAsync();
-  }, []);
+  }, [eventID]);
 
   useEffect(() => {
     const fetchAllPOEEventAsync = async () => {
@@ -94,13 +98,6 @@ const GrowthDetail = props => {
     };
     fetchAllPOEEventAsync();
   }, []);
-
-  //   useEffect(() => {
-  //     const fetchAllPillarMemberContentAsync = async () => {
-  //       await fetchAllPillarMemberContent(route.params.pillarId);
-  //     };
-  //     fetchAllPillarMemberContentAsync();
-  //   }, [isFocused]);
 
   useEffect(() => {
     const fetchCoachingSessionAsync = async () => {
@@ -110,28 +107,8 @@ const GrowthDetail = props => {
   }, []);
 
   useEffect(() => {
-    const fetchPoeSelfLearnAsync = async () => {
-      await fetchPoeSelfLearn(route.params.poeId);
-    };
-    fetchPoeSelfLearnAsync();
-  }, []);
-
-  //   useEffect(() => {
-  //     setMemberConnection(pillarMemberContents);
-  //   }, [pillarMemberContents]);
-
-  useEffect(() => {
     fetchRadarMemberDetail();
   }, []);
-
-  // useEffect(()=>{
-  //   for(let value of coachingSession){
-  //     if(!value?.completed_status){
-  //       setShowChartButton(false);
-  //       break;
-  //     }
-  //   };
-  // },[coachingSession]);
 
   function LoadingIndicatorView() {
     return (
@@ -142,6 +119,27 @@ const GrowthDetail = props => {
       />
     );
   }
+
+  useEffect(() => {
+    setEventStatus(coachingSession[0]?.register_status);
+  }, [coachingSession]);
+
+  const sessionId = coachingSession[0]?.ID;
+  const Slug = poeDetails?.slug;
+
+  const registerEventByEventID = async (sessionId, Slug) => {
+    const response = await registerEventByIdentifier({
+      event_id: sessionId,
+      slug: Slug,
+    });
+    if (response?.payload?.code === 200) {
+      setEventStatus(true);
+      ToastMessage.show('You have successfully RSVP’d this event.');
+    } else {
+      toast.closeAll();
+      ToastMessage.show(response?.payload?.response);
+    }
+  };
 
   const _renderItem = ({item, index}, navigation) => {
     return (
@@ -218,73 +216,6 @@ const GrowthDetail = props => {
     );
   };
 
-  const _renderLearnItem = ({item, index}) => {
-    return (
-      <View>
-        <View style={styles.learnWrapper}>
-          <Image
-            source={{uri: item?.image}}
-            style={{
-              width: 150,
-              height: 180,
-              margin: 10,
-              borderRadius: 10,
-            }}
-            resizeMode="contain"
-          />
-
-          <View>
-            {/* <TouchableOpacity
-              onPress={() =>
-                navigation.navigate('selflearn', {
-                  id: item.ID,
-                  selfLearnId: item?.ID,
-                })
-              }> */}
-            <View>
-              <Text
-                style={{
-                  fontWeight: '500',
-                  fontSize: 16,
-                  marginTop: 10,
-                  color: 'black',
-                  width: '80%',
-                }}>
-                {item?.title}
-              </Text>
-              <Text
-                style={{
-                  fontSize: 12,
-                  marginTop: 5,
-                  width: 180,
-                }}>
-                {item.subtitle}
-              </Text>
-              <Text
-                style={{
-                  marginTop: 10,
-                  fontSize: 11,
-                  width: 180,
-                }}>
-                {item.author}
-              </Text>
-            </View>
-            {/* </TouchableOpacity> */}
-            <View
-              style={{
-                justifyContent: 'center',
-                position: 'absolute',
-                right: 25,
-                bottom: 10,
-              }}>
-              <Ionicons name={'book-outline'} size={20} color="#cccccc" />
-            </View>
-          </View>
-        </View>
-      </View>
-    );
-  };
-
   let poeDescription = poeDetails?.description;
   if (poeDescription !== undefined) {
     poeDescription = poeDetails?.description;
@@ -345,15 +276,36 @@ const GrowthDetail = props => {
                 }}
               />
 
-              {/* <View>
-                <TouchableOpacity>
+              {!eventStatus && (
+                <View>
+                  <TouchableOpacity
+                    onPress={() => registerEventByEventID(poeDetails?.term_id)}>
+                    <View style={styles.buttonWrapper}>
+                      <View
+                        style={[
+                          styles.button,
+                          {
+                            marginLeft: 15,
+                            backgroundColor: Colors.PRACTICE_COLOR,
+                          },
+                        ]}>
+                        <Text style={styles.buttonText}>
+                          Sign Up for Growth Leader Coaching
+                        </Text>
+                      </View>
+                    </View>
+                  </TouchableOpacity>
+                </View>
+              )}
+              {eventStatus && (
+                <View>
                   <View style={styles.buttonWrapper}>
                     <View
                       style={[
                         styles.button,
                         {
                           marginLeft: 15,
-                          backgroundColor: Colors.PRACTICE_COLOR,
+                          backgroundColor: '#808080',
                         },
                       ]}>
                       <Text style={styles.buttonText}>
@@ -361,8 +313,8 @@ const GrowthDetail = props => {
                       </Text>
                     </View>
                   </View>
-                </TouchableOpacity>
-              </View> */}
+                </View>
+              )}
 
               {coachingSessionLoading && <Loading />}
               {coachingSession?.length !== 0 &&
@@ -422,26 +374,6 @@ const GrowthDetail = props => {
                   </View>
                 </View>
               )} */}
-
-              {/* {poeSelfLearns?.length !== 0 &&
-                poeSelfLearns !== false &&
-                poeSelfLearns !== null && (
-                  <View style={styles.learn}>
-                    <Text style={styles.title}>Be a Growth Leader</Text>
-                    <View
-                      style={{
-                        display: 'flex',
-                        flexDirection: 'row',
-                      }}>
-                      <FlatList
-                        horizontal
-                        showsHorizontalScrollIndicator={false}
-                        data={poeSelfLearns}
-                        renderItem={_renderLearnItem}
-                      />
-                    </View>
-                  </View>
-                )} */}
 
               {showChartButton && (
                 <View style={styles.bottom}>

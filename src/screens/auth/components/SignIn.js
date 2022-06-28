@@ -19,13 +19,10 @@ import {Linking} from 'react-native';
 import messaging from '@react-native-firebase/messaging';
 
 import axios from 'axios';
-
 import {CommonStyles, Colors, Typography} from '../../../theme';
 import {useAuthentication} from '../../../context/auth';
 import FlatTextInput from '../../../shared/form/FlatTextInput';
-import {API_URL} from '../../../constants';
-import {createUserWithEmailAndPassword} from 'firebase/auth';
-import {auth} from '../../../utils/firebaseUtil';
+import {API_URL, USER_AVATAR} from '../../../constants';
 
 const screenHeight = Math.round(Dimensions.get('window').height);
 
@@ -39,7 +36,7 @@ const SignInForm = props => {
 
   const [hidePass, setHidePass] = useState(true);
 
-  const {loading, setLoading, message, setMessage, signIn} =
+  const {loading, setLoading, message, setMessage, signIn, emailId} =
     useAuthentication();
 
   const {
@@ -65,13 +62,15 @@ const SignInForm = props => {
     },
   });
 
+  console.log('B', emailId);
   const areAllFieldsFilled = values.username != '' && values.password != '';
 
   const postToAPI = async data => {
     return await axios.get(
-      `${API_URL}/pd/fcm/subscribe?api_secret_key=s3D6nHoU9AUw%jjTHy0K@UO)&user_email=${data?.username}&device_token=${data.token}&subscribed=UserNotification`,
+      `${API_URL}/pd/fcm/subscribe?api_secret_key=s3D6nHoU9AUw%jjTHy0K@UO)&user_email=${emailId}&device_token=${data.token}&subscribed=UserNotification`,
     );
   };
+
 
   useFocusEffect(
     useCallback(() => {
@@ -81,7 +80,6 @@ const SignInForm = props => {
     }, []),
   );
 
- 
   return (
     <ScrollView
       contentContainerStyle={{flexGrow: 1, height: screenHeight + 100}}>

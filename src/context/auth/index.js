@@ -11,13 +11,13 @@ import {
 } from '../../utils/storageUtil';
 import {JWT_TOKEN, API_URL, USER_NAME, USER_AVATAR} from '../../constants';
 
-
 export const AuthContext = createContext({});
 
 export const AuthProvider = ({children}) => {
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState(null);
   const [loggedIn, setLoggedIn] = useState(false);
+  const [emailId, setEmailId] = useState('');
 
   useEffect(() => {
     (async () => {
@@ -80,8 +80,10 @@ export const AuthProvider = ({children}) => {
         loading,
         message,
         loggedIn,
+        emailId,
         setMessage,
         setLoading,
+        setEmailId,
         signIn: async fromData => {
           setLoading(true);
           try {
@@ -98,7 +100,7 @@ export const AuthProvider = ({children}) => {
               },
             );
 
-            console.log('a', response);
+            setEmailId(response?.data?.user_email);
 
             if (response.data.token) {
               await setAsyncStorage(
@@ -108,6 +110,7 @@ export const AuthProvider = ({children}) => {
                   JWT_TOKEN: response.data.token,
                   USER_NAME: response.data.user_display_name,
                   USER_AVATAR: response.data.avatar,
+                  USER_EMAIL: response.data.user_email,
                 }),
               );
 
@@ -142,6 +145,7 @@ export const AuthProvider = ({children}) => {
     </AuthContext.Provider>
   );
 };
+
 export const useAuthentication = () => {
   const context = useContext(AuthContext);
   if (!context) {
