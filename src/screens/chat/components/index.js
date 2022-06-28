@@ -195,9 +195,7 @@ const Chat = props => {
     } else {
     }
 
-    // const friendIDSnap = await getDoc(
-    //   doc(database, `rooms/${chatID()}/screens`, friendID),
-    // );
+
     if (friendIDSnap.exists) {
       if (friendIDSnap.data().is_active) {
         setFriendScreen(true);
