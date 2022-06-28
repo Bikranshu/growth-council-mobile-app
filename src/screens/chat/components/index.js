@@ -321,10 +321,11 @@ const styles = StyleSheet.create({
     borderRadius: 40,
   },
   wrapper: {
-    height: 80,
+    minHeight: 80,
+    height: 'auto',
     backgroundColor: Colors.PRIMARY_BACKGROUND_COLOR,
     padding: 10,
-    paddingTop: Platform.OS === 'ios' ? 30 : 10,
+    paddingTop: Platform.OS === 'ios' ? 40 : 30,
     display: 'flex',
     flexDirection: 'row',
   },
