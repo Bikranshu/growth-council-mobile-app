@@ -299,7 +299,8 @@ const OthersAccount = props => {
                           fontWeight: '500',
                           color: 'white',
                         }}>
-                        Connect with "Name of the Users"
+                        Connect with {otherProfiles?.user_meta?.first_name}{' '}
+                        {otherProfiles?.user_meta?.last_name}
                       </Text>
                     </View>
                   </TouchableOpacity>
@@ -413,7 +414,7 @@ const styles = StyleSheet.create({
     borderColor: '#707070',
   },
   loginWrapper: {
-    width: '100%',
+    padding: 15,
     display: 'flex',
     flexDirection: 'row',
     paddingVertical: 5,
