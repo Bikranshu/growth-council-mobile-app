@@ -12,10 +12,7 @@ const PushNotificationsConfigs = {
       onNotification: notification => {
 
         if (notification.foreground && !isIOS) {
-          PushNotification.localNotificationSchedule({
-            ...notification,
-            date: new Date(Date.now() + 10 * 1000)
-          });
+          PushNotification.localNotification(notification);
         }
 
         const clicked = notification.userInteraction && !notification.foreground;

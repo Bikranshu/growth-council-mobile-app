@@ -43,17 +43,15 @@ const App = () => {
 
     Platform.OS === 'android' && _createChannel();
     const unsubscribe = messaging().onMessage(remoteMessage => {
-      /**
-       * FIXME: Uncomment this after notification is fixed in iOS
       Platform.OS === 'ios' &&
         PushNotificationIOS.addNotificationRequest({
           id: new Date().toString(),
           title: remoteMessage.notification?.title,
           body: remoteMessage.notification?.body,
+          number: 1,
           category: 'userAction',
-          userInfo: remoteMessage.notification?.data,
+          userInfo: { ...remoteMessage.data },
         });
-      */
     });
     return unsubscribe;
   }, []);

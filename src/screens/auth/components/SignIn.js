@@ -49,12 +49,6 @@ const SignInForm = props => {
     validationSchema: signInSchema,
     initialValues: { username: '', password: '' },
     onSubmit: async values => {
-      // const messageToken = await messaging().getToken();
-      // const firebasePayload = {
-      //   username: values.username,
-      //   token: messageToken,
-      // };
-      // const resp = await postToAPI(firebasePayload);
       await signIn(values);
     },
   });
