@@ -3,6 +3,7 @@ import axios from 'axios';
 import uuid from 'react-native-uuid';
 import crashlytics from '@react-native-firebase/crashlytics';
 import auth from '@react-native-firebase/auth';
+import messaging from '@react-native-firebase/messaging';
 
 import {
   setAsyncStorage,
@@ -10,7 +11,6 @@ import {
   getAsyncStorage,
 } from '../../utils/storageUtil';
 import {JWT_TOKEN, API_URL, USER_NAME, USER_AVATAR} from '../../constants';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export const AuthContext = createContext({});
 
@@ -18,6 +18,7 @@ export const AuthProvider = ({children}) => {
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState(null);
   const [loggedIn, setLoggedIn] = useState(false);
+  const [emailId, setEmailId] = useState('');
 
   useEffect(() => {
     (async () => {
@@ -27,47 +28,60 @@ export const AuthProvider = ({children}) => {
     })();
   });
 
-  const createUser = () => new Promise(async (resolve, reject) => {
+  const createUser = () =>
+    new Promise(async (resolve, reject) => {
       try {
-  
         const raw_data = await getAsyncStorage('tempData');
         const data = JSON.parse(raw_data);
-  
+
         const {formData, JWT_TOKEN, USER_AVATAR, USER_NAME} = data;
-  
-        const res = await auth().createUserWithEmailAndPassword(formData.username, "6AWgM#.Y(fE8Q2=");
-        await loginWithFirebase(formData.username, "6AWgM#.Y(fE8Q2=", {JWT_TOKEN, USER_AVATAR, USER_NAME});
+
+        const res = await auth().createUserWithEmailAndPassword(
+          formData.username,
+          '6AWgM#.Y(fE8Q2=',
+        );
+
+        await loginWithFirebase(response.data.user_email, '6AWgM#.Y(fE8Q2=', {
+          JWT_TOKEN,
+          USER_AVATAR,
+          USER_NAME,
+        });
         resolve(true);
-  
-      } catch(error){
+      } catch (error) {
         console.log(error);
         reject(error);
       }
-  })
+    });
 
   const loginWithFirebase = async (email, password, data) => {
-    const res = await auth().signInWithEmailAndPassword(email, "6AWgM#.Y(fE8Q2=");
-    console.log("clearing cache...");
-    await clearAsyncStorage("tempData");
-
-
+    const res = await auth().signInWithEmailAndPassword(
+      email,
+      '6AWgM#.Y(fE8Q2=',
+    );
+    console.log('clearing cache...');
+    console.log('login', res);
+    await clearAsyncStorage('tempData');
 
     setLoggedIn(true);
     await setAsyncStorage(JWT_TOKEN, data.token ?? data.JWT_TOKEN);
     await setAsyncStorage(USER_NAME, data.user_display_name ?? data.USER_NAME);
     await setAsyncStorage(USER_AVATAR, data.avatar ?? data.USER_AVATAR);
 
-
     const token = await res.user;
     await Promise.all([
-        crashlytics().setUserId(response?.data?.user_email),
-        crashlytics().setAttributes({
-          email,
-         }),
-      ]);
-      if (token) setLoggedIn(true);
+      crashlytics().setUserId(response?.data?.user_email),
+      crashlytics().setAttributes({
+        email,
+      }),
+    ]);
+    if (token) setLoggedIn(true);
+  };
 
-  }
+  const postToAPI = async (email, token) => {
+    return await axios.get(
+      `${API_URL}/pd/fcm/subscribe?api_secret_key=s3D6nHoU9AUw%jjTHy0K@UO)&user_email=${email}&device_token=${token}&subscribed=UserNotification`,
+    );
+  };
 
   return (
     <AuthContext.Provider
@@ -75,12 +89,14 @@ export const AuthProvider = ({children}) => {
         loading,
         message,
         loggedIn,
+        emailId,
         setMessage,
         setLoading,
+        setEmailId,
         signIn: async fromData => {
           setLoading(true);
           try {
-            console.log("Logging in...")
+            console.log('Logging in...');
             const response = await axios.post(
               API_URL + '/jwt-auth/v1/token',
               fromData,
@@ -93,31 +109,34 @@ export const AuthProvider = ({children}) => {
               },
             );
 
+            const messageToken = await messaging().getToken();
+            await postToAPI(response.data.user_email, messageToken);
 
             if (response.data.token) {
+              await setAsyncStorage(
+                'tempData',
+                JSON.stringify({
+                  formData: fromData,
+                  JWT_TOKEN: response.data.token,
+                  USER_NAME: response.data.user_display_name,
+                  USER_AVATAR: response.data.avatar,
+                }),
+              );
 
-              await setAsyncStorage("tempData", JSON.stringify({
-                formData: fromData,
-                JWT_TOKEN: response.data.token,
-                USER_NAME: response.data.user_display_name,
-                USER_AVATAR: response.data.avatar
-              }))
-
-
-             await loginWithFirebase(fromData.username, "6AWgM#.Y(fE8Q2=", response.data);
-
-              
-
-              
+              await loginWithFirebase(
+                response.data.user_email,
+                '6AWgM#.Y(fE8Q2=',
+                response.data,
+              );
             } else {
               setLoading(false);
               setMessage(response?.data?.message);
             }
           } catch (error) {
             setLoading(false);
-            
-            if(error.toString().includes("user-not-found")){
-              createUser()
+
+            if (error.toString().includes('user-not-found')) {
+              createUser();
             }
 
             setMessage(error?.response?.data);
@@ -135,6 +154,7 @@ export const AuthProvider = ({children}) => {
     </AuthContext.Provider>
   );
 };
+
 export const useAuthentication = () => {
   const context = useContext(AuthContext);
   if (!context) {

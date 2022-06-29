@@ -1,15 +1,15 @@
 import React, {useState, useCallback, useLayoutEffect, useEffect} from 'react';
-import {StyleSheet, View, Text, Image} from 'react-native';
+import {StyleSheet, View, Text, Image, SafeAreaView} from 'react-native';
 import {GiftedChat, Send} from 'react-native-gifted-chat';
 
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 
-import firestore from '@react-native-firebase/firestore'
+import firestore from '@react-native-firebase/firestore';
 
 import {CommonStyles, Colors} from '../../../theme';
-import { getFCMTOkenForUser } from '../../../utils/httpUtil';
-import { sendNotification } from '../../../utils/sendNotification';
+import {getFCMTOkenForUser} from '../../../utils/httpUtil';
+import {sendNotification} from '../../../utils/sendNotification';
 
 const Chat = props => {
   const {
@@ -31,7 +31,7 @@ const Chat = props => {
 
   const [userScreen, setUserScreen] = useState(false);
   const [friendScreen, setFriendScreen] = useState(false);
-  const [friendToken, setFriendToken] = useState("");
+  const [friendToken, setFriendToken] = useState('');
 
   const chatID = () => {
     const chatIDPre = [];
@@ -43,15 +43,21 @@ const Chat = props => {
 
   const [messages, setMessages] = useState([]);
 
-
   useEffect(() => {
-    getFCMTOkenForUser(friendID).then(res => {
-      const token = res?.data?.data;
-      setFriendToken(typeof token == "string" ? token : token[0]);
-    }).catch(error => {
-      console.log(error);
-    })
-  }, [])
+    console.log('The friend ID is ' + friendID);
+    getFCMTOkenForUser(friendID)
+      .then(res => {
+        const token = res?.data?.data;
+        if (token == null) {
+          console.log(res.data?.message);
+        }
+        console.log(token);
+        setFriendToken(typeof token == 'string' ? token : token?.[0]);
+      })
+      .catch(error => {
+        console.log(error);
+      });
+  }, []);
 
   useLayoutEffect(() => {
     let unsubscribe = null;
@@ -69,9 +75,9 @@ const Chat = props => {
           createdAt: doc.data().createdAt.toDate(),
           text: doc.data().text,
           user: doc.data().user,
-        }))
+        }));
         setMessages(messageList);
-      })
+      });
       // const q = await query(chatsCol, orderBy('createdAt', 'desc'));
       // unsubscribe = onSnapshot(q, querySnapshot => {
       //   const messageList = querySnapshot?.docs?.map(doc => ({
@@ -93,13 +99,19 @@ const Chat = props => {
       let docIds = [];
       const chatsCol = firestore().collection(`rooms/${chatID()}/messages`);
 
-      chatsCol.where('status', "==", 'unread').where('user._id', '==', friendID).onSnapshot(snapShot => {
-        snapShot.docs?.map(async record => {
-          if(record.exists){
-            const taskDocRef = await record.ref.update({...record.data(), status: 'read'});
-          }
-        })
-      })
+      chatsCol
+        .where('status', '==', 'unread')
+        .where('user._id', '==', friendID)
+        .onSnapshot(snapShot => {
+          snapShot.docs?.map(async record => {
+            if (record.exists) {
+              const taskDocRef = await record.ref.update({
+                ...record.data(),
+                status: 'read',
+              });
+            }
+          });
+        });
 
       // const chatSnapshot = await getDocs(
       //   query(
@@ -130,7 +142,10 @@ const Chat = props => {
     const isActive = async action => {
       if (action === 'add') {
         const addPayload = {is_active: true};
-        await firestore().collection(`rooms/${chatID()}/screens}`).doc(userID).set(addPayload, {merge: true});
+        await firestore()
+          .collection(`rooms/${chatID()}/screens}`)
+          .doc(userID)
+          .set(addPayload, {merge: true});
         // await setDoc(
         //   doc(database, `rooms/${chatID()}/screens`, userID),
         //   addPayload,
@@ -138,7 +153,10 @@ const Chat = props => {
         // );
       } else {
         const updatePayload = {is_active: false};
-        await firestore().collection(`rooms/${chatID()}/screens`).doc(userID).set(updatePayload, {merge: true});
+        await firestore()
+          .collection(`rooms/${chatID()}/screens`)
+          .doc(userID)
+          .set(updatePayload, {merge: true});
 
         // await updateDoc(
         //   doc(database, `rooms/${chatID()}/screens`, userID),
@@ -158,8 +176,14 @@ const Chat = props => {
     );
     const {_id, createdAt, text, user} = messages[0];
 
-    const userIDSnap = await firestore().collection(`rooms/${chatID()}/screens`).doc(userID).get();
-    const friendIDSnap = await firestore().collection(`rooms/${chatID()}/screens`).doc(friendID).get();
+    const userIDSnap = await firestore()
+      .collection(`rooms/${chatID()}/screens`)
+      .doc(userID)
+      .get();
+    const friendIDSnap = await firestore()
+      .collection(`rooms/${chatID()}/screens`)
+      .doc(friendID)
+      .get();
 
     // const userIDSnap = await getDoc(
     //   doc(database, `rooms/${chatID()}/screens`, userID),
@@ -171,9 +195,7 @@ const Chat = props => {
     } else {
     }
 
-    // const friendIDSnap = await getDoc(
-    //   doc(database, `rooms/${chatID()}/screens`, friendID),
-    // );
+
     if (friendIDSnap.exists) {
       if (friendIDSnap.data().is_active) {
         setFriendScreen(true);
@@ -182,15 +204,25 @@ const Chat = props => {
     }
 
     if (userScreen && friendScreen) {
-      await firestore().collection(`rooms/${chatID()}/messages`).add({_id, createdAt, text, user, status: 'read'})
+      await firestore()
+        .collection(`rooms/${chatID()}/messages`)
+        .add({_id, createdAt, text, user, status: 'read'});
       // await addDoc(chatsCol, {_id, createdAt, text, user, status: 'read'});
     } else {
-      await firestore().collection(`rooms/${chatID()}/messages`).add({_id, createdAt, text, user, status: 'read'})
+      await firestore()
+        .collection(`rooms/${chatID()}/messages`)
+        .add({_id, createdAt, text, user, status: 'read'});
       // await addDoc(chatsCol, {_id, createdAt, text, user, status: 'unread'});
     }
 
     // update the last message Status
-    await firestore().collection(`rooms`).doc(chatID()).set({lastUpdated: Date.now(), roomId: chatID().split("_")}, {merge: true});
+    await firestore()
+      .collection(`rooms`)
+      .doc(chatID())
+      .set(
+        {lastUpdated: Date.now(), roomId: chatID().split('_')},
+        {merge: true},
+      );
 
     sendNotification(friendToken, `New Message from ${userName}`, text, {
       type: 'chat',
@@ -201,43 +233,45 @@ const Chat = props => {
       userAvatar: friendAvatar,
       userName: friendName,
     });
-})
+  });
 
   return (
     <View style={styles.container}>
-      <View style={styles.wrapper}>
-        <TouchableOpacity onPress={() => navigation.goBack()}>
-          <Ionicons
-            name="chevron-back-outline"
-            size={40}
-            color="#02B0F0"
-            style={{marginTop: 15}}
-          />
-        </TouchableOpacity>
-        <View style={{flexDirection: 'row', marginTop: 10}}>
-          <Image
-            source={{
-              uri: friendAvatar,
-            }}
-            style={{
-              height: 50,
-              width: 50,
-              borderRadius: 50,
-              marginLeft: 10,
-            }}
-          />
-          <View
-            style={{
-              width: '60%',
-              justifyContent: 'center',
-              marginLeft: 20,
-            }}>
-            <Text style={{color: '#323232', fontSize: 16}}>{friendName}</Text>
+      <SafeAreaView style={{top: -20, backgroundColor: 'white'}}>
+        <View style={styles.wrapper}>
+          <TouchableOpacity onPress={() => navigation.goBack()}>
+            <Ionicons
+              name="chevron-back-outline"
+              size={40}
+              color="#02B0F0"
+              style={{marginTop: 15}}
+            />
+          </TouchableOpacity>
+          <View style={{flexDirection: 'row', marginTop: 10}}>
+            <Image
+              source={{
+                uri: friendAvatar,
+              }}
+              style={{
+                height: 50,
+                width: 50,
+                borderRadius: 50,
+                marginLeft: 10,
+              }}
+            />
+            <View
+              style={{
+                width: '60%',
+                justifyContent: 'center',
+                marginLeft: 20,
+              }}>
+              <Text style={{color: '#323232', fontSize: 16}}>{friendName}</Text>
+            </View>
           </View>
-        </View>
 
-        {/**/}
-      </View>
+          {/**/}
+        </View>
+      </SafeAreaView>
       <GiftedChat
         messages={messages}
         onSend={messages => onSend(messages)}
@@ -285,11 +319,11 @@ const styles = StyleSheet.create({
     borderRadius: 40,
   },
   wrapper: {
-    height: 80,
+    minHeight: 80,
+    height: 'auto',
     backgroundColor: Colors.PRIMARY_BACKGROUND_COLOR,
-    borderTopWidth: 0.2,
     padding: 10,
-
+    paddingTop: Platform.OS === 'ios' ? 40 : 30,
     display: 'flex',
     flexDirection: 'row',
   },

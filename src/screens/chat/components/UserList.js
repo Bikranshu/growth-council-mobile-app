@@ -68,19 +68,19 @@ const UserList = props => {
       if (!userID) console.log('USER ID NOT FOUND');
 
       const fbUsers = await firestore().collection('rooms').get();
-    //   console.log('FB USERS');
-    //   console.log(fbUsers);
-    //   console.log('*****************');
+      //   console.log('FB USERS');
+      //   console.log(fbUsers);
+      //   console.log('*****************');
 
       const docs = fbUsers.docs.filter(doc => doc.id.includes(userID));
-    //   console.log('DOC USERS');
-    //   console.log(docs);
-    //   console.log('*****************');
+      //   console.log('DOC USERS');
+      //   console.log(docs);
+      //   console.log('*****************');
 
       const data = docs.map(doc => ({id: doc.id, ...doc.data()}));
-    //   console.log('MAP USERS');
-    //   console.log(data);
-    //   console.log('*****************');
+      //   console.log('MAP USERS');
+      //   console.log(data);
+      //   console.log('*****************');
 
       let __users = [];
       for (let i = 0; i < data.length; i++) {
@@ -91,9 +91,9 @@ const UserList = props => {
         __users.push({...user, ...data[i]});
       }
 
-    //   console.log('ACTUAL USERS');
-    //   console.log(__users);
-    //   console.log('*****************');
+      //   console.log('ACTUAL USERS');
+      //   console.log(__users);
+      //   console.log('*****************');
 
       setUsers(__users);
     } catch (error) {
@@ -238,10 +238,10 @@ const UserList = props => {
       <View style={styles.container}>
         <View
           style={{
-            height: 80,
+            height: 110,
             paddingLeft: 4,
             paddingRight: 20,
-            flexDirection: 'row',
+
             alignItems: 'center',
             shadowColor: '#000000',
             shadowOffset: {width: 0, height: 3},
@@ -250,20 +250,36 @@ const UserList = props => {
             elevation: 5,
             backgroundColor: Colors.PRIMARY_BACKGROUND_COLOR,
           }}>
-          <TouchableOpacity onPress={() => navigation.goBack()}>
-            <Ionicons name="chevron-back-outline" size={30} color="#B2B3B9" />
-          </TouchableOpacity>
+          <View style={{marginVertical: 15}}>
+            <Text>Search for membership by name and begin chatting</Text>
+          </View>
+          <View
+            style={{
+              paddingLeft: 4,
+              paddingRight: 20,
+              flexDirection: 'row',
+              alignItems: 'center',
+              shadowColor: '#000000',
+              shadowOffset: {width: 0, height: 3},
+              shadowRadius: 9,
+              shadowOpacity: 0.1,
+              elevation: 5,
+            }}>
+            <TouchableOpacity onPress={() => navigation.goBack()}>
+              <Ionicons name="chevron-back-outline" size={30} color="#B2B3B9" />
+            </TouchableOpacity>
 
-          <Searchbar
-            style={styles.input}
-            placeholder="Search"
-            keyboardType="default"
-            value={text}
-            onChangeText={async text => {
-              setSearchKey(text);
-              setText(text);
-            }}
-          />
+            <Searchbar
+              style={styles.input}
+              placeholder="Search"
+              keyboardType="default"
+              value={text}
+              onChangeText={async text => {
+                setSearchKey(text);
+                setText(text);
+              }}
+            />
+          </View>
         </View>
         <View style={styles.buttonWrapper}>
           <TouchableOpacity>

@@ -22,6 +22,7 @@ import HTMLView from 'react-native-htmlview';
 import {BubblesLoader} from 'react-native-indicator';
 import {useFocusEffect, useIsFocused} from '@react-navigation/native';
 import Loading from '../../../shared/loading';
+import { GROWTH_CONTENT_FALLBACK_IMAGE } from '../../../constants';
 
 const ContentLibrary = props => {
   const {
@@ -118,7 +119,7 @@ const ContentLibrary = props => {
           }}>
           <View style={{flexDirection: 'row'}}>
             <View style={{flexDirection: 'row', alignItems: 'center'}}>
-              <Text style={{fontSize: 9}}>Content Library</Text>
+              <Text style={{fontSize: 9}}>Growth Content</Text>
               <Ionicons
                 name="chevron-forward-outline"
                 size={15}
@@ -146,69 +147,43 @@ const ContentLibrary = props => {
           )}
 
           <View style={{alignItems: 'center'}}>
-            {filteredDataSource.map(item => {
+            {filteredDataSource.map((item, key) => {
               const itemname = item?.name;
               return (
-                <>
-                  {item?.count !== 0 && (
-                    <TouchableOpacity
-                      style={[styles.content, styles.shadowProp]}
-                      onPress={() =>
-                        navigation.navigate('LibraryDetail', {
-                          breadcrumbName,
-                          resources: item?.term_id,
-                          itemname,
-                        })
-                      }>
-                      <>
-                        <Image
-                          style={{
-                            width: '100%',
-                            height: 170,
-                            borderTopLeftRadius: 14,
-                            borderTopRightRadius: 14,
+                  <TouchableOpacity
+                    key={key}
+                    style={[styles.content, styles.shadowProp]}
+                    onPress={() =>
+                      navigation.navigate('LibraryDetail', {
+                        breadcrumbName,
+                        resources: item?.term_id,
+                        itemname,
+                      })
+                    }>
+                    <>
+                      <Image
+                        style={{
+                          width: '100%',
+                          height: 170,
+                          borderTopLeftRadius: 14,
+                          borderTopRightRadius: 14,
+                        }}
+                        source={{uri: item?.image||null}}
+                        resizeMode="stretch"
+                      />
+                      <View style={styles.wrapper}>
+                        <HTMLView
+                          value={item?.name}
+                          textComponentProps={{
+                            style: {
+                              color: 'black',
+                              fontWeight: '600',
+                            },
                           }}
-                          source={{uri: item?.image}}
-                          resizeMode="stretch"
                         />
-                        {/* <View style={styles.contentWrapper}>
-                          <Text style={{color: 'black'}}>{item?.count}</Text>
-                          {item?.count === 1 ? (
-                            <Text
-                              style={{
-                                fontFamily: 'SFProText-Regular',
-                                fontSize: 10,
-                                color: 'black',
-                              }}>
-                              Article
-                            </Text>
-                          ) : (
-                            <Text
-                              style={{
-                                fontFamily: 'SFProText-Regular',
-                                fontSize: 10,
-                                color: 'black',
-                              }}>
-                              {' '}
-                              Articles{' '}
-                            </Text>
-                          )}
-                        </View> */}
-                        <View style={styles.wrapper}>
-                          <HTMLView
-                            value={item?.name}
-                            textComponentProps={{
-                              style: {
-                                color: 'black',
-                                fontWeight: '600',
-                              },
-                            }}
-                          />
-                        </View>
-                      </>
-                    </TouchableOpacity>
-                  )}
-                </>
+                      </View>
+                    </>
+                  </TouchableOpacity>
               );
             })}
           </View>

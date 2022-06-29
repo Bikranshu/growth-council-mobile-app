@@ -7,17 +7,27 @@ import {fetchAllPOEEvents, resetPOEEvent} from './slice/poeEventListSlice';
 
 import {fetchAllPOEDetails, resetPOEDetail} from './slice/poeDetailSlice';
 
-import { fetchcoachingSession ,resetcoachingSession } from './slice/sessionlistSlice';
-
 import {
-  fetchPoeSelfLearns,
-  resetPoeSelfLearn,
-} from '../selfLearn/slice/poeSelfLearnSlice';
+  fetchcoachingSession,
+  resetcoachingSession,
+} from './slice/sessionlistSlice';
+
+
 
 import {
   fetchAllPillarMemberContents,
   resetPillarMemberContent,
 } from './slice/pillarMembersContentsSlice';
+
+import {
+  fetchRadarMemberDetails,
+  resetRadarMemberDetails,
+} from './slice/radarSlice';
+
+import {
+  registerEventByID,
+  resetEventRegister,
+} from '../event/slice/eventRegisterSlice';
 
 const GrowthDetailScreen = props => {
   const dispatch = useDispatch();
@@ -36,10 +46,18 @@ const GrowthDetailScreen = props => {
     pillarMemberContentError,
   } = useSelector(state => state.pillarMemberContents);
 
-  const {coachingSession, coachingSessionLoading ,coachingSessionError} = useSelector(state=>state.coachingSession)
-  const {poeSelfLearns, poeSelfLearnLoading, poeSelfLearnError} = useSelector(
-    state => state.poeSelfLearns,
-  );
+  const {coachingSession, coachingSessionLoading, coachingSessionError} =
+    useSelector(state => state.coachingSession);
+ 
+
+  const {
+    radarMemberDetails,
+    radarMemberDetailsLoading,
+    radarMemberDetailsError,
+  } = useSelector(state => state.radarMemberDetails);
+
+  const {eventRegisters, eventRegisterLoading, eventRegisterError} =
+    useSelector(state => state.eventRegisters);
 
   /**
    * Fetch event data.
@@ -60,17 +78,14 @@ const GrowthDetailScreen = props => {
     dispatch(fetchAllPOEEvents(poeId));
   };
 
-  const fetchPoeSelfLearn = poeId => {
-    dispatch(fetchPoeSelfLearns(poeId));
-  };
-
+ 
   const fetchAllPillarMemberContent = pillarId => {
     dispatch(fetchAllPillarMemberContents(pillarId));
   };
 
-  const fetchCoachingSessions = poeId =>{
-	  dispatch(fetchcoachingSession(poeId));
-  }
+  const fetchCoachingSessions = poeId => {
+    dispatch(fetchcoachingSession(poeId));
+  };
 
   const cleanPOEDetail = () => {
     dispatch(resetPOEDetail());
@@ -84,11 +99,20 @@ const GrowthDetailScreen = props => {
     dispatch(resetPillarMemberContent());
   };
 
-  const cleanCoachingSession =() =>{
-	  dispatch(resetcoachingSession());
-  }
-  const cleanPoeSelfLearn = () => {
-    dispatch(resetPoeSelfLearn());
+  const cleanCoachingSession = () => {
+    dispatch(resetcoachingSession());
+  };
+
+  const fetchRadarMemberDetail = () => {
+    dispatch(fetchRadarMemberDetails());
+  };
+
+  const registerEventByIdentifier = formData => {
+    return dispatch(registerEventByID(formData));
+  };
+
+  const cleanEventRegister = () => {
+    dispatch(resetEventRegister());
   };
 
   return (
@@ -109,18 +133,20 @@ const GrowthDetailScreen = props => {
       pillarMemberContentError={pillarMemberContentError}
       fetchAllPillarMemberContent={fetchAllPillarMemberContent}
       cleanPillarMemberContent={cleanPillarMemberContent}
-
-	  coachingSession={coachingSession}
-	  coachingSessionLoading={coachingSessionLoading}
-	  coachingSessionError={coachingSessionError}
-	  fetchCoachingSessions={fetchCoachingSessions}
-	  cleanCoachingSession={cleanCoachingSession}
-	  
-      poeSelfLearns={poeSelfLearns}
-      poeSelfLearnLoading={poeSelfLearnLoading}
-      poeSelfLearnError={poeSelfLearnError}
-      fetchPoeSelfLearn={fetchPoeSelfLearn}
-      cleanPoeSelfLearn={cleanPoeSelfLearn}
+      coachingSession={coachingSession}
+      coachingSessionLoading={coachingSessionLoading}
+      coachingSessionError={coachingSessionError}
+      fetchCoachingSessions={fetchCoachingSessions}
+      cleanCoachingSession={cleanCoachingSession}
+      radarMemberDetails={radarMemberDetails}
+      radarMemberDetailsLoading={radarMemberDetailsLoading}
+      radarMemberDetailsError={radarMemberDetailsError}
+      fetchRadarMemberDetail={fetchRadarMemberDetail}
+      eventRegisters={eventRegisters}
+      eventRegisterLoading={eventRegisterLoading}
+      eventRegisterError={eventRegisterError}
+      registerEventByIdentifier={registerEventByIdentifier}
+      cleanEventRegister={cleanEventRegister}
     />
   );
 };

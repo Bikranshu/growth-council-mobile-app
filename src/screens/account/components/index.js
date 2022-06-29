@@ -44,7 +44,7 @@ const Profile = props => {
   }, [isFocused]);
 
   return (
-    <SafeAreaView style={{flex: 1}}>
+    <View style={{flex: 1}}>
       <StatusBar
         barStyle="light-content"
         hidden={false}
@@ -166,7 +166,7 @@ const Profile = props => {
         </View>
       </ScrollView>
       <BottomNav {...props} navigation={navigation} />
-    </SafeAreaView>
+    </View>
   );
 };
 

@@ -14,6 +14,7 @@ import moment from 'moment';
 import ToastMessage from '../../../shared/toast';
 
 import {CommonStyles, Colors, Typography} from '../../../theme';
+import { GROWTH_COMMUNITY_ID, GROWTH_CONTENT_ID } from '../../../constants';
 
 const CouncilAllDetail = props => {
   const {
@@ -59,11 +60,11 @@ const CouncilAllDetail = props => {
       item?.pillar_categories[0]?.parent || item?.pillar_categories[1]?.parent;
     switch (pillarCategory) {
       case 0:
-      case 194:
+      case GROWTH_COMMUNITY_ID:
         backgroundColor = Colors.COMMUNITY_COLOR;
         break;
       case 0:
-      case 171:
+      case GROWTH_CONTENT_ID:
         backgroundColor = Colors.PRACTICE_COLOR;
         break;
       default:

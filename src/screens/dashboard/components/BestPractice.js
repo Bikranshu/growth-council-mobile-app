@@ -31,6 +31,7 @@ import Player from './Player';
 import {CommonStyles, Colors, Typography} from '../../../theme';
 import BottomNav from '../../../layout/BottomLayout';
 import Loading from '../../../shared/loading';
+import { GROWTH_CONTENT_ID } from '../../../constants';
 
 const win = Dimensions.get('window');
 const contentContainerWidth = win.width - 30;
@@ -56,7 +57,7 @@ const BestPractice = props => {
     cleanPillarPOE,
   } = props;
 
-  const pillarId = 171;
+  const pillarId = GROWTH_CONTENT_ID;
   const isFocused = useIsFocused();
 
   const [memberConnection, setMemberConnection] = useState([]);

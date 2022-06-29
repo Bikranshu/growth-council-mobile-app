@@ -494,6 +494,7 @@ const ManageAccount = props => {
                       setValue={setValue}
                       setItems={setItems}
                       maxHeight={1000}
+                      placeholder="Select please"
                       onChangeValue={value => {
                         setFieldValue('expertise_areas1', value);
                       }}

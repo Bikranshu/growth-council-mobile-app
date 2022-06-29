@@ -156,7 +156,7 @@ const OthersAccount = props => {
                 <TextInput
                   multiline={true}
                   numberOfLines={2}
-				  style={styles.input}
+                  style={styles.input}
                   keyboardType="default"
                   value={
                     typeof Title === 'undefined'
@@ -170,7 +170,7 @@ const OthersAccount = props => {
                 <TextInput
                   multiline={true}
                   numberOfLines={2}
-				  style={styles.input}
+                  style={styles.input}
                   keyboardType="default"
                   value={
                     typeof company === 'undefined'
@@ -295,11 +295,12 @@ const OthersAccount = props => {
                       </View>
                       <Text
                         style={{
-                          fontSize: 16,
+                          fontSize: 14,
                           fontWeight: '500',
                           color: 'white',
                         }}>
-                        Chat
+                        Connect with {otherProfiles?.user_meta?.first_name}{' '}
+                        {otherProfiles?.user_meta?.last_name}
                       </Text>
                     </View>
                   </TouchableOpacity>
@@ -413,7 +414,7 @@ const styles = StyleSheet.create({
     borderColor: '#707070',
   },
   loginWrapper: {
-    width: '30%',
+    padding: 15,
     display: 'flex',
     flexDirection: 'row',
     paddingVertical: 5,

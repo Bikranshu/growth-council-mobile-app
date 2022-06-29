@@ -24,11 +24,14 @@ import Player from '../../dashboard/components/Player';
 import {CommonStyles, Colors, Typography} from '../../../theme';
 import Loading from '../../../shared/loading';
 import RNFetchBlob from 'react-native-blob-util';
+import LinearGradient from 'react-native-linear-gradient';
 // import ReactNativeBlobUtil from 'react-native-blob-util';
 import ToastMessage from '../../../shared/toast';
+import { GROWTH_COACHING_ID, GROWTH_COMMUNITY_ID, GROWTH_CONTENT_ID } from '../../../constants';
 
 const win = Dimensions.get('window');
 const contentContainerWidth = win.width - 30;
+const buttonContainerWidth = win.width - 50;
 
 const CommunityDetail = props => {
   const {
@@ -59,14 +62,21 @@ const CommunityDetail = props => {
     pillarPOEError,
     fetchAllPillarPOE,
     cleanPillarPOE,
+
+    getSlug,
+    getSlugLoading,
+    getSlugError,
+    GetIdBySlug,
+    cleanSlug,
   } = props;
 
   const isFocused = useIsFocused();
   const [memberConnection, setMemberConnection] = useState([]);
+  const [slugName, setSlugName] = useState('');
 
   useFocusEffect(
     useCallback(() => {
-      fetchSessionDetailByIdentifier(route.params.id);
+      fetchSessionDetailByIdentifier(route?.params?.id);
       return () => {
         cleanSessionDetail();
       };
@@ -75,7 +85,7 @@ const CommunityDetail = props => {
 
   useFocusEffect(
     useCallback(() => {
-      fetchAllPOEDetail(route.params.poeId);
+      fetchAllPOEDetail(route?.params?.poeId);
       return () => {
         cleanPOEDetail();
       };
@@ -84,7 +94,7 @@ const CommunityDetail = props => {
 
   useFocusEffect(
     useCallback(() => {
-      fetchAllPOEEvent(route.params.poeId);
+      fetchAllPOEEvent(route?.params?.poeId);
       return () => {
         cleanPOEEvent();
       };
@@ -92,7 +102,7 @@ const CommunityDetail = props => {
   );
 
   useEffect(() => {
-    fetchAllPillarMemberContent(route.params.pillarId);
+    fetchAllPillarMemberContent(route?.params?.pillarId);
   }, [isFocused]);
 
   useEffect(() => {
@@ -101,7 +111,7 @@ const CommunityDetail = props => {
 
   useFocusEffect(
     useCallback(() => {
-      fetchAllPillarPOE(route.params.poeId);
+      fetchAllPillarPOE(route?.params?.poeId);
 
       return () => {
         cleanPillarPOE();
@@ -109,40 +119,52 @@ const CommunityDetail = props => {
     }, [isFocused]),
   );
 
-  const _renderItem = ({item, index}, navigation) => {
-    return (
-      <View style={[styles.bottomWrapper, styles.shadowProp]} key={index}>
-        <TouchableOpacity
-          onPress={() => navigation.navigate('OthersAccount', {id: item.ID})}>
-          <Image
-            source={{uri: item.avatar}}
-            style={{
-              width: '100%',
-              height: 83,
-              borderRadius: 10,
-            }}
-          />
-          <View style={{padding: 10, paddingBottom: 20}}>
-            <Text
-              style={{
-                fontSize: 10,
-                fontFamily: Typography.FONT_SF_SEMIBOLD,
-                color: Colors.TERTIARY_TEXT_COLOR,
-              }}>
-              {item?.user_meta?.first_name} {item?.user_meta?.last_name}
-            </Text>
-            <Text style={{fontSize: 6}}>Frost and Sullivan</Text>
-          </View>
-        </TouchableOpacity>
+  //   useEffect(() => {
+  //  GetIdBySlug({
+  //       slug: poeDetails?.slug,
+  //     }).then(response => {
+  //       console.log('a', response);
+  //     });
+  //   }, [poeDetails]);
 
-        {/* <View style={styles.chatIcon}>
-          <TouchableOpacity onPress={() => navigation.navigate('People')}>
-            <Ionicons name={'add'} size={15} color="#B1AFAF" />
-          </TouchableOpacity>
-        </View> */}
-      </View>
-    );
-  };
+  //     useEffect(() => {
+  //       setSlugName(poeDetails?.slug);
+  //     }, [poeDetails]);
+
+  //   const _renderItem = ({item, index}, navigation) => {
+  //     return (
+  //       <View style={[styles.bottomWrapper, styles.shadowProp]} key={index}>
+  //         <TouchableOpacity
+  //           onPress={() => navigation.navigate('OthersAccount', {id: item.ID})}>
+  //           <Image
+  //             source={{uri: item.avatar}}
+  //             style={{
+  //               width: '100%',
+  //               height: 83,
+  //               borderRadius: 10,
+  //             }}
+  //           />
+  //           <View style={{padding: 10, paddingBottom: 20}}>
+  //             <Text
+  //               style={{
+  //                 fontSize: 10,
+  //                 fontFamily: Typography.FONT_SF_SEMIBOLD,
+  //                 color: Colors.TERTIARY_TEXT_COLOR,
+  //               }}>
+  //               {item?.user_meta?.first_name} {item?.user_meta?.last_name}
+  //             </Text>
+  //             <Text style={{fontSize: 6}}>Frost and Sullivan</Text>
+  //           </View>
+  //         </TouchableOpacity>
+
+  //         {/* <View style={styles.chatIcon}>
+  //           <TouchableOpacity onPress={() => navigation.navigate('People')}>
+  //             <Ionicons name={'add'} size={15} color="#B1AFAF" />
+  //           </TouchableOpacity>
+  //         </View> */}
+  //       </View>
+  //     );
+  //   };
 
   const _renderMiddleItem = ({item, index}, navigation) => {
     return (
@@ -193,19 +215,19 @@ const CommunityDetail = props => {
     const date = actualDate[0].split(' ', 3);
 
     let backgroundImage = '';
-	let pillarname = '';
+    let pillarname = '';
     switch (
       item?.pillar_categories[0]?.parent ||
       item?.pillar_categories[1]?.parent
     ) {
       case 0:
-      case 194:
+      case GROWTH_COMMUNITY_ID:
         backgroundImage = require('../../../assets/img/Rectangle2.png');
         pillarname = 'Growth Community';
         break;
 
       case 0:
-      case 171:
+      case GROWTH_CONTENT_ID:
         backgroundImage = require('../../../assets/img/best-practice-bg.png');
         pillarname = 'Growth Content';
         break;
@@ -241,7 +263,7 @@ const CommunityDetail = props => {
           <ImageBackground
             style={{
               width: '100%',
-              height: 150,
+              height: 190,
               borderRadius: 20,
             }}
             source={backgroundImage}>
@@ -270,13 +292,6 @@ const CommunityDetail = props => {
         </TouchableOpacity>
       </View>
     );
-  };
-
-  const _renderContentItem = ({item, index}) => {
-    const file = item?.file;
-    const link = file.split('=', 2);
-    let videoLink = link[1]?.split('&', 2);
-    return <Player {...props} item={item} file={file} videoLink={videoLink} />;
   };
 
   const _renderContent = ({item, index}) => {
@@ -376,6 +391,7 @@ const CommunityDetail = props => {
     const getFileExtention = fileUrl => {
       return /[.]/.exec(fileUrl) ? /[^.]+$/.exec(fileUrl) : undefined;
     };
+
     return (
       <TouchableOpacity
         onPress={() =>
@@ -405,15 +421,15 @@ const CommunityDetail = props => {
   const parent = poeDetails?.parent;
   const slug = poeDetails?.slug;
   switch (parent) {
-    case 171:
+    case GROWTH_CONTENT_ID:
       backgroundColor = Colors.PRACTICE_COLOR;
       title = 'Best Practices';
       break;
-    case 194:
+    case GROWTH_COMMUNITY_ID:
       backgroundColor = Colors.COMMUNITY_COLOR;
       title = 'Growth Community';
       break;
-    case 172:
+    case GROWTH_COACHING_ID:
       backgroundColor = Colors.COACHING_COLOR;
       title = 'Growth Coaching';
     case 133:
@@ -458,7 +474,7 @@ const CommunityDetail = props => {
                 alignItems: 'center',
                 justifyContent: 'center',
               }}
-			  resizeMode="contain"
+              resizeMode="contain"
             />
           </View>
 
@@ -540,19 +556,146 @@ const CommunityDetail = props => {
                     />
                   </View>
                 )}
-              {/* {pillarMemberContents?.members?.length !== 0 && (
-                <View style={styles.bottom}>
-                  <Text style={styles.title}> Members</Text>
-                  <View>
-                    <FlatList
-                      horizontal
-                      showsHorizontalScrollIndicator={false}
-                      data={pillarMemberContents?.members}
-                      renderItem={item => _renderItem(item, navigation)}
-                    />
+              {poeDetails?.slug === 'peer-to-peer-digital-network' && (
+                <View style={styles.buttonWrapper}>
+                  <View style={styles.memberWrapper}>
+                    <TouchableOpacity
+                      onPress={() => navigation.navigate('People')}>
+                      <ImageBackground
+                        style={{width: '100%', height: 160, borderRadius: 20}}
+                        source={require('../../../assets/img/people.jpg')}>
+                        <LinearGradient
+                          colors={['#00000000', '#000000']}
+                          style={{height: '100%', width: '100%'}}
+                        />
+                        <View
+                          style={{
+                            width: buttonContainerWidth,
+                            marginBottom: Platform.OS === 'ios' ? 10 : 10,
+                            borderRadius: 10,
+                            height: 45,
+                            flexDirection: 'row',
+                            position: 'absolute',
+                            bottom: -5,
+                            left: 5,
+                          }}>
+                          <Ionicons
+                            name="people-outline"
+                            size={25}
+                            color="white"
+                          />
+                          <Text
+                            style={{
+                              fontFamily: Typography.FONT_SF_BOLD,
+                              fontSize: 14,
+                              color: 'white',
+                              alignItems: 'center',
+                              paddingLeft: 10,
+                            }}>
+                            Growth Community Members
+                          </Text>
+                        </View>
+                      </ImageBackground>
+                    </TouchableOpacity>
                   </View>
+                  <TouchableOpacity
+                    onPress={() => navigation.navigate('UserList')}>
+                    <View style={styles.chatbutton}>
+                      <Ionicons name="chatbox" size={20} color="white" />
+                      <Text style={styles.chatbuttonText}>
+                        Connect With Growth Council Member
+                      </Text>
+                    </View>
+                  </TouchableOpacity>
                 </View>
-              )} */}
+              )}
+              {poeDetails?.slug !== 'peer-to-peer-digital-network' &&
+                poeDetails?.slug !== 'executive-coaching-clinic' &&
+                poeDetails?.slug !== 'annual-council-meeting' && (
+                  <View style={styles.buttonWrapper}>
+                    <View style={styles.btnWrapper}>
+                      <TouchableOpacity
+                        onPress={() => {
+                          if (poeDetails?.slug === 'innovative-center-tours') {
+                            navigation.navigate('LibraryDetail', {
+                              resources: 44,
+                              itemname: poeDetails?.name,
+                            });
+                          } else if (
+                            poeDetails?.slug === 'council-virtual-events'
+                          ) {
+                            navigation.navigate('LibraryDetail', {
+                              resources: 44,
+                              itemname: poeDetails?.name,
+                            });
+                          } else if (
+                            poeDetails?.slug === 'transformational-think-tanks'
+                          ) {
+                            navigation.navigate('LibraryDetail', {
+                              resources: 119,
+                              itemname: poeDetails?.name,
+                            });
+                          } else if (
+                            poeDetails?.slug === 'mega-trends-workshop'
+                          ) {
+                            navigation.navigate('LibraryDetail', {
+                              resources: 204,
+                              itemname: poeDetails?.name,
+                            });
+                          } else if (
+                            poeDetails?.slug === 'executive-mindxchange-events'
+                          ) {
+                            navigation.navigate('LibraryDetail', {
+                              resources: 35,
+                              itemname: poeDetails?.name,
+                            });
+                          } else {
+                            navigation.navigate('LibraryDetail', {
+                              resources: poeDetails?.term_id,
+                              itemname: poeDetails?.name,
+                            });
+                          }
+                        }}>
+                        <ImageBackground
+                          style={{width: '100%', height: 120, borderRadius: 20}}
+                          source={require('../../../assets/img/digital-content.jpg')}>
+                          <LinearGradient
+                            colors={['#00000000', '#000000']}
+                            style={{height: '100%', width: '100%'}}
+                          />
+                          <View
+                            style={{
+                              width: buttonContainerWidth,
+                              marginBottom: Platform.OS === 'ios' ? 10 : 10,
+                              borderRadius: 10,
+                              height: 45,
+                              flexDirection: 'row',
+                              position: 'absolute',
+                              bottom: -15,
+                              left: 5,
+                            }}>
+                            <Ionicons
+                              name="people-outline"
+                              size={25}
+                              color="white"
+                            />
+                            <Text
+                              style={{
+                                fontFamily: Typography.FONT_SF_BOLD,
+                                fontSize: 16,
+                                color: 'white',
+                                alignItems: 'center',
+                                paddingLeft: 10,
+                                fontWeight: '700',
+                              }}>
+                              On-Demand Content
+                            </Text>
+                          </View>
+                        </ImageBackground>
+                      </TouchableOpacity>
+                    </View>
+                  </View>
+                )}
 
               {/* <Footer /> */}
             </View>
@@ -615,18 +758,20 @@ const styles = StyleSheet.create({
     color: '#77838F',
   },
   top: {
+    height: 210,
+    marginBottom: 10,
     marginTop: 10,
     justifyContent: 'center',
-    marginBottom: 10,
+    marginLeft: 5,
   },
   topWrapper: {
-    height: 144,
+    height: 180,
     width: 256,
     marginLeft: 15,
     borderRadius: 16,
     overflow: 'hidden',
     marginRight: 5,
-    marginTop: 15,
+    marginTop: 10,
   },
   middleWrapper: {
     width: (Dimensions.get('window').width - 10) / 4,
@@ -760,6 +905,46 @@ const styles = StyleSheet.create({
   sectionContainer: {
     marginBottom: 20,
     marginTop: 20,
+  },
+  buttonWrapper: {
+    alignItems: 'center',
+    marginTop: 20,
+    bottom: 0,
+  },
+  chatbutton: {
+    ...CommonStyles.button,
+    width: buttonContainerWidth,
+    marginBottom: Platform.OS === 'ios' ? 10 : 10,
+    borderRadius: 10,
+    height: 45,
+    flexDirection: 'row',
+    backgroundColor: Colors.PRACTICE_COLOR,
+  },
+
+  chatbuttonText: {
+    fontFamily: Typography.FONT_SF_BOLD,
+    fontSize: 16,
+    color: 'white',
+    alignItems: 'center',
+    paddingLeft: 10,
+  },
+  memberWrapper: {
+    height: 150,
+    width: 330,
+    marginLeft: 15,
+    borderRadius: 16,
+    overflow: 'hidden',
+    marginRight: 5,
+    marginBottom: 15,
+  },
+  btnWrapper: {
+    height: 120,
+    width: 300,
+    marginLeft: 15,
+    borderRadius: 16,
+    overflow: 'hidden',
+    marginRight: 5,
+    marginBottom: 15,
   },
 });
 

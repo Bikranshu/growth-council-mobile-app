@@ -26,6 +26,7 @@ import {CommonStyles, Colors, Typography} from '../../../theme';
 import ToastMessage from '../../../shared/toast';
 import Footer from '../../../shared/footer';
 import Loading from '../../../shared/loading';
+import { GROWTH_COACHING_ID, GROWTH_COMMUNITY_ID, GROWTH_CONTENT_ID } from '../../../constants';
 
 const Event = props => {
   const {
@@ -49,6 +50,7 @@ const Event = props => {
   const [timeToEnd, setTimeToEnd] = useState('');
 
   const eventID = route?.params?.id;
+  const Slug = events?.slug !== undefined ? events?.slug : '';
 
   useEffect(() => {
     fetchEventByIdentifier(eventID);
@@ -59,7 +61,10 @@ const Event = props => {
   }, [events]);
 
   const registerEventByEventID = async eventID => {
-    const response = await registerEventByIdentifier({event_id: eventID});
+    const response = await registerEventByIdentifier({
+      event_id: eventID,
+      slug: Slug,
+    });
     if (response?.payload?.code === 200) {
       setEventStatus(true);
       ToastMessage.show('You have successfully RSVP’d this event.');
@@ -76,11 +81,11 @@ const Event = props => {
     : '';
   switch (pillarCategory) {
     case 0:
-    case 194:
+    case GROWTH_COMMUNITY_ID:
       backgroundColor = Colors.COMMUNITY_COLOR;
       break;
     case 0:
-    case 171:
+    case GROWTH_CONTENT_ID:
       backgroundColor = Colors.PRACTICE_COLOR;
       break;
 
@@ -140,19 +145,19 @@ const Event = props => {
       events?.pillar_categories[0]?.parent
     : '';
   switch (pillarname) {
-    case 194:
+    case GROWTH_COMMUNITY_ID:
     case 0:
       title =
         events?.pillar_categories[1]?.name ||
         events?.pillar_categories[0]?.name;
       break;
-    case 171:
+    case GROWTH_CONTENT_ID:
     case 0:
       title =
         events?.pillar_categories[1]?.name ||
         events?.pillar_categories[0]?.name;
       break;
-    case 172:
+    case GROWTH_COACHING_ID:
     case 0:
       title =
         events?.pillar_categories[0]?.name ||
