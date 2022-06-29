@@ -11,24 +11,24 @@ const PushNotificationsConfigs = {
     PushNotification.configure({
       onNotification: notification => {
 
-        if(notification.foreground){
+        if (notification.foreground && notification?.data?.type !== "chat") {
           PushNotification.localNotificationSchedule({
             ...notification,
-            userInfo: notification?.data,
             date: new Date(Date.now() + 10 * 1000)
           });
         }
 
-        const clicked = notification.userInteraction;
+        const clicked = notification.userInteraction && !notification.foreground;
 
         if (clicked) {
-            try {
-              // handle the navigation here
-              const data = notification?.data || notification?.userInfo;
+          try {
+            // handle the navigation here
+            const data = notification?.data;
 
-            if(data?.type == 'chat'){
-              console.log(notification.data);
-              navigate('Chat', {
+            if (data) {
+              if (data?.type == 'chat') {
+                console.log(notification.data);
+                navigate('Chat', {
                   friendID: data?.friendID,
                   friendName: data?.friendName,
                   friendAvatar: data?.friendAvatar,
@@ -36,19 +36,21 @@ const PushNotificationsConfigs = {
                   userName: data?.userName,
                   userAvatar: data?.userAvatar,
                 })
-          } else if (data?.type == "event"){
-              navigate("EventDetail", {id: data?.post_id});
-          }
-            } catch(error){
-              console.log(error);
+              } else if (data?.type == "event") {
+                navigate("EventDetail", { id: data?.post_id });
+              }
+
             }
+          } catch (error) {
+            console.log(error);
           }
-          notification.finish(PushNotificationIOS.FetchResult.NoData);
+        }
+        notification.finish(PushNotificationIOS.FetchResult.NoData);
       },
       onAction: notification => {
         console.log('NOTIFICATION:', notification);
       },
-      onRegistrationError: err => {},
+      onRegistrationError: err => { },
       // IOS ONLY (optional): default: all - Permissions to register.
       permissions: {
         alert: true,
