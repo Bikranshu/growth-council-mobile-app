@@ -220,6 +220,7 @@ const styles = StyleSheet.create({
     borderWidth: 0.2,
     marginTop: 10,
     borderRadius: 5,
+	padding: 10
   },
   buttonWrapper: {
     width: 200,

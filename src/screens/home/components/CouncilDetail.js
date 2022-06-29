@@ -40,7 +40,7 @@ const CouncilDetail = props => {
   }, []);
 
   return (
-    <SafeAreaView style={{flex: 1}}>
+    <SafeAreaView style={{flex: 1, backgroundColor: 'white'}}>
       <ScrollView>
         <View style={styles.meta}>
           {!loadMore && (
@@ -122,7 +122,7 @@ const CouncilDetail = props => {
               style={styles.paragraph}
             />
           </View>
-          {!loadMore && (
+          {!loadMore && pillars.slug !== 'growth-content' && (
             <View style={{alignItems: 'center', justifyContent: 'center'}}>
               <Button
                 style={styles.moreButton}

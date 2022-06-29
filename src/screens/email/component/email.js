@@ -10,7 +10,7 @@ import {
   Dimensions,
   TouchableOpacity,
   TextInput,
-  SafeAreaView
+  SafeAreaView,
 } from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import {useIsFocused} from '@react-navigation/native';
@@ -74,36 +74,36 @@ const Email = props => {
         <View style={styles.container}>
           <SafeAreaView style={{backgroundColor: '#02B0F0', top: -15}}>
             <View style={styles.wrapper}>
-            <TouchableOpacity onPress={() => navigation.goBack()}>
-              <Ionicons
-                name="chevron-back-outline"
-                size={40}
-                color="white"
-                style={{marginTop: 15}}
-              />
-            </TouchableOpacity>
-            <View style={{flexDirection: 'row', marginTop: 10}}>
-              <View
-                style={{
-                  justifyContent: 'center',
-                  width: '90%',
-                  marginLeft: 10,
-                }}>
-                <Text style={{color: 'white', fontSize: 20}}>New Messages</Text>
+              <TouchableOpacity onPress={() => navigation.goBack()}>
+                <Ionicons
+                  name="chevron-back-outline"
+                  size={40}
+                  color="white"
+                  style={{marginTop: 15}}
+                />
+              </TouchableOpacity>
+              <View style={{flexDirection: 'row', marginTop: 10}}>
+                <View
+                  style={{
+                    justifyContent: 'center',
+                    width: '90%',
+                    marginLeft: 10,
+                  }}>
+                  <Text style={{color: 'white', fontSize: 20}}>
+                    New Messages
+                  </Text>
+                </View>
               </View>
-            </View>
 
-            {/**/}
+              {/**/}
             </View>
           </SafeAreaView>
           <View style={{padding: 20, backgroundColor: 'white'}}>
-
             <View style={{flexDirection: 'row'}}>
               <Text style={{fontSize: 18, marginTop: 10}}>From:</Text>
 
               <TextInput
                 multiline={true}
-                numberOfLines={1}
                 style={[styles.input, {color: 'blue'}]}
                 value={values.sender}
                 onChangeText={handleChange('sender')}
@@ -134,9 +134,7 @@ const Email = props => {
               <TextInput
                 multiline={true}
                 numberOfLines={15}
-
-                style={[styles.textarea, styles.large]}
-
+                style={styles.textarea1}
                 value={values.message}
                 onChangeText={handleChange('message')}
                 onFocus={handleBlur('message')}
@@ -168,7 +166,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#02B0F0',
     borderTopWidth: 0.2,
     padding: 10,
-    paddingTop: Platform.OS === 'ios' ? 30 : 10,
+    paddingTop: Platform.OS === 'ios' ? 40 : 20,
     display: 'flex',
     flexDirection: 'row',
   },
@@ -183,11 +181,8 @@ const styles = StyleSheet.create({
     marginLeft: 5,
   },
   textarea: {
-    minHeight: 50,
-    height: 'auto',
+    padding: 10,
     fontSize: 16,
-    textAlignVertical: 'top',
-    lineHeight: 20,
     borderWidth: 0.2,
     marginTop: 10,
     borderRadius: 5,
@@ -196,12 +191,13 @@ const styles = StyleSheet.create({
     minHeight: 300,
     height: 'auto',
     fontSize: 16,
+    padding: 10,
     textAlignVertical: 'top',
     lineHeight: 30,
     borderWidth: 0.2,
     marginTop: 10,
     borderRadius: 5,
-    padding: 10
+    padding: 10,
   },
   buttonWrapper: {
     width: 200,
@@ -220,6 +216,6 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
   large: {
-    minHeight: 120
-  }
+    minHeight: 120,
+  },
 });
