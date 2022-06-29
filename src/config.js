@@ -11,7 +11,7 @@ const PushNotificationsConfigs = {
     PushNotification.configure({
       onNotification: notification => {
 
-        if (notification.foreground && notification?.data?.type !== "chat") {
+        if (notification.foreground && !isIOS) {
           PushNotification.localNotificationSchedule({
             ...notification,
             date: new Date(Date.now() + 10 * 1000)
