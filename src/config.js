@@ -8,8 +8,6 @@ const PushNotificationsConfigs = {
   congigurations: () => {
     PushNotification.configure({
       onNotification: notification => {
-        const clicked = notification.userInteraction;
-
         if (Platform.OS == 'ios') {
           if (
             notification.foreground &&
@@ -17,35 +15,13 @@ const PushNotificationsConfigs = {
           ) {
             PushNotification.localNotification(notification);
           }
-
-          if (clicked) {
-            // handle the navigation here
-            if (notification.data.type == 'chat') {
-              console.log(notification.data);
-              navigate('Chat', {
-                friendID: notification.data.friendID,
-                friendName: notification.data.friendName,
-                friendAvatar: notification.data.friendAvatar,
-                userID: notification.data.userID,
-                userName: notification.data.userName,
-                userAvatar: notification.data.userAvatar,
-              });
-            } else if (notification.data.type == 'event') {
-              navigate('EventDetail', {
-                id: notification.data.post_id,
-                image: require('../src/assets/img/appBG.png'),
-                title: 'Growth Community',
-              });
-            }
-          }
-
-            notification.finish(PushNotificationIOS.FetchResult.NoData);
+          notification.finish(PushNotificationIOS.FetchResult.NoData);
         } else {
           if (notification.foreground) {
             PushNotification.localNotification(notification);
           }
         }
-
+        const clicked = notification.userInteraction;
         if (clicked) {
           // handle the navigation here
           if (notification.data.type == 'chat') {
