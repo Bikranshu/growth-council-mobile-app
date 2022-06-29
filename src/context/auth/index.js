@@ -37,9 +37,11 @@ export const AuthProvider = ({children}) => {
         const {formData, JWT_TOKEN, USER_AVATAR, USER_NAME, response} = data;
 
         const res = await auth().createUserWithEmailAndPassword(
-          response?.data?.user_email,
+          formData,
           '6AWgM#.Y(fE8Q2=',
         );
+
+        console.log('res', res);
         await loginWithFirebase(response?.data?.user_email, '6AWgM#.Y(fE8Q2=', {
           JWT_TOKEN,
           USER_AVATAR,
@@ -58,6 +60,7 @@ export const AuthProvider = ({children}) => {
       '6AWgM#.Y(fE8Q2=',
     );
     console.log('clearing cache...');
+    console.log('login', res);
     await clearAsyncStorage('tempData');
 
     setLoggedIn(true);

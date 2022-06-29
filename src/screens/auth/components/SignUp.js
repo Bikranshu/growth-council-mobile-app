@@ -97,29 +97,28 @@ const SignUpForm = props => {
       try {
         const response = await auth().createUserWithEmailAndPassword(
           values?.email?.trim(),
-          "6AWgM#.Y(fE8Q2=",
+          '6AWgM#.Y(fE8Q2=',
         );
         const token = await response.user.getIdToken();
         // const response = await registerCustomer(values);
         console.log(response);
         if (token) {
-            await registerCustomer(values).then(response => {
-          if (response?.payload?.code === 200) {
-          navigation.navigate('SignIn');
-          ToastMessage.show(
-            'You have successfully registered. Please wait for admin approval.',
-          );
-        } else {
-          ToastMessage.show('This email address is already in use');
-          }
-            });
+          await registerCustomer(values).then(response => {
+            if (response?.payload?.code === 200) {
+              console.log('response', response);
+              navigation.navigate('SignIn');
+              ToastMessage.show(
+                'You have successfully registered. Please wait for admin approval.',
+              );
+            } else {
+              ToastMessage.show('This email address is already in use');
+            }
+          });
         }
       } catch (error) {
         switch (error.code) {
           case 'auth/email-already-in-use':
-            ToastMessage.show(
-              'This email address is already in use',
-            );
+            ToastMessage.show('This email address is already in use');
             break;
           case 'auth/argument-error':
             ToastMessage.show('Authentication error. Please try again.');
