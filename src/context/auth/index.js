@@ -34,15 +34,14 @@ export const AuthProvider = ({children}) => {
         const raw_data = await getAsyncStorage('tempData');
         const data = JSON.parse(raw_data);
 
-        const {formData, JWT_TOKEN, USER_AVATAR, USER_NAME, response} = data;
+        const {formData, JWT_TOKEN, USER_AVATAR, USER_NAME} = data;
 
         const res = await auth().createUserWithEmailAndPassword(
-          formData,
+          formData.username,
           '6AWgM#.Y(fE8Q2=',
         );
 
-        console.log('res', res);
-        await loginWithFirebase(response?.data?.user_email, '6AWgM#.Y(fE8Q2=', {
+        await loginWithFirebase(response.data.user_email, '6AWgM#.Y(fE8Q2=', {
           JWT_TOKEN,
           USER_AVATAR,
           USER_NAME,
@@ -109,7 +108,7 @@ export const AuthProvider = ({children}) => {
                 responseType: 'json',
               },
             );
-            // setEmailId(response?.data?.user_email);
+
             const messageToken = await messaging().getToken();
             await postToAPI(response.data.user_email, messageToken);
 
