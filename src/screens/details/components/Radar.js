@@ -119,7 +119,7 @@ const Radar = props => {
         <View style={{height: 400}}>
           <WebView
             source={{
-              uri: `${HOME_URL}?user_id=${userId}`,
+              uri: `${HOME_URL}/frost?user_id=${userId}`,
             }}
             renderLoading={LoadingIndicatorView}
             startInLoadingState={true}
