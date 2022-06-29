@@ -119,7 +119,7 @@ const Radar = props => {
         <View style={{height: 400}}>
           <WebView
             source={{
-              uri: `${HOME_URL}/frost?user_id=${userId}`,
+              uri: `${HOME_URL}/frost-radar/?user_id=${userId}`,
             }}
             renderLoading={LoadingIndicatorView}
             startInLoadingState={true}
@@ -127,26 +127,27 @@ const Radar = props => {
           />
         </View>
         <View style={{flex: 1}}>
-          <View style={styles.container}>
-            <View style={styles.mainContent}>
-              <View>
-                <View>
-                  <View style={{flexDirection: 'row', flex: 1}}>
-                    <View style={{flex: 2}}>
-                      <Text style={styles.title}>Name</Text>
-                    </View>
-                    <View style={{flex: 2, marginLeft: 10}}>
-                      <Text style={styles.title}>Growth Index</Text>
-                    </View>
-                    <View style={{flex: 2, marginLeft: 10}}>
-                      <Text style={styles.title}>Innovation Index</Text>
-                    </View>
-                  </View>
-                  {radarMemberDetails?.present_growth_index
-                    ?.user_radar_growth_index !== '' &&
-                    radarMemberDetails?.present_growth_index
-                      ?.user_radar_innovation_index !== '' &&
-                    radarMemberDetails?.present_growth_index !== null && (
+          {radarMemberDetails?.present_growth_index?.user_radar_growth_index !==
+            '' &&
+            radarMemberDetails?.present_growth_index
+              ?.user_radar_innovation_index !== '' &&
+            radarMemberDetails?.present_growth_index !== null && (
+              <View style={styles.container}>
+                <View style={styles.mainContent}>
+                  <View>
+                    <View>
+                      <View style={{flexDirection: 'row', flex: 1}}>
+                        <View style={{flex: 2}}>
+                          <Text style={styles.title}>Name</Text>
+                        </View>
+                        <View style={{flex: 2, marginLeft: 10}}>
+                          <Text style={styles.title}>Growth Index</Text>
+                        </View>
+                        <View style={{flex: 2, marginLeft: 10}}>
+                          <Text style={styles.title}>Innovation Index</Text>
+                        </View>
+                      </View>
+
                       <View
                         style={{
                           flexDirection: 'row',
@@ -183,11 +184,11 @@ const Radar = props => {
                           />
                         </View>
                       </View>
-                    )}
-                  <View style={styles.seperationline} />
-                </View>
 
-                {/* <View style={{marginTop: 10}}>
+                      <View style={styles.seperationline} />
+                    </View>
+
+                    {/* <View style={{marginTop: 10}}>
                   {radarMemberDetails?.member_details?.map(item => {
                     const memberData = () => {
                       setDescription(item?.member_description);
@@ -214,10 +215,10 @@ const Radar = props => {
                     );
                   })}
                 </View> */}
+                  </View>
+                </View>
               </View>
-            </View>
-          </View>
-
+            )}
           {/* <View style={styles.centeredView}>
             <Modal
               animationType="slide"
