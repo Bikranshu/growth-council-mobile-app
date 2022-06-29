@@ -15,7 +15,7 @@ const PushNotificationsConfigs = {
           ) {
             PushNotification.localNotification(notification);
           }
-          notification.finish(PushNotificationIOS.FetchResult.NoData);
+        //   notification.finish(PushNotificationIOS.FetchResult.NoData);
         } else {
           if (notification.foreground) {
             PushNotification.localNotification(notification);
