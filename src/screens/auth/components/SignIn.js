@@ -49,12 +49,12 @@ const SignInForm = props => {
     validationSchema: signInSchema,
     initialValues: { username: '', password: '' },
     onSubmit: async values => {
-      const messageToken = await messaging().getToken();
-      const firebasePayload = {
-        username: values.username,
-        token: messageToken,
-      };
-      const resp = await postToAPI(firebasePayload);
+      // const messageToken = await messaging().getToken();
+      // const firebasePayload = {
+      //   username: values.username,
+      //   token: messageToken,
+      // };
+      // const resp = await postToAPI(firebasePayload);
       await signIn(values);
     },
   });
@@ -62,11 +62,11 @@ const SignInForm = props => {
 
   const areAllFieldsFilled = values.username != '' && values.password != '';
 
-  const postToAPI = async data => {
-    return axios.get(
-      `${API_URL}/pd/fcm/subscribe?api_secret_key=s3D6nHoU9AUw%jjTHy0K@UO)&user_email=${data.email}&device_token=${data.token}&subscribed=UserNotification`,
-    );
-  };
+  // const postToAPI = async data => {
+  //   return axios.get(
+  //     `${API_URL}/pd/fcm/subscribe?api_secret_key=s3D6nHoU9AUw%jjTHy0K@UO)&user_email=${data.email}&device_token=${data.token}&subscribed=UserNotification`,
+  //   );
+  // };
 
   useFocusEffect(
     useCallback(() => {
