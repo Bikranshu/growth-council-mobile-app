@@ -17,7 +17,7 @@
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
-	<string>1.0</string>
+	<string>$(MARKETING_VERSION)</string>
 	<key>CFBundleSignature</key>
 	<string>????</string>
 	<key>CFBundleVersion</key>
@@ -40,11 +40,11 @@
 	<key>NSBluetoothPeripheralUsageDescription</key>
 	<string>Growth Coucil would like to use your bluetooth</string>
 	<key>NSCameraUsageDescription</key>
-	<string>Growth Coucil would like to use your camera</string>
+	<string>Growth Coucil would like to use your camera for profile picture</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>Growth Coucil would like to use your location</string>
 	<key>NSPhotoLibraryUsageDescription</key>
-	<string>Growth Coucil would like to use your photo gallery</string>
+	<string>Growth Coucil would like to use your photo gallery for profile picture</string>
 	<key>UIAppFonts</key>
 	<array>
 		<string>AntDesign.ttf</string>
