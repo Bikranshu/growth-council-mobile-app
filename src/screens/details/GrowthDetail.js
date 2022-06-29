@@ -12,21 +12,22 @@ import {
   resetcoachingSession,
 } from './slice/sessionlistSlice';
 
-import {
-  fetchPoeSelfLearns,
-  resetPoeSelfLearn,
-} from '../selfLearn/slice/poeSelfLearnSlice';
+
 
 import {
   fetchAllPillarMemberContents,
   resetPillarMemberContent,
 } from './slice/pillarMembersContentsSlice';
 
-
 import {
   fetchRadarMemberDetails,
   resetRadarMemberDetails,
 } from './slice/radarSlice';
+
+import {
+  registerEventByID,
+  resetEventRegister,
+} from '../event/slice/eventRegisterSlice';
 
 const GrowthDetailScreen = props => {
   const dispatch = useDispatch();
@@ -47,9 +48,7 @@ const GrowthDetailScreen = props => {
 
   const {coachingSession, coachingSessionLoading, coachingSessionError} =
     useSelector(state => state.coachingSession);
-  const {poeSelfLearns, poeSelfLearnLoading, poeSelfLearnError} = useSelector(
-    state => state.poeSelfLearns,
-  );
+ 
 
   const {
     radarMemberDetails,
@@ -57,7 +56,8 @@ const GrowthDetailScreen = props => {
     radarMemberDetailsError,
   } = useSelector(state => state.radarMemberDetails);
 
-  
+  const {eventRegisters, eventRegisterLoading, eventRegisterError} =
+    useSelector(state => state.eventRegisters);
 
   /**
    * Fetch event data.
@@ -78,10 +78,7 @@ const GrowthDetailScreen = props => {
     dispatch(fetchAllPOEEvents(poeId));
   };
 
-  const fetchPoeSelfLearn = poeId => {
-    dispatch(fetchPoeSelfLearns(poeId));
-  };
-
+ 
   const fetchAllPillarMemberContent = pillarId => {
     dispatch(fetchAllPillarMemberContents(pillarId));
   };
@@ -105,15 +102,18 @@ const GrowthDetailScreen = props => {
   const cleanCoachingSession = () => {
     dispatch(resetcoachingSession());
   };
-  const cleanPoeSelfLearn = () => {
-    dispatch(resetPoeSelfLearn());
-  };
 
   const fetchRadarMemberDetail = () => {
     dispatch(fetchRadarMemberDetails());
   };
 
- 
+  const registerEventByIdentifier = formData => {
+    return dispatch(registerEventByID(formData));
+  };
+
+  const cleanEventRegister = () => {
+    dispatch(resetEventRegister());
+  };
 
   return (
     <GrowthDetail
@@ -138,17 +138,15 @@ const GrowthDetailScreen = props => {
       coachingSessionError={coachingSessionError}
       fetchCoachingSessions={fetchCoachingSessions}
       cleanCoachingSession={cleanCoachingSession}
-      poeSelfLearns={poeSelfLearns}
-      poeSelfLearnLoading={poeSelfLearnLoading}
-      poeSelfLearnError={poeSelfLearnError}
-      fetchPoeSelfLearn={fetchPoeSelfLearn}
-      cleanPoeSelfLearn={cleanPoeSelfLearn}
       radarMemberDetails={radarMemberDetails}
       radarMemberDetailsLoading={radarMemberDetailsLoading}
       radarMemberDetailsError={radarMemberDetailsError}
       fetchRadarMemberDetail={fetchRadarMemberDetail}
-
-	
+      eventRegisters={eventRegisters}
+      eventRegisterLoading={eventRegisterLoading}
+      eventRegisterError={eventRegisterError}
+      registerEventByIdentifier={registerEventByIdentifier}
+      cleanEventRegister={cleanEventRegister}
     />
   );
 };

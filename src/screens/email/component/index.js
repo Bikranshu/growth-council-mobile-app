@@ -10,7 +10,7 @@ import {
   Dimensions,
   TouchableOpacity,
   TextInput,
-  SafeAreaView
+  SafeAreaView,
 } from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import {useIsFocused} from '@react-navigation/native';
@@ -91,41 +91,42 @@ const Email = props => {
       />
       <ScrollView style={{backgroundColor: 'white'}}>
         <View style={styles.container}>
-        <SafeAreaView style={{backgroundColor: '#02B0F0', top: -15}}>
-          <View style={styles.wrapper}>
-            <TouchableOpacity onPress={() => navigation.goBack()}>
-              <Ionicons
-                name="chevron-back-outline"
-                size={40}
-                color="white"
-                style={{marginTop: 15}}
-              />
-            </TouchableOpacity>
-            <View style={{flexDirection: 'row', marginTop: 10}}>
-              <View
-                style={{
-                  justifyContent: 'center',
-                  width: '90%',
-                  marginLeft: 10,
-                }}>
-                <Text style={{color: 'white', fontSize: 20}}>New Messages</Text>
-                <Text style={{color: 'white', fontSize: 16}}>
-                  {profile?.user_email}
-                </Text>
+          <SafeAreaView style={{backgroundColor: '#02B0F0', top: -15}}>
+            <View style={styles.wrapper}>
+              <TouchableOpacity onPress={() => navigation.goBack()}>
+                <Ionicons
+                  name="chevron-back-outline"
+                  size={40}
+                  color="white"
+                  style={{marginTop: 15}}
+                />
+              </TouchableOpacity>
+              <View style={{flexDirection: 'row', marginTop: 10}}>
+                <View
+                  style={{
+                    justifyContent: 'center',
+                    width: '90%',
+                    marginLeft: 10,
+                  }}>
+                  <Text style={{color: 'white', fontSize: 20}}>
+                    New Messages
+                  </Text>
+                  <Text style={{color: 'white', fontSize: 16}}>
+                    {profile?.user_email}
+                  </Text>
+                </View>
               </View>
-            </View>
 
-            {/**/}
-          </View>
+              {/**/}
+            </View>
           </SafeAreaView>
           <View style={{padding: 20, backgroundColor: 'white'}}>
-
             <View style={{flexDirection: 'row'}}>
               <Text style={{fontSize: 18, marginTop: 10}}>From:</Text>
 
               <TextInput
                 multiline={true}
-                style={[styles.textarea, {color: 'blue'}]}
+                style={[styles.input, {color: 'blue'}]}
                 value={values.sender}
                 onChangeText={handleChange('sender')}
                 onFocus={handleBlur('sender')}
@@ -188,7 +189,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#02B0F0',
     borderTopWidth: 0.2,
     padding: 10,
-    paddingTop: Platform.OS === 'ios' ? 30 : 10,
+    paddingTop: Platform.OS === 'ios' ? 40 : 20,
     display: 'flex',
     flexDirection: 'row',
   },
@@ -219,6 +220,7 @@ const styles = StyleSheet.create({
     borderWidth: 0.2,
     marginTop: 10,
     borderRadius: 5,
+	padding: 10
   },
   buttonWrapper: {
     width: 200,

@@ -15,22 +15,17 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { BubblesLoader } from 'react-native-indicator';
-import { Linking } from 'react-native';
 import messaging from '@react-native-firebase/messaging';
-
 import axios from 'axios';
-
 import { CommonStyles, Colors, Typography } from '../../../theme';
 import { useAuthentication } from '../../../context/auth';
 import FlatTextInput from '../../../shared/form/FlatTextInput';
 import { API_URL } from '../../../constants';
-import { createUserWithEmailAndPassword } from 'firebase/auth';
-import { auth } from '../../../utils/firebaseUtil';
 
 const screenHeight = Math.round(Dimensions.get('window').height);
 
 const signInSchema = Yup.object().shape({
-  username: Yup.string().required('Email is required.'),
+  username: Yup.string().required('Email or Username is required.'),
   password: Yup.string().required('Password is required.'),
 });
 
@@ -60,16 +55,16 @@ const SignInForm = props => {
         token: messageToken,
       };
       const resp = await postToAPI(firebasePayload);
-
       await signIn(values);
     },
   });
 
+
   const areAllFieldsFilled = values.username != '' && values.password != '';
 
   const postToAPI = async data => {
-    return await axios.get(
-      `${API_URL}/pd/fcm/subscribe?api_secret_key=s3D6nHoU9AUw%jjTHy0K@UO)&user_email=${data?.username}&device_token=${data.token}&subscribed=UserNotification`,
+    return axios.get(
+      `${API_URL}/pd/fcm/subscribe?api_secret_key=s3D6nHoU9AUw%jjTHy0K@UO)&user_email=${data.email}&device_token=${data.token}&subscribed=UserNotification`,
     );
   };
 
@@ -78,9 +73,9 @@ const SignInForm = props => {
       setMessage(null);
       ``;
       setLoading(false);
+
     }, []),
   );
-
 
   return (
     <ScrollView
@@ -215,8 +210,7 @@ const SignInForm = props => {
                 <Text
                   style={{ color: '#31ade5', fontWeight: '700' }}
                   onPress={() => navigation.navigate('Email')}>
-                  {' '}
-                  Contact Us{' '}
+                  Contact Us
                 </Text>
               </View>
             </View>

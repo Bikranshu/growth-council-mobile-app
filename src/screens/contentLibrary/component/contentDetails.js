@@ -119,7 +119,7 @@ const ContentLibrary = props => {
           }}>
           <View style={{flexDirection: 'row'}}>
             <View style={{flexDirection: 'row', alignItems: 'center'}}>
-              <Text style={{fontSize: 9}}>Content Library</Text>
+              <Text style={{fontSize: 9}}>Growth Content</Text>
               <Ionicons
                 name="chevron-forward-outline"
                 size={15}

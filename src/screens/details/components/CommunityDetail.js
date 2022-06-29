@@ -24,6 +24,7 @@ import Player from '../../dashboard/components/Player';
 import {CommonStyles, Colors, Typography} from '../../../theme';
 import Loading from '../../../shared/loading';
 import RNFetchBlob from 'react-native-blob-util';
+import LinearGradient from 'react-native-linear-gradient';
 // import ReactNativeBlobUtil from 'react-native-blob-util';
 import ToastMessage from '../../../shared/toast';
 import { GROWTH_COACHING_ID, GROWTH_COMMUNITY_ID, GROWTH_CONTENT_ID } from '../../../constants';
@@ -75,7 +76,7 @@ const CommunityDetail = props => {
 
   useFocusEffect(
     useCallback(() => {
-      fetchSessionDetailByIdentifier(route.params.id);
+      fetchSessionDetailByIdentifier(route?.params?.id);
       return () => {
         cleanSessionDetail();
       };
@@ -84,7 +85,7 @@ const CommunityDetail = props => {
 
   useFocusEffect(
     useCallback(() => {
-      fetchAllPOEDetail(route.params.poeId);
+      fetchAllPOEDetail(route?.params?.poeId);
       return () => {
         cleanPOEDetail();
       };
@@ -93,7 +94,7 @@ const CommunityDetail = props => {
 
   useFocusEffect(
     useCallback(() => {
-      fetchAllPOEEvent(route.params.poeId);
+      fetchAllPOEEvent(route?.params?.poeId);
       return () => {
         cleanPOEEvent();
       };
@@ -101,7 +102,7 @@ const CommunityDetail = props => {
   );
 
   useEffect(() => {
-    fetchAllPillarMemberContent(route.params.pillarId);
+    fetchAllPillarMemberContent(route?.params?.pillarId);
   }, [isFocused]);
 
   useEffect(() => {
@@ -110,7 +111,7 @@ const CommunityDetail = props => {
 
   useFocusEffect(
     useCallback(() => {
-      fetchAllPillarPOE(route.params.poeId);
+      fetchAllPillarPOE(route?.params?.poeId);
 
       return () => {
         cleanPillarPOE();
@@ -555,7 +556,7 @@ const CommunityDetail = props => {
                     />
                   </View>
                 )}
-              {poeDetails?.slug === 'peer-to-peer-interactions' && (
+              {poeDetails?.slug === 'peer-to-peer-digital-network' && (
                 <View style={styles.buttonWrapper}>
                   <View style={styles.memberWrapper}>
                     <TouchableOpacity
@@ -563,6 +564,10 @@ const CommunityDetail = props => {
                       <ImageBackground
                         style={{width: '100%', height: 160, borderRadius: 20}}
                         source={require('../../../assets/img/people.jpg')}>
+                        <LinearGradient
+                          colors={['#00000000', '#000000']}
+                          style={{height: '100%', width: '100%'}}
+                        />
                         <View
                           style={{
                             width: buttonContainerWidth,
@@ -604,8 +609,8 @@ const CommunityDetail = props => {
                   </TouchableOpacity>
                 </View>
               )}
-              {poeDetails?.slug !== 'peer-to-peer-interactions' &&
-                // poeDetails?.slug !== 'executive-mindxchange-events' &&
+              {poeDetails?.slug !== 'peer-to-peer-digital-network' &&
+                poeDetails?.slug !== 'executive-coaching-clinic' &&
                 poeDetails?.slug !== 'annual-council-meeting' && (
                   <View style={styles.buttonWrapper}>
                     <View style={styles.btnWrapper}>
@@ -654,6 +659,10 @@ const CommunityDetail = props => {
                         <ImageBackground
                           style={{width: '100%', height: 120, borderRadius: 20}}
                           source={require('../../../assets/img/digital-content.jpg')}>
+                          <LinearGradient
+                            colors={['#00000000', '#000000']}
+                            style={{height: '100%', width: '100%'}}
+                          />
                           <View
                             style={{
                               width: buttonContainerWidth,

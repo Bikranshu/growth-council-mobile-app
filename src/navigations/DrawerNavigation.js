@@ -174,7 +174,11 @@ const DrawerNavigation = () => {
         options={({navigation, route}) => ({
           pillarId: route?.params?.pillarId,
           drawerIcon: ({focused, size}) => (
-            <Material name="group-work" color={'#14A2E2'} size={19} />
+            <Image
+              source={require('../../src/assets/img/CommunityIcon_Blue.png')}
+              style={{width: 20, height: 20}}
+              resizeMode="cover"
+            />
           ),
           header: () => (
             <SubHeader
@@ -191,7 +195,11 @@ const DrawerNavigation = () => {
         options={({navigation, route}) => ({
           pillarId: route?.params?.pillarId,
           drawerIcon: ({focused, size}) => (
-            <Feature name="thumbs-up" color={'#f26722'} size={19} />
+            <Image
+              source={require('../../src/assets/img/ContentIcon_Orange.png')}
+              style={{width: 20, height: 20}}
+              resizeMode="cover"
+            />
           ),
           header: () => (
             <SubHeader
@@ -209,8 +217,8 @@ const DrawerNavigation = () => {
           pillarId: route?.params?.pillarId,
           drawerIcon: ({focused, size}) => (
             <Image
-              source={require('../../src/assets/img/GrowthCoaching-01.png')}
-              style={{width: 20, height: 30}}
+              source={require('../../src/assets/img/CoachingIcon_Green.png')}
+              style={{width: 20, height: 20}}
               resizeMode="cover"
             />
           ),

@@ -119,7 +119,7 @@ const Radar = props => {
         <View style={{height: 400}}>
           <WebView
             source={{
-              uri: `${HOME_URL}/frost-radar?user_id=${userId}`,
+              uri: `${HOME_URL}/frost-radar/?user_id=${userId}`,
             }}
             renderLoading={LoadingIndicatorView}
             startInLoadingState={true}
@@ -127,14 +127,14 @@ const Radar = props => {
           />
         </View>
         <View style={{flex: 1}}>
-          <View style={styles.container}>
-            <View style={styles.mainContent}>
-              <View>
-                {radarMemberDetails?.present_growth_index
-                  ?.user_radar_growth_index !== '' &&
-                  radarMemberDetails?.present_growth_index
-                    ?.user_radar_innovation_index !== '' &&
-                  radarMemberDetails?.present_growth_index !== null && (
+          {radarMemberDetails?.present_growth_index?.user_radar_growth_index !==
+            '' &&
+            radarMemberDetails?.present_growth_index
+              ?.user_radar_innovation_index !== '' &&
+            radarMemberDetails?.present_growth_index !== null && (
+              <View style={styles.container}>
+                <View style={styles.mainContent}>
+                  <View>
                     <View>
                       <View style={{flexDirection: 'row', flex: 1}}>
                         <View style={{flex: 2}}>
@@ -184,11 +184,11 @@ const Radar = props => {
                           />
                         </View>
                       </View>
+
                       <View style={styles.seperationline} />
                     </View>
-                  )}
 
-                {/* <View style={{marginTop: 10}}>
+                    {/* <View style={{marginTop: 10}}>
                   {radarMemberDetails?.member_details?.map(item => {
                     const memberData = () => {
                       setDescription(item?.member_description);
@@ -215,10 +215,10 @@ const Radar = props => {
                     );
                   })}
                 </View> */}
+                  </View>
+                </View>
               </View>
-            </View>
-          </View>
-
+            )}
           {/* <View style={styles.centeredView}>
             <Modal
               animationType="slide"
@@ -314,6 +314,7 @@ const styles = StyleSheet.create({
     fontWeight: '600',
     height: 30,
     alignItems: 'center',
+    color: 'black',
     fontFamily: Typography.FONT_SF_REGULAR,
   },
   input: {
