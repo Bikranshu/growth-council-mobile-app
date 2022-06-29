@@ -15,6 +15,10 @@ export const FIREBASE_APP_ID = '1:377923277535:android:d100b41f6342692a9f4f6a';
 
 export const GROWTH_CONTENT_FALLBACK_IMAGE = '../img/best-practice-bg.png'
 
+export const HOME_URL ='https://staging.gilcouncil.com/frost-radar'
+// export const HOME_URL ='https:/gilcouncil.com/frost-radar'
+
+
 //LIVE
 // export const GROWTH_COMMUNITY_ID = 194; //169
 // export const GROWTH_CONTENT_ID = 171; //170

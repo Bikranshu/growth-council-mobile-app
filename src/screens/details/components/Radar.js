@@ -119,7 +119,7 @@ const Radar = props => {
         <View style={{height: 400}}>
           <WebView
             source={{
-              uri: `https://staging.gilcouncil.com/frost-radar?user_id=${userId}`,
+              uri: `${HOME_URL}?user_id=${userId}`,
             }}
             renderLoading={LoadingIndicatorView}
             startInLoadingState={true}
