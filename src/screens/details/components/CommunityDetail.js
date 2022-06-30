@@ -556,7 +556,7 @@ const CommunityDetail = props => {
                     />
                   </View>
                 )}
-              {poeDetails?.slug === 'peer-to-peer-digital-network' && (
+              {poeDetails?.slug === 'peer-to-peer-interactions' && (
                 <View style={styles.buttonWrapper}>
                   <View style={styles.memberWrapper}>
                     <TouchableOpacity
@@ -609,7 +609,7 @@ const CommunityDetail = props => {
                   </TouchableOpacity>
                 </View>
               )}
-              {poeDetails?.slug !== 'peer-to-peer-digital-network' &&
+              {poeDetails?.slug !== 'peer-to-peer-interactions' &&
                 poeDetails?.slug !== 'executive-coaching-clinic' &&
                 poeDetails?.slug !== 'annual-council-meeting' && (
                   <View style={styles.buttonWrapper}>
