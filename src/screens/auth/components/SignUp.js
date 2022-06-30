@@ -111,14 +111,18 @@ const SignUpForm = props => {
                 'You have successfully registered. Please wait for admin approval.',
               );
             } else {
-              ToastMessage.show('This email address is already in use');
+              ToastMessage.show(
+                'This email address or username is already in use',
+              );
             }
           });
         }
       } catch (error) {
         switch (error.code) {
           case 'auth/email-already-in-use':
-            ToastMessage.show('This email address is already in use');
+            ToastMessage.show(
+              'This email address or username is already in use',
+            );
             break;
           case 'auth/argument-error':
             ToastMessage.show('Authentication error. Please try again.');

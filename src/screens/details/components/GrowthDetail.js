@@ -120,26 +120,26 @@ const GrowthDetail = props => {
     );
   }
 
-//   useEffect(() => {
-//     setEventStatus(coachingSession[0]?.register_status);
-//   }, [coachingSession]);
+  //   useEffect(() => {
+  //     setEventStatus(coachingSession[0]?.register_status);
+  //   }, [coachingSession]);
 
-//   const sessionId = coachingSession[0]?.ID;
-//   const Slug = poeDetails?.slug;
+  //   const sessionId = coachingSession[0]?.ID;
+  //   const Slug = poeDetails?.slug;
 
-//   const registerEventByEventID = async (sessionId, Slug) => {
-//     const response = await registerEventByIdentifier({
-//       event_id: sessionId,
-//       slug: Slug,
-//     });
-//     if (response?.payload?.code === 200) {
-//       setEventStatus(true);
-//       ToastMessage.show('You have successfully RSVP’d this event.');
-//     } else {
-//       toast.closeAll();
-//       ToastMessage.show(response?.payload?.response);
-//     }
-//   };
+  //   const registerEventByEventID = async (sessionId, Slug) => {
+  //     const response = await registerEventByIdentifier({
+  //       event_id: sessionId,
+  //       slug: Slug,
+  //     });
+  //     if (response?.payload?.code === 200) {
+  //       setEventStatus(true);
+  //       ToastMessage.show('You have successfully RSVP’d this event.');
+  //     } else {
+  //       toast.closeAll();
+  //       ToastMessage.show(response?.payload?.response);
+  //     }
+  //   };
 
   const _renderItem = ({item, index}, navigation) => {
     return (
@@ -378,6 +378,21 @@ const GrowthDetail = props => {
               {showChartButton && (
                 <View style={styles.bottom}>
                   <Text style={styles.title}>Frost Radar for Leadership</Text>
+                  <HTMLView
+                    value={radarMemberDetails?.radar_text}
+                    textComponentProps={{
+                      style: {
+                        fontFamily: Typography.FONT_SF_REGULAR,
+                        fontSize: 14,
+                        lineHeight: 24,
+                        padding: 15,
+                        textAlign: 'left',
+                        color: '#77838F',
+                        textAlign: 'justify',
+                      },
+                    }}
+                  />
+
                   <TouchableOpacity
                     onPress={() => {
                       navigation.navigate('Radar');
@@ -499,7 +514,7 @@ const styles = StyleSheet.create({
     marginTop: 30,
   },
   bottom: {
-    marginTop: 15,
+    marginTop: 10,
     marginBottom: 20,
   },
   bottomWrapper: {
