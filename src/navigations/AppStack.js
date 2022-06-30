@@ -324,7 +324,7 @@ const AppStack = () => (
         header: ({navigation}) => (
           <SubHeader
             title="Growth Content"
-            image={require('../assets/img/appBG.png')}
+            image={require('../assets/img/best-practice-bg.png')}
             navigation={navigation}
             noDrawer
           />
