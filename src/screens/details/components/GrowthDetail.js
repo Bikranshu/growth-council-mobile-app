@@ -378,20 +378,22 @@ const GrowthDetail = props => {
               {showChartButton && (
                 <View style={styles.bottom}>
                   <Text style={styles.title}>Frost Radar for Leadership</Text>
-                  <HTMLView
-                    value={radarMemberDetails?.radar_text}
-                    textComponentProps={{
-                      style: {
-                        fontFamily: Typography.FONT_SF_REGULAR,
-                        fontSize: 14,
-                        lineHeight: 24,
-                        padding: 15,
-                        textAlign: 'left',
-                        color: '#77838F',
-                        textAlign: 'justify',
-                      },
-                    }}
-                  />
+                  {radarMemberDetails?.radar_text !== undefined && (
+                    <HTMLView
+                      value={radarMemberDetails?.radar_text}
+                      textComponentProps={{
+                        style: {
+                          fontFamily: Typography.FONT_SF_REGULAR,
+                          fontSize: 14,
+                          lineHeight: 24,
+                          padding: 15,
+                          textAlign: 'left',
+                          color: '#77838F',
+                          textAlign: 'justify',
+                        },
+                      }}
+                    />
+                  )}
 
                   <TouchableOpacity
                     onPress={() => {
@@ -586,7 +588,7 @@ const styles = StyleSheet.create({
   buttonWrapper: {
     justifyContent: 'center',
     alignItems: 'flex-start',
-    marginTop: 10,
+    marginTop: 20,
   },
   button: {
     width: '93%',
