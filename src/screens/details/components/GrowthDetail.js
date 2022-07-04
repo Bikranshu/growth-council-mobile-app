@@ -276,28 +276,29 @@ const GrowthDetail = props => {
                 }}
               />
 
-              {/* {!eventStatus && (
-                <View>
-                  <TouchableOpacity
-                    onPress={() => registerEventByEventID(poeDetails?.term_id)}>
-                    <View style={styles.buttonWrapper}>
-                      <View
-                        style={[
-                          styles.button,
-                          {
-                            marginLeft: 15,
-                            backgroundColor: Colors.PRACTICE_COLOR,
-                          },
-                        ]}>
-                        <Text style={styles.buttonText}>
-                          Sign Up for Growth Leader Coaching
-                        </Text>
-                      </View>
+              {/* {!eventStatus && ( */}
+              <View>
+                <TouchableOpacity
+                //   onPress={() => registerEventByEventID(poeDetails?.term_id)}
+				  >
+                  <View style={styles.buttonWrapper}>
+                    <View
+                      style={[
+                        styles.button,
+                        {
+                          marginLeft: 15,
+                          backgroundColor: Colors.PRACTICE_COLOR,
+                        },
+                      ]}>
+                      <Text style={styles.buttonText}>
+                        Sign Up for Growth Leader Coaching
+                      </Text>
                     </View>
-                  </TouchableOpacity>
-                </View>
-              )}
-              {eventStatus && (
+                  </View>
+                </TouchableOpacity>
+              </View>
+              {/* )} */}
+              {/* {eventStatus && (
                 <View>
                   <View style={styles.buttonWrapper}>
                     <View
@@ -337,47 +338,18 @@ const GrowthDetail = props => {
                   </View>
                 )}
 
-              {/* {showChartButton && (
-                <View style={{marginTop: 10, paddingBottom: 20}}>
-                  <Text
-                    style={{
-                      fontSize: 14,
-                      fontFamily: Typography.FONT_SF_REGULAR,
-                      color: Colors.PRIMARY_TEXT_COLOR,
-                      fontWeight: '700',
-                      marginLeft: 15,
-                    }}>
-                    Frost Radar for Leadership
-                  </Text>
-                  <Text
-                    style={{
-                      fontFamily: Typography.FONT_SF_REGULAR,
-                      fontSize: 14,
-                      lineHeight: 24,
-                      padding: 15,
-                      textAlign: 'left',
-                      color: 'black',
-                      textAlign: 'justify',
-                    }}>
-                    {radarMemberDetails?.radar_text}
-                  </Text>
-
-                  <View style={{height: 400, backgroundColor: 'white'}}>
-                    <WebView
-                      source={{
-                        uri: `https://gilcouncil.com/frost-radar?user_id=${userId}`,
-                      }}
-                      renderLoading={LoadingIndicatorView}
-                      startInLoadingState={true}
-                      ref={webviewRef}
-                    />
-                  </View>
-                </View>
-              )} */}
-
-              {showChartButton && (
-                <View style={styles.bottom}>
-                  <Text style={styles.title}>Frost Radar for Leadership</Text>
+              <View style={{marginTop: 20, paddingBottom: 20}}>
+                <Text
+                  style={{
+                    fontSize: 14,
+                    fontFamily: Typography.FONT_SF_REGULAR,
+                    color: Colors.PRIMARY_TEXT_COLOR,
+                    fontWeight: '700',
+                    marginLeft: 15,
+                  }}>
+                  Frost Radar for Leadership
+                </Text>
+                {radarMemberDetails?.radar_text !== undefined && (
                   <HTMLView
                     value={radarMemberDetails?.radar_text}
                     textComponentProps={{
@@ -392,7 +364,41 @@ const GrowthDetail = props => {
                       },
                     }}
                   />
+                )}
 
+                <View style={{height: 400, backgroundColor: 'white'}}>
+                  <WebView
+                    source={{
+                      uri: `https://staging.gilcouncil.com/frost-radar/`,
+                    }}
+                    renderLoading={LoadingIndicatorView}
+                    startInLoadingState={true}
+                    ref={webviewRef}
+                    androidHardwareAccelerationDisabled={true}
+                    style={{overflow: 'hidden', opacity: 0.99}}
+                  />
+                </View>
+              </View>
+
+              {/* {showChartButton && (
+                <View style={styles.bottom}>
+                  <Text style={styles.title}>Frost Radar for Leadership</Text>
+                  {radarMemberDetails?.radar_text !== undefined && (
+                    <HTMLView
+                      value={radarMemberDetails?.radar_text}
+                      textComponentProps={{
+                        style: {
+                          fontFamily: Typography.FONT_SF_REGULAR,
+                          fontSize: 14,
+                          lineHeight: 24,
+                          padding: 15,
+                          textAlign: 'left',
+                          color: '#77838F',
+                          textAlign: 'justify',
+                        },
+                      }}
+                    />
+                  )}
                   <TouchableOpacity
                     onPress={() => {
                       navigation.navigate('Radar');
@@ -406,7 +412,7 @@ const GrowthDetail = props => {
                     </View>
                   </TouchableOpacity>
                 </View>
-              )}
+              )} */}
             </View>
           </ScrollView>
         </View>
