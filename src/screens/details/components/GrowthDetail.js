@@ -277,7 +277,7 @@ const GrowthDetail = props => {
               />
 
               {/* {!eventStatus && ( */}
-              <View>
+              {/* <View>
                 <TouchableOpacity
                 //   onPress={() => registerEventByEventID(poeDetails?.term_id)}
 				  >
@@ -296,7 +296,7 @@ const GrowthDetail = props => {
                     </View>
                   </View>
                 </TouchableOpacity>
-              </View>
+              </View> */}
               {/* )} */}
               {/* {eventStatus && (
                 <View>
@@ -338,7 +338,7 @@ const GrowthDetail = props => {
                   </View>
                 )}
 
-              <View style={{marginTop: 20, paddingBottom: 20}}>
+              {/* <View style={{marginTop: 20, paddingBottom: 20}}>
                 <Text
                   style={{
                     fontSize: 14,
@@ -378,9 +378,9 @@ const GrowthDetail = props => {
                     style={{overflow: 'hidden', opacity: 0.99}}
                   />
                 </View>
-              </View>
+              </View> */}
 
-              {/* {showChartButton && (
+              {showChartButton && (
                 <View style={styles.bottom}>
                   <Text style={styles.title}>Frost Radar for Leadership</Text>
                   {radarMemberDetails?.radar_text !== undefined && (
@@ -412,7 +412,7 @@ const GrowthDetail = props => {
                     </View>
                   </TouchableOpacity>
                 </View>
-              )} */}
+              )} 
             </View>
           </ScrollView>
         </View>
