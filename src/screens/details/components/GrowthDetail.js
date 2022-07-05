@@ -59,18 +59,16 @@ const GrowthDetail = props => {
     radarMemberDetailsError,
     fetchRadarMemberDetail,
 
-    eventRegisters,
-    eventRegisterLoading,
-    eventRegisterError,
-    registerEventByIdentifier,
-    cleanEventRegister,
+    coachingSignup,
+    coachingSignupLoading,
+    coachingSignupError,
+    signupCoachingSession,
+    cleanSignUpCoaching,
   } = props;
 
   const toast = useToast();
   const isFocused = useIsFocused();
-  const [eventStatus, setEventStatus] = useState(
-    coachingSession[0]?.register_status,
-  );
+  const [status, setStatus] = useState(false);
   const [showChartButton, setShowChartButton] = useState(true);
   const webviewRef = React.useRef(null);
   const [userId, setUserId] = useState(0);
@@ -120,26 +118,17 @@ const GrowthDetail = props => {
     );
   }
 
-  //   useEffect(() => {
-  //     setEventStatus(coachingSession[0]?.register_status);
-  //   }, [coachingSession]);
+  const GrowthCoachingSignup = async () => {
+    const response = await signupCoachingSession({});
 
-  //   const sessionId = coachingSession[0]?.ID;
-  //   const Slug = poeDetails?.slug;
-
-  //   const registerEventByEventID = async (sessionId, Slug) => {
-  //     const response = await registerEventByIdentifier({
-  //       event_id: sessionId,
-  //       slug: Slug,
-  //     });
-  //     if (response?.payload?.code === 200) {
-  //       setEventStatus(true);
-  //       ToastMessage.show('You have successfully RSVP’d this event.');
-  //     } else {
-  //       toast.closeAll();
-  //       ToastMessage.show(response?.payload?.response);
-  //     }
-  //   };
+    if (response?.payload?.code === 201) {
+        // setStatus(true);
+      ToastMessage.show(response.payload.message);
+    } else {
+        toast.closeAll();
+      ToastMessage.show(response?.payload?.message);
+    }
+  };
 
   const _renderItem = ({item, index}, navigation) => {
     return (
@@ -276,29 +265,27 @@ const GrowthDetail = props => {
                 }}
               />
 
-              {/* {!eventStatus && ( */}
-              <View>
-                <TouchableOpacity
-                //   onPress={() => registerEventByEventID(poeDetails?.term_id)}
-				  >
-                  <View style={styles.buttonWrapper}>
-                    <View
-                      style={[
-                        styles.button,
-                        {
-                          marginLeft: 15,
-                          backgroundColor: Colors.PRACTICE_COLOR,
-                        },
-                      ]}>
-                      <Text style={styles.buttonText}>
-                        Sign Up for Growth Leader Coaching
-                      </Text>
+              {/* {!status && ( */}
+                <View>
+                  <TouchableOpacity onPress={() => GrowthCoachingSignup()}>
+                    <View style={styles.buttonWrapper}>
+                      <View
+                        style={[
+                          styles.button,
+                          {
+                            marginLeft: 15,
+                            backgroundColor: Colors.PRACTICE_COLOR,
+                          },
+                        ]}>
+                        <Text style={styles.buttonText}>
+                          Sign Up for Growth Leader Coaching
+                        </Text>
+                      </View>
                     </View>
-                  </View>
-                </TouchableOpacity>
-              </View>
-              {/* )} */}
-              {/* {eventStatus && (
+                  </TouchableOpacity>
+                </View>
+              {/* )}
+              {status && (
                 <View>
                   <View style={styles.buttonWrapper}>
                     <View
