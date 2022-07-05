@@ -27,6 +27,9 @@ import {
   resetCoachingSignup,
 } from './slice/coachingSignupSlice';
 
+import {fetchProfileByID, resetProfile} from '../account/slice/profileSlice';
+
+
 const GrowthDetailScreen = props => {
   const dispatch = useDispatch();
 
@@ -55,6 +58,12 @@ const GrowthDetailScreen = props => {
 
   const {coachingSignup, coachingSignupLoading, coachingSignupError} =
     useSelector(state => state.coachingSignup);
+
+	const {profile, profileLoading, profileError} = useSelector(
+		state => state.profile,
+	  );
+
+
   /**
    * Fetch event data.
    * @param {string} poeId
@@ -110,6 +119,14 @@ const GrowthDetailScreen = props => {
     dispatch(resetCoachingSignup());
   };
 
+  const fetchProfile = () => {
+    dispatch(fetchProfileByID());
+  };
+
+  const cleanProfile = () => {
+    dispatch(resetProfile());
+  };
+
   return (
     <GrowthDetail
       {...props}
@@ -143,6 +160,12 @@ const GrowthDetailScreen = props => {
       coachingSignupError={coachingSignupError}
       signupCoachingSession={signupCoachingSession}
       cleanSignUpCoaching={cleanSignUpCoaching}
+
+	  profile={profile}
+      profileLoading={profileLoading}
+      profileError={profileError}
+      fetchProfile={fetchProfile}
+      cleanProfile={cleanProfile}
     />
   );
 };

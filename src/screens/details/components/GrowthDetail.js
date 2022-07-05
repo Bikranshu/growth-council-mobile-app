@@ -64,6 +64,12 @@ const GrowthDetail = props => {
     coachingSignupError,
     signupCoachingSession,
     cleanSignUpCoaching,
+
+    profile,
+    profileLoading,
+    profileError,
+    fetchProfile,
+    cleanProfile,
   } = props;
 
   const toast = useToast();
@@ -108,6 +114,13 @@ const GrowthDetail = props => {
     fetchRadarMemberDetail();
   }, []);
 
+  useEffect(() => {
+    const fetchProfileAsync = async () => {
+      await fetchProfile();
+    };
+    fetchProfileAsync();
+  }, []);
+
   function LoadingIndicatorView() {
     return (
       <ActivityIndicator
@@ -120,15 +133,24 @@ const GrowthDetail = props => {
 
   const GrowthCoachingSignup = async () => {
     const response = await signupCoachingSession({});
-
     if (response?.payload?.code === 200) {
-        // setStatus(true);
+      // setStatus(true);
       ToastMessage.show(response.payload.message);
     } else {
-        toast.closeAll();
+      toast.closeAll();
       ToastMessage.show(response?.payload?.message);
     }
   };
+
+  let previousSession =
+    profile?.session_score !== false && profile?.session_score !== null
+      ? profile?.session_score?.map(item => item?.session)
+      : [0];
+
+  let SessionID =
+    coachingSession !== false && coachingSession !== null
+      ? coachingSession.map(item => item?.ID)
+      : [0];
 
   const _renderItem = ({item, index}, navigation) => {
     return (
@@ -266,24 +288,24 @@ const GrowthDetail = props => {
               />
 
               {/* {!status && ( */}
-                <View>
-                  <TouchableOpacity onPress={() => GrowthCoachingSignup()}>
-                    <View style={styles.buttonWrapper}>
-                      <View
-                        style={[
-                          styles.button,
-                          {
-                            marginLeft: 15,
-                            backgroundColor: Colors.PRACTICE_COLOR,
-                          },
-                        ]}>
-                        <Text style={styles.buttonText}>
-                          Sign Up for Growth Leader Coaching
-                        </Text>
-                      </View>
+              <View>
+                <TouchableOpacity onPress={() => GrowthCoachingSignup()}>
+                  <View style={styles.buttonWrapper}>
+                    <View
+                      style={[
+                        styles.button,
+                        {
+                          marginLeft: 15,
+                          backgroundColor: Colors.PRACTICE_COLOR,
+                        },
+                      ]}>
+                      <Text style={styles.buttonText}>
+                        Sign Up for Growth Leader Coaching
+                      </Text>
                     </View>
-                  </TouchableOpacity>
-                </View>
+                  </View>
+                </TouchableOpacity>
+              </View>
               {/* )}
               {status && (
                 <View>
@@ -305,25 +327,30 @@ const GrowthDetail = props => {
               )} */}
 
               {coachingSessionLoading && <Loading />}
-              {coachingSession?.length !== 0 &&
-                coachingSession !== null &&
-                coachingSession !== false && (
-                  <View style={styles.middle}>
-                    <Text style={styles.title}>Sessions</Text>
-                    <View
-                      style={{
-                        display: 'flex',
-                        flexDirection: 'row',
-                      }}>
-                      <FlatList
-                        horizontal
-                        showsHorizontalScrollIndicator={false}
-                        data={coachingSession}
-                        renderItem={_renderMiddleItem}
-                      />
-                    </View>
-                  </View>
-                )}
+
+              {previousSession.indexOf(SessionID) > -1 !== true && (
+                <View>
+                  {coachingSession?.length !== 0 &&
+                    coachingSession !== null &&
+                    coachingSession !== false && (
+                      <View style={styles.middle}>
+                        <Text style={styles.title}>Sessions</Text>
+                        <View
+                          style={{
+                            display: 'flex',
+                            flexDirection: 'row',
+                          }}>
+                          <FlatList
+                            horizontal
+                            showsHorizontalScrollIndicator={false}
+                            data={coachingSession}
+                            renderItem={_renderMiddleItem}
+                          />
+                        </View>
+                      </View>
+                    )}
+                </View>
+              )}
 
               <View style={{marginTop: 20, paddingBottom: 20}}>
                 <Text
