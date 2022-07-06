@@ -380,7 +380,7 @@ const GrowthDetail = props => {
                 </View>
               </View> */}
 
-              {showChartButton && (
+              {/* {showChartButton && (
                 <View style={styles.bottom}>
                   <Text style={styles.title}>Frost Radar for Leadership</Text>
                   {radarMemberDetails?.radar_text !== undefined && (
@@ -399,7 +399,7 @@ const GrowthDetail = props => {
                       }}
                     />
                   )}
-                  {/* <TouchableOpacity
+                  <TouchableOpacity
                     onPress={() => {
                       navigation.navigate('Radar');
                     }}>
@@ -410,9 +410,9 @@ const GrowthDetail = props => {
                         </Text>
                       </View>
                     </View>
-                  </TouchableOpacity> */}
+                  </TouchableOpacity>
                 </View>
-              )} 
+              )}  */}
             </View>
           </ScrollView>
         </View>
