@@ -300,7 +300,7 @@ const GrowthDetail = props => {
                         },
                       ]}>
                       <Text style={styles.buttonText}>
-                        Sign Up for Growth Leader Coaching
+                        Click here to enroll and begin your own transformational journey today
                       </Text>
                     </View>
                   </View>
@@ -327,7 +327,7 @@ const GrowthDetail = props => {
               )} */}
 
               {coachingSessionLoading && <Loading />}
-
+{/* 
               {previousSession.indexOf(SessionID) > -1 !== true && (
                 <View>
                   {coachingSession?.length !== 0 &&
@@ -350,8 +350,8 @@ const GrowthDetail = props => {
                       </View>
                     )}
                 </View>
-              )}
-
+              )} */}
+{/* 
               <View style={{marginTop: 20, paddingBottom: 20}}>
                 <Text
                   style={{
@@ -392,7 +392,7 @@ const GrowthDetail = props => {
                     style={{overflow: 'hidden', opacity: 0.99}}
                   />
                 </View>
-              </View>
+              </View> */}
 
               {/* {showChartButton && (
                 <View style={styles.bottom}>
