@@ -59,18 +59,22 @@ const GrowthDetail = props => {
     radarMemberDetailsError,
     fetchRadarMemberDetail,
 
-    eventRegisters,
-    eventRegisterLoading,
-    eventRegisterError,
-    registerEventByIdentifier,
-    cleanEventRegister,
+    coachingSignup,
+    coachingSignupLoading,
+    coachingSignupError,
+    signupCoachingSession,
+    cleanSignUpCoaching,
+
+    profile,
+    profileLoading,
+    profileError,
+    fetchProfile,
+    cleanProfile,
   } = props;
 
   const toast = useToast();
   const isFocused = useIsFocused();
-  const [eventStatus, setEventStatus] = useState(
-    coachingSession[0]?.register_status,
-  );
+  const [status, setStatus] = useState(false);
   const [showChartButton, setShowChartButton] = useState(true);
   const webviewRef = React.useRef(null);
   const [userId, setUserId] = useState(0);
@@ -110,6 +114,13 @@ const GrowthDetail = props => {
     fetchRadarMemberDetail();
   }, []);
 
+  useEffect(() => {
+    const fetchProfileAsync = async () => {
+      await fetchProfile();
+    };
+    fetchProfileAsync();
+  }, []);
+
   function LoadingIndicatorView() {
     return (
       <ActivityIndicator
@@ -120,26 +131,26 @@ const GrowthDetail = props => {
     );
   }
 
-  //   useEffect(() => {
-  //     setEventStatus(coachingSession[0]?.register_status);
-  //   }, [coachingSession]);
+  const GrowthCoachingSignup = async () => {
+    const response = await signupCoachingSession({});
+    if (response?.payload?.code === 200) {
+      // setStatus(true);
+      ToastMessage.show(response.payload.message);
+    } else {
+      toast.closeAll();
+      ToastMessage.show(response?.payload?.message);
+    }
+  };
 
-  //   const sessionId = coachingSession[0]?.ID;
-  //   const Slug = poeDetails?.slug;
+  let previousSession =
+    profile?.session_score !== false && profile?.session_score !== null
+      ? profile?.session_score?.map(item => item?.session)
+      : [0];
 
-  //   const registerEventByEventID = async (sessionId, Slug) => {
-  //     const response = await registerEventByIdentifier({
-  //       event_id: sessionId,
-  //       slug: Slug,
-  //     });
-  //     if (response?.payload?.code === 200) {
-  //       setEventStatus(true);
-  //       ToastMessage.show('You have successfully RSVP’d this event.');
-  //     } else {
-  //       toast.closeAll();
-  //       ToastMessage.show(response?.payload?.response);
-  //     }
-  //   };
+  let SessionID =
+    coachingSession !== false && coachingSession !== null
+      ? coachingSession.map(item => item?.ID)
+      : [0];
 
   const _renderItem = ({item, index}, navigation) => {
     return (
@@ -276,11 +287,9 @@ const GrowthDetail = props => {
                 }}
               />
 
-              {/* {!eventStatus && ( */}
-              {/* <View>
-                <TouchableOpacity
-                //   onPress={() => registerEventByEventID(poeDetails?.term_id)}
-				  >
+              {/* {!status && ( */}
+              <View>
+                <TouchableOpacity onPress={() => GrowthCoachingSignup()}>
                   <View style={styles.buttonWrapper}>
                     <View
                       style={[
@@ -291,14 +300,14 @@ const GrowthDetail = props => {
                         },
                       ]}>
                       <Text style={styles.buttonText}>
-                        Sign Up for Growth Leader Coaching
+                        Click here to enroll and begin your own transformational journey today!
                       </Text>
                     </View>
                   </View>
                 </TouchableOpacity>
-              </View> */}
-              {/* )} */}
-              {/* {eventStatus && (
+              </View>
+              {/* )}
+              {status && (
                 <View>
                   <View style={styles.buttonWrapper}>
                     <View
@@ -318,27 +327,33 @@ const GrowthDetail = props => {
               )} */}
 
               {coachingSessionLoading && <Loading />}
-              {coachingSession?.length !== 0 &&
-                coachingSession !== null &&
-                coachingSession !== false && (
-                  <View style={styles.middle}>
-                    <Text style={styles.title}>Sessions</Text>
-                    <View
-                      style={{
-                        display: 'flex',
-                        flexDirection: 'row',
-                      }}>
-                      <FlatList
-                        horizontal
-                        showsHorizontalScrollIndicator={false}
-                        data={coachingSession}
-                        renderItem={_renderMiddleItem}
-                      />
-                    </View>
-                  </View>
-                )}
 
-              {/* <View style={{marginTop: 20, paddingBottom: 20}}>
+              {/* {previousSession.indexOf(SessionID) > -1 !== true && (
+                <View> */}
+                  {coachingSession?.length !== 0 &&
+                    coachingSession !== null &&
+                    coachingSession !== false && (
+                      <View style={styles.middle}>
+                        <Text style={styles.title}>Sessions</Text>
+                        <View
+                          style={{
+                            display: 'flex',
+                            flexDirection: 'row',
+                          }}>
+                          <FlatList
+                            horizontal
+                            showsHorizontalScrollIndicator={false}
+                            data={coachingSession}
+                            renderItem={_renderMiddleItem}
+                          />
+                        </View>
+                      </View>
+                    )}
+                {/* </View>
+              )} */}
+
+{/* 
+              <View style={{marginTop: 20, paddingBottom: 20}}>
                 <Text
                   style={{
                     fontSize: 14,
@@ -380,7 +395,7 @@ const GrowthDetail = props => {
                 </View>
               </View> */}
 
-              {showChartButton && (
+              {/* {showChartButton && (
                 <View style={styles.bottom}>
                   <Text style={styles.title}>Frost Radar for Leadership</Text>
                   {radarMemberDetails?.radar_text !== undefined && (
@@ -398,7 +413,7 @@ const GrowthDetail = props => {
                         },
                       }}
                     />
-                  )}
+                  )} */}
                   {/* <TouchableOpacity
                     onPress={() => {
                       navigation.navigate('Radar');
@@ -411,8 +426,8 @@ const GrowthDetail = props => {
                       </View>
                     </View>
                   </TouchableOpacity> */}
-                </View>
-              )} 
+                {/* </View>
+              )}  */}
             </View>
           </ScrollView>
         </View>

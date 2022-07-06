@@ -89,6 +89,7 @@ import sendMailReducer from '../screens/email/slice/emailSlice';
 import radarReducer from '../screens/details/slice/radarSlice';
 import termsReducer from '../screens/terms/component/termsSlice';
 import getIdReducer from '../screens/details/slice/getIdBySlug';
+import coachingSignupReducer from '../screens/details/slice/coachingSignupSlice';
 
 const persistConfig = {
   key: 'root',
@@ -160,7 +161,8 @@ const reducers = combineReducers({
   radarMemberDetails: radarReducer,
   sendMail: sendMailReducer,
   terms: termsReducer,
-  getSlug:getIdReducer,
+  getSlug: getIdReducer,
+  coachingSignup: coachingSignupReducer,
 });
 
 const persistedReducer = persistReducer(persistConfig, reducers);
