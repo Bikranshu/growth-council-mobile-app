@@ -124,6 +124,8 @@ const Radar = props => {
             renderLoading={LoadingIndicatorView}
             startInLoadingState={true}
             ref={webviewRef}
+            androidHardwareAccelerationDisabled={true}
+            style={{overflow: 'hidden', opacity: 0.99}}
           />
         </View>
         <View style={{flex: 1}}>
