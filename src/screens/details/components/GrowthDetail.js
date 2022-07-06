@@ -300,7 +300,7 @@ const GrowthDetail = props => {
                         },
                       ]}>
                       <Text style={styles.buttonText}>
-                        Click here to enroll and begin your own transformational journey today
+                        Click here to enroll and begin your own transformational journey today!
                       </Text>
                     </View>
                   </View>
@@ -351,6 +351,7 @@ const GrowthDetail = props => {
                     )}
                 {/* </View>
               )} */}
+
 {/* 
               <View style={{marginTop: 20, paddingBottom: 20}}>
                 <Text
