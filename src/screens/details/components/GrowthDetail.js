@@ -327,9 +327,9 @@ const GrowthDetail = props => {
               )} */}
 
               {coachingSessionLoading && <Loading />}
-{/* 
-              {previousSession.indexOf(SessionID) > -1 !== true && (
-                <View>
+
+              {/* {previousSession.indexOf(SessionID) > -1 !== true && (
+                <View> */}
                   {coachingSession?.length !== 0 &&
                     coachingSession !== null &&
                     coachingSession !== false && (
@@ -349,7 +349,7 @@ const GrowthDetail = props => {
                         </View>
                       </View>
                     )}
-                </View>
+                {/* </View>
               )} */}
 {/* 
               <View style={{marginTop: 20, paddingBottom: 20}}>
