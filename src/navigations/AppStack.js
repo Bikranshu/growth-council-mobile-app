@@ -22,7 +22,7 @@ import SessionDetailScreen from '../screens/sessions';
 import SearchScreen from '../screens/search';
 import GmailScreen from '../screens/email/index';
 
-import FrostRadarScreen from '../screens/radar';
+// import FrostRadarScreen from '../screens/radar';
 import ManageAccountScreen from '../screens/account/ManageAccount';
 import OtherAccountScreen from '../screens/account/OthersAccount';
 import PrivacyScreen from '../screens/privacy';
@@ -72,7 +72,7 @@ const AppStack = () => (
         ...TransitionPresets.RevealFromBottomAndroid,
       }}
     />
-    <Screen
+    {/* <Screen
       name="FrostRadar"
       component={FrostRadarScreen}
       options={{
@@ -81,7 +81,7 @@ const AppStack = () => (
         headerTransparent: true,
         ...TransitionPresets.RevealFromBottomAndroid,
       }}
-    />
+    /> */}
     <Screen
       name="coachingSession"
       component={CoachingSessionDetailScreen}

@@ -399,7 +399,7 @@ const GrowthDetail = props => {
                       }}
                     />
                   )}
-                  <TouchableOpacity
+                  {/* <TouchableOpacity
                     onPress={() => {
                       navigation.navigate('Radar');
                     }}>
@@ -410,7 +410,7 @@ const GrowthDetail = props => {
                         </Text>
                       </View>
                     </View>
-                  </TouchableOpacity>
+                  </TouchableOpacity> */}
                 </View>
               )} 
             </View>
