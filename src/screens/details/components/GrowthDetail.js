@@ -59,18 +59,22 @@ const GrowthDetail = props => {
     radarMemberDetailsError,
     fetchRadarMemberDetail,
 
-    eventRegisters,
-    eventRegisterLoading,
-    eventRegisterError,
-    registerEventByIdentifier,
-    cleanEventRegister,
+    coachingSignup,
+    coachingSignupLoading,
+    coachingSignupError,
+    signupCoachingSession,
+    cleanSignUpCoaching,
+
+    profile,
+    profileLoading,
+    profileError,
+    fetchProfile,
+    cleanProfile,
   } = props;
 
   const toast = useToast();
   const isFocused = useIsFocused();
-  const [eventStatus, setEventStatus] = useState(
-    coachingSession[0]?.register_status,
-  );
+  const [status, setStatus] = useState(false);
   const [showChartButton, setShowChartButton] = useState(true);
   const webviewRef = React.useRef(null);
   const [userId, setUserId] = useState(0);
@@ -110,6 +114,13 @@ const GrowthDetail = props => {
     fetchRadarMemberDetail();
   }, []);
 
+  useEffect(() => {
+    const fetchProfileAsync = async () => {
+      await fetchProfile();
+    };
+    fetchProfileAsync();
+  }, []);
+
   function LoadingIndicatorView() {
     return (
       <ActivityIndicator
@@ -120,26 +131,26 @@ const GrowthDetail = props => {
     );
   }
 
-  //   useEffect(() => {
-  //     setEventStatus(coachingSession[0]?.register_status);
-  //   }, [coachingSession]);
+  const GrowthCoachingSignup = async () => {
+    const response = await signupCoachingSession({});
+    if (response?.payload?.code === 200) {
+      // setStatus(true);
+      ToastMessage.show(response.payload.message);
+    } else {
+      toast.closeAll();
+      ToastMessage.show(response?.payload?.message);
+    }
+  };
 
-  //   const sessionId = coachingSession[0]?.ID;
-  //   const Slug = poeDetails?.slug;
+  let previousSession =
+    profile?.session_score !== false && profile?.session_score !== null
+      ? profile?.session_score?.map(item => item?.session)
+      : [0];
 
-  //   const registerEventByEventID = async (sessionId, Slug) => {
-  //     const response = await registerEventByIdentifier({
-  //       event_id: sessionId,
-  //       slug: Slug,
-  //     });
-  //     if (response?.payload?.code === 200) {
-  //       setEventStatus(true);
-  //       ToastMessage.show('You have successfully RSVP’d this event.');
-  //     } else {
-  //       toast.closeAll();
-  //       ToastMessage.show(response?.payload?.response);
-  //     }
-  //   };
+  let SessionID =
+    coachingSession !== false && coachingSession !== null
+      ? coachingSession.map(item => item?.ID)
+      : [0];
 
   const _renderItem = ({item, index}, navigation) => {
     return (
@@ -276,108 +287,68 @@ const GrowthDetail = props => {
                 }}
               />
 
-              {/* {!eventStatus && (
-                <View>
-                  <TouchableOpacity
-                    onPress={() => registerEventByEventID(poeDetails?.term_id)}>
-                    <View style={styles.buttonWrapper}>
-                      <View
-                        style={[
-                          styles.button,
-                          {
-                            marginLeft: 15,
-                            backgroundColor: Colors.PRACTICE_COLOR,
-                          },
-                        ]}>
-                        <Text style={styles.buttonText}>
-                          Sign Up for Growth Leader Coaching
-                        </Text>
-                      </View>
-                    </View>
-                  </TouchableOpacity>
-                </View>
-              )}
-              {eventStatus && (
-                <View>
+      
+	  
+              {/* <View>
+                <TouchableOpacity onPress={() => GrowthCoachingSignup()}>
                   <View style={styles.buttonWrapper}>
                     <View
                       style={[
                         styles.button,
                         {
                           marginLeft: 15,
-                          backgroundColor: '#808080',
+                          backgroundColor: Colors.PRACTICE_COLOR,
                         },
                       ]}>
                       <Text style={styles.buttonText}>
-                        Sign Up for Growth Leader Coaching
+                        Click here to enroll and begin your own transformational journey today!
                       </Text>
                     </View>
                   </View>
-                </View>
-              )} */}
+                </TouchableOpacity>
+              </View> */}
 
+           
+		   
               {coachingSessionLoading && <Loading />}
-              {coachingSession?.length !== 0 &&
-                coachingSession !== null &&
-                coachingSession !== false && (
-                  <View style={styles.middle}>
-                    <Text style={styles.title}>Sessions</Text>
-                    <View
-                      style={{
-                        display: 'flex',
-                        flexDirection: 'row',
-                      }}>
-                      <FlatList
-                        horizontal
-                        showsHorizontalScrollIndicator={false}
-                        data={coachingSession}
-                        renderItem={_renderMiddleItem}
-                      />
-                    </View>
-                  </View>
-                )}
 
-              {/* {showChartButton && (
-                <View style={{marginTop: 10, paddingBottom: 20}}>
-                  <Text
-                    style={{
-                      fontSize: 14,
-                      fontFamily: Typography.FONT_SF_REGULAR,
-                      color: Colors.PRIMARY_TEXT_COLOR,
-                      fontWeight: '700',
-                      marginLeft: 15,
-                    }}>
-                    Frost Radar for Leadership
-                  </Text>
-                  <Text
-                    style={{
-                      fontFamily: Typography.FONT_SF_REGULAR,
-                      fontSize: 14,
-                      lineHeight: 24,
-                      padding: 15,
-                      textAlign: 'left',
-                      color: 'black',
-                      textAlign: 'justify',
-                    }}>
-                    {radarMemberDetails?.radar_text}
-                  </Text>
-
-                  <View style={{height: 400, backgroundColor: 'white'}}>
-                    <WebView
-                      source={{
-                        uri: `https://gilcouncil.com/frost-radar?user_id=${userId}`,
-                      }}
-                      renderLoading={LoadingIndicatorView}
-                      startInLoadingState={true}
-                      ref={webviewRef}
-                    />
-                  </View>
-                </View>
+              {/* {previousSession.indexOf(SessionID) > -1 !== true && (
+                <View> */}
+                  {coachingSession?.length !== 0 &&
+                    coachingSession !== null &&
+                    coachingSession !== false && (
+                      <View style={styles.middle}>
+                        <Text style={styles.title}>Sessions</Text>
+                        <View
+                          style={{
+                            display: 'flex',
+                            flexDirection: 'row',
+                          }}>
+                          <FlatList
+                            horizontal
+                            showsHorizontalScrollIndicator={false}
+                            data={coachingSession}
+                            renderItem={_renderMiddleItem}
+                          />
+                        </View>
+                      </View>
+                    )}
+                {/* </View>
               )} */}
 
-              {showChartButton && (
-                <View style={styles.bottom}>
-                  <Text style={styles.title}>Frost Radar for Leadership</Text>
+{/* 
+              <View style={{marginTop: 20, paddingBottom: 20}}>
+                <Text
+                  style={{
+                    fontSize: 14,
+                    fontFamily: Typography.FONT_SF_REGULAR,
+                    color: Colors.PRIMARY_TEXT_COLOR,
+                    fontWeight: '700',
+                    marginLeft: 15,
+                  }}>
+                  Frost Radar for Leadership
+                </Text>
+                {radarMemberDetails?.radar_text !== undefined && (
                   <HTMLView
                     value={radarMemberDetails?.radar_text}
                     textComponentProps={{
@@ -392,7 +363,41 @@ const GrowthDetail = props => {
                       },
                     }}
                   />
+                )}
 
+                <View style={{height: 400, backgroundColor: 'white'}}>
+                  <WebView
+                    source={{
+                      uri: `https://staging.gilcouncil.com/frost-radar/`,
+                    }}
+                    renderLoading={LoadingIndicatorView}
+                    startInLoadingState={true}
+                    ref={webviewRef}
+                    androidHardwareAccelerationDisabled={true}
+                    style={{overflow: 'hidden', opacity: 0.99}}
+                  />
+                </View>
+              </View> */}
+
+              {/* {showChartButton && (
+                <View style={styles.bottom}>
+                  <Text style={styles.title}>Frost Radar for Leadership</Text>
+                  {radarMemberDetails?.radar_text !== undefined && (
+                    <HTMLView
+                      value={radarMemberDetails?.radar_text}
+                      textComponentProps={{
+                        style: {
+                          fontFamily: Typography.FONT_SF_REGULAR,
+                          fontSize: 14,
+                          lineHeight: 24,
+                          padding: 15,
+                          textAlign: 'left',
+                          color: '#77838F',
+                          textAlign: 'justify',
+                        },
+                      }}
+                    />
+                  )}
                   <TouchableOpacity
                     onPress={() => {
                       navigation.navigate('Radar');
@@ -406,7 +411,7 @@ const GrowthDetail = props => {
                     </View>
                   </TouchableOpacity>
                 </View>
-              )}
+              )} */}
             </View>
           </ScrollView>
         </View>

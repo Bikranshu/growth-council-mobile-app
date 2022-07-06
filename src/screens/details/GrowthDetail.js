@@ -12,8 +12,6 @@ import {
   resetcoachingSession,
 } from './slice/sessionlistSlice';
 
-
-
 import {
   fetchAllPillarMemberContents,
   resetPillarMemberContent,
@@ -25,9 +23,12 @@ import {
 } from './slice/radarSlice';
 
 import {
-  registerEventByID,
-  resetEventRegister,
-} from '../event/slice/eventRegisterSlice';
+  GrowthCoachingSignup,
+  resetCoachingSignup,
+} from './slice/coachingSignupSlice';
+
+import {fetchProfileByID, resetProfile} from '../account/slice/profileSlice';
+
 
 const GrowthDetailScreen = props => {
   const dispatch = useDispatch();
@@ -48,7 +49,6 @@ const GrowthDetailScreen = props => {
 
   const {coachingSession, coachingSessionLoading, coachingSessionError} =
     useSelector(state => state.coachingSession);
- 
 
   const {
     radarMemberDetails,
@@ -56,8 +56,13 @@ const GrowthDetailScreen = props => {
     radarMemberDetailsError,
   } = useSelector(state => state.radarMemberDetails);
 
-  const {eventRegisters, eventRegisterLoading, eventRegisterError} =
-    useSelector(state => state.eventRegisters);
+  const {coachingSignup, coachingSignupLoading, coachingSignupError} =
+    useSelector(state => state.coachingSignup);
+
+	const {profile, profileLoading, profileError} = useSelector(
+		state => state.profile,
+	  );
+
 
   /**
    * Fetch event data.
@@ -78,7 +83,6 @@ const GrowthDetailScreen = props => {
     dispatch(fetchAllPOEEvents(poeId));
   };
 
- 
   const fetchAllPillarMemberContent = pillarId => {
     dispatch(fetchAllPillarMemberContents(pillarId));
   };
@@ -107,12 +111,20 @@ const GrowthDetailScreen = props => {
     dispatch(fetchRadarMemberDetails());
   };
 
-  const registerEventByIdentifier = formData => {
-    return dispatch(registerEventByID(formData));
+  const signupCoachingSession = formData => {
+    return dispatch(GrowthCoachingSignup(formData));
   };
 
-  const cleanEventRegister = () => {
-    dispatch(resetEventRegister());
+  const cleanSignUpCoaching = () => {
+    dispatch(resetCoachingSignup());
+  };
+
+  const fetchProfile = () => {
+    dispatch(fetchProfileByID());
+  };
+
+  const cleanProfile = () => {
+    dispatch(resetProfile());
   };
 
   return (
@@ -142,11 +154,18 @@ const GrowthDetailScreen = props => {
       radarMemberDetailsLoading={radarMemberDetailsLoading}
       radarMemberDetailsError={radarMemberDetailsError}
       fetchRadarMemberDetail={fetchRadarMemberDetail}
-      eventRegisters={eventRegisters}
-      eventRegisterLoading={eventRegisterLoading}
-      eventRegisterError={eventRegisterError}
-      registerEventByIdentifier={registerEventByIdentifier}
-      cleanEventRegister={cleanEventRegister}
+
+      coachingSignup={coachingSignup}
+      coachingSignupLoading={coachingSignupLoading}
+      coachingSignupError={coachingSignupError}
+      signupCoachingSession={signupCoachingSession}
+      cleanSignUpCoaching={cleanSignUpCoaching}
+
+	  profile={profile}
+      profileLoading={profileLoading}
+      profileError={profileError}
+      fetchProfile={fetchProfile}
+      cleanProfile={cleanProfile}
     />
   );
 };
