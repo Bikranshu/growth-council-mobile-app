@@ -288,7 +288,7 @@ const GrowthDetail = props => {
               />
 
               {/* {!status && ( */}
-              <View>
+              {/* <View>
                 <TouchableOpacity onPress={() => GrowthCoachingSignup()}>
                   <View style={styles.buttonWrapper}>
                     <View
@@ -305,7 +305,7 @@ const GrowthDetail = props => {
                     </View>
                   </View>
                 </TouchableOpacity>
-              </View>
+              </View> */}
               {/* )}
               {status && (
                 <View>
