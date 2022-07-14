@@ -152,6 +152,20 @@ const GrowthDetail = props => {
       ? coachingSession.map(item => item?.ID)
       : [0];
 
+  //   let check = SessionID.filter(item => previousSession.includes(item));
+
+  let check = SessionID.filter(el => previousSession.indexOf(el) === -1);
+   console.log('check', check);
+
+  //   const index = previousSession.findIndex(array1Item => {
+  //     // This will return the index if found, otherwise -1
+  //     const match = SessionID.findIndex(array2Item => {
+  //       return array1Item.session === array2Item.ID;
+  //     });
+
+  //     return match > -1;
+  //   });
+
   const _renderItem = ({item, index}, navigation) => {
     return (
       <View style={[styles.bottomWrapper, styles.shadowProp]} key={index}>
@@ -287,9 +301,7 @@ const GrowthDetail = props => {
                 }}
               />
 
-      
-	  
-              {/* <View>
+              <View>
                 <TouchableOpacity onPress={() => GrowthCoachingSignup()}>
                   <View style={styles.buttonWrapper}>
                     <View
@@ -301,19 +313,18 @@ const GrowthDetail = props => {
                         },
                       ]}>
                       <Text style={styles.buttonText}>
-                        Click here to enroll and begin your own transformational journey today!
+                        Click here to enroll and begin your own transformational
+                        journey today!
                       </Text>
                     </View>
                   </View>
                 </TouchableOpacity>
-              </View> */}
+              </View>
 
-           
-		   
               {coachingSessionLoading && <Loading />}
 
-              {/* {previousSession.indexOf(SessionID) > -1 !== true && (
-                <View> */}
+              {/* {check[0] && ( */}
+                <View>
                   {coachingSession?.length !== 0 &&
                     coachingSession !== null &&
                     coachingSession !== false && (
@@ -333,10 +344,10 @@ const GrowthDetail = props => {
                         </View>
                       </View>
                     )}
-                {/* </View>
-              )} */}
+                </View>
+              {/* )} */}
 
-{/* 
+              {/* 
               <View style={{marginTop: 20, paddingBottom: 20}}>
                 <Text
                   style={{

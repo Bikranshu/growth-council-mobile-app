@@ -27,7 +27,11 @@ import RNFetchBlob from 'react-native-blob-util';
 import LinearGradient from 'react-native-linear-gradient';
 // import ReactNativeBlobUtil from 'react-native-blob-util';
 import ToastMessage from '../../../shared/toast';
-import { GROWTH_COACHING_ID, GROWTH_COMMUNITY_ID, GROWTH_CONTENT_ID } from '../../../constants';
+import {
+  GROWTH_COACHING_ID,
+  GROWTH_COMMUNITY_ID,
+  GROWTH_CONTENT_ID,
+} from '../../../constants';
 
 const win = Dimensions.get('window');
 const contentContainerWidth = win.width - 30;
@@ -616,14 +620,7 @@ const CommunityDetail = props => {
                     <View style={styles.btnWrapper}>
                       <TouchableOpacity
                         onPress={() => {
-                          if (poeDetails?.slug === 'innovative-center-tours') {
-                            navigation.navigate('LibraryDetail', {
-                              resources: 44,
-                              itemname: poeDetails?.name,
-                            });
-                          } else if (
-                            poeDetails?.slug === 'council-virtual-events'
-                          ) {
+                          if (poeDetails?.slug === 'council-virtual-events') {
                             navigation.navigate('LibraryDetail', {
                               resources: 44,
                               itemname: poeDetails?.name,
@@ -645,14 +642,21 @@ const CommunityDetail = props => {
                           } else if (
                             poeDetails?.slug === 'executive-mindxchange-events'
                           ) {
-                            navigation.navigate('LibraryDetail', {
-                              resources: 35,
-                              itemname: poeDetails?.name,
+                            navigation.navigate('ContentDetail', {
+                              resourceId: 35,
+                              resourcesName: poeDetails?.name,
+                            });
+                          } else if (
+                            poeDetails?.slug === 'innovation-center-tours'
+                          ) {
+                            navigation.navigate('ContentDetail', {
+                              resourceId: 204,
+                              resourcesName: poeDetails?.name,
                             });
                           } else {
-                            navigation.navigate('LibraryDetail', {
-                              resources: poeDetails?.term_id,
-                              itemname: poeDetails?.name,
+                            navigation.navigate('ContentDetail', {
+                              resourceId: poeDetails?.ID,
+                              resourcesName: poeDetails?.name,
                             });
                           }
                         }}>

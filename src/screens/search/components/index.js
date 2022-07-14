@@ -177,6 +177,11 @@ const Search = props => {
             navigation.navigate('Search');
           } else if (item.slug === 'content-library') {
             navigation.navigate('ContentLibrary');
+          } else if (item.slug === '"best-practices') {
+            navigation.navigate('ContentDetail', {
+              resourceId: 35,
+              resourcesName: poeDetails?.name,
+            });
           } else {
             navigation.navigate(poePage, {
               poeId: item?.term_id,
@@ -191,7 +196,7 @@ const Search = props => {
             <Image
               source={{uri: item?.image}}
               style={{width: 30, height: 35}}
-			  resizeMode="contain"
+              resizeMode="contain"
             />
           </View>
           <Text style={{marginTop: 8, fontSize: 10}}>{item?.name}</Text>
