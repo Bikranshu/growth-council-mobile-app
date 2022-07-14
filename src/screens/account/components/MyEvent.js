@@ -12,9 +12,6 @@ import {Button} from 'native-base';
 import moment from 'moment-timezone';
 import {useIsFocused} from '@react-navigation/native';
 import {CommonStyles, Typography} from '../../../theme';
-import {getAsyncStorage} from '../../../utils/storageUtil';
-import {JWT_TOKEN} from '../../../constants';
-import {decodeUserID} from '../../../utils/jwtUtil';
 import {PRIMARY_BACKGROUND_COLOR} from '../../../theme/colors';
 import {BubblesLoader} from 'react-native-indicator';
 import * as Colors from '../../../theme/colors';
@@ -22,7 +19,7 @@ import * as RNLocalize from 'react-native-localize';
 import {formatTimeByOffset} from '../../event/components/timezone';
 import Loading from '../../../shared/loading';
 
-const Profile = props => {
+const MyEvent = props => {
   const isFocused = useIsFocused();
   const {
     navigation,
@@ -142,25 +139,29 @@ const Profile = props => {
               </View>
 
               <View style={styles.iconWrapper}>
-                {item?.organizer !== undefined && (
-                  <View
-                    style={{
-                      flexDirection: 'row',
-                      alignItems: 'flex-start',
-                      marginRight: 10,
-                    }}>
-                    <Ionicon name={'person'} size={20} color="#0B0B45" />
-                    <Text style={[styles.text, {fontSize: 10, width: 190}]}>
-                      {organizer} {description}
-                    </Text>
-                  </View>
-                )}
-                {item?.event_start !== undefined && item?.event_start !== null && (
-                  <View style={{flexDirection: 'row', alignItems: 'center'}}>
-                    <Ionicon name={'time'} size={20} color="#0B0B45" />
-                    <Text style={[styles.text, {fontSize: 12}]}>{time}</Text>
-                  </View>
-                )}
+                {item?.organizer !== undefined &&
+                  item?.organizer !== null &&
+                  item?.organizer !== '' && (
+                    <View
+                      style={{
+                        flexDirection: 'row',
+                        alignItems: 'flex-start',
+                        marginRight: 10,
+                      }}>
+                      <Ionicon name={'person'} size={20} color="#0B0B45" />
+                      <Text style={[styles.text, {fontSize: 10, width: 190}]}>
+                        {organizer} {description}
+                      </Text>
+                    </View>
+                  )}
+                {item?.event_start !== undefined &&
+                  item?.event_start !== null &&
+                  item?.event_start !== '' && (
+                    <View style={{flexDirection: 'row', alignItems: 'center'}}>
+                      <Ionicon name={'time'} size={20} color="#0B0B45" />
+                      <Text style={[styles.text, {fontSize: 12}]}>{time}</Text>
+                    </View>
+                  )}
               </View>
               <View style={styles.iconWrapper}>
                 <View
@@ -175,7 +176,8 @@ const Profile = props => {
                   </Text>
                 </View>
                 {item?.location?.location_address !== undefined &&
-                  item?.location?.location_address !== null && (
+                  item?.location?.location_address !== null &&
+                  item?.location?.location_address !== '' && (
                     <View style={{flexDirection: 'row', alignItems: 'center'}}>
                       <Ionicon name={'location'} size={20} color="#0B0B45" />
                       <Text style={[styles.text, {fontSize: 12, width: 120}]}>
@@ -290,4 +292,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Profile;
+export default MyEvent;
