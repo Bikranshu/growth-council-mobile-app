@@ -183,7 +183,7 @@ const Search = props => {
             navigation.navigate('ContentLibrary');
           } else if (item?.slug === 'best-practices') {
             navigation.navigate('ContentDetail', {
-              resourceId: 35,
+              resourceId: 203,
               resourcesName: item?.name,
             });
           } else {
