@@ -140,7 +140,11 @@ const About = props => {
                 styles.plainButton,
                 {backgroundColor: Colors.SECONDARY_BUTTON_COLOR},
               ]}
-              onPress={() => navigation.navigate('Gmail')}>
+              onPress={() =>
+                navigation.navigate('Gmail', {
+                  title: 'Account Assistance',
+                })
+              }>
               <Text style={[styles.buttonText, styles.plainButtonText]}>
                 Contact Us
               </Text>

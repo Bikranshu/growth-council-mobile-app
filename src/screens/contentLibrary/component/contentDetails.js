@@ -22,6 +22,7 @@ import HTMLView from 'react-native-htmlview';
 import {BubblesLoader} from 'react-native-indicator';
 import {useFocusEffect, useIsFocused} from '@react-navigation/native';
 import Loading from '../../../shared/loading';
+import { GROWTH_CONTENT_FALLBACK_IMAGE } from '../../../constants';
 
 const ContentLibrary = props => {
   const {
@@ -68,8 +69,6 @@ const ContentLibrary = props => {
       setSearch(text);
     }
   };
-
-  console.log({filteredDataSource});
 
   return (
     <SafeAreaView style={{flex: 1}}>
@@ -120,7 +119,7 @@ const ContentLibrary = props => {
           }}>
           <View style={{flexDirection: 'row'}}>
             <View style={{flexDirection: 'row', alignItems: 'center'}}>
-              <Text style={{fontSize: 9}}>Content Library</Text>
+              <Text style={{fontSize: 9}}>Growth Content</Text>
               <Ionicons
                 name="chevron-forward-outline"
                 size={15}
@@ -148,11 +147,11 @@ const ContentLibrary = props => {
           )}
 
           <View style={{alignItems: 'center'}}>
-            {filteredDataSource.map(item => {
+            {filteredDataSource.map((item, key) => {
               const itemname = item?.name;
               return (
-                <>
                   <TouchableOpacity
+                    key={key}
                     style={[styles.content, styles.shadowProp]}
                     onPress={() =>
                       navigation.navigate('LibraryDetail', {
@@ -169,7 +168,7 @@ const ContentLibrary = props => {
                           borderTopLeftRadius: 14,
                           borderTopRightRadius: 14,
                         }}
-                        source={{uri: item?.image}}
+                        source={{uri: item?.image||null}}
                         resizeMode="stretch"
                       />
                       <View style={styles.wrapper}>
@@ -185,7 +184,6 @@ const ContentLibrary = props => {
                       </View>
                     </>
                   </TouchableOpacity>
-                </>
               );
             })}
           </View>

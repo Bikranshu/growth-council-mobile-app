@@ -13,18 +13,17 @@ import {
   StatusBar,
   ActivityIndicator,
 } from 'react-native';
+import {Button, useToast} from 'native-base';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import moment from 'moment';
-import {BubblesLoader} from 'react-native-indicator';
-import YoutubePlayer from '../../../shared/youtube';
-import Footer from '../../../shared/footer';
-import Player from '../../dashboard/components/Player';
+
 import {useIsFocused} from '@react-navigation/native';
 import HTMLView from 'react-native-htmlview';
 import {CommonStyles, Colors, Typography} from '../../../theme';
 import {WebView} from 'react-native-webview';
-import {Button} from 'native-base';
+import ToastMessage from '../../../shared/toast';
 import Loading from '../../../shared/loading';
+import {HOME_URL} from '../../../constants';
 
 const screenHeight = Math.round(Dimensions.get('window').height);
 const win = Dimensions.get('window');
@@ -54,38 +53,48 @@ const GrowthDetail = props => {
     coachingSessionError,
     fetchCoachingSessions,
     cleanCoachingSession,
-    poeSelfLearns,
-    poeSelfLearnLoading,
-    poeSelfLearnError,
-    fetchPoeSelfLearn,
-    cleanPoeSelfLearn,
 
     radarMemberDetails,
     radarMemberDetailsLoading,
     radarMemberDetailsError,
     fetchRadarMemberDetail,
+
+    coachingSignup,
+    coachingSignupLoading,
+    coachingSignupError,
+    signupCoachingSession,
+    cleanSignUpCoaching,
+
+    profile,
+    profileLoading,
+    profileError,
+    fetchProfile,
+    cleanProfile,
   } = props;
 
+  const toast = useToast();
   const isFocused = useIsFocused();
-  const [memberConnection, setMemberConnection] = useState([]);
+  const [status, setStatus] = useState(false);
   const [showChartButton, setShowChartButton] = useState(true);
   const webviewRef = React.useRef(null);
   const [userId, setUserId] = useState(0);
 
-  useEffect(async () => {
-    let token = await getAsyncStorage(JWT_TOKEN);
-    let ID = decodeUserID(token);
-    if (ID) {
-      setUserId(ID);
-    }
-  }, []);
+  //   useEffect(async () => {
+  //     let token = await getAsyncStorage(JWT_TOKEN);
+  //     let ID = decodeUserID(token);
+  //     if (ID) {
+  //       setUserId(ID);
+  //     }
+  //   }, []);
+
+  const eventID = route.params.poeId;
 
   useEffect(() => {
     const fetchAllPOEDetailAsync = async () => {
-      await fetchAllPOEDetail(route.params.poeId);
+      await fetchAllPOEDetail(eventID);
     };
     fetchAllPOEDetailAsync();
-  }, []);
+  }, [eventID]);
 
   useEffect(() => {
     const fetchAllPOEEventAsync = async () => {
@@ -95,13 +104,6 @@ const GrowthDetail = props => {
   }, []);
 
   useEffect(() => {
-    const fetchAllPillarMemberContentAsync = async () => {
-      await fetchAllPillarMemberContent(route.params.pillarId);
-    };
-    fetchAllPillarMemberContentAsync();
-  }, [isFocused]);
-
-  useEffect(() => {
     const fetchCoachingSessionAsync = async () => {
       await fetchCoachingSessions(route.params.poeId);
     };
@@ -109,29 +111,15 @@ const GrowthDetail = props => {
   }, []);
 
   useEffect(() => {
-    const fetchPoeSelfLearnAsync = async () => {
-      await fetchPoeSelfLearn(route.params.poeId);
-    };
-    fetchPoeSelfLearnAsync();
-  }, []);
-
-  useEffect(() => {
-    setMemberConnection(pillarMemberContents);
-  }, [pillarMemberContents]);
-
-  useEffect(() => {
     fetchRadarMemberDetail();
   }, []);
 
-
-  // useEffect(()=>{
-  //   for(let value of coachingSession){
-  //     if(!value?.completed_status){
-  //       setShowChartButton(false);
-  //       break;
-  //     }
-  //   };
-  // },[coachingSession]);
+  useEffect(() => {
+    const fetchProfileAsync = async () => {
+      await fetchProfile();
+    };
+    fetchProfileAsync();
+  }, []);
 
   function LoadingIndicatorView() {
     return (
@@ -142,6 +130,41 @@ const GrowthDetail = props => {
       />
     );
   }
+
+  const GrowthCoachingSignup = async () => {
+    const response = await signupCoachingSession({});
+    if (response?.payload?.code === 200) {
+      // setStatus(true);
+      ToastMessage.show(response.payload.message);
+    } else {
+      toast.closeAll();
+      ToastMessage.show(response?.payload?.message);
+    }
+  };
+
+  let previousSession =
+    profile?.session_score !== false && profile?.session_score !== null
+      ? profile?.session_score?.map(item => item?.session)
+      : [0];
+
+  let SessionID =
+    coachingSession !== false && coachingSession !== null
+      ? coachingSession.map(item => item?.ID)
+      : [0];
+
+  //   let check = SessionID.filter(item => previousSession.includes(item));
+
+  let check = SessionID.filter(el => previousSession.indexOf(el) === -1);
+   console.log('check', check);
+
+  //   const index = previousSession.findIndex(array1Item => {
+  //     // This will return the index if found, otherwise -1
+  //     const match = SessionID.findIndex(array2Item => {
+  //       return array1Item.session === array2Item.ID;
+  //     });
+
+  //     return match > -1;
+  //   });
 
   const _renderItem = ({item, index}, navigation) => {
     return (
@@ -218,80 +241,6 @@ const GrowthDetail = props => {
     );
   };
 
-  const _renderContentItem = ({item, index}) => {
-    const file = item?.file;
-    const link = file.split('=', 2);
-    let videoLink = link[1].split('&', 2);
-    return <Player {...props} item={item} file={file} videoLink={videoLink} />;
-  };
-
-  const _renderLearnItem = ({item, index}) => {
-    return (
-      <View>
-        <View style={styles.learnWrapper}>
-          <Image
-            source={{uri: item?.image}}
-            style={{
-              width: 150,
-              height: 180,
-              margin: 10,
-              borderRadius: 10,
-            }}
-            resizeMode="contain"
-          />
-
-          <View>
-            {/* <TouchableOpacity
-              onPress={() =>
-                navigation.navigate('selflearn', {
-                  id: item.ID,
-                  selfLearnId: item?.ID,
-                })
-              }> */}
-            <View>
-              <Text
-                style={{
-                  fontWeight: '500',
-                  fontSize: 16,
-                  marginTop: 10,
-                  color: 'black',
-                  width: '80%',
-                }}>
-                {item?.title}
-              </Text>
-              <Text
-                style={{
-                  fontSize: 12,
-                  marginTop: 5,
-                  width: 180,
-                }}>
-                {item.subtitle}
-              </Text>
-              <Text
-                style={{
-                  marginTop: 10,
-                  fontSize: 11,
-                  width: 180,
-                }}>
-                {item.author}
-              </Text>
-            </View>
-            {/* </TouchableOpacity> */}
-            <View
-              style={{
-                justifyContent: 'center',
-                position: 'absolute',
-                right: 25,
-                bottom: 10,
-              }}>
-              <Ionicons name={'book-outline'} size={20} color="#cccccc" />
-            </View>
-          </View>
-        </View>
-      </View>
-    );
-  };
-
   let poeDescription = poeDetails?.description;
   if (poeDescription !== undefined) {
     poeDescription = poeDetails?.description;
@@ -353,11 +302,7 @@ const GrowthDetail = props => {
               />
 
               <View>
-                <TouchableOpacity
-                //   onPress={() => {
-                //     navigation.navigate('Radar');
-                //   }}
-                >
+                <TouchableOpacity onPress={() => GrowthCoachingSignup()}>
                   <View style={styles.buttonWrapper}>
                     <View
                       style={[
@@ -368,93 +313,102 @@ const GrowthDetail = props => {
                         },
                       ]}>
                       <Text style={styles.buttonText}>
-                        Sign Up for Growth Leader Coaching
+                        Click here to enroll and begin your own transformational
+                        journey today!
                       </Text>
                     </View>
                   </View>
                 </TouchableOpacity>
               </View>
+
               {coachingSessionLoading && <Loading />}
-              {coachingSession?.length !== 0 &&
-                coachingSession !== null &&
-                coachingSession !== false && (
-                  <View style={styles.middle}>
-                    <Text style={styles.title}>Sessions</Text>
-                    <View
-                      style={{
-                        display: 'flex',
-                        flexDirection: 'row',
-                      }}>
-                      <FlatList
-                        horizontal
-                        showsHorizontalScrollIndicator={false}
-                        data={coachingSession}
-                        renderItem={_renderMiddleItem}
-                      />
-                    </View>
-                  </View>
-                )}
-              {showChartButton && (
-                <View style={{marginTop: 10, paddingBottom: 20}}>
-                  <Text
-                    style={{
-                      fontSize: 14,
-                      fontFamily: Typography.FONT_SF_REGULAR,
-                      color: Colors.PRIMARY_TEXT_COLOR,
-                      fontWeight: '700',
-                      marginLeft: 15,
-                    }}>
-                    Frost Radar for Leadership
-                  </Text>
-                  <Text
-                    style={{
-                      fontFamily: Typography.FONT_SF_REGULAR,
-                      fontSize: 14,
-                      lineHeight: 24,
-                      padding: 15,
-                      textAlign: 'left',
-                      color: 'black',
-                      textAlign: 'justify',
-                    }}>
-                    {radarMemberDetails?.radar_text}
-                  </Text>
 
-                  <View style={{height: 400, backgroundColor: 'white'}}>
-                    <WebView
-                      source={{
-                        uri: `https://gilcouncil.com/frost-radar/`,
-                      }}
-                      renderLoading={LoadingIndicatorView}
-                      startInLoadingState={true}
-                      ref={webviewRef}
-                    />
-                  </View>
+              {/* {check[0] && ( */}
+                <View>
+                  {coachingSession?.length !== 0 &&
+                    coachingSession !== null &&
+                    coachingSession !== false && (
+                      <View style={styles.middle}>
+                        <Text style={styles.title}>Sessions</Text>
+                        <View
+                          style={{
+                            display: 'flex',
+                            flexDirection: 'row',
+                          }}>
+                          <FlatList
+                            horizontal
+                            showsHorizontalScrollIndicator={false}
+                            data={coachingSession}
+                            renderItem={_renderMiddleItem}
+                          />
+                        </View>
+                      </View>
+                    )}
                 </View>
-              )}
+              {/* )} */}
 
-              {/* {poeSelfLearns?.length !== 0 &&
-                poeSelfLearns !== false &&
-                poeSelfLearns !== null && (
-                  <View style={styles.learn}>
-                    <Text style={styles.title}>Be a Growth Leader</Text>
-                    <View
-                      style={{
-                        display: 'flex',
-                        flexDirection: 'row',
-                      }}>
-                      <FlatList
-                        horizontal
-                        showsHorizontalScrollIndicator={false}
-                        data={poeSelfLearns}
-                        renderItem={_renderLearnItem}
-                      />
-                    </View>
-                  </View>
-                )} */}
+              {/* 
+              <View style={{marginTop: 20, paddingBottom: 20}}>
+                <Text
+                  style={{
+                    fontSize: 14,
+                    fontFamily: Typography.FONT_SF_REGULAR,
+                    color: Colors.PRIMARY_TEXT_COLOR,
+                    fontWeight: '700',
+                    marginLeft: 15,
+                  }}>
+                  Frost Radar for Leadership
+                </Text>
+                {radarMemberDetails?.radar_text !== undefined && (
+                  <HTMLView
+                    value={radarMemberDetails?.radar_text}
+                    textComponentProps={{
+                      style: {
+                        fontFamily: Typography.FONT_SF_REGULAR,
+                        fontSize: 14,
+                        lineHeight: 24,
+                        padding: 15,
+                        textAlign: 'left',
+                        color: '#77838F',
+                        textAlign: 'justify',
+                      },
+                    }}
+                  />
+                )}
+
+                <View style={{height: 400, backgroundColor: 'white'}}>
+                  <WebView
+                    source={{
+                      uri: `https://staging.gilcouncil.com/frost-radar/`,
+                    }}
+                    renderLoading={LoadingIndicatorView}
+                    startInLoadingState={true}
+                    ref={webviewRef}
+                    androidHardwareAccelerationDisabled={true}
+                    style={{overflow: 'hidden', opacity: 0.99}}
+                  />
+                </View>
+              </View> */}
 
               {/* {showChartButton && (
                 <View style={styles.bottom}>
                   <Text style={styles.title}>Frost Radar for Leadership</Text>
+                  {radarMemberDetails?.radar_text !== undefined && (
+                    <HTMLView
+                      value={radarMemberDetails?.radar_text}
+                      textComponentProps={{
+                        style: {
+                          fontFamily: Typography.FONT_SF_REGULAR,
+                          fontSize: 14,
+                          lineHeight: 24,
+                          padding: 15,
+                          textAlign: 'left',
+                          color: '#77838F',
+                          textAlign: 'justify',
+                        },
+                      }}
+                    />
+                  )}
                   <TouchableOpacity
                     onPress={() => {
                       navigation.navigate('Radar');
@@ -542,6 +496,7 @@ const styles = StyleSheet.create({
   middle: {
     marginTop: 10,
     marginRight: 5,
+    marginBottom: 10,
     justifyContent: 'center',
   },
   middleWrapper: {
@@ -575,7 +530,7 @@ const styles = StyleSheet.create({
     marginTop: 30,
   },
   bottom: {
-    marginTop: 25,
+    marginTop: 10,
     marginBottom: 20,
   },
   bottomWrapper: {

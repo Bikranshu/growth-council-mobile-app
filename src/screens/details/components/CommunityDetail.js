@@ -24,8 +24,14 @@ import Player from '../../dashboard/components/Player';
 import {CommonStyles, Colors, Typography} from '../../../theme';
 import Loading from '../../../shared/loading';
 import RNFetchBlob from 'react-native-blob-util';
+import LinearGradient from 'react-native-linear-gradient';
 // import ReactNativeBlobUtil from 'react-native-blob-util';
 import ToastMessage from '../../../shared/toast';
+import {
+  GROWTH_COACHING_ID,
+  GROWTH_COMMUNITY_ID,
+  GROWTH_CONTENT_ID,
+} from '../../../constants';
 
 const win = Dimensions.get('window');
 const contentContainerWidth = win.width - 30;
@@ -74,7 +80,7 @@ const CommunityDetail = props => {
 
   useFocusEffect(
     useCallback(() => {
-      fetchSessionDetailByIdentifier(route.params.id);
+      fetchSessionDetailByIdentifier(route?.params?.id);
       return () => {
         cleanSessionDetail();
       };
@@ -83,7 +89,7 @@ const CommunityDetail = props => {
 
   useFocusEffect(
     useCallback(() => {
-      fetchAllPOEDetail(route.params.poeId);
+      fetchAllPOEDetail(route?.params?.poeId);
       return () => {
         cleanPOEDetail();
       };
@@ -92,7 +98,7 @@ const CommunityDetail = props => {
 
   useFocusEffect(
     useCallback(() => {
-      fetchAllPOEEvent(route.params.poeId);
+      fetchAllPOEEvent(route?.params?.poeId);
       return () => {
         cleanPOEEvent();
       };
@@ -100,7 +106,7 @@ const CommunityDetail = props => {
   );
 
   useEffect(() => {
-    fetchAllPillarMemberContent(route.params.pillarId);
+    fetchAllPillarMemberContent(route?.params?.pillarId);
   }, [isFocused]);
 
   useEffect(() => {
@@ -109,7 +115,7 @@ const CommunityDetail = props => {
 
   useFocusEffect(
     useCallback(() => {
-      fetchAllPillarPOE(route.params.poeId);
+      fetchAllPillarPOE(route?.params?.poeId);
 
       return () => {
         cleanPillarPOE();
@@ -219,13 +225,13 @@ const CommunityDetail = props => {
       item?.pillar_categories[1]?.parent
     ) {
       case 0:
-      case 169:
+      case GROWTH_COMMUNITY_ID:
         backgroundImage = require('../../../assets/img/Rectangle2.png');
         pillarname = 'Growth Community';
         break;
 
       case 0:
-      case 170:
+      case GROWTH_CONTENT_ID:
         backgroundImage = require('../../../assets/img/best-practice-bg.png');
         pillarname = 'Growth Content';
         break;
@@ -419,15 +425,15 @@ const CommunityDetail = props => {
   const parent = poeDetails?.parent;
   const slug = poeDetails?.slug;
   switch (parent) {
-    case 170:
+    case GROWTH_CONTENT_ID:
       backgroundColor = Colors.PRACTICE_COLOR;
       title = 'Best Practices';
       break;
-    case 169:
+    case GROWTH_COMMUNITY_ID:
       backgroundColor = Colors.COMMUNITY_COLOR;
       title = 'Growth Community';
       break;
-    case 171:
+    case GROWTH_COACHING_ID:
       backgroundColor = Colors.COACHING_COLOR;
       title = 'Growth Coaching';
     case 133:
@@ -562,6 +568,10 @@ const CommunityDetail = props => {
                       <ImageBackground
                         style={{width: '100%', height: 160, borderRadius: 20}}
                         source={require('../../../assets/img/people.jpg')}>
+                        <LinearGradient
+                          colors={['#00000000', '#000000']}
+                          style={{height: '100%', width: '100%'}}
+                        />
                         <View
                           style={{
                             width: buttonContainerWidth,
@@ -577,6 +587,7 @@ const CommunityDetail = props => {
                             name="people-outline"
                             size={25}
                             color="white"
+                            style={{marginLeft: 5}}
                           />
                           <Text
                             style={{
@@ -584,9 +595,9 @@ const CommunityDetail = props => {
                               fontSize: 14,
                               color: 'white',
                               alignItems: 'center',
-                              paddingLeft: 10,
+                              paddingLeft: 5,
                             }}>
-                            Growth Community Members
+                            Connect with Growth Council Members
                           </Text>
                         </View>
                       </ImageBackground>
@@ -597,27 +608,20 @@ const CommunityDetail = props => {
                     <View style={styles.chatbutton}>
                       <Ionicons name="chatbox" size={20} color="white" />
                       <Text style={styles.chatbuttonText}>
-                        Connect With Growth Council Member
+                        Chat with Growth Council Members
                       </Text>
                     </View>
                   </TouchableOpacity>
                 </View>
               )}
               {poeDetails?.slug !== 'peer-to-peer-interactions' &&
-                // poeDetails?.slug !== 'executive-mindxchange-events' &&
+                poeDetails?.slug !== 'executive-coaching-clinic' &&
                 poeDetails?.slug !== 'annual-council-meeting' && (
                   <View style={styles.buttonWrapper}>
                     <View style={styles.btnWrapper}>
                       <TouchableOpacity
                         onPress={() => {
-                          if (poeDetails?.slug === 'innovative-center-tours') {
-                            navigation.navigate('LibraryDetail', {
-                              resources: 44,
-                              itemname: poeDetails?.name,
-                            });
-                          } else if (
-                            poeDetails?.slug === 'council-virtual-events'
-                          ) {
+                          if (poeDetails?.slug === 'council-virtual-events') {
                             navigation.navigate('LibraryDetail', {
                               resources: 44,
                               itemname: poeDetails?.name,
@@ -639,20 +643,31 @@ const CommunityDetail = props => {
                           } else if (
                             poeDetails?.slug === 'executive-mindxchange-events'
                           ) {
-                            navigation.navigate('LibraryDetail', {
-                              resources: 35,
-                              itemname: poeDetails?.name,
+                            navigation.navigate('ContentDetail', {
+                              resourceId: 35,
+                              resourcesName: poeDetails?.name,
+                            });
+                          } else if (
+                            poeDetails?.slug === 'innovation-center-tours'
+                          ) {
+                            navigation.navigate('ContentDetail', {
+                              resourceId: 204,
+                              resourcesName: poeDetails?.name,
                             });
                           } else {
-                            navigation.navigate('LibraryDetail', {
-                              resources: poeDetails?.term_id,
-                              itemname: poeDetails?.name,
+                            navigation.navigate('ContentDetail', {
+                              resourceId: poeDetails?.ID,
+                              resourcesName: poeDetails?.name,
                             });
                           }
                         }}>
                         <ImageBackground
                           style={{width: '100%', height: 120, borderRadius: 20}}
-                          source={require('../../../assets/img/digital-content.jpg')}>
+                          source={require('../../../assets/img/onDemat.jpg')}>
+                          <LinearGradient
+                            colors={['#00000000', '#000000']}
+                            style={{height: '100%', width: '100%'}}
+                          />
                           <View
                             style={{
                               width: buttonContainerWidth,
@@ -664,11 +679,16 @@ const CommunityDetail = props => {
                               bottom: -15,
                               left: 5,
                             }}>
-                            <Ionicons
+                            <Image
+                              source={require('../../../assets/img/ContentIcon_Orange.png')}
+                              style={{width: 20, height: 20}}
+                              resizeMode="cover"
+                            />
+                            {/* <Ionicons
                               name="people-outline"
                               size={25}
                               color="white"
-                            />
+                            /> */}
                             <Text
                               style={{
                                 fontFamily: Typography.FONT_SF_BOLD,

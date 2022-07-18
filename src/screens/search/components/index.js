@@ -16,6 +16,11 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import moment from 'moment';
 import SearchBox from '../../../shared/form/SearchBar';
 import {BubblesLoader} from 'react-native-indicator';
+import {
+  GROWTH_COACHING_ID,
+  GROWTH_COMMUNITY_ID,
+  GROWTH_CONTENT_ID,
+} from '../../../constants';
 
 import {CommonStyles, Colors, Typography} from '../../../theme';
 import Loading from '../../../shared/loading';
@@ -39,15 +44,14 @@ const Search = props => {
     let pillarname = '';
     switch (item?.pillar_categories[0]?.parent) {
       case 0:
-      case 117:
+      case GROWTH_COMMUNITY_ID:
         backgroundColor = Colors.COMMUNITY_COLOR;
         pillarname = 'Growth Community';
         backgroundImage = require('../../../assets/img/Rectangle2.png');
-
         break;
 
       case 0:
-      case 118:
+      case GROWTH_CONTENT_ID:
         backgroundColor = Colors.PRACTICE_COLOR;
         pillarname = 'Growth Content';
         backgroundImage = require('../../../assets/img/best-practice-bg.png');
@@ -118,7 +122,7 @@ const Search = props => {
         pillarname = 'Growth Community';
         backgroundImage = require('../../../assets/img/Rectangle2.png');
         break;
-      case 'best-practices':
+      case 'growth-content':
         navigationPath = 'Growth Content';
         pillarname = 'Growth Content';
         backgroundImage = require('../../../assets/img/best-practice-bg.png');
@@ -151,7 +155,7 @@ const Search = props => {
     let pillarname = 'Growth Community';
     let poePage = 'CommunityDetail';
 
-    if (item?.parent === 119) {
+    if (item?.parent === GROWTH_COACHING_ID) {
       if (item?.slug === 'executive-coaching-clinic') {
         poePage = 'CommunityDetail';
         pillarname = 'Growth Coaching';
@@ -161,7 +165,7 @@ const Search = props => {
         pillarname = 'Growth Coaching';
         backgroundImage = require('../../../assets/img/Rectangle.png');
       }
-    } else if (item?.parent === 118 || item?.parent === 133) {
+    } else if (item?.parent === GROWTH_CONTENT_ID || item?.parent === 133) {
       poePage = 'CommunityDetail';
       pillarname = 'Growth Content';
       backgroundImage = require('../../../assets/img/best-practice-bg.png');
@@ -175,8 +179,13 @@ const Search = props => {
             item.slug === 'innovation-generator'
           ) {
             navigation.navigate('Search');
-          } else if (item.slug === 'content-library') {
+          } else if (item?.slug === 'content-library') {
             navigation.navigate('ContentLibrary');
+          } else if (item?.slug === 'best-practices') {
+            navigation.navigate('ContentDetail', {
+              resourceId: 203,
+              resourcesName: item?.name,
+            });
           } else {
             navigation.navigate(poePage, {
               poeId: item?.term_id,
@@ -191,7 +200,7 @@ const Search = props => {
             <Image
               source={{uri: item?.image}}
               style={{width: 30, height: 35}}
-			  resizeMode="contain"
+              resizeMode="contain"
             />
           </View>
           <Text style={{marginTop: 8, fontSize: 10}}>{item?.name}</Text>

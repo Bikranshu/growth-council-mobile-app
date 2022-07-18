@@ -1,16 +1,16 @@
 import 'react-native-gesture-handler';
-import React, {useEffect, useRef} from 'react';
-import {Provider} from 'react-redux';
-import {PersistGate} from 'redux-persist/integration/react';
-import {NativeBaseProvider} from 'native-base';
+import React, { useEffect, useRef } from 'react';
+import { Provider } from 'react-redux';
+import { PersistGate } from 'redux-persist/integration/react';
+import { NativeBaseProvider } from 'native-base';
 import RNBootSplash from 'react-native-bootsplash';
-import {Provider as PaperProvider} from 'react-native-paper';
+import { Provider as PaperProvider } from 'react-native-paper';
 import messaging from '@react-native-firebase/messaging';
-import PushNotification, {Importance} from 'react-native-push-notification';
+import PushNotification, { Importance } from 'react-native-push-notification';
 import PushNotificationIOS from '@react-native-community/push-notification-ios';
-import {store, persistor} from './store';
+import { store, persistor } from './store';
 import MainNavigation from './navigations';
-import {AuthProvider} from './context/auth';
+import { AuthProvider } from './context/auth';
 import SplashScreen from './screens/splash';
 import { Platform } from 'react-native';
 
@@ -32,9 +32,9 @@ const App = () => {
     getNotifications();
 
     (async () => {
-      if(Platform.OS == 'ios'){
+      if (Platform.OS == 'ios') {
         const authorizationStatus = await messaging().requestPermission();
-        
+
         if (authorizationStatus) {
           console.log('Permission status:', authorizationStatus);
         }
@@ -48,8 +48,9 @@ const App = () => {
           id: new Date().toString(),
           title: remoteMessage.notification?.title,
           body: remoteMessage.notification?.body,
+          number: 1,
           category: 'userAction',
-          userInfo: remoteMessage.data,
+          userInfo: { ...remoteMessage.data },
         });
     });
     return unsubscribe;
@@ -63,10 +64,10 @@ const App = () => {
     console.log(token);
   };
   const getNotifications = async () => {
-    await messaging().onNotificationOpenedApp(remoteMessage => {});
+    await messaging().onNotificationOpenedApp(remoteMessage => { });
     await messaging()
       .getInitialNotification()
-      .then(remoteMessage => {});
+      .then(remoteMessage => { });
   };
   const _createChannel = () => {
     PushNotification.createChannel(
@@ -97,7 +98,7 @@ const App = () => {
         <NativeBaseProvider>
           <PaperProvider>
             <AuthProvider>
-                <MainNavigation />
+              <MainNavigation />
             </AuthProvider>
           </PaperProvider>
         </NativeBaseProvider>
