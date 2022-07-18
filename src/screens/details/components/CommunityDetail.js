@@ -587,6 +587,7 @@ const CommunityDetail = props => {
                             name="people-outline"
                             size={25}
                             color="white"
+                            style={{marginLeft: 5}}
                           />
                           <Text
                             style={{
@@ -594,9 +595,9 @@ const CommunityDetail = props => {
                               fontSize: 14,
                               color: 'white',
                               alignItems: 'center',
-                              paddingLeft: 10,
+                              paddingLeft: 5,
                             }}>
-                            Growth Community Members
+                            Connect with Growth Council Members
                           </Text>
                         </View>
                       </ImageBackground>
@@ -607,7 +608,7 @@ const CommunityDetail = props => {
                     <View style={styles.chatbutton}>
                       <Ionicons name="chatbox" size={20} color="white" />
                       <Text style={styles.chatbuttonText}>
-                        Connect With Growth Council Member
+                        Chat with Growth Council Members
                       </Text>
                     </View>
                   </TouchableOpacity>
@@ -662,7 +663,7 @@ const CommunityDetail = props => {
                         }}>
                         <ImageBackground
                           style={{width: '100%', height: 120, borderRadius: 20}}
-                          source={require('../../../assets/img/digital-content.jpg')}>
+                          source={require('../../../assets/img/onDemat.jpg')}>
                           <LinearGradient
                             colors={['#00000000', '#000000']}
                             style={{height: '100%', width: '100%'}}
@@ -678,11 +679,16 @@ const CommunityDetail = props => {
                               bottom: -15,
                               left: 5,
                             }}>
-                            <Ionicons
+                            <Image
+                              source={require('../../../assets/img/ContentIcon_Orange.png')}
+                              style={{width: 20, height: 20}}
+                              resizeMode="cover"
+                            />
+                            {/* <Ionicons
                               name="people-outline"
                               size={25}
                               color="white"
-                            />
+                            /> */}
                             <Text
                               style={{
                                 fontFamily: Typography.FONT_SF_BOLD,
