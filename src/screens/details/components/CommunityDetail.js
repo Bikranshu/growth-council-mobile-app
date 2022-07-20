@@ -616,7 +616,8 @@ const CommunityDetail = props => {
               )}
               {poeDetails?.slug !== 'peer-to-peer-interactions' &&
                 poeDetails?.slug !== 'executive-coaching-clinic' &&
-                poeDetails?.slug !== 'annual-council-meeting' && (
+                poeDetails?.slug !== 'annual-council-meeting' &&
+                poeDetails?.slug !== 'innovation-center-tours' && (
                   <View style={styles.buttonWrapper}>
                     <View style={styles.btnWrapper}>
                       <TouchableOpacity
@@ -647,13 +648,14 @@ const CommunityDetail = props => {
                               resourceId: 35,
                               resourcesName: poeDetails?.name,
                             });
-                          } else if (
-                            poeDetails?.slug === 'innovation-center-tours'
-                          ) {
-                            navigation.navigate('ContentDetail', {
-                              resourceId: 204,
-                              resourcesName: poeDetails?.name,
-                            });
+                        //   }
+						//    else if (
+                        //     poeDetails?.slug === 'innovation-center-tours'
+                        //   ) {
+                        //     navigation.navigate('ContentDetail', {
+                        //       resourceId: 204,
+                        //       resourcesName: poeDetails?.name,
+                        //     });
                           } else {
                             navigation.navigate('ContentDetail', {
                               resourceId: poeDetails?.ID,
