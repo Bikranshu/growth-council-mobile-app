@@ -273,7 +273,7 @@ const CommunityDetail = props => {
             source={backgroundImage}>
             <View
               style={{
-                width: 40,
+                width: 50,
                 height: 50,
                 marginTop: 10,
                 marginLeft: 200,
@@ -282,8 +282,8 @@ const CommunityDetail = props => {
                 padding: 5,
                 alignItems: 'center',
               }}>
-              <Text>{date[0]}</Text>
-              <Text>{date[1]}</Text>
+              <Text style={{color: '#030303'}}>{date[0]}</Text>
+              <Text style={{color: '#030303'}}>{date[1]}</Text>
             </View>
 
             <View style={styles.header}>
@@ -614,7 +614,8 @@ const CommunityDetail = props => {
                   </TouchableOpacity>
                 </View>
               )}
-              {poeDetails?.slug !== 'peer-to-peer-interactions' &&
+              {
+                poeDetails?.slug !== 'peer-to-peer-interactions' &&
                 poeDetails?.slug !== 'executive-coaching-clinic' &&
                 poeDetails?.slug !== 'annual-council-meeting' &&
                 poeDetails?.slug !== 'innovation-center-tours' && (
@@ -648,14 +649,14 @@ const CommunityDetail = props => {
                               resourceId: 35,
                               resourcesName: poeDetails?.name,
                             });
-                        //   }
-						//    else if (
-                        //     poeDetails?.slug === 'innovation-center-tours'
-                        //   ) {
-                        //     navigation.navigate('ContentDetail', {
-                        //       resourceId: 204,
-                        //       resourcesName: poeDetails?.name,
-                        //     });
+                            //   }
+                            //    else if (
+                            //     poeDetails?.slug === 'innovation-center-tours'
+                            //   ) {
+                            //     navigation.navigate('ContentDetail', {
+                            //       resourceId: 204,
+                            //       resourcesName: poeDetails?.name,
+                            //     });
                           } else {
                             navigation.navigate('ContentDetail', {
                               resourceId: poeDetails?.ID,
@@ -837,21 +838,22 @@ const styles = StyleSheet.create({
     borderRadius: 20,
   },
   header: {
-    margin: 10,
+    marginLeft: 10,
   },
   headingText1: {
-    ...CommonStyles.headingText1,
-    fontFamily: Typography.FONT_SF_REGULAR,
-    marginTop: 5,
+    fontFamily: Typography.FONT_SF_MEDIUM,
+    marginTop: 10,
     fontWeight: '600',
+    width: '98%',
     color: 'white',
-    fontSize: 12,
+    fontSize: 11,
   },
   headingText2: {
-    ...CommonStyles.headingText2,
-    fontFamily: Typography.FONT_SF_REGULAR,
+    fontFamily: Typography.FONT_SF_MEDIUM,
+    // fontWeight: '700',
     color: 'white',
     fontSize: 8,
+    lineHeight: 8,
   },
 
   growthContent: {
