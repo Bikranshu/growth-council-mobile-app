@@ -614,101 +614,103 @@ const CommunityDetail = props => {
                   </TouchableOpacity>
                 </View>
               )}
-              {
-                poeDetails?.slug !== 'peer-to-peer-interactions' &&
-                poeDetails?.slug !== 'executive-coaching-clinic' &&
-                poeDetails?.slug !== 'annual-council-meeting' &&
-                poeDetails?.slug !== 'innovation-center-tours' && (
-                  <View style={styles.buttonWrapper}>
-                    <View style={styles.btnWrapper}>
-                      <TouchableOpacity
-                        onPress={() => {
-                          if (poeDetails?.slug === 'council-virtual-events') {
-                            navigation.navigate('LibraryDetail', {
-                              resources: 44,
-                              itemname: poeDetails?.name,
-                            });
-                          } else if (
-                            poeDetails?.slug === 'transformational-think-tanks'
-                          ) {
-                            navigation.navigate('LibraryDetail', {
-                              resources: 119,
-                              itemname: poeDetails?.name,
-                            });
-                          } else if (
-                            poeDetails?.slug === 'mega-trends-workshop'
-                          ) {
-                            navigation.navigate('LibraryDetail', {
-                              resources: 204,
-                              itemname: poeDetails?.name,
-                            });
-                          } else if (
-                            poeDetails?.slug === 'executive-mindxchange-events'
-                          ) {
-                            navigation.navigate('ContentDetail', {
-                              resourceId: 35,
-                              resourcesName: poeDetails?.name,
-                            });
-                            //   }
-                            //    else if (
-                            //     poeDetails?.slug === 'innovation-center-tours'
-                            //   ) {
-                            //     navigation.navigate('ContentDetail', {
-                            //       resourceId: 204,
-                            //       resourcesName: poeDetails?.name,
-                            //     });
-                          } else {
-                            navigation.navigate('ContentDetail', {
-                              resourceId: poeDetails?.ID,
-                              resourcesName: poeDetails?.name,
-                            });
-                          }
-                        }}>
-                        <ImageBackground
-                          style={{width: '100%', height: 120, borderRadius: 20}}
-                          source={require('../../../assets/img/onDemat.jpg')}>
-                          <LinearGradient
-                            colors={['#00000000', '#000000']}
-                            style={{height: '100%', width: '100%'}}
+
+              {poeDetails?.slug === 'transformational-think-tanks' ||
+              poeDetails?.slug === 'mega-trends-workshop' ||
+              (poeDetails?.slug === 'executive-mindxchange-events' &&
+                poeDetails?.slug !== 'innovation-center-tours') ? (
+                <View style={styles.buttonWrapper}>
+                  <View style={styles.btnWrapper}>
+                    <TouchableOpacity
+                      onPress={() => {
+                        if (poeDetails?.slug === 'council-virtual-events') {
+                          navigation.navigate('LibraryDetail', {
+                            resources: 44,
+                            itemname: poeDetails?.name,
+                          });
+                        } else if (
+                          poeDetails?.slug === 'transformational-think-tanks'
+                        ) {
+                          navigation.navigate('LibraryDetail', {
+                            resources: 119,
+                            itemname: poeDetails?.name,
+                          });
+                        } else if (
+                          poeDetails?.slug === 'mega-trends-workshop'
+                        ) {
+                          navigation.navigate('LibraryDetail', {
+                            resources: 204,
+                            itemname: poeDetails?.name,
+                          });
+                        } else if (
+                          poeDetails?.slug === 'executive-mindxchange-events'
+                        ) {
+                          navigation.navigate('ContentDetail', {
+                            resourceId: 35,
+                            resourcesName: poeDetails?.name,
+                          });
+                          //   }
+                          //    else if (
+                          //     poeDetails?.slug === 'innovation-center-tours'
+                          //   ) {
+                          //     navigation.navigate('ContentDetail', {
+                          //       resourceId: 204,
+                          //       resourcesName: poeDetails?.name,
+                          //     });
+                        } else {
+                          navigation.navigate('ContentDetail', {
+                            resourceId: poeDetails?.ID,
+                            resourcesName: poeDetails?.name,
+                          });
+                        }
+                      }}>
+                      <ImageBackground
+                        style={{width: '100%', height: 120, borderRadius: 20}}
+                        source={require('../../../assets/img/onDemat.jpg')}>
+                        <LinearGradient
+                          colors={['#00000000', '#000000']}
+                          style={{height: '100%', width: '100%'}}
+                        />
+                        <View
+                          style={{
+                            width: buttonContainerWidth,
+                            marginBottom: Platform.OS === 'ios' ? 10 : 10,
+                            borderRadius: 10,
+                            height: 45,
+                            flexDirection: 'row',
+                            position: 'absolute',
+                            bottom: -15,
+                            left: 5,
+                          }}>
+                          <Image
+                            source={require('../../../assets/img/ContentIcon_Orange.png')}
+                            style={{width: 20, height: 20}}
+                            resizeMode="cover"
                           />
-                          <View
-                            style={{
-                              width: buttonContainerWidth,
-                              marginBottom: Platform.OS === 'ios' ? 10 : 10,
-                              borderRadius: 10,
-                              height: 45,
-                              flexDirection: 'row',
-                              position: 'absolute',
-                              bottom: -15,
-                              left: 5,
-                            }}>
-                            <Image
-                              source={require('../../../assets/img/ContentIcon_Orange.png')}
-                              style={{width: 20, height: 20}}
-                              resizeMode="cover"
-                            />
-                            {/* <Ionicons
+                          {/* <Ionicons
                               name="people-outline"
                               size={25}
                               color="white"
                             /> */}
-                            <Text
-                              style={{
-                                fontFamily: Typography.FONT_SF_BOLD,
-                                fontSize: 16,
-                                color: 'white',
-                                alignItems: 'center',
-                                paddingLeft: 10,
-                                fontWeight: '700',
-                              }}>
-                              On-Demand Content
-                            </Text>
-                          </View>
-                        </ImageBackground>
-                      </TouchableOpacity>
-                    </View>
+                          <Text
+                            style={{
+                              fontFamily: Typography.FONT_SF_BOLD,
+                              fontSize: 16,
+                              color: 'white',
+                              alignItems: 'center',
+                              paddingLeft: 10,
+                              fontWeight: '700',
+                            }}>
+                            On-Demand Content
+                          </Text>
+                        </View>
+                      </ImageBackground>
+                    </TouchableOpacity>
                   </View>
-                )}
+                </View>
+              ) : (
+                <></>
+              )}
 
               {/* <Footer /> */}
             </View>
