@@ -28,7 +28,8 @@ const NoInternetModel = () => (
     <View style={styles.modalContainer}>
       <Text style={styles.modalTitle}>Connection Error</Text>
       <Text style={styles.modalText}>
-        Oops! Looks like your device is not connected to the internet
+        Oops! Looks like your device is not connected to the internet or you
+        don't have stable internet. Please check your internet connection
       </Text>
     </View>
   </Modal>
