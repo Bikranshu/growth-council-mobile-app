@@ -28,6 +28,17 @@ export const AuthProvider = ({children}) => {
     })();
   });
 
+  useEffect(() => {
+    (async () => {
+      const token = await getAsyncStorage(JWT_TOKEN);
+      var dateNow = new Date();
+      if (token) {
+        const decodedToken = decode(token);
+        if (decodedToken.exp * 1000 < dateNow.getTime()) setLoggedIn(false);
+      }
+    })();
+  }, []);
+
   const createUser = () =>
     new Promise(async (resolve, reject) => {
       try {
@@ -148,6 +159,12 @@ export const AuthProvider = ({children}) => {
           await clearAsyncStorage(USER_AVATAR);
           // await auth().signOut();
           setLoggedIn(false);
+          const token = await getAsyncStorage(JWT_TOKEN);
+          var dateNow = new Date();
+          if (token) {
+            const decodedToken = decode(token);
+            if (decodedToken.exp * 1000 < dateNow.getTime()) setLoggedIn(false);
+          }
         },
       }}>
       {children}
