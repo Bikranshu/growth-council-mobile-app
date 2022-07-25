@@ -29,14 +29,15 @@ export const AuthProvider = ({children}) => {
   });
 
   useEffect(() => {
-    (async () => {
-      const token = await getAsyncStorage(JWT_TOKEN);
+    async () => {
+      const tok = await getAsyncStorage(JWT_TOKEN);
       var dateNow = new Date();
-      if (token) {
-        const decodedToken = decode(token);
+      if (tok) {
+        const decodedToken = decode(tok);
         if (decodedToken.exp * 1000 < dateNow.getTime()) setLoggedIn(false);
       }
-    })();
+      console.log('abcd', tok);
+    };
   }, []);
 
   const createUser = () =>
