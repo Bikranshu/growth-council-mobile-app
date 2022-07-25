@@ -9,6 +9,7 @@ import {
   TouchableOpacity,
   Image,
   StatusBar,
+  Dimensions,
 } from 'react-native';
 import {Button} from 'react-native-paper';
 import Font from 'react-native-vector-icons/FontAwesome5';
@@ -24,6 +25,9 @@ import {
 
 import {CommonStyles, Colors, Typography} from '../../../theme';
 import Loading from '../../../shared/loading';
+
+const win = Dimensions.get('window');
+const contentContainerWidth = win.width - 30;
 
 const Search = props => {
   const {
@@ -195,16 +199,27 @@ const Search = props => {
             });
           }
         }}>
-        <View style={styles.middleWrapper}>
-          <View style={[styles.middleW, styles.shadowProp]}>
-            <Image
-              source={{uri: item?.image}}
-              style={{width: 30, height: 35}}
-              resizeMode="contain"
-            />
+        {item?.parent !== GROWTH_CONTENT_ID && item?.parent !== 184 && item?.parent !== 188 &&(
+          <View style={styles.middleWrapper}>
+            <View style={[styles.middleW, styles.shadowProp]}>
+              <Image
+                source={{uri: item?.image}}
+                style={{width: 30, height: 30}}
+                resizeMode="contain"
+              />
+            </View>
+            <Text
+              style={{
+                marginTop: 10,
+                fontSize: 8,
+                marginHorizontal: 9,
+                textAlign: 'center',
+                color: '#222B45',
+              }}>
+              {item?.name}
+            </Text>
           </View>
-          <Text style={{marginTop: 8, fontSize: 10}}>{item?.name}</Text>
-        </View>
+        )}
       </TouchableOpacity>
     );
   };
@@ -324,12 +339,11 @@ const styles = StyleSheet.create({
     marginTop: 5,
   },
   middleWrapper: {
-    width: 80,
+    width: Dimensions.get('window').width / 4,
     borderRadius: 20,
     marginTop: 15,
     justifyContent: 'center',
     alignItems: 'center',
-    marginRight: 15,
   },
   middleW: {
     backgroundColor: 'white',

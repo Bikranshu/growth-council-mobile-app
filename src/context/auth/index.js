@@ -10,6 +10,7 @@ import {
   clearAsyncStorage,
   getAsyncStorage,
 } from '../../utils/storageUtil';
+import {isTokenExpired} from '../../utils/jwtUtil';
 import {JWT_TOKEN, API_URL, USER_NAME, USER_AVATAR} from '../../constants';
 
 export const AuthContext = createContext({});
@@ -27,6 +28,14 @@ export const AuthProvider = ({children}) => {
       else setLoggedIn(false);
     })();
   });
+
+  useEffect(() => {
+    async () => {
+      if (isTokenExpired) {
+        await signOut();
+      }
+    };
+  }, []);
 
   const createUser = () =>
     new Promise(async (resolve, reject) => {
@@ -148,6 +157,7 @@ export const AuthProvider = ({children}) => {
           await clearAsyncStorage(USER_AVATAR);
           // await auth().signOut();
           setLoggedIn(false);
+          
         },
       }}>
       {children}

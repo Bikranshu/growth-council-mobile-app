@@ -602,7 +602,7 @@ const styles = StyleSheet.create({
   buttonWrapper: {
     justifyContent: 'center',
     alignItems: 'flex-start',
-    marginTop: 10,
+    marginTop: 20,
   },
   button: {
     width: '93%',
