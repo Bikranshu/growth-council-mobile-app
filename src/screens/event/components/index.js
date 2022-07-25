@@ -67,7 +67,7 @@ const Event = props => {
     });
     if (response?.payload?.code === 200) {
       setEventStatus(true);
-      ToastMessage.show('You have successfully RSVP’d to this event.');
+      ToastMessage.show('You have successfully RSVP’d for this event.');
     } else {
       toast.closeAll();
       ToastMessage.show(response?.payload?.response);
