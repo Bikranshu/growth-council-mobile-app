@@ -9,9 +9,11 @@ export const isTokenExpired = token => {
     if (decoded.exp < Date.now() / 1000) {
       // Checking if token is expired.
       return true;
+	
     }
   } catch (e) {
     return false;
+	
   }
 };
 

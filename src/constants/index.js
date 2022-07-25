@@ -18,14 +18,12 @@ export const FIREBASE_APP_ID = '1:377923277535:android:d100b41f6342692a9f4f6a';
 export const GROWTH_CONTENT_FALLBACK_IMAGE = '../img/best-practice-bg.png'
 
 
-
-
 // // LIVE
 // export const GROWTH_COMMUNITY_ID = 194; //169
 // export const GROWTH_CONTENT_ID = 171; //170
 // export const GROWTH_COACHING_ID = 172; //171
 
-//staging
+// staging
 export const GROWTH_COMMUNITY_ID = 169
 export const GROWTH_CONTENT_ID = 170
 export const GROWTH_COACHING_ID = 171

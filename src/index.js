@@ -1,5 +1,6 @@
 import 'react-native-gesture-handler';
 import React, {useEffect, useRef} from 'react';
+import jwt_decode from 'jwt-decode';
 import {StyleSheet, View, Text} from 'react-native';
 import {Provider} from 'react-redux';
 import {PersistGate} from 'redux-persist/integration/react';
@@ -16,6 +17,8 @@ import {AuthProvider} from './context/auth';
 import SplashScreen from './screens/splash';
 import {Platform} from 'react-native';
 import Modal from 'react-native-modal';
+import {useAuthentication} from './context/auth';
+import {isTokenExpired} from './utils/jwtUtil';
 
 XMLHttpRequest = GLOBAL.originalXMLHttpRequest
   ? GLOBAL.originalXMLHttpRequest
@@ -45,6 +48,8 @@ const App = () => {
   };
 
   const netInfo = useNetInfo();
+  const {loading, setLoading, message, setMessage, signOut} =
+    useAuthentication();
 
   useEffect(() => {
     getNotifications();
@@ -76,11 +81,21 @@ const App = () => {
   useEffect(() => {
     getToken();
   }, []);
+
+
   const getToken = async () => {
     const token = await messaging().getToken();
     console.log('***************************************');
     console.log(token);
+
+    if (isTokenExpired) {
+      async () => {
+        await signOut();
+      };
+    }
   };
+
+  
   const getNotifications = async () => {
     await messaging().onNotificationOpenedApp(remoteMessage => {});
     await messaging()

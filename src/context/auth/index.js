@@ -10,6 +10,7 @@ import {
   clearAsyncStorage,
   getAsyncStorage,
 } from '../../utils/storageUtil';
+import {isTokenExpired} from '../../utils/jwtUtil';
 import {JWT_TOKEN, API_URL, USER_NAME, USER_AVATAR} from '../../constants';
 
 export const AuthContext = createContext({});
@@ -30,13 +31,9 @@ export const AuthProvider = ({children}) => {
 
   useEffect(() => {
     async () => {
-      const tok = await getAsyncStorage(JWT_TOKEN);
-      var dateNow = new Date();
-      if (tok) {
-        const decodedToken = decode(tok);
-        if (decodedToken.exp * 1000 < dateNow.getTime()) setLoggedIn(false);
+      if (isTokenExpired) {
+        await signOut();
       }
-      console.log('abcd', tok);
     };
   }, []);
 
@@ -160,12 +157,7 @@ export const AuthProvider = ({children}) => {
           await clearAsyncStorage(USER_AVATAR);
           // await auth().signOut();
           setLoggedIn(false);
-          const token = await getAsyncStorage(JWT_TOKEN);
-          var dateNow = new Date();
-          if (token) {
-            const decodedToken = decode(token);
-            if (decodedToken.exp * 1000 < dateNow.getTime()) setLoggedIn(false);
-          }
+          
         },
       }}>
       {children}
