@@ -16,6 +16,7 @@ import {
   BackHandler,
 } from 'react-native';
 import {useAuthentication} from '../../../context/auth';
+
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import {BubblesLoader} from 'react-native-indicator';
@@ -26,14 +27,15 @@ import PillarList from './PillarList';
 import {CommonStyles, Colors, Typography} from '../../../theme';
 import {PRIMARY_TEXT_COLOR, SECONDARY_TEXT_COLOR} from '../../../theme/colors';
 import Footer from '../../../shared/footer';
-import Player from './Player';
+
 import BottomNav from '../../../layout/BottomLayout';
 import HTMLView from 'react-native-htmlview';
 import Loading from '../../../shared/loading';
-import {sendNotification} from '../../../utils/sendNotification';
-import MainHeader from '../../../shared/header/MainHeader';
+import {isTokenExpired} from '../../../utils/jwtUtil';
+
 import messaging from '@react-native-firebase/messaging';
-import { GROWTH_COMMUNITY_ID, GROWTH_CONTENT_ID } from '../../../constants';
+
+import {GROWTH_COMMUNITY_ID, GROWTH_CONTENT_ID} from '../../../constants';
 
 const win = Dimensions.get('window').width;
 const contentContainerWidth = win / 2;
@@ -84,6 +86,8 @@ const Dashboard = props => {
 
   const [dataSourceCords, setDataSourceCords] = useState(criticalIssue);
   const [ref, setRef] = useState(null);
+  const {loading, setLoading, message, setMessage, signOut} =
+    useAuthentication();
   const navigation = useNavigation();
 
   useEffect(() => {
@@ -96,8 +100,14 @@ const Dashboard = props => {
   useEffect(() => {
     messaging()
       .getToken()
+
       .then(token => {
-        console.log('FCM ---> ' + token);
+        async () => {
+          if (isTokenExpired) {
+            await signOut();
+          }
+          console.log('FCM ---> ' + token);
+        };
       });
   }, []);
 
@@ -550,7 +560,6 @@ const styles = StyleSheet.create({
   },
   header: {
     marginLeft: 10,
-  
   },
   title: {
     fontSize: 16,

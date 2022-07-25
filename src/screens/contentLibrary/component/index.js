@@ -56,7 +56,7 @@ const Content = props => {
   const _renderContent = ({item, index}) => {
     return (
       <>
-        {item?.children_count !== 0 && (
+        {/* {item?.children_count !== 0 && ( */}
           <TouchableOpacity
             key={index}
             style={[styles.content, styles.shadowProp]}
@@ -125,7 +125,7 @@ const Content = props => {
               </View>
             </>
           </TouchableOpacity>
-        )}
+        {/* )} */}
       </>
     );
   };
