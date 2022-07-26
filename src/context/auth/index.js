@@ -1,5 +1,6 @@
 import React, {createContext, useContext, useEffect, useState} from 'react';
 import axios from 'axios';
+import jwt_decode from 'jwt-decode';
 import uuid from 'react-native-uuid';
 import crashlytics from '@react-native-firebase/crashlytics';
 import auth from '@react-native-firebase/auth';
@@ -24,18 +25,22 @@ export const AuthProvider = ({children}) => {
   useEffect(() => {
     (async () => {
       const token = await getAsyncStorage(JWT_TOKEN);
-      if (token) setLoggedIn(true);
-      else setLoggedIn(false);
+      if (token) {
+        setLoggedIn(true);
+      } else {
+        await isTokenExpired(token);
+        setLoggedIn(false);
+      }
     })();
   });
 
-  useEffect(() => {
-    async () => {
-      if (isTokenExpired) {
-        await signOut();
-      }
-    };
-  }, []);
+  const isTokenExpired = async token => {
+    const decoded = jwt_decode(token);
+    if (decoded.exp < Date.now() / 1000) {
+  
+      await signOut();
+    }
+  };
 
   const createUser = () =>
     new Promise(async (resolve, reject) => {
@@ -157,7 +162,6 @@ export const AuthProvider = ({children}) => {
           await clearAsyncStorage(USER_AVATAR);
           // await auth().signOut();
           setLoggedIn(false);
-          
         },
       }}>
       {children}

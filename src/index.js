@@ -18,7 +18,11 @@ import SplashScreen from './screens/splash';
 import {Platform} from 'react-native';
 import Modal from 'react-native-modal';
 import {useAuthentication} from './context/auth';
-import {isTokenExpired} from './utils/jwtUtil';
+import {
+  setAsyncStorage,
+  clearAsyncStorage,
+  getAsyncStorage,
+} from './utils/storageUtil';
 
 XMLHttpRequest = GLOBAL.originalXMLHttpRequest
   ? GLOBAL.originalXMLHttpRequest
@@ -80,22 +84,25 @@ const App = () => {
   }, []);
   useEffect(() => {
     getToken();
+    // isTokenExpired();
   }, []);
-
 
   const getToken = async () => {
     const token = await messaging().getToken();
     console.log('***************************************');
     console.log(token);
+  };
 
-    if (isTokenExpired) {
-      async () => {
-        await signOut();
-      };
+  const isTokenExpired = async () => {
+    const token = await getAsyncStorage(JWT_TOKEN);
+    const decoded = jwt_decode(token);
+    if (decoded.exp < Date.now() / 1000) {
+      // Checking if token is expired.
+      //   return true;
+      await signOut();
     }
   };
 
-  
   const getNotifications = async () => {
     await messaging().onNotificationOpenedApp(remoteMessage => {});
     await messaging()
