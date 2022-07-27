@@ -5,6 +5,7 @@ import uuid from 'react-native-uuid';
 import crashlytics from '@react-native-firebase/crashlytics';
 import auth from '@react-native-firebase/auth';
 import messaging from '@react-native-firebase/messaging';
+import {HOME_URL} from '../../constants';
 
 import {
   setAsyncStorage,
@@ -36,10 +37,14 @@ export const AuthProvider = ({children}) => {
 
   const isTokenExpired = async token => {
     const decoded = jwt_decode(token);
-    console.log('abcd', decoded);
-    if (decoded.exp * 1000 < Date.now()) {
-      await signOut();
+	
+    if (decoded.iss !== HOME_URL) {
+		await clearAsyncStorage(JWT_TOKEN);
+		await clearAsyncStorage(USER_NAME);
+		await clearAsyncStorage(USER_AVATAR);
+		setLoggedIn(false);
     }
+
   };
 
   const createUser = () =>
