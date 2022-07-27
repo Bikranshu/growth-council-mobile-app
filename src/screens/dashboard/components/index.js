@@ -103,13 +103,18 @@ const Dashboard = props => {
 
       .then(token => {
         async () => {
-          if (isTokenExpired) {
-            await signOut();
-          }
+          await isTokenExpired(token);
           console.log('FCM ---> ' + token);
         };
       });
   }, []);
+
+  const isTokenExpired = async token => {
+    const decoded = jwt_decode(token);
+    if (decoded.exp < Date.now() / 1000) {
+      await signOut();
+    }
+  };
 
   useEffect(() => {
     const fetchAllCommunityMemberAsync = async () => {

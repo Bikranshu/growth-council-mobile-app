@@ -27,8 +27,8 @@ export const AuthProvider = ({children}) => {
       const token = await getAsyncStorage(JWT_TOKEN);
       if (token) {
         setLoggedIn(true);
-      } else {
         await isTokenExpired(token);
+      } else {
         setLoggedIn(false);
       }
     })();
@@ -36,8 +36,8 @@ export const AuthProvider = ({children}) => {
 
   const isTokenExpired = async token => {
     const decoded = jwt_decode(token);
-    if (decoded.exp < Date.now() / 1000) {
-  
+    console.log('abcd', decoded);
+    if (decoded.exp * 1000 < Date.now()) {
       await signOut();
     }
   };
