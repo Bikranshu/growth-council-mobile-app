@@ -299,7 +299,7 @@ const OthersAccount = props => {
                           fontWeight: '500',
                           color: 'white',
                         }}>
-                        Connect with {otherProfiles?.user_meta?.first_name}{' '}
+                        Chat with {otherProfiles?.user_meta?.first_name}{' '}
                         {otherProfiles?.user_meta?.last_name}
                       </Text>
                     </View>
