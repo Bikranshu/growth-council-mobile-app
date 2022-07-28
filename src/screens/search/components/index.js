@@ -199,27 +199,29 @@ const Search = props => {
             });
           }
         }}>
-        {item?.parent !== GROWTH_CONTENT_ID && item?.parent !== 184 && item?.parent !== 188 &&(
-          <View style={styles.middleWrapper}>
-            <View style={[styles.middleW, styles.shadowProp]}>
-              <Image
-                source={{uri: item?.image}}
-                style={{width: 30, height: 30}}
-                resizeMode="contain"
-              />
+        {item?.parent !== GROWTH_CONTENT_ID &&
+          item?.parent !== 184 &&
+          item?.parent !== 188 && (
+            <View style={styles.middleWrapper}>
+              <View style={[styles.middleW, styles.shadowProp]}>
+                <Image
+                  source={{uri: item?.image}}
+                  style={{width: 30, height: 30}}
+                  resizeMode="contain"
+                />
+              </View>
+              <Text
+                style={{
+                  marginTop: 10,
+                  fontSize: 8,
+                  marginHorizontal: 9,
+                  textAlign: 'center',
+                  color: '#222B45',
+                }}>
+                {item?.name}
+              </Text>
             </View>
-            <Text
-              style={{
-                marginTop: 10,
-                fontSize: 8,
-                marginHorizontal: 9,
-                textAlign: 'center',
-                color: '#222B45',
-              }}>
-              {item?.name}
-            </Text>
-          </View>
-        )}
+          )}
       </TouchableOpacity>
     );
   };

@@ -52,7 +52,7 @@ const HomeCommunity = props => {
     fetchAllCommunityMember,
     cleanCommunityMember,
 
-	pillarMemberContents,
+    pillarMemberContents,
     pillarMemberContentLoading,
     pillarMemberContentError,
     fetchAllPillarMemberContent,
@@ -75,9 +75,7 @@ const HomeCommunity = props => {
 
   const isFocused = useIsFocused();
 
-  const [memberConnection, setMemberConnection] = useState(
-    pillarMemberContents?.members,
-  );
+  const [memberConnection, setMemberConnection] = useState([]);
 
   useFocusEffect(
     useCallback(() => {
@@ -105,16 +103,16 @@ const HomeCommunity = props => {
     }, []),
   );
 
-    useFocusEffect(
-      useCallback(() => {
-        const fetchAllPillarMemberContentAsync = async () => {
-          let token = await getAsyncStorage(JWT_TOKEN);
-          let userID = decodeUserID(token);
-          await fetchAllPillarMemberContent(pillarId);
-        };
-        fetchAllPillarMemberContentAsync();
-      }, [isFocused]),
-    );
+  useFocusEffect(
+    useCallback(() => {
+      const fetchAllPillarMemberContentAsync = async () => {
+        let token = await getAsyncStorage(JWT_TOKEN);
+        let userID = decodeUserID(token);
+        await fetchAllPillarMemberContent(pillarId);
+      };
+      fetchAllPillarMemberContentAsync();
+    }, [isFocused]),
+  );
 
   useEffect(() => {
     const fetchAllCommunityMemberAsync = async () => {
@@ -146,8 +144,8 @@ const HomeCommunity = props => {
   );
 
   useEffect(() => {
-    setMemberConnection(users);
-  }, [users]);
+    setMemberConnection(communityMembers);
+  }, [communityMembers]);
 
   const _renderItem = ({item, index}) => {
     return (
@@ -181,14 +179,14 @@ const HomeCommunity = props => {
         </TouchableOpacity>
 
         <View style={styles.chatIcon}>
-          {/* { !memberConnection[index]?.connection && (
+          {!memberConnection[index]?.connection && (
             <TouchableOpacity onPress={() => navigation.navigate('People')}>
               <Ionicons name="add-circle" size={20} color="#B2B3B9" />
             </TouchableOpacity>
           )}
-          { memberConnection[index]?.connection && (
-              <Material name="check-circle" size={20} color="#14A2E2" />
-            )} */}
+          {memberConnection[index]?.connection && (
+            <Material name="check-circle" size={20} color="#14A2E2" />
+          )}
         </View>
       </View>
     );
