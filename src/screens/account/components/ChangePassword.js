@@ -125,9 +125,9 @@ const ChangePasswordForm = props => {
             </View>
             <View style={styles.header}>
               <Text style={styles.headingText1}>
-                {profile?.user_meta?.first_name} {profile?.user_meta?.last_name}
+                {profile?.user_login} 
               </Text>
-              <Text>{profile.user_email}</Text>
+              <Text>{profile?.user_meta?.title}</Text>
             </View>
           </View>
         </View>
