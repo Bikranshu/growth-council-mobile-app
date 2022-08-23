@@ -179,7 +179,7 @@ const People = props => {
   const [accountVisible, setAccountVisible] = useState(false);
   const [regionVisible, setRegionVisible] = useState(false);
 
-  console.log({users});
+
 
   return (
     <SafeAreaView style={{flex: 1}}>
