@@ -323,8 +323,8 @@ const AppStack = () => (
         animationEnabled: false,
         header: ({navigation}) => (
           <SubHeader
-            title="Content Library"
-            image={require('../assets/img/appBG.png')}
+            title="Growth Content"
+            image={require('../assets/img/best-practice-bg.png')}
             navigation={navigation}
             noDrawer
           />

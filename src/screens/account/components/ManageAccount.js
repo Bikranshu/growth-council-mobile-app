@@ -334,7 +334,7 @@ const ManageAccount = props => {
                     </View>
                   </>
                 )}
-                <Text style={styles.headingText1}>{profile?.display_name}</Text>
+                <Text style={styles.headingText1}>{profile?.user_login}</Text>
                 <Text style={{color: '#222B45'}}>
                   {profile.user_meta?.title}
                 </Text>
@@ -494,6 +494,7 @@ const ManageAccount = props => {
                       setValue={setValue}
                       setItems={setItems}
                       maxHeight={1000}
+                      placeholder="Select please"
                       onChangeValue={value => {
                         setFieldValue('expertise_areas1', value);
                       }}

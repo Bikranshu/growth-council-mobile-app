@@ -1,16 +1,19 @@
 import React, {createContext, useContext, useEffect, useState} from 'react';
 import axios from 'axios';
+import jwt_decode from 'jwt-decode';
 import uuid from 'react-native-uuid';
 import crashlytics from '@react-native-firebase/crashlytics';
 import auth from '@react-native-firebase/auth';
+import messaging from '@react-native-firebase/messaging';
+import {HOME_URL} from '../../constants';
 
 import {
   setAsyncStorage,
   clearAsyncStorage,
   getAsyncStorage,
 } from '../../utils/storageUtil';
+import {isTokenExpired} from '../../utils/jwtUtil';
 import {JWT_TOKEN, API_URL, USER_NAME, USER_AVATAR} from '../../constants';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export const AuthContext = createContext({});
 
@@ -18,14 +21,31 @@ export const AuthProvider = ({children}) => {
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState(null);
   const [loggedIn, setLoggedIn] = useState(false);
+  const [emailId, setEmailId] = useState('');
 
   useEffect(() => {
     (async () => {
       const token = await getAsyncStorage(JWT_TOKEN);
-      if (token) setLoggedIn(true);
-      else setLoggedIn(false);
+      if (token) {
+        setLoggedIn(true);
+        await isTokenExpired(token);
+      } else {
+        setLoggedIn(false);
+      }
     })();
   });
+
+  const isTokenExpired = async token => {
+    const decoded = jwt_decode(token);
+	
+    if (decoded.iss !== HOME_URL) {
+		await clearAsyncStorage(JWT_TOKEN);
+		await clearAsyncStorage(USER_NAME);
+		await clearAsyncStorage(USER_AVATAR);
+		setLoggedIn(false);
+    }
+
+  };
 
   const createUser = () =>
     new Promise(async (resolve, reject) => {
@@ -33,13 +53,14 @@ export const AuthProvider = ({children}) => {
         const raw_data = await getAsyncStorage('tempData');
         const data = JSON.parse(raw_data);
 
-        const {formData, JWT_TOKEN, USER_AVATAR, USER_NAME, response} = data;
+        const {formData, JWT_TOKEN, USER_AVATAR, USER_NAME} = data;
 
         const res = await auth().createUserWithEmailAndPassword(
-          response?.data?.user_email,
+          formData.username,
           '6AWgM#.Y(fE8Q2=',
         );
-        await loginWithFirebase(response?.data?.user_email, '6AWgM#.Y(fE8Q2=', {
+
+        await loginWithFirebase(response.data.user_email, '6AWgM#.Y(fE8Q2=', {
           JWT_TOKEN,
           USER_AVATAR,
           USER_NAME,
@@ -57,6 +78,7 @@ export const AuthProvider = ({children}) => {
       '6AWgM#.Y(fE8Q2=',
     );
     console.log('clearing cache...');
+    console.log('login', res);
     await clearAsyncStorage('tempData');
 
     setLoggedIn(true);
@@ -74,14 +96,22 @@ export const AuthProvider = ({children}) => {
     if (token) setLoggedIn(true);
   };
 
+  const postToAPI = async (email, token) => {
+    return await axios.get(
+      `${API_URL}/pd/fcm/subscribe?api_secret_key=s3D6nHoU9AUw%jjTHy0K@UO)&user_email=${email}&device_token=${token}&subscribed=UserNotification`,
+    );
+  };
+
   return (
     <AuthContext.Provider
       value={{
         loading,
         message,
         loggedIn,
+        emailId,
         setMessage,
         setLoading,
+        setEmailId,
         signIn: async fromData => {
           setLoading(true);
           try {
@@ -98,8 +128,8 @@ export const AuthProvider = ({children}) => {
               },
             );
 
-            console.log('a', response);
-            console.log('avatar', response.data.user_display_name);
+            const messageToken = await messaging().getToken();
+            await postToAPI(response.data.user_email, messageToken);
 
             if (response.data.token) {
               await setAsyncStorage(
@@ -143,6 +173,7 @@ export const AuthProvider = ({children}) => {
     </AuthContext.Provider>
   );
 };
+
 export const useAuthentication = () => {
   const context = useContext(AuthContext);
   if (!context) {

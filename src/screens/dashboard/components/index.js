@@ -16,6 +16,7 @@ import {
   BackHandler,
 } from 'react-native';
 import {useAuthentication} from '../../../context/auth';
+
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import {BubblesLoader} from 'react-native-indicator';
@@ -26,13 +27,15 @@ import PillarList from './PillarList';
 import {CommonStyles, Colors, Typography} from '../../../theme';
 import {PRIMARY_TEXT_COLOR, SECONDARY_TEXT_COLOR} from '../../../theme/colors';
 import Footer from '../../../shared/footer';
-import Player from './Player';
+
 import BottomNav from '../../../layout/BottomLayout';
 import HTMLView from 'react-native-htmlview';
 import Loading from '../../../shared/loading';
-import {sendNotification} from '../../../utils/sendNotification';
-import MainHeader from '../../../shared/header/MainHeader';
+import {isTokenExpired} from '../../../utils/jwtUtil';
+
 import messaging from '@react-native-firebase/messaging';
+
+import {GROWTH_COMMUNITY_ID, GROWTH_CONTENT_ID} from '../../../constants';
 
 const win = Dimensions.get('window').width;
 const contentContainerWidth = win / 2;
@@ -83,6 +86,8 @@ const Dashboard = props => {
 
   const [dataSourceCords, setDataSourceCords] = useState(criticalIssue);
   const [ref, setRef] = useState(null);
+  const {loading, setLoading, message, setMessage, signOut} =
+    useAuthentication();
   const navigation = useNavigation();
 
   useEffect(() => {
@@ -95,10 +100,21 @@ const Dashboard = props => {
   useEffect(() => {
     messaging()
       .getToken()
+
       .then(token => {
-        console.log('FCM ---> ' + token);
+        async () => {
+        //   await isTokenExpired(token);
+          console.log('FCM ---> ' + token);
+        };
       });
   }, []);
+
+//   const isTokenExpired = async token => {
+//     const decoded = jwt_decode(token);
+//     if (decoded.exp * 1000 < Date.now() ) {
+//       await signOut();
+//     }
+//   };
 
   useEffect(() => {
     const fetchAllCommunityMemberAsync = async () => {
@@ -265,12 +281,12 @@ const Dashboard = props => {
       item?.pillar_categories[0]?.parent ||
       item?.pillar_categories[1]?.parent
     ) {
-      case 169:
+      case GROWTH_COMMUNITY_ID:
       case 0:
         backgroundImage = require('../../../assets/img/Rectangle2.png');
         pillarname = 'Growth Community';
         break;
-      case 170:
+      case GROWTH_CONTENT_ID:
       case 0:
         backgroundImage = require('../../../assets/img/best-practice-bg.png');
         pillarname = 'Growth Content';
@@ -549,7 +565,6 @@ const styles = StyleSheet.create({
   },
   header: {
     marginLeft: 10,
-  
   },
   title: {
     fontSize: 16,

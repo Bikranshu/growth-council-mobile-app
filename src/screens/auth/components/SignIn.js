@@ -1,4 +1,4 @@
-import React, {useCallback, useState} from 'react';
+import React, { useCallback, useState } from 'react';
 import {
   StyleSheet,
   Text,
@@ -9,37 +9,32 @@ import {
   ImageBackground,
   Image,
 } from 'react-native';
-import {useFocusEffect} from '@react-navigation/native';
-import {Button} from 'native-base';
+import { useFocusEffect } from '@react-navigation/native';
+import { Button } from 'native-base';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import {useFormik} from 'formik';
+import { useFormik } from 'formik';
 import * as Yup from 'yup';
-import {BubblesLoader} from 'react-native-indicator';
-import {Linking} from 'react-native';
+import { BubblesLoader } from 'react-native-indicator';
 import messaging from '@react-native-firebase/messaging';
-
 import axios from 'axios';
-
-import {CommonStyles, Colors, Typography} from '../../../theme';
-import {useAuthentication} from '../../../context/auth';
+import { CommonStyles, Colors, Typography } from '../../../theme';
+import { useAuthentication } from '../../../context/auth';
 import FlatTextInput from '../../../shared/form/FlatTextInput';
-import {API_URL} from '../../../constants';
-import {createUserWithEmailAndPassword} from 'firebase/auth';
-import {auth} from '../../../utils/firebaseUtil';
+import { API_URL } from '../../../constants';
 
 const screenHeight = Math.round(Dimensions.get('window').height);
 
 const signInSchema = Yup.object().shape({
-  username: Yup.string().required('Email is required.'),
+  username: Yup.string().required('Email or Username is required.'),
   password: Yup.string().required('Password is required.'),
 });
 
 const SignInForm = props => {
-  const {navigation} = props;
+  const { navigation } = props;
 
   const [hidePass, setHidePass] = useState(true);
 
-  const {loading, setLoading, message, setMessage, signIn} =
+  const { loading, setLoading, message, setMessage, signIn } =
     useAuthentication();
 
   const {
@@ -52,55 +47,49 @@ const SignInForm = props => {
     isValid,
   } = useFormik({
     validationSchema: signInSchema,
-    initialValues: {username: '', password: ''},
+    initialValues: { username: '', password: '' },
     onSubmit: async values => {
-      const messageToken = await messaging().getToken();
-      const firebasePayload = {
-        username: values.username,
-        token: messageToken,
-      };
-      const resp = await postToAPI(firebasePayload);
-
       await signIn(values);
     },
   });
 
+
   const areAllFieldsFilled = values.username != '' && values.password != '';
 
-  const postToAPI = async data => {
-    return await axios.get(
-      `${API_URL}/pd/fcm/subscribe?api_secret_key=s3D6nHoU9AUw%jjTHy0K@UO)&user_email=${data?.username}&device_token=${data.token}&subscribed=UserNotification`,
-    );
-  };
+  // const postToAPI = async data => {
+  //   return axios.get(
+  //     `${API_URL}/pd/fcm/subscribe?api_secret_key=s3D6nHoU9AUw%jjTHy0K@UO)&user_email=${data.email}&device_token=${data.token}&subscribed=UserNotification`,
+  //   );
+  // };
 
   useFocusEffect(
     useCallback(() => {
       setMessage(null);
       ``;
       setLoading(false);
+
     }, []),
   );
 
- 
   return (
     <ScrollView
-      contentContainerStyle={{flexGrow: 1, height: screenHeight + 100}}>
+      contentContainerStyle={{ flexGrow: 1, height: screenHeight + 100 }}>
       <View style={styles.container}>
         <ImageBackground
           source={require('../../../assets/img/splash-screen.png')}
           resizeMode="cover">
-          <View style={{height: '15%'}} />
+          <View style={{ height: '15%' }} />
 
           <View>
             <View style={styles.content}>
               <View style={styles.header}>
                 <Image
-                  style={{width: '80%'}}
+                  style={{ width: '80%' }}
                   source={require('../../../assets/img/GILCouncil.jpg')}
                   resizeMode="contain"
                 />
               </View>
-              <View style={{marginTop: 10}}>
+              <View style={{ marginTop: 10 }}>
                 <Text style={styles.headingText1}>
                   Growth Innovation
                   {'\n'}
@@ -131,7 +120,7 @@ const SignInForm = props => {
                   autoCapitalize="none"
                 />
                 {errors.username && (
-                  <Text style={{fontSize: 10, color: 'red'}}>
+                  <Text style={{ fontSize: 10, color: 'red' }}>
                     {errors.username}
                   </Text>
                 )}
@@ -147,7 +136,7 @@ const SignInForm = props => {
                   autoCapitalize="none"
                 />
                 {errors.password && (
-                  <Text style={{fontSize: 10, color: 'red'}}>
+                  <Text style={{ fontSize: 10, color: 'red' }}>
                     {errors.password}
                   </Text>
                 )}
@@ -180,7 +169,7 @@ const SignInForm = props => {
                     !areAllFieldsFilled
                       ? styles.loginButton1
                       : styles.loginButton,
-                    loading && {backgroundColor: 'grey'},
+                    loading && { backgroundColor: 'grey' },
                   ]}
                   onPress={handleSubmit}
                   disabled={!areAllFieldsFilled || loading}>
@@ -199,7 +188,7 @@ const SignInForm = props => {
               <View style={styles.signuptext}>
                 <Text>Join Growth Innovation Leadership Council</Text>
                 <Text
-                  style={{color: '#31ade5', fontWeight: '700'}}
+                  style={{ color: '#31ade5', fontWeight: '700' }}
                   onPress={() => navigation.navigate('SignUp')}>
                   {' '}
                   Sign Up{' '}
@@ -208,15 +197,14 @@ const SignInForm = props => {
               <View
                 style={[
                   styles.signuptext,
-                  {marginTop: Platform.OS === 'ios' ? 40 : 80},
+                  { marginTop: Platform.OS === 'ios' ? 40 : 80 },
                 ]}>
                 {/* <Ionicons name="help-circle-outline" size={20} color={'#31ade5'}/> */}
                 <Text>Need Help? </Text>
                 <Text
-                  style={{color: '#31ade5', fontWeight: '700'}}
+                  style={{ color: '#31ade5', fontWeight: '700' }}
                   onPress={() => navigation.navigate('Email')}>
-                  {' '}
-                  Contact Us{' '}
+                  Contact Us
                 </Text>
               </View>
             </View>

@@ -117,7 +117,7 @@ const Profile = props => {
                 />
               </View>
               <View style={styles.header}>
-                <Text style={styles.headingText1}>{profile?.display_name}</Text>
+                <Text style={styles.headingText1}>{profile?.user_login}</Text>
                 <Text style={{color: '#222B45'}}>
                   {profile?.user_meta?.title}
                 </Text>

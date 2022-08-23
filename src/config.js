@@ -3,48 +3,51 @@ import PushNotificationIOS from '@react-native-community/push-notification-ios';
 import { navigate } from './utils/navigationUtil';
 import { Platform } from 'react-native';
 
+const isIOS = Platform.OS == 'ios';
+
 // import moment from 'moment';
 const PushNotificationsConfigs = {
   congigurations: () => {
     PushNotification.configure({
       onNotification: notification => {
-        if (Platform.OS == 'ios') {
-          if (
-            notification.foreground &&
-            (notification.userInteraction || notification.remote)
-          ) {
-            PushNotification.localNotification(notification);
-          }
-          notification.finish(PushNotificationIOS.FetchResult.NoData);
-        } else {
-          if (notification.foreground) {
-            PushNotification.localNotification(notification);
-          }
+
+        if (notification.foreground && !isIOS) {
+          PushNotification.localNotification(notification);
         }
 
-        const clicked = notification.userInteraction;
+        const clicked = notification.userInteraction && !notification.foreground;
+
         if (clicked) {
+          try {
             // handle the navigation here
-            if(notification.data.type == 'chat'){
+            const data = notification?.data;
+
+            if (data) {
+              if (data?.type == 'chat') {
                 console.log(notification.data);
                 navigate('Chat', {
-                    friendID: notification.data.friendID,
-                    friendName: notification.data.friendName,
-                    friendAvatar: notification.data.friendAvatar,
-                    userID: notification.data.userID,
-                    userName: notification.data.userName,
-                    userAvatar: notification.data.userAvatar,
-                  })
-            } else if (notification.data.type == "event"){
-                navigate("EventDetail", {id: notification.data.post_id});
+                  friendID: data?.friendID,
+                  friendName: data?.friendName,
+                  friendAvatar: data?.friendAvatar,
+                  userID: data?.userID,
+                  userName: data?.userName,
+                  userAvatar: data?.userAvatar,
+                })
+              } else if (data?.type == "event") {
+                navigate("EventDetail", { id: data?.post_id });
+              }
+
             }
+          } catch (error) {
+            console.log(error);
           }
-          notification.finish(PushNotificationIOS.FetchResult.NoData);
+        }
+        notification.finish(PushNotificationIOS.FetchResult.NoData);
       },
       onAction: notification => {
         console.log('NOTIFICATION:', notification);
       },
-      onRegistrationError: err => {},
+      onRegistrationError: err => { },
       // IOS ONLY (optional): default: all - Permissions to register.
       permissions: {
         alert: true,

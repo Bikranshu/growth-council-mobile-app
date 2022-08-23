@@ -26,6 +26,7 @@ import {CommonStyles, Colors, Typography} from '../../../theme';
 import ToastMessage from '../../../shared/toast';
 import Footer from '../../../shared/footer';
 import Loading from '../../../shared/loading';
+import { GROWTH_COACHING_ID, GROWTH_COMMUNITY_ID, GROWTH_CONTENT_ID } from '../../../constants';
 
 const Event = props => {
   const {
@@ -66,7 +67,7 @@ const Event = props => {
     });
     if (response?.payload?.code === 200) {
       setEventStatus(true);
-      ToastMessage.show('You have successfully RSVP’d this event.');
+      ToastMessage.show('You have successfully RSVP’d for this event.');
     } else {
       toast.closeAll();
       ToastMessage.show(response?.payload?.response);
@@ -80,11 +81,11 @@ const Event = props => {
     : '';
   switch (pillarCategory) {
     case 0:
-    case 169:
+    case GROWTH_COMMUNITY_ID:
       backgroundColor = Colors.COMMUNITY_COLOR;
       break;
     case 0:
-    case 170:
+    case GROWTH_CONTENT_ID:
       backgroundColor = Colors.PRACTICE_COLOR;
       break;
 
@@ -144,19 +145,19 @@ const Event = props => {
       events?.pillar_categories[0]?.parent
     : '';
   switch (pillarname) {
-    case 169:
+    case GROWTH_COMMUNITY_ID:
     case 0:
       title =
         events?.pillar_categories[1]?.name ||
         events?.pillar_categories[0]?.name;
       break;
-    case 170:
+    case GROWTH_CONTENT_ID:
     case 0:
       title =
         events?.pillar_categories[1]?.name ||
         events?.pillar_categories[0]?.name;
       break;
-    case 171:
+    case GROWTH_COACHING_ID:
     case 0:
       title =
         events?.pillar_categories[0]?.name ||

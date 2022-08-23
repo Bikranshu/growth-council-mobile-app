@@ -56,7 +56,7 @@ const Content = props => {
   const _renderContent = ({item, index}) => {
     return (
       <>
-        {item?.children_count !== 0 && (
+        {/* {item?.children_count !== 0 && ( */}
           <TouchableOpacity
             key={index}
             style={[styles.content, styles.shadowProp]}
@@ -125,7 +125,7 @@ const Content = props => {
               </View>
             </>
           </TouchableOpacity>
-        )}
+        {/* )} */}
       </>
     );
   };
@@ -174,14 +174,14 @@ const Content = props => {
           />
         </View>
 
-        <View
+        {/* <View
           style={{
             margin: 15,
             paddingBottom: 10,
             borderBottomWidth: 0.3,
           }}>
           <Text style={{fontSize: 9, color: '#14A2E2'}}>Content Library</Text>
-        </View>
+        </View> */}
 
         <ScrollView
           style={{
@@ -195,13 +195,14 @@ const Content = props => {
             </View>
           )}
           {/* {loader} */}
-
-          <FlatList
-            contentContainerStyle={{alignItems: 'center'}}
-            showsVerticalScrollIndicator={false}
-            data={filteredDataSource}
-            renderItem={_renderContent}
-          />
+          <View style={{marginTop: 15}}>
+            <FlatList
+              contentContainerStyle={{alignItems: 'center'}}
+              showsVerticalScrollIndicator={false}
+              data={filteredDataSource}
+              renderItem={_renderContent}
+            />
+          </View>
 
           {/* <View style={{marginVertical:5}}>
             <Footer />
