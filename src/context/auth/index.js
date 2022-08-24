@@ -37,14 +37,25 @@ export const AuthProvider = ({children}) => {
 
   const isTokenExpired = async token => {
     const decoded = jwt_decode(token);
-	
-    if (decoded?.iss !== HOME_URL) {
-		await clearAsyncStorage(JWT_TOKEN);
-		await clearAsyncStorage(USER_NAME);
-		await clearAsyncStorage(USER_AVATAR);
-		setLoggedIn(false);
-    }
+    console.log('decoded', decoded);
+    console.log('HOmeurl', HOME_URL);
 
+    if (decoded?.iss !== HOME_URL) {
+      await clearAsyncStorage(JWT_TOKEN);
+      await clearAsyncStorage(USER_NAME);
+      await clearAsyncStorage(USER_AVATAR);
+      setLoggedIn(false);
+
+    }else if(decoded.exp < Date.now() / 1000) {
+
+		await clearAsyncStorage(JWT_TOKEN);
+      await clearAsyncStorage(USER_NAME);
+      await clearAsyncStorage(USER_AVATAR);
+      setLoggedIn(false);
+	}
+	else{
+		
+	}
   };
 
   const createUser = () =>
