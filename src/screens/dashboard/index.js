@@ -28,7 +28,10 @@ import {
   resetCriticalIssue,
 } from '../criticalIssue/slice/criticalIssueSlice';
 
-
+import {
+	connectMemberByID,
+	resetConnectMember,
+  } from '../people/slice/memberConnectionSlice';
 
 const DashboardScreen = props => {
   const dispatch = useDispatch();
@@ -52,6 +55,9 @@ const DashboardScreen = props => {
     state => state.criticalIssue,
   );
 
+  
+  const {memberConnections, memberConnectionLoading, memberConnectionError} =
+    useSelector(state => state.memberConnections);
  
 
   useEffect(() => {
@@ -108,6 +114,14 @@ const DashboardScreen = props => {
     dispatch(resetCriticalIssue());
   };
 
+  const connectMemberByIdentifier = formData => {
+    return dispatch(connectMemberByID(formData));
+  };
+
+  const cleanConnectMember = () => {
+    dispatch(resetConnectMember());
+  };
+
   
   return (
     <Dashboard
@@ -144,6 +158,11 @@ const DashboardScreen = props => {
       fetchCritcalIssue={fetchCritcalIssue}
       cleanCriticalIssue={cleanCriticalIssue}
 
+	  memberConnections={memberConnections}
+      memberConnectionLoading={memberConnectionLoading}
+      memberConnectionError={memberConnectionError}
+      connectMemberByIdentifier={connectMemberByIdentifier}
+      cleanConnectMember={cleanConnectMember}
 
     />
   );

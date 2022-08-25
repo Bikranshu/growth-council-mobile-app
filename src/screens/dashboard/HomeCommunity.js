@@ -17,6 +17,10 @@ import {
   fetchAllCommunityMembers,
   resetCommunityMember,
 } from './slice/communityMemberSlice';
+import {
+  connectMemberByID,
+  resetConnectMember,
+} from '../people/slice/memberConnectionSlice';
 
 import {fetchUsersByKey, resetUser} from '../account/slice/userSlice';
 
@@ -34,6 +38,9 @@ const HomeCommunityScreen = props => {
   const {pillarPOEs, pillarPOELoading, pillarPOEError} = useSelector(
     state => state.pillarPOEs,
   );
+
+  const {memberConnections, memberConnectionLoading, memberConnectionError} =
+    useSelector(state => state.memberConnections);
 
   const {users, userLoading, userError} = useSelector(state => state.users);
 
@@ -83,6 +90,14 @@ const HomeCommunityScreen = props => {
     dispatch(resetPillarMemberContent());
   };
 
+  const connectMemberByIdentifier = formData => {
+    return dispatch(connectMemberByID(formData));
+  };
+
+  const cleanConnectMember = () => {
+    dispatch(resetConnectMember());
+  };
+
   return (
     <HomeCommunity
       {...props}
@@ -106,6 +121,11 @@ const HomeCommunityScreen = props => {
       userError={userError}
       fetchAllUsers={fetchAllUsers}
       cleanUser={cleanUser}
+      memberConnections={memberConnections}
+      memberConnectionLoading={memberConnectionLoading}
+      memberConnectionError={memberConnectionError}
+      connectMemberByIdentifier={connectMemberByIdentifier}
+      cleanConnectMember={cleanConnectMember}
       pillarMemberContents={pillarMemberContents}
       pillarMemberContentLoading={pillarMemberContentLoading}
       pillarMemberContentError={pillarMemberContentError}

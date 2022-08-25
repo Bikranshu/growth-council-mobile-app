@@ -69,6 +69,12 @@ const HomeCommunity = props => {
     userError,
     fetchAllUsers,
     cleanUser,
+
+    memberConnections,
+    memberConnectionLoading,
+    memberConnectionError,
+    connectMemberByIdentifier,
+    cleanConnectMember,
   } = props;
 
   const pillarId = GROWTH_COMMUNITY_ID;
@@ -147,6 +153,21 @@ const HomeCommunity = props => {
     setMemberConnection(communityMembers);
   }, [communityMembers]);
 
+  const connectMemberByMemberID = async (memberID, index) => {
+    const response = await connectMemberByIdentifier({member_id: memberID});
+    if (response?.payload?.code === 200) {
+      let items = [...memberConnection];
+      let item = {...items[index]};
+      item.connection = true;
+      items[index] = item;
+      setMemberConnection(items);
+      ToastMessage.show('You have successfully connected.');
+    } else {
+    //   toast.closeAll();
+      ToastMessage.show(response?.payload?.response);
+    }
+  };
+
   const _renderItem = ({item, index}) => {
     return (
       <View style={[styles.bottomWrapper, styles.shadowProp]} key={index}>
@@ -180,7 +201,8 @@ const HomeCommunity = props => {
 
         <View style={styles.chatIcon}>
           {!memberConnection[index]?.connection && (
-            <TouchableOpacity onPress={() => navigation.navigate('People')}>
+            <TouchableOpacity
+              onPress={() => connectMemberByMemberID(item.ID, index)}>
               <Ionicons name="add-circle" size={20} color="#B2B3B9" />
             </TouchableOpacity>
           )}
@@ -472,6 +494,11 @@ const HomeCommunity = props => {
             )}
 
           {pillarMemberContentLoading && (
+            <View style={{marginTop: 40}}>
+              <Loading />
+            </View>
+          )}
+          {memberConnectionLoading && (
             <View style={{marginTop: 40}}>
               <Loading />
             </View>
