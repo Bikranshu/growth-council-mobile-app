@@ -16,12 +16,12 @@ import {
   BackHandler,
 } from 'react-native';
 import {useAuthentication} from '../../../context/auth';
-
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import {BubblesLoader} from 'react-native-indicator';
 import moment from 'moment';
-import {useIsFocused, useNavigation} from '@react-navigation/native';
+import {NavigationContainer, useIsFocused, useNavigation,useNavigationContainerRef} from '@react-navigation/native';
+import analytics from '@react-native-firebase/analytics';
 import Material from 'react-native-vector-icons/MaterialIcons';
 import PillarList from './PillarList';
 import {CommonStyles, Colors, Typography} from '../../../theme';
@@ -95,6 +95,9 @@ const Dashboard = props => {
   const {loading, setLoading, message, setMessage, signOut} =
     useAuthentication();
   const navigation = useNavigation();
+  
+  const navigationRef = useRef();
+  const routeNameRef = useRef();
 
   useEffect(() => {
     const fetchAllUpcomingEventAsync = async () => {
@@ -336,12 +339,20 @@ const Dashboard = props => {
     return (
       <View key={index} style={styles.topWrapper}>
         <TouchableOpacity
-          onPress={() =>
-            navigation.navigate('EventDetail', {
-              id: item.ID,
-              title: pillarname,
-              image: backgroundImage,
-            })
+          onPress={async () =>{
+			navigation.navigate('EventDetail', {
+				id: item.ID,
+				title: pillarname,
+				image: backgroundImage,
+			  });
+
+			await analytics().logEvent('basket', {
+				id: item.ID,
+				title: pillarname,
+			  });
+
+			}
+			
           }>
           <ImageBackground
             style={{width: '100%', height: 190, borderRadius: 20}}
@@ -415,6 +426,26 @@ const Dashboard = props => {
     );
   };
   return (
+	<NavigationContainer
+      ref={navigationRef}
+      onReady={() => {
+        // routeNameRef.current = navigationRef.current.getCurrentRoute().name;
+        console.log('a', navigationRef.current);
+      }}
+      onStateChange={async () => {
+        // const previousRouteName = routeNameRef.current;
+        // const currentRouteName = navigationRef.current.getCurrentRoute().name;
+
+        // if (previousRouteName !== currentRouteName) {
+          await analytics().logScreenView({
+            screen_name: "Dashboard",
+            screen_class: "Dashboard",
+          });
+        // }
+        // routeNameRef.current = "login";
+      }}
+      independent={true}>
+
     <View style={{flex: 1}}>
       <StatusBar
         barStyle="light-content"
@@ -543,6 +574,7 @@ const Dashboard = props => {
       </ScrollView>
       <BottomNav {...props} navigation={navigation} />
     </View>
+	</NavigationContainer>
   );
 };
 

@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react';
+import React, {useCallback, useState, useRef} from 'react';
 import {
   StyleSheet,
   Text,
@@ -9,18 +9,21 @@ import {
   ImageBackground,
   Image,
 } from 'react-native';
-import { useFocusEffect } from '@react-navigation/native';
-import { Button } from 'native-base';
+
+import {Button} from 'native-base';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import { useFormik } from 'formik';
+import {useFormik} from 'formik';
 import * as Yup from 'yup';
-import { BubblesLoader } from 'react-native-indicator';
-import messaging from '@react-native-firebase/messaging';
-import axios from 'axios';
-import { CommonStyles, Colors, Typography } from '../../../theme';
-import { useAuthentication } from '../../../context/auth';
+import {BubblesLoader} from 'react-native-indicator';
+import {
+  useFocusEffect,
+  NavigationContainer,
+  useNavigationContainerRef,
+} from '@react-navigation/native';
+import analytics from '@react-native-firebase/analytics';
+import {CommonStyles, Colors, Typography} from '../../../theme';
+import {useAuthentication} from '../../../context/auth';
 import FlatTextInput from '../../../shared/form/FlatTextInput';
-import { API_URL } from '../../../constants';
 
 const screenHeight = Math.round(Dimensions.get('window').height);
 
@@ -30,11 +33,15 @@ const signInSchema = Yup.object().shape({
 });
 
 const SignInForm = props => {
-  const { navigation } = props;
+  const {navigation} = props;
+
+  const navigationRef = useRef();
+  const routeNameRef = useRef();
+
 
   const [hidePass, setHidePass] = useState(true);
 
-  const { loading, setLoading, message, setMessage, signIn } =
+  const {loading, setLoading, message, setMessage, signIn} =
     useAuthentication();
 
   const {
@@ -47,12 +54,11 @@ const SignInForm = props => {
     isValid,
   } = useFormik({
     validationSchema: signInSchema,
-    initialValues: { username: '', password: '' },
+    initialValues: {username: '', password: ''},
     onSubmit: async values => {
       await signIn(values);
     },
   });
-
 
   const areAllFieldsFilled = values.username != '' && values.password != '';
 
@@ -67,151 +73,171 @@ const SignInForm = props => {
       setMessage(null);
       ``;
       setLoading(false);
-
     }, []),
   );
 
   return (
-    <ScrollView
-      contentContainerStyle={{ flexGrow: 1, height: screenHeight + 100 }}>
-      <View style={styles.container}>
-        <ImageBackground
-          source={require('../../../assets/img/splash-screen.png')}
-          resizeMode="cover">
-          <View style={{ height: '15%' }} />
+    <NavigationContainer
+      ref={navigationRef}
+      onReady={() => {
+        // routeNameRef.current = navigationRef.current.getCurrentRoute().name;
+        console.log('a', navigationRef.current);
+      }}
+      onStateChange={async () => {
+        // const previousRouteName = routeNameRef.current;
+        // const currentRouteName = navigationRef.current.getCurrentRoute().name;
 
-          <View>
-            <View style={styles.content}>
-              <View style={styles.header}>
-                <Image
-                  style={{ width: '80%' }}
-                  source={require('../../../assets/img/GILCouncil.jpg')}
-                  resizeMode="contain"
-                />
-              </View>
-              <View style={{ marginTop: 10 }}>
-                <Text style={styles.headingText1}>
-                  Growth Innovation
-                  {'\n'}
-                  Leadership Council
-                </Text>
-                <Text>
-                  {'\n'}
-                  Login to your account below.
-                </Text>
-              </View>
+        // if (previousRouteName !== currentRouteName) {
+          await analytics().logScreenView({
+            screen_name: "login",
+            screen_class: "login",
+          });
+        // }
+        // routeNameRef.current = "login";
+      }}
+      independent={true}>
+		
+      <ScrollView
+        contentContainerStyle={{flexGrow: 1, height: screenHeight + 100}}>		
+        <View style={styles.container}>
+          <ImageBackground
+            source={require('../../../assets/img/splash-screen.png')}
+            resizeMode="cover">
+            <View style={{height: '15%'}} />
 
-              <View style={styles.body}>
-                {loading && (
-                  <View style={styles.loading1}>
-                    <BubblesLoader
-                      color={Colors.SECONDARY_TEXT_COLOR}
-                      size={60}
-                    />
+            <View>
+              <View style={styles.content}>
+                <View style={styles.header}>
+                  <Image
+                    style={{width: '80%'}}
+                    source={require('../../../assets/img/GILCouncil.jpg')}
+                    resizeMode="contain"
+                  />
+                </View>
+                <View style={{marginTop: 10}}>
+                  <Text style={styles.headingText1}>
+                    Growth Innovation
+                    {'\n'}
+                    Leadership Council
+                  </Text>
+                  <Text>
+                    {'\n'}
+                    Login to your account below.
+                  </Text>
+                </View>
+
+                <View style={styles.body}>
+                  {loading && (
+                    <View style={styles.loading1}>
+                      <BubblesLoader
+                        color={Colors.SECONDARY_TEXT_COLOR}
+                        size={60}
+                      />
+                    </View>
+                  )}
+                  <FlatTextInput
+                    label="Email or Username*"
+                    value={values.username}
+                    onChangeText={handleChange('username')}
+                    onFocus={handleBlur('username')}
+                    error={errors.username}
+                    touched={touched.username}
+                    autoCapitalize="none"
+                  />
+                  {errors.username && (
+                    <Text style={{fontSize: 10, color: 'red'}}>
+                      {errors.username}
+                    </Text>
+                  )}
+
+                  <FlatTextInput
+                    label="Password *"
+                    value={values.password}
+                    secureTextEntry={hidePass}
+                    onChangeText={handleChange('password')}
+                    onFocus={handleBlur('password')}
+                    error={errors.password}
+                    touched={touched.password}
+                    autoCapitalize="none"
+                  />
+                  {errors.password && (
+                    <Text style={{fontSize: 10, color: 'red'}}>
+                      {errors.password}
+                    </Text>
+                  )}
+
+                  <Ionicons
+                    name={!hidePass ? 'eye-outline' : 'eye-off-outline'}
+                    size={22}
+                    color={
+                      !hidePass
+                        ? Colors.PRIMARY_BACKGROUND_ICON_COLOR
+                        : Colors.PRIMARY_HEADING_COLOR
+                    }
+                    onPress={() => setHidePass(!hidePass)}
+                    style={{
+                      position: 'absolute',
+                      bottom: 20,
+                      right: 15,
+                    }}
+                  />
+                </View>
+                {!message?.success && (
+                  <View style={styles.message}>
+                    <Text style={styles.errorText}>{message?.message}</Text>
                   </View>
                 )}
-                <FlatTextInput
-                  label="Email or Username*"
-                  value={values.username}
-                  onChangeText={handleChange('username')}
-                  onFocus={handleBlur('username')}
-                  error={errors.username}
-                  touched={touched.username}
-                  autoCapitalize="none"
-                />
-                {errors.username && (
-                  <Text style={{ fontSize: 10, color: 'red' }}>
-                    {errors.username}
-                  </Text>
-                )}
 
-                <FlatTextInput
-                  label="Password *"
-                  value={values.password}
-                  secureTextEntry={hidePass}
-                  onChangeText={handleChange('password')}
-                  onFocus={handleBlur('password')}
-                  error={errors.password}
-                  touched={touched.password}
-                  autoCapitalize="none"
-                />
-                {errors.password && (
-                  <Text style={{ fontSize: 10, color: 'red' }}>
-                    {errors.password}
-                  </Text>
-                )}
-
-                <Ionicons
-                  name={!hidePass ? 'eye-outline' : 'eye-off-outline'}
-                  size={22}
-                  color={
-                    !hidePass
-                      ? Colors.PRIMARY_BACKGROUND_ICON_COLOR
-                      : Colors.PRIMARY_HEADING_COLOR
-                  }
-                  onPress={() => setHidePass(!hidePass)}
-                  style={{
-                    position: 'absolute',
-                    bottom: 20,
-                    right: 15,
-                  }}
-                />
-              </View>
-              {!message?.success && (
-                <View style={styles.message}>
-                  <Text style={styles.errorText}>{message?.message}</Text>
+                <View style={styles.loginButtonWrapper}>
+                  <Button
+                    style={[
+                      !areAllFieldsFilled
+                        ? styles.loginButton1
+                        : styles.loginButton,
+                      loading && {backgroundColor: 'grey'},
+                    ]}
+                    onPress={handleSubmit}
+                    disabled={!areAllFieldsFilled || loading}>
+                    <Text style={styles.loginButtonText}>Sign In</Text>
+                  </Button>
                 </View>
-              )}
-
-              <View style={styles.loginButtonWrapper}>
-                <Button
-                  style={[
-                    !areAllFieldsFilled
-                      ? styles.loginButton1
-                      : styles.loginButton,
-                    loading && { backgroundColor: 'grey' },
-                  ]}
-                  onPress={handleSubmit}
-                  disabled={!areAllFieldsFilled || loading}>
-                  <Text style={styles.loginButtonText}>Sign In</Text>
-                </Button>
-              </View>
-              <View style={styles.forgotButtonWrapper}>
-                <TouchableOpacity>
+                <View style={styles.forgotButtonWrapper}>
+                  <TouchableOpacity>
+                    <Text
+                      style={styles.forgotButtonText}
+                      onPress={() => navigation.navigate('Forgot')}>
+                      Reset Password?
+                    </Text>
+                  </TouchableOpacity>
+                </View>
+                <View style={styles.signuptext}>
+                  <Text>Join Growth Innovation Leadership Council</Text>
                   <Text
-                    style={styles.forgotButtonText}
-                    onPress={() => navigation.navigate('Forgot')}>
-                    Reset Password?
+                    style={{color: '#31ade5', fontWeight: '700'}}
+                    onPress={() => navigation.navigate('SignUp')}>
+                    {' '}
+                    Sign Up{' '}
                   </Text>
-                </TouchableOpacity>
-              </View>
-              <View style={styles.signuptext}>
-                <Text>Join Growth Innovation Leadership Council</Text>
-                <Text
-                  style={{ color: '#31ade5', fontWeight: '700' }}
-                  onPress={() => navigation.navigate('SignUp')}>
-                  {' '}
-                  Sign Up{' '}
-                </Text>
-              </View>
-              <View
-                style={[
-                  styles.signuptext,
-                  { marginTop: Platform.OS === 'ios' ? 40 : 80 },
-                ]}>
-                {/* <Ionicons name="help-circle-outline" size={20} color={'#31ade5'}/> */}
-                <Text>Need Help? </Text>
-                <Text
-                  style={{ color: '#31ade5', fontWeight: '700' }}
-                  onPress={() => navigation.navigate('Email')}>
-                  Contact Us
-                </Text>
+                </View>
+                <View
+                  style={[
+                    styles.signuptext,
+                    {marginTop: Platform.OS === 'ios' ? 40 : 80},
+                  ]}>
+                  {/* <Ionicons name="help-circle-outline" size={20} color={'#31ade5'}/> */}
+                  <Text>Need Help? </Text>
+                  <Text
+                    style={{color: '#31ade5', fontWeight: '700'}}
+                    onPress={() => navigation.navigate('Email')}>
+                    Contact Us
+                  </Text>
+                </View>
               </View>
             </View>
-          </View>
-        </ImageBackground>
-      </View>
-    </ScrollView>
+          </ImageBackground>
+        </View>
+      </ScrollView>
+    </NavigationContainer>
   );
 };
 

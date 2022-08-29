@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useRef} from 'react';
 import {
   Platform,
   Text,
@@ -10,6 +10,12 @@ import {
   Dimensions,
   useWindowDimensions,
 } from 'react-native';
+import {
+  useFocusEffect,
+  NavigationContainer,
+  useNavigationContainerRef,
+} from '@react-navigation/native';
+import analytics from '@react-native-firebase/analytics';
 import {Button} from 'native-base';
 import {Linking} from 'react-native';
 import HTMLView from 'react-native-htmlview';
@@ -19,6 +25,10 @@ import {CommonStyles, Colors, Typography} from '../../../theme';
 
 const About = props => {
   const {navigation, about, aboutLoading, aboutError, fetchAbout} = props;
+
+  const navigationRef = useRef();
+  const routeNameRef = useRef();
+  
   const {width} = useWindowDimensions();
 
   const win = Dimensions.get('window');
@@ -62,97 +72,117 @@ const About = props => {
   }
 
   return (
-    <>
-      <StatusBar
-        barStyle="light-content"
-        hidden={false}
-        backgroundColor="#001D3F"
-        translucent={false}
-      />
-      <ScrollView
-        showsVerticalScrollIndicator={false}
-        style={{
-          height: Platform.OS === 'ios' ? 400 : 350,
-          backgroundColor: 'white',
-        }}>
-        <View style={styles.container}>
-          <View style={styles.about}>
-            <View style={styles.title}>
+    <NavigationContainer
+      ref={navigationRef}
+      onReady={() => {
+        // routeNameRef.current = navigationRef.current.getCurrentRoute().name;
+        console.log('a', navigationRef.current);
+      }}
+      onStateChange={async () => {
+        // const previousRouteName = routeNameRef.current;
+        // const currentRouteName = navigationRef.current.getCurrentRoute().name;
+
+        // if (previousRouteName !== currentRouteName) {
+        await analytics().logScreenView({
+          screen_name: 'About',
+          screen_class: 'About',
+        });
+        // }
+        // routeNameRef.current = "login";
+      }}
+      independent={true}>
+      <>
+        <StatusBar
+          barStyle="light-content"
+          hidden={false}
+          backgroundColor="#001D3F"
+          translucent={false}
+        />
+        <ScrollView
+          showsVerticalScrollIndicator={false}
+          style={{
+            height: Platform.OS === 'ios' ? 400 : 350,
+            backgroundColor: 'white',
+          }}>
+          <View style={styles.container}>
+            <View style={styles.about}>
+              <View style={styles.title}>
+                <HTMLView
+                  value={heading1}
+                  textComponentProps={{
+                    style: {
+                      color: 'black',
+                      fontSize: 24,
+                      paddingBottom: 30,
+                      fontWeight: '600',
+                    },
+                  }}
+                />
+
+                <View style={styles.titleBorder}></View>
+              </View>
+              {/* <RenderHtml contentWidth={width} source={{html: content1}} /> */}
+
               <HTMLView
-                value={heading1}
-                textComponentProps={{
-                  style: {
-                    color: 'black',
-                    fontSize: 24,
-                    paddingBottom: 30,
-                    fontWeight: '600',
-                  },
-                }}
+                value={content1}
+                textComponentProps={{style: {fontSize: 14, color: '#666767'}}}
               />
-
-              <View style={styles.titleBorder}></View>
             </View>
-            {/* <RenderHtml contentWidth={width} source={{html: content1}} /> */}
+            <View style={styles.aboutImage}>
+              <Image
+                source={{uri: about?.image}}
+                style={{
+                  width: imageContainerWidth,
+                  height: 220,
+                  borderRadius: 16,
+                  marginTop: 20,
+                }}
+                resizeMode={'contain'}
+              />
+            </View>
+            <View style={styles.backgroundText}>
+              <View style={styles.backgroundTitle}>
+                <HTMLView
+                  value={heading2}
+                  textComponentProps={{
+                    style: {
+                      color: '#fff',
+                      fontSize: 24,
+                      fontWeight: '600',
+                      paddingBottom: 30,
+                    },
+                  }}
+                />
 
-            <HTMLView
-              value={content1}
-              textComponentProps={{style: {fontSize: 14, color: '#666767'}}}
-            />
-          </View>
-          <View style={styles.aboutImage}>
-            <Image
-              source={{uri: about?.image}}
-              style={{
-                width: imageContainerWidth,
-                height: 220,
-                borderRadius: 16,
-                marginTop: 20,
-              }}
-              resizeMode={'contain'}
-            />
-          </View>
-          <View style={styles.backgroundText}>
-            <View style={styles.backgroundTitle}>
+                <View style={styles.backgroundTitleBorder}></View>
+              </View>
+
               <HTMLView
-                value={heading2}
-                textComponentProps={{
-                  style: {
-                    color: '#fff',
-                    fontSize: 24,
-                    fontWeight: '600',
-                    paddingBottom: 30,
-                  },
-                }}
+                value={content2}
+                textComponentProps={{style: {color: 'white', fontSize: 14}}}
               />
-
-              <View style={styles.backgroundTitleBorder}></View>
             </View>
-
-            <HTMLView
-              value={content2}
-              textComponentProps={{style: {color: 'white', fontSize: 14}}}
-            />
+            <View style={styles.cta}>
+              <Button
+                style={[
+                  styles.button,
+                  styles.plainButton,
+                  {backgroundColor: Colors.SECONDARY_BUTTON_COLOR},
+                ]}
+                onPress={() =>
+                  navigation.navigate('Gmail', {
+                    title: 'Account Assistance',
+                  })
+                }>
+                <Text style={[styles.buttonText, styles.plainButtonText]}>
+                  Contact Us
+                </Text>
+              </Button>
+            </View>
           </View>
-          <View style={styles.cta}>
-            <Button
-              style={[
-                styles.button,
-                styles.plainButton,
-                {backgroundColor: Colors.SECONDARY_BUTTON_COLOR},
-              ]}
-              onPress={() =>
-                navigation.navigate('Gmail', {
-                  title: 'Account Assistance',
-                })
-              }>
-              <Text style={[styles.buttonText, styles.plainButtonText]}>
-                Contact Us
-              </Text>
-            </Button>
-          </View>
-        </View>
-      </ScrollView>
-    </>
+        </ScrollView>
+      </>
+    </NavigationContainer>
   );
 };
 

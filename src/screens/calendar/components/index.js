@@ -12,6 +12,12 @@ import {
 } from 'react-native';
 import {Calendar} from 'react-native-calendars';
 import moment from 'moment-timezone';
+import {
+	useFocusEffect,
+	NavigationContainer,
+	useNavigationContainerRef,
+  } from '@react-navigation/native';
+  import analytics from '@react-native-firebase/analytics';
 import {BubblesLoader} from 'react-native-indicator';
 import * as RNLocalize from 'react-native-localize';
 import {Picker} from '@react-native-picker/picker';
@@ -40,6 +46,8 @@ const EventCalendar = props => {
   const [currentEvents, setCurrentEvents] = useState([]);
   const [showAllEvents, setShowAllEvents] = useState(true);
   const [pickerVisible, setPickerVisible] = useState(false);
+  const navigationRef = useRef();
+  const routeNameRef = useRef();
   //   const [markedDay, setMarkedDay] = useState([]);
 
   useEffect(() => {
@@ -206,6 +214,25 @@ const EventCalendar = props => {
     }
 
     return (
+		<NavigationContainer
+      ref={navigationRef}
+      onReady={() => {
+        // routeNameRef.current = navigationRef.current.getCurrentRoute().name;
+        console.log('a', navigationRef.current);
+      }}
+      onStateChange={async () => {
+        // const previousRouteName = routeNameRef.current;
+        // const currentRouteName = navigationRef.current.getCurrentRoute().name;
+
+        // if (previousRouteName !== currentRouteName) {
+          await analytics().logScreenView({
+            screen_name: "Calendar",
+            screen_class: "Calendar",
+          });
+        // }
+        // routeNameRef.current = "login";
+      }}
+      independent={true}>
       <View>
         <TouchableOpacity
           onPress={() =>
@@ -265,6 +292,7 @@ const EventCalendar = props => {
           </View>
         </TouchableOpacity>
       </View>
+	  </NavigationContainer>
     );
   };
 
