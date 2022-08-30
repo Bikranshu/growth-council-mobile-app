@@ -19,7 +19,7 @@ import {
   useIsFocused,
   useNavigation,
 } from '@react-navigation/native';
-
+import analytics from '@react-native-firebase/analytics';
 import {CommonStyles, Colors, Typography} from '../../../theme';
 import {getAsyncStorage} from '../../../utils/storageUtil';
 import {JWT_TOKEN, USER_NAME, USER_AVATAR} from '../../../constants';
@@ -285,7 +285,12 @@ const UserList = props => {
           <TouchableOpacity>
             <Button
               style={[styles.button]}
-              onPress={() => navigation.navigate('Gmail')}>
+              onPress={async () => {
+                navigation.navigate('Gmail');
+                await analytics().logEvent('userlist', {
+                  item: 'userlist',
+                });
+              }}>
               <Text style={styles.buttonText}>Contact us</Text>
             </Button>
           </TouchableOpacity>

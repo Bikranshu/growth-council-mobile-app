@@ -16,7 +16,7 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import HTMLView from 'react-native-htmlview';
 import moment from 'moment-timezone';
-
+import analytics from '@react-native-firebase/analytics';
 // import 'moment-timezone';
 import * as RNLocalize from 'react-native-localize';
 import {formatTimeByOffset} from './timezone';
@@ -398,7 +398,13 @@ const Event = props => {
                 {!eventStatus && (
                   <Button
                     style={styles.acceptButton}
-                    onPress={() => registerEventByEventID(route?.params?.id)}>
+                    onPress={async() => {
+						registerEventByEventID(route?.params?.id);
+						await analytics().logEvent('register_event', {
+							item: events?.title,
+							description :'Event Register'
+						  });
+					}}>
                     <Text style={styles.acceptButtonText}>RSVP</Text>
                   </Button>
                 )}

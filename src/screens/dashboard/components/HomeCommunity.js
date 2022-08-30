@@ -19,9 +19,8 @@ import FeatherIcon from 'react-native-vector-icons/Feather';
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome';
 import moment from 'moment';
 import {Linking} from 'react-native';
-import {BubblesLoader} from 'react-native-indicator';
+import analytics from '@react-native-firebase/analytics';
 import {useFocusEffect, useIsFocused} from '@react-navigation/native';
-import Footer from '../../../shared/footer';
 import BottomNav from '../../../layout/BottomLayout';
 import Player from './Player';
 import {getAsyncStorage} from '../../../utils/storageUtil';
@@ -202,7 +201,14 @@ const HomeCommunity = props => {
         <View style={styles.chatIcon}>
           {!memberConnection[index]?.connection && (
             <TouchableOpacity
-              onPress={() => connectMemberByMemberID(item.ID, index)}>
+				onPress={async() => {
+				connectMemberByMemberID(item.ID, index);
+				await analytics().logEvent('community', {
+					item:item?.user_meta?.first_name,
+					description: 'Community member connection'
+				  });
+				}}
+			  >
               <Ionicons name="add-circle" size={20} color="#B2B3B9" />
             </TouchableOpacity>
           )}

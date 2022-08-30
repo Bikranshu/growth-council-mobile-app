@@ -12,6 +12,8 @@ import {
 } from 'react-native';
 import {Button} from 'native-base';
 import {Linking} from 'react-native';
+import analytics from '@react-native-firebase/analytics';
+
 import HTMLView from 'react-native-htmlview';
 import Footer from '../../../shared/footer';
 
@@ -68,10 +70,15 @@ const Ideas = props => {
                 styles.plainButton,
                 {backgroundColor: Colors.SECONDARY_BUTTON_COLOR},
               ]}
-              onPress={() =>
+              onPress={async() =>
+				{
                 navigation.navigate('Gmail', {
                   title: 'Contribute Ideas',
                 })
+				await analytics().logEvent('Ideas', {
+					item: 'Contribute Ideas',
+				  });
+				}
               }>
               <Text style={[styles.buttonText, styles.plainButtonText]}>
                 Email Us

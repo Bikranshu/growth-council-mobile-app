@@ -38,7 +38,6 @@ const SignInForm = props => {
   const navigationRef = useRef();
   const routeNameRef = useRef();
 
-
   const [hidePass, setHidePass] = useState(true);
 
   const {loading, setLoading, message, setMessage, signIn} =
@@ -77,28 +76,9 @@ const SignInForm = props => {
   );
 
   return (
-    <NavigationContainer
-      ref={navigationRef}
-      onReady={() => {
-        // routeNameRef.current = navigationRef.current.getCurrentRoute().name;
-        console.log('a', navigationRef.current);
-      }}
-      onStateChange={async () => {
-        // const previousRouteName = routeNameRef.current;
-        // const currentRouteName = navigationRef.current.getCurrentRoute().name;
-
-        // if (previousRouteName !== currentRouteName) {
-          await analytics().logScreenView({
-            screen_name: "login",
-            screen_class: "login",
-          });
-        // }
-        // routeNameRef.current = "login";
-      }}
-      independent={true}>
-		
+   
       <ScrollView
-        contentContainerStyle={{flexGrow: 1, height: screenHeight + 100}}>		
+        contentContainerStyle={{flexGrow: 1, height: screenHeight + 100}}>
         <View style={styles.container}>
           <ImageBackground
             source={require('../../../assets/img/splash-screen.png')}
@@ -237,7 +217,6 @@ const SignInForm = props => {
           </ImageBackground>
         </View>
       </ScrollView>
-    </NavigationContainer>
   );
 };
 
