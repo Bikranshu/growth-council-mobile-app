@@ -618,7 +618,7 @@ const CommunityDetail = props => {
               {poeDetails?.slug === 'transformational-think-tanks' ||
               poeDetails?.slug === 'mega-trends-workshop' ||
               poeDetails?.slug === 'executive-mindxchange-events' ||
-              poeDetails?.slug === 'innovation-center-tours' ? (
+              poeDetails?.slug === 'innovative-center-tours' ? (
                 <View style={styles.buttonWrapper}>
                   <View style={styles.btnWrapper}>
                     <TouchableOpacity
@@ -652,9 +652,9 @@ const CommunityDetail = props => {
                         } else if (
                           poeDetails?.slug === 'innovation-center-tours'
                         ) {
-                          navigation.navigate('ContentDetail', {
-                            resourceId: 206,
-                            resourcesName: poeDetails?.name,
+                          navigation.navigate('LibraryDetail', {
+                            resources: 205,
+                            itemname: poeDetails?.name,
                           });
                         } else {
                           navigation.navigate('ContentDetail', {
