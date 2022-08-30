@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useState, useRef} from 'react';
 import {
   StyleSheet,
   View,
@@ -17,7 +17,7 @@ import {
 	NavigationContainer,
 	useNavigationContainerRef,
   } from '@react-navigation/native';
-  import analytics from '@react-native-firebase/analytics';
+import analytics from '@react-native-firebase/analytics';
 import {BubblesLoader} from 'react-native-indicator';
 import * as RNLocalize from 'react-native-localize';
 import {Picker} from '@react-native-picker/picker';
