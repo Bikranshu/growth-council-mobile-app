@@ -650,12 +650,12 @@ const CommunityDetail = props => {
                             resourcesName: poeDetails?.name,
                           });
                         } else if (
-                          poeDetails?.slug === 'innovation-center-tours'
+                          poeDetails?.slug === 'innovative-center-tours'
                         ) {
-                          navigation.navigate('LibraryDetail', {
-                            resources: 205,
-                            itemname: poeDetails?.name,
-                          });
+							navigation.navigate('LibraryDetail', {
+								resources: 205,
+								itemname: poeDetails?.name,
+							  });
                         } else {
                           navigation.navigate('ContentDetail', {
                             resourceId: poeDetails?.ID,
