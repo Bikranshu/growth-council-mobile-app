@@ -27,7 +27,7 @@ import PillarList from './PillarList';
 import {CommonStyles, Colors, Typography} from '../../../theme';
 import {PRIMARY_TEXT_COLOR, SECONDARY_TEXT_COLOR} from '../../../theme/colors';
 import Footer from '../../../shared/footer';
-
+import ToastMessage from '../../../shared/toast';
 import BottomNav from '../../../layout/BottomLayout';
 import HTMLView from 'react-native-htmlview';
 import Loading from '../../../shared/loading';
@@ -79,6 +79,12 @@ const Dashboard = props => {
     criticalIssueError,
     fetchCritcalIssue,
     cleanCriticalIssue,
+
+    memberConnections,
+    memberConnectionLoading,
+    memberConnectionError,
+    connectMemberByIdentifier,
+    cleanConnectMember,
   } = props;
 
   const isFocused = useIsFocused();
@@ -103,18 +109,18 @@ const Dashboard = props => {
 
       .then(token => {
         async () => {
-        //   await isTokenExpired(token);
+          //   await isTokenExpired(token);
           console.log('FCM ---> ' + token);
         };
       });
   }, []);
 
-//   const isTokenExpired = async token => {
-//     const decoded = jwt_decode(token);
-//     if (decoded.exp * 1000 < Date.now() ) {
-//       await signOut();
-//     }
-//   };
+  //   const isTokenExpired = async token => {
+  //     const decoded = jwt_decode(token);
+  //     if (decoded.exp * 1000 < Date.now() ) {
+  //       await signOut();
+  //     }
+  //   };
 
   useEffect(() => {
     const fetchAllCommunityMemberAsync = async () => {
@@ -145,10 +151,6 @@ const Dashboard = props => {
   }, []);
 
   useEffect(() => {
-    setMemberConnection(communityMembers);
-  }, [communityMembers]);
-
-  useEffect(() => {
     const fetchLatestContentAsync = async () => {
       await fetchLatestContent();
     };
@@ -175,6 +177,25 @@ const Dashboard = props => {
 
     return () => backHandler.remove();
   }, []);
+
+  useEffect(() => {
+    setMemberConnection(communityMembers);
+  }, [communityMembers]);
+
+  const connectMemberByMemberID = async (memberID, index) => {
+    const response = await connectMemberByIdentifier({member_id: memberID});
+    if (response?.payload?.code === 200) {
+      let items = [...memberConnection];
+      let item = {...items[index]};
+      item.connection = true;
+      items[index] = item;
+      setMemberConnection(items);
+      ToastMessage.show('You have successfully connected.');
+    } else {
+      //   toast.closeAll();
+      ToastMessage.show(response?.payload?.response);
+    }
+  };
 
   const _renderItem = ({item, index}) => {
     return (
@@ -209,7 +230,8 @@ const Dashboard = props => {
 
         <View style={styles.chatIcon}>
           {!memberConnection[index]?.connection && (
-            <TouchableOpacity onPress={() => navigation.navigate('People')}>
+            <TouchableOpacity
+              onPress={() => connectMemberByMemberID(item?.ID, index)}>
               <Ionicons name="add-circle" size={20} color="#B2B3B9" />
             </TouchableOpacity>
           )}
@@ -457,6 +479,11 @@ const Dashboard = props => {
             </View>
           )}
         {latestContentLoading && <Loading />}
+        {memberConnectionLoading && (
+          <View style={{marginTop: 40}}>
+            <Loading />
+          </View>
+        )}
         {latestContent?.length !== 0 &&
           latestContent !== null &&
           latestContent !== false && (

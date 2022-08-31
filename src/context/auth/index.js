@@ -37,8 +37,6 @@ export const AuthProvider = ({children}) => {
 
   const isTokenExpired = async token => {
     const decoded = jwt_decode(token);
-    console.log('decoded', decoded);
-    console.log('HOmeurl', HOME_URL);
 
     if (decoded?.iss !== HOME_URL) {
       await clearAsyncStorage(JWT_TOKEN);
@@ -56,6 +54,7 @@ export const AuthProvider = ({children}) => {
 	else{
 		
 	}
+
   };
 
   const createUser = () =>
