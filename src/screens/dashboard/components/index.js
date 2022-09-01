@@ -360,7 +360,7 @@ const Dashboard = props => {
               image: backgroundImage,
             });
 
-            await analytics().logEvent('basket', {
+            await analytics().logEvent(item?.title, {
               id: item.ID,
               item: item.title,
             });

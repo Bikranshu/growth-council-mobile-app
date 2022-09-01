@@ -15,6 +15,7 @@ import {
 } from 'react-native';
 import {Searchbar} from 'react-native-paper';
 import {Colors} from '../../../theme';
+import analytics from '@react-native-firebase/analytics';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import Footer from '../../../shared/footer';
 import BottomNav from '../../../layout/BottomLayout';
@@ -60,7 +61,10 @@ const Content = props => {
           <TouchableOpacity
             key={index}
             style={[styles.content, styles.shadowProp]}
-            onPress={() => {
+            onPress={async () => {
+                await analytics().logEvent('ContentLibrary', {
+                  item: 'Content Library list',
+                });
               if (item?.count !== 0) {
                 navigation.navigate('LibraryDetail', {
                   resources: item?.term_id,

@@ -208,7 +208,14 @@ const SignInForm = props => {
                   <Text>Need Help? </Text>
                   <Text
                     style={{color: '#31ade5', fontWeight: '700'}}
-                    onPress={() => navigation.navigate('Email')}>
+                    onPress={async () => {
+						navigation.navigate('Email', {
+						  title: 'Account Assistance',
+						});
+						await analytics().logEvent('signinEmail', {
+						  item: 'click email button from login page',
+						});
+					  }}>
                     Contact Us
                   </Text>
                 </View>

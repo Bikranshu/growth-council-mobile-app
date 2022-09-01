@@ -13,7 +13,7 @@ import {useFormik} from 'formik';
 import * as Yup from 'yup';
 import {BubblesLoader} from 'react-native-indicator';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-
+import analytics from '@react-native-firebase/analytics';
 import {CommonStyles, Colors, Typography} from '../../../theme';
 import FlatTextInput from '../../../shared/form/FlatTextInput';
 import ToastMessage from '../../../shared/toast';
@@ -72,11 +72,9 @@ const ChangePasswordForm = props => {
     onSubmit: async values => {
       delete values.confirmPassword;
       await updateCustomerPassword(values).then(response => {
-       
         if (response?.payload?.code === 200) {
           navigation.navigate('Dashboard');
           ToastMessage.show(response?.payload?.message);
-          
         }
       });
     },
@@ -124,9 +122,7 @@ const ChangePasswordForm = props => {
               />
             </View>
             <View style={styles.header}>
-              <Text style={styles.headingText1}>
-                {profile?.user_login} 
-              </Text>
+              <Text style={styles.headingText1}>{profile?.user_login}</Text>
               <Text>{profile?.user_meta?.title}</Text>
             </View>
           </View>
@@ -234,7 +230,11 @@ const ChangePasswordForm = props => {
           </View>
 
           <View style={styles.buttonWrapper}>
-            <Button style={styles.button} onPress={handleSubmit}>
+            <Button
+              style={styles.button}
+              onPress={
+                handleSubmit
+              }>
               <Text style={styles.buttonText}>Update Password</Text>
             </Button>
           </View>

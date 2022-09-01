@@ -18,8 +18,8 @@ import Material from 'react-native-vector-icons/MaterialIcons';
 import FeatherIcon from 'react-native-vector-icons/Feather';
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome';
 import moment from 'moment';
-import {Linking} from 'react-native';
 import analytics from '@react-native-firebase/analytics';
+import {Linking} from 'react-native';
 import {useFocusEffect, useIsFocused} from '@react-navigation/native';
 import BottomNav from '../../../layout/BottomLayout';
 import Player from './Player';
@@ -281,13 +281,18 @@ const HomeCommunity = props => {
     return (
       <View style={styles.topWrapper} key={index}>
         <TouchableOpacity
-          onPress={() =>
+          onPress={async () => {
             navigation.navigate('EventDetail', {
               id: item.ID,
               title: pillarname,
               image: image,
-            })
-          }>
+            });
+
+            await analytics().logEvent(item?.title, {
+              id: item.ID,
+              item: item.title,
+            });
+          }}>
           <ImageBackground
             style={{
               width: '100%',

@@ -75,7 +75,7 @@ const Ideas = props => {
                 navigation.navigate('Gmail', {
                   title: 'Contribute Ideas',
                 })
-				await analytics().logEvent('Ideas', {
+				await analytics().logEvent('IdeasGmail', {
 					item: 'Contribute Ideas',
 				  });
 				}

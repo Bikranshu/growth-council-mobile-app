@@ -217,13 +217,17 @@ const EventCalendar = props => {
 		
       <View>
         <TouchableOpacity
-          onPress={() =>
+          onPress={async() =>{
             navigation.navigate(nav, {
               id: item.ID,
               title: pillarname,
               image: backgroundImage,
             })
-          }>
+			await analytics().logEvent(item?.title, {
+				id: item.ID,
+				item: item.title,
+			  });
+          }}>
           <View style={[styles.eventCard, styles.shadowProp]} key={index}>
             <Text
               style={{

@@ -150,7 +150,7 @@ const About = props => {
                 navigation.navigate('Gmail', {
                   title: 'Account Assistance',
                 });
-                await analytics().logEvent('about', {
+                await analytics().logEvent('aboutGmail', {
                   item: 'about',
                 });
               }}>

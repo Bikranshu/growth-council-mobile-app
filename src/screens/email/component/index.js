@@ -15,6 +15,7 @@ import {
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import {useIsFocused} from '@react-navigation/native';
 import * as Yup from 'yup';
+import analytics from '@react-native-firebase/analytics';
 import {useFormik} from 'formik';
 import {Button} from 'native-base';
 import ToastMessage from '../../../shared/toast';
@@ -167,7 +168,8 @@ const Email = props => {
             </View>
 
             <View style={styles.buttonWrapper}>
-              <TouchableOpacity style={styles.button} onPress={handleSubmit}>
+              <TouchableOpacity style={styles.button} 
+			  onPress={handleSubmit}>
                 <Text style={styles.buttonText}>Send</Text>
               </TouchableOpacity>
             </View>

@@ -125,7 +125,12 @@ const Setting = props => {
               <View style={styles.middle}>
                 <View style={styles.wrapper}>
                   <TouchableOpacity
-                    onPress={() => navigation.navigate('ManageAccount')}>
+                    onPress={async () => {
+                      await analytics().logEvent('SettingAccount', {
+                        item: 'Button to manage account',
+                      });
+                      navigation.navigate('ManageAccount');
+                    }}>
                     <View style={styles.middleWrapper}>
                       <View style={styles.middleImage}>
                         <Ionicons
@@ -170,16 +175,14 @@ const Setting = props => {
                 </View>
                 <View style={styles.wrapper}>
                   <TouchableOpacity
-                    onPress={async() =>
-                      {
-						navigation.navigate('Gmail', {
+                    onPress={async () => {
+                      navigation.navigate('Gmail', {
                         title: 'Account Assistance',
-                      })
-					  await analytics().logEvent('setting', {
-						item: 'setting',
-					  });
-					}
-                    }>
+                      });
+                      await analytics().logEvent('settingGmail', {
+                        item: 'setting',
+                      });
+                    }}>
                     <View style={styles.middleWrapper}>
                       <View style={styles.middleImage1}>
                         <AntDesign name={'mail'} size={20} color="white" />
