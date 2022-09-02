@@ -26,7 +26,11 @@ import {CommonStyles, Colors, Typography} from '../../../theme';
 import ToastMessage from '../../../shared/toast';
 import Footer from '../../../shared/footer';
 import Loading from '../../../shared/loading';
-import { GROWTH_COACHING_ID, GROWTH_COMMUNITY_ID, GROWTH_CONTENT_ID } from '../../../constants';
+import {
+  GROWTH_COACHING_ID,
+  GROWTH_COMMUNITY_ID,
+  GROWTH_CONTENT_ID,
+} from '../../../constants';
 
 const Event = props => {
   const {
@@ -398,13 +402,13 @@ const Event = props => {
                 {!eventStatus && (
                   <Button
                     style={styles.acceptButton}
-                    onPress={async() => {
-						registerEventByEventID(route?.params?.id);
-						await analytics().logEvent('register_event', {
-							item: events?.title,
-							description :'Event Register'
-						  });
-					}}>
+                    onPress={async () => {
+                      registerEventByEventID(route?.params?.id);
+                      await analytics().logEvent(events?.title, {
+                        item: events?.title,
+                        description: 'Event Register',
+                      });
+                    }}>
                     <Text style={styles.acceptButtonText}>RSVP</Text>
                   </Button>
                 )}
