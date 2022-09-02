@@ -16,12 +16,17 @@ import {
   BackHandler,
 } from 'react-native';
 import {useAuthentication} from '../../../context/auth';
-
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import {BubblesLoader} from 'react-native-indicator';
 import moment from 'moment';
-import {useIsFocused, useNavigation} from '@react-navigation/native';
+import {
+  NavigationContainer,
+  useIsFocused,
+  useNavigation,
+  useNavigationContainerRef,
+} from '@react-navigation/native';
+import analytics from '@react-native-firebase/analytics';
 import Material from 'react-native-vector-icons/MaterialIcons';
 import PillarList from './PillarList';
 import {CommonStyles, Colors, Typography} from '../../../theme';
@@ -95,6 +100,9 @@ const Dashboard = props => {
   const {loading, setLoading, message, setMessage, signOut} =
     useAuthentication();
   const navigation = useNavigation();
+
+  const navigationRef = useRef();
+  const routeNameRef = useRef();
 
   useEffect(() => {
     const fetchAllUpcomingEventAsync = async () => {
@@ -231,7 +239,16 @@ const Dashboard = props => {
         <View style={styles.chatIcon}>
           {!memberConnection[index]?.connection && (
             <TouchableOpacity
-              onPress={() => connectMemberByMemberID(item?.ID, index)}>
+				onPress={async() => {
+
+				connectMemberByMemberID(item.ID, index);
+
+				await analytics().logEvent('dashboard', {
+					item:item?.user_meta?.first_name,
+					description: 'Dashboard Member Connection'
+				  });
+				}}
+			  >
               <Ionicons name="add-circle" size={20} color="#B2B3B9" />
             </TouchableOpacity>
           )}
@@ -336,13 +353,18 @@ const Dashboard = props => {
     return (
       <View key={index} style={styles.topWrapper}>
         <TouchableOpacity
-          onPress={() =>
+          onPress={async () => {
             navigation.navigate('EventDetail', {
               id: item.ID,
               title: pillarname,
               image: backgroundImage,
-            })
-          }>
+            });
+
+            await analytics().logEvent(item?.title, {
+              id: item.ID,
+              item: item.title,
+            });
+          }}>
           <ImageBackground
             style={{width: '100%', height: 190, borderRadius: 20}}
             source={backgroundImage}>
@@ -415,134 +437,136 @@ const Dashboard = props => {
     );
   };
   return (
-    <View style={{flex: 1}}>
-      <StatusBar
-        barStyle="light-content"
-        hidden={false}
-        backgroundColor="#001D3F"
-        translucent={false}
-      />
-      <ScrollView
-        onScroll={e => {
-          const offset = e.nativeEvent.contentOffset.y;
-          if (offset >= 70) {
-            navigation.setOptions({
-              headerShown: false,
-            });
-          } else {
-            navigation.setOptions({
-              headerShown: true,
-            });
-          }
-        }}
-        contentContainerStyle={{
-          flexGrow: 1,
-          backgroundColor: Colors.PRIMARY_BACKGROUND_COLOR,
-        }}>
-        <View>
-          <ImageBackground
-            style={{
-              width: '100%',
-              height: (Dimensions.get('screen').height - 80) / 3,
-              paddingTop: Dimensions.get('screen').height / 10,
-            }}
-            source={require('../../../assets/img/appBG.png')}>
-            <View style={styles.pillar}>
-              <PillarList
-                pillarSliders={pillarSliders}
-                navigation={navigation}
-              />
-            </View>
-          </ImageBackground>
-        </View>
-        {upcomingEvents?.length !== 0 &&
-          upcomingEvents !== null &&
-          upcomingEvents !== false && (
-            <View style={styles.top}>
-              <View style={styles.eventWrapper}>
-                <Text style={styles.title}>Upcoming Events</Text>
+  
+      <View style={{flex: 1}}>
+        <StatusBar
+          barStyle="light-content"
+          hidden={false}
+          backgroundColor="#001D3F"
+          translucent={false}
+        />
+        <ScrollView
+          onScroll={e => {
+            const offset = e.nativeEvent.contentOffset.y;
+            if (offset >= 70) {
+              navigation.setOptions({
+                headerShown: false,
+              });
+            } else {
+              navigation.setOptions({
+                headerShown: true,
+              });
+            }
+          }}
+          contentContainerStyle={{
+            flexGrow: 1,
+            backgroundColor: Colors.PRIMARY_BACKGROUND_COLOR,
+          }}>
+          <View>
+            <ImageBackground
+              style={{
+                width: '100%',
+                height: (Dimensions.get('screen').height - 80) / 3,
+                paddingTop: Dimensions.get('screen').height / 10,
+              }}
+              source={require('../../../assets/img/appBG.png')}>
+              <View style={styles.pillar}>
+                <PillarList
+                  pillarSliders={pillarSliders}
+                  navigation={navigation}
+                />
               </View>
+            </ImageBackground>
+          </View>
+          {upcomingEvents?.length !== 0 &&
+            upcomingEvents !== null &&
+            upcomingEvents !== false && (
+              <View style={styles.top}>
+                <View style={styles.eventWrapper}>
+                  <Text style={styles.title}>Upcoming Events</Text>
+                </View>
 
-              <View
-                style={{
-                  display: 'flex',
-                  flexDirection: 'row',
-                  marginTop: 20,
-                }}>
+                <View
+                  style={{
+                    display: 'flex',
+                    flexDirection: 'row',
+                    marginTop: 20,
+                  }}>
+                  <FlatList
+                    horizontal
+                    showsHorizontalScrollIndicator={false}
+                    data={upcomingEvents}
+                    renderItem={item => _renderTopItem(item, navigation)}
+                  />
+                </View>
+              </View>
+            )}
+          {latestContentLoading && <Loading />}
+          {memberConnectionLoading && (
+            <View style={{marginTop: 40}}>
+              <Loading />
+            </View>
+          )}
+          {latestContent?.length !== 0 &&
+            latestContent !== null &&
+            latestContent !== false && (
+              <View style={styles.middle}>
+                <Text style={[styles.title, {marginLeft: 15}]}>
+                  Latest Growth Content
+                </Text>
+
                 <FlatList
                   horizontal
                   showsHorizontalScrollIndicator={false}
-                  data={upcomingEvents}
-                  renderItem={item => _renderTopItem(item, navigation)}
+                  data={latestContent}
+                  renderItem={_renderContent}
                 />
               </View>
-            </View>
-          )}
-        {latestContentLoading && <Loading />}
-        {memberConnectionLoading && (
-          <View style={{marginTop: 40}}>
-            <Loading />
-          </View>
-        )}
-        {latestContent?.length !== 0 &&
-          latestContent !== null &&
-          latestContent !== false && (
-            <View style={styles.middle}>
-              <Text style={[styles.title, {marginLeft: 15}]}>
-                Latest Growth Content
-              </Text>
+            )}
+          {communityMembers?.length !== 0 &&
+            communityMembers !== null &&
+            communityMembers !== false && (
+              <View style={styles.bottom}>
+                <View
+                  style={{
+                    display: 'flex',
+                    flexDirection: 'row',
+                    marginLeft: 15,
+                    marginRight: 15,
+                  }}>
+                  <Text style={styles.title}>Welcome New Members</Text>
+                </View>
+                <View>
+                  <FlatList
+                    horizontal
+                    showsHorizontalScrollIndicator={false}
+                    data={communityMembers}
+                    renderItem={_renderItem}
+                  />
+                </View>
+              </View>
+            )}
 
+          <View style={styles.content}>
+            <Text style={styles.title}>
+              {criticalIssue?.critical_issue_mobile_title}
+            </Text>
+            <View
+              ref={ref => {
+                setRef(ref);
+              }}>
               <FlatList
-                horizontal
+                numColumns={2}
                 showsHorizontalScrollIndicator={false}
-                data={latestContent}
-                renderItem={_renderContent}
+                data={criticalIssue?.critical_issue_mobile_lists}
+                renderItem={_renderCritical}
               />
             </View>
-          )}
-        {communityMembers?.length !== 0 &&
-          communityMembers !== null &&
-          communityMembers !== false && (
-            <View style={styles.bottom}>
-              <View
-                style={{
-                  display: 'flex',
-                  flexDirection: 'row',
-                  marginLeft: 15,
-                  marginRight: 15,
-                }}>
-                <Text style={styles.title}>Welcome New Members</Text>
-              </View>
-              <View>
-                <FlatList
-                  horizontal
-                  showsHorizontalScrollIndicator={false}
-                  data={communityMembers}
-                  renderItem={_renderItem}
-                />
-              </View>
-            </View>
-          )}
-
-        <View style={styles.content}>
-          <Text style={styles.title}>
-            {criticalIssue?.critical_issue_mobile_title}
-          </Text>
-          <View
-            ref={ref => {
-              setRef(ref);
-            }}>
-            <FlatList
-              numColumns={2}
-              showsHorizontalScrollIndicator={false}
-              data={criticalIssue?.critical_issue_mobile_lists}
-              renderItem={_renderCritical}
-            />
           </View>
-        </View>
-      </ScrollView>
-      <BottomNav {...props} navigation={navigation} />
-    </View>
+        </ScrollView>
+        <BottomNav {...props} navigation={navigation} />
+      </View>
+   
   );
 };
 

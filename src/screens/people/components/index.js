@@ -18,6 +18,7 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import Material from 'react-native-vector-icons/MaterialIcons';
 import {Picker} from '@react-native-picker/picker';
 import {useToast} from 'native-base';
+import analytics from '@react-native-firebase/analytics';
 import {useIsFocused, useFocusEffect} from '@react-navigation/native';
 import {Colors, Typography} from '../../../theme';
 import ToastMessage from '../../../shared/toast';
@@ -153,7 +154,13 @@ const People = props => {
           </View>
           {!memberConnection[index]?.connection && (
             <TouchableOpacity
-              onPress={() => connectMemberByMemberID(item.ID, index)}>
+              onPress={async() => {
+				connectMemberByMemberID(item.ID, index);
+				await analytics().logEvent('Member', {
+					item:item?.user_meta?.first_name,
+					description: 'Member Connection'
+				  });
+				}}>
               <Ionicons
                 name="add-circle"
                 size={30}

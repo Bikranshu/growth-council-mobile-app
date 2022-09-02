@@ -18,10 +18,9 @@ import Material from 'react-native-vector-icons/MaterialIcons';
 import FeatherIcon from 'react-native-vector-icons/Feather';
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome';
 import moment from 'moment';
+import analytics from '@react-native-firebase/analytics';
 import {Linking} from 'react-native';
-import {BubblesLoader} from 'react-native-indicator';
 import {useFocusEffect, useIsFocused} from '@react-navigation/native';
-import Footer from '../../../shared/footer';
 import BottomNav from '../../../layout/BottomLayout';
 import Player from './Player';
 import {getAsyncStorage} from '../../../utils/storageUtil';
@@ -202,7 +201,14 @@ const HomeCommunity = props => {
         <View style={styles.chatIcon}>
           {!memberConnection[index]?.connection && (
             <TouchableOpacity
-              onPress={() => connectMemberByMemberID(item.ID, index)}>
+				onPress={async() => {
+				connectMemberByMemberID(item.ID, index);
+				await analytics().logEvent('community', {
+					item:item?.user_meta?.first_name,
+					description: 'Community member connection'
+				  });
+				}}
+			  >
               <Ionicons name="add-circle" size={20} color="#B2B3B9" />
             </TouchableOpacity>
           )}
@@ -275,13 +281,18 @@ const HomeCommunity = props => {
     return (
       <View style={styles.topWrapper} key={index}>
         <TouchableOpacity
-          onPress={() =>
+          onPress={async () => {
             navigation.navigate('EventDetail', {
               id: item.ID,
               title: pillarname,
               image: image,
-            })
-          }>
+            });
+
+            await analytics().logEvent(item?.title, {
+              id: item.ID,
+              item: item.title,
+            });
+          }}>
           <ImageBackground
             style={{
               width: '100%',

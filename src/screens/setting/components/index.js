@@ -16,6 +16,8 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import Footer from '../../../shared/footer';
 import ToastMessage from '../../../shared/toast';
+import analytics from '@react-native-firebase/analytics';
+
 import {CommonStyles, Colors, Typography} from '../../../theme';
 import {PRIMARY_BACKGROUND_COLOR} from '../../../theme/colors';
 import {clearAsyncStorage} from '../../../utils/storageUtil';
@@ -123,7 +125,12 @@ const Setting = props => {
               <View style={styles.middle}>
                 <View style={styles.wrapper}>
                   <TouchableOpacity
-                    onPress={() => navigation.navigate('ManageAccount')}>
+                    onPress={async () => {
+                      await analytics().logEvent('SettingAccount', {
+                        item: 'Button to manage account',
+                      });
+                      navigation.navigate('ManageAccount');
+                    }}>
                     <View style={styles.middleWrapper}>
                       <View style={styles.middleImage}>
                         <Ionicons
@@ -168,11 +175,14 @@ const Setting = props => {
                 </View>
                 <View style={styles.wrapper}>
                   <TouchableOpacity
-                    onPress={() =>
+                    onPress={async () => {
                       navigation.navigate('Gmail', {
                         title: 'Account Assistance',
-                      })
-                    }>
+                      });
+                      await analytics().logEvent('settingGmail', {
+                        item: 'setting',
+                      });
+                    }}>
                     <View style={styles.middleWrapper}>
                       <View style={styles.middleImage1}>
                         <AntDesign name={'mail'} size={20} color="white" />
