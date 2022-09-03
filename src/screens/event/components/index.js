@@ -404,7 +404,8 @@ const Event = props => {
                     style={styles.acceptButton}
                     onPress={async () => {
                       registerEventByEventID(route?.params?.id);
-                      await analytics().logEvent(events?.title, {
+                      let eventName = events?.title;
+                      await analytics().logEvent(eventName, {
                         item: events?.title,
                         description: 'Event Register',
                       });
