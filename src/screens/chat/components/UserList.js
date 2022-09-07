@@ -68,19 +68,13 @@ const UserList = props => {
       if (!userID) console.log('USER ID NOT FOUND');
 
       const fbUsers = await firestore().collection('rooms').get();
-      //   console.log('FB USERS');
-      //   console.log(fbUsers);
-      //   console.log('*****************');
+    
 
       const docs = fbUsers.docs.filter(doc => doc.id.includes(userID));
-      //   console.log('DOC USERS');
-      //   console.log(docs);
-      //   console.log('*****************');
+     
 
       const data = docs.map(doc => ({id: doc.id, ...doc.data()}));
-      //   console.log('MAP USERS');
-      //   console.log(data);
-      //   console.log('*****************');
+   
 
       let __users = [];
       for (let i = 0; i < data.length; i++) {
@@ -91,13 +85,10 @@ const UserList = props => {
         __users.push({...user, ...data[i]});
       }
 
-      //   console.log('ACTUAL USERS');
-      //   console.log(__users);
-      //   console.log('*****************');
 
       setUsers(__users);
     } catch (error) {
-      console.log(error);
+    
     }
   };
 

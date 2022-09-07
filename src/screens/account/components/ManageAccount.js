@@ -140,15 +140,15 @@ const ManageAccount = props => {
         name: 'profile_photo.jpg',
       };
       fd.append('file', file);
-      console.log('choosePhotoFromLibrary', fd);
+      
       await uploadImage(fd).then(async response => {
-        console.log('Upload response:::::::::::', response?.payload?.id);
+     
         await updateImage({attachment_id: response?.payload?.id}).then(
           response => {
             if (response?.payload?.code === 200) {
               navigation.navigate('Account');
               ToastMessage.show('Profile Image has been successfully updated.');
-              console.log('Update response::::::::::', response);
+             
             }
           },
         );

@@ -89,8 +89,7 @@ const App = () => {
 
   const getToken = async () => {
     const token = await messaging().getToken();
-    console.log('***************************************');
-    console.log(token);
+   
   };
 
   const isTokenExpired = async () => {

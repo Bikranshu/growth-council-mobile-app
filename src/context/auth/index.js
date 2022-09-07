@@ -74,7 +74,7 @@ export const AuthProvider = ({children}) => {
         });
         resolve(true);
       } catch (error) {
-        console.log(error);
+       
         reject(error);
       }
     });
@@ -84,8 +84,7 @@ export const AuthProvider = ({children}) => {
       email,
       '6AWgM#.Y(fE8Q2=',
     );
-    console.log('clearing cache...');
-    console.log('login', res);
+ 
     await clearAsyncStorage('tempData');
 
     setLoggedIn(true);
@@ -122,7 +121,7 @@ export const AuthProvider = ({children}) => {
         signIn: async fromData => {
           setLoading(true);
           try {
-            console.log('Logging in...');
+         
             const response = await axios.post(
               API_URL + '/jwt-auth/v1/token',
               fromData,

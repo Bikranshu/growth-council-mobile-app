@@ -10,34 +10,22 @@ import {
   Dimensions,
   useWindowDimensions,
 } from 'react-native';
-import {
-  useFocusEffect,
-  NavigationContainer,
-  useNavigationContainerRef,
-} from '@react-navigation/native';
+
 import analytics from '@react-native-firebase/analytics';
 import {Button} from 'native-base';
-import {Linking} from 'react-native';
 import HTMLView from 'react-native-htmlview';
-import Footer from '../../../shared/footer';
 
 import {CommonStyles, Colors, Typography} from '../../../theme';
+import Loading from '../../../shared/loading';
 
 const About = props => {
   const {navigation, about, aboutLoading, aboutError, fetchAbout} = props;
-  const {width} = useWindowDimensions();
-
   const win = Dimensions.get('window');
   const imageContainerWidth = win.width - 40;
 
-  const tagsStyles = {
-    whiteSpace: 'normal',
-    color: 'white',
-  };
-
-  useEffect(() => {
-    fetchAbout();
-  }, []);
+//   useEffect(() => {
+//     fetchAbout();
+//   }, []);
 
   let heading1 = about?.heading1;
   if (heading1 !== undefined) {
@@ -99,7 +87,7 @@ const About = props => {
               <View style={styles.titleBorder}></View>
             </View>
             {/* <RenderHtml contentWidth={width} source={{html: content1}} /> */}
-
+            {aboutLoading && <Loading />}
             <HTMLView
               value={content1}
               textComponentProps={{style: {fontSize: 14, color: '#666767'}}}

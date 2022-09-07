@@ -134,6 +134,11 @@ const Email = props => {
                 error={errors.sender}
                 touched={touched.sender}
               />
+			  {errors.sender && (
+                    <Text style={{fontSize: 10, color: 'red'}}>
+                      {errors.sender}
+                    </Text>
+                  )}
             </View>
             {sendMailLoading && <Loading />}
 
@@ -150,7 +155,13 @@ const Email = props => {
                 error={errors.subject}
                 touched={touched.subject}
               />
+			    {errors.subject && (
+                    <Text style={{fontSize: 10, color: 'red'}}>
+                      {errors.subject}
+                    </Text>
+                  )}
             </View>
+
 
             <View style={{marginTop: 10}}>
               <Text style={{fontSize: 18}}>Messages:</Text>
@@ -165,6 +176,11 @@ const Email = props => {
                 error={errors.message}
                 touched={touched.message}
               />
+			    {errors.message && (
+                    <Text style={{fontSize: 10, color: 'red'}}>
+                      {errors.message}
+                    </Text>
+                  )}
             </View>
 
             <View style={styles.buttonWrapper}>

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 
 import About from './components';
@@ -18,6 +18,10 @@ const AboutScreen = props => {
   const cleanAbout = () => {
     dispatch(resetAbout());
   };
+
+  useEffect(() => {
+    fetchAbout();
+  }, []);
 
   return (
     <About

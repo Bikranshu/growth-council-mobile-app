@@ -123,17 +123,6 @@ const CommunityDetail = props => {
     }, [isFocused]),
   );
 
-  //   useEffect(() => {
-  //  GetIdBySlug({
-  //       slug: poeDetails?.slug,
-  //     }).then(response => {
-  //       console.log('a', response);
-  //     });
-  //   }, [poeDetails]);
-
-  //     useEffect(() => {
-  //       setSlugName(poeDetails?.slug);
-  //     }, [poeDetails]);
 
   //   const _renderItem = ({item, index}, navigation) => {
   //     return (
@@ -371,7 +360,7 @@ const CommunityDetail = props => {
         RNFetchBlob.config(configOptions)
           .fetch('GET', FILE_URL)
           .then(res => {
-            console.log('file', res);
+            
             RNFetchBlob.ios.previewDocument('file://' + res.path());
           });
         return;
@@ -383,7 +372,7 @@ const CommunityDetail = props => {
           })
 
           .then(res => {
-            console.log('file download', res);
+            
             RNFetchBlob.android.actionViewIntent(res.path());
           })
           .catch((errorMessage, statusCode) => {

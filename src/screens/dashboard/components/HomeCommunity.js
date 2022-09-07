@@ -407,7 +407,7 @@ const HomeCommunity = props => {
         RNFetchBlob.config(configOptions)
           .fetch('GET', FILE_URL)
           .then(res => {
-            console.log('file', res);
+            
             RNFetchBlob.ios.previewDocument('file://' + res.path());
           });
         return;
@@ -419,7 +419,7 @@ const HomeCommunity = props => {
           })
 
           .then(res => {
-            console.log('file download', res);
+          
             RNFetchBlob.android.actionViewIntent(res.path());
           })
           .catch((errorMessage, statusCode) => {

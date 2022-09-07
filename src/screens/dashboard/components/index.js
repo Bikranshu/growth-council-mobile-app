@@ -115,20 +115,10 @@ const Dashboard = props => {
     messaging()
       .getToken()
 
-      .then(token => {
-        async () => {
-          //   await isTokenExpired(token);
-          console.log('FCM ---> ' + token);
-        };
-      });
+      
   }, []);
 
-  //   const isTokenExpired = async token => {
-  //     const decoded = jwt_decode(token);
-  //     if (decoded.exp * 1000 < Date.now() ) {
-  //       await signOut();
-  //     }
-  //   };
+
 
   useEffect(() => {
     const fetchAllCommunityMemberAsync = async () => {

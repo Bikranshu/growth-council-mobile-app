@@ -1,12 +1,12 @@
 import React from 'react';
-import {StyleSheet, View, Image, Text} from 'react-native';
+import {StyleSheet, View, Image, Text, ActivityIndicator} from 'react-native';
 import {BubblesLoader} from 'react-native-indicator';
 import {Colors} from '../../theme';
 
 const Loading = props => {
   return (
     <View style={styles.loading1}>
-      <BubblesLoader color={Colors.SECONDARY_TEXT_COLOR} size={80} />
+      <ActivityIndicator size={60} />
     </View>
   );
 };

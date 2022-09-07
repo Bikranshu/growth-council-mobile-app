@@ -44,18 +44,18 @@ const Chat = props => {
   const [messages, setMessages] = useState([]);
 
   useEffect(() => {
-    console.log('The friend ID is ' + friendID);
+  
     getFCMTOkenForUser(friendID)
       .then(res => {
         const token = res?.data?.data;
         if (token == null) {
           console.log(res.data?.message);
         }
-        console.log(token);
+        
         setFriendToken(typeof token == 'string' ? token : token?.[0]);
       })
       .catch(error => {
-        console.log(error);
+     
       });
   }, []);
 

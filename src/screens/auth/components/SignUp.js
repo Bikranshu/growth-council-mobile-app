@@ -101,12 +101,12 @@ const SignUpForm = props => {
           '6AWgM#.Y(fE8Q2=',
         );
         const token = await response.user.getIdToken();
-        // const response = await registerCustomer(values);
-        console.log(response);
+       
+     
         if (token) {
           await registerCustomer(values).then(response => {
             if (response?.payload?.code === 200) {
-              console.log('response', response);
+            
               navigation.navigate('SignIn');
               ToastMessage.show(
                 'You have successfully registered. Please wait for admin approval.',

@@ -79,13 +79,6 @@ const GrowthDetail = props => {
   const webviewRef = React.useRef(null);
   const [userId, setUserId] = useState(0);
 
-  //   useEffect(async () => {
-  //     let token = await getAsyncStorage(JWT_TOKEN);
-  //     let ID = decodeUserID(token);
-  //     if (ID) {
-  //       setUserId(ID);
-  //     }
-  //   }, []);
 
   const eventID = route.params.poeId;
 
@@ -152,19 +145,11 @@ const GrowthDetail = props => {
       ? coachingSession.map(item => item?.ID)
       : [0];
 
-  //   let check = SessionID.filter(item => previousSession.includes(item));
+
 
   let check = SessionID.filter(el => previousSession.indexOf(el) === -1);
-   console.log('check', check);
+ 
 
-  //   const index = previousSession.findIndex(array1Item => {
-  //     // This will return the index if found, otherwise -1
-  //     const match = SessionID.findIndex(array2Item => {
-  //       return array1Item.session === array2Item.ID;
-  //     });
-
-  //     return match > -1;
-  //   });
 
   const _renderItem = ({item, index}, navigation) => {
     return (

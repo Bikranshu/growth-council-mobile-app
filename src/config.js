@@ -39,7 +39,7 @@ const PushNotificationsConfigs = {
 
             }
           } catch (error) {
-            console.log(error);
+         
           }
         }
         notification.finish(PushNotificationIOS.FetchResult.NoData);
