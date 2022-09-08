@@ -12,19 +12,11 @@ import {
 } from 'react-native';
 import {Calendar} from 'react-native-calendars';
 import moment from 'moment-timezone';
-import {
-	useFocusEffect,
-	NavigationContainer,
-	useNavigationContainerRef,
-  } from '@react-navigation/native';
 import analytics from '@react-native-firebase/analytics';
-import {BubblesLoader} from 'react-native-indicator';
 import * as RNLocalize from 'react-native-localize';
 import {Picker} from '@react-native-picker/picker';
 import {CommonStyles, Colors} from '../../../theme';
 import BottomNav from '../../../layout/BottomLayout';
-import Footer from '../../../shared/footer';
-import ToastMessage from '../../../shared/toast';
 import {formatTimeByOffset} from '../../event/components/timezone';
 import Loading from '../../../shared/loading';
 import { GROWTH_COMMUNITY_ID, GROWTH_CONTENT_ID } from '../../../constants';

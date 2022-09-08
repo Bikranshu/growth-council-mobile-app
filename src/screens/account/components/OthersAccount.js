@@ -7,7 +7,6 @@ import {
   TextInput,
   Image,
   TouchableOpacity,
-  Button,
   Dimensions,
 } from 'react-native';
 import {useIsFocused} from '@react-navigation/native';
@@ -180,14 +179,6 @@ const OthersAccount = props => {
                   editable={false}
                 />
 
-                {/* <Text style={styles.title}>Last Name</Text>
-                <TextInput
-                  style={styles.input}
-                  keyboardType="default"
-                  value={otherProfiles?.user_meta?.last_name[0]}
-                  editable={false}
-                /> */}
-
                 <Text style={styles.title}>Email</Text>
                 <TextInput
                   style={styles.input}
@@ -247,35 +238,6 @@ const OthersAccount = props => {
                   editable={false}
                 />
 
-                {/* <Text style={styles.title}>
-                  Most Recent Growth/Innovation Initative
-                </Text>
-                <TextInput
-                  multiline={true}
-                  numberOfLines={4}
-                  style={styles.textarea}
-                  keyboardType="default"
-                  value={
-                    typeof initatives === 'undefined'
-                      ? ''
-                      : otherProfiles?.user_meta?.initatives[0]
-                  }
-                  editable={false}
-                /> */}
-
-                {/* <Text style={styles.title}>I'm Seeking Insights On</Text>
-                <TextInput
-                  multiline={true}
-                  numberOfLines={4}
-                  style={styles.textarea}
-                  keyboardType="default"
-                  value={
-                    typeof insights === 'undefined'
-                      ? ''
-                      : otherProfiles?.user_meta?.insights[0]
-                  }
-                  editable={false}
-                /> */}
 
                 <View>
                   <TouchableOpacity

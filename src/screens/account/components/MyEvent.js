@@ -13,11 +13,9 @@ import moment from 'moment-timezone';
 import {useIsFocused} from '@react-navigation/native';
 import {CommonStyles, Typography} from '../../../theme';
 import {PRIMARY_BACKGROUND_COLOR} from '../../../theme/colors';
-import {BubblesLoader} from 'react-native-indicator';
-import * as Colors from '../../../theme/colors';
 import * as RNLocalize from 'react-native-localize';
 import {formatTimeByOffset} from '../../event/components/timezone';
-import Loading from '../../../shared/loading';
+
 
 const MyEvent = props => {
   const isFocused = useIsFocused();

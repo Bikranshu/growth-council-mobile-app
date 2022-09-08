@@ -13,16 +13,11 @@ import {
 import {Button} from 'native-base';
 import {useFormik} from 'formik';
 import * as Yup from 'yup';
-import {getAuth, deleteUser} from 'firebase/auth';
-
 import {CommonStyles, Colors, Typography} from '../../../theme';
 import Spinner from '../../../shared/spinner';
 import FlatTextInput from '../../../shared/form/FlatTextInput';
 import ToastMessage from '../../../shared/toast';
-import Footer from '../../../shared/footer';
-import auth from '../../../utils/firebaseUtil';
 
-const screenHeight = Math.round(Dimensions.get('window').height);
 
 const forgotSchema = Yup.object().shape({
   email: Yup.string()

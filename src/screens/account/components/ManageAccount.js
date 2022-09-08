@@ -8,13 +8,11 @@ import {
   Image,
   TouchableOpacity,
   Platform,
-  ImageBackground,
   StatusBar,
   KeyboardAvoidingView,
   Keyboard,
   Dimensions,
 } from 'react-native';
-import {Button} from 'native-base';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import {useFormik} from 'formik';
@@ -23,18 +21,12 @@ import {BubblesLoader} from 'react-native-indicator';
 import DropDownPicker from 'react-native-dropdown-picker';
 import ImagePicker from 'react-native-image-crop-picker';
 import {useIsFocused} from '@react-navigation/native';
-import analytics from '@react-native-firebase/analytics';
 import {CommonStyles, Colors, Typography} from '../../../theme';
 import ToastMessage from '../../../shared/toast';
-import {PRIMARY_BACKGROUND_COLOR} from '../../../theme/colors';
-import Footer from '../../../shared/footer';
-import {useSelector} from 'react-redux';
+import {PRIMARY_BACKGROUND_COLOR} from '../../../theme/colors'
 import Loading from '../../../shared/loading';
 
 const profileUpdateSchema = Yup.object().shape({
-  //   display_name: Yup.string().required('Name is required.'),
-  //   first_name: Yup.string().required('First name is required.'),
-  //   last_name: Yup.string().required('Last Name is required.'),
   email: Yup.string()
     .email('Please enter a valid email.')
     .required('Email is required.'),
@@ -405,24 +397,6 @@ const ManageAccount = props => {
                       touched={touched.company}
                     />
 
-                    {/* <Text
-                    style={{
-                      size: 7,
-                      marginLeft: 10,
-                      fontSize: 10,
-                      color: '#8F9BB3',
-                    }}>
-                    Last Name
-                  </Text>
-                  <TextInput
-                    style={styles.input}
-                    value={values.last_name}
-                    onChangeText={handleChange('last_name')}
-                    onBlur={handleBlur('last_name')}
-                    error={errors.last_name}
-                    touched={touched.last_name}
-                  /> */}
-
                     <Text
                       style={{marginLeft: 10, fontSize: 10, color: '#8F9BB3'}}>
                       Email Address
@@ -503,36 +477,7 @@ const ManageAccount = props => {
                         marginLeft: 10,
                       }}
                     />
-
-                    {/* <Text
-                    style={{marginLeft: 10, fontSize: 10, color: '#8F9BB3'}}>
-                    Most Recent Growth/Innovation Initative
-                  </Text>
-                  <TextInput
-                    multiline={true}
-                    numberOfLines={4}
-                    style={styles.textarea}
-                    value={values.initatives}
-                    onChangeText={handleChange('initatives')}
-                    onBlur={handleBlur('initatives')}
-                    error={errors.initatives}
-                    touched={touched.initatives}
-                  /> */}
-
-                    {/* <Text
-                    style={{marginLeft: 10, fontSize: 10, color: '#8F9BB3'}}>
-                    I'm Seeking Insights On
-                  </Text>
-                  <TextInput
-                    multiline={true}
-                    numberOfLines={4}
-                    style={styles.textarea}
-                    value={values.insights}
-                    onChangeText={handleChange('insights')}
-                    onBlur={handleBlur('insights')}
-                    error={errors.insights}
-                    touched={touched.insights}
-                  /> */}
+					
                     {userLoading && <Loading />}
                     <View style={styles.loginButtonWrapper}>
                       <TouchableOpacity

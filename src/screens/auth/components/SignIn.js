@@ -9,7 +9,6 @@ import {
   ImageBackground,
   Image,
 } from 'react-native';
-
 import {Button} from 'native-base';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import {useFormik} from 'formik';
@@ -17,8 +16,6 @@ import * as Yup from 'yup';
 import {BubblesLoader} from 'react-native-indicator';
 import {
   useFocusEffect,
-  NavigationContainer,
-  useNavigationContainerRef,
 } from '@react-navigation/native';
 import analytics from '@react-native-firebase/analytics';
 import {CommonStyles, Colors, Typography} from '../../../theme';
@@ -34,9 +31,6 @@ const signInSchema = Yup.object().shape({
 
 const SignInForm = props => {
   const {navigation} = props;
-
-  const navigationRef = useRef();
-  const routeNameRef = useRef();
 
   const [hidePass, setHidePass] = useState(true);
 
@@ -61,11 +55,6 @@ const SignInForm = props => {
 
   const areAllFieldsFilled = values.username != '' && values.password != '';
 
-  // const postToAPI = async data => {
-  //   return axios.get(
-  //     `${API_URL}/pd/fcm/subscribe?api_secret_key=s3D6nHoU9AUw%jjTHy0K@UO)&user_email=${data.email}&device_token=${data.token}&subscribed=UserNotification`,
-  //   );
-  // };
 
   useFocusEffect(
     useCallback(() => {
@@ -204,7 +193,7 @@ const SignInForm = props => {
                     styles.signuptext,
                     {marginTop: Platform.OS === 'ios' ? 40 : 80},
                   ]}>
-                  {/* <Ionicons name="help-circle-outline" size={20} color={'#31ade5'}/> */}
+                  
                   <Text>Need Help? </Text>
                   <Text
                     style={{color: '#31ade5', fontWeight: '700'}}

@@ -3,21 +3,11 @@ import {
   Text,
   View,
   StyleSheet,
-  TouchableOpacity,
   TextInput,
-  Platform,
 } from 'react-native';
-import Ionicon from 'react-native-vector-icons/Ionicons';
-import {Button} from 'native-base';
-import moment from 'moment';
 
 import {CommonStyles, Typography} from '../../../theme';
-import {getAsyncStorage} from '../../../utils/storageUtil';
-import {JWT_TOKEN} from '../../../constants';
-import {decodeUserID} from '../../../utils/jwtUtil';
 import {PRIMARY_BACKGROUND_COLOR} from '../../../theme/colors';
-import {BubblesLoader} from 'react-native-indicator';
-import * as Colors from '../../../theme/colors';
 import {useIsFocused} from '@react-navigation/native';
 import Loading from '../../../shared/loading';
 

@@ -32,12 +32,12 @@ const CouncilDetail = props => {
 
   const [loadMore, setLoadMore] = useState(false);
 
-  useEffect(() => {
-    const fetchPillarDetailAsync = async () => {
-      await fetchPillarByIdentifier(route?.params?.id);
-    };
-    fetchPillarDetailAsync();
-  }, []);
+//   useEffect(() => {
+//     const fetchPillarDetailAsync = async () => {
+//       await fetchPillarByIdentifier(route?.params?.id);
+//     };
+//     fetchPillarDetailAsync();
+//   }, []);
 
   return (
     <SafeAreaView style={{flex: 1, backgroundColor: 'white'}}>

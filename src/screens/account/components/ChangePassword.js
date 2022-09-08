@@ -11,13 +11,10 @@ import {
 import {Button} from 'native-base';
 import {useFormik} from 'formik';
 import * as Yup from 'yup';
-import {BubblesLoader} from 'react-native-indicator';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import analytics from '@react-native-firebase/analytics';
 import {CommonStyles, Colors, Typography} from '../../../theme';
 import FlatTextInput from '../../../shared/form/FlatTextInput';
 import ToastMessage from '../../../shared/toast';
-import Footer from '../../../shared/footer';
 import Loading from '../../../shared/loading';
 
 const passwordSchema = Yup.object().shape({

@@ -9,7 +9,6 @@ import {
     Image
 } from 'react-native';
 
-import Ionicons from 'react-native-vector-icons/Ionicons';
 import {Button} from "native-base";
 
 import {CommonStyles, Colors, Typography} from '../../../theme';

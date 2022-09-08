@@ -33,13 +33,14 @@ const Home = props => {
   } = props;
 
   const [activeSlider, setActiveSlider] = useState(1);
+  //   const [loading, setLoading] = useState(true);
   const sliderRef = useRef(null);
 
   const sliderWidth = viewportWidth;
 
-  useEffect(() => {
-    fetchAllPillarSlider();
-  }, []);
+  //   useEffect(() => {
+  //     fetchAllPillarSlider();
+  //   }, []);
 
   const _renderItem = ({item, index}, navigation) => {
     let borderColor = Colors.PRIMARY_BACKGROUND_COLOR;
@@ -80,7 +81,6 @@ const Home = props => {
             source={require('../../../assets/img/GILCouncil.jpg')}
             resizeMode="contain"
           />
-        
         </View>
         <View styyle={styles.sliderView}>
           {!pillarSliderLoading ? (

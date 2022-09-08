@@ -8,7 +8,6 @@ import {
   StatusBar,
   StyleSheet,
   Dimensions,
-  useWindowDimensions,
 } from 'react-native';
 
 import analytics from '@react-native-firebase/analytics';

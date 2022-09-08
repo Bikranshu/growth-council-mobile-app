@@ -10,14 +10,14 @@ import {
   Modal,
   Image,
 } from 'react-native';
-import {useFocusEffect} from '@react-navigation/native';
+
 import {Button} from 'native-base';
 import {useFormik} from 'formik';
 import * as Yup from 'yup';
 import {Picker} from '@react-native-picker/picker';
 import {BubblesLoader} from 'react-native-indicator';
 import uuid from 'react-native-uuid';
-import analytics from '@react-native-firebase/analytics';
+
 import PhoneInput from 'react-native-phone-number-input';
 import {CommonStyles, Colors, Typography} from '../../../theme';
 import FlatTextInput from '../../../shared/form/FlatTextInput';
@@ -91,10 +91,6 @@ const SignUpForm = props => {
       values.name = values.first_name + ' ' + values.last_name;
       values.username = values.first_name + ' ' + values.last_name;
 
-      //   values.email.substring(
-      //     0,
-      //     values.email.lastIndexOf('@'),
-      //   );
       try {
         const response = await auth().createUserWithEmailAndPassword(
           values?.email?.trim(),
@@ -454,12 +450,8 @@ const SignUpForm = props => {
               <PhoneInput
                 ref={phoneInput}
                 defaultCode="US"
-                // layout="first"
                 containerStyle={styles.phoneNumberView}
                 textContainerStyle={{paddingVertical: 0}}
-                // onChangeFormattedText={text => {
-                // setPhoneNumber(text);
-                // }}
                 value={values.phone}
                 onChangeText={handleChange('phone')}
                 onFocus={handleBlur('phone')}
@@ -595,7 +587,6 @@ const SignUpForm = props => {
               <Picker
                 selectedValue={country}
                 mode={'dropdown'}
-                // onValueChange={(itemValue, itemIndex) => setCountry(itemValue)}>
                 onValueChange={(itemValue, itemIndex) => {
                   if (itemValue !== null) {
                     setFieldValue('country', itemValue);

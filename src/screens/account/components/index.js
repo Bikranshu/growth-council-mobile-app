@@ -6,18 +6,15 @@ import {
   StyleSheet,
   TouchableOpacity,
   ScrollView,
-  SafeAreaView,
   Dimensions,
   StatusBar,
 } from 'react-native';
-import Font from 'react-native-vector-icons/FontAwesome5';
+
 import Ionicon from 'react-native-vector-icons/Ionicons';
 import ButtonToggleGroup from 'react-native-button-toggle-group';
-import {BubblesLoader} from 'react-native-indicator';
 import analytics from '@react-native-firebase/analytics';
 import {CommonStyles, Colors, Typography} from '../../../theme';
 import {PRIMARY_BACKGROUND_COLOR} from '../../../theme/colors';
-import Footer from '../../../shared/footer';
 import {useIsFocused} from '@react-navigation/native';
 import MyEvent from './MyEvent';
 import AboutMe from './AboutMe';
@@ -144,15 +141,11 @@ const Profile = props => {
                     value={value}
                     onSelect={val => setValue(val)}
                     style={{
-                      // width: '100%',
-                      // alignItems: 'center',
                       paddingLeft: 5,
                       paddingRight: 5,
-                      // borderRadius: 10,
                     }}
                     textStyle={{
                       paddingHorizontal: 0,
-                      // paddingLeft: 15,
                       fontSize: 13,
                       width: '100%',
                       alignItems: 'center',
