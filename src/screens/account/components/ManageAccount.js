@@ -74,6 +74,7 @@ const ManageAccount = props => {
   const [value, setValue] = useState([]);
   const [items, setItems] = useState([]);
   const [image, setImage] = useState(profile.avatar);
+  const [imageDetail, setImageDetail] = useState();
 
   let title = profile?.user_meta?.title;
   if (typeof title === 'undefined') {
@@ -140,19 +141,20 @@ const ManageAccount = props => {
         name: 'profile_photo.jpg',
       };
       fd.append('file', file);
-      console.log('choosePhotoFromLibrary', fd);
-      await uploadImage(fd).then(async response => {
-        console.log('Upload response:::::::::::', response?.payload?.id);
-        await updateImage({attachment_id: response?.payload?.id}).then(
-          response => {
-            if (response?.payload?.code === 200) {
-              navigation.navigate('Account');
-              ToastMessage.show('Profile Image has been successfully updated.');
-              console.log('Update response::::::::::', response);
-            }
-          },
-        );
-      });
+      setImageDetail(fd);
+
+      //   await uploadImage(fd).then(async response => {
+      //     console.log('Upload response:::::::::::', response?.payload?.id);
+      //     await updateImage({attachment_id: response?.payload?.id}).then(
+      //       response => {
+      //         if (response?.payload?.code === 200) {
+      //           navigation.navigate('Account');
+      //           ToastMessage.show('Profile Image has been successfully updated.');
+      //           console.log('Update response::::::::::', response);
+      //         }
+      //       },
+      //     );
+      //   });
     });
   };
   const choosePhotoFromLibrary = () => {
@@ -167,17 +169,7 @@ const ManageAccount = props => {
         name: 'profile_photo.jpg',
       };
       fd.append('file', file);
-
-      await uploadImage(fd).then(async response => {
-        await updateImage({attachment_id: response?.payload?.id}).then(
-          response => {
-            if (response?.payload?.code === 200) {
-              navigation.navigate('Account');
-              ToastMessage.show('Profile Image has been successfully updated.');
-            }
-          },
-        );
-      });
+      setImageDetail(fd);
     });
   };
 
@@ -203,7 +195,20 @@ const ManageAccount = props => {
       professional_summary: professional_summary,
     },
     onSubmit: async values => {
-      await updateUser(values).then(response => {
+      await updateUser(values).then(async response => {
+		//image upload code
+        await uploadImage(imageDetail).then(async response => {
+          await updateImage({attachment_id: response?.payload?.id}).then(
+            response => {
+              if (response?.payload?.code === 200) {
+                navigation.navigate('Account');
+                // ToastMessage.show(
+                //   'Your profile has been successfully updated.',
+                // );
+              }
+            },
+          );
+        });
         if (response?.payload?.code === 200) {
           navigation.navigate('Account');
           ToastMessage.show('Your profile has been successfully updated.');
@@ -353,7 +358,7 @@ const ManageAccount = props => {
                       </Text>
                     </View>
                   )}
-                  {profileLoading && <Loading />}
+                  {/* {profileLoading && <Loading />} */}
 
                   <View style={styles.middleWrapper}>
                     <View style={styles.middleImage}>

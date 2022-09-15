@@ -22,10 +22,10 @@ import Loading from '../../../shared/loading';
 
 const passwordSchema = Yup.object().shape({
   oldPassword: Yup.string()
-    .min(6, 'Too Short!')
+    .min(6, 'Too Short! Password should be atleast 6 character.')
     .required('Old password is required.'),
   newPassword: Yup.string()
-    .min(6, 'Too Short!')
+    .min(6, 'Too Short! Password should be atleast 6 character.')
     .required('New Password is required.'),
   confirmPassword: Yup.string()
     .oneOf(
@@ -204,7 +204,7 @@ const ChangePasswordForm = props => {
               <FlatTextInput
                 label="Confirm Password"
                 value={values.confirmPassword}
-                secureTextEntry={hidePass1}
+                secureTextEntry={hidePass2}
                 onChangeText={handleChange('confirmPassword')}
                 onFocus={handleBlur('confirmPassword')}
                 error={errors.confirmPassword}
@@ -219,7 +219,7 @@ const ChangePasswordForm = props => {
                 name={hidePass2 ? 'eye-outline' : 'eye-off-outline'}
                 size={25}
                 color={Colors.PRIMARY_HEADING_COLOR}
-                onPress={() => setHidePass2(!hidePass1)}
+                onPress={() => setHidePass2(!hidePass2)}
                 style={{
                   position: 'absolute',
                   bottom: 20,
@@ -230,13 +230,9 @@ const ChangePasswordForm = props => {
           </View>
 
           <View style={styles.buttonWrapper}>
-            <Button
-              style={styles.button}
-              onPress={
-                handleSubmit
-              }>
+            <TouchableOpacity style={styles.button} onPress={handleSubmit}>
               <Text style={styles.buttonText}>Update Password</Text>
-            </Button>
+            </TouchableOpacity>
           </View>
 
           <View style={styles.cancelWrapper}>

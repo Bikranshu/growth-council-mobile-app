@@ -18,6 +18,7 @@ import * as Colors from '../../../theme/colors';
 import * as RNLocalize from 'react-native-localize';
 import {formatTimeByOffset} from '../../event/components/timezone';
 import Loading from '../../../shared/loading';
+import {GROWTH_COMMUNITY_ID, GROWTH_CONTENT_ID} from '../../../constants';
 
 const MyEvent = props => {
   const isFocused = useIsFocused();
@@ -86,12 +87,12 @@ const MyEvent = props => {
       item?.pillar_categories[0]?.parent ||
       item?.pillar_categories[1]?.parent
     ) {
-      case 117:
+      case GROWTH_COMMUNITY_ID:
       case 0:
         backgroundImage = require('../../../assets/img/Rectangle2.png');
         pillarname = 'Growth Community';
         break;
-      case 118:
+      case GROWTH_CONTENT_ID:
       case 0:
         backgroundImage = require('../../../assets/img/best-practice-bg.png');
         pillarname = 'Growth Content';

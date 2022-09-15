@@ -1,5 +1,5 @@
 import React, {useState, useCallback, useLayoutEffect, useEffect} from 'react';
-import {StyleSheet, View, Text, Image, SafeAreaView} from 'react-native';
+import {StyleSheet, View, Text, Image, SafeAreaView, StatusBar} from 'react-native';
 import {GiftedChat, Send} from 'react-native-gifted-chat';
 
 import Ionicons from 'react-native-vector-icons/Ionicons';
@@ -236,6 +236,13 @@ const Chat = props => {
   });
 
   return (
+	<SafeAreaView style={{flex: 1, backgroundColor: 'white'}}>
+      <StatusBar
+        barStyle="light-content"
+        hidden={false}
+        backgroundColor="#001D3F"
+        translucent={false}
+      />
     <View style={styles.container}>
       <SafeAreaView style={{top: -20, backgroundColor: 'white'}}>
         <View style={styles.wrapper}>
@@ -299,6 +306,7 @@ const Chat = props => {
         alwaysShowSend={true}
       />
     </View>
+	</SafeAreaView>
   );
 };
 
@@ -323,7 +331,7 @@ const styles = StyleSheet.create({
     height: 'auto',
     backgroundColor: Colors.PRIMARY_BACKGROUND_COLOR,
     padding: 10,
-    paddingTop: Platform.OS === 'ios' ? 40 : 30,
+    paddingTop: Platform.OS === 'ios' ? 30 : 20,
     display: 'flex',
     flexDirection: 'row',
   },

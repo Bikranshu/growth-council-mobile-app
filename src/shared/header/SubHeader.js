@@ -1,4 +1,4 @@
-import { DrawerActions, useNavigation } from '@react-navigation/native';
+import {DrawerActions, useNavigation} from '@react-navigation/native';
 import React from 'react';
 import {
   View,
@@ -13,7 +13,7 @@ import IonIcon from 'react-native-vector-icons/Ionicons';
 import {useDispatch, useSelector} from 'react-redux';
 
 import {fetchProfileByID} from '../../screens/account/slice/profileSlice';
-import { navigationRef, toggleDrawer } from '../../utils/navigationUtil';
+import {navigationRef, toggleDrawer} from '../../utils/navigationUtil';
 import HeaderRight from './HeaderRight';
 
 const SubHeader = props => {
@@ -21,11 +21,13 @@ const SubHeader = props => {
   const {profile, profileLoading, profileError} = useSelector(
     state => state.profile,
   );
-  const {navigation} = props;
+  const {navigation, route} = props;
 
   const fetchProfileByIdentifier = () => {
     dispatch(fetchProfileByID());
   };
+
+  console.log('hello', props?.id);
 
   return (
     <ImageBackground source={props.image} style={{width: '100%'}}>
@@ -44,8 +46,25 @@ const SubHeader = props => {
             flexDirection: 'row',
             alignItems: 'center',
           }}>
-          {props?.noDrawer ? (
-            <TouchableOpacity onPress={() => navigation.goBack()}>
+          {props?.noDrawer || props?.name ? (
+            <TouchableOpacity
+              onPress={() => {
+                if (props?.id == undefined) {
+                  navigation.goBack();
+                } else if (props.subtitle == 'Growth Community') {
+                  navigation.navigate(props.subtitle, {
+                    pillarId: props.id,
+                    title: 'Growth Community',
+                    image: require('../../assets/img/Rectangle2.png'),
+                  });
+                } else {
+                  navigation.navigate(props.subtitle, {
+                    poeId: props.id,
+                    title: 'Growth Community',
+                    image: require('../../assets/img/Rectangle2.png'),
+                  });
+                }
+              }}>
               <IonIcon name="arrow-back-sharp" size={30} color="white" />
             </TouchableOpacity>
           ) : (
