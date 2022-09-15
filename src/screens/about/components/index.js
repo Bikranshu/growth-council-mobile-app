@@ -1,4 +1,4 @@
-import React, {useEffect, useRef} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import {
   Platform,
   Text,
@@ -8,6 +8,7 @@ import {
   StatusBar,
   StyleSheet,
   Dimensions,
+  RefreshControl,
 } from 'react-native';
 
 import analytics from '@react-native-firebase/analytics';
@@ -21,6 +22,7 @@ const About = props => {
   const {navigation, about, aboutLoading, aboutError, fetchAbout} = props;
   const win = Dimensions.get('window');
   const imageContainerWidth = win.width - 40;
+
 
 //   useEffect(() => {
 //     fetchAbout();
@@ -52,7 +54,9 @@ const About = props => {
     content2 = about?.content2;
   } else {
     content2 = '';
-  }
+  };
+
+
 
   return (
     <>
@@ -64,10 +68,12 @@ const About = props => {
       />
       <ScrollView
         showsVerticalScrollIndicator={false}
+		
         style={{
           height: Platform.OS === 'ios' ? 400 : 350,
           backgroundColor: 'white',
-        }}>
+        }}
+		>
         <View style={styles.container}>
           <View style={styles.about}>
             <View style={styles.title}>

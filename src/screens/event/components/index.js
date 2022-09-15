@@ -9,6 +9,7 @@ import {
   Image,
   Modal,
   TouchableOpacity,
+  RefreshControl,
 } from 'react-native';
 import {Button, useToast} from 'native-base';
 import Feather from 'react-native-vector-icons/Feather';
@@ -53,12 +54,25 @@ const Event = props => {
   const [timeToDisplay, setTimeToDisplay] = useState('');
   const [timeToEnd, setTimeToEnd] = useState('');
 
+  const [refreshing, setRefreshing] = useState(true);
+
   const eventID = route?.params?.id;
   const Slug = events?.slug !== undefined ? events?.slug : '';
 
+  const onRefresh = () => {
+    events;
+    fetchEventByIdentifierAsync();
+  };
+
   useEffect(() => {
-    fetchEventByIdentifier(eventID);
+    fetchEventByIdentifierAsync();
   }, [eventID]);
+
+  const fetchEventByIdentifierAsync = () => {
+    fetchEventByIdentifier(eventID);
+    events;
+    setRefreshing(false);
+  };
 
   useEffect(() => {
     setEventStatus(events?.register_status);
@@ -169,7 +183,11 @@ const Event = props => {
       break;
   }
   return (
-    <ScrollView style={styles.scrollBox}>
+    <ScrollView
+      refreshControl={
+        <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+      }
+      style={styles.scrollBox}>
       <View style={styles.container}>
         <ImageBackground
           source={{

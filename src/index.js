@@ -92,15 +92,6 @@ const App = () => {
    
   };
 
-  const isTokenExpired = async () => {
-    const token = await getAsyncStorage(JWT_TOKEN);
-    const decoded = jwt_decode(token);
-    if (decoded.exp < Date.now() / 1000) {
-      // Checking if token is expired.
-      //   return true;
-      await signOut();
-    }
-  };
 
   const getNotifications = async () => {
     await messaging().onNotificationOpenedApp(remoteMessage => {});

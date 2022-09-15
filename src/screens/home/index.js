@@ -40,15 +40,17 @@ const HomeScreen = props => {
   );
 
   useEffect(() => {
-    fetchAllPillarSlider();
+    console.log('aab', new Date());
+    dispatch(fetchAllPillarSliders());
   }, []);
+
   /**
    * Fetch all pillar slider data.
    *
    */
-  const fetchAllPillarSlider = () => {
-    dispatch(fetchAllPillarSliders());
-  };
+  //   const fetchAllPillarSlider = () => {
+  //     dispatch(fetchAllPillarSliders());
+  //   };
 
   /**
    * Clear pillar slider data.
@@ -73,9 +75,9 @@ const HomeScreen = props => {
     return (
       <TouchableOpacity
         key={index}
-        onPress={() =>
-          navigation.navigate('CouncilDetail', {id: item?.term_id})
-        }>
+        onPress={() => {
+          navigation.navigate('CouncilDetail', {id: item?.term_id});
+        }}>
         <View style={[styles.ImageWrapper, {borderColor: borderColor}]}>
           <Image
             source={{uri: item?.image}}
@@ -173,7 +175,9 @@ const HomeScreen = props => {
       <View style={styles.buttonWrapper}>
         <Button
           style={styles.signupbutton}
-          onPress={() => navigation.navigate('HomeDetail')}>
+          onPress={() => {
+            console.log('hlo', new Date()), navigation.navigate('HomeDetail');
+          }}>
           <Text style={styles.signupbuttonText}>Get Started</Text>
         </Button>
         <Button

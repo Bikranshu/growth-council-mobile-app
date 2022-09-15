@@ -2,11 +2,20 @@ import {createAsyncThunk, createSlice} from '@reduxjs/toolkit';
 
 import {fetch} from '../../../utils/httpUtil';
 
+const start = new Date();
 export const fetchAllDetails = createAsyncThunk(
   'detail/fetchAll',
   (_, {rejectWithValue}) => {
     return fetch(`jwt-auth/v1/page/why_right_community`)
-      .then(response => response.data.data)
+      .then(response => {
+        {
+          
+          console.log('data fetch', new Date());
+		  console.log('api hit', start);
+          console.log('cc2', new Date() - start);
+        }
+        return response.data.data;
+      })
       .catch(error => rejectWithValue(error?.response?.data || error));
   },
 );

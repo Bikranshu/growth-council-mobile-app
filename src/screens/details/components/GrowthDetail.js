@@ -12,6 +12,7 @@ import {
   Pressable,
   StatusBar,
   ActivityIndicator,
+  RefreshControl,
 } from 'react-native';
 import {Button, useToast} from 'native-base';
 import Ionicons from 'react-native-vector-icons/Ionicons';
@@ -78,16 +79,24 @@ const GrowthDetail = props => {
   const [showChartButton, setShowChartButton] = useState(true);
   const webviewRef = React.useRef(null);
   const [userId, setUserId] = useState(0);
-
+  const [refreshing, setRefreshing] = useState(true);
 
   const eventID = route.params.poeId;
 
+  const onRefresh = () => {
+    poeDetails;
+    fetchAllPOEDetailAsync();
+  };
+
   useEffect(() => {
-    const fetchAllPOEDetailAsync = async () => {
-      await fetchAllPOEDetail(eventID);
-    };
     fetchAllPOEDetailAsync();
   }, [eventID]);
+
+  const fetchAllPOEDetailAsync = () => {
+    fetchAllPOEDetail(eventID);
+    poeDetails;
+    setRefreshing(false);
+  };
 
   useEffect(() => {
     const fetchAllPOEEventAsync = async () => {
@@ -145,11 +154,7 @@ const GrowthDetail = props => {
       ? coachingSession.map(item => item?.ID)
       : [0];
 
-
-
   let check = SessionID.filter(el => previousSession.indexOf(el) === -1);
- 
-
 
   const _renderItem = ({item, index}, navigation) => {
     return (
@@ -241,7 +246,11 @@ const GrowthDetail = props => {
         backgroundColor="#001D3F"
         translucent={false}
       />
-      <ScrollView style={{backgroundColor: Colors.PRIMARY_BACKGROUND_COLOR}}>
+      <ScrollView
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+        }
+        style={{backgroundColor: Colors.PRIMARY_BACKGROUND_COLOR}}>
         <View style={styles.container}>
           <ImageBackground
             source={{uri: poeDetails?.pillar_detail_image}}
@@ -309,27 +318,27 @@ const GrowthDetail = props => {
               {coachingSessionLoading && <Loading />}
 
               {/* {check[0] && ( */}
-                <View>
-                  {coachingSession?.length !== 0 &&
-                    coachingSession !== null &&
-                    coachingSession !== false && (
-                      <View style={styles.middle}>
-                        <Text style={styles.title}>Sessions</Text>
-                        <View
-                          style={{
-                            display: 'flex',
-                            flexDirection: 'row',
-                          }}>
-                          <FlatList
-                            horizontal
-                            showsHorizontalScrollIndicator={false}
-                            data={coachingSession}
-                            renderItem={_renderMiddleItem}
-                          />
-                        </View>
+              <View>
+                {coachingSession?.length !== 0 &&
+                  coachingSession !== null &&
+                  coachingSession !== false && (
+                    <View style={styles.middle}>
+                      <Text style={styles.title}>Sessions</Text>
+                      <View
+                        style={{
+                          display: 'flex',
+                          flexDirection: 'row',
+                        }}>
+                        <FlatList
+                          horizontal
+                          showsHorizontalScrollIndicator={false}
+                          data={coachingSession}
+                          renderItem={_renderMiddleItem}
+                        />
                       </View>
-                    )}
-                </View>
+                    </View>
+                  )}
+              </View>
               {/* )} */}
 
               {/* 

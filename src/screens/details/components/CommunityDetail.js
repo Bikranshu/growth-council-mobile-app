@@ -11,6 +11,7 @@ import {
   Dimensions,
   StatusBar,
   PermissionsAndroid,
+  RefreshControl,
 } from 'react-native';
 import FeatherIcon from 'react-native-vector-icons/Feather';
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome';
@@ -77,30 +78,50 @@ const CommunityDetail = props => {
   const isFocused = useIsFocused();
   const [memberConnection, setMemberConnection] = useState([]);
   const [slugName, setSlugName] = useState('');
+  const [refreshing, setRefreshing] = useState(true);
+
+  const onRefresh = () => {
+    poeDetails;
+    poeEvents;
+    fetchAllPOEEventAsync;
+    fetchAllPOEDetailAsync();
+  };
 
   useFocusEffect(
     useCallback(() => {
-      fetchSessionDetailByIdentifier(route?.params?.id);
+      fetchAllPOEEventAsync();
       return () => {
-        cleanSessionDetail();
+        cleanPOEEvent();
       };
     }, [isFocused]),
   );
-
   useFocusEffect(
     useCallback(() => {
-      fetchAllPOEDetail(route?.params?.poeId);
+      fetchAllPOEDetailAsync();
       return () => {
         cleanPOEDetail();
       };
     }, [isFocused]),
   );
 
+  const fetchAllPOEDetailAsync = () => {
+    fetchAllPOEDetail(route?.params?.poeId);
+    setRefreshing(false);
+    poeDetails;
+  };
+
+  const fetchAllPOEEventAsync = () => {
+    fetchAllPOEEvent(route?.params?.poeId);
+    setRefreshing(false);
+    poeEvents;
+  };
+
   useFocusEffect(
     useCallback(() => {
-      fetchAllPOEEvent(route?.params?.poeId);
+      fetchSessionDetailByIdentifier(route?.params?.id);
+
       return () => {
-        cleanPOEEvent();
+        cleanSessionDetail();
       };
     }, [isFocused]),
   );
@@ -122,7 +143,6 @@ const CommunityDetail = props => {
       };
     }, [isFocused]),
   );
-
 
   //   const _renderItem = ({item, index}, navigation) => {
   //     return (
@@ -360,7 +380,6 @@ const CommunityDetail = props => {
         RNFetchBlob.config(configOptions)
           .fetch('GET', FILE_URL)
           .then(res => {
-            
             RNFetchBlob.ios.previewDocument('file://' + res.path());
           });
         return;
@@ -372,7 +391,6 @@ const CommunityDetail = props => {
           })
 
           .then(res => {
-            
             RNFetchBlob.android.actionViewIntent(res.path());
           })
           .catch((errorMessage, statusCode) => {
@@ -450,6 +468,9 @@ const CommunityDetail = props => {
         translucent={false}
       />
       <ScrollView
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+        }
         style={{
           backgroundColor: Colors.PRIMARY_BACKGROUND_COLOR,
         }}>

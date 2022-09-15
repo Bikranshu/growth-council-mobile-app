@@ -13,6 +13,7 @@ import {
   SafeAreaView,
   Pressable,
   PermissionsAndroid,
+  RefreshControl,
 } from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import Material from 'react-native-vector-icons/MaterialIcons';
@@ -31,7 +32,7 @@ import Player from './Player';
 import {CommonStyles, Colors, Typography} from '../../../theme';
 import BottomNav from '../../../layout/BottomLayout';
 import Loading from '../../../shared/loading';
-import { GROWTH_CONTENT_ID } from '../../../constants';
+import {GROWTH_CONTENT_ID} from '../../../constants';
 
 const win = Dimensions.get('window');
 const contentContainerWidth = win.width - 30;
@@ -62,6 +63,15 @@ const BestPractice = props => {
 
   const [memberConnection, setMemberConnection] = useState([]);
 
+  const [refreshing, setRefreshing] = useState(false);
+
+  const onRefresh = () => {
+    pillarEvents;
+    fetchAllPillarEventAsync();
+    pillarMemberContents;
+    fetchAllPillarMemberContentAsync();
+  };
+
   useFocusEffect(
     useCallback(() => {
       fetchAllPillarPOE(pillarId);
@@ -74,28 +84,32 @@ const BestPractice = props => {
 
   useFocusEffect(
     useCallback(() => {
-      const fetchAllPillarEventAsync = async () => {
-        await fetchAllPillarEvent(pillarId);
-      };
       fetchAllPillarEventAsync();
-
       return () => {
         cleanPillarEvent();
       };
     }, []),
   );
-
   useFocusEffect(
     useCallback(() => {
-      const fetchAllPillarMemberContentAsync = async () => {
-        await fetchAllPillarMemberContent(pillarId);
-      };
       fetchAllPillarMemberContentAsync();
       return () => {
         cleanPillarMemberContent();
       };
     }, [isFocused]),
   );
+
+  const fetchAllPillarEventAsync = () => {
+    fetchAllPillarEvent(pillarId);
+    setRefreshing(false);
+    pillarEvents;
+  };
+
+  const fetchAllPillarMemberContentAsync = () => {
+    fetchAllPillarMemberContent(pillarId);
+    pillarMemberContents;
+    setRefreshing(false);
+  };
 
   useEffect(() => {
     setMemberConnection(pillarMemberContents?.members);
@@ -320,19 +334,17 @@ const BestPractice = props => {
         RNFetchBlob.config(configOptions)
           .fetch('GET', FILE_URL)
           .then(res => {
-         
             RNFetchBlob.ios.previewDocument('file://' + res.path());
           });
         return;
       } else {
         config(configOptions)
           .fetch('GET', FILE_URL)
-        //   .progress((received, total) => {
-        //     console.log('progress', received / total);
-        //   })
+          //   .progress((received, total) => {
+          //     console.log('progress', received / total);
+          //   })
 
           .then(res => {
-           
             RNFetchBlob.android.actionViewIntent(res.path());
           })
           .catch((errorMessage, statusCode) => {
@@ -402,6 +414,9 @@ const BestPractice = props => {
       />
       <ScrollView
         showsVerticalScrollIndicator={false}
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+        }
         style={{backgroundColor: Colors.PRIMARY_BACKGROUND_COLOR}}>
         <View style={styles.container}>
           {pillarEvents?.length !== 0 &&

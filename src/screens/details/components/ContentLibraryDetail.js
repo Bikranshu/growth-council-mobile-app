@@ -11,6 +11,7 @@ import {
   Button,
   StatusBar,
   Dimensions,
+  RefreshControl,
 } from 'react-native';
 
 import FeatherIcon from 'react-native-vector-icons/Feather';
@@ -46,14 +47,27 @@ const ContentLibraryDetail = props => {
   } = props;
 
   const isFocused = useIsFocused();
+  const [refreshing, setRefreshing] = useState(true);
+
+  const onRefresh = () => {
+    contentLibraryDetails;
+    fetchContentLibraryDetailAsync();
+  };
   useFocusEffect(
     useCallback(() => {
-      fetchContentLibraryDetail(route?.params?.id);
+      fetchContentLibraryDetailAsync();
+      
       return () => {
         cleanContentLibraryDetail();
       };
     }, [isFocused]),
   );
+
+  const fetchContentLibraryDetailAsync = () => {
+    fetchContentLibraryDetail(route?.params?.id);
+	contentLibraryDetails;
+      setRefreshing(false);
+  };
 
   const [isTrue, setIsTrue] = useState(true);
 
@@ -134,21 +148,19 @@ const ContentLibraryDetail = props => {
         RNFetchBlob.config(configOptions)
           .fetch('GET', FILE_URL)
           .then(res => {
-            
             RNFetchBlob.ios.previewDocument('file://' + res.path());
           });
         return;
       } else {
         config(configOptions)
           .fetch('GET', FILE_URL)
-        //   .progress((received, total) => {
-        //     console.log('progress', received / total);
-        //   })
+          //   .progress((received, total) => {
+          //     console.log('progress', received / total);
+          //   })
 
           .then(res => {
-         
             RNFetchBlob.android.actionViewIntent(res.path());
-          })
+          });
         //   .catch((errorMessage, statusCode) => {
         //     console.log('error with downloading file', errorMessage);
         //   });
@@ -281,6 +293,9 @@ const ContentLibraryDetail = props => {
 
         {/* Main Body Section */}
         <ScrollView
+          refreshControl={
+            <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+          }
           showsVerticalScrollIndicator={false}
           style={{padding: 25}}
           contentContainerStyle={{paddingBottom: 60}}>

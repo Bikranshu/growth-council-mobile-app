@@ -12,6 +12,7 @@ import {
   SafeAreaView,
   StatusBar,
   PermissionsAndroid,
+  RefreshControl,
 } from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import Material from 'react-native-vector-icons/MaterialIcons';
@@ -82,31 +83,58 @@ const HomeCommunity = props => {
 
   const [memberConnection, setMemberConnection] = useState([]);
 
+  const [refreshing, setRefreshing] = useState(false);
+
+  const onRefresh = () => {
+    pillarEvents;
+    communityMembers;
+    pillarPOEs;
+    fetchAllPillarPOEAsync();
+    fetchAllPillarEventAsync();
+    fetchAllCommunityMemberAsync();
+  };
+
   useFocusEffect(
     useCallback(() => {
-      const fetchAllPillarPOEAsync = async () => {
-        await fetchAllPillarPOE(pillarId);
-      };
       fetchAllPillarPOEAsync();
-
       return () => {
         cleanPillarPOE();
       };
     }, []),
   );
-
   useFocusEffect(
     useCallback(() => {
-      const fetchAllPillarEventAsync = async () => {
-        await fetchAllPillarEvent(pillarId);
-      };
       fetchAllPillarEventAsync();
-
       return () => {
         cleanPillarEvent();
       };
     }, []),
   );
+  useEffect(() => {
+    fetchAllCommunityMemberAsync();
+    return () => {
+      cleanCommunityMember();
+    };
+  }, []);
+
+  const fetchAllPillarPOEAsync = () => {
+    fetchAllPillarPOE(pillarId);
+    setRefreshing(false);
+	pillarPOEs;
+  };
+  const fetchAllPillarEventAsync = () => {
+    fetchAllPillarEvent(pillarId);
+    setRefreshing(false);
+	pillarEvents;
+  };
+  const fetchAllCommunityMemberAsync = () => {
+    fetchAllCommunityMember({
+      s: '',
+      sort: 'Desc',
+    });
+    setRefreshing(false);
+	communityMembers;
+  };
 
   useFocusEffect(
     useCallback(() => {
@@ -116,35 +144,6 @@ const HomeCommunity = props => {
         await fetchAllPillarMemberContent(pillarId);
       };
       fetchAllPillarMemberContentAsync();
-    }, [isFocused]),
-  );
-
-  useEffect(() => {
-    const fetchAllCommunityMemberAsync = async () => {
-      await fetchAllCommunityMember({
-        s: '',
-        sort: 'Desc',
-      });
-    };
-    fetchAllCommunityMemberAsync();
-
-    return () => {
-      cleanCommunityMember();
-    };
-  }, []);
-
-  useFocusEffect(
-    useCallback(() => {
-      const fetchAllUsersAsync = async () => {
-        await fetchAllUsers({
-          sort: 'ASC',
-        });
-      };
-      fetchAllUsersAsync();
-
-      return () => {
-        cleanUser();
-      };
     }, [isFocused]),
   );
 
@@ -162,7 +161,7 @@ const HomeCommunity = props => {
       setMemberConnection(items);
       ToastMessage.show('You have successfully connected.');
     } else {
-    //   toast.closeAll();
+      //   toast.closeAll();
       ToastMessage.show(response?.payload?.response);
     }
   };
@@ -201,14 +200,13 @@ const HomeCommunity = props => {
         <View style={styles.chatIcon}>
           {!memberConnection[index]?.connection && (
             <TouchableOpacity
-				onPress={async() => {
-				connectMemberByMemberID(item.ID, index);
-				await analytics().logEvent('community', {
-					item:item?.user_meta?.first_name,
-					description: 'Community member connection'
-				  });
-				}}
-			  >
+              onPress={async () => {
+                connectMemberByMemberID(item.ID, index);
+                await analytics().logEvent('community', {
+                  item: item?.user_meta?.first_name,
+                  description: 'Community member connection',
+                });
+              }}>
               <Ionicons name="add-circle" size={20} color="#B2B3B9" />
             </TouchableOpacity>
           )}
@@ -407,7 +405,6 @@ const HomeCommunity = props => {
         RNFetchBlob.config(configOptions)
           .fetch('GET', FILE_URL)
           .then(res => {
-            
             RNFetchBlob.ios.previewDocument('file://' + res.path());
           });
         return;
@@ -419,7 +416,6 @@ const HomeCommunity = props => {
           })
 
           .then(res => {
-          
             RNFetchBlob.android.actionViewIntent(res.path());
           })
           .catch((errorMessage, statusCode) => {
@@ -481,6 +477,9 @@ const HomeCommunity = props => {
       />
       <ScrollView
         showsVerticalScrollIndicator={false}
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+        }
         style={{backgroundColor: Colors.PRIMARY_BACKGROUND_COLOR}}>
         <View style={styles.container}>
           {pillarEvents?.length !== 0 &&
@@ -557,19 +556,21 @@ const HomeCommunity = props => {
                 />
               </View>
             )}
-          {users !== undefined && users !== null && users !== false && (
-            <View style={styles.bottom}>
-              <Text style={styles.title}>Welcome New Members</Text>
-              <View>
-                <FlatList
-                  horizontal
-                  showsHorizontalScrollIndicator={false}
-                  data={communityMembers}
-                  renderItem={_renderItem}
-                />
+          {communityMembers !== undefined &&
+            communityMembers !== null &&
+            communityMembers !== false && (
+              <View style={styles.bottom}>
+                <Text style={styles.title}>Welcome New Members</Text>
+                <View>
+                  <FlatList
+                    horizontal
+                    showsHorizontalScrollIndicator={false}
+                    data={communityMembers}
+                    renderItem={_renderItem}
+                  />
+                </View>
               </View>
-            </View>
-          )}
+            )}
 
           {/* external_links */}
 

@@ -12,6 +12,7 @@ import {
   SafeAreaView,
   PermissionsAndroid,
   StatusBar,
+  RefreshControl,
 } from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import Material from 'react-native-vector-icons/MaterialIcons';
@@ -33,7 +34,7 @@ import Player from './Player';
 import {CommonStyles, Colors, Typography} from '../../../theme';
 import {isEmptyArray} from 'formik';
 import Loading from '../../../shared/loading';
-import { GROWTH_COACHING_ID } from '../../../constants';
+import {GROWTH_COACHING_ID} from '../../../constants';
 
 const win = Dimensions.get('window');
 const contentContainerWidth = win.width - 30;
@@ -63,32 +64,43 @@ const GrowthCoaching = props => {
 
   const isFocused = useIsFocused();
   const [memberConnection, setMemberConnection] = useState([]);
+  const [color, changeColor] = useState('red');
+  const [refreshing, setRefreshing] = useState(false);
+
+  const onRefresh = () => {
+    pillarEvents;
+
+    pillarPOEs;
+    fetchAllPillarPOEAsync();
+    fetchAllPillarEventAsync();
+  };
 
   useFocusEffect(
     useCallback(() => {
-      const fetchAllPillarPOEAsync = async () => {
-        await fetchAllPillarPOE(pillarId);
-      };
       fetchAllPillarPOEAsync();
-
       return () => {
         cleanPillarPOE();
       };
     }, []),
   );
-
   useFocusEffect(
     useCallback(() => {
-      const fetchAllPillarEventAsync = async () => {
-        await fetchAllPillarEvent(pillarId);
-      };
       fetchAllPillarEventAsync();
-
       return () => {
         cleanPillarEvent();
       };
     }, []),
   );
+  const fetchAllPillarPOEAsync = async () => {
+    await fetchAllPillarPOE(pillarId);
+    setRefreshing(false);
+    pillarPOEs;
+  };
+  const fetchAllPillarEventAsync = async () => {
+    await fetchAllPillarEvent(pillarId);
+    setRefreshing(false);
+    pillarEvents;
+  };
 
   useFocusEffect(
     useCallback(() => {
@@ -338,7 +350,6 @@ const GrowthCoaching = props => {
         RNFetchBlob.config(configOptions)
           .fetch('GET', FILE_URL)
           .then(res => {
-           
             RNFetchBlob.ios.previewDocument('file://' + res.path());
           });
         return;
@@ -350,7 +361,6 @@ const GrowthCoaching = props => {
           })
 
           .then(res => {
-           
             RNFetchBlob.android.actionViewIntent(res.path());
           })
           .catch((errorMessage, statusCode) => {
@@ -413,6 +423,13 @@ const GrowthCoaching = props => {
       />
       <ScrollView
         showsVerticalScrollIndicator={false}
+        refreshControl={
+          <RefreshControl
+            refreshing={refreshing}
+            onRefresh={onRefresh}
+            color={color}
+          />
+        }
         style={{backgroundColor: Colors.PRIMARY_BACKGROUND_COLOR}}>
         <View style={styles.container}>
           {pillarEvents?.length !== 0 &&

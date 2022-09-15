@@ -2,19 +2,17 @@ import {createAsyncThunk, createSlice} from '@reduxjs/toolkit';
 
 import {fetch} from '../../../utils/httpUtil';
 
+const start = new Date();
+
 export const fetchAllPillarSliders = createAsyncThunk(
   'pillarSlider/fetchAll',
   (_, {rejectWithValue}) => {
     return fetch(`jwt-auth/v1/pillars`)
-	.then((response) => {
-        return response.data.data;
-      })
-      .catch(error => 
-		{
-			rejectWithValue(error?.response?.data || error)
-		});
+      .then(response => response.data.data)
+      .catch(error => {
+        rejectWithValue(error?.response?.data || error);
+      });
   },
-  
 );
 
 const pillarSliderSlice = createSlice({

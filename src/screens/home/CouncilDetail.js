@@ -24,6 +24,7 @@ import {
   Image,
   TouchableOpacity,
   SafeAreaView,
+  RefreshControl,
 } from 'react-native';
 import {Button} from 'native-base';
 import Ionicons from 'react-native-vector-icons/Ionicons';
@@ -46,51 +47,36 @@ const CouncilDetailScreen = props => {
   const {pillarPOEs, pillarPOELoading, pillarPOEError} = useSelector(
     state => state.pillarPOEs,
   );
+
   /**
    * Fetch pillar data.
    * @param {string} identifier
    *
    */
+
   const fetchPillarByIdentifier = identifier => {
     dispatch(fetchPillarByID(identifier));
   };
 
-  /**
-   * Fetch upcoming events data.
-   * @param {string} identifier
-   *
-   */
-  const fetchUpcomingEventsByIdentifier = identifier => {
-    dispatch(fetchUpcomingEventsByID(identifier));
-  };
-
-  /**
-   * Clear pillar data.
-   *
-   */
   const cleanPillar = () => {
     dispatch(resetPillar());
   };
 
-  /**
-   * Clear upcoming event data.
-   *
-   */
-  const cleanUpcomingEvent = () => {
-    dispatch(resetUpcomingEvent());
-  };
+  const [refreshing, setRefreshing] = useState(true);
 
-  const fetchAllPillarPOE = pillarId => {
-    dispatch(fetchAllPillarPOEs(pillarId));
+  const onRefresh = () => {
+    pillars;
+    fetchPillarByIdentifierAsync();
   };
-
-  const cleanPillarPOE = () => {
-    dispatch(resetPillarPOE());
-  };
-
   useEffect(() => {
-    fetchPillarByIdentifier(route?.params?.id);
+    fetchPillarByIdentifierAsync();
   }, []);
+
+  const fetchPillarByIdentifierAsync = () => {
+    fetchPillarByIdentifier(route?.params?.id);
+    setRefreshing(false);
+    pillars;
+  };
 
   const [loadMore, setLoadMore] = useState(false);
 
@@ -115,7 +101,10 @@ const CouncilDetailScreen = props => {
     // />
 
     <SafeAreaView style={{flex: 1, backgroundColor: 'white'}}>
-      <ScrollView>
+      <ScrollView
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+        }>
         <View style={styles.meta}>
           {!loadMore && (
             <View style={{padding: 20, backgroundColor: '#ffffff'}}>
@@ -196,7 +185,7 @@ const CouncilDetailScreen = props => {
               style={styles.paragraph}
             />
           </View>
-          {!loadMore && pillars.slug !== 'growth-content' && (
+          {/* {!loadMore && pillars?.slug !== 'growth-content' && (
             <View style={{alignItems: 'center', justifyContent: 'center'}}>
               <Button
                 style={styles.moreButton}
@@ -204,11 +193,11 @@ const CouncilDetailScreen = props => {
                 <Text style={styles.moreButtonText}>Explore More</Text>
               </Button>
             </View>
-          )}
+          )} */}
 
-          {loadMore && pillars.slug !== 'growth-content' && (
+          {/* {loadMore && pillars?.slug !== 'growth-content' && (
             <LoadMore {...props} pillar_id={route?.params?.id} />
-          )}
+          )} */}
         </View>
       </ScrollView>
     </SafeAreaView>
