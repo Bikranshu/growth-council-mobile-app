@@ -15,12 +15,11 @@ import Feather from 'react-native-vector-icons/Feather';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import HTMLView from 'react-native-htmlview';
-import moment from 'moment-timezone';
+
 import analytics from '@react-native-firebase/analytics';
-// import 'moment-timezone';
-import * as RNLocalize from 'react-native-localize';
 import {formatTimeByOffset} from './timezone';
-import {BubblesLoader} from 'react-native-indicator';
+import * as RNLocalize from 'react-native-localize';
+import moment from 'moment-timezone';
 
 import {CommonStyles, Colors, Typography} from '../../../theme';
 import ToastMessage from '../../../shared/toast';
@@ -106,13 +105,6 @@ const Event = props => {
 
   const isEventLoaded = Object.keys(events).length === 0;
 
-  const backStartTimeStamp = events?.event_start;
-  const backEndTimeStamp = events?.event_end;
-  const deviceTimeZone = RNLocalize.getTimeZone();
-
-  const today = moment().tz(deviceTimeZone);
-  const currentTimeZoneOffsetInHours = today.utcOffset() / 60;
-
   const eventDate = moment(events?.event_start).format('MMMM D dddd, h:mma - ');
   const eventEnd = moment(events?.event_end).format('MMMM D dddd, h:mma');
 
@@ -127,6 +119,20 @@ const Event = props => {
   const GobalEndTime = moment(timeToEnd).format('h:mma ');
   const GobalEndMonth = moment(timeToEnd).format('MMMM D');
 
+  const comma = '/';
+
+  const backStartTimeStamp = events?.event_start;
+  const backEndTimeStamp = events?.event_end;
+  const deviceTimeZone = RNLocalize.getTimeZone();
+
+  const time = moment(events?.event_start).tz(deviceTimeZone).format();
+
+  const today = moment().tz(deviceTimeZone);
+
+  console.log('a', timeToEnd);
+  console.log('b', timeToDisplay);
+
+  const currentTimeZoneOffsetInHours = today.utcOffset() / 60;
   useEffect(() => {
     const convertedToLocalTime = formatTimeByOffset(
       backStartTimeStamp,
@@ -222,14 +228,18 @@ const Event = props => {
                     }}>
                     {/* <Text style={styles.eventDetails}>{GobalDate} /</Text> */}
                     <Text style={styles.eventDetails}>
-                      {/* {GobalStartMonth === GobalEndMonth
+                      {GobalStartMonth === GobalEndMonth
                         ? GobalDate + GobalEndTime
                         : GobalStartMonth +
                           GobalDate.split(/(\s+)/)[7] +
                           GobalDate.split(/(\s+)/)[6] +
                           GobalDate.split(/(\s+)/)[7] +
                           GobalEndMonth}{' '}
-                      ({deviceTimeZone}) /{' '} */}
+                      (
+                      {deviceTimeZone.split('/')[1] +
+                        comma +
+                        deviceTimeZone.split('/')[0]}
+                      ) /{' '}
                       {eventStartMonth === eventEndMonth
                         ? eventDate + eventEndTime
                         : eventStartMonth +

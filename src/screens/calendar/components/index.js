@@ -109,11 +109,10 @@ const EventCalendar = props => {
 
     if (moment(startDate).isSame(endDate)) {
       markedDay[startDate] = {
-		
         color: backgroundColor,
         textColor: 'white',
-        marked: true,
-        
+        borderWidth: 1,
+        borderColor: 'black',
       };
     } else {
       const dates = getDates(
@@ -127,7 +126,6 @@ const EventCalendar = props => {
             color: backgroundColor,
             textColor: 'white',
             borderRadius: 10,
-      
           };
         } else if (dates?.length - 1 === index) {
           markedDay[moment(item).format('YYYY-MM-DD')] = {
@@ -135,7 +133,6 @@ const EventCalendar = props => {
             color: backgroundColor,
             textColor: 'white',
             borderRadius: 10,
-          
           };
         } else {
           markedDay[moment(item).format('YYYY-MM-DD')] = {
