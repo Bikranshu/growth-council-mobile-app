@@ -331,7 +331,7 @@ const styles = StyleSheet.create({
     height: 'auto',
     backgroundColor: Colors.PRIMARY_BACKGROUND_COLOR,
     padding: 10,
-    paddingTop: Platform.OS === 'ios' ? 30 : 20,
+    paddingTop: Platform.OS === 'ios' ? 20 : 20,
     display: 'flex',
     flexDirection: 'row',
   },
