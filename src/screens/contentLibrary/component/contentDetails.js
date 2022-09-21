@@ -12,6 +12,8 @@ import {
   ImageBackground,
   StatusBar,
   Dimensions,
+  Keyboard,
+  TouchableWithoutFeedback,
 } from 'react-native';
 import {Searchbar} from 'react-native-paper';
 import {Colors, Typography} from '../../../theme';
@@ -22,7 +24,7 @@ import HTMLView from 'react-native-htmlview';
 import {BubblesLoader} from 'react-native-indicator';
 import {useFocusEffect, useIsFocused} from '@react-navigation/native';
 import Loading from '../../../shared/loading';
-import { GROWTH_CONTENT_FALLBACK_IMAGE } from '../../../constants';
+import {GROWTH_CONTENT_FALLBACK_IMAGE} from '../../../constants';
 
 const ContentLibrary = props => {
   const {
@@ -97,18 +99,22 @@ const ContentLibrary = props => {
           <TouchableOpacity onPress={() => navigation.goBack()}>
             <Ionicons name="chevron-back-outline" size={30} color="#B2B3B9" />
           </TouchableOpacity>
-          <Searchbar
-            style={styles.input}
-            inputStyle={{
-              height: 38,
-              paddingVertical: 0,
-            }}
-            placeholder="Search"
-            placeholderTextColor="#B2B3B9"
-            iconColor="#B2B3B9"
-            value={search}
-            onChangeText={text => searchFilterFunction(text)}
-          />
+          <TouchableWithoutFeedback
+            onPress={Keyboard.dismiss}
+            accessible={false}>
+            <Searchbar
+              style={styles.input}
+              inputStyle={{
+                height: 38,
+                paddingVertical: 0,
+              }}
+              placeholder="Search"
+              placeholderTextColor="#B2B3B9"
+              iconColor="#B2B3B9"
+              value={search}
+              onChangeText={text => searchFilterFunction(text)}
+            />
+          </TouchableWithoutFeedback>
         </View>
 
         <View
@@ -150,40 +156,40 @@ const ContentLibrary = props => {
             {filteredDataSource.map((item, key) => {
               const itemname = item?.name;
               return (
-                  <TouchableOpacity
-                    key={key}
-                    style={[styles.content, styles.shadowProp]}
-                    onPress={() =>
-                      navigation.navigate('LibraryDetail', {
-                        breadcrumbName,
-                        resources: item?.term_id,
-                        itemname,
-                      })
-                    }>
-                    <>
-                      <Image
-                        style={{
-                          width: '100%',
-                          height: 170,
-                          borderTopLeftRadius: 14,
-                          borderTopRightRadius: 14,
+                <TouchableOpacity
+                  key={key}
+                  style={[styles.content, styles.shadowProp]}
+                  onPress={() =>
+                    navigation.navigate('LibraryDetail', {
+                      breadcrumbName,
+                      resources: item?.term_id,
+                      itemname,
+                    })
+                  }>
+                  <>
+                    <Image
+                      style={{
+                        width: '100%',
+                        height: 170,
+                        borderTopLeftRadius: 14,
+                        borderTopRightRadius: 14,
+                      }}
+                      source={{uri: item?.image || null}}
+                      resizeMode="stretch"
+                    />
+                    <View style={styles.wrapper}>
+                      <HTMLView
+                        value={item?.name}
+                        textComponentProps={{
+                          style: {
+                            color: 'black',
+                            fontWeight: '600',
+                          },
                         }}
-                        source={{uri: item?.image||null}}
-                        resizeMode="stretch"
                       />
-                      <View style={styles.wrapper}>
-                        <HTMLView
-                          value={item?.name}
-                          textComponentProps={{
-                            style: {
-                              color: 'black',
-                              fontWeight: '600',
-                            },
-                          }}
-                        />
-                      </View>
-                    </>
-                  </TouchableOpacity>
+                    </View>
+                  </>
+                </TouchableOpacity>
               );
             })}
           </View>

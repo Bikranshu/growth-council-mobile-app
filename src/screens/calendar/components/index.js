@@ -13,10 +13,10 @@ import {
 import {Calendar} from 'react-native-calendars';
 import moment from 'moment-timezone';
 import {
-	useFocusEffect,
-	NavigationContainer,
-	useNavigationContainerRef,
-  } from '@react-navigation/native';
+  useFocusEffect,
+  NavigationContainer,
+  useNavigationContainerRef,
+} from '@react-navigation/native';
 import analytics from '@react-native-firebase/analytics';
 import {BubblesLoader} from 'react-native-indicator';
 import * as RNLocalize from 'react-native-localize';
@@ -27,7 +27,7 @@ import Footer from '../../../shared/footer';
 import ToastMessage from '../../../shared/toast';
 import {formatTimeByOffset} from '../../event/components/timezone';
 import Loading from '../../../shared/loading';
-import { GROWTH_COMMUNITY_ID, GROWTH_CONTENT_ID } from '../../../constants';
+import {GROWTH_COMMUNITY_ID, GROWTH_CONTENT_ID} from '../../../constants';
 
 const EventCalendar = props => {
   const {
@@ -47,7 +47,6 @@ const EventCalendar = props => {
   const [showAllEvents, setShowAllEvents] = useState(true);
   const [pickerVisible, setPickerVisible] = useState(false);
 
-  
   //   const [markedDay, setMarkedDay] = useState([]);
 
   useEffect(() => {
@@ -110,9 +109,11 @@ const EventCalendar = props => {
 
     if (moment(startDate).isSame(endDate)) {
       markedDay[startDate] = {
+		
         color: backgroundColor,
         textColor: 'white',
-        borderRadius: 10,
+        marked: true,
+        
       };
     } else {
       const dates = getDates(
@@ -126,6 +127,7 @@ const EventCalendar = props => {
             color: backgroundColor,
             textColor: 'white',
             borderRadius: 10,
+      
           };
         } else if (dates?.length - 1 === index) {
           markedDay[moment(item).format('YYYY-MM-DD')] = {
@@ -133,6 +135,7 @@ const EventCalendar = props => {
             color: backgroundColor,
             textColor: 'white',
             borderRadius: 10,
+          
           };
         } else {
           markedDay[moment(item).format('YYYY-MM-DD')] = {
@@ -152,7 +155,6 @@ const EventCalendar = props => {
     const startdate = eventStart.split(' ', 3)[1].split('', 3);
     const enddate = eventEnd.split(' ', 3)[1].split('', 3);
 
-	
     const backStartTimeStamp = item?.event_start;
     const deviceTimeZone = RNLocalize.getTimeZone();
 
@@ -214,19 +216,18 @@ const EventCalendar = props => {
     }
 
     return (
-		
       <View>
         <TouchableOpacity
-          onPress={async() =>{
+          onPress={async () => {
             navigation.navigate(nav, {
               id: item.ID,
               title: pillarname,
               image: backgroundImage,
-            })
-			await analytics().logEvent(item?.title, {
-				id: item.ID,
-				item: item.title,
-			  });
+            });
+            await analytics().logEvent(item?.title, {
+              id: item.ID,
+              item: item.title,
+            });
           }}>
           <View style={[styles.eventCard, styles.shadowProp]} key={index}>
             <Text
@@ -278,7 +279,6 @@ const EventCalendar = props => {
           </View>
         </TouchableOpacity>
       </View>
-	
     );
   };
 

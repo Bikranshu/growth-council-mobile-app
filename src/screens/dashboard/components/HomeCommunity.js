@@ -162,7 +162,7 @@ const HomeCommunity = props => {
       setMemberConnection(items);
       ToastMessage.show('You have successfully connected.');
     } else {
-    //   toast.closeAll();
+      //   toast.closeAll();
       ToastMessage.show(response?.payload?.response);
     }
   };
@@ -201,14 +201,13 @@ const HomeCommunity = props => {
         <View style={styles.chatIcon}>
           {!memberConnection[index]?.connection && (
             <TouchableOpacity
-				onPress={async() => {
-				connectMemberByMemberID(item.ID, index);
-				await analytics().logEvent('community', {
-					item:item?.user_meta?.first_name,
-					description: 'Community member connection'
-				  });
-				}}
-			  >
+              onPress={async () => {
+                connectMemberByMemberID(item.ID, index);
+                await analytics().logEvent('community', {
+                  item: item?.user_meta?.first_name,
+                  description: 'Community member connection',
+                });
+              }}>
               <Ionicons name="add-circle" size={20} color="#B2B3B9" />
             </TouchableOpacity>
           )}

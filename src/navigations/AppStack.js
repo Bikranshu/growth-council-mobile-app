@@ -49,6 +49,7 @@ import DashboardScreen from '../screens/dashboard';
 import SessionCompleted from '../screens/coachingSession/component/sessionCompleted';
 import DrawerNavigation from '../navigations/DrawerNavigation';
 import Header from '../shared/header/header';
+import { GROWTH_COMMUNITY_ID } from '../constants';
 
 const AppStack = () => (
   <Navigator>
@@ -413,6 +414,8 @@ const AppStack = () => (
         pillarId: route?.params?.pillarId,
         header: () => (
           <SubHeader
+            subtitle="Growth Community"
+            id={GROWTH_COMMUNITY_ID}
             title={route?.params?.title}
             image={route?.params?.image}
             navigation={navigation}
