@@ -154,13 +154,13 @@ const People = props => {
           </View>
           {!memberConnection[index]?.connection && (
             <TouchableOpacity
-              onPress={async() => {
-				connectMemberByMemberID(item.ID, index);
-				await analytics().logEvent('Member', {
-					item:item?.user_meta?.first_name,
-					description: 'Member Connection'
-				  });
-				}}>
+              onPress={async () => {
+                connectMemberByMemberID(item.ID, index);
+                await analytics().logEvent('Member', {
+                  item: item?.user_meta?.first_name,
+                  description: 'Member Connection',
+                });
+              }}>
               <Ionicons
                 name="add-circle"
                 size={30}
@@ -215,7 +215,6 @@ const People = props => {
                   region: region,
                 });
               }}
-
             />
           </View>
           <View style={styles.iconWrapper}>
@@ -456,7 +455,7 @@ const People = props => {
                 mode="dropdown"
                 itemTextStyle={{fontSize: 12}}
                 onValueChange={async itemValue => {
-                  setRegion(itemValue);
+                  setRegion( itemValue);
 
                   await fetchAllUsers({
                     s: searchKey,

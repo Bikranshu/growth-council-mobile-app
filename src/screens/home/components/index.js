@@ -80,7 +80,6 @@ const Home = props => {
             source={require('../../../assets/img/GILCouncil.jpg')}
             resizeMode="contain"
           />
-        
         </View>
         <View styyle={styles.sliderView}>
           {!pillarSliderLoading ? (
@@ -148,7 +147,7 @@ const Home = props => {
       <View style={styles.buttonWrapper}>
         <Button
           style={styles.signupbutton}
-          onPress={() => navigation.navigate('HomeDetail')}>
+          onPress={() => navigation.navigate('CountryConfirmation')}>
           <Text style={styles.signupbuttonText}>Get Started</Text>
         </Button>
         <Button

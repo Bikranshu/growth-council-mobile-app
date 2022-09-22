@@ -138,6 +138,7 @@ export const AuthProvider = ({children}) => {
             const messageToken = await messaging().getToken();
             await postToAPI(response.data.user_email, messageToken);
 
+			
             if (response.data.token) {
               await setAsyncStorage(
                 'tempData',

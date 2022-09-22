@@ -11,6 +11,7 @@ import {
   Image,
 } from 'react-native';
 import {useFocusEffect} from '@react-navigation/native';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 import {Button} from 'native-base';
 import {useFormik} from 'formik';
 import * as Yup from 'yup';
@@ -60,6 +61,15 @@ const SignUpForm = props => {
   const min = 1;
   const max = 100;
   const rand = min + Math.random() * (max - min);
+  const [regionVisible, setRegionVisible] = useState(false);
+  const [region, setRegion] = useState('');
+
+  const Region = {
+    Region: 'Region',
+    AMERICAS: 'AMERICAS',
+    APAC: 'APAC',
+    MEASA: 'MEASA',
+  };
 
   const {
     handleChange,
@@ -492,6 +502,38 @@ const SignUpForm = props => {
                   {errors.country}
                 </Text>
               )}
+              <View>
+                <Text style={{color: 'black', marginTop: 10}}>Your Region</Text>
+                <TouchableOpacity onPress={() => setRegionVisible(true)}>
+                  <View
+                    style={{
+                      borderRadius: 5,
+                      borderWidth: 0.5,
+                      overflow: 'hidden',
+                      height: 50,
+                      marginTop: 10,
+                      marginBottom: 10,
+                      justifyContent: 'center',
+                      paddingLeft: 20,
+                    }}>
+                    <Text
+                      style={{
+                        position: 'absolute',
+                        left: 20,
+                        top: 12,
+                        color: 'gray',
+                      }}>
+                      {region ? region : 'Region'}
+                    </Text>
+                    <Ionicons
+                      name="chevron-down-outline"
+                      size={30}
+                      color="gray"
+                      style={{position: 'absolute', right: 15, top: 8}}
+                    />
+                  </View>
+                </TouchableOpacity>
+              </View>
 
               <View style={{flex: 1}}>
                 <View style={{flexDirection: 'row', flex: 0.2}}>
@@ -609,6 +651,65 @@ const SignUpForm = props => {
                       label={value}
                       value={value}
                       style={{fontSize: 12}}
+                    />
+                  );
+                })}
+              </Picker>
+            </View>
+          </View>
+        </View>
+      </Modal>
+
+      <Modal transparent visible={regionVisible}>
+        <View
+          style={{
+            flex: 1,
+            backgroundColor: 'rgba(56,56,56,0.3)',
+            justifyContent: 'flex-end',
+          }}>
+          <View
+            style={{
+              height: 300,
+              backgroundColor: 'white',
+              borderTopLeftRadius: 20,
+              borderTopRightRadius: 20,
+              padding: 20,
+            }}>
+            <TouchableOpacity
+              activeOpacity={0.7}
+              onPress={() => setRegionVisible(false)}
+              style={{alignItems: 'flex-end'}}>
+              <Text
+                style={{
+                  padding: 15,
+                  fontSize: 18,
+                }}>
+                Done
+              </Text>
+            </TouchableOpacity>
+            <View style={{marginBottom: 40}}>
+              <Picker
+                selectedValue={region}
+                mode="dropdown"
+                itemTextStyle={{fontSize: 12}}
+                onValueChange={async itemValue => {
+                  setRegion(itemValue);
+
+                  //   await fetchAllUsers({
+                  //     s: searchKey,
+                  //     sort: sorting,
+                  //     expertise_areas: category,
+                  //     account: account,
+                  //     region: itemValue,
+                  //   });
+                }}>
+                {Object.keys(Region).map(key => {
+                  return (
+                    <Picker.Item
+                      label={Region[key]}
+                      value={Region[key]}
+                      key={key}
+                      style={{fontSize: 14}}
                     />
                   );
                 })}

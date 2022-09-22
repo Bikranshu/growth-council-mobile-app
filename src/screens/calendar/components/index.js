@@ -18,7 +18,7 @@ import {
   useNavigationContainerRef,
 } from '@react-navigation/native';
 import analytics from '@react-native-firebase/analytics';
-import {BubblesLoader} from 'react-native-indicator';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 import * as RNLocalize from 'react-native-localize';
 import {Picker} from '@react-native-picker/picker';
 import {CommonStyles, Colors} from '../../../theme';
@@ -46,6 +46,15 @@ const EventCalendar = props => {
   const [currentEvents, setCurrentEvents] = useState([]);
   const [showAllEvents, setShowAllEvents] = useState(true);
   const [pickerVisible, setPickerVisible] = useState(false);
+  const [regionVisible, setRegionVisible] = useState(false);
+  const [region, setRegion] = useState('');
+
+  const countries = {
+    Region: 'Region',
+    AMERICAS: 'AMERICAS',
+    APAC: 'APAC',
+    MEASA: 'MEASA',
+  };
 
   //   const [markedDay, setMarkedDay] = useState([]);
 
@@ -294,16 +303,51 @@ const EventCalendar = props => {
               onPress={() => setPickerVisible(true)}
               style={{
                 flex: 1,
-                alignItems: 'center',
-                borderWidth: 1,
+                // alignItems: 'center',
+                borderWidth: 0.3,
                 paddingVertical: 10,
                 borderRadius: 10,
+                paddingLeft: 20,
+                width: 100,
                 borderColor: 'gray',
-                marginRight: 30,
+                marginRight: 10,
               }}>
               <Text style={{fontSize: 12, color: '#030303'}}>
                 {showAllEvents ? 'All Events' : 'My Events'}
               </Text>
+              <Ionicons
+                name="chevron-down-outline"
+                size={20}
+                color="black"
+                style={{position: 'absolute', right: 15, top: 8}}
+              />
+            </TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => setRegionVisible(true)}
+              style={{
+                flex: 1,
+                // alignItems: 'center',
+                borderWidth: 0.3,
+                paddingVertical: 10,
+                borderRadius: 10,
+                width: 100,
+                paddingLeft: 20,
+                borderColor: 'gray',
+                marginRight: 10,
+              }}>
+              <Text
+                style={{
+                  fontSize: 12,
+                  color: '#030303',
+                }}>
+                {region ? region : 'Region'}
+              </Text>
+              <Ionicons
+                name="chevron-down-outline"
+                size={20}
+                color="black"
+                style={{position: 'absolute', right: 15, top: 8}}
+              />
             </TouchableOpacity>
           </View>
           <View style={[styles.calendar, styles.shadowProp]}>
@@ -405,6 +449,64 @@ const EventCalendar = props => {
                     }}>
                     <Picker.Item label="All Events" value={true} />
                     <Picker.Item label="My Events" value={false} />
+                  </Picker>
+                </View>
+              </View>
+            </View>
+          </Modal>
+          <Modal transparent visible={regionVisible}>
+            <View
+              style={{
+                flex: 1,
+                backgroundColor: 'rgba(56,56,56,0.3)',
+                justifyContent: 'flex-end',
+              }}>
+              <View
+                style={{
+                  height: 300,
+                  backgroundColor: 'white',
+                  borderTopLeftRadius: 20,
+                  borderTopRightRadius: 20,
+                  padding: 20,
+                }}>
+                <TouchableOpacity
+                  activeOpacity={0.7}
+                  onPress={() => setRegionVisible(false)}
+                  style={{alignItems: 'flex-end'}}>
+                  <Text
+                    style={{
+                      padding: 15,
+                      fontSize: 18,
+                    }}>
+                    Done
+                  </Text>
+                </TouchableOpacity>
+                <View style={{marginBottom: 40}}>
+                  <Picker
+                    selectedValue={region}
+                    mode="dropdown"
+                    itemTextStyle={{fontSize: 12}}
+                    onValueChange={async itemValue => {
+                      setRegion(itemValue);
+
+                      //   await fetchAllUsers({
+                      //     s: searchKey,
+                      //     sort: sorting,
+                      //     expertise_areas: category,
+                      //     account: account,
+                      //     region: itemValue,
+                      //   });
+                    }}>
+                    {Object.keys(countries).map(key => {
+                      return (
+                        <Picker.Item
+                          label={countries[key]}
+                          value={countries[key]}
+                          key={key}
+                          style={{fontSize: 14}}
+                        />
+                      );
+                    })}
                   </Picker>
                 </View>
               </View>
@@ -534,6 +636,7 @@ const styles = StyleSheet.create({
     marginTop: 15,
     marginLeft: 20,
   },
+  dropdown: {},
   pickerWrapper: {
     display: 'flex',
     flexDirection: 'row',

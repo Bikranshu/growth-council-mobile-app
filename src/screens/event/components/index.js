@@ -30,6 +30,7 @@ import {
   GROWTH_COMMUNITY_ID,
   GROWTH_CONTENT_ID,
 } from '../../../constants';
+import {COMMUNITY_COLOR} from '../../../theme/colors';
 
 const Event = props => {
   const {
@@ -113,26 +114,28 @@ const Event = props => {
   const eventEndTime = moment(events?.event_end).format('h:mma ');
   const eventEndMonth = moment(events?.event_end).format('MMMM D dddd');
 
-  const GobalDate = moment(timeToDisplay).format('MMMM D, h:mma - ');
+  const GobalDate = moment(timeToDisplay).format('MMMM D, hh:mm a - ');
   const GobalStartMonth = moment(timeToDisplay).format('MMMM D');
 
-  const GobalEndTime = moment(timeToEnd).format('h:mma ');
+  const GobalEndTime = moment(timeToEnd).format('hh:mm a ');
   const GobalEndMonth = moment(timeToEnd).format('MMMM D');
 
   const comma = '/';
 
-  const backStartTimeStamp = events?.event_start;
-  const backEndTimeStamp = events?.event_end;
+  const backStartTimeStamp = moment(events?.event_start).format(
+    'YYYY-MM-DD hh:mm:ss zz',
+  );
+  const backEndTimeStamp = moment(events?.event_end).format(
+    'YYYY-MM-DD hh:mm:ss',
+  );
+  
   const deviceTimeZone = RNLocalize.getTimeZone();
-
-  const time = moment(events?.event_start).tz(deviceTimeZone).format();
 
   const today = moment().tz(deviceTimeZone);
 
-  console.log('a', timeToEnd);
-  console.log('b', timeToDisplay);
-
   const currentTimeZoneOffsetInHours = today.utcOffset() / 60;
+
+  console.log('currentTimeZoneOffsetInHours', currentTimeZoneOffsetInHours);
   useEffect(() => {
     const convertedToLocalTime = formatTimeByOffset(
       backStartTimeStamp,
@@ -141,13 +144,13 @@ const Event = props => {
     setTimeToDisplay(convertedToLocalTime);
   }, [events]);
 
-  useEffect(() => {
-    const convertedToLocalTimeEnd = formatTimeByOffset(
-      backEndTimeStamp,
-      currentTimeZoneOffsetInHours,
-    );
-    setTimeToEnd(convertedToLocalTimeEnd);
-  }, [events]);
+    // useEffect(() => {
+    //   const convertedToLocalTimeEnd = formatTimeByOffset(
+    //     backEndTimeStamp,
+    //     currentTimeZoneOffsetInHours,
+    //   );
+    //   setTimeToEnd(convertedToLocalTimeEnd);
+    // }, [events]);
 
   let title = '';
   const pillarname = events?.pillar_categories
@@ -174,6 +177,7 @@ const Event = props => {
         events?.pillar_categories[0]?.name;
       break;
   }
+
   return (
     <ScrollView style={styles.scrollBox}>
       <View style={styles.container}>
@@ -228,7 +232,7 @@ const Event = props => {
                     }}>
                     {/* <Text style={styles.eventDetails}>{GobalDate} /</Text> */}
                     <Text style={styles.eventDetails}>
-                      {GobalStartMonth === GobalEndMonth
+                      {/* {GobalStartMonth === GobalEndMonth
                         ? GobalDate + GobalEndTime
                         : GobalStartMonth +
                           GobalDate.split(/(\s+)/)[7] +
@@ -239,19 +243,57 @@ const Event = props => {
                       {deviceTimeZone.split('/')[1] +
                         comma +
                         deviceTimeZone.split('/')[0]}
-                      ) /{' '}
+                      ) /{' '} */}
                       {eventStartMonth === eventEndMonth
-                        ? eventDate + eventEndTime
+                        ? eventStartMonth
                         : eventStartMonth +
                           eventDate.split(/(\s+)/)[7] +
                           eventDate.split(/(\s+)/)[8] +
                           eventDate.split(/(\s+)/)[7] +
                           eventEndMonth}
-                      {eventDate.split(/(\s+)/)[5]}
+                      {/* {eventDate.split(/(\s+)/)[5]}
                       {events?.event_meta?.evo_event_timezone !== undefined
                         ? events?.event_meta?.evo_event_timezone
-                        : ''}
+                        : ''} */}
                     </Text>
+                    {eventStartMonth === eventEndMonth ? (
+                      <View style={{flexDirection: 'row'}}>
+                        <Text style={{fontSize: 12, marginLeft: 5}}>
+                          {eventDate.split(/(\s+)/)[6]}
+                          {eventDate.split(/(\s+)/)[7]}
+                          {eventDate.split(/(\s+)/)[8]}
+                          {eventDate.split(/(\s+)/)[7]}
+                          {eventEndTime}
+                        </Text>
+                        <Text
+                          style={{
+                            fontSize: 12,
+                            marginLeft: 5,
+                            color: COMMUNITY_COLOR,
+                          }}>
+                          Actual Time
+                        </Text>
+                      </View>
+                    ) : null}
+                    {GobalStartMonth === GobalEndMonth ? (
+                      <View style={{flexDirection: 'row'}}>
+                        <Text style={{fontSize: 12, marginLeft: 5}}>
+                          {GobalDate.split(/(\s+)/)[4]}
+                          {GobalDate.split(/(\s+)/)[5]}
+                          {GobalDate.split(/(\s+)/)[6]}
+                          {GobalDate.split(/(\s+)/)[5]}
+                          {GobalEndTime}
+                        </Text>
+                        <Text
+                          style={{
+                            fontSize: 12,
+                            marginLeft: 5,
+                            color: COMMUNITY_COLOR,
+                          }}>
+                          Local Time
+                        </Text>
+                      </View>
+                    ) : null}
                   </View>
                   {!eventStatus && (
                     <View
