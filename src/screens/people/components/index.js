@@ -55,7 +55,7 @@ const People = props => {
   const isFocused = useIsFocused();
   const [category, setCategory] = useState('');
   const [account, setAccount] = useState('');
-  const [region, setRegion] = useState('');
+  const [region, setRegion] = useState('APAC');
   const [searchKey, setSearchKey] = useState('');
   const [sorting, setSorting] = useState('ASC');
   const [memberConnection, setMemberConnection] = useState([]);
@@ -109,10 +109,9 @@ const People = props => {
   };
 
   const countries = {
-    Region: 'Region',
-    AMERICAS: 'AMERICAS',
     APAC: 'APAC',
     MEASA: 'MEASA',
+    AMERICAS: 'AMERICAS',
   };
 
   const pillar = {
@@ -455,7 +454,7 @@ const People = props => {
                 mode="dropdown"
                 itemTextStyle={{fontSize: 12}}
                 onValueChange={async itemValue => {
-                  setRegion( itemValue);
+                  setRegion(itemValue);
 
                   await fetchAllUsers({
                     s: searchKey,

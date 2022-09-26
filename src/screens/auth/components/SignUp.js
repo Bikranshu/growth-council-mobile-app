@@ -61,15 +61,6 @@ const SignUpForm = props => {
   const min = 1;
   const max = 100;
   const rand = min + Math.random() * (max - min);
-  const [regionVisible, setRegionVisible] = useState(false);
-  const [region, setRegion] = useState('');
-
-  const Region = {
-    Region: 'Region',
-    AMERICAS: 'AMERICAS',
-    APAC: 'APAC',
-    MEASA: 'MEASA',
-  };
 
   const {
     handleChange,
@@ -94,6 +85,7 @@ const SignUpForm = props => {
       phone: '',
       email: '',
       country: 'United States',
+      region: 'APAC',
       checked: false,
       firebase_password: uuid.v4(),
     },
@@ -154,7 +146,6 @@ const SignUpForm = props => {
 
   const [checked, setChecked] = React.useState(false);
 
-  const [country, setCountry] = useState('United States');
 
   const countries = [
     'Afghanistan',
@@ -355,7 +346,15 @@ const SignUpForm = props => {
     'Zimbabwe',
   ];
 
+  const Region = ['AMERICAS', 'APAC', 'MEASA'];
+
   const [isPickerVisible, setIsPickerVisible] = useState(false);
+
+  const [regionVisible, setRegionVisible] = useState(false);
+
+  const [region, setRegion] = useState('APAC');
+  const [country, setCountry] = useState('United States');
+
   const areAllFieldsFilled =
     values.first_name != '' &&
     values.last_name != '' &&
@@ -523,7 +522,7 @@ const SignUpForm = props => {
                         top: 12,
                         color: 'gray',
                       }}>
-                      {region ? region : 'Region'}
+                      {values.region ? values.region : 'Region'}
                     </Text>
                     <Ionicons
                       name="chevron-down-outline"
@@ -690,26 +689,21 @@ const SignUpForm = props => {
             <View style={{marginBottom: 40}}>
               <Picker
                 selectedValue={region}
-                mode="dropdown"
-                itemTextStyle={{fontSize: 12}}
-                onValueChange={async itemValue => {
-                  setRegion(itemValue);
-
-                  //   await fetchAllUsers({
-                  //     s: searchKey,
-                  //     sort: sorting,
-                  //     expertise_areas: category,
-                  //     account: account,
-                  //     region: itemValue,
-                  //   });
+                mode={'dropdown'}
+                // onValueChange={(itemValue, itemIndex) => setCountry(itemValue)}>
+                onValueChange={(itemValue, itemIndex) => {
+                  if (itemValue !== null) {
+                    setFieldValue('region', itemValue);
+                    setRegion(itemValue);
+                    setErrors({});
+                  }
                 }}>
-                {Object.keys(Region).map(key => {
+                {Region.map((value, index) => {
                   return (
                     <Picker.Item
-                      label={Region[key]}
-                      value={Region[key]}
-                      key={key}
-                      style={{fontSize: 14}}
+                      label={value}
+                      value={value}
+                      style={{fontSize: 12}}
                     />
                   );
                 })}

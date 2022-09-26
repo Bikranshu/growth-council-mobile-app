@@ -49,7 +49,9 @@ import DashboardScreen from '../screens/dashboard';
 import SessionCompleted from '../screens/coachingSession/component/sessionCompleted';
 import DrawerNavigation from '../navigations/DrawerNavigation';
 import Header from '../shared/header/header';
-import { GROWTH_COMMUNITY_ID } from '../constants';
+import CountryPopupScreen from '../screens/auth/components/CountryPopup';
+import {GROWTH_COMMUNITY_ID} from '../constants';
+
 
 const AppStack = () => (
   <Navigator>
@@ -112,6 +114,16 @@ const AppStack = () => (
         ),
       })}
     />
+    <Screen
+      name="CountryPop"
+      component={CountryPopupScreen}
+      options={({route, navigation}) => ({
+        headerShown: false,
+        ...TransitionPresets.RevealFromBottomAndroid,
+        gestureDirection: 'horizontal-inverted',
+      })}
+    />
+
     <Screen
       name="selfAssessment"
       component={SelfAssessment}

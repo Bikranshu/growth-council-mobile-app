@@ -17,17 +17,25 @@ import {JWT_TOKEN, API_URL, USER_NAME, USER_AVATAR} from '../../constants';
 
 export const AuthContext = createContext({});
 
-export const AuthProvider = ({children}) => {
+export const AuthProvider = props => {
+  const {navigation, children} = props;
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState(null);
   const [loggedIn, setLoggedIn] = useState(false);
   const [emailId, setEmailId] = useState('');
+  const [userCountry, setUserCountry] = useState();
 
   useEffect(() => {
     (async () => {
       const token = await getAsyncStorage(JWT_TOKEN);
       if (token) {
         setLoggedIn(true);
+        {
+          userCountry !== undefined && userCountry !== null
+            ? (setLoggedIn(true), navigation.navigate('Dashboard'))
+            : navigation.navigate('CountryPop');
+        }
+
         await isTokenExpired(token);
       } else {
         setLoggedIn(false);
@@ -43,13 +51,11 @@ export const AuthProvider = ({children}) => {
       await clearAsyncStorage(USER_NAME);
       await clearAsyncStorage(USER_AVATAR);
       setLoggedIn(false);
-
     } else if (decoded.exp < Date.now() / 1000) {
       await clearAsyncStorage(JWT_TOKEN);
       await clearAsyncStorage(USER_NAME);
       await clearAsyncStorage(USER_AVATAR);
       setLoggedIn(false);
-	  
     } else {
     }
   };
@@ -135,10 +141,12 @@ export const AuthProvider = ({children}) => {
               },
             );
 
+            setUserCountry(response?.data?.country);
+          
+            console.log('abcd', response?.data?.country);
             const messageToken = await messaging().getToken();
             await postToAPI(response.data.user_email, messageToken);
 
-			
             if (response.data.token) {
               await setAsyncStorage(
                 'tempData',

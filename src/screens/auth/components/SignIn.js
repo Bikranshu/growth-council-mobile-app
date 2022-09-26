@@ -1,4 +1,4 @@
-import React, {useCallback, useState, useRef} from 'react';
+import React, {useCallback, useState, useEffect} from 'react';
 import {
   StyleSheet,
   Text,
@@ -35,25 +35,29 @@ const signInSchema = Yup.object().shape({
 });
 
 const SignInForm = props => {
-  const {navigation} = props;
-
-  const navigationRef = useRef();
-  const routeNameRef = useRef();
+  const {
+    navigation,
+    profile,
+    profileLoading,
+    profileError,
+    fetchProfile,
+    cleanProfile,
+    userLoading,
+    updateUser,
+  } = props;
 
   const [hidePass, setHidePass] = useState(true);
+  const [userProfile, setUserProfile] = useState(false);
 
-  const {loading, setLoading, message, setMessage, signIn} =
+  const {loading, setLoading, message, setMessage, signIn, userCountry} =
     useAuthentication();
 
-  const [regionVisible, setRegionVisible] = useState(false);
-  const [region, setRegion] = useState('');
-
-  const countries = {
-    Region: 'Region',
-    AMERICAS: 'AMERICAS',
-    APAC: 'APAC',
-    MEASA: 'MEASA',
-  };
+  useEffect(() => {
+    const fetchProfileAsync = async () => {
+      await fetchProfile();
+    };
+    fetchProfileAsync();
+  }, []);
 
   const {
     handleChange,
@@ -68,6 +72,26 @@ const SignInForm = props => {
     initialValues: {username: '', password: ''},
     onSubmit: async values => {
       await signIn(values);
+      {
+        userCountry !== undefined && userCountry !== null
+          ? (setLoggedIn(true), navigation.navigate('Dashboard'))
+          : navigation.navigate('CountryPop', {
+              profile: profile,
+              updateUser: updateUser,
+              userLoading: userLoading,
+              navigation: navigation,
+            });
+      }
+      //   if (userCountry === null || userCountry === undefined) {
+      //     navigation.navigate('CountryPop', {
+      //       profile: profile,
+      //       updateUser: updateUser,
+      //       userLoading: userLoading,
+      //       navigation: navigation,
+      //     });
+      //   } else if (userCountry !== null || userCountry !== undefined) {
+      //     navigation.navigate('Dashboard');
+      //   }
     },
   });
 
@@ -235,65 +259,6 @@ const SignInForm = props => {
           </View>
         </ImageBackground>
       </View>
-
-      {/* <Modal transparent visible={regionVisible}>
-        <View
-          style={{
-            flex: 1,
-            backgroundColor: 'rgba(56,56,56,0.3)',
-            justifyContent: 'flex-end',
-          }}>
-          <View
-            style={{
-              height: 300,
-              backgroundColor: 'white',
-              borderTopLeftRadius: 20,
-              borderTopRightRadius: 20,
-              padding: 20,
-            }}>
-            <TouchableOpacity
-              activeOpacity={0.7}
-              onPress={() => setRegionVisible(false)}
-              style={{alignItems: 'flex-end'}}>
-              <Text
-                style={{
-                  padding: 15,
-                  fontSize: 18,
-                }}>
-                Done
-              </Text>
-            </TouchableOpacity>
-            <View style={{marginBottom: 40}}>
-              <Picker
-                selectedValue={region}
-                mode="dropdown"
-                itemTextStyle={{fontSize: 12}}
-                onValueChange={async itemValue => {
-                  setRegion(itemValue);
-
-                  //   await fetchAllUsers({
-                  //     s: searchKey,
-                  //     sort: sorting,
-                  //     expertise_areas: category,
-                  //     account: account,
-                  //     region: itemValue,
-                  //   });
-                }}>
-                {Object.keys(countries).map(key => {
-                  return (
-                    <Picker.Item
-                      label={countries[key]}
-                      value={countries[key]}
-                      key={key}
-                      style={{fontSize: 14}}
-                    />
-                  );
-                })}
-              </Picker>
-            </View>
-          </View>
-        </View>
-      </Modal> */}
     </ScrollView>
   );
 };

@@ -114,10 +114,10 @@ const Event = props => {
   const eventEndTime = moment(events?.event_end).format('h:mma ');
   const eventEndMonth = moment(events?.event_end).format('MMMM D dddd');
 
-  const GobalDate = moment(timeToDisplay).format('MMMM D, hh:mm a - ');
+  const GobalDate = moment(timeToDisplay).format('MMMM D, hh:mma - ');
   const GobalStartMonth = moment(timeToDisplay).format('MMMM D');
 
-  const GobalEndTime = moment(timeToEnd).format('hh:mm a ');
+  const GobalEndTime = moment(timeToEnd).format('hh:mma ');
   const GobalEndMonth = moment(timeToEnd).format('MMMM D');
 
   const comma = '/';
@@ -128,7 +128,7 @@ const Event = props => {
   const backEndTimeStamp = moment(events?.event_end).format(
     'YYYY-MM-DD hh:mm:ss',
   );
-  
+
   const deviceTimeZone = RNLocalize.getTimeZone();
 
   const today = moment().tz(deviceTimeZone);
@@ -144,13 +144,13 @@ const Event = props => {
     setTimeToDisplay(convertedToLocalTime);
   }, [events]);
 
-    // useEffect(() => {
-    //   const convertedToLocalTimeEnd = formatTimeByOffset(
-    //     backEndTimeStamp,
-    //     currentTimeZoneOffsetInHours,
-    //   );
-    //   setTimeToEnd(convertedToLocalTimeEnd);
-    // }, [events]);
+  useEffect(() => {
+    const convertedToLocalTimeEnd = formatTimeByOffset(
+      backEndTimeStamp,
+      currentTimeZoneOffsetInHours,
+    );
+    setTimeToEnd(convertedToLocalTimeEnd);
+  }, [events]);
 
   let title = '';
   const pillarname = events?.pillar_categories
@@ -271,7 +271,9 @@ const Event = props => {
                             marginLeft: 5,
                             color: COMMUNITY_COLOR,
                           }}>
-                          Actual Time
+                          {events?.event_meta?.evo_event_timezone !== undefined
+                            ? events?.event_meta?.evo_event_timezone
+                            : ''}
                         </Text>
                       </View>
                     ) : null}
@@ -290,7 +292,10 @@ const Event = props => {
                             marginLeft: 5,
                             color: COMMUNITY_COLOR,
                           }}>
-                          Local Time
+                          {deviceTimeZone.split('/')[1] +
+                            comma +
+                            deviceTimeZone.split('/')[0]}
+                          
                         </Text>
                       </View>
                     ) : null}

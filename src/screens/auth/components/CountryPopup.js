@@ -11,22 +11,83 @@ import {
   Modal,
 } from 'react-native';
 import {Button} from 'native-base';
-import HTMLView from 'react-native-htmlview';
+
 import Loading from '../../../shared/loading';
 import {useFormik} from 'formik';
 import {Picker} from '@react-native-picker/picker';
-import uuid from 'react-native-uuid';
+
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import {CommonStyles, Colors, Typography} from '../../../theme';
 import {style} from '@mui/system';
+
 const screenHeight = Math.round(Dimensions.get('window').height);
 
-const CountryConfirmationScreen = props => {
+const CountryPopup = props => {
   const {navigation, route} = props;
 
   const [isPickerVisible, setIsPickerVisible] = useState(false);
+  const [regionVisible, setRegionVisible] = useState(false);
 
+  const [region, setRegion] = useState(countryRegion);
   const [country, setCountry] = useState('United States');
+  const [countryRegion, setCountryRegion] = useState('');
+
+  const profile = route?.params?.profile;
+  const userLoading = route?.params?.userLoading;
+  const updateUser = route?.params?.updateUser;
+
+  let title = profile?.user_meta?.title;
+  if (typeof title === 'undefined') {
+    title = ' ';
+  } else {
+    title = profile?.user_meta?.title[0];
+  }
+
+  let company = profile?.user_meta?.company;
+  if (typeof company === 'undefined') {
+    company = ' ';
+  } else {
+    company = profile?.user_meta?.company[0];
+  }
+
+  let Location = profile?.user_meta?.Location;
+  if (typeof Location === 'undefined') {
+    Location = ' ';
+  } else {
+    Location = profile?.user_meta?.Location[0];
+  }
+
+  let favorite_quote = profile?.user_meta?.favorite_quote;
+  if (typeof favorite_quote === 'undefined') {
+    favorite_quote = ' ';
+  } else {
+    favorite_quote = profile?.user_meta?.favorite_quote[0];
+  }
+
+  let professional_summary = profile?.user_meta?.professional_summary;
+  if (typeof professional_summary === 'undefined') {
+    professional_summary = ' ';
+  } else {
+    professional_summary = profile?.user_meta?.professional_summary[0];
+  }
+
+  let initatives = profile?.user_meta?.initatives;
+  if (typeof initatives === 'undefined') {
+    initatives = ' ';
+  } else {
+    initatives = profile?.user_meta?.initatives[0];
+  }
+
+  let insights = profile?.user_meta?.insights;
+  if (typeof insights === 'undefined') {
+    insights = ' ';
+  } else {
+    insights = profile?.user_meta?.insights[0];
+  }
+
+  let expertise_areas1 = profile?.expertise_areas1
+    ? profile?.expertise_areas1
+    : [];
 
   const {
     handleChange,
@@ -39,11 +100,20 @@ const CountryConfirmationScreen = props => {
     isValid,
     setFieldValue,
   } = useFormik({
+    enableReinitialize: true,
     initialValues: {
-      country: 'United States',
+      title: title,
+      company: company,
+      email: profile?.user_email,
+      Location: Location,
+      favorite_quote: favorite_quote,
+      expertise_areas1: expertise_areas1,
+      professional_summary: professional_summary,
+      country: country,
+      region: countryRegion,
     },
     onSubmit: async values => {
-      await registerCustomer(values).then(response => {
+      await updateUser(values).then(async response => {
         if (response?.payload?.code === 200) {
           console.log('response', response);
           navigation.navigate('Dashboard');
@@ -251,6 +321,201 @@ const CountryConfirmationScreen = props => {
     'Zimbabwe',
   ];
 
+  const Region = ['AMERICAS', 'APAC', 'MEASA'];
+
+  const Apac = [
+    'Afghanistan',
+    'Albania',
+    'Algeria',
+    'Andorra',
+    'Angola',
+    'Antigua & Deps',
+    'Argentina',
+    'Armenia',
+    'Australia',
+    'Austria',
+    'Azerbaijan',
+    'Bahamas',
+    'Bahrain',
+    'Bangladesh',
+    'Barbados',
+    'Belarus',
+    'Belgium',
+    'Belize',
+    'Benin',
+    'Bhutan',
+    'Bolivia',
+    'Bosnia Herzegovina',
+    'Botswana',
+    'Brazil',
+    'Brunei',
+    'Bulgaria',
+    'Burkina',
+    'Burundi',
+    'Cambodia',
+    'Cameroon',
+    'Canada',
+    'Cape Verde',
+    'Central African Rep',
+    'Chad',
+    'Chile',
+    'China',
+    'Colombia',
+    'Comoros',
+    'Congo',
+    'Costa Rica',
+    'Croatia',
+    'Cuba',
+    'Cyprus',
+    'Czech Republic',
+    'Denmark',
+    'Djibouti',
+    'Dominica',
+    'Dominican Republic',
+    'Nepal',
+    'India',
+    'Sri Lanka',
+    'Maldives',
+  ];
+
+  const measa = [
+    'Gabon',
+    'Gambia',
+    'Georgia',
+    'Germany',
+    'Ghana',
+    'Greece',
+    'Grenada',
+    'Guatemala',
+    'Guinea',
+    'Guinea-Bissau',
+    'Guyana',
+    'Haiti',
+    'Honduras',
+    'Hungary',
+    'Iceland',
+    'Indonesia',
+    'Iran',
+    'Iraq',
+    'Ireland {Republic}',
+    'Israel',
+    'Italy',
+    'Ivory Coast',
+    'Jamaica',
+    'Japan',
+    'Jordan',
+    'Kazakhstan',
+    'Kenya',
+    'Kiribati',
+    'Korea North',
+    'Korea South',
+    'Kosovo',
+    'Kuwait',
+    'Kyrgyzstan',
+    'Laos',
+    'Latvia',
+    'Lebanon',
+    'Lesotho',
+    'Liberia',
+    'Libya',
+    'Liechtenstein',
+    'Lithuania',
+    'Luxembourg',
+    'Macedonia',
+    'Madagascar',
+    'Malawi',
+    'Malaysia',
+    'Maldives',
+    'Mali',
+    'Malta',
+    'Marshall Islands',
+    'Mauritania',
+    'Mauritius',
+    'Mexico',
+    'Micronesia',
+    'Moldova',
+    'Monaco',
+    'Mongolia',
+    'Montenegro',
+    'Morocco',
+    'Mozambique',
+    'Myanmar, {Burma}',
+    'Namibia',
+    'Nauru',
+    'Netherlands',
+    'New Zealand',
+    'Nicaragua',
+    'Niger',
+    'Nigeria',
+    'Norway',
+    'Oman',
+    'Pakistan',
+    'Palau',
+    'Panama',
+    'Papua New Guinea',
+    'Paraguay',
+    'Peru',
+    'Philippines',
+    'Poland',
+    'Portugal',
+    'Qatar',
+    'Romania',
+    'Russian Federation',
+    'Rwanda',
+    'St Kitts & Nevis',
+    'St Lucia',
+    'Saint Vincent & the Grenadines',
+    'Samoa',
+    'San Marino',
+    'Sao Tome & Principe',
+    'Saudi Arabia',
+    'Senegal',
+    'Serbia',
+    'Seychelles',
+    'Sierra Leone',
+    'Singapore',
+    'Slovakia',
+    'Slovenia',
+    'Solomon Islands',
+    'Somalia',
+    'South Africa',
+    'South Sudan',
+    'Spain',
+    'Sudan',
+    'Suriname',
+    'Swaziland',
+    'Sweden',
+    'Switzerland',
+    'Syria',
+    'Taiwan',
+    'Tajikistan',
+    'Tanzania',
+    'Thailand',
+    'Togo',
+    'Tonga',
+    'Trinidad & Tobago',
+    'Tunisia',
+    'Turkey',
+    'Turkmenistan',
+    'Tuvalu',
+    'Uganda',
+    'Ukraine',
+    'United Arab Emirates',
+    'United Kingdom',
+    'Uruguay',
+    'Uzbekistan',
+    'Vanuatu',
+    'Vatican City',
+    'Venezuela',
+    'Vietnam',
+    'Yemen',
+    'Zambia',
+    'Zimbabwe',
+  ];
+
+  const america = ['United States'];
+
+  console.log('country', countryRegion, country);
   return (
     <ScrollView
       contentContainerStyle={{flexGrow: 1, height: screenHeight + 100}}>
@@ -258,7 +523,16 @@ const CountryConfirmationScreen = props => {
         <ImageBackground
           source={require('../../../assets/img/splash-screen.png')}
           resizeMode="cover">
-          <View style={{height: '15%'}} />
+          <Ionicons
+            name={'arrow-back'}
+            size={70}
+            color={'white'}
+            style={{
+              position: Platform.OS === 'ios' ? 'absolute' : 'relative',
+            }}
+            onPress={() => navigation.navigate('SignIn')}
+          />
+          <View style={{height: '5%'}} />
 
           <View>
             <View style={styles.content}>
@@ -287,8 +561,36 @@ const CountryConfirmationScreen = props => {
                     paddingLeft: 20,
                   }}>
                   <Text style={{fontWeight: 'bold', color: 'gray'}}>
-                    {values.country ? values.country : 'Select a Country'}
+                    {country}
                   </Text>
+                </TouchableOpacity>
+              </View>
+              {userLoading && <Loading />}
+              <View>
+                <Text style={{color: 'black', marginTop: 10}}>Your Region</Text>
+                <TouchableOpacity onPress={() => setRegionVisible(true)}>
+                  <View
+                    style={{
+                      borderRadius: 5,
+                      borderWidth: 0.5,
+                      overflow: 'hidden',
+                      height: 50,
+                      marginTop: 10,
+                      marginRight: 20,
+                      marginBottom: 10,
+                      justifyContent: 'center',
+                      paddingLeft: 20,
+                    }}>
+                    <Text
+                      style={{
+                        position: 'absolute',
+                        left: 20,
+                        top: 12,
+                        color: 'gray',
+                      }}>
+                      {values.region ? values.region : 'Region'}
+                    </Text>
+                  </View>
                 </TouchableOpacity>
               </View>
 
@@ -362,10 +664,74 @@ const CountryConfirmationScreen = props => {
                   if (itemValue !== null) {
                     setFieldValue('country', itemValue);
                     setCountry(itemValue);
+
                     setErrors({});
+                    setCountryRegion(
+                      Apac.indexOf(itemValue) > -1 !== false
+                        ? 'APAC'
+                        : measa.indexOf(itemValue) > -1 !== false
+                        ? 'MEASA'
+                        : america.indexOf(itemValue) > -1 !== false
+                        ? 'AMERICAS'
+                        : null,
+                    );
                   }
                 }}>
                 {countries.map((value, index) => {
+                  return (
+                    <Picker.Item
+                      label={value}
+                      value={value}
+                      style={{fontSize: 12}}
+                    />
+                  );
+                })}
+              </Picker>
+            </View>
+          </View>
+        </View>
+      </Modal>
+
+      <Modal transparent visible={regionVisible}>
+        <View
+          style={{
+            flex: 1,
+            backgroundColor: 'rgba(56,56,56,0.3)',
+            justifyContent: 'flex-end',
+          }}>
+          <View
+            style={{
+              height: 300,
+              backgroundColor: 'white',
+              borderTopLeftRadius: 20,
+              borderTopRightRadius: 20,
+              padding: 20,
+            }}>
+            <TouchableOpacity
+              activeOpacity={0.7}
+              onPress={() => setRegionVisible(false)}
+              style={{alignItems: 'flex-end'}}>
+              <Text
+                style={{
+                  padding: 15,
+                  fontSize: 18,
+                }}>
+                Done
+              </Text>
+            </TouchableOpacity>
+            <View style={{marginBottom: 40}}>
+              <Picker
+                selectedValue={region}
+                mode={'dropdown'}
+                // onValueChange={(itemValue, itemIndex) => setCountry(itemValue)}>
+                onValueChange={(itemValue, itemIndex) => {
+                  if (itemValue !== null) {
+                    setFieldValue('region', itemValue);
+                    setRegion(itemValue);
+                    setErrors({});
+                  }
+                }}>
+                {Region.map((value, index) => {
                   return (
                     <Picker.Item
                       label={value}
@@ -461,4 +827,5 @@ const styles = StyleSheet.create({
     zIndex: 1011,
   },
 });
-export default CountryConfirmationScreen;
+
+export default CountryPopup;

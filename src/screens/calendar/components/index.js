@@ -50,10 +50,10 @@ const EventCalendar = props => {
   const [region, setRegion] = useState('');
 
   const countries = {
-    Region: 'Region',
-    AMERICAS: 'AMERICAS',
-    APAC: 'APAC',
-    MEASA: 'MEASA',
+    // Region: 'Region',
+    AMERICAS: 'north-america',
+    APAC: 'apac',
+    MEASA: 'measa',
   };
 
   //   const [markedDay, setMarkedDay] = useState([]);
@@ -64,6 +64,7 @@ const EventCalendar = props => {
         year: moment().format('YYYY'),
         month: moment().format('MM'),
         all_events: showAllEvents,
+        region: region,
       })
         .then(response => {
           if (response?.payload?.code === 200) {
@@ -363,6 +364,7 @@ const EventCalendar = props => {
                   year: moment(month?.dateString).format('YYYY'),
                   month: moment(month?.dateString).format('MM'),
                   all_events: showAllEvents,
+                  region: region,
                 })
                   .then(response => {
                     if (response?.payload?.code === 200) {
@@ -431,6 +433,7 @@ const EventCalendar = props => {
                         year: calendarYear,
                         month: calendarMonth,
                         all_events: itemValue,
+                        region: region,
                       })
                         .then(response => {
                           if (response?.payload?.code === 200) {
@@ -489,13 +492,12 @@ const EventCalendar = props => {
                     onValueChange={async itemValue => {
                       setRegion(itemValue);
 
-                      //   await fetchAllUsers({
-                      //     s: searchKey,
-                      //     sort: sorting,
-                      //     expertise_areas: category,
-                      //     account: account,
-                      //     region: itemValue,
-                      //   });
+                      await fetchAllCalendarEvent({
+                        year: calendarYear,
+                        month: calendarMonth,
+                        all_events: itemValue,
+                        region: itemValue,
+                      });
                     }}>
                     {Object.keys(countries).map(key => {
                       return (
