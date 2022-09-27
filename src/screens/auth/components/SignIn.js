@@ -1,4 +1,4 @@
-import React, {useCallback, useState, useRef} from 'react';
+import React, {useCallback, useState, useEffect} from 'react';
 import {
   StyleSheet,
   Text,
@@ -8,6 +8,7 @@ import {
   Dimensions,
   ImageBackground,
   Image,
+  Modal,
 } from 'react-native';
 
 import {Button} from 'native-base';
@@ -15,6 +16,7 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import {useFormik} from 'formik';
 import * as Yup from 'yup';
 import {BubblesLoader} from 'react-native-indicator';
+import {Picker} from '@react-native-picker/picker';
 import {
   useFocusEffect,
   NavigationContainer,
@@ -33,15 +35,36 @@ const signInSchema = Yup.object().shape({
 });
 
 const SignInForm = props => {
-  const {navigation} = props;
-
-  const navigationRef = useRef();
-  const routeNameRef = useRef();
+  const {
+    navigation,
+    profile,
+    profileLoading,
+    profileError,
+    fetchProfile,
+    cleanProfile,
+    userLoading,
+    updateUser,
+  } = props;
 
   const [hidePass, setHidePass] = useState(true);
+  const [userProfile, setUserProfile] = useState(false);
 
-  const {loading, setLoading, message, setMessage, signIn} =
-    useAuthentication();
+  const {
+    loading,
+    setLoading,
+    message,
+    setMessage,
+    signIn,
+    userCountry,
+    setLoggedIn,
+  } = useAuthentication();
+
+  useEffect(() => {
+    const fetchProfileAsync = async () => {
+      await fetchProfile();
+    };
+    fetchProfileAsync();
+  }, []);
 
   const {
     handleChange,
@@ -56,6 +79,16 @@ const SignInForm = props => {
     initialValues: {username: '', password: ''},
     onSubmit: async values => {
       await signIn(values);
+    //   {
+    //     userCountry === undefined && userCountry === null
+    //       ? navigation.navigate('CountryPop', {
+    //           profile: profile,
+    //           updateUser: updateUser,
+    //           userLoading: userLoading,
+    //           navigation: navigation,
+    //         })
+    //       : (setLoggedIn(true), navigation.navigate('Dashboard'));
+    //   }
     },
   });
 
@@ -76,60 +109,59 @@ const SignInForm = props => {
   );
 
   return (
-   
-      <ScrollView
-        contentContainerStyle={{flexGrow: 1, height: screenHeight + 100}}>
-        <View style={styles.container}>
-          <ImageBackground
-            source={require('../../../assets/img/splash-screen.png')}
-            resizeMode="cover">
-            <View style={{height: '15%'}} />
+    <ScrollView
+      contentContainerStyle={{flexGrow: 1, height: screenHeight + 100}}>
+      <View style={styles.container}>
+        <ImageBackground
+          source={require('../../../assets/img/splash-screen.png')}
+          resizeMode="cover">
+          <View style={{height: '15%'}} />
 
-            <View>
-              <View style={styles.content}>
-                <View style={styles.header}>
-                  <Image
-                    style={{width: '80%'}}
-                    source={require('../../../assets/img/GILCouncil.jpg')}
-                    resizeMode="contain"
-                  />
-                </View>
-                <View style={{marginTop: 10}}>
-                  <Text style={styles.headingText1}>
-                    Growth Innovation
-                    {'\n'}
-                    Leadership Council
+          <View>
+            <View style={styles.content}>
+              <View style={styles.header}>
+                <Image
+                  style={{width: '80%'}}
+                  source={require('../../../assets/img/GILCouncil.jpg')}
+                  resizeMode="contain"
+                />
+              </View>
+              <View style={{marginTop: 10}}>
+                <Text style={styles.headingText1}>
+                  Growth Innovation
+                  {'\n'}
+                  Leadership Council
+                </Text>
+                <Text>
+                  {'\n'}
+                  Login to your account below.
+                </Text>
+              </View>
+
+              <View style={styles.body}>
+                {loading && (
+                  <View style={styles.loading1}>
+                    <BubblesLoader
+                      color={Colors.SECONDARY_TEXT_COLOR}
+                      size={60}
+                    />
+                  </View>
+                )}
+                <FlatTextInput
+                  label="Email or Username*"
+                  value={values.username}
+                  onChangeText={handleChange('username')}
+                  onFocus={handleBlur('username')}
+                  error={errors.username}
+                  touched={touched.username}
+                  autoCapitalize="none"
+                />
+                {errors.username && (
+                  <Text style={{fontSize: 10, color: 'red'}}>
+                    {errors.username}
                   </Text>
-                  <Text>
-                    {'\n'}
-                    Login to your account below.
-                  </Text>
-                </View>
-
-                <View style={styles.body}>
-                  {loading && (
-                    <View style={styles.loading1}>
-                      <BubblesLoader
-                        color={Colors.SECONDARY_TEXT_COLOR}
-                        size={60}
-                      />
-                    </View>
-                  )}
-                  <FlatTextInput
-                    label="Email or Username*"
-                    value={values.username}
-                    onChangeText={handleChange('username')}
-                    onFocus={handleBlur('username')}
-                    error={errors.username}
-                    touched={touched.username}
-                    autoCapitalize="none"
-                  />
-                  {errors.username && (
-                    <Text style={{fontSize: 10, color: 'red'}}>
-                      {errors.username}
-                    </Text>
-                  )}
-
+                )}
+                <View>
                   <FlatTextInput
                     label="Password *"
                     value={values.password}
@@ -157,73 +189,74 @@ const SignInForm = props => {
                     onPress={() => setHidePass(!hidePass)}
                     style={{
                       position: 'absolute',
-                      bottom: 20,
+                      top: 15,
                       right: 15,
                     }}
                   />
                 </View>
-                {!message?.success && (
-                  <View style={styles.message}>
-                    <Text style={styles.errorText}>{message?.message}</Text>
-                  </View>
-                )}
+              </View>
+              {!message?.success && (
+                <View style={styles.message}>
+                  <Text style={styles.errorText}>{message?.message}</Text>
+                </View>
+              )}
 
-                <View style={styles.loginButtonWrapper}>
-                  <Button
-                    style={[
-                      !areAllFieldsFilled
-                        ? styles.loginButton1
-                        : styles.loginButton,
-                      loading && {backgroundColor: 'grey'},
-                    ]}
-                    onPress={handleSubmit}
-                    disabled={!areAllFieldsFilled || loading}>
-                    <Text style={styles.loginButtonText}>Sign In</Text>
-                  </Button>
-                </View>
-                <View style={styles.forgotButtonWrapper}>
-                  <TouchableOpacity>
-                    <Text
-                      style={styles.forgotButtonText}
-                      onPress={() => navigation.navigate('Forgot')}>
-                      Reset Password?
-                    </Text>
-                  </TouchableOpacity>
-                </View>
-                <View style={styles.signuptext}>
-                  <Text>Join Growth Innovation Leadership Council</Text>
-                  <Text
-                    style={{color: '#31ade5', fontWeight: '700'}}
-                    onPress={() => navigation.navigate('SignUp')}>
-                    {' '}
-                    Sign Up{' '}
-                  </Text>
-                </View>
-                <View
+              <View style={styles.loginButtonWrapper}>
+                <Button
                   style={[
-                    styles.signuptext,
-                    {marginTop: Platform.OS === 'ios' ? 40 : 80},
-                  ]}>
-                  {/* <Ionicons name="help-circle-outline" size={20} color={'#31ade5'}/> */}
-                  <Text>Need Help? </Text>
+                    !areAllFieldsFilled
+                      ? styles.loginButton1
+                      : styles.loginButton,
+                    loading && {backgroundColor: 'grey'},
+                  ]}
+                  onPress={handleSubmit}
+                  disabled={!areAllFieldsFilled || loading}>
+                  <Text style={styles.loginButtonText}>Sign In</Text>
+                </Button>
+              </View>
+              <View style={styles.forgotButtonWrapper}>
+                <TouchableOpacity>
                   <Text
-                    style={{color: '#31ade5', fontWeight: '700'}}
-                    onPress={async () => {
-						navigation.navigate('Email', {
-						  title: 'Account Assistance',
-						});
-						await analytics().logEvent('signinEmail', {
-						  item: 'click email button from login page',
-						});
-					  }}>
-                    Contact Us
+                    style={styles.forgotButtonText}
+                    onPress={() => navigation.navigate('Forgot')}>
+                    Reset Password?
                   </Text>
-                </View>
+                </TouchableOpacity>
+              </View>
+              <View style={styles.signuptext}>
+                <Text>Join Growth Innovation Leadership Council</Text>
+                <Text
+                  style={{color: '#31ade5', fontWeight: '700'}}
+                  onPress={() => navigation.navigate('SignUp')}>
+                  {' '}
+                  Sign Up{' '}
+                </Text>
+              </View>
+              <View
+                style={[
+                  styles.signuptext,
+                  {marginTop: Platform.OS === 'ios' ? 40 : 80},
+                ]}>
+                {/* <Ionicons name="help-circle-outline" size={20} color={'#31ade5'}/> */}
+                <Text>Need Help? </Text>
+                <Text
+                  style={{color: '#31ade5', fontWeight: '700'}}
+                  onPress={async () => {
+                    navigation.navigate('Email', {
+                      title: 'Account Assistance',
+                    });
+                    await analytics().logEvent('signinEmail', {
+                      item: 'click email button from login page',
+                    });
+                  }}>
+                  Contact Us
+                </Text>
               </View>
             </View>
-          </ImageBackground>
-        </View>
-      </ScrollView>
+          </View>
+        </ImageBackground>
+      </View>
+    </ScrollView>
   );
 };
 
@@ -309,6 +342,27 @@ const styles = StyleSheet.create({
 
   signuptext: {
     flexDirection: 'row',
+  },
+  dropdown: {
+    justifyContent: 'center',
+    borderRadius: 10,
+    paddingVertical: 5,
+    height: 50,
+    borderWidth: 0.3,
+    marginTop: 10,
+    flexDirection: 'row',
+    shadowColor: '#000',
+  },
+  shadowProp: {
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+
+    elevation: 5,
   },
 
   loading1: {

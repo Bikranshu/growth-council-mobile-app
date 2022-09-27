@@ -90,6 +90,7 @@ import radarReducer from '../screens/details/slice/radarSlice';
 import termsReducer from '../screens/terms/component/termsSlice';
 import getIdReducer from '../screens/details/slice/getIdBySlug';
 import coachingSignupReducer from '../screens/details/slice/coachingSignupSlice';
+import regionEventsReducer from '../screens/dashboard/slice/eventByRegionSlice';
 
 const persistConfig = {
   key: 'root',
@@ -163,6 +164,7 @@ const reducers = combineReducers({
   terms: termsReducer,
   getSlug: getIdReducer,
   coachingSignup: coachingSignupReducer,
+  regionEvents: regionEventsReducer,
 });
 
 const persistedReducer = persistReducer(persistConfig, reducers);

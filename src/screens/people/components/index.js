@@ -55,7 +55,7 @@ const People = props => {
   const isFocused = useIsFocused();
   const [category, setCategory] = useState('');
   const [account, setAccount] = useState('');
-  const [region, setRegion] = useState('');
+  const [region, setRegion] = useState('APAC');
   const [searchKey, setSearchKey] = useState('');
   const [sorting, setSorting] = useState('ASC');
   const [memberConnection, setMemberConnection] = useState([]);
@@ -109,10 +109,9 @@ const People = props => {
   };
 
   const countries = {
-    Region: 'Region',
-    AMERICAS: 'AMERICAS',
     APAC: 'APAC',
     MEASA: 'MEASA',
+    AMERICAS: 'AMERICAS',
   };
 
   const pillar = {
@@ -154,13 +153,13 @@ const People = props => {
           </View>
           {!memberConnection[index]?.connection && (
             <TouchableOpacity
-              onPress={async() => {
-				connectMemberByMemberID(item.ID, index);
-				await analytics().logEvent('Member', {
-					item:item?.user_meta?.first_name,
-					description: 'Member Connection'
-				  });
-				}}>
+              onPress={async () => {
+                connectMemberByMemberID(item.ID, index);
+                await analytics().logEvent('Member', {
+                  item: item?.user_meta?.first_name,
+                  description: 'Member Connection',
+                });
+              }}>
               <Ionicons
                 name="add-circle"
                 size={30}
@@ -215,7 +214,6 @@ const People = props => {
                   region: region,
                 });
               }}
-
             />
           </View>
           <View style={styles.iconWrapper}>

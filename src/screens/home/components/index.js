@@ -80,7 +80,6 @@ const Home = props => {
             source={require('../../../assets/img/GILCouncil.jpg')}
             resizeMode="contain"
           />
-        
         </View>
         <View styyle={styles.sliderView}>
           {!pillarSliderLoading ? (

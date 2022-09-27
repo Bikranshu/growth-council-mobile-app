@@ -74,6 +74,18 @@ const HomeCommunity = props => {
     memberConnectionError,
     connectMemberByIdentifier,
     cleanConnectMember,
+
+    regionEvents,
+    regionEventLoading,
+    regionEventError,
+    fetchEventRegion,
+    cleanEventRegion,
+
+    profile,
+    profileLoading,
+    profileError,
+    fetchProfile,
+    cleanProfile,
   } = props;
 
   const pillarId = GROWTH_COMMUNITY_ID;
@@ -82,6 +94,23 @@ const HomeCommunity = props => {
 
   const [memberConnection, setMemberConnection] = useState([]);
 
+  useEffect(() => {
+    fetchProfile();
+  }, []);
+
+  useFocusEffect(
+    useCallback(() => {
+      fetchEventRegion({
+        region: profile?.user_meta?.region[0],
+      });
+      return () => {
+        cleanEventRegion();
+      };
+    }, []),
+  );
+
+  console.log('profile', profile?.user_meta?.region[0]);
+  
   useFocusEffect(
     useCallback(() => {
       const fetchAllPillarPOEAsync = async () => {
@@ -95,18 +124,18 @@ const HomeCommunity = props => {
     }, []),
   );
 
-  useFocusEffect(
-    useCallback(() => {
-      const fetchAllPillarEventAsync = async () => {
-        await fetchAllPillarEvent(pillarId);
-      };
-      fetchAllPillarEventAsync();
+  //   useFocusEffect(
+  //     useCallback(() => {
+  //       const fetchAllPillarEventAsync = async () => {
+  //         await fetchAllPillarEvent(pillarId);
+  //       };
+  //       fetchAllPillarEventAsync();
 
-      return () => {
-        cleanPillarEvent();
-      };
-    }, []),
-  );
+  //       return () => {
+  //         cleanPillarEvent();
+  //       };
+  //     }, []),
+  //   );
 
   useFocusEffect(
     useCallback(() => {
@@ -482,9 +511,9 @@ const HomeCommunity = props => {
         showsVerticalScrollIndicator={false}
         style={{backgroundColor: Colors.PRIMARY_BACKGROUND_COLOR}}>
         <View style={styles.container}>
-          {pillarEvents?.length !== 0 &&
-            pillarEvents !== null &&
-            pillarEvents !== false && (
+          {regionEvents?.length !== 0 &&
+            regionEvents !== null &&
+            regionEvents !== false && (
               <View style={styles.top}>
                 <Text style={styles.title}>Growth Community Events</Text>
 
@@ -496,7 +525,7 @@ const HomeCommunity = props => {
                   <FlatList
                     horizontal
                     showsHorizontalScrollIndicator={false}
-                    data={pillarEvents}
+                    data={regionEvents}
                     renderItem={item => _renderTopItem(item, navigation)}
                   />
                 </View>

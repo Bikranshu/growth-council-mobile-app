@@ -8723,6 +8723,11 @@
   dependencies:
     "moment" "^2.22.0"
 
+"react-native-device-info@^10.2.0":
+  "integrity" "sha512-7VycjFGaLKIZLDwCxSK5cWZdDOGqz3QxdGF57B/a4bW3gkrUFa5Gf0v7fUR9YL/VBJM0UwDiDH7pR9hkMQt+vw=="
+  "resolved" "https://registry.npmjs.org/react-native-device-info/-/react-native-device-info-10.2.0.tgz"
+  "version" "10.2.0"
+
 "react-native-dropdown-picker@^5.3.0":
   "integrity" "sha512-LUctVMAWiDir1X0WrFX1784psvqzBXRxRujYbvlvKz1Owa6cujrVN98rP356hIXFzX19E7SkbA942fGfMvoEWQ=="
   "resolved" "https://registry.npmjs.org/react-native-dropdown-picker/-/react-native-dropdown-picker-5.3.0.tgz"

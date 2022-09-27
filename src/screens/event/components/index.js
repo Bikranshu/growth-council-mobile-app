@@ -15,6 +15,7 @@ import Feather from 'react-native-vector-icons/Feather';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import HTMLView from 'react-native-htmlview';
+import {Linking} from 'react-native';
 
 import analytics from '@react-native-firebase/analytics';
 import {formatTimeByOffset} from './timezone';
@@ -123,7 +124,7 @@ const Event = props => {
   const comma = '/';
 
   const backStartTimeStamp = moment(events?.event_start).format(
-    'YYYY-MM-DD hh:mm:ss zz',
+    'YYYY-MM-DD hh:mm:ss',
   );
   const backEndTimeStamp = moment(events?.event_end).format(
     'YYYY-MM-DD hh:mm:ss',
@@ -271,7 +272,9 @@ const Event = props => {
                             marginLeft: 5,
                             color: COMMUNITY_COLOR,
                           }}>
-                          Actual Time
+                          {events?.event_meta?.evo_event_timezone !== undefined
+                            ? events?.event_meta?.evo_event_timezone
+                            : ''}
                         </Text>
                       </View>
                     ) : null}
@@ -290,7 +293,9 @@ const Event = props => {
                             marginLeft: 5,
                             color: COMMUNITY_COLOR,
                           }}>
-                          Local Time
+                          {deviceTimeZone.split('/')[1] +
+                            comma +
+                            deviceTimeZone.split('/')[0]}
                         </Text>
                       </View>
                     ) : null}
@@ -441,6 +446,224 @@ const Event = props => {
                         }}
                       />
                     )}
+                  </View>
+                )}
+              {events?.title ===
+                '16TH ANNUAL GROWTH, INNOVATION AND LEADERSHIP' &&
+                eventStatus && (
+                  <View>
+                    <Text
+                      style={[
+                        styles.contentHeading,
+                        {marginTop: 20, alignItems: 'center'},
+                      ]}>
+                      Downloading the Mobile App {'\n'}
+                      Your Full Event Guide!
+                    </Text>
+
+                    <View style={{flexDirection: 'row', marginTop: 10}}>
+                      <MaterialIcons
+                        name={'circle'}
+                        size={10}
+                        style={{color: 'black', marginTop: 5}}
+                      />
+                      <Text
+                        style={{
+                          marginLeft: 5,
+                          textAlign: 'justify',
+                          marginRight: 5,
+                        }}>
+                        Search for{' '}
+                        <Text
+                          style={{
+                            marginLeft: 5,
+                            textAlign: 'justify',
+                            marginRight: 5,
+                            fontWeight: 'bold',
+                            color: 'black',
+                          }}>
+                          "CrowdCompass Attendee Hub"
+                        </Text>{' '}
+                        in your phone's app store/ (Blackberry and Windows users
+                        can access the event app using this URL:
+                      </Text>
+                    </View>
+                    <TouchableOpacity
+                      onPress={() =>
+                        Linking.openURL(
+                          'https://event.crowdcompass.com/gil2022',
+                        )
+                      }>
+                      <Text style={{color: 'blue', marginLeft: 15}}>
+                        https://event.crowdcompass.com/gil2022
+                      </Text>
+                    </TouchableOpacity>
+                    <View style={{flexDirection: 'row', marginTop: 10}}>
+                      <MaterialIcons
+                        name={'circle'}
+                        size={10}
+                        style={{color: 'black', marginTop: 5}}
+                      />
+                      <Text
+                        style={{
+                          marginLeft: 5,
+                          textAlign: 'justify',
+                          marginRight: 5,
+                        }}>
+                        Open the app and search for{' '}
+                        <Text
+                          style={{
+                            marginLeft: 5,
+                            textAlign: 'justify',
+                            marginRight: 5,
+                            fontWeight: 'bold',
+                            color: 'black',
+                          }}>
+                          "16 Annual Growth, Innovation and leadership"{' '}
+                        </Text>
+                        Tap on "Download" adn enter the password "gil22sj" to
+                        gain access
+                      </Text>
+                    </View>
+                    <View style={{flexDirection: 'row', marginTop: 10}}>
+                      <MaterialIcons
+                        name={'circle'}
+                        size={10}
+                        style={{color: 'black', marginTop: 5}}
+                      />
+                      <Text
+                        style={{
+                          marginLeft: 5,
+                          textAlign: 'justify',
+                          marginRight: 5,
+                        }}>
+                        Tap on the{' '}
+                        <Text
+                          style={{
+                            marginLeft: 5,
+                            textAlign: 'justify',
+                            marginRight: 5,
+                            fontWeight: 'bold',
+                            color: 'black',
+                          }}>
+                          "Profile"
+                        </Text>{' '}
+                        icon on the bottom and click on{' '}
+                        <Text
+                          style={{
+                            marginLeft: 5,
+                            textAlign: 'justify',
+                            marginRight: 5,
+                            fontWeight: 'bold',
+                            color: 'black',
+                          }}>
+                          "Log in" .
+                        </Text>
+                        Enter you first and last name, followed by your email
+                        address.
+                        {'\n'}
+                        <Text
+                          style={{
+                            marginLeft: 5,
+                            textAlign: 'justify',
+                            marginRight: 5,
+                            fontWeight: 'bold',
+                            color: 'black',
+                          }}>
+                          If you do not login, you won't have access to full
+                          participant list.
+                        </Text>
+                      </Text>
+                    </View>
+
+                    <View style={{flexDirection: 'row', marginTop: 10}}>
+                      <MaterialIcons
+                        name={'circle'}
+                        size={10}
+                        style={{color: 'black', marginTop: 5}}
+                      />
+                      <Text
+                        style={{
+                          marginLeft: 5,
+                          textAlign: 'justify',
+                          marginRight: 5,
+                        }}>
+                        You will be sent a verificaton email with 6 digit
+                        codethat will need to be entered in to app. (this may
+                        take a few minute. If you have any issues please see us
+                        at the registeryion desk!
+                      </Text>
+                    </View>
+                    <View style={{flexDirection: 'row', marginTop: 10}}>
+                      <MaterialIcons
+                        name={'circle'}
+                        size={10}
+                        style={{color: 'black', marginTop: 5}}
+                      />
+                      <Text
+                        style={{
+                          marginLeft: 5,
+                          textAlign: 'justify',
+                          marginRight: 5,
+                        }}>
+                        Then click back in{' '}
+                        <Text
+                          style={{
+                            marginLeft: 5,
+                            textAlign: 'justify',
+                            marginRight: 5,
+                            fontWeight: 'bold',
+                            color: 'black',
+                          }}>
+                          {' '}
+                          "Profile"
+                        </Text>{' '}
+                        and tap on{' '}
+                        <Text
+                          style={{
+                            marginLeft: 5,
+                            textAlign: 'justify',
+                            marginRight: 5,
+                            fontWeight: 'bold',
+                            color: 'black',
+                          }}>
+                          {' '}
+                          "Edit"{' '}
+                        </Text>
+                        to edit your profile.
+                      </Text>
+                    </View>
+
+                    <View style={{flexDirection: 'row', marginTop: 10}}>
+                      <MaterialIcons
+                        name={'circle'}
+                        size={10}
+                        style={{color: 'black', marginTop: 5}}
+                      />
+                      <Text
+                        style={{
+                          marginLeft: 5,
+                          textAlign: 'justify',
+                          marginRight: 5,
+                        }}>
+                        You can either manually enter your information/photo or
+                        scroll to the bottom and{' '}
+                        <Text
+                          style={{
+                            marginLeft: 5,
+                            textAlign: 'justify',
+                            marginRight: 5,
+                            fontWeight: 'bold',
+                            color: 'black',
+                          }}>
+                          {' '}
+                          "Connect"
+                        </Text>{' '}
+                        with LinkedIn to have it automatically entered. Now you
+                        are visible on the participant list and can interact
+                        with peers!
+                      </Text>
+                    </View>
                   </View>
                 )}
 

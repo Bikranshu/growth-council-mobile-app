@@ -29,9 +29,11 @@ import {
 } from '../criticalIssue/slice/criticalIssueSlice';
 
 import {
-	connectMemberByID,
-	resetConnectMember,
-  } from '../people/slice/memberConnectionSlice';
+  connectMemberByID,
+  resetConnectMember,
+} from '../people/slice/memberConnectionSlice';
+import {fetchProfileByID, resetProfile} from '../account/slice/profileSlice';
+import {fetchEventByRegion, resetRegionEvent} from './slice/eventByRegionSlice';
 
 const DashboardScreen = props => {
   const dispatch = useDispatch();
@@ -43,7 +45,7 @@ const DashboardScreen = props => {
   const {upcomingEvents, upcomingEventLoading, upcomingEventError} =
     useSelector(state => state.upcomingEvents);
 
-  const {poes, poeLoading, poeError} = useSelector(state => state.poes);
+  //   const {poes, poeLoading, poeError} = useSelector(state => state.poes);
 
   const {communityMembers, communityMemberLoading, communityMemberError} =
     useSelector(state => state.communityMembers);
@@ -55,14 +57,19 @@ const DashboardScreen = props => {
     state => state.criticalIssue,
   );
 
-  
   const {memberConnections, memberConnectionLoading, memberConnectionError} =
     useSelector(state => state.memberConnections);
- 
+
+  const {profile, profileLoading, profileError} = useSelector(
+    state => state.profile,
+  );
+
+  const {regionEvents, regionEventLoading, regionEventError} = useSelector(
+    state => state.regionEvents,
+  );
 
   useEffect(() => {
     let content = pillarSliders?.flatMap((value, key) => {
-      
       return value?.pillar_contents;
     });
     setContentSlider(content);
@@ -72,9 +79,9 @@ const DashboardScreen = props => {
     dispatch(fetchAllUpcomingEvents());
   };
 
-  const fetchAllPOE = () => {
-    dispatch(fetchAllPOEs());
-  };
+  //   const fetchAllPOE = () => {
+  //     dispatch(fetchAllPOEs());
+  //   };
 
   const fetchAllCommunityMember = () => {
     dispatch(fetchAllCommunityMembers());
@@ -88,9 +95,9 @@ const DashboardScreen = props => {
     dispatch(resetUpcomingEvent());
   };
 
-  const cleanPOE = () => {
-    dispatch(resetPOE());
-  };
+  //   const cleanPOE = () => {
+  //     dispatch(resetPOE());
+  //   };
 
   const cleanCommunityMember = () => {
     dispatch(resetCommunityMember());
@@ -122,7 +129,25 @@ const DashboardScreen = props => {
     dispatch(resetConnectMember());
   };
 
-  
+//   const fetchProfile = () => {
+//     dispatch(fetchProfileByID());
+//   };
+
+  const cleanProfile = () => {
+    dispatch(resetProfile());
+  };
+
+  const fetchEventRegion = formData => {
+    dispatch(fetchEventByRegion(formData));
+  };
+
+  const cleanEventRegion = () => {
+    dispatch(resetRegionEvent());
+  };
+
+  useEffect(() => {
+    fetchProfileByID();
+  }, []);
   return (
     <Dashboard
       {...props}
@@ -131,11 +156,11 @@ const DashboardScreen = props => {
       upcomingEventError={upcomingEventError}
       fetchAllUpcomingEvent={fetchAllUpcomingEvent}
       cleanUpcomingEvent={cleanUpcomingEvent}
-      poes={poes}
-      poeLoading={poeLoading}
-      poeError={poeError}
-      fetchAllPOE={fetchAllPOE}
-      cleanPOE={cleanPOE}
+      //   poes={poes}
+      //   poeLoading={poeLoading}
+      //   poeError={poeError}
+      //   fetchAllPOE={fetchAllPOE}
+      //   cleanPOE={cleanPOE}
       communityMembers={communityMembers}
       communityMemberLoading={communityMemberLoading}
       communityMemberError={communityMemberError}
@@ -157,13 +182,21 @@ const DashboardScreen = props => {
       criticalIssueError={criticalIssueError}
       fetchCritcalIssue={fetchCritcalIssue}
       cleanCriticalIssue={cleanCriticalIssue}
-
-	  memberConnections={memberConnections}
+      memberConnections={memberConnections}
       memberConnectionLoading={memberConnectionLoading}
       memberConnectionError={memberConnectionError}
       connectMemberByIdentifier={connectMemberByIdentifier}
       cleanConnectMember={cleanConnectMember}
-
+      profile={profile}
+      profileLoading={profileLoading}
+      profileError={profileError}
+    //   fetchProfile={fetchProfile}
+    //   cleanProfile={cleanProfile}
+      regionEvents={regionEvents}
+      regionEventLoading={regionEventLoading}
+      regionEventError={regionEventError}
+      fetchEventRegion={fetchEventRegion}
+      cleanEventRegion={cleanEventRegion}
     />
   );
 };

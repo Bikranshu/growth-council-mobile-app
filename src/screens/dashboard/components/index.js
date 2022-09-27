@@ -1,4 +1,4 @@
-import React, {useEffect, useState, useRef} from 'react';
+import React, {useEffect, useState, useCallback} from 'react';
 import {
   StyleSheet,
   View,
@@ -26,6 +26,12 @@ import {
   useNavigation,
   useNavigationContainerRef,
 } from '@react-navigation/native';
+import {
+  setAsyncStorage,
+  clearAsyncStorage,
+  getAsyncStorage,
+} from '../../../utils/storageUtil';
+
 import analytics from '@react-native-firebase/analytics';
 import Material from 'react-native-vector-icons/MaterialIcons';
 import PillarList from './PillarList';
@@ -36,27 +42,33 @@ import ToastMessage from '../../../shared/toast';
 import BottomNav from '../../../layout/BottomLayout';
 import HTMLView from 'react-native-htmlview';
 import Loading from '../../../shared/loading';
+import {useFocusEffect} from '@react-navigation/native';
+
 import {isTokenExpired} from '../../../utils/jwtUtil';
 
 import messaging from '@react-native-firebase/messaging';
 
-import {GROWTH_COMMUNITY_ID, GROWTH_CONTENT_ID} from '../../../constants';
+import {
+  GROWTH_COMMUNITY_ID,
+  GROWTH_CONTENT_ID,
+  USER_REGION,
+} from '../../../constants';
 
 const win = Dimensions.get('window').width;
 const contentContainerWidth = win / 2;
 
 const Dashboard = props => {
   const {
-    upcomingEvents,
-    upcomingEventLoading,
-    upcomingEventError,
-    fetchAllUpcomingEvent,
-    cleanUpcomingEvent,
-    poes,
-    poeLoading,
-    poeError,
-    fetchAllPOE,
-    cleanPOE,
+    // upcomingEvents,
+    // upcomingEventLoading,
+    // upcomingEventError,
+    // fetchAllUpcomingEvent,
+    // cleanUpcomingEvent,
+    // poes,
+    // poeLoading,
+    // poeError,
+    // fetchAllPOE,
+    // cleanPOE,
     communityMembers,
     communityMemberLoading,
     communityMemberError,
@@ -90,26 +102,43 @@ const Dashboard = props => {
     memberConnectionError,
     connectMemberByIdentifier,
     cleanConnectMember,
+
+    profile,
+    profileLoading,
+    profileError,
+    // fetchProfile,
+    // cleanProfile,
+
+    regionEvents,
+    regionEventLoading,
+    regionEventError,
+    fetchEventRegion,
+    cleanEventRegion,
   } = props;
 
+  const {loading, setLoading, message, setMessage, signIn, userCountry} =
+    useAuthentication();
+
+  //   let profileRegion = profile?.user_meta?.region[0]
+  //     ? profile?.user_meta?.region[0]
+  //     : '';
+  const token = getAsyncStorage(USER_REGION);
+  console.log('dash', userCountry);
   const isFocused = useIsFocused();
   const [memberConnection, setMemberConnection] = useState([]);
 
   const [dataSourceCords, setDataSourceCords] = useState(criticalIssue);
   const [ref, setRef] = useState(null);
-  const {loading, setLoading, message, setMessage, signOut} =
-    useAuthentication();
   const navigation = useNavigation();
 
-  const navigationRef = useRef();
-  const routeNameRef = useRef();
+  let string = profile?.user_meta?.region[0];
+  if (string) string = string.toLowerCase();
+
+  const [userRegion, setUserRegion] = useState(profile?.user_meta?.region[0]);
 
   useEffect(() => {
-    const fetchAllUpcomingEventAsync = async () => {
-      await fetchAllUpcomingEvent();
-    };
-    fetchAllUpcomingEventAsync();
-  }, []);
+    setUserRegion(profile?.user_meta?.region[0]);
+  }, [profile]);
 
   useEffect(() => {
     messaging()
@@ -117,27 +146,25 @@ const Dashboard = props => {
 
       .then(token => {
         async () => {
-          //   await isTokenExpired(token);
           console.log('FCM ---> ' + token);
         };
       });
   }, []);
 
-  //   const isTokenExpired = async token => {
-  //     const decoded = jwt_decode(token);
-  //     if (decoded.exp * 1000 < Date.now() ) {
-  //       await signOut();
-  //     }
-  //   };
+  useEffect(() => {
+    fetchEventRegion({
+      region: userRegion,
+    });
+    return () => {
+      cleanEventRegion();
+    };
+  }, [profile]);
 
   useEffect(() => {
-    const fetchAllCommunityMemberAsync = async () => {
-      await fetchAllCommunityMember({
-        s: '',
-        sort: 'Desc',
-      });
-    };
-    fetchAllCommunityMemberAsync();
+    fetchAllCommunityMember({
+      s: '',
+      sort: 'Desc',
+    });
 
     return () => {
       cleanCommunityMember();
@@ -145,17 +172,7 @@ const Dashboard = props => {
   }, []);
 
   useEffect(() => {
-    const fetchPillarSliderAsync = async () => {
-      await fetchAllPillarSlider();
-    };
-    fetchPillarSliderAsync();
-  }, []);
-
-  useEffect(() => {
-    const fetchAllPOEAsync = async () => {
-      await fetchAllPOE();
-    };
-    fetchAllPOEAsync();
+    fetchAllPillarSlider();
   }, []);
 
   useEffect(() => {
@@ -165,8 +182,15 @@ const Dashboard = props => {
     fetchLatestContentAsync();
   }, []);
 
+  const wait = ms =>
+    new Promise(resolve => {
+      setTimeout(() => {
+        resolve(true);
+      }, ms);
+    });
+
   useEffect(() => {
-    fetchCritcalIssue();
+    wait(5000).then(() => fetchCritcalIssue());
   }, []);
 
   useEffect(() => {
@@ -239,16 +263,14 @@ const Dashboard = props => {
         <View style={styles.chatIcon}>
           {!memberConnection[index]?.connection && (
             <TouchableOpacity
-				onPress={async() => {
+              onPress={async () => {
+                connectMemberByMemberID(item.ID, index);
 
-				connectMemberByMemberID(item.ID, index);
-
-				await analytics().logEvent('dashboard', {
-					item:item?.user_meta?.first_name,
-					description: 'Dashboard Member Connection'
-				  });
-				}}
-			  >
+                await analytics().logEvent('dashboard', {
+                  item: item?.user_meta?.first_name,
+                  description: 'Dashboard Member Connection',
+                });
+              }}>
               <Ionicons name="add-circle" size={20} color="#B2B3B9" />
             </TouchableOpacity>
           )}
@@ -396,177 +418,234 @@ const Dashboard = props => {
   };
 
   const _renderCritical = ({item, index}) => {
+    let lowercaseRegion = '';
+    if (userRegion) lowercaseRegion = userRegion.toLowerCase();
+    else console.log("lowercaseRegion doesn't exist, look into it");
+    console.log('a', lowercaseRegion === item?.region);
+    console.log(lowercaseRegion);
+
     return (
-      <TouchableOpacity
-        onPress={() => {
-          navigation.navigate('CriticalIssue', {index});
-        }}>
-        <View
-          style={styles.ContentWrapper}
-          key={index}
-          onLayout={items => {
-            const layout = items.nativeEvent.layout;
-            dataSourceCords[index] = layout.y;
-            setDataSourceCords(dataSourceCords);
-          }}
-          onScroll={e => setPos(e.nativeEvent.contentOffset.y)}>
-          <View
-            style={{
-              flexDirection: 'row',
-              justifyContent: 'center',
-              alignItems: 'center',
+      <>
+        {lowercaseRegion === item?.region ? (
+          <TouchableOpacity
+            onPress={() => {
+              navigation.navigate('CriticalIssue', {
+                index,
+                Userregion: lowercaseRegion,
+              });
             }}>
-            <View style={[styles.criticalW, styles.shadowCritical]}>
-              <Image
-                source={{uri: item?.icon}}
-                style={{width: 36, height: 36}}
-              />
+            <View
+              style={styles.ContentWrapper}
+              key={index}
+              onLayout={items => {
+                const layout = items.nativeEvent.layout;
+                dataSourceCords[index] = layout.y;
+                setDataSourceCords(dataSourceCords);
+              }}
+              onScroll={e => setPos(e.nativeEvent.contentOffset.y)}>
+              <View
+                style={{
+                  flexDirection: 'row',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                }}>
+                <View style={[styles.criticalW, styles.shadowCritical]}>
+                  <Image
+                    source={{uri: item?.icon}}
+                    style={{width: 36, height: 36}}
+                  />
+                </View>
+                <Text
+                  style={{
+                    fontSize: 10,
+                    width: '60%',
+                    paddingLeft: 5,
+                    // paddingRight: 10,
+                  }}>
+                  {item?.heading}
+                </Text>
+              </View>
             </View>
-            <Text
-              style={{
-                fontSize: 10,
-                width: '60%',
-                paddingLeft: 5,
-                // paddingRight: 10,
-              }}>
-              {item?.heading}
-            </Text>
-          </View>
-        </View>
-      </TouchableOpacity>
+          </TouchableOpacity>
+        ) : lowercaseRegion === null ||
+          lowercaseRegion === undefined ||
+          lowercaseRegion === '' ? (
+          <TouchableOpacity
+            onPress={() => {
+              navigation.navigate('CriticalIssue', {
+                index,
+                Userregion: lowercaseRegion,
+              });
+            }}>
+            <View
+              style={styles.ContentWrapper}
+              key={index}
+              onLayout={items => {
+                const layout = items.nativeEvent.layout;
+                dataSourceCords[index] = layout.y;
+                setDataSourceCords(dataSourceCords);
+              }}
+              onScroll={e => setPos(e.nativeEvent.contentOffset.y)}>
+              <View
+                style={{
+                  flexDirection: 'row',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                }}>
+                <View style={[styles.criticalW, styles.shadowCritical]}>
+                  <Image
+                    source={{uri: item?.icon}}
+                    style={{width: 36, height: 36}}
+                  />
+                </View>
+                <Text
+                  style={{
+                    fontSize: 10,
+                    width: '60%',
+                    paddingLeft: 5,
+                    // paddingRight: 10,
+                  }}>
+                  {item?.heading}
+                </Text>
+              </View>
+            </View>
+          </TouchableOpacity>
+        ) : (
+          <></>
+        )}
+      </>
     );
   };
   return (
-  
-      <View style={{flex: 1}}>
-        <StatusBar
-          barStyle="light-content"
-          hidden={false}
-          backgroundColor="#001D3F"
-          translucent={false}
-        />
-        <ScrollView
-          onScroll={e => {
-            const offset = e.nativeEvent.contentOffset.y;
-            if (offset >= 70) {
-              navigation.setOptions({
-                headerShown: false,
-              });
-            } else {
-              navigation.setOptions({
-                headerShown: true,
-              });
-            }
-          }}
-          contentContainerStyle={{
-            flexGrow: 1,
-            backgroundColor: Colors.PRIMARY_BACKGROUND_COLOR,
-          }}>
-          <View>
-            <ImageBackground
-              style={{
-                width: '100%',
-                height: (Dimensions.get('screen').height - 80) / 3,
-                paddingTop: Dimensions.get('screen').height / 10,
-              }}
-              source={require('../../../assets/img/appBG.png')}>
-              <View style={styles.pillar}>
-                <PillarList
-                  pillarSliders={pillarSliders}
-                  navigation={navigation}
-                />
-              </View>
-            </ImageBackground>
-          </View>
-          {upcomingEvents?.length !== 0 &&
-            upcomingEvents !== null &&
-            upcomingEvents !== false && (
-              <View style={styles.top}>
-                <View style={styles.eventWrapper}>
-                  <Text style={styles.title}>Upcoming Events</Text>
-                </View>
-
-                <View
-                  style={{
-                    display: 'flex',
-                    flexDirection: 'row',
-                    marginTop: 20,
-                  }}>
-                  <FlatList
-                    horizontal
-                    showsHorizontalScrollIndicator={false}
-                    data={upcomingEvents}
-                    renderItem={item => _renderTopItem(item, navigation)}
-                  />
-                </View>
-              </View>
-            )}
-          {latestContentLoading && <Loading />}
-          {memberConnectionLoading && (
-            <View style={{marginTop: 40}}>
-              <Loading />
+    <View style={{flex: 1}}>
+      <StatusBar
+        barStyle="light-content"
+        hidden={false}
+        backgroundColor="#001D3F"
+        translucent={false}
+      />
+      <ScrollView
+        onScroll={e => {
+          const offset = e.nativeEvent.contentOffset.y;
+          if (offset >= 70) {
+            navigation.setOptions({
+              headerShown: false,
+            });
+          } else {
+            navigation.setOptions({
+              headerShown: true,
+            });
+          }
+        }}
+        contentContainerStyle={{
+          flexGrow: 1,
+          backgroundColor: Colors.PRIMARY_BACKGROUND_COLOR,
+        }}>
+        <View>
+          <ImageBackground
+            style={{
+              width: '100%',
+              height: (Dimensions.get('screen').height - 80) / 3,
+              paddingTop: Dimensions.get('screen').height / 10,
+            }}
+            source={require('../../../assets/img/appBG.png')}>
+            <View style={styles.pillar}>
+              <PillarList
+                pillarSliders={pillarSliders}
+                navigation={navigation}
+              />
             </View>
-          )}
-          {latestContent?.length !== 0 &&
-            latestContent !== null &&
-            latestContent !== false && (
-              <View style={styles.middle}>
-                <Text style={[styles.title, {marginLeft: 15}]}>
-                  Latest Growth Content
-                </Text>
+          </ImageBackground>
+        </View>
+        <View style={{height: 60}} />
+        {regionEvents?.length !== 0 &&
+          regionEvents !== null &&
+          regionEvents !== false && (
+            <View style={styles.top}>
+              <View style={styles.eventWrapper}>
+                <Text style={styles.title}>Upcoming Events</Text>
+              </View>
 
+              <View
+                style={{
+                  display: 'flex',
+                  flexDirection: 'row',
+                  marginTop: 20,
+                }}>
                 <FlatList
                   horizontal
                   showsHorizontalScrollIndicator={false}
-                  data={latestContent}
-                  renderItem={_renderContent}
+                  data={regionEvents}
+                  renderItem={item => _renderTopItem(item, navigation)}
                 />
               </View>
-            )}
-          {communityMembers?.length !== 0 &&
-            communityMembers !== null &&
-            communityMembers !== false && (
-              <View style={styles.bottom}>
-                <View
-                  style={{
-                    display: 'flex',
-                    flexDirection: 'row',
-                    marginLeft: 15,
-                    marginRight: 15,
-                  }}>
-                  <Text style={styles.title}>Welcome New Members</Text>
-                </View>
-                <View>
-                  <FlatList
-                    horizontal
-                    showsHorizontalScrollIndicator={false}
-                    data={communityMembers}
-                    renderItem={_renderItem}
-                  />
-                </View>
-              </View>
-            )}
+            </View>
+          )}
+        {latestContentLoading && <Loading />}
+        {memberConnectionLoading && (
+          <View style={{marginTop: 40}}>
+            <Loading />
+          </View>
+        )}
+        {latestContent?.length !== 0 &&
+          latestContent !== null &&
+          latestContent !== false && (
+            <View style={styles.middle}>
+              <Text style={[styles.title, {marginLeft: 15}]}>
+                Latest Growth Content
+              </Text>
 
-          <View style={styles.content}>
-            <Text style={styles.title}>
-              {criticalIssue?.critical_issue_mobile_title}
-            </Text>
-            <View
-              ref={ref => {
-                setRef(ref);
-              }}>
               <FlatList
-                numColumns={2}
+                horizontal
                 showsHorizontalScrollIndicator={false}
-                data={criticalIssue?.critical_issue_mobile_lists}
-                renderItem={_renderCritical}
+                data={latestContent}
+                renderItem={_renderContent}
               />
             </View>
+          )}
+        {communityMembers?.length !== 0 &&
+          communityMembers !== null &&
+          communityMembers !== false && (
+            <View style={styles.bottom}>
+              <View
+                style={{
+                  display: 'flex',
+                  flexDirection: 'row',
+                  marginLeft: 15,
+                  marginRight: 15,
+                }}>
+                <Text style={styles.title}>Welcome New Members</Text>
+              </View>
+              <View>
+                <FlatList
+                  horizontal
+                  showsHorizontalScrollIndicator={false}
+                  data={communityMembers}
+                  renderItem={_renderItem}
+                />
+              </View>
+            </View>
+          )}
+
+        <View style={styles.content}>
+          <Text style={styles.title}>
+            {criticalIssue?.critical_issue_mobile_title}
+          </Text>
+          <View
+            ref={ref => {
+              setRef(ref);
+            }}>
+            <FlatList
+              numColumns={2}
+              showsHorizontalScrollIndicator={false}
+              data={criticalIssue?.critical_issue_mobile_lists}
+              renderItem={_renderCritical}
+            />
           </View>
-        </ScrollView>
-        <BottomNav {...props} navigation={navigation} />
-      </View>
-   
+        </View>
+      </ScrollView>
+      <BottomNav {...props} navigation={navigation} />
+    </View>
   );
 };
 
@@ -601,7 +680,7 @@ const styles = StyleSheet.create({
   top: {
     height: 210,
     marginBottom: 10,
-    marginTop: 70,
+    marginTop: 10,
     justifyContent: 'center',
     marginLeft: 5,
   },
