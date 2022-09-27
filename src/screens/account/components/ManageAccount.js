@@ -97,6 +97,20 @@ const ManageAccount = props => {
     Location = profile?.user_meta?.Location[0];
   }
 
+  let region = profile?.user_meta?.region;
+  if (typeof region === 'undefined') {
+    region = ' ';
+  } else {
+    region = profile?.user_meta?.region[0];
+  }
+
+  let country = profile?.user_meta?.country;
+  if (typeof country === 'undefined') {
+    country = ' ';
+  } else {
+    country = profile?.user_meta?.country[0];
+  }
+
   let favorite_quote = profile?.user_meta?.favorite_quote;
   if (typeof favorite_quote === 'undefined') {
     favorite_quote = ' ';
@@ -190,13 +204,15 @@ const ManageAccount = props => {
       company: company,
       email: profile?.user_email,
       Location: Location,
+      country: country,
+      region: region,
       favorite_quote: favorite_quote,
       expertise_areas1: expertise_areas1,
       professional_summary: professional_summary,
     },
     onSubmit: async values => {
       await updateUser(values).then(async response => {
-		//image upload code
+        //image upload code
         await uploadImage(imageDetail).then(async response => {
           await updateImage({attachment_id: response?.payload?.id}).then(
             response => {
@@ -442,7 +458,7 @@ const ManageAccount = props => {
                       editable={false}
                     />
 
-                    <Text
+                    {/* <Text
                       style={{marginLeft: 10, fontSize: 10, color: '#8F9BB3'}}>
                       Region
                     </Text>
@@ -453,7 +469,7 @@ const ManageAccount = props => {
                       onBlur={handleBlur('Location')}
                       error={errors.Location}
                       touched={touched.Location}
-                    />
+                    /> */}
 
                     <Text
                       style={{marginLeft: 10, fontSize: 10, color: '#8F9BB3'}}>

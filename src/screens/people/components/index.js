@@ -49,13 +49,17 @@ const People = props => {
     expertiseError,
     fetchAllExpertises,
     cleanExperties,
+
+	profile,
+    profileLoading,
+    profileError,
   } = props;
 
   const toast = useToast();
   const isFocused = useIsFocused();
   const [category, setCategory] = useState('');
   const [account, setAccount] = useState('');
-  const [region, setRegion] = useState('APAC');
+  const [region, setRegion] = useState(profile?.user_meta?.region[0]);
   const [searchKey, setSearchKey] = useState('');
   const [sorting, setSorting] = useState('ASC');
   const [memberConnection, setMemberConnection] = useState([]);
@@ -109,6 +113,7 @@ const People = props => {
   };
 
   const countries = {
+    Region: 'Region',
     APAC: 'APAC',
     MEASA: 'MEASA',
     AMERICAS: 'AMERICAS',

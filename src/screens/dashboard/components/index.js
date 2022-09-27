@@ -116,14 +116,13 @@ const Dashboard = props => {
     cleanEventRegion,
   } = props;
 
-  const {loading, setLoading, message, setMessage, signIn, userCountry} =
-    useAuthentication();
+  let region = profile?.user_meta?.region;
+  if (typeof region === 'undefined') {
+    region = ' ';
+  } else {
+    region = profile?.user_meta?.region[0];
+  }
 
-  //   let profileRegion = profile?.user_meta?.region[0]
-  //     ? profile?.user_meta?.region[0]
-  //     : '';
-  const token = getAsyncStorage(USER_REGION);
-  console.log('dash', userCountry);
   const isFocused = useIsFocused();
   const [memberConnection, setMemberConnection] = useState([]);
 
@@ -131,13 +130,13 @@ const Dashboard = props => {
   const [ref, setRef] = useState(null);
   const navigation = useNavigation();
 
-  let string = profile?.user_meta?.region[0];
+  let string = region;
   if (string) string = string.toLowerCase();
 
-  const [userRegion, setUserRegion] = useState(profile?.user_meta?.region[0]);
+  const [userRegion, setUserRegion] = useState(region);
 
   useEffect(() => {
-    setUserRegion(profile?.user_meta?.region[0]);
+    setUserRegion(region);
   }, [profile]);
 
   useEffect(() => {
@@ -151,14 +150,25 @@ const Dashboard = props => {
       });
   }, []);
 
-  useEffect(() => {
-    fetchEventRegion({
-      region: userRegion,
+  const wait = ms =>
+    new Promise(resolve => {
+      setTimeout(() => {
+        resolve(true);
+      }, ms);
     });
-    return () => {
-      cleanEventRegion();
-    };
-  }, [profile]);
+
+  console.log('helo', region);
+
+  useFocusEffect(
+    useCallback(() => {
+      fetchEventRegion({
+        region: profile?.user_meta?.region[0],
+      });
+      return () => {
+        cleanEventRegion();
+      };
+    }, []),
+  );
 
   useEffect(() => {
     fetchAllCommunityMember({
@@ -181,13 +191,6 @@ const Dashboard = props => {
     };
     fetchLatestContentAsync();
   }, []);
-
-  const wait = ms =>
-    new Promise(resolve => {
-      setTimeout(() => {
-        resolve(true);
-      }, ms);
-    });
 
   useEffect(() => {
     wait(5000).then(() => fetchCritcalIssue());
@@ -230,55 +233,72 @@ const Dashboard = props => {
   };
 
   const _renderItem = ({item, index}) => {
+    console.log(userRegion);
+    let user = region;
+    if (typeof user === 'undefined') {
+      user = ' ';
+    } else {
+      user = region;
+    }
+	
+    console.log('a', userRegion === user);
     return (
-      <View style={[styles.bottomWrapper, styles.shadowProp]} key={index}>
-        <TouchableOpacity
-          onPress={() => navigation.navigate('OthersAccount', {id: item.ID})}>
-          <Image
-            source={{uri: item.avatar}}
-            style={{
-              width: '100%',
-              height: 83,
-              borderRadius: 10,
-            }}
-          />
-          <View style={{padding: 10, paddingBottom: 20}}>
-            <Text
-              style={{
-                fontSize: 10,
-                fontFamily: Typography.FONT_SF_SEMIBOLD,
-                color: '#030303',
-              }}>
-              {item?.user_meta?.first_name} {item?.user_meta?.last_name}
-            </Text>
-            <Text style={{fontSize: 6, color: '#030303', marginTop: 5}}>
-              {item?.registered_date}
-              {'\n'}
-              {'\n'}
-              {item?.user_meta?.Title}
-            </Text>
-          </View>
-        </TouchableOpacity>
-
-        <View style={styles.chatIcon}>
-          {!memberConnection[index]?.connection && (
+      <>
+        {user === userRegion ? (
+          <View style={[styles.bottomWrapper, styles.shadowProp]} key={index}>
             <TouchableOpacity
-              onPress={async () => {
-                connectMemberByMemberID(item.ID, index);
-
-                await analytics().logEvent('dashboard', {
-                  item: item?.user_meta?.first_name,
-                  description: 'Dashboard Member Connection',
-                });
-              }}>
-              <Ionicons name="add-circle" size={20} color="#B2B3B9" />
+              onPress={() =>
+                navigation.navigate('OthersAccount', {id: item.ID})
+              }>
+              <Image
+                source={{uri: item.avatar}}
+                style={{
+                  width: '100%',
+                  height: 83,
+                  borderRadius: 10,
+                }}
+              />
+              <View style={{padding: 10, paddingBottom: 20}}>
+                <Text
+                  style={{
+                    fontSize: 10,
+                    fontFamily: Typography.FONT_SF_SEMIBOLD,
+                    color: '#030303',
+                  }}>
+                  {item?.user_meta?.first_name} {item?.user_meta?.last_name}
+                </Text>
+                <Text style={{fontSize: 6, color: '#030303', marginTop: 5}}>
+                  {item?.registered_date}
+                  {'\n'}
+                  {'\n'}
+                  {item?.user_meta?.Title}
+                </Text>
+              </View>
             </TouchableOpacity>
-          )}
-          {memberConnection[index]?.connection && (
-            <Material name="check-circle" size={20} color="#14A2E2" />
-          )}
-        </View>
-      </View>
+
+            <View style={styles.chatIcon}>
+              {!memberConnection[index]?.connection && (
+                <TouchableOpacity
+                  onPress={async () => {
+                    connectMemberByMemberID(item.ID, index);
+
+                    await analytics().logEvent('dashboard', {
+                      item: item?.user_meta?.first_name,
+                      description: 'Dashboard Member Connection',
+                    });
+                  }}>
+                  <Ionicons name="add-circle" size={20} color="#B2B3B9" />
+                </TouchableOpacity>
+              )}
+              {memberConnection[index]?.connection && (
+                <Material name="check-circle" size={20} color="#14A2E2" />
+              )}
+            </View>
+          </View>
+        ) : (
+          <></>
+        )}
+      </>
     );
   };
 
@@ -421,9 +441,8 @@ const Dashboard = props => {
     let lowercaseRegion = '';
     if (userRegion) lowercaseRegion = userRegion.toLowerCase();
     else console.log("lowercaseRegion doesn't exist, look into it");
-    console.log('a', lowercaseRegion === item?.region);
-    console.log(lowercaseRegion);
-
+    console.log(lowercaseRegion === item?.region);
+    console.log(userRegion);
     return (
       <>
         {lowercaseRegion === item?.region ? (

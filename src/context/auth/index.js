@@ -30,12 +30,6 @@ export const AuthProvider = props => {
       const token = await getAsyncStorage(JWT_TOKEN);
       if (token) {
         setLoggedIn(true);
-        // {
-        //   userCountry !== undefined && userCountry !== null
-        //     ? (setLoggedIn(true), navigation.navigate('Dashboard'))
-        //     : navigation.navigate('CountryPop');
-        // }
-
         await isTokenExpired(token);
       } else {
         setLoggedIn(false);
@@ -143,7 +137,6 @@ export const AuthProvider = props => {
 
             setUserCountry(response?.data?.region);
 
-            console.log('abcd', userCountry);
 			console.log('abcdef', response?.data?.region);
 			await setAsyncStorage(USER_REGION, response?.data?.region ?? data.USER_REGION);
             const messageToken = await messaging().getToken();

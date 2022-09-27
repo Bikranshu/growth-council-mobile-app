@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 
 import People from './components';
@@ -8,6 +8,7 @@ import {
   resetConnectMember,
 } from './slice/memberConnectionSlice';
 import {fetchAllExpertise, resetExpertise} from './slice/expertiseSlice';
+import {fetchProfileByID, resetProfile} from '../account/slice/profileSlice';
 
 const PeopleScreen = props => {
   const dispatch = useDispatch();
@@ -19,6 +20,9 @@ const PeopleScreen = props => {
     state => state.expertise,
   );
 
+  const {profile, profileLoading, profileError} = useSelector(
+    state => state.profile,
+  );
   const fetchAllUsers = formData => {
     dispatch(fetchUsersByKey(formData));
   };
@@ -52,6 +56,13 @@ const PeopleScreen = props => {
     dispatch(resetExpertise());
   };
 
+  useEffect(() => {
+    fetchProfileByID();
+  }, []);
+
+  const cleanProfile = () => {
+    dispatch(resetProfile());
+  };
   return (
     <People
       {...props}
@@ -70,6 +81,9 @@ const PeopleScreen = props => {
       expertiseError={expertiseError}
       fetchAllExpertises={fetchAllExpertises}
       cleanExperties={cleanExperties}
+      profile={profile}
+      profileLoading={profileLoading}
+      profileError={profileError}
     />
   );
 };
