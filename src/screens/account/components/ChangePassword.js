@@ -27,6 +27,7 @@ const passwordSchema = Yup.object().shape({
   newPassword: Yup.string()
     .min(6, 'Too Short! Password should be atleast 6 character.')
     .required('New Password is required.'),
+
   confirmPassword: Yup.string()
     .oneOf(
       [Yup.ref('newPassword'), null],
@@ -188,7 +189,6 @@ const ChangePasswordForm = props => {
                   {errors.newPassword}
                 </Text>
               )}
-
               {values?.oldPassword !== values?.newPassword ||
                 (values?.oldPassword !== '' && values?.newPassword !== '' && (
                   <Text

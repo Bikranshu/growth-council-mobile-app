@@ -27,7 +27,6 @@ const SubHeader = props => {
     dispatch(fetchProfileByID());
   };
 
-
   return (
     <ImageBackground source={props.image} style={{width: '100%'}}>
       <View

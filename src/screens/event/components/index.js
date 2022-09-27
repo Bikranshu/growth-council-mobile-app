@@ -32,8 +32,6 @@ import {
   GROWTH_CONTENT_ID,
 } from '../../../constants';
 import {COMMUNITY_COLOR} from '../../../theme/colors';
-import {blue} from '@material-ui/core/colors';
-import {black} from 'react-native-paper/lib/typescript/styles/colors';
 
 const Event = props => {
   const {
@@ -131,62 +129,14 @@ const Event = props => {
   const backEndTimeStamp = moment(events?.event_end).format(
     'YYYY-MM-DD hh:mm:ss',
   );
-
-  const actualtimeOffset = events?.time_zone;
-  console.log('sfgsfg', actualtimeOffset);
+  
   const deviceTimeZone = RNLocalize.getTimeZone();
 
-  //console.log('offset', moment().tz(actualtimeOffset).utcOffset());
   const today = moment().tz(deviceTimeZone);
 
-  //   console.log(
-  //     'Test Timezone : -------- :',
-  //     moment('2013-11-18 11:55', 'America/Toronto')
-  //       .tz('Asia/Taipei')
-  //       .format('YYYY/MM/DD HH:mm:ss ZZ'),
-  //   );
-  function convertTZ(date, tzString) {
-    console.log(
-      'test date',
-      new Date(
-        (typeof date === 'string' ? new Date(date) : date).toLocaleString(
-          'en-US',
-          {timeZone: tzString},
-        ),
-      ),
-    );
-  }
-
-  // usage: Asia/Jakarta is GMT+7
-  // convertTZ('2012/04/20 10:10:30 +345', 'Asia/Jakarta'); // Tue Apr 20 2012 17:10:30 GMT+0700 (Western Indonesia Time)
-
-  // Resulting value is regular Date() object
-  // const convertedDate = convertTZ("2012/04/20 10:10:30 +0000", "Asia/Jakarta")
-  // convertedDate.getHours(); // 17
-
-  // Bonus: You can also put Date object to first arg
-  const date = new Date();
-  convertTZ(date, 'Asia/Jakarta'); // current date-time in jakarta
-
-  //   console.log('asfgha', today.utcOffset());
-  const currentTimeZoneOffsetInHours = today.utcOffset();
+  const currentTimeZoneOffsetInHours = today.utcOffset() / 60;
 
   console.log('currentTimeZoneOffsetInHours', currentTimeZoneOffsetInHours);
-
-  const convertLocalTimeToUTCTime = () => {
-    const dateString = moment(events?.event_end).format('YYYY-MM-DDThh:mm:ss');
-    console.log('hlo', dateString);
-    const [fullDate, time] = dateString.split('T');
-    const [year, month, date] = fullDate.split('-');
-    const [hour, minute, second] = time.split(':');
-    const dateTime = new Date(year, month, date, hour, minute, second);
-    console.log(dateTime.toISOString());
-  };
-
-  useEffect(() => {
-    convertLocalTimeToUTCTime();
-  });
-
   useEffect(() => {
     const convertedToLocalTime = formatTimeByOffset(
       backStartTimeStamp,
@@ -195,13 +145,13 @@ const Event = props => {
     setTimeToDisplay(convertedToLocalTime);
   }, [events]);
 
-  useEffect(() => {
-    const convertedToLocalTimeEnd = formatTimeByOffset(
-      backEndTimeStamp,
-      currentTimeZoneOffsetInHours,
-    );
-    setTimeToEnd(convertedToLocalTimeEnd);
-  }, [events]);
+    useEffect(() => {
+      const convertedToLocalTimeEnd = formatTimeByOffset(
+        backEndTimeStamp,
+        currentTimeZoneOffsetInHours,
+      );
+      setTimeToEnd(convertedToLocalTimeEnd);
+    }, [events]);
 
   let title = '';
   const pillarname = events?.pillar_categories
