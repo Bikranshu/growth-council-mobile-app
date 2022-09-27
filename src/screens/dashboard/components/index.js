@@ -159,7 +159,7 @@ const Dashboard = props => {
     return () => {
       cleanEventRegion();
     };
-  }, []);
+  }, [profile]);
 
   useEffect(() => {
     fetchAllCommunityMember({
