@@ -467,7 +467,9 @@ const Dashboard = props => {
               </View>
             </View>
           </TouchableOpacity>
-        ) : (
+        ) : lowercaseRegion === null ||
+          lowercaseRegion === undefined ||
+          lowercaseRegion === '' ? (
           <TouchableOpacity
             onPress={() => {
               navigation.navigate('CriticalIssue', {
@@ -508,6 +510,8 @@ const Dashboard = props => {
               </View>
             </View>
           </TouchableOpacity>
+        ) : (
+          <></>
         )}
       </>
     );

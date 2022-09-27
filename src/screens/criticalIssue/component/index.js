@@ -56,6 +56,9 @@ const CriticalIssue = props => {
     AMERICAS: 'north-america',
     MEASA: 'measa',
   };
+  useEffect(() => {
+    setRegion(profile?.user_meta?.region[0]);
+  }, [profile]);
   console.log('countries');
 
   useEffect(() => {
