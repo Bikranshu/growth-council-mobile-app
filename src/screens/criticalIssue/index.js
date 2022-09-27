@@ -1,4 +1,4 @@
-import { useRoute } from '@react-navigation/native';
+import {useRoute} from '@react-navigation/native';
 import React from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 
@@ -7,6 +7,8 @@ import {
   fetchAllCriticalIssue,
   resetCriticalIssue,
 } from './slice/criticalIssueSlice';
+
+import {fetchProfileByID, resetProfile} from '../account/slice/profileSlice';
 
 const CriticalIssueScreen = props => {
   const dispatch = useDispatch();
@@ -17,12 +19,24 @@ const CriticalIssueScreen = props => {
     state => state.criticalIssue,
   );
 
+  const {profile, profileLoading, profileError} = useSelector(
+    state => state.profile,
+  );
+
   const fetchCritcalIssue = () => {
     dispatch(fetchAllCriticalIssue());
   };
 
   const cleanCriticalIssue = () => {
     dispatch(resetCriticalIssue());
+  };
+
+  const fetchProfile = () => {
+    dispatch(fetchProfileByID());
+  };
+
+  const cleanProfile = () => {
+    dispatch(resetProfile());
   };
 
   return (
@@ -34,6 +48,11 @@ const CriticalIssueScreen = props => {
       index={index}
       fetchCritcalIssue={fetchCritcalIssue}
       cleanCriticalIssue={cleanCriticalIssue}
+      profile={profile}
+      profileLoading={profileLoading}
+      profileError={profileError}
+      fetchProfile={fetchProfile}
+      cleanProfile={cleanProfile}
     />
   );
 };

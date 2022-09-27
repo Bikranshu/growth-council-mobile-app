@@ -39,7 +39,7 @@ import CoachingSessionDetailScreen from '../screens/coachingSession';
 import SelfLearnDetailScreen from '../screens/selfLearn';
 import PDFDetailScreen from '../screens/selfLearn/pdf';
 import SelfAssessment from '../screens/coachingSession/component/selfAssessment';
-
+import CountryPopupScreen from '../screens/auth/CountryPopup';
 import MainHeader from '../shared/header/MainHeader';
 import UserListScreen from '../screens/chat/UserList';
 import PeopleScreen from '../screens/people';
@@ -49,9 +49,8 @@ import DashboardScreen from '../screens/dashboard';
 import SessionCompleted from '../screens/coachingSession/component/sessionCompleted';
 import DrawerNavigation from '../navigations/DrawerNavigation';
 import Header from '../shared/header/header';
-import CountryPopupScreen from '../screens/auth/components/CountryPopup';
-import {GROWTH_COMMUNITY_ID} from '../constants';
 
+import {GROWTH_COMMUNITY_ID} from '../constants';
 
 const AppStack = () => (
   <Navigator>
@@ -65,7 +64,15 @@ const AppStack = () => (
         headerLeft: () => null,
       })}
     />
-
+    {/* <Screen
+      name="CountryPop"
+      component={CountryPopupScreen}
+      options={({route, navigation}) => ({
+        headerShown: false,
+        ...TransitionPresets.RevealFromBottomAndroid,
+        gestureDirection: 'horizontal-inverted',
+      })}
+    /> */}
     <Screen
       name="Journey"
       component={JourneyScreen}
@@ -112,15 +119,6 @@ const AppStack = () => (
             noDrawer={true}
           />
         ),
-      })}
-    />
-    <Screen
-      name="CountryPop"
-      component={CountryPopupScreen}
-      options={({route, navigation}) => ({
-        headerShown: false,
-        ...TransitionPresets.RevealFromBottomAndroid,
-        gestureDirection: 'horizontal-inverted',
       })}
     />
 

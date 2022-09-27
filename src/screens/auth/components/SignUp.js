@@ -1,4 +1,4 @@
-import React, {useState, useRef, useCallback} from 'react';
+import React, {useState, useRef, useCallback, useEffect} from 'react';
 import {
   Platform,
   StyleSheet,
@@ -56,11 +56,19 @@ const SignUpForm = props => {
     cleanCustomer,
     setLoading,
   } = props;
+
   const phoneInput = useRef(null);
 
   const min = 1;
   const max = 100;
   const rand = min + Math.random() * (max - min);
+
+  const [isPickerVisible, setIsPickerVisible] = useState(false);
+  const [regionVisible, setRegionVisible] = useState(false);
+
+  const [country, setCountry] = useState('United States');
+  const [countryRegion, setCountryRegion] = useState('AMERICAS');
+
 
   const {
     handleChange,
@@ -84,15 +92,16 @@ const SignUpForm = props => {
       company: '',
       phone: '',
       email: '',
-      country: 'United States',
-      region: 'APAC',
+      country: country,
       checked: false,
       firebase_password: uuid.v4(),
+      region: countryRegion,
     },
+
     onSubmit: async values => {
       values.name = values.first_name + ' ' + values.last_name;
       values.username = values.first_name + ' ' + values.last_name;
-
+			values.region = countryRegion
       //   values.email.substring(
       //     0,
       //     values.email.lastIndexOf('@'),
@@ -144,8 +153,8 @@ const SignUpForm = props => {
     },
   });
 
+  console.log(values);
   const [checked, setChecked] = React.useState(false);
-
 
   const countries = [
     'Afghanistan',
@@ -346,14 +355,199 @@ const SignUpForm = props => {
     'Zimbabwe',
   ];
 
-  const Region = ['AMERICAS', 'APAC', 'MEASA'];
+  const Apac = [
+    'Afghanistan',
+    'Albania',
+    'Algeria',
+    'Andorra',
+    'Angola',
+    'Antigua & Deps',
+    'Argentina',
+    'Armenia',
+    'Australia',
+    'Austria',
+    'Azerbaijan',
+    'Bahamas',
+    'Bahrain',
+    'Bangladesh',
+    'Barbados',
+    'Belarus',
+    'Belgium',
+    'Belize',
+    'Benin',
+    'Bhutan',
+    'Bolivia',
+    'Bosnia Herzegovina',
+    'Botswana',
+    'Brazil',
+    'Brunei',
+    'Bulgaria',
+    'Burkina',
+    'Burundi',
+    'Cambodia',
+    'Cameroon',
+    'Canada',
+    'Cape Verde',
+    'Central African Rep',
+    'Chad',
+    'Chile',
+    'China',
+    'Colombia',
+    'Comoros',
+    'Congo',
+    'Costa Rica',
+    'Croatia',
+    'Cuba',
+    'Cyprus',
+    'Czech Republic',
+    'Denmark',
+    'Djibouti',
+    'Dominica',
+    'Dominican Republic',
+    'Nepal',
+    'India',
+    'Sri Lanka',
+    'Maldives',
+  ];
 
-  const [isPickerVisible, setIsPickerVisible] = useState(false);
+  const measa = [
+    'Gabon',
+    'Gambia',
+    'Georgia',
+    'Germany',
+    'Ghana',
+    'Greece',
+    'Grenada',
+    'Guatemala',
+    'Guinea',
+    'Guinea-Bissau',
+    'Guyana',
+    'Haiti',
+    'Honduras',
+    'Hungary',
+    'Iceland',
+    'Indonesia',
+    'Iran',
+    'Iraq',
+    'Ireland {Republic}',
+    'Israel',
+    'Italy',
+    'Ivory Coast',
+    'Jamaica',
+    'Japan',
+    'Jordan',
+    'Kazakhstan',
+    'Kenya',
+    'Kiribati',
+    'Korea North',
+    'Korea South',
+    'Kosovo',
+    'Kuwait',
+    'Kyrgyzstan',
+    'Laos',
+    'Latvia',
+    'Lebanon',
+    'Lesotho',
+    'Liberia',
+    'Libya',
+    'Liechtenstein',
+    'Lithuania',
+    'Luxembourg',
+    'Macedonia',
+    'Madagascar',
+    'Malawi',
+    'Malaysia',
+    'Maldives',
+    'Mali',
+    'Malta',
+    'Marshall Islands',
+    'Mauritania',
+    'Mauritius',
+    'Mexico',
+    'Micronesia',
+    'Moldova',
+    'Monaco',
+    'Mongolia',
+    'Montenegro',
+    'Morocco',
+    'Mozambique',
+    'Myanmar, {Burma}',
+    'Namibia',
+    'Nauru',
+    'Netherlands',
+    'New Zealand',
+    'Nicaragua',
+    'Niger',
+    'Nigeria',
+    'Norway',
+    'Oman',
+    'Pakistan',
+    'Palau',
+    'Panama',
+    'Papua New Guinea',
+    'Paraguay',
+    'Peru',
+    'Philippines',
+    'Poland',
+    'Portugal',
+    'Qatar',
+    'Romania',
+    'Russian Federation',
+    'Rwanda',
+    'St Kitts & Nevis',
+    'St Lucia',
+    'Saint Vincent & the Grenadines',
+    'Samoa',
+    'San Marino',
+    'Sao Tome & Principe',
+    'Saudi Arabia',
+    'Senegal',
+    'Serbia',
+    'Seychelles',
+    'Sierra Leone',
+    'Singapore',
+    'Slovakia',
+    'Slovenia',
+    'Solomon Islands',
+    'Somalia',
+    'South Africa',
+    'South Sudan',
+    'Spain',
+    'Sudan',
+    'Suriname',
+    'Swaziland',
+    'Sweden',
+    'Switzerland',
+    'Syria',
+    'Taiwan',
+    'Tajikistan',
+    'Tanzania',
+    'Thailand',
+    'Togo',
+    'Tonga',
+    'Trinidad & Tobago',
+    'Tunisia',
+    'Turkey',
+    'Turkmenistan',
+    'Tuvalu',
+    'Uganda',
+    'Ukraine',
+    'United Arab Emirates',
+    'United Kingdom',
+    'Uruguay',
+    'Uzbekistan',
+    'Vanuatu',
+    'Vatican City',
+    'Venezuela',
+    'Vietnam',
+    'Yemen',
+    'Zambia',
+    'Zimbabwe',
+  ];
 
-  const [regionVisible, setRegionVisible] = useState(false);
+  const america = ['United States'];
 
-  const [region, setRegion] = useState('APAC');
-  const [country, setCountry] = useState('United States');
+  console.log('country', countryRegion, country);
 
   const areAllFieldsFilled =
     values.first_name != '' &&
@@ -362,7 +556,8 @@ const SignUpForm = props => {
     values.company &&
     values.email != '' &&
     values.phone != '' &&
-    values.country != '';
+    values.country != '' &&
+    values.region != '';
 
   return (
     <View style={styles.container}>
@@ -493,7 +688,7 @@ const SignUpForm = props => {
                   paddingLeft: 20,
                 }}>
                 <Text style={{fontWeight: 'bold', color: 'gray'}}>
-                  {values.country ? values.country : 'Select a Country'}
+                  {country}
                 </Text>
               </TouchableOpacity>
               {errors.country && (
@@ -503,35 +698,35 @@ const SignUpForm = props => {
               )}
               <View>
                 <Text style={{color: 'black', marginTop: 10}}>Your Region</Text>
-                <TouchableOpacity onPress={() => setRegionVisible(true)}>
-                  <View
+                {/* <TouchableOpacity onPress={() => setRegionVisible(true)}> */}
+                <View
+                  style={{
+                    borderRadius: 5,
+                    borderWidth: 0.5,
+                    overflow: 'hidden',
+                    height: 50,
+                    marginTop: 10,
+                    marginBottom: 10,
+                    justifyContent: 'center',
+                    paddingLeft: 20,
+                  }}>
+                  <Text
                     style={{
-                      borderRadius: 5,
-                      borderWidth: 0.5,
-                      overflow: 'hidden',
-                      height: 50,
-                      marginTop: 10,
-                      marginBottom: 10,
-                      justifyContent: 'center',
-                      paddingLeft: 20,
+                      position: 'absolute',
+                      left: 20,
+                      top: 12,
+                      color: 'gray',
                     }}>
-                    <Text
-                      style={{
-                        position: 'absolute',
-                        left: 20,
-                        top: 12,
-                        color: 'gray',
-                      }}>
-                      {values.region ? values.region : 'Region'}
-                    </Text>
-                    <Ionicons
+                    {countryRegion}
+                  </Text>
+                  {/* <Ionicons
                       name="chevron-down-outline"
                       size={30}
                       color="gray"
                       style={{position: 'absolute', right: 15, top: 8}}
-                    />
-                  </View>
-                </TouchableOpacity>
+                    /> */}
+                </View>
+                {/* </TouchableOpacity> */}
               </View>
 
               <View style={{flex: 1}}>
@@ -642,6 +837,15 @@ const SignUpForm = props => {
                     setFieldValue('country', itemValue);
                     setCountry(itemValue);
                     setErrors({});
+                    setCountryRegion(
+                      Apac.indexOf(itemValue) > -1 !== false
+                        ? 'APAC'
+                        : measa.indexOf(itemValue) > -1 !== false
+                        ? 'MEASA'
+                        : america.indexOf(itemValue) > -1 !== false
+                        ? 'AMERICAS'
+                        : null,
+                    );
                   }
                 }}>
                 {countries.map((value, index) => {
@@ -659,7 +863,7 @@ const SignUpForm = props => {
         </View>
       </Modal>
 
-      <Modal transparent visible={regionVisible}>
+      {/* <Modal transparent visible={regionVisible}>
         <View
           style={{
             flex: 1,
@@ -693,7 +897,7 @@ const SignUpForm = props => {
                 // onValueChange={(itemValue, itemIndex) => setCountry(itemValue)}>
                 onValueChange={(itemValue, itemIndex) => {
                   if (itemValue !== null) {
-                    setFieldValue('region', itemValue);
+                    setFieldValue('countryRegion', itemValue);
                     setRegion(itemValue);
                     setErrors({});
                   }
@@ -711,7 +915,7 @@ const SignUpForm = props => {
             </View>
           </View>
         </View>
-      </Modal>
+      </Modal> */}
     </View>
   );
 };

@@ -25,6 +25,9 @@ import {
 import {fetchUsersByKey, resetUser} from '../account/slice/userSlice';
 
 import {fetchAllPillarPOEs, resetPillarPOE} from './slice/pillarPOESlice';
+import {fetchProfileByID, resetProfile} from '../account/slice/profileSlice';
+
+import {fetchEventByRegion, resetRegionEvent} from './slice/eventByRegionSlice';
 
 const HomeCommunityScreen = props => {
   const dispatch = useDispatch();
@@ -43,6 +46,14 @@ const HomeCommunityScreen = props => {
     useSelector(state => state.memberConnections);
 
   const {users, userLoading, userError} = useSelector(state => state.users);
+
+  const {profile, profileLoading, profileError} = useSelector(
+    state => state.profile,
+  );
+
+  const {regionEvents, regionEventLoading, regionEventError} = useSelector(
+    state => state.regionEvents,
+  );
 
   const {
     pillarMemberContents,
@@ -98,6 +109,21 @@ const HomeCommunityScreen = props => {
     dispatch(resetConnectMember());
   };
 
+  const fetchEventRegion = formData => {
+    dispatch(fetchEventByRegion(formData));
+  };
+
+  const cleanEventRegion = () => {
+    dispatch(resetRegionEvent());
+  };
+
+  const fetchProfile = () => {
+    dispatch(fetchProfileByID());
+  };
+
+  const cleanProfile = () => {
+    dispatch(resetProfile());
+  };
   return (
     <HomeCommunity
       {...props}
@@ -131,6 +157,16 @@ const HomeCommunityScreen = props => {
       pillarMemberContentError={pillarMemberContentError}
       fetchAllPillarMemberContent={fetchAllPillarMemberContent}
       cleanPillarMemberContent={cleanPillarMemberContent}
+      regionEvents={regionEvents}
+      regionEventLoading={regionEventLoading}
+      regionEventError={regionEventError}
+      fetchEventRegion={fetchEventRegion}
+      cleanEventRegion={cleanEventRegion}
+      profile={profile}
+      profileLoading={profileLoading}
+      profileError={profileError}
+      fetchProfile={fetchProfile}
+      cleanProfile={cleanProfile}
     />
   );
 };

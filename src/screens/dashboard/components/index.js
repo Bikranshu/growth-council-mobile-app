@@ -1,4 +1,4 @@
-import React, {useEffect, useState, useRef} from 'react';
+import React, {useEffect, useState, useCallback} from 'react';
 import {
   StyleSheet,
   View,
@@ -26,6 +26,12 @@ import {
   useNavigation,
   useNavigationContainerRef,
 } from '@react-navigation/native';
+import {
+  setAsyncStorage,
+  clearAsyncStorage,
+  getAsyncStorage,
+} from '../../../utils/storageUtil';
+
 import analytics from '@react-native-firebase/analytics';
 import Material from 'react-native-vector-icons/MaterialIcons';
 import PillarList from './PillarList';
@@ -36,22 +42,28 @@ import ToastMessage from '../../../shared/toast';
 import BottomNav from '../../../layout/BottomLayout';
 import HTMLView from 'react-native-htmlview';
 import Loading from '../../../shared/loading';
+import {useFocusEffect} from '@react-navigation/native';
+
 import {isTokenExpired} from '../../../utils/jwtUtil';
 
 import messaging from '@react-native-firebase/messaging';
 
-import {GROWTH_COMMUNITY_ID, GROWTH_CONTENT_ID} from '../../../constants';
+import {
+  GROWTH_COMMUNITY_ID,
+  GROWTH_CONTENT_ID,
+  USER_REGION,
+} from '../../../constants';
 
 const win = Dimensions.get('window').width;
 const contentContainerWidth = win / 2;
 
 const Dashboard = props => {
   const {
-    upcomingEvents,
-    upcomingEventLoading,
-    upcomingEventError,
-    fetchAllUpcomingEvent,
-    cleanUpcomingEvent,
+    // upcomingEvents,
+    // upcomingEventLoading,
+    // upcomingEventError,
+    // fetchAllUpcomingEvent,
+    // cleanUpcomingEvent,
     // poes,
     // poeLoading,
     // poeError,
@@ -94,28 +106,40 @@ const Dashboard = props => {
     profile,
     profileLoading,
     profileError,
-    fetchProfile,
-    cleanProfile,
+    // fetchProfile,
+    // cleanProfile,
+
+    regionEvents,
+    regionEventLoading,
+    regionEventError,
+    fetchEventRegion,
+    cleanEventRegion,
   } = props;
 
+  const {loading, setLoading, message, setMessage, signIn, userCountry} =
+    useAuthentication();
+
+  //   let profileRegion = profile?.user_meta?.region[0]
+  //     ? profile?.user_meta?.region[0]
+  //     : '';
+  const token = getAsyncStorage(USER_REGION);
+  console.log('dash', userCountry);
   const isFocused = useIsFocused();
   const [memberConnection, setMemberConnection] = useState([]);
 
   const [dataSourceCords, setDataSourceCords] = useState(criticalIssue);
   const [ref, setRef] = useState(null);
-  const {loading, setLoading, message, setMessage, signOut} =
-    useAuthentication();
   const navigation = useNavigation();
 
-  const navigationRef = useRef();
-  const routeNameRef = useRef();
+  let string = profile?.user_meta?.region[0];
+  if (string) string = string.toLowerCase();
+  console.log('profile', string);
+
+  const [userRegion, setUserRegion] = useState(profile?.user_meta?.region[0]);
 
   useEffect(() => {
-    const fetchAllUpcomingEventAsync = async () => {
-      await fetchAllUpcomingEvent();
-    };
-    fetchAllUpcomingEventAsync();
-  }, []);
+    setUserRegion(profile?.user_meta?.region[0]);
+  }, [profile]);
 
   useEffect(() => {
     messaging()
@@ -123,27 +147,25 @@ const Dashboard = props => {
 
       .then(token => {
         async () => {
-          //   await isTokenExpired(token);
           console.log('FCM ---> ' + token);
         };
       });
   }, []);
 
-  //   const isTokenExpired = async token => {
-  //     const decoded = jwt_decode(token);
-  //     if (decoded.exp * 1000 < Date.now() ) {
-  //       await signOut();
-  //     }
-  //   };
+  useEffect(() => {
+    fetchEventRegion({
+      region: userRegion,
+    });
+    return () => {
+      cleanEventRegion();
+    };
+  }, []);
 
   useEffect(() => {
-    const fetchAllCommunityMemberAsync = async () => {
-      await fetchAllCommunityMember({
-        s: '',
-        sort: 'Desc',
-      });
-    };
-    fetchAllCommunityMemberAsync();
+    fetchAllCommunityMember({
+      s: '',
+      sort: 'Desc',
+    });
 
     return () => {
       cleanCommunityMember();
@@ -151,18 +173,8 @@ const Dashboard = props => {
   }, []);
 
   useEffect(() => {
-    const fetchPillarSliderAsync = async () => {
-      await fetchAllPillarSlider();
-    };
-    fetchPillarSliderAsync();
+    fetchAllPillarSlider();
   }, []);
-
-  //   useEffect(() => {
-  //     const fetchAllPOEAsync = async () => {
-  //       await fetchAllPOE();
-  //     };
-  //     fetchAllPOEAsync();
-  //   }, []);
 
   useEffect(() => {
     const fetchLatestContentAsync = async () => {
@@ -171,15 +183,16 @@ const Dashboard = props => {
     fetchLatestContentAsync();
   }, []);
 
-  useEffect(() => {
-    fetchCritcalIssue();
-  }, []);
+  const wait = ms =>
+    new Promise(resolve => {
+      setTimeout(() => {
+        resolve(true);
+      }, ms);
+    });
 
   useEffect(() => {
-    fetchProfile();
+    wait(5000).then(() => fetchCritcalIssue());
   }, []);
-
-  console.log('profile', profile);
 
   useEffect(() => {
     setDataSourceCords(criticalIssue);
@@ -406,44 +419,97 @@ const Dashboard = props => {
   };
 
   const _renderCritical = ({item, index}) => {
+    let lowercaseRegion = '';
+    if (userRegion) lowercaseRegion = userRegion.toLowerCase();
+    else console.log("lowercaseRegion doesn't exist, look into it");
+    console.log('a', lowercaseRegion === item?.region);
     return (
-      <TouchableOpacity
-        onPress={() => {
-          navigation.navigate('CriticalIssue', {index});
-        }}>
-        <View
-          style={styles.ContentWrapper}
-          key={index}
-          onLayout={items => {
-            const layout = items.nativeEvent.layout;
-            dataSourceCords[index] = layout.y;
-            setDataSourceCords(dataSourceCords);
-          }}
-          onScroll={e => setPos(e.nativeEvent.contentOffset.y)}>
-          <View
-            style={{
-              flexDirection: 'row',
-              justifyContent: 'center',
-              alignItems: 'center',
+      <>
+        {lowercaseRegion === item?.region ? (
+          <TouchableOpacity
+            onPress={() => {
+              navigation.navigate('CriticalIssue', {
+                index,
+                Userregion: lowercaseRegion,
+              });
             }}>
-            <View style={[styles.criticalW, styles.shadowCritical]}>
-              <Image
-                source={{uri: item?.icon}}
-                style={{width: 36, height: 36}}
-              />
+            <View
+              style={styles.ContentWrapper}
+              key={index}
+              onLayout={items => {
+                const layout = items.nativeEvent.layout;
+                dataSourceCords[index] = layout.y;
+                setDataSourceCords(dataSourceCords);
+              }}
+              onScroll={e => setPos(e.nativeEvent.contentOffset.y)}>
+              <View
+                style={{
+                  flexDirection: 'row',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                }}>
+                <View style={[styles.criticalW, styles.shadowCritical]}>
+                  <Image
+                    source={{uri: item?.icon}}
+                    style={{width: 36, height: 36}}
+                  />
+                </View>
+                <Text
+                  style={{
+                    fontSize: 10,
+                    width: '60%',
+                    paddingLeft: 5,
+                    // paddingRight: 10,
+                  }}>
+                  {item?.heading}
+                </Text>
+              </View>
             </View>
-            <Text
-              style={{
-                fontSize: 10,
-                width: '60%',
-                paddingLeft: 5,
-                // paddingRight: 10,
-              }}>
-              {item?.heading}
-            </Text>
-          </View>
-        </View>
-      </TouchableOpacity>
+          </TouchableOpacity>
+        ) : (
+          //   <TouchableOpacity
+          //     onPress={() => {
+          //       navigation.navigate('CriticalIssue', {
+          //         index,
+          //         Userregion: lowercaseRegion,
+          //       });
+          //     }}>
+          //     <View
+          //       style={styles.ContentWrapper}
+          //       key={index}
+          //       onLayout={items => {
+          //         const layout = items.nativeEvent.layout;
+          //         dataSourceCords[index] = layout.y;
+          //         setDataSourceCords(dataSourceCords);
+          //       }}
+          //       onScroll={e => setPos(e.nativeEvent.contentOffset.y)}>
+          //       <View
+          //         style={{
+          //           flexDirection: 'row',
+          //           justifyContent: 'center',
+          //           alignItems: 'center',
+          //         }}>
+          //         <View style={[styles.criticalW, styles.shadowCritical]}>
+          //           <Image
+          //             source={{uri: item?.icon}}
+          //             style={{width: 36, height: 36}}
+          //           />
+          //         </View>
+          //         <Text
+          //           style={{
+          //             fontSize: 10,
+          //             width: '60%',
+          //             paddingLeft: 5,
+          //             // paddingRight: 10,
+          //           }}>
+          //           {item?.heading}
+          //         </Text>
+          //       </View>
+          //     </View>
+          //   </TouchableOpacity>
+          <></>
+        )}
+      </>
     );
   };
   return (
@@ -487,9 +553,10 @@ const Dashboard = props => {
             </View>
           </ImageBackground>
         </View>
-        {upcomingEvents?.length !== 0 &&
-          upcomingEvents !== null &&
-          upcomingEvents !== false && (
+        <View style={{height: 60}} />
+        {regionEvents?.length !== 0 &&
+          regionEvents !== null &&
+          regionEvents !== false && (
             <View style={styles.top}>
               <View style={styles.eventWrapper}>
                 <Text style={styles.title}>Upcoming Events</Text>
@@ -504,7 +571,7 @@ const Dashboard = props => {
                 <FlatList
                   horizontal
                   showsHorizontalScrollIndicator={false}
-                  data={upcomingEvents}
+                  data={regionEvents}
                   renderItem={item => _renderTopItem(item, navigation)}
                 />
               </View>
@@ -609,7 +676,7 @@ const styles = StyleSheet.create({
   top: {
     height: 210,
     marginBottom: 10,
-    marginTop: 70,
+    marginTop: 10,
     justifyContent: 'center',
     marginLeft: 5,
   },

@@ -33,6 +33,7 @@ import {
   resetConnectMember,
 } from '../people/slice/memberConnectionSlice';
 import {fetchProfileByID, resetProfile} from '../account/slice/profileSlice';
+import {fetchEventByRegion, resetRegionEvent} from './slice/eventByRegionSlice';
 
 const DashboardScreen = props => {
   const dispatch = useDispatch();
@@ -61,6 +62,10 @@ const DashboardScreen = props => {
 
   const {profile, profileLoading, profileError} = useSelector(
     state => state.profile,
+  );
+
+  const {regionEvents, regionEventLoading, regionEventError} = useSelector(
+    state => state.regionEvents,
   );
 
   useEffect(() => {
@@ -124,14 +129,25 @@ const DashboardScreen = props => {
     dispatch(resetConnectMember());
   };
 
-  const fetchProfile = () => {
-    dispatch(fetchProfileByID());
-  };
+//   const fetchProfile = () => {
+//     dispatch(fetchProfileByID());
+//   };
 
   const cleanProfile = () => {
     dispatch(resetProfile());
   };
 
+  const fetchEventRegion = formData => {
+    dispatch(fetchEventByRegion(formData));
+  };
+
+  const cleanEventRegion = () => {
+    dispatch(resetRegionEvent());
+  };
+
+  useEffect(() => {
+    fetchProfileByID();
+  }, []);
   return (
     <Dashboard
       {...props}
@@ -171,12 +187,16 @@ const DashboardScreen = props => {
       memberConnectionError={memberConnectionError}
       connectMemberByIdentifier={connectMemberByIdentifier}
       cleanConnectMember={cleanConnectMember}
-
-	  profile={profile}
+      profile={profile}
       profileLoading={profileLoading}
       profileError={profileError}
-      fetchProfile={fetchProfile}
-      cleanProfile={cleanProfile}
+    //   fetchProfile={fetchProfile}
+    //   cleanProfile={cleanProfile}
+      regionEvents={regionEvents}
+      regionEventLoading={regionEventLoading}
+      regionEventError={regionEventError}
+      fetchEventRegion={fetchEventRegion}
+      cleanEventRegion={cleanEventRegion}
     />
   );
 };

@@ -49,8 +49,15 @@ const SignInForm = props => {
   const [hidePass, setHidePass] = useState(true);
   const [userProfile, setUserProfile] = useState(false);
 
-  const {loading, setLoading, message, setMessage, signIn, userCountry} =
-    useAuthentication();
+  const {
+    loading,
+    setLoading,
+    message,
+    setMessage,
+    signIn,
+    userCountry,
+    setLoggedIn,
+  } = useAuthentication();
 
   useEffect(() => {
     const fetchProfileAsync = async () => {
@@ -72,26 +79,16 @@ const SignInForm = props => {
     initialValues: {username: '', password: ''},
     onSubmit: async values => {
       await signIn(values);
-      {
-        userCountry !== undefined && userCountry !== null
-          ? (setLoggedIn(true), navigation.navigate('Dashboard'))
-          : navigation.navigate('CountryPop', {
-              profile: profile,
-              updateUser: updateUser,
-              userLoading: userLoading,
-              navigation: navigation,
-            });
-      }
-      //   if (userCountry === null || userCountry === undefined) {
-      //     navigation.navigate('CountryPop', {
-      //       profile: profile,
-      //       updateUser: updateUser,
-      //       userLoading: userLoading,
-      //       navigation: navigation,
-      //     });
-      //   } else if (userCountry !== null || userCountry !== undefined) {
-      //     navigation.navigate('Dashboard');
-      //   }
+    //   {
+    //     userCountry === undefined && userCountry === null
+    //       ? navigation.navigate('CountryPop', {
+    //           profile: profile,
+    //           updateUser: updateUser,
+    //           userLoading: userLoading,
+    //           navigation: navigation,
+    //         })
+    //       : (setLoggedIn(true), navigation.navigate('Dashboard'));
+    //   }
     },
   });
 

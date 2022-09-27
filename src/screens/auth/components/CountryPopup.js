@@ -116,7 +116,7 @@ const CountryPopup = props => {
       await updateUser(values).then(async response => {
         if (response?.payload?.code === 200) {
           console.log('response', response);
-          navigation.navigate('Dashboard');
+          navigation.navigate('Dashboard', {region: response?.region});
         }
       });
     },

@@ -35,17 +35,32 @@ const CriticalIssue = props => {
     fetchCritcalIssue,
     cleanCriticalIssue,
     index,
+
+    profile,
+    profileLoading,
+    profileError,
+    fetchProfile,
+    cleanProfile,
+    Userregion,
   } = props;
 
+
+  let profileRegion = profile?.user_meta?.region[0]
+    ? profile?.user_meta?.region[0]
+    : 'APAC';
   const listRef = useRef(null);
   const [regionVisible, setRegionVisible] = useState(false);
-  const [region, setRegion] = useState('');
+  const [region, setRegion] = useState(profileRegion);
   const countries = {
-    Region: 'Region',
-    AMERICAS: 'AMERICAS',
-    APAC: 'APAC',
-    MEASA: 'MEASA',
+    APAC: 'apac',
+    AMERICAS: 'north-america',
+    MEASA: 'measa',
   };
+  console.log('countries');
+
+  useEffect(() => {
+    fetchProfile();
+  }, []);
 
   useEffect(() => {
     fetchCritcalIssue();
@@ -69,43 +84,50 @@ const CriticalIssue = props => {
   };
 
   const _renderCritical = ({item, index}) => {
+    let lowercaseRegion = region.toLowerCase();
     return (
-      <View style={styles.content}>
-        <Image
-          style={{
-            width: Dimensions.get('window').width - 40,
-            height: 120,
-            borderRadius: 8,
-          }}
-          source={{uri: item?.image}}
-        />
-        <View style={styles.contentWrapper}>
-          <Text style={{color: 'black', fontSize: 14, marginBottom: 10}}>
-            {item?.heading}
-          </Text>
-          {item?.areas_of_focus?.map(items => (
-            <View
+      <>
+        {lowercaseRegion === item?.region ? (
+          <View style={styles.content}>
+            <Image
               style={{
-                marginBottom: 10,
-                paddingRight: 20,
-                flexDirection: 'row',
-                alignItems: 'center',
-              }}>
-              <Entypo name="dot-single" size={20} color="black" />
+                width: Dimensions.get('window').width - 40,
+                height: 120,
+                borderRadius: 8,
+              }}
+              source={{uri: item?.image}}
+            />
+            <View style={styles.contentWrapper}>
+              <Text style={{color: 'black', fontSize: 14, marginBottom: 10}}>
+                {item?.heading}
+              </Text>
+              {item?.areas_of_focus?.map(items => (
+                <View
+                  style={{
+                    marginBottom: 10,
+                    paddingRight: 20,
+                    flexDirection: 'row',
+                    alignItems: 'center',
+                  }}>
+                  <Entypo name="dot-single" size={20} color="black" />
 
-              <HTMLView
-                value={items.point}
-                textComponentProps={{
-                  style: {
-                    fontSize: 10,
-                    color: 'black',
-                  },
-                }}
-              />
+                  <HTMLView
+                    value={items.point}
+                    textComponentProps={{
+                      style: {
+                        fontSize: 10,
+                        color: 'black',
+                      },
+                    }}
+                  />
+                </View>
+              ))}
             </View>
-          ))}
-        </View>
-      </View>
+          </View>
+        ) : (
+          <></>
+        )}
+      </>
     );
   };
 
@@ -137,7 +159,7 @@ const CriticalIssue = props => {
                 <View style={styles.titleBorder} />
 
                 <View>
-                  <Text style={{ fontSize: 16, marginTop: 20}}>
+                  <Text style={{fontSize: 16, marginTop: 20}}>
                     Select Region
                   </Text>
                   <TouchableOpacity
@@ -214,15 +236,9 @@ const CriticalIssue = props => {
                 mode="dropdown"
                 itemTextStyle={{fontSize: 12}}
                 onValueChange={async itemValue => {
-                  setRegion(itemValue);
-
-                  //   await fetchAllUsers({
-                  //     s: searchKey,
-                  //     sort: sorting,
-                  //     expertise_areas: category,
-                  //     account: account,
-                  //     region: itemValue,
-                  //   });
+                  let lowerItemValue = itemValue.toLowerCase();
+                  console.log('asc', lowerItemValue);
+                  setRegion(lowerItemValue);
                 }}>
                 {Object.keys(countries).map(key => {
                   return (

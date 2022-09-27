@@ -38,6 +38,12 @@ const EventCalendar = props => {
     calendarEventError,
     fetchAllCalendarEvent,
     cleanCalendarEvent,
+
+    profile,
+    profileLoading,
+    profileError,
+    fetchProfile,
+    cleanProfile,
   } = props;
 
   const [currentMonth, setCurrentMonth] = useState(moment().format('MMMM'));
@@ -47,14 +53,18 @@ const EventCalendar = props => {
   const [showAllEvents, setShowAllEvents] = useState(true);
   const [pickerVisible, setPickerVisible] = useState(false);
   const [regionVisible, setRegionVisible] = useState(false);
-  const [region, setRegion] = useState('');
+  const [region, setRegion] = useState(profile?.user_meta?.region[0]);
 
   const countries = {
     // Region: 'Region',
-    AMERICAS: 'north-america',
-    APAC: 'apac',
-    MEASA: 'measa',
+    'NORTH-AMERICA': 'NORTH-AMERICA',
+    APAC: 'APAC',
+    MEASA: 'MEASA',
   };
+
+  useEffect(() => {
+    fetchProfile();
+  }, []);
 
   //   const [markedDay, setMarkedDay] = useState([]);
 
@@ -439,14 +449,10 @@ const EventCalendar = props => {
                           if (response?.payload?.code === 200) {
                             setCurrentEvents(response?.payload?.data);
                           } else {
-                            // setMarkedDay([]);
                             setCurrentEvents([]);
                           }
                         })
                         .catch(e => {
-                          //   ToastMessage.show(e?.response?.payload?.response);
-
-                          //   setMarkedDay([]);
                           setCurrentEvents([]);
                         });
                     }}>
@@ -495,9 +501,19 @@ const EventCalendar = props => {
                       await fetchAllCalendarEvent({
                         year: calendarYear,
                         month: calendarMonth,
-                        all_events: itemValue,
+                        all_events: showAllEvents,
                         region: itemValue,
-                      });
+                      })
+                        .then(response => {
+                          if (response?.payload?.code === 200) {
+                            setCurrentEvents(response?.payload?.data);
+                          } else {
+                            setCurrentEvents([]);
+                          }
+                        })
+                        .catch(e => {
+                          setCurrentEvents([]);
+                        });
                     }}>
                     {Object.keys(countries).map(key => {
                       return (
