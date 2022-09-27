@@ -531,9 +531,8 @@ const SignUpForm = props => {
                   {errors.country}
                 </Text>
               )}
-              <View>
+              {/* <View>
                 <Text style={{color: 'black', marginTop: 10}}>Your Region</Text>
-                {/* <TouchableOpacity onPress={() => setRegionVisible(true)}> */}
                 <View
                   style={{
                     borderRadius: 5,
@@ -554,15 +553,15 @@ const SignUpForm = props => {
                     }}>
                     {countryRegion}
                   </Text>
-                  {/* <Ionicons
+                  <Ionicons
                       name="chevron-down-outline"
                       size={30}
                       color="gray"
                       style={{position: 'absolute', right: 15, top: 8}}
-                    /> */}
+                    />
                 </View>
-                {/* </TouchableOpacity> */}
-              </View>
+            
+              </View>  */}
 
               <View style={{flex: 1}}>
                 <View style={{flexDirection: 'row', flex: 0.2}}>

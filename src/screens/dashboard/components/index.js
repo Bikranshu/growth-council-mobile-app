@@ -133,7 +133,6 @@ const Dashboard = props => {
 
   let string = profile?.user_meta?.region[0];
   if (string) string = string.toLowerCase();
-  console.log('profile', string);
 
   const [userRegion, setUserRegion] = useState(profile?.user_meta?.region[0]);
 
@@ -423,6 +422,8 @@ const Dashboard = props => {
     if (userRegion) lowercaseRegion = userRegion.toLowerCase();
     else console.log("lowercaseRegion doesn't exist, look into it");
     console.log('a', lowercaseRegion === item?.region);
+    console.log(lowercaseRegion);
+
     return (
       <>
         {lowercaseRegion === item?.region ? (
@@ -467,46 +468,6 @@ const Dashboard = props => {
             </View>
           </TouchableOpacity>
         ) : (
-          //   <TouchableOpacity
-          //     onPress={() => {
-          //       navigation.navigate('CriticalIssue', {
-          //         index,
-          //         Userregion: lowercaseRegion,
-          //       });
-          //     }}>
-          //     <View
-          //       style={styles.ContentWrapper}
-          //       key={index}
-          //       onLayout={items => {
-          //         const layout = items.nativeEvent.layout;
-          //         dataSourceCords[index] = layout.y;
-          //         setDataSourceCords(dataSourceCords);
-          //       }}
-          //       onScroll={e => setPos(e.nativeEvent.contentOffset.y)}>
-          //       <View
-          //         style={{
-          //           flexDirection: 'row',
-          //           justifyContent: 'center',
-          //           alignItems: 'center',
-          //         }}>
-          //         <View style={[styles.criticalW, styles.shadowCritical]}>
-          //           <Image
-          //             source={{uri: item?.icon}}
-          //             style={{width: 36, height: 36}}
-          //           />
-          //         </View>
-          //         <Text
-          //           style={{
-          //             fontSize: 10,
-          //             width: '60%',
-          //             paddingLeft: 5,
-          //             // paddingRight: 10,
-          //           }}>
-          //           {item?.heading}
-          //         </Text>
-          //       </View>
-          //     </View>
-          //   </TouchableOpacity>
           <></>
         )}
       </>
