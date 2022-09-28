@@ -136,9 +136,6 @@ export const AuthProvider = props => {
             );
 
             setUserCountry(response?.data?.region);
-
-			console.log('abcdef', response?.data?.region);
-			await setAsyncStorage(USER_REGION, response?.data?.region ?? data.USER_REGION);
             const messageToken = await messaging().getToken();
             await postToAPI(response.data.user_email, messageToken);
 

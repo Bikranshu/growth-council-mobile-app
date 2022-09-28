@@ -69,6 +69,15 @@ const Dashboard = props => {
     // poeError,
     // fetchAllPOE,
     // cleanPOE,
+
+    // pillarEventLists,
+    // pillarEventLoading,
+    // pillarEventError,
+    // fetchAllPillarEvent,
+    // cleanPillarEvent,
+    // contentSlider,
+
+
     communityMembers,
     communityMemberLoading,
     communityMemberError,
@@ -79,12 +88,6 @@ const Dashboard = props => {
     pillarSliderError,
     fetchAllPillarSlider,
     cleanPillarSlider,
-    pillarEventLists,
-    pillarEventLoading,
-    pillarEventError,
-    fetchAllPillarEvent,
-    cleanPillarEvent,
-    contentSlider,
 
     latestContent,
     latestContentLoading,
@@ -156,18 +159,18 @@ const Dashboard = props => {
       }, ms);
     });
 
+  console.log(userRegion);
   useEffect(() => {
     fetchEventRegion({
       region: userRegion,
     });
-  }, []);
+  }, [profile]);
 
   useEffect(() => {
     fetchAllCommunityMember({
       s: '',
       sort: 'Desc',
     });
-
   }, []);
 
   useEffect(() => {
@@ -222,8 +225,6 @@ const Dashboard = props => {
   };
 
   const _renderItem = ({item, index}) => {
-    console.log(userRegion);
-
     let user = item?.user_meta?.region;
     if (typeof user === 'undefined') {
       user = ' ';
@@ -231,7 +232,6 @@ const Dashboard = props => {
       user = item?.user_meta?.region[0];
     }
 
-    console.log('a', userRegion === user);
     return (
       <>
         {user === userRegion ? (
@@ -285,7 +285,7 @@ const Dashboard = props => {
               )}
             </View>
           </View>
-        ) : user === undefined || user === null || user === "" ? (
+        ) : user === undefined || user === null || user === '' ? (
           <View style={[styles.bottomWrapper, styles.shadowProp]} key={index}>
             <TouchableOpacity
               onPress={() =>
@@ -481,9 +481,7 @@ const Dashboard = props => {
   const _renderCritical = ({item, index}) => {
     let lowercaseRegion = '';
     if (userRegion) lowercaseRegion = userRegion.toLowerCase();
-    else console.log("lowercaseRegion doesn't exist, look into it");
-    console.log(lowercaseRegion === item?.region);
-    console.log(userRegion);
+
     return (
       <>
         {lowercaseRegion === item?.region ? (
@@ -641,7 +639,7 @@ const Dashboard = props => {
               </View>
             </View>
           )}
-        {latestContentLoading && <Loading />}
+        {regionEventLoading && <Loading />}
         {memberConnectionLoading && (
           <View style={{marginTop: 40}}>
             <Loading />
@@ -649,7 +647,7 @@ const Dashboard = props => {
         )}
         {latestContent?.length !== 0 &&
           latestContent !== null &&
-          latestContent !== false && (
+          latestContent !== undefined && (
             <View style={styles.middle}>
               <Text style={[styles.title, {marginLeft: 15}]}>
                 Latest Growth Content

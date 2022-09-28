@@ -108,7 +108,6 @@ const Event = props => {
   const isEventLoaded = Object.keys(events).length === 0;
 
   const eventDate = moment(events?.event_start).format('MMMM D dddd, h:mma - ');
-  const eventEnd = moment(events?.event_end).format('MMMM D dddd, h:mma');
 
   const eventStartMonth = moment(events?.event_start).format('MMMM D dddd');
 
@@ -123,6 +122,7 @@ const Event = props => {
 
   const comma = '/';
 
+
   const backStartTimeStamp = moment(events?.event_start).format(
     'YYYY-MM-DD hh:mm:ss',
   );
@@ -130,28 +130,65 @@ const Event = props => {
     'YYYY-MM-DD hh:mm:ss',
   );
   
+//   const backStartTimeStamp = moment(events?.event_start).format('h : mm a');
+//   const backEndTimeStamp = moment(events?.event_end).format('h : mm a');
+
   const deviceTimeZone = RNLocalize.getTimeZone();
-
   const today = moment().tz(deviceTimeZone);
+//   const deviceOffset = today.utcOffset() / 60;
 
-  const currentTimeZoneOffsetInHours = today.utcOffset() / 60;
+//   const actualtimeZone = events?.time_zone;
+//   const eventToday = moment().tz(actualtimeZone);
+//   const eventOffset = eventToday.utcOffset() / 60;
 
-  console.log('currentTimeZoneOffsetInHours', currentTimeZoneOffsetInHours);
-  useEffect(() => {
-    const convertedToLocalTime = formatTimeByOffset(
-      backStartTimeStamp,
-      currentTimeZoneOffsetInHours,
-    );
-    setTimeToDisplay(convertedToLocalTime);
-  }, [events]);
+//   const com = ':';
 
+//   //calculating gobal timezone of event.start
+//   const startHours = Number(backStartTimeStamp.split(/(\s+)/)[0]);
+//   const min =
+//     Number(backStartTimeStamp.split(/(\s+)/)[3]) +
+//     Number(backStartTimeStamp.split(/(\s+)/)[4]);
+//   const hourCal =
+//     backStartTimeStamp.split(/(\s+)/)[6] === 'am'
+//       ? startHours + min
+//       : startHours + 12 + min;
+//   const startDateCal = hourCal - eventOffset + deviceOffset;
+// //   startDateCal.spilt('.');
+
+//   //calculating gobal timezone of event.end
+//   const endHours = Number(backEndTimeStamp.split(/(\s+)/)[0]);
+//   const min1 =
+//     Number(backEndTimeStamp.split(/(\s+)/)[3]) +
+//     Number(backEndTimeStamp.split(/(\s+)/)[4]);
+//   const hourCal1 =
+//     backEndTimeStamp.split(/(\s+)/)[6] === 'am'
+//       ? endHours + min1
+//       : endHours + 12 + min1;
+//   const endDateCal = hourCal1 - eventOffset + deviceOffset;
+
+//   console.log('hourCal', gobaldate);
+
+//   console.log('abcd123', startDateCal);
+//   console.log('abcd', endDateCal);
+
+    const currentTimeZoneOffsetInHours = today.utcOffset() / 60;
+
+    console.log('currentTimeZoneOffsetInHours', currentTimeZoneOffsetInHours);
     useEffect(() => {
-      const convertedToLocalTimeEnd = formatTimeByOffset(
-        backEndTimeStamp,
+      const convertedToLocalTime = formatTimeByOffset(
+        backStartTimeStamp,
         currentTimeZoneOffsetInHours,
       );
-      setTimeToEnd(convertedToLocalTimeEnd);
+      setTimeToDisplay(convertedToLocalTime);
     }, [events]);
+
+      useEffect(() => {
+        const convertedToLocalTimeEnd = formatTimeByOffset(
+          backEndTimeStamp,
+          currentTimeZoneOffsetInHours,
+        );
+        setTimeToEnd(convertedToLocalTimeEnd);
+      }, [events]);
 
   let title = '';
   const pillarname = events?.pillar_categories
@@ -272,8 +309,8 @@ const Event = props => {
                             marginLeft: 5,
                             color: COMMUNITY_COLOR,
                           }}>
-                          {events?.event_meta?.evo_event_timezone !== undefined
-                            ? events?.event_meta?.evo_event_timezone
+                          {events?.time_zone !== undefined
+                            ? events?.time_zone
                             : ''}
                         </Text>
                       </View>
@@ -448,7 +485,7 @@ const Event = props => {
                     )}
                   </View>
                 )}
-              {events?.title ===
+              {/* {events?.title ===
                 '16TH ANNUAL GROWTH, INNOVATION AND LEADERSHIP' &&
                 eventStatus && (
                   <View>
@@ -665,7 +702,7 @@ const Event = props => {
                       </Text>
                     </View>
                   </View>
-                )}
+                )} */}
 
               <View
                 style={{
