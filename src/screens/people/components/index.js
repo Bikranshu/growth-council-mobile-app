@@ -50,7 +50,7 @@ const People = props => {
     fetchAllExpertises,
     cleanExperties,
 
-	profile,
+    profile,
     profileLoading,
     profileError,
   } = props;
@@ -59,7 +59,12 @@ const People = props => {
   const isFocused = useIsFocused();
   const [category, setCategory] = useState('');
   const [account, setAccount] = useState('');
-  const [region, setRegion] = useState(profile?.user_meta?.region[0]);
+  const [region, setRegion] = useState(
+    profile?.user_meta?.region[0] !== undefined ||
+      profile?.user_meta?.region[0] !== null
+      ? profile?.user_meta?.region[0]
+      : 'Region',
+  );
   const [searchKey, setSearchKey] = useState('');
   const [sorting, setSorting] = useState('ASC');
   const [memberConnection, setMemberConnection] = useState([]);
