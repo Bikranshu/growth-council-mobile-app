@@ -56,7 +56,7 @@ const EventCalendar = props => {
   const [region, setRegion] = useState(profile?.user_meta?.region[0]);
 
   const countries = {
-    // Region: 'Region',
+    Region: 'Region',
     'NORTH-AMERICA': 'NORTH-AMERICA',
     APAC: 'APAC',
     MEASA: 'MEASA',

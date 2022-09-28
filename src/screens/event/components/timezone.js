@@ -29,7 +29,7 @@ export const formatTimeByOffset = (dateString, offset) => {
   const currentHours = dateObject.getHours();
 
 //   console.log('currentHours', currentHours);
-//   console.log('abcde', currentHours + offset);
+//   console.log('abcde', currentHours);
 
 
   // Step 4: Add the offset to the date object

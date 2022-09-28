@@ -44,7 +44,6 @@ const CriticalIssue = props => {
     Userregion,
   } = props;
 
-
   let profileRegion = profile?.user_meta?.region[0]
     ? profile?.user_meta?.region[0]
     : 'APAC';
@@ -52,9 +51,9 @@ const CriticalIssue = props => {
   const [regionVisible, setRegionVisible] = useState(false);
   const [region, setRegion] = useState(profileRegion);
   const countries = {
-    APAC: 'apac',
-    AMERICAS: 'north-america',
-    MEASA: 'measa',
+    APAC: 'APAC',
+    AMERICAS: 'NORTH-AMERICA',
+    // MEASA: 'MEASA',
   };
   useEffect(() => {
     setRegion(profile?.user_meta?.region[0]);
@@ -87,7 +86,9 @@ const CriticalIssue = props => {
   };
 
   const _renderCritical = ({item, index}) => {
-    let lowercaseRegion = region.toLowerCase();
+    let lowercaseRegion = '';
+    if (region) lowercaseRegion = region.toLowerCase();
+    else console.log("lowercaseRegion doesn't exist, look into it");
     return (
       <>
         {lowercaseRegion === item?.region ? (
@@ -239,9 +240,7 @@ const CriticalIssue = props => {
                 mode="dropdown"
                 itemTextStyle={{fontSize: 12}}
                 onValueChange={async itemValue => {
-                  let lowerItemValue = itemValue.toLowerCase();
-                  console.log('asc', lowerItemValue);
-                  setRegion(lowerItemValue);
+                  setRegion(itemValue);
                 }}>
                 {Object.keys(countries).map(key => {
                   return (

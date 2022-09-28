@@ -79,16 +79,6 @@ const SignInForm = props => {
     initialValues: {username: '', password: ''},
     onSubmit: async values => {
       await signIn(values);
-    //   {
-    //     userCountry === undefined && userCountry === null
-    //       ? navigation.navigate('CountryPop', {
-    //           profile: profile,
-    //           updateUser: updateUser,
-    //           userLoading: userLoading,
-    //           navigation: navigation,
-    //         })
-    //       : (setLoggedIn(true), navigation.navigate('Dashboard'));
-    //   }
     },
   });
 

@@ -109,7 +109,6 @@ const HomeCommunity = props => {
     }, []),
   );
 
-  console.log('profile', profile?.user_meta?.region[0]);
   
   useFocusEffect(
     useCallback(() => {
