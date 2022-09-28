@@ -315,7 +315,7 @@ const Event = props => {
                         </Text>
                       </View>
                     ) : null}
-                    {GobalStartMonth === GobalEndMonth ? (
+                    {/* {GobalStartMonth === GobalEndMonth ? (
                       <View style={{flexDirection: 'row'}}>
                         <Text style={{fontSize: 12, marginLeft: 5}}>
                           {GobalDate.split(/(\s+)/)[4]}
@@ -335,7 +335,7 @@ const Event = props => {
                             deviceTimeZone.split('/')[0]}
                         </Text>
                       </View>
-                    ) : null}
+                    ) : null} */}
                   </View>
                   {!eventStatus && (
                     <View
