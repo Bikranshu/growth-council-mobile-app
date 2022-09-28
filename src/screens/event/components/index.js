@@ -122,6 +122,7 @@ const Event = props => {
 
   const comma = '/';
 
+
   // const backStartTimeStamp = moment(events?.event_start).format(
   //   'YYYY-MM-DD hh:mm:ss',
   // );
@@ -219,6 +220,7 @@ const Event = props => {
   //       );
   //       setTimeToEnd(convertedToLocalTimeEnd);
   //     }, [events]);
+
 
   let title = '';
   const pillarname = events?.pillar_categories
