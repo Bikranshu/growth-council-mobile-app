@@ -166,6 +166,13 @@ const Dashboard = props => {
   }, [profile]);
 
   useEffect(() => {
+    const fetchLatestContentAsync = async () => {
+      await fetchLatestContent();
+    };
+    fetchLatestContentAsync();
+  }, []);
+
+  useEffect(() => {
     fetchAllCommunityMember({
       s: '',
       sort: 'Desc',
@@ -177,14 +184,7 @@ const Dashboard = props => {
   }, []);
 
   useEffect(() => {
-    const fetchLatestContentAsync = async () => {
-      await fetchLatestContent();
-    };
-    fetchLatestContentAsync();
-  }, []);
-
-  useEffect(() => {
-    wait(5000).then(() => fetchCritcalIssue());
+    wait(2000).then(() => fetchCritcalIssue());
   }, []);
 
   useEffect(() => {
@@ -230,7 +230,7 @@ const Dashboard = props => {
     } else {
       user = item?.user_meta?.region[0];
     }
-
+    console.log('a', user, userRegion);
     return (
       <>
         {user === userRegion ? (
@@ -284,7 +284,7 @@ const Dashboard = props => {
               )}
             </View>
           </View>
-        ) : user === undefined || user === null || user === '' ? (
+        ) : (
           <View style={[styles.bottomWrapper, styles.shadowProp]} key={index}>
             <TouchableOpacity
               onPress={() =>
@@ -335,8 +335,6 @@ const Dashboard = props => {
               )}
             </View>
           </View>
-        ) : (
-          <></>
         )}
       </>
     );
@@ -663,29 +661,29 @@ const Dashboard = props => {
               />
             </View>
           )}
-        {communityMembers?.length !== 0 &&
+        {/* {communityMembers?.length !== 0 &&
           communityMembers !== null &&
-          communityMembers !== false && (
-            <View style={styles.bottom}>
-              <View
-                style={{
-                  display: 'flex',
-                  flexDirection: 'row',
-                  marginLeft: 15,
-                  marginRight: 15,
-                }}>
-                <Text style={styles.title}>Welcome New Members</Text>
-              </View>
-              <View>
-                <FlatList
-                  horizontal
-                  showsHorizontalScrollIndicator={false}
-                  data={communityMembers}
-                  renderItem={_renderItem}
-                />
-              </View>
-            </View>
-          )}
+          communityMembers !== false && ( */}
+        <View style={styles.bottom}>
+          <View
+            style={{
+              display: 'flex',
+              flexDirection: 'row',
+              marginLeft: 15,
+              marginRight: 15,
+            }}>
+            <Text style={styles.title}>Welcome New Members</Text>
+          </View>
+          <View>
+            <FlatList
+              horizontal
+              showsHorizontalScrollIndicator={false}
+              data={communityMembers}
+              renderItem={_renderItem}
+            />
+          </View>
+        </View>
+        {/* )} */}
 
         <View style={styles.content}>
           <Text style={styles.title}>
