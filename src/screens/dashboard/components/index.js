@@ -159,7 +159,7 @@ const Dashboard = props => {
       }, ms);
     });
 
-  console.log(userRegion);
+//   console.log(userRegion);
   useEffect(() => {
     fetchEventRegion({
       region: userRegion,
