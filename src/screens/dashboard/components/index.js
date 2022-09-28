@@ -77,7 +77,6 @@ const Dashboard = props => {
     // cleanPillarEvent,
     // contentSlider,
 
-
     communityMembers,
     communityMemberLoading,
     communityMemberError,
@@ -159,7 +158,7 @@ const Dashboard = props => {
       }, ms);
     });
 
-  console.log(userRegion);
+  //   console.log(userRegion);
   useEffect(() => {
     fetchEventRegion({
       region: userRegion,
@@ -481,6 +480,9 @@ const Dashboard = props => {
   const _renderCritical = ({item, index}) => {
     let lowercaseRegion = '';
     if (userRegion) lowercaseRegion = userRegion.toLowerCase();
+    // console.log('lowercaseRegion', userRegion);
+
+    if (userRegion === 'MEASA') lowercaseRegion = 'apac';
 
     return (
       <>
