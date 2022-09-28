@@ -51,6 +51,7 @@ const Event = props => {
 
   const toast = useToast();
   const [eventStatus, setEventStatus] = useState(events?.register_status);
+  const [actualtimeZone, setactualtimeZone] = useState(events?.time_zone);
   const [timeToDisplay, setTimeToDisplay] = useState('');
   const [timeToEnd, setTimeToEnd] = useState('');
 
@@ -64,6 +65,10 @@ const Event = props => {
   useEffect(() => {
     setEventStatus(events?.register_status);
   }, [events]);
+
+  useEffect(() => {
+    setactualtimeZone(events?.time_zone);
+  }, [events, eventID]);
 
   const registerEventByEventID = async eventID => {
     const response = await registerEventByIdentifier({
@@ -114,93 +119,79 @@ const Event = props => {
   const eventEndTime = moment(events?.event_end).format('h:mma ');
   const eventEndMonth = moment(events?.event_end).format('MMMM D dddd');
 
-  //   const GobalDate = moment(timeToDisplay).format('MMMM D, hh:mma - ');
-  //   const GobalStartMonth = moment(timeToDisplay).format('MMMM D');
-
-  //   const GobalEndTime = moment(timeToEnd).format('hh:mma ');
-  //   const GobalEndMonth = moment(timeToEnd).format('MMMM D');
 
   const comma = '/';
 
-  // const backStartTimeStamp = moment(events?.event_start).format(
-  //   'YYYY-MM-DD hh:mm:ss',
-  // );
-  // const backEndTimeStamp = moment(events?.event_end).format(
-  //   'YYYY-MM-DD hh:mm:ss',
-  // );
+  const backStartTimeStamp = moment(events?.event_start).format('h : mm a');
+  const backEndTimeStamp = moment(events?.event_end).format('h : mm a');
 
-  //   const backStartTimeStamp = moment(events?.event_start).format('h : mm a');
-  //   const backEndTimeStamp = moment(events?.event_end).format('h : mm a');
+  const deviceTimeZone = RNLocalize.getTimeZone();
 
-  //   const deviceTimeZone = RNLocalize.getTimeZone();
+  const today = moment().tz(deviceTimeZone);
+  const deviceOffset = today?.utcOffset();
 
-  //   const today = moment().tz(deviceTimeZone);
-  //   const deviceOffset = today.utcOffset() / 60;
+  let Today = moment().tz(actualtimeZone);
+  let eventOffset = Today?.utcOffset();
 
-  //   let actualtimeZone = events?.time_zone;
+  const com = ':';
 
-  //   let Today1 = moment().tz(actualtimeZone);
-  //   let eventOffset = Today1.utcOffset() / 60;
+  //calculating gobal timezone of event.start
+  const startHours = Number(backStartTimeStamp.split(/(\s+)/)[0]);
+  const min =
+    Number(backStartTimeStamp.split(/(\s+)/)[3]) +
+    Number(backStartTimeStamp.split(/(\s+)/)[4]);
+  const hourCal =
+    backStartTimeStamp.split(/(\s+)/)[6] === 'am'
+      ? startHours * 60 + min
+      : (startHours + 12) * 60 + min;
+  const startDateCal = (hourCal - eventOffset + deviceOffset) / 60;
 
-  //   console.log(
-  //     'data',
-  //     deviceTimeZone,
-  //     Today1,
-  //     today,
-  //     actualtimeZone,
-  //     eventOffset,
-  //   );
-  //   const com = ':';
+  const gobalStart =
+    startDateCal > 12 && startDateCal < 24
+      ? startDateCal - 12 + 'pm'
+      : startDateCal > 24
+      ? startDateCal - 24 + 'am'
+      : startDateCal + 'am';
+  const first = gobalStart?.split('.')[0];
+  const second = gobalStart?.split('.')[1];
 
-  //   //calculating gobal timezone of event.start
-  //   const startHours = Number(backStartTimeStamp.split(/(\s+)/)[0]);
-  //   const min =
-  //     Number(backStartTimeStamp.split(/(\s+)/)[3]) +
-  //     Number(backStartTimeStamp.split(/(\s+)/)[4]);
-  //   const hourCal =
-  //     backStartTimeStamp.split(/(\s+)/)[6] === 'am'
-  //       ? startHours + min
-  //       : startHours + 12 + min;
-  //   const startDateCal = hourCal - eventOffset + deviceOffset;
-  //   const gobalStart =
-  //     startDateCal > 12 && startDateCal < 24
-  //       ? startDateCal - 12 + 'pm'
-  //       : startDateCal > 24
-  //       ? startDateCal - 24 + 'am'
-  //       : startDateCal + 'am';
-  //   const first = gobalStart.split('.')[0];
-  //   const second = gobalStart.split('.')[1];
-  //   const third = '0.' + second.split('')[0] + second.split('')[1];
-  //   const fourth = Number(third) * 60;
+  const third = '0.' + second?.split('')[0] + second?.split('')[1];
 
-  //   const actualGobalStartTime =
-  //     first + com + fourth + second.split('')[2] + second.split('')[3];
+  const fourth = third !== '0.undefinedundefined' ? Number(third) * 60 : '';
+  const fifth = second?.split('')[2] === undefined ? '' : second?.split('')[2];
+  const sixth = second?.split('')[3] === undefined ? '' : second?.split('')[3];
 
-  //   //calculating gobal timezone of event.end
-  //   const endHours = Number(backEndTimeStamp.split(/(\s+)/)[0]);
-  //   const min1 =
-  //     Number(backEndTimeStamp.split(/(\s+)/)[3]) +
-  //     Number(backEndTimeStamp.split(/(\s+)/)[4]);
-  //   const hourCal1 =
-  //     backEndTimeStamp.split(/(\s+)/)[6] === 'am'
-  //       ? endHours + min1
-  //       : endHours + 12 + min1;
-  //   const endDateCal = hourCal1 - eventOffset + deviceOffset;
-  //   const gobalEnd =
-  //     endDateCal > 12 && endDateCal < 24
-  //       ? endDateCal - 12 + 'pm'
-  //       : endDateCal > 24
-  //       ? endDateCal - 24 + 'am'
-  //       : endDateCal + 'am';
-  //   const a = gobalEnd.split('.')[0];
-  //   const b = gobalEnd.split('.')[1];
-  //   const c = '0.' + b.split('')[0] + b.split('')[1];
-  //   const d = Number(c) * 60;
-  //   const actualGobalEndTime = a + com + d + b.split('')[2] + b.split('')[3];
+  const GobalStartTime = first + com + fourth + fifth + sixth;
+  const actualGobalStartTime =
+    GobalStartTime === 'NaNam:' ? '' : GobalStartTime;
 
-  //   console.log('actualGobalStartTime', actualGobalStartTime);
-  //   console.log('actualGobalEndTime', actualGobalEndTime);
+  console.log('GobalStartTime', GobalStartTime);
 
+  //calculating gobal timezone of event.end
+  const endHours = Number(backEndTimeStamp.split(/(\s+)/)[0]);
+  const min1 =
+    Number(backEndTimeStamp.split(/(\s+)/)[3]) +
+    Number(backEndTimeStamp.split(/(\s+)/)[4]);
+  const hourCal1 =
+    backEndTimeStamp.split(/(\s+)/)[6] === 'am'
+      ? endHours * 60 + min1
+      : (endHours + 12) * 60 + min1;
+  const endDateCal = (hourCal1 - eventOffset + deviceOffset) / 60;
+  const gobalEnd =
+    endDateCal > 12 && endDateCal < 24
+      ? endDateCal - 12 + 'pm'
+      : endDateCal > 24
+      ? endDateCal - 24 + 'am'
+      : endDateCal + 'am';
+  const a = gobalEnd.split('.')[0];
+  const b = gobalEnd.split('.')[1];
+  const c = '0.' + b?.split('')[0] + b?.split('')[1];
+  const d = Number(c) * 60;
+  const GobalEndTime = a + com + d + b?.split('')[2] + b?.split('')[3];
+  const actualGobalEndTime =
+    GobalEndTime === 'NaNam:NaNundefinedundefined' ? '' : GobalEndTime;
+
+  console.log('GobalEndTime', GobalEndTime);
   //   const currentTimeZoneOffsetInHours = today.utcOffset() / 60;
 
   //   console.log('currentTimeZoneOffsetInHours', currentTimeZoneOffsetInHours);
@@ -350,11 +341,9 @@ const Event = props => {
                           {GobalDate.split(/(\s+)/)[6]}
                           {GobalDate.split(/(\s+)/)[5]}
                           {GobalEndTime} */}
-                    {/* {eventStartMonth === eventEndMonth ? (
+                    {eventStartMonth === eventEndMonth ? (
                       <View style={{flexDirection: 'row'}}>
                         <Text style={{fontSize: 12, marginLeft: 5}}>
-                       
-
                           {actualGobalStartTime +
                             eventDate.split(/(\s+)/)[7] +
                             eventDate.split(/(\s+)/)[8] +
@@ -372,7 +361,7 @@ const Event = props => {
                             deviceTimeZone.split('/')[0]}
                         </Text>
                       </View>
-                    ) : null} */}
+                    ) : null}
                   </View>
                   {!eventStatus && (
                     <View
