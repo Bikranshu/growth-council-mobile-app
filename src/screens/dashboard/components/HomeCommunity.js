@@ -92,11 +92,26 @@ const HomeCommunity = props => {
 
   const isFocused = useIsFocused();
 
+  let region = profile?.user_meta?.region;
+  if (typeof region === 'undefined') {
+    region = ' ';
+  } else {
+    region = profile?.user_meta?.region[0];
+  }
+
+  let string = region;
+  if (string) string = string.toLowerCase();
+
+  const [userRegion, setUserRegion] = useState(region);
   const [memberConnection, setMemberConnection] = useState([]);
 
   useEffect(() => {
     fetchProfile();
   }, []);
+
+  useEffect(() => {
+    setUserRegion(region);
+  }, [profile]);
 
   useFocusEffect(
     useCallback(() => {
@@ -109,7 +124,6 @@ const HomeCommunity = props => {
     }, []),
   );
 
-  
   useFocusEffect(
     useCallback(() => {
       const fetchAllPillarPOEAsync = async () => {
@@ -196,54 +210,121 @@ const HomeCommunity = props => {
   };
 
   const _renderItem = ({item, index}) => {
-    return (
-      <View style={[styles.bottomWrapper, styles.shadowProp]} key={index}>
-        <TouchableOpacity
-          onPress={() => navigation.navigate('OthersAccount', {id: item.ID})}>
-          <Image
-            source={{uri: item.avatar}}
-            style={{
-              width: '100%',
-              height: 83,
-              borderRadius: 10,
-            }}
-          />
-          <View style={{padding: 10, paddingBottom: 20}}>
-            <Text
-              style={{
-                fontSize: 10,
-                fontFamily: Typography.FONT_SF_SEMIBOLD,
-                color: '#030303',
-              }}>
-              {item?.user_meta?.first_name} {item?.user_meta?.last_name}
-            </Text>
-            <Text style={{fontSize: 6, color: '#030303', marginTop: 5}}>
-              {item?.registered_date}
-              {'\n'}
-              {'\n'}
-              {item?.user_meta?.Title}
-            </Text>
-          </View>
-        </TouchableOpacity>
+    let user = item?.user_meta?.region;
+    if (typeof user === 'undefined') {
+      user = ' ';
+    } else {
+      user = item?.user_meta?.region[0];
+    }
 
-        <View style={styles.chatIcon}>
-          {!memberConnection[index]?.connection && (
+    return (
+      <>
+        {user === userRegion ? (
+          <View style={[styles.bottomWrapper, styles.shadowProp]} key={index}>
             <TouchableOpacity
-              onPress={async () => {
-                connectMemberByMemberID(item.ID, index);
-                await analytics().logEvent('community', {
-                  item: item?.user_meta?.first_name,
-                  description: 'Community member connection',
-                });
-              }}>
-              <Ionicons name="add-circle" size={20} color="#B2B3B9" />
+              onPress={() =>
+                navigation.navigate('OthersAccount', {id: item.ID})
+              }>
+              <Image
+                source={{uri: item.avatar}}
+                style={{
+                  width: '100%',
+                  height: 83,
+                  borderRadius: 10,
+                }}
+              />
+              <View style={{padding: 10, paddingBottom: 20}}>
+                <Text
+                  style={{
+                    fontSize: 10,
+                    fontFamily: Typography.FONT_SF_SEMIBOLD,
+                    color: '#030303',
+                  }}>
+                  {item?.user_meta?.first_name} {item?.user_meta?.last_name}
+                </Text>
+                <Text style={{fontSize: 6, color: '#030303', marginTop: 5}}>
+                  {item?.registered_date}
+                  {'\n'}
+                  {'\n'}
+                  {item?.user_meta?.Title}
+                </Text>
+              </View>
             </TouchableOpacity>
-          )}
-          {memberConnection[index]?.connection && (
-            <Material name="check-circle" size={20} color="#14A2E2" />
-          )}
-        </View>
-      </View>
+
+            <View style={styles.chatIcon}>
+              {!memberConnection[index]?.connection && (
+                <TouchableOpacity
+                  onPress={async () => {
+                    connectMemberByMemberID(item.ID, index);
+
+                    await analytics().logEvent('dashboard', {
+                      item: item?.user_meta?.first_name,
+                      description: 'Dashboard Member Connection',
+                    });
+                  }}>
+                  <Ionicons name="add-circle" size={20} color="#B2B3B9" />
+                </TouchableOpacity>
+              )}
+              {memberConnection[index]?.connection && (
+                <Material name="check-circle" size={20} color="#14A2E2" />
+              )}
+            </View>
+          </View>
+        ) : user === undefined || user === null || user === '' ? (
+          <View style={[styles.bottomWrapper, styles.shadowProp]} key={index}>
+            <TouchableOpacity
+              onPress={() =>
+                navigation.navigate('OthersAccount', {id: item.ID})
+              }>
+              <Image
+                source={{uri: item.avatar}}
+                style={{
+                  width: '100%',
+                  height: 83,
+                  borderRadius: 10,
+                }}
+              />
+              <View style={{padding: 10, paddingBottom: 20}}>
+                <Text
+                  style={{
+                    fontSize: 10,
+                    fontFamily: Typography.FONT_SF_SEMIBOLD,
+                    color: '#030303',
+                  }}>
+                  {item?.user_meta?.first_name} {item?.user_meta?.last_name}
+                </Text>
+                <Text style={{fontSize: 6, color: '#030303', marginTop: 5}}>
+                  {item?.registered_date}
+                  {'\n'}
+                  {'\n'}
+                  {item?.user_meta?.Title}
+                </Text>
+              </View>
+            </TouchableOpacity>
+
+            <View style={styles.chatIcon}>
+              {!memberConnection[index]?.connection && (
+                <TouchableOpacity
+                  onPress={async () => {
+                    connectMemberByMemberID(item.ID, index);
+
+                    await analytics().logEvent('dashboard', {
+                      item: item?.user_meta?.first_name,
+                      description: 'Dashboard Member Connection',
+                    });
+                  }}>
+                  <Ionicons name="add-circle" size={20} color="#B2B3B9" />
+                </TouchableOpacity>
+              )}
+              {memberConnection[index]?.connection && (
+                <Material name="check-circle" size={20} color="#14A2E2" />
+              )}
+            </View>
+          </View>
+        ) : (
+          <></>
+        )}
+      </>
     );
   };
 

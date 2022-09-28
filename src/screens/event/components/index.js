@@ -122,14 +122,13 @@ const Event = props => {
 
   const comma = '/';
 
+    const backStartTimeStamp = moment(events?.event_start).format(
+      'YYYY-MM-DD hh:mm:ss',
+    );
+    const backEndTimeStamp = moment(events?.event_end).format(
+      'YYYY-MM-DD hh:mm:ss',
+    );
 
-  const backStartTimeStamp = moment(events?.event_start).format(
-    'YYYY-MM-DD hh:mm:ss',
-  );
-  const backEndTimeStamp = moment(events?.event_end).format(
-    'YYYY-MM-DD hh:mm:ss',
-  );
-  
 //   const backStartTimeStamp = moment(events?.event_start).format('h : mm a');
 //   const backEndTimeStamp = moment(events?.event_end).format('h : mm a');
 
@@ -153,7 +152,13 @@ const Event = props => {
 //       ? startHours + min
 //       : startHours + 12 + min;
 //   const startDateCal = hourCal - eventOffset + deviceOffset;
-// //   startDateCal.spilt('.');
+//   const gobalStart =
+//     startDateCal > 12 && startDateCal < 24
+//       ? startDateCal - 12 + 'pm'
+//       : startDateCal > 24
+//       ? startDateCal - 24 + 'am'
+//       : startDateCal + 'am';
+//   //   startDateCal.spilt('.');
 
 //   //calculating gobal timezone of event.end
 //   const endHours = Number(backEndTimeStamp.split(/(\s+)/)[0]);
@@ -165,30 +170,36 @@ const Event = props => {
 //       ? endHours + min1
 //       : endHours + 12 + min1;
 //   const endDateCal = hourCal1 - eventOffset + deviceOffset;
+//   const gobalEnd =
+//     endDateCal > 12 && endDateCal < 24
+//       ? endDateCal - 12 + 'pm'
+//       : endDateCal > 24
+//       ? endDateCal - 24 + 'am'
+//       : endDateCal + 'am';
 
-//   console.log('hourCal', gobaldate);
+//   console.log('hourCal', gobalStart);
 
 //   console.log('abcd123', startDateCal);
 //   console.log('abcd', endDateCal);
 
-    const currentTimeZoneOffsetInHours = today.utcOffset() / 60;
+  const currentTimeZoneOffsetInHours = today.utcOffset() / 60;
 
-    console.log('currentTimeZoneOffsetInHours', currentTimeZoneOffsetInHours);
+  console.log('currentTimeZoneOffsetInHours', currentTimeZoneOffsetInHours);
+  useEffect(() => {
+    const convertedToLocalTime = formatTimeByOffset(
+      backStartTimeStamp,
+      currentTimeZoneOffsetInHours,
+    );
+    setTimeToDisplay(convertedToLocalTime);
+  }, [events]);
+
     useEffect(() => {
-      const convertedToLocalTime = formatTimeByOffset(
-        backStartTimeStamp,
+      const convertedToLocalTimeEnd = formatTimeByOffset(
+        backEndTimeStamp,
         currentTimeZoneOffsetInHours,
       );
-      setTimeToDisplay(convertedToLocalTime);
+      setTimeToEnd(convertedToLocalTimeEnd);
     }, [events]);
-
-      useEffect(() => {
-        const convertedToLocalTimeEnd = formatTimeByOffset(
-          backEndTimeStamp,
-          currentTimeZoneOffsetInHours,
-        );
-        setTimeToEnd(convertedToLocalTimeEnd);
-      }, [events]);
 
   let title = '';
   const pillarname = events?.pillar_categories
@@ -315,7 +326,7 @@ const Event = props => {
                         </Text>
                       </View>
                     ) : null}
-                    {GobalStartMonth === GobalEndMonth ? (
+                    {/* {GobalStartMonth === GobalEndMonth ? (
                       <View style={{flexDirection: 'row'}}>
                         <Text style={{fontSize: 12, marginLeft: 5}}>
                           {GobalDate.split(/(\s+)/)[4]}
@@ -335,7 +346,7 @@ const Event = props => {
                             deviceTimeZone.split('/')[0]}
                         </Text>
                       </View>
-                    ) : null}
+                    ) : null} */}
                   </View>
                   {!eventStatus && (
                     <View
