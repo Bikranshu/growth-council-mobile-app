@@ -53,7 +53,12 @@ const EventCalendar = props => {
   const [showAllEvents, setShowAllEvents] = useState(true);
   const [pickerVisible, setPickerVisible] = useState(false);
   const [regionVisible, setRegionVisible] = useState(false);
-  const [region, setRegion] = useState(profile?.user_meta?.region[0]);
+  let profileRegion = profile?.user_meta?.region[0]
+    ? profile?.user_meta?.region[0]
+    : 'NORTH-AMERICA';
+  let UserRegion =
+    profileRegion === 'AMERICAS' ? 'NORTH-AMERICA' : profileRegion;
+  const [region, setRegion] = useState(UserRegion);
 
   const countries = {
     Region: 'Region',
@@ -351,7 +356,11 @@ const EventCalendar = props => {
                   fontSize: 12,
                   color: '#030303',
                 }}>
-                {region ? region : 'Region'}
+                {region
+                  ? region === 'AMERICAS'
+                    ? 'NORTH-AMERICA'
+                    : region
+                  : 'Region'}
               </Text>
               <Ionicons
                 name="chevron-down-outline"

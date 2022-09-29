@@ -47,7 +47,12 @@ const CriticalIssue = props => {
   let profileRegion = profile?.user_meta?.region[0]
     ? profile?.user_meta?.region[0]
     : 'NORTH-AMERICA';
-  let UserRegion = profileRegion === 'MEASA' ? 'APAC' : profileRegion;
+  let UserRegion =
+    profileRegion === 'MEASA'
+      ? 'APAC'
+      : profileRegion === 'AMERICAS'
+      ? 'NORTH-AMERICA'
+      : profileRegion;
   console.log('UserRegion', profile?.user_meta?.region[0]);
 
   const listRef = useRef(null);
@@ -59,9 +64,7 @@ const CriticalIssue = props => {
     // MEASA: 'MEASA',
   };
   useEffect(() => {
-    setRegion(
-      UserRegion 
-    );
+    setRegion(UserRegion);
   }, [profile]);
 
   useEffect(() => {

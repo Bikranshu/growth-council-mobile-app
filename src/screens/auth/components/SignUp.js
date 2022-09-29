@@ -67,7 +67,7 @@ const SignUpForm = props => {
   const [regionVisible, setRegionVisible] = useState(false);
 
   const [country, setCountry] = useState('United States');
-  const [countryRegion, setCountryRegion] = useState('');
+  const [countryRegion, setCountryRegion] = useState('AMERICAS');
 
   const {
     handleChange,
@@ -392,7 +392,7 @@ const SignUpForm = props => {
     values.company &&
     values.email != '' &&
     values.phone != '' &&
-    values.country != '' ;
+    values.country != '';
 
   return (
     <View style={styles.container}>
