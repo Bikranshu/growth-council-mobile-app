@@ -127,14 +127,12 @@ const Dashboard = props => {
   let string = region;
   if (string) string = string.toLowerCase();
 
-  region = region === 'AMERICAS' ? 'north-america' : region;
+  //   region = region === 'AMERICAS' ? 'north-america' : region;
   const [userRegion, setUserRegion] = useState(region);
 
   useEffect(() => {
     setUserRegion(region);
   }, [profile]);
-
-  console.log('adasd', userRegion);
 
   useEffect(() => {
     messaging()
@@ -154,7 +152,8 @@ const Dashboard = props => {
       }, ms);
     });
 
-  //   console.log(userRegion);
+  console.log('a', userRegion);
+
   useEffect(() => {
     fetchEventRegion({
       region: userRegion,
@@ -165,11 +164,13 @@ const Dashboard = props => {
     fetchAllCommunityMember({
       s: '',
       sort: 'Desc',
+      //   region: userRegion,
     });
   }, []);
-  useEffect(() => {
-    fetchAllUpcomingEvent();
-  }, []);
+
+  //   useEffect(() => {
+  //     fetchAllUpcomingEvent();
+  //   }, []);
 
   useEffect(() => {
     fetchAllPillarSlider();
@@ -233,7 +234,7 @@ const Dashboard = props => {
     // console.log('a', item?.user_meta?.region);
     return (
       <>
-        {user === userRegion ? (
+        {/* {user === userRegion ? ( */}
           <View style={[styles.bottomWrapper, styles.shadowProp]} key={index}>
             <TouchableOpacity
               onPress={() =>
@@ -284,7 +285,7 @@ const Dashboard = props => {
               )}
             </View>
           </View>
-        ) : userRegion !== user ||
+        {/* ) : userRegion !== user ||
           userRegion === '' ||
           userRegion === undefined ? (
           <View style={[styles.bottomWrapper, styles.shadowProp]} key={index}>
@@ -336,8 +337,8 @@ const Dashboard = props => {
                 <Material name="check-circle" size={20} color="#14A2E2" />
               )}
             </View>
-          </View>
-        ) : null}
+          </View> */}
+        {/* ) : null} */}
       </>
     );
   };

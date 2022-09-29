@@ -115,8 +115,8 @@ const Event = props => {
   const eventDate = moment(events?.event_start).format('MMMM D dddd, h:mma - ');
 
   const eventStartMonth = moment(events?.event_start).format('MMMM D dddd');
-
-  const eventEndTime = moment(events?.event_end).format('h:mma ');
+  const eventStartTime = moment(events?.event_start).format('h:mma ');
+  const eventEndTime = moment(events?.event_end).format(' h:mma');
   const eventEndMonth = moment(events?.event_end).format('MMMM D dddd');
 
   const comma = '/';
@@ -139,6 +139,7 @@ const Event = props => {
 
   const today = moment().tz(deviceTimeZone);
   const deviceOffset = today?.utcOffset();
+  console.log('deviceOffset', deviceOffset);
 
   let Today = moment().tz(actualtimeZone);
   console.log(
@@ -151,6 +152,7 @@ const Event = props => {
   const com = ':';
 
   //calculating gobal timezone of event.start
+
   const startHours = Number(backStartTimeStamp.split(/(\s+)/)[0]);
   const min =
     Number(backStartTimeStamp.split(/(\s+)/)[3]) +
@@ -163,16 +165,14 @@ const Event = props => {
 
   const gobalStart =
     startDateCal > 12 && startDateCal < 24
-      ? startDateCal - 12 + 'pm'
+      ? startDateCal - 12 + eventDate.split(/(\s+)/)[7] + 'pm'
       : startDateCal > 24
       ? startDateCal - 24 + 'am'
-      : startDateCal + 'am';
-  const first = gobalStart?.split('.')[0];
-  const second = gobalStart?.split('.')[1];
+      : startDateCal + eventDate.split(/(\s+)/)[7] + 'am';
 
-  //   const asd = startDateCal.toString();
   let nextDay = day?.indexOf(eventDate.split(/(\s+)/)[4]) + 1;
   let previousDay = day?.indexOf(eventDate.split(/(\s+)/)[4]) - 1;
+
   const gobalDate =
     startDateCal > 24
       ? Number(eventDate.split(/(\s+)/)[2]) +
@@ -186,19 +186,21 @@ const Event = props => {
         day[previousDay]
       : null;
 
-  console.log('a', day?.indexOf(eventDate.split(/(\s+)/)[4]) + 1, gobalDate);
+  const first = gobalStart?.split('.')[0];
+  const second = gobalStart?.split('.')[1];
 
   const third = '0.' + second?.split('')[0] + second?.split('')[1];
 
-  const fourth = third !== '0.undefinedundefined' ? Number(third) * 60 : '';
-  const fifth = second?.split('')[2] === undefined ? '' : second?.split('')[2];
-  const sixth = second?.split('')[3] === undefined ? '' : second?.split('')[3];
+  const fourth =
+    third !== '0.undefinedundefined' ? com + Number(third) * 60 : '';
+  const fifth =
+    gobalStart.split(' ')[1] === undefined ? '' : gobalStart.split(' ')[1];
 
-  const GobalStartTime = first + com + fourth + fifth + sixth;
+  const GobalStartTime = first + fourth + fifth;
   const actualGobalStartTime =
     GobalStartTime === 'NaNam:' ? '' : GobalStartTime;
 
-  console.log('GobalStartTime', GobalStartTime);
+  console.log('GobalStartTime', gobalStart, startDateCal);
 
   //calculating gobal timezone of event.end
   const endHours = Number(backEndTimeStamp.split(/(\s+)/)[0]);
@@ -209,22 +211,26 @@ const Event = props => {
     backEndTimeStamp.split(/(\s+)/)[6] === 'am'
       ? endHours * 60 + min1
       : (endHours + 12) * 60 + min1;
+
   const endDateCal = (hourCal1 - eventOffset + deviceOffset) / 60;
   const gobalEnd =
     endDateCal > 12 && endDateCal < 24
-      ? endDateCal - 12 + 'pm'
+      ? endDateCal - 12 + eventDate.split(/(\s+)/)[7] + 'pm'
       : endDateCal > 24
-      ? endDateCal - 24 + 'am'
-      : endDateCal + 'am';
+      ? endDateCal - 24 + '' + ' am'
+      : endDateCal + eventDate.split(/(\s+)/)[7] + 'am';
+
   const a = gobalEnd.split('.')[0];
   const b = gobalEnd.split('.')[1];
   const c = '0.' + b?.split('')[0] + b?.split('')[1];
-  const d = Number(c) * 60;
-  const GobalEndTime = a + com + d + b?.split('')[2] + b?.split('')[3];
-  const actualGobalEndTime =
-    GobalEndTime === 'NaNam:NaNundefinedundefined' ? '' : GobalEndTime;
+  const d = c !== '0.undefinedundefined' ? com + Number(c) * 60 : '';
+  const e = gobalEnd.split(' ')[1] === undefined ? '' : gobalEnd.split(' ')[1];
 
-  console.log('GobalEndTime', GobalEndTime);
+  const GobalEndTime = a + d + e;
+  const actualGobalEndTime = GobalEndTime === 'NaNam:' ? '' : GobalEndTime;
+
+  console.log('GobalEndTime', a, b, c, d);
+  console.log('gobalEnd', gobalEnd.split(' ')[1]);
 
   let title = '';
   const pillarname = events?.pillar_categories
@@ -333,10 +339,8 @@ const Event = props => {
                     {eventStartMonth === eventEndMonth ? (
                       <View style={{flexDirection: 'row'}}>
                         <Text style={{fontSize: 12, marginLeft: 5}}>
-                          {eventDate.split(/(\s+)/)[6]}
-                          {eventDate.split(/(\s+)/)[7]}
+                          {eventStartTime}
                           {eventDate.split(/(\s+)/)[8]}
-                          {eventDate.split(/(\s+)/)[7]}
                           {eventEndTime}
                         </Text>
                         <Text
