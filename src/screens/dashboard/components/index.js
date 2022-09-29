@@ -224,16 +224,17 @@ const Dashboard = props => {
   };
 
   const _renderItem = ({item, index}) => {
-    // let user = item?.user_meta?.region;
-    // if (typeof user === 'undefined') {
-    //   user = ' ';
-    // } else {
-    //   user = item?.user_meta?.region[0];
-    // }
+    let user = item?.user_meta?.region;
+    if (typeof user === 'undefined') {
+      user = ' ';
+    } else {
+      user = item?.user_meta?.region[0];
+    }
     // console.log('a', user, userRegion);
+    // console.log('a', item?.user_meta?.region);
     return (
       <>
-        {item?.user_meta?.region === userRegion ? (
+        {user === userRegion ? (
           <View style={[styles.bottomWrapper, styles.shadowProp]} key={index}>
             <TouchableOpacity
               onPress={() =>
@@ -284,7 +285,9 @@ const Dashboard = props => {
               )}
             </View>
           </View>
-        ) : (
+        ) : userRegion !== user ||
+          userRegion === '' ||
+          userRegion === undefined ? (
           <View style={[styles.bottomWrapper, styles.shadowProp]} key={index}>
             <TouchableOpacity
               onPress={() =>
@@ -335,7 +338,7 @@ const Dashboard = props => {
               )}
             </View>
           </View>
-        )}
+        ) : null}
       </>
     );
   };
@@ -478,7 +481,7 @@ const Dashboard = props => {
   const _renderCritical = ({item, index}) => {
     let lowercaseRegion = '';
     if (userRegion) lowercaseRegion = userRegion.toLowerCase();
-    console.log('lowercaseRegion', userRegion);
+    // console.log('lowercaseRegion', userRegion);
 
     if (userRegion === 'MEASA') lowercaseRegion = 'apac';
     if (userRegion === '' || userRegion === '')

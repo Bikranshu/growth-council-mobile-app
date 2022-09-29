@@ -216,10 +216,11 @@ const HomeCommunity = props => {
     } else {
       user = item?.user_meta?.region[0];
     }
-
+    // console.log('a', user, userRegion);
+    // console.log('a', item?.user_meta?.region);
     return (
       <>
-        {item?.user_meta?.region === userRegion ? (
+        {user === userRegion ? (
           <View style={[styles.bottomWrapper, styles.shadowProp]} key={index}>
             <TouchableOpacity
               onPress={() =>
@@ -270,7 +271,9 @@ const HomeCommunity = props => {
               )}
             </View>
           </View>
-        ) : (
+        ) : userRegion !== user ||
+          userRegion === '' ||
+          userRegion === undefined ? (
           <View style={[styles.bottomWrapper, styles.shadowProp]} key={index}>
             <TouchableOpacity
               onPress={() =>
@@ -321,7 +324,7 @@ const HomeCommunity = props => {
               )}
             </View>
           </View>
-        )}
+        ) : null}
       </>
     );
   };
