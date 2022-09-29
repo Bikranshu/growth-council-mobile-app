@@ -15,10 +15,8 @@ import {
   Alert,
   BackHandler,
 } from 'react-native';
-import {useAuthentication} from '../../../context/auth';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
-import {BubblesLoader} from 'react-native-indicator';
 import moment from 'moment';
 import {
   NavigationContainer,
@@ -26,11 +24,6 @@ import {
   useNavigation,
   useNavigationContainerRef,
 } from '@react-navigation/native';
-import {
-  setAsyncStorage,
-  clearAsyncStorage,
-  getAsyncStorage,
-} from '../../../utils/storageUtil';
 
 import analytics from '@react-native-firebase/analytics';
 import Material from 'react-native-vector-icons/MaterialIcons';
@@ -59,11 +52,11 @@ const contentContainerWidth = win / 2;
 
 const Dashboard = props => {
   const {
-    // upcomingEvents,
-    // upcomingEventLoading,
-    // upcomingEventError,
-    // fetchAllUpcomingEvent,
-    // cleanUpcomingEvent,
+    upcomingEvents,
+    upcomingEventLoading,
+    upcomingEventError,
+    fetchAllUpcomingEvent,
+    cleanUpcomingEvent,
     // poes,
     // poeLoading,
     // poeError,
@@ -134,6 +127,7 @@ const Dashboard = props => {
   let string = region;
   if (string) string = string.toLowerCase();
 
+  //   region = region === 'AMERICAS' ? 'north-america' : region;
   const [userRegion, setUserRegion] = useState(region);
 
   useEffect(() => {
@@ -158,7 +152,8 @@ const Dashboard = props => {
       }, ms);
     });
 
-  //   console.log(userRegion);
+  console.log('a', userRegion);
+
   useEffect(() => {
     fetchEventRegion({
       region: userRegion,
@@ -169,8 +164,13 @@ const Dashboard = props => {
     fetchAllCommunityMember({
       s: '',
       sort: 'Desc',
+      //   region: userRegion,
     });
   }, []);
+
+  //   useEffect(() => {
+  //     fetchAllUpcomingEvent();
+  //   }, []);
 
   useEffect(() => {
     fetchAllPillarSlider();
@@ -234,7 +234,7 @@ const Dashboard = props => {
     // console.log('a', item?.user_meta?.region);
     return (
       <>
-        {user === userRegion ? (
+        {/* {user === userRegion ? ( */}
           <View style={[styles.bottomWrapper, styles.shadowProp]} key={index}>
             <TouchableOpacity
               onPress={() =>
@@ -285,7 +285,7 @@ const Dashboard = props => {
               )}
             </View>
           </View>
-        ) : userRegion !== user ||
+        {/* ) : userRegion !== user ||
           userRegion === '' ||
           userRegion === undefined ? (
           <View style={[styles.bottomWrapper, styles.shadowProp]} key={index}>
@@ -337,8 +337,8 @@ const Dashboard = props => {
                 <Material name="check-circle" size={20} color="#14A2E2" />
               )}
             </View>
-          </View>
-        ) : null}
+          </View> */}
+        {/* ) : null} */}
       </>
     );
   };
@@ -484,7 +484,7 @@ const Dashboard = props => {
     // console.log('lowercaseRegion', userRegion);
 
     if (userRegion === 'MEASA') lowercaseRegion = 'apac';
-    if (userRegion === '' || userRegion === '')
+    if (userRegion === '' || userRegion === 'AMERICAS')
       lowercaseRegion = 'north-america';
     return (
       <>
