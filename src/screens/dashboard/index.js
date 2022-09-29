@@ -83,8 +83,8 @@ const DashboardScreen = props => {
   //     dispatch(fetchAllPOEs());
   //   };
 
-  const fetchAllCommunityMember = () => {
-    dispatch(fetchAllCommunityMembers());
+  const fetchAllCommunityMember = formData => {
+    dispatch(fetchAllCommunityMembers(formData));
   };
 
   const fetchAllPillarSlider = () => {
@@ -129,9 +129,9 @@ const DashboardScreen = props => {
     dispatch(resetConnectMember());
   };
 
-//   const fetchProfile = () => {
-//     dispatch(fetchProfileByID());
-//   };
+  //   const fetchProfile = () => {
+  //     dispatch(fetchProfileByID());
+  //   };
 
   const cleanProfile = () => {
     dispatch(resetProfile());
@@ -190,8 +190,8 @@ const DashboardScreen = props => {
       profile={profile}
       profileLoading={profileLoading}
       profileError={profileError}
-    //   fetchProfile={fetchProfile}
-    //   cleanProfile={cleanProfile}
+      //   fetchProfile={fetchProfile}
+      //   cleanProfile={cleanProfile}
       regionEvents={regionEvents}
       regionEventLoading={regionEventLoading}
       regionEventError={regionEventError}
