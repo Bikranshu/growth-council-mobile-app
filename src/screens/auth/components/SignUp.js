@@ -354,7 +354,7 @@ const SignUpForm = props => {
     'Zimbabwe',
   ];
 
-  const Apac = [
+  const measa = [
     'India',
     'Pakistan',
     'Sri Lanka ',
@@ -365,7 +365,7 @@ const SignUpForm = props => {
     'Maldives',
   ];
 
-  const measa = [
+  const Apac = [
     'Brunei',
     'Burma',
     'Cambodia',

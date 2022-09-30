@@ -161,7 +161,7 @@ const Dashboard = props => {
 
   console.log('a', userRegion);
 
-  useEffect(() => {
+  useEffect(() => {         
     fetchEventRegion({
       region: userRegion,
     });
