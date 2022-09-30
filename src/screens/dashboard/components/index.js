@@ -127,7 +127,14 @@ const Dashboard = props => {
   let string = region;
   if (string) string = string.toLowerCase();
 
-  //   region = region === 'AMERICAS' ? 'north-america' : region;
+  let regionUser = profile?.user_meta?.region;
+  if (typeof regionUser === 'undefined') {
+    regionUser = ' ';
+  } else {
+    regionUser = profile?.user_meta?.region[0];
+  }
+
+  region = region === 'AMERICAS' ? 'north-america' : region;
   const [userRegion, setUserRegion] = useState(region);
 
   useEffect(() => {
@@ -164,7 +171,7 @@ const Dashboard = props => {
     fetchAllCommunityMember({
       s: '',
       sort: 'Desc',
-      region: userRegion,
+      region: regionUser,
     });
   }, [profile]);
 

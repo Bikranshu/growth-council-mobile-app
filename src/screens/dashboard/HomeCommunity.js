@@ -77,8 +77,8 @@ const HomeCommunityScreen = props => {
     dispatch(resetPillarEvent());
   };
 
-  const fetchAllCommunityMember = () => {
-    dispatch(fetchAllCommunityMembers());
+  const fetchAllCommunityMember = formData => {
+    dispatch(fetchAllCommunityMembers(formData));
   };
 
   const cleanCommunityMember = () => {
