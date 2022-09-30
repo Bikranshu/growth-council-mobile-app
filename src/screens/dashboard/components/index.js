@@ -168,7 +168,7 @@ const Dashboard = props => {
   }, [profile]);
 
   regionUser = regionUser === 'NORTH-AMERICA' ? 'AMERICAS' : regionUser;
-  console.log('a', regionUser);
+
   useEffect(() => {
     fetchAllCommunityMember({
       s: '',

@@ -195,12 +195,13 @@ const Event = props => {
     third !== '0.undefinedundefined' ? com + Number(third) * 60 : '';
   const fifth =
     gobalStart.split(' ')[1] === undefined ? '' : gobalStart.split(' ')[1];
+  const six = first?.indexOf(fifth) > -1 !== false ? '' : fifth;
 
-  const GobalStartTime = first + fourth + fifth;
+  const GobalStartTime = first + fourth + six;
   const actualGobalStartTime =
     GobalStartTime === 'NaNam:' ? '' : GobalStartTime;
 
-  console.log('GobalStartTime', gobalStart, startDateCal);
+  console.log('GobalStartTime', first, six);
 
   //calculating gobal timezone of event.end
   const endHours = Number(backEndTimeStamp.split(/(\s+)/)[0]);
@@ -225,12 +226,11 @@ const Event = props => {
   const c = '0.' + b?.split('')[0] + b?.split('')[1];
   const d = c !== '0.undefinedundefined' ? com + Number(c) * 60 : '';
   const e = gobalEnd.split(' ')[1] === undefined ? '' : gobalEnd.split(' ')[1];
-
-  const GobalEndTime = a + d + e;
+  const f = a?.indexOf(e) > -1 !== false ? '' : e;
+  const GobalEndTime = a + d + f;
   const actualGobalEndTime = GobalEndTime === 'NaNam:' ? '' : GobalEndTime;
 
-  console.log('GobalEndTime', a, b, c, d);
-  console.log('gobalEnd', gobalEnd.split(' ')[1]);
+  console.log('GobalEndTime', a, d, f);
 
   let title = '';
   const pillarname = events?.pillar_categories
