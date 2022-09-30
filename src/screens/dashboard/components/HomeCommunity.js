@@ -102,7 +102,12 @@ const HomeCommunity = props => {
   let string = region;
   if (string) string = string.toLowerCase();
 
-  
+  let regionUser = profile?.user_meta?.region;
+  if (typeof regionUser === 'undefined') {
+    regionUser = ' ';
+  } else {
+    regionUser = profile?.user_meta?.region[0];
+  }
 
   region = region === 'AMERICAS' ? 'north-america' : region;
   const [userRegion, setUserRegion] = useState(region);
@@ -164,12 +169,13 @@ const HomeCommunity = props => {
     }, [isFocused]),
   );
 
+  regionUser = regionUser === 'NORTH-AMERICA' ? 'AMERICAS' : regionUser;
   useEffect(() => {
     const fetchAllCommunityMemberAsync = async () => {
       await fetchAllCommunityMember({
         s: '',
         sort: 'Desc',
-        region: profile?.user_meta?.region[0],
+        region: regionUser,
       });
     };
     fetchAllCommunityMemberAsync();

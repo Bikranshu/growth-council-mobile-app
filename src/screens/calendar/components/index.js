@@ -56,9 +56,11 @@ const EventCalendar = props => {
   let profileRegion = profile?.user_meta?.region[0]
     ? profile?.user_meta?.region[0]
     : 'NORTH-AMERICA';
-  let UserRegion =
-    profileRegion === 'AMERICAS' ? 'NORTH-AMERICA' : profileRegion;
-  const [region, setRegion] = useState(UserRegion);
+//   let UserRegion =
+//     profileRegion === 'AMERICAS' ? 'NORTH-AMERICA' : profileRegion;
+  const [region, setRegion] = useState(
+    profileRegion === 'AMERICAS' ? 'NORTH-AMERICA' : profileRegion,
+  );
 
   const countries = {
     Region: 'Region',

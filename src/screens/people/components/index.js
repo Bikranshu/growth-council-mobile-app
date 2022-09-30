@@ -55,15 +55,15 @@ const People = props => {
     profileError,
   } = props;
 
+  let profileRegion = profile?.user_meta?.region[0]
+    ? profile?.user_meta?.region[0]
+    : 'NORTH-AMERICA';
   const toast = useToast();
   const isFocused = useIsFocused();
   const [category, setCategory] = useState('');
   const [account, setAccount] = useState('');
   const [region, setRegion] = useState(
-    profile?.user_meta?.region[0] !== undefined ||
-      profile?.user_meta?.region[0] !== null
-      ? profile?.user_meta?.region[0]
-      : 'Region',
+    profileRegion === 'NORTH-AMERICA' ? 'AMERICAS' : profileRegion,
   );
   const [searchKey, setSearchKey] = useState('');
   const [sorting, setSorting] = useState('ASC');

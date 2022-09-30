@@ -52,11 +52,11 @@ const contentContainerWidth = win / 2;
 
 const Dashboard = props => {
   const {
-    upcomingEvents,
-    upcomingEventLoading,
-    upcomingEventError,
-    fetchAllUpcomingEvent,
-    cleanUpcomingEvent,
+    // upcomingEvents,
+    // upcomingEventLoading,
+    // upcomingEventError,
+    // fetchAllUpcomingEvent,
+    // cleanUpcomingEvent,
     // poes,
     // poeLoading,
     // poeError,
@@ -167,6 +167,8 @@ const Dashboard = props => {
     });
   }, [profile]);
 
+  regionUser = regionUser === 'NORTH-AMERICA' ? 'AMERICAS' : regionUser;
+  console.log('a', regionUser);
   useEffect(() => {
     fetchAllCommunityMember({
       s: '',
