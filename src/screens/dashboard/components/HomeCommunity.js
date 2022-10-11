@@ -93,7 +93,7 @@ const HomeCommunity = props => {
   const isFocused = useIsFocused();
 
   let region = profile?.user_meta?.region;
-  if (typeof region === 'undefined') {
+  if (typeof region === 'undefined' || region === 'null') {
     region = ' ';
   } else {
     region = profile?.user_meta?.region[0];
@@ -103,7 +103,7 @@ const HomeCommunity = props => {
   if (string) string = string.toLowerCase();
 
   let regionUser = profile?.user_meta?.region;
-  if (typeof regionUser === 'undefined') {
+  if (typeof regionUser === 'undefined' || regionUser === 'null') {
     regionUser = ' ';
   } else {
     regionUser = profile?.user_meta?.region[0];
@@ -221,7 +221,7 @@ const HomeCommunity = props => {
 
   const _renderItem = ({item, index}) => {
     let user = item?.user_meta?.region;
-    if (typeof user === 'undefined') {
+    if (typeof user === 'undefined' || user === 'null') {
       user = ' ';
     } else {
       user = item?.user_meta?.region[0];
