@@ -44,6 +44,12 @@ const People = props => {
     connectMemberByIdentifier,
     cleanConnectMember,
 
+	deleteConnections,
+	deleteConnectionLoading,
+	deleteConnectionError,
+	deleteMemberByIdentifier,
+	cleanDeleteMember,
+
     expertise,
     expertiseLoading,
     expertiseError,
@@ -68,6 +74,7 @@ const People = props => {
   const [searchKey, setSearchKey] = useState('');
   const [sorting, setSorting] = useState('ASC');
   const [memberConnection, setMemberConnection] = useState([]);
+  const [deleteConnection, setDeleteConnection] = useState([]);
 
   useFocusEffect(
     useCallback(() => {
@@ -89,6 +96,7 @@ const People = props => {
 
   useEffect(() => {
     setMemberConnection(users);
+	setDeleteConnection(users);
   }, [users]);
 
   useEffect(() => {
@@ -116,6 +124,30 @@ const People = props => {
       ToastMessage.show(response?.payload?.response);
     }
   };
+
+  
+  const deleteMemberByMemberID = async (memberID, index) => {
+    const response = await deleteMemberByIdentifier({member_id: memberID});
+    if (response?.payload?.code === 200) {
+      let items = [...deleteConnection];
+      let item = {...items[index]};
+      item.connection = true;
+      items[index] = item;
+      setDeleteConnection(items);
+      fetchAllUsers({
+        s: searchKey,
+        sort: sorting,
+        expertise_areas: category,
+        account: account,
+        region: region,
+      });
+      ToastMessage.show('You have successfully connected.');
+    } else {
+      toast.closeAll();
+      ToastMessage.show(response?.payload?.response);
+    }
+  };
+
 
   const countries = {
     Region: 'Region',

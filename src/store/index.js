@@ -91,6 +91,7 @@ import termsReducer from '../screens/terms/component/termsSlice';
 import getIdReducer from '../screens/details/slice/getIdBySlug';
 import coachingSignupReducer from '../screens/details/slice/coachingSignupSlice';
 import regionEventsReducer from '../screens/dashboard/slice/eventByRegionSlice';
+import deleteConnectionReducer from '../screens/people/slice/deleteConnectionSlice';
 
 const persistConfig = {
   key: 'root',
@@ -165,6 +166,7 @@ const reducers = combineReducers({
   getSlug: getIdReducer,
   coachingSignup: coachingSignupReducer,
   regionEvents: regionEventsReducer,
+  deleteConnections: deleteConnectionReducer,
 });
 
 const persistedReducer = persistReducer(persistConfig, reducers);

@@ -9,6 +9,10 @@ import {
 } from './slice/memberConnectionSlice';
 import {fetchAllExpertise, resetExpertise} from './slice/expertiseSlice';
 import {fetchProfileByID, resetProfile} from '../account/slice/profileSlice';
+import {
+  deleteMemberByID,
+  resetConnectdelete,
+} from './slice/deleteConnectionSlice';
 
 const PeopleScreen = props => {
   const dispatch = useDispatch();
@@ -16,6 +20,9 @@ const PeopleScreen = props => {
   const {users, userLoading, userError} = useSelector(state => state.users);
   const {memberConnections, memberConnectionLoading, memberConnectionError} =
     useSelector(state => state.memberConnections);
+
+  const {deleteConnections, deleteConnectionLoading, deleteConnectionError} =
+    useSelector(state => state.deleteConnections);
   const {expertise, expertiseLoading, expertiseError} = useSelector(
     state => state.expertise,
   );
@@ -36,6 +43,10 @@ const PeopleScreen = props => {
     return dispatch(connectMemberByID(formData));
   };
 
+  const deleteMemberByIdentifier = formData => {
+    return dispatch(deleteMemberByID(formData));
+  };
+
   const fetchAllExpertises = () => {
     dispatch(fetchAllExpertise());
   };
@@ -52,6 +63,9 @@ const PeopleScreen = props => {
     dispatch(resetConnectMember());
   };
 
+  const cleanDeleteMember = () => {
+    dispatch(resetConnectdelete());
+  };
   const cleanExperties = () => {
     dispatch(resetExpertise());
   };
@@ -84,6 +98,11 @@ const PeopleScreen = props => {
       profile={profile}
       profileLoading={profileLoading}
       profileError={profileError}
+      deleteConnections={deleteConnections}
+      deleteConnectionLoading={deleteConnectionLoading}
+      deleteConnectionError={deleteConnectionError}
+      deleteMemberByIdentifier={deleteMemberByIdentifier}
+      cleanDeleteMember={cleanDeleteMember}
     />
   );
 };
