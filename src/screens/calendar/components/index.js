@@ -53,11 +53,20 @@ const EventCalendar = props => {
   const [showAllEvents, setShowAllEvents] = useState(true);
   const [pickerVisible, setPickerVisible] = useState(false);
   const [regionVisible, setRegionVisible] = useState(false);
-  let profileRegion = profile?.user_meta?.region[0]
-    ? profile?.user_meta?.region[0]
-    : 'NORTH-AMERICA';
-//   let UserRegion =
-//     profileRegion === 'AMERICAS' ? 'NORTH-AMERICA' : profileRegion;
+
+
+  let profileRegion = profile?.user_meta?.region[0];
+  if (typeof profileRegion === 'undefined' ||
+    profileRegion === 'null' ||
+    profileRegion === ''
+  ) {
+    profileRegion = 'Region';
+  } else {
+    profileRegion = profile?.user_meta?.region[0];
+  }
+
+  //   let UserRegion =
+  //     profileRegion === 'AMERICAS' ? 'NORTH-AMERICA' : profileRegion;
   const [region, setRegion] = useState(
     profileRegion === 'AMERICAS' ? 'NORTH-AMERICA' : profileRegion,
   );
