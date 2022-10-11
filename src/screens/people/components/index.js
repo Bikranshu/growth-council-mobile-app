@@ -15,6 +15,7 @@ import {
 } from 'react-native';
 
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import AntDesign from 'react-native-vector-icons/AntDesign';
 import Material from 'react-native-vector-icons/MaterialIcons';
 import {Picker} from '@react-native-picker/picker';
 import {useToast} from 'native-base';
@@ -44,11 +45,11 @@ const People = props => {
     connectMemberByIdentifier,
     cleanConnectMember,
 
-	deleteConnections,
-	deleteConnectionLoading,
-	deleteConnectionError,
-	deleteMemberByIdentifier,
-	cleanDeleteMember,
+    deleteConnections,
+    deleteConnectionLoading,
+    deleteConnectionError,
+    deleteMemberByIdentifier,
+    cleanDeleteMember,
 
     expertise,
     expertiseLoading,
@@ -74,7 +75,7 @@ const People = props => {
   const [searchKey, setSearchKey] = useState('');
   const [sorting, setSorting] = useState('ASC');
   const [memberConnection, setMemberConnection] = useState([]);
-  const [deleteConnection, setDeleteConnection] = useState([]);
+  const [deleteConnect, setDeleteConnect] = useState([]);
 
   useFocusEffect(
     useCallback(() => {
@@ -96,7 +97,7 @@ const People = props => {
 
   useEffect(() => {
     setMemberConnection(users);
-	setDeleteConnection(users);
+    setDeleteConnect(users);
   }, [users]);
 
   useEffect(() => {
@@ -125,15 +126,14 @@ const People = props => {
     }
   };
 
-  
   const deleteMemberByMemberID = async (memberID, index) => {
     const response = await deleteMemberByIdentifier({member_id: memberID});
     if (response?.payload?.code === 200) {
-      let items = [...deleteConnection];
+      let items = [...deleteConnect];
       let item = {...items[index]};
       item.connection = true;
       items[index] = item;
-      setDeleteConnection(items);
+      setDeleteConnect(items);
       fetchAllUsers({
         s: searchKey,
         sort: sorting,
@@ -141,13 +141,12 @@ const People = props => {
         account: account,
         region: region,
       });
-      ToastMessage.show('You have successfully connected.');
+      ToastMessage.show('You have successfully deleted.');
     } else {
       toast.closeAll();
       ToastMessage.show(response?.payload?.response);
     }
   };
-
 
   const countries = {
     Region: 'Region',
@@ -211,12 +210,25 @@ const People = props => {
             </TouchableOpacity>
           )}
           {memberConnection[index]?.connection && (
-            <Material
-              name="check-circle"
-              size={30}
-              color="#14A2E2"
-              style={{marginTop: 25}}
-            />
+            <View style={{flexDirection: 'row'}}>
+              <Material
+                name="check-circle"
+                size={20}
+                color="#14A2E2"
+                style={{marginTop: 25}}
+              />
+              <TouchableOpacity
+                onPress={async () => {
+                  deleteMemberByMemberID(item.ID, index);
+                }}>
+                <AntDesign
+                  name="deleteuser"
+                  size={20}
+                  color="#14A2E2"
+                  style={{marginTop: 25, marginLeft: 10}}
+                />
+              </TouchableOpacity>
+            </View>
           )}
         </View>
       </TouchableOpacity>
@@ -226,8 +238,6 @@ const People = props => {
   const [pickerVisible, setPickerVisible] = useState(false);
   const [accountVisible, setAccountVisible] = useState(false);
   const [regionVisible, setRegionVisible] = useState(false);
-
-  console.log({users});
 
   return (
     <SafeAreaView style={{flex: 1}}>
@@ -320,6 +330,7 @@ const People = props => {
           }}>
           <View style={{marginTop: 10}}>
             {memberConnectionLoading && <Loading />}
+            {deleteConnectionLoading && <Loading />}
             {users === null && users === [] ? (
               <View style={{justifyContent: 'center', alignItems: 'center'}}>
                 <Text
