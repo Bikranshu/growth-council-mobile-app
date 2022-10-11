@@ -56,8 +56,16 @@ const People = props => {
   } = props;
 
   let profileRegion = profile?.user_meta?.region[0]
-    ? profile?.user_meta?.region[0]
-    : 'NORTH-AMERICA';
+  if (
+    typeof profileRegion === 'undefined' ||
+    profileRegion === 'null' ||
+    profileRegion === ''
+  ) {
+    profileRegion = 'Region';
+  } else {
+    profileRegion = profile?.user_meta?.region[0];
+  }
+
   const toast = useToast();
   const isFocused = useIsFocused();
   const [category, setCategory] = useState('');

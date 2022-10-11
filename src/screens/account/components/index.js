@@ -125,7 +125,10 @@ const Profile = props => {
               <View style={styles.header}>
                 <Text style={styles.headingText1}>{profile?.user_login}</Text>
                 <Text style={{color: '#222B45'}}>
-                  {profile?.user_meta?.title}
+					{profile?.user_meta?.title === undefined
+                      ? profile?.user_meta?.Title[0]
+                      : profile?.user_meta?.title[0]}
+                  {/* {profile?.user_meta?.title} */}
                 </Text>
               </View>
             </View>

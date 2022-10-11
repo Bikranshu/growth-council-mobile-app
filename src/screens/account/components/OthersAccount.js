@@ -204,7 +204,7 @@ const OthersAccount = props => {
                   editable={false}
                 />
 
-                <Text style={styles.title}>Region</Text>
+                {/* <Text style={styles.title}>Region</Text>
                 <TextInput
                   style={styles.input}
                   keyboardType="default"
@@ -214,7 +214,7 @@ const OthersAccount = props => {
                       : otherProfiles?.user_meta?.Location[0]
                   }
                   editable={false}
-                />
+                /> */}
 
                 <Text style={styles.title}>Favorite Quote</Text>
                 <TextInput
