@@ -17,6 +17,8 @@ import {
 } from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
+import AntDesign from 'react-native-vector-icons/AntDesign';
+
 import moment from 'moment';
 import {
   NavigationContainer,
@@ -98,6 +100,12 @@ const Dashboard = props => {
     connectMemberByIdentifier,
     cleanConnectMember,
 
+    deleteConnections,
+    deleteConnectionLoading,
+    deleteConnectionError,
+    deleteMemberByIdentifier,
+    cleanDeleteMember,
+
     profile,
     profileLoading,
     profileError,
@@ -119,6 +127,7 @@ const Dashboard = props => {
   }
 
   const [memberConnection, setMemberConnection] = useState([]);
+  const [deleteConnect, setDeleteConnect] = useState([]);
 
   const [dataSourceCords, setDataSourceCords] = useState(criticalIssue);
   const [ref, setRef] = useState(null);
@@ -215,6 +224,7 @@ const Dashboard = props => {
 
   useEffect(() => {
     setMemberConnection(communityMembers);
+    setDeleteConnect(communityMembers);
   }, [communityMembers]);
 
   const connectMemberByMemberID = async (memberID, index) => {
@@ -228,6 +238,26 @@ const Dashboard = props => {
       ToastMessage.show('You have successfully connected.');
     } else {
       //   toast.closeAll();
+      ToastMessage.show(response?.payload?.response);
+    }
+  };
+
+  const deleteMemberByMemberID = async (memberID, index) => {
+    const response = await deleteMemberByIdentifier({member_id: memberID});
+    if (response?.payload?.code === 200) {
+      let items = [...deleteConnect];
+      let item = {...items[index]};
+      item.connection = true;
+      items[index] = item;
+      setDeleteConnect(items);
+      fetchAllCommunityMember({
+        s: '',
+        sort: 'Desc',
+        region: regionUser,
+      });
+      ToastMessage.show('You have successfully deleted.');
+    } else {
+      toast.closeAll();
       ToastMessage.show(response?.payload?.response);
     }
   };
@@ -289,64 +319,23 @@ const Dashboard = props => {
               </TouchableOpacity>
             )}
             {memberConnection[index]?.connection && (
-              <Material name="check-circle" size={20} color="#14A2E2" />
+              <View style={{flexDirection: 'row'}}>
+                <Material name="check-circle" size={20} color="#14A2E2" />
+                <TouchableOpacity
+                  onPress={async () => {
+                    deleteMemberByMemberID(item.ID, index);
+                  }}>
+                  <AntDesign
+                    name="deleteuser"
+                    size={20}
+                    color="#14A2E2"
+                    style={{marginLeft: 5}}
+                  />
+                </TouchableOpacity>
+              </View>
             )}
           </View>
         </View>
-        {/* ) : userRegion !== user ||
-          userRegion === '' ||
-          userRegion === undefined ? (
-          <View style={[styles.bottomWrapper, styles.shadowProp]} key={index}>
-            <TouchableOpacity
-              onPress={() =>
-                navigation.navigate('OthersAccount', {id: item.ID})
-              }>
-              <Image
-                source={{uri: item.avatar}}
-                style={{
-                  width: '100%',
-                  height: 83,
-                  borderRadius: 10,
-                }}
-              />
-              <View style={{padding: 10, paddingBottom: 20}}>
-                <Text
-                  style={{
-                    fontSize: 10,
-                    fontFamily: Typography.FONT_SF_SEMIBOLD,
-                    color: '#030303',
-                  }}>
-                  {item?.user_meta?.first_name} {item?.user_meta?.last_name}
-                </Text>
-                <Text style={{fontSize: 6, color: '#030303', marginTop: 5}}>
-                  {item?.registered_date}
-                  {'\n'}
-                  {'\n'}
-                  {item?.user_meta?.Title}
-                </Text>
-              </View>
-            </TouchableOpacity>
-
-            <View style={styles.chatIcon}>
-              {!memberConnection[index]?.connection && (
-                <TouchableOpacity
-                  onPress={async () => {
-                    connectMemberByMemberID(item.ID, index);
-
-                    await analytics().logEvent('dashboard', {
-                      item: item?.user_meta?.first_name,
-                      description: 'Dashboard Member Connection',
-                    });
-                  }}>
-                  <Ionicons name="add-circle" size={20} color="#B2B3B9" />
-                </TouchableOpacity>
-              )}
-              {memberConnection[index]?.connection && (
-                <Material name="check-circle" size={20} color="#14A2E2" />
-              )}
-            </View>
-          </View> */}
-        {/* ) : null} */}
       </>
     );
   };
@@ -653,6 +642,11 @@ const Dashboard = props => {
           )}
         {regionEventLoading && <Loading />}
         {memberConnectionLoading && (
+          <View style={{marginTop: 40}}>
+            <Loading />
+          </View>
+        )}
+        {deleteConnectionLoading && (
           <View style={{marginTop: 40}}>
             <Loading />
           </View>

@@ -32,6 +32,10 @@ import {
   connectMemberByID,
   resetConnectMember,
 } from '../people/slice/memberConnectionSlice';
+import {
+  deleteMemberByID,
+  resetConnectdelete,
+} from '../people/slice/deleteConnectionSlice';
 import {fetchProfileByID, resetProfile} from '../account/slice/profileSlice';
 import {fetchEventByRegion, resetRegionEvent} from './slice/eventByRegionSlice';
 
@@ -59,6 +63,9 @@ const DashboardScreen = props => {
 
   const {memberConnections, memberConnectionLoading, memberConnectionError} =
     useSelector(state => state.memberConnections);
+
+  const {deleteConnections, deleteConnectionLoading, deleteConnectionError} =
+    useSelector(state => state.deleteConnections);
 
   const {profile, profileLoading, profileError} = useSelector(
     state => state.profile,
@@ -124,9 +131,15 @@ const DashboardScreen = props => {
   const connectMemberByIdentifier = formData => {
     return dispatch(connectMemberByID(formData));
   };
-
   const cleanConnectMember = () => {
     dispatch(resetConnectMember());
+  };
+  const deleteMemberByIdentifier = formData => {
+    return dispatch(deleteMemberByID(formData));
+  };
+
+  const cleanDeleteMember = () => {
+    dispatch(resetConnectdelete());
   };
 
   //   const fetchProfile = () => {
@@ -197,6 +210,11 @@ const DashboardScreen = props => {
       regionEventError={regionEventError}
       fetchEventRegion={fetchEventRegion}
       cleanEventRegion={cleanEventRegion}
+      deleteConnections={deleteConnections}
+      deleteConnectionLoading={deleteConnectionLoading}
+      deleteConnectionError={deleteConnectionError}
+      deleteMemberByIdentifier={deleteMemberByIdentifier}
+      cleanDeleteMember={cleanDeleteMember}
     />
   );
 };

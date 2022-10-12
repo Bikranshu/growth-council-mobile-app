@@ -16,6 +16,7 @@ import {
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import Material from 'react-native-vector-icons/MaterialIcons';
 import FeatherIcon from 'react-native-vector-icons/Feather';
+import AntDesign from 'react-native-vector-icons/AntDesign';
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome';
 import moment from 'moment';
 import analytics from '@react-native-firebase/analytics';
@@ -75,6 +76,12 @@ const HomeCommunity = props => {
     connectMemberByIdentifier,
     cleanConnectMember,
 
+    deleteConnections,
+    deleteConnectionLoading,
+    deleteConnectionError,
+    deleteMemberByIdentifier,
+    cleanDeleteMember,
+
     regionEvents,
     regionEventLoading,
     regionEventError,
@@ -112,6 +119,7 @@ const HomeCommunity = props => {
   region = region === 'AMERICAS' ? 'north-america' : region;
   const [userRegion, setUserRegion] = useState(region);
   const [memberConnection, setMemberConnection] = useState([]);
+  const [deleteConnect, setDeleteConnect] = useState([]);
 
   useEffect(() => {
     fetchProfile();
@@ -170,20 +178,22 @@ const HomeCommunity = props => {
   );
 
   regionUser = regionUser === 'NORTH-AMERICA' ? 'AMERICAS' : regionUser;
-  useEffect(() => {
-    const fetchAllCommunityMemberAsync = async () => {
-      await fetchAllCommunityMember({
-        s: '',
-        sort: 'Desc',
-        region: regionUser,
-      });
-    };
-    fetchAllCommunityMemberAsync();
+  useFocusEffect(
+    useCallback(() => {
+      const fetchAllCommunityMemberAsync = async () => {
+        await fetchAllCommunityMember({
+          s: '',
+          sort: 'Desc',
+          region: regionUser,
+        });
+      };
+      fetchAllCommunityMemberAsync();
 
-    return () => {
-      cleanCommunityMember();
-    };
-  }, []);
+      return () => {
+        cleanCommunityMember();
+      };
+    }, []),
+  );
 
   useFocusEffect(
     useCallback(() => {
@@ -202,6 +212,7 @@ const HomeCommunity = props => {
 
   useEffect(() => {
     setMemberConnection(communityMembers);
+    setDeleteConnect(communityMembers);
   }, [communityMembers]);
 
   const connectMemberByMemberID = async (memberID, index) => {
@@ -215,6 +226,26 @@ const HomeCommunity = props => {
       ToastMessage.show('You have successfully connected.');
     } else {
       //   toast.closeAll();
+      ToastMessage.show(response?.payload?.response);
+    }
+  };
+
+  const deleteMemberByMemberID = async (memberID, index) => {
+    const response = await deleteMemberByIdentifier({member_id: memberID});
+    if (response?.payload?.code === 200) {
+      let items = [...deleteConnect];
+      let item = {...items[index]};
+      item.connection = true;
+      items[index] = item;
+      setDeleteConnect(items);
+      fetchAllCommunityMember({
+        s: '',
+        sort: 'Desc',
+        region: regionUser,
+      });
+      ToastMessage.show('You have successfully deleted.');
+    } else {
+      toast.closeAll();
       ToastMessage.show(response?.payload?.response);
     }
   };
@@ -275,64 +306,24 @@ const HomeCommunity = props => {
               </TouchableOpacity>
             )}
             {memberConnection[index]?.connection && (
-              <Material name="check-circle" size={20} color="#14A2E2" />
+              <View style={{flexDirection: 'row'}}>
+                <Material name="check-circle" size={20} color="#14A2E2" />
+                <TouchableOpacity
+                  onPress={async () => {
+                    deleteMemberByMemberID(item.ID, index);
+                  }}>
+                  <AntDesign
+                    name="deleteuser"
+                    size={20}
+                    color="#14A2E2"
+                    style={{marginLeft: 10}}
+                  />
+                </TouchableOpacity>
+              </View>
             )}
           </View>
         </View>
-        {/* ) : userRegion !== user ||
-          userRegion === '' ||
-          userRegion === undefined ? (
-          <View style={[styles.bottomWrapper, styles.shadowProp]} key={index}>
-            <TouchableOpacity
-              onPress={() =>
-                navigation.navigate('OthersAccount', {id: item.ID})
-              }>
-              <Image
-                source={{uri: item.avatar}}
-                style={{
-                  width: '100%',
-                  height: 83,
-                  borderRadius: 10,
-                }}
-              />
-              <View style={{padding: 10, paddingBottom: 20}}>
-                <Text
-                  style={{
-                    fontSize: 10,
-                    fontFamily: Typography.FONT_SF_SEMIBOLD,
-                    color: '#030303',
-                  }}>
-                  {item?.user_meta?.first_name} {item?.user_meta?.last_name}
-                </Text>
-                <Text style={{fontSize: 6, color: '#030303', marginTop: 5}}>
-                  {item?.registered_date}
-                  {'\n'}
-                  {'\n'}
-                  {item?.user_meta?.Title}
-                </Text>
-              </View>
-            </TouchableOpacity>
-
-            <View style={styles.chatIcon}>
-              {!memberConnection[index]?.connection && (
-                <TouchableOpacity
-                  onPress={async () => {
-                    connectMemberByMemberID(item.ID, index);
-
-                    await analytics().logEvent('dashboard', {
-                      item: item?.user_meta?.first_name,
-                      description: 'Dashboard Member Connection',
-                    });
-                  }}>
-                  <Ionicons name="add-circle" size={20} color="#B2B3B9" />
-                </TouchableOpacity>
-              )}
-              {memberConnection[index]?.connection && (
-                <Material name="check-circle" size={20} color="#14A2E2" />
-              )}
-            </View>
-          </View>
-        ) : null} */}
+      
       </>
     );
   };
@@ -631,7 +622,11 @@ const HomeCommunity = props => {
               <Loading />
             </View>
           )}
-
+          {deleteConnectionLoading && (
+            <View style={{marginTop: 40}}>
+              <Loading />
+            </View>
+          )}
           {pillarPOEs?.length !== 0 && (
             <View style={styles.middle}>
               <Text style={styles.title}>Points of Engagement</Text>
