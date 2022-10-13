@@ -15,7 +15,7 @@ import {Button} from 'native-base';
 import Loading from '../../../shared/loading';
 import {useFormik} from 'formik';
 import {Picker} from '@react-native-picker/picker';
-
+import {useAuthentication} from '../../../context/auth';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import {CommonStyles, Colors, Typography} from '../../../theme';
 import {style} from '@mui/system';
@@ -35,6 +35,7 @@ const CountryPopup = props => {
     updateUser,
   } = props;
 
+  const {setLoggedIn} = useAuthentication();
   const [isPickerVisible, setIsPickerVisible] = useState(false);
   const [regionVisible, setRegionVisible] = useState(false);
 
@@ -135,7 +136,8 @@ const CountryPopup = props => {
       await updateUser(values).then(async response => {
         if (response?.payload?.code === 200) {
           console.log('response', response);
-          navigation.navigate('SignIn');
+        //   setLoggedIn(true);
+            navigation.navigate('Dashboard');
         }
       });
     },
