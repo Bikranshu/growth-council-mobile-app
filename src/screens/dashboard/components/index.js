@@ -133,12 +133,10 @@ const Dashboard = props => {
     typeof regionUser === "undefined" || regionUser === null 
   ) {
     regionUser = ' ';
-	// console.log("afasgfsadrga")
   } else {
     regionUser = profile?.user_meta?.region[0];
   }
 
-//   console.log(typeof region)
   region = region === 'AMERICAS' ? 'north-america' : region;
   const [userRegion, setUserRegion] = useState(region);
 

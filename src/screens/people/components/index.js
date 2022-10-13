@@ -55,10 +55,10 @@ const People = props => {
     profileError,
   } = props;
 
-  let profileRegion = profile?.user_meta?.region[0]
+  let profileRegion = profile?.user_meta?.region;
   if (
     typeof profileRegion === 'undefined' ||
-    profileRegion === 'null' ||
+    profileRegion === null ||
     profileRegion === ''
   ) {
     profileRegion = 'Region';
@@ -202,8 +202,6 @@ const People = props => {
   const [pickerVisible, setPickerVisible] = useState(false);
   const [accountVisible, setAccountVisible] = useState(false);
   const [regionVisible, setRegionVisible] = useState(false);
-
-
 
   return (
     <SafeAreaView style={{flex: 1}}>
