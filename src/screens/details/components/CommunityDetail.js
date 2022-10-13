@@ -663,7 +663,7 @@ const CommunityDetail = props => {
                           poeDetails?.slug === 'innovation-center-tours'
                         ) {
                           navigation.navigate('LibraryDetail', {
-                            resources: 205,
+                            resources: 206,
                             itemname: poeDetails?.name,
                           });
                         } else {
