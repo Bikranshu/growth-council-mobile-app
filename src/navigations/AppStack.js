@@ -3,8 +3,6 @@ import {createStackNavigator, TransitionPresets} from '@react-navigation/stack';
 import {Platform} from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
-const {Navigator, Screen} = createStackNavigator();
-
 import SignUpNextScreen from '../screens/auth/SignUpNext';
 import JourneyScreen from '../screens/auth/Journey';
 
@@ -52,8 +50,10 @@ import Header from '../shared/header/header';
 
 import {GROWTH_COMMUNITY_ID} from '../constants';
 
-const AppStack = () => (
+const {Navigator, Screen} = createStackNavigator();
+const AppStack = navigation => (
   <Navigator>
+    {/*    */}
     <Screen
       name="Drawer"
       component={DrawerNavigation}
@@ -64,15 +64,7 @@ const AppStack = () => (
         headerLeft: () => null,
       })}
     />
-    {/* <Screen
-      name="CountryPop"
-      component={CountryPopupScreen}
-      options={({route, navigation}) => ({
-        headerShown: false,
-        ...TransitionPresets.RevealFromBottomAndroid,
-        gestureDirection: 'horizontal-inverted',
-      })}
-    /> */}
+
     <Screen
       name="Journey"
       component={JourneyScreen}
@@ -121,6 +113,20 @@ const AppStack = () => (
         ),
       })}
     />
+    {/* <Screen
+      name="CountryPop"
+      component={CountryPopupScreen}
+      options={({route, navigation}) => ({
+        header: () => (
+          <SubHeader
+            title="CountryPopup"
+            image={require('../assets/img/appBG.png')}
+            navigation={navigation}
+            noDrawer={true}
+          />
+        ),
+      })}
+    /> */}
 
     <Screen
       name="selfAssessment"

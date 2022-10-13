@@ -23,18 +23,37 @@ import {style} from '@mui/system';
 const screenHeight = Math.round(Dimensions.get('window').height);
 
 const CountryPopup = props => {
-  const {navigation, route} = props;
+  const {
+    navigation,
+    route,
+    profile,
+    profileLoading,
+    profileError,
+    fetchProfile,
+    cleanProfile,
+    userLoading,
+    updateUser,
+  } = props;
 
   const [isPickerVisible, setIsPickerVisible] = useState(false);
   const [regionVisible, setRegionVisible] = useState(false);
 
-  const [region, setRegion] = useState(countryRegion);
+  //   const [region, setRegion] = useState(countryRegion);
   const [country, setCountry] = useState('United States');
-  const [countryRegion, setCountryRegion] = useState('');
+  const [countryRegion, setCountryRegion] = useState('AMERICAS');
 
-  const profile = route?.params?.profile;
-  const userLoading = route?.params?.userLoading;
-  const updateUser = route?.params?.updateUser;
+  useEffect(() => {
+    const fetchProfileAsync = async () => {
+      await fetchProfile();
+    };
+    fetchProfileAsync();
+  }, []);
+
+  //   const profile = route?.params?.profile;
+  //   const userLoading = route?.params?.userLoading;
+  //   const updateUser = route?.params?.updateUser;
+
+  console.log(profile);
 
   let title = profile?.user_meta?.title;
   if (typeof title === 'undefined') {
@@ -116,7 +135,7 @@ const CountryPopup = props => {
       await updateUser(values).then(async response => {
         if (response?.payload?.code === 200) {
           console.log('response', response);
-          navigation.navigate('Dashboard', {region: response?.region});
+          navigation.navigate('SignIn');
         }
       });
     },
@@ -321,201 +340,35 @@ const CountryPopup = props => {
     'Zimbabwe',
   ];
 
-  const Region = ['AMERICAS', 'APAC', 'MEASA'];
+  const measa = [
+    'India',
+    'Pakistan',
+    'Sri Lanka ',
+    'Middle east',
+    'Nepal',
+    'Bangladesh',
+    'Bhutan',
+    'Maldives',
+  ];
 
   const Apac = [
-    'Afghanistan',
-    'Albania',
-    'Algeria',
-    'Andorra',
-    'Angola',
-    'Antigua & Deps',
-    'Argentina',
-    'Armenia',
-    'Australia',
-    'Austria',
-    'Azerbaijan',
-    'Bahamas',
-    'Bahrain',
-    'Bangladesh',
-    'Barbados',
-    'Belarus',
-    'Belgium',
-    'Belize',
-    'Benin',
-    'Bhutan',
-    'Bolivia',
-    'Bosnia Herzegovina',
-    'Botswana',
-    'Brazil',
     'Brunei',
-    'Bulgaria',
-    'Burkina',
-    'Burundi',
+    'Burma',
     'Cambodia',
-    'Cameroon',
-    'Canada',
-    'Cape Verde',
-    'Central African Rep',
-    'Chad',
-    'Chile',
-    'China',
-    'Colombia',
-    'Comoros',
-    'Congo',
-    'Costa Rica',
-    'Croatia',
-    'Cuba',
-    'Cyprus',
-    'Czech Republic',
-    'Denmark',
-    'Djibouti',
-    'Dominica',
-    'Dominican Republic',
-    'Nepal',
-    'India',
-    'Sri Lanka',
-    'Maldives',
-  ];
-
-  const measa = [
-    'Gabon',
-    'Gambia',
-    'Georgia',
-    'Germany',
-    'Ghana',
-    'Greece',
-    'Grenada',
-    'Guatemala',
-    'Guinea',
-    'Guinea-Bissau',
-    'Guyana',
-    'Haiti',
-    'Honduras',
-    'Hungary',
-    'Iceland',
-    'Indonesia',
-    'Iran',
-    'Iraq',
-    'Ireland {Republic}',
-    'Israel',
-    'Italy',
-    'Ivory Coast',
-    'Jamaica',
-    'Japan',
-    'Jordan',
-    'Kazakhstan',
-    'Kenya',
-    'Kiribati',
-    'Korea North',
-    'Korea South',
-    'Kosovo',
-    'Kuwait',
-    'Kyrgyzstan',
+    'Timor- Leste ',
+    'Indonesia ',
     'Laos',
-    'Latvia',
-    'Lebanon',
-    'Lesotho',
-    'Liberia',
-    'Libya',
-    'Liechtenstein',
-    'Lithuania',
-    'Luxembourg',
-    'Macedonia',
-    'Madagascar',
-    'Malawi',
     'Malaysia',
-    'Maldives',
-    'Mali',
-    'Malta',
-    'Marshall Islands',
-    'Mauritania',
-    'Mauritius',
-    'Mexico',
-    'Micronesia',
-    'Moldova',
-    'Monaco',
-    'Mongolia',
-    'Montenegro',
-    'Morocco',
-    'Mozambique',
-    'Myanmar, {Burma}',
-    'Namibia',
-    'Nauru',
-    'Netherlands',
-    'New Zealand',
-    'Nicaragua',
-    'Niger',
-    'Nigeria',
-    'Norway',
-    'Oman',
-    'Pakistan',
-    'Palau',
-    'Panama',
-    'Papua New Guinea',
-    'Paraguay',
-    'Peru',
     'Philippines',
-    'Poland',
-    'Portugal',
-    'Qatar',
-    'Romania',
-    'Russian Federation',
-    'Rwanda',
-    'St Kitts & Nevis',
-    'St Lucia',
-    'Saint Vincent & the Grenadines',
-    'Samoa',
-    'San Marino',
-    'Sao Tome & Principe',
-    'Saudi Arabia',
-    'Senegal',
-    'Serbia',
-    'Seychelles',
-    'Sierra Leone',
     'Singapore',
-    'Slovakia',
-    'Slovenia',
-    'Solomon Islands',
-    'Somalia',
-    'South Africa',
-    'South Sudan',
-    'Spain',
-    'Sudan',
-    'Suriname',
-    'Swaziland',
-    'Sweden',
-    'Switzerland',
-    'Syria',
-    'Taiwan',
-    'Tajikistan',
-    'Tanzania',
     'Thailand',
-    'Togo',
-    'Tonga',
-    'Trinidad & Tobago',
-    'Tunisia',
-    'Turkey',
-    'Turkmenistan',
-    'Tuvalu',
-    'Uganda',
-    'Ukraine',
-    'United Arab Emirates',
-    'United Kingdom',
-    'Uruguay',
-    'Uzbekistan',
-    'Vanuatu',
-    'Vatican City',
-    'Venezuela',
     'Vietnam',
-    'Yemen',
-    'Zambia',
-    'Zimbabwe',
+    'Australia',
+    'Japan',
   ];
 
-  const america = ['United States'];
+  const america = ['United States', 'Canada', 'Mexio'];
 
-  console.log('country', countryRegion, country);
   return (
     <ScrollView
       contentContainerStyle={{flexGrow: 1, height: screenHeight + 100}}>
@@ -543,9 +396,9 @@ const CountryPopup = props => {
                   resizeMode="contain"
                 />
               </View>
+              {userLoading && <Loading />}
               <View style={{marginTop: 10}}>
                 <Text style={styles.headingText1}>Select Your Country</Text>
-
                 <Text style={{marginTop: 20, color: 'black'}}>Country *</Text>
                 <TouchableOpacity
                   onPress={() => setIsPickerVisible(true)}
@@ -565,8 +418,8 @@ const CountryPopup = props => {
                   </Text>
                 </TouchableOpacity>
               </View>
-              {userLoading && <Loading />}
-              <View>
+
+              {/* <View>
                 <Text style={{color: 'black', marginTop: 10}}>Your Region</Text>
                 <TouchableOpacity onPress={() => setRegionVisible(true)}>
                   <View
@@ -592,14 +445,15 @@ const CountryPopup = props => {
                     </Text>
                   </View>
                 </TouchableOpacity>
-              </View>
+              </View> */}
 
               <View style={styles.loginButtonWrapper}>
-                <Button style={styles.loginButton} onPress={handleSubmit}>
+                <TouchableOpacity
+                  style={styles.loginButton}
+                  onPress={handleSubmit}>
                   <Text style={styles.loginButtonText}>Proceed</Text>
-                </Button>
+                </TouchableOpacity>
               </View>
-
               <View
                 style={[
                   styles.signuptext,
@@ -692,7 +546,7 @@ const CountryPopup = props => {
         </View>
       </Modal>
 
-      <Modal transparent visible={regionVisible}>
+      {/* <Modal transparent visible={regionVisible}>
         <View
           style={{
             flex: 1,
@@ -744,11 +598,10 @@ const CountryPopup = props => {
             </View>
           </View>
         </View>
-      </Modal>
+      </Modal> */}
     </ScrollView>
   );
 };
-
 const styles = StyleSheet.create({
   container: {
     ...CommonStyles.container,
@@ -782,7 +635,6 @@ const styles = StyleSheet.create({
     color: 'black',
     marginTop: 20,
   },
-
   signuptext: {
     flexDirection: 'row',
   },
@@ -791,7 +643,6 @@ const styles = StyleSheet.create({
     marginTop: 30,
     marginBottom: 30,
   },
-
   loginButton: {
     width: '50%',
     borderRadius: 5,
@@ -803,7 +654,6 @@ const styles = StyleSheet.create({
     color: Colors.PRIMARY_BUTTON_TEXT_COLOR,
     fontFamily: Typography.FONT_BOLD,
   },
-
   shadowProp: {
     shadowColor: '#000',
     shadowOffset: {
@@ -812,10 +662,8 @@ const styles = StyleSheet.create({
     },
     shadowOpacity: 0.25,
     shadowRadius: 3.84,
-
     elevation: 5,
   },
-
   loading1: {
     top: 10,
     left: 0,
