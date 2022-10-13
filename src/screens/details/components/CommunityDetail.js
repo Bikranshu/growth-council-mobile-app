@@ -628,7 +628,7 @@ const CommunityDetail = props => {
               {poeDetails?.slug === 'transformational-think-tanks' ||
               poeDetails?.slug === 'mega-trends-workshop' ||
               poeDetails?.slug === 'executive-mindxchange-events' ||
-              poeDetails?.slug === 'innovation-center-tours' ? (
+              poeDetails?.slug === 'innovative-center-tours' ? (
                 <View style={styles.buttonWrapper}>
                   <View style={styles.btnWrapper}>
                     <TouchableOpacity
@@ -660,7 +660,7 @@ const CommunityDetail = props => {
                             resourcesName: poeDetails?.name,
                           });
                         } else if (
-                          poeDetails?.slug === 'innovation-center-tours'
+                          poeDetails?.slug === 'innovative-center-tours'
                         ) {
                           navigation.navigate('LibraryDetail', {
                             resources: 205,
