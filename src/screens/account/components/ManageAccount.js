@@ -23,7 +23,7 @@ import {BubblesLoader} from 'react-native-indicator';
 import DropDownPicker from 'react-native-dropdown-picker';
 import ImagePicker from 'react-native-image-crop-picker';
 import {useIsFocused} from '@react-navigation/native';
-
+import analytics from '@react-native-firebase/analytics';
 import {CommonStyles, Colors, Typography} from '../../../theme';
 import ToastMessage from '../../../shared/toast';
 import {PRIMARY_BACKGROUND_COLOR} from '../../../theme/colors';
@@ -74,10 +74,11 @@ const ManageAccount = props => {
   const [value, setValue] = useState([]);
   const [items, setItems] = useState([]);
   const [image, setImage] = useState(profile.avatar);
+  const [imageDetail, setImageDetail] = useState();
 
   let title = profile?.user_meta?.title;
   if (typeof title === 'undefined') {
-    title = ' ';
+    title = profile?.user_meta?.Title[0];
   } else {
     title = profile?.user_meta?.title[0];
   }
@@ -94,6 +95,20 @@ const ManageAccount = props => {
     Location = ' ';
   } else {
     Location = profile?.user_meta?.Location[0];
+  }
+
+  let region = profile?.user_meta?.region;
+  if (typeof region === 'undefined') {
+    region = ' ';
+  } else {
+    region = profile?.user_meta?.region[0];
+  }
+
+  let country = profile?.user_meta?.country;
+  if (typeof country === 'undefined') {
+    country = ' ';
+  } else {
+    country = profile?.user_meta?.country[0];
   }
 
   let favorite_quote = profile?.user_meta?.favorite_quote;
@@ -140,19 +155,20 @@ const ManageAccount = props => {
         name: 'profile_photo.jpg',
       };
       fd.append('file', file);
-      console.log('choosePhotoFromLibrary', fd);
-      await uploadImage(fd).then(async response => {
-        console.log('Upload response:::::::::::', response?.payload?.id);
-        await updateImage({attachment_id: response?.payload?.id}).then(
-          response => {
-            if (response?.payload?.code === 200) {
-              navigation.navigate('Account');
-              ToastMessage.show('Profile Image has been successfully updated.');
-              console.log('Update response::::::::::', response);
-            }
-          },
-        );
-      });
+      setImageDetail(fd);
+
+      //   await uploadImage(fd).then(async response => {
+      //     console.log('Upload response:::::::::::', response?.payload?.id);
+      //     await updateImage({attachment_id: response?.payload?.id}).then(
+      //       response => {
+      //         if (response?.payload?.code === 200) {
+      //           navigation.navigate('Account');
+      //           ToastMessage.show('Profile Image has been successfully updated.');
+      //           console.log('Update response::::::::::', response);
+      //         }
+      //       },
+      //     );
+      //   });
     });
   };
   const choosePhotoFromLibrary = () => {
@@ -167,17 +183,7 @@ const ManageAccount = props => {
         name: 'profile_photo.jpg',
       };
       fd.append('file', file);
-
-      await uploadImage(fd).then(async response => {
-        await updateImage({attachment_id: response?.payload?.id}).then(
-          response => {
-            if (response?.payload?.code === 200) {
-              navigation.navigate('Account');
-              ToastMessage.show('Profile Image has been successfully updated.');
-            }
-          },
-        );
-      });
+      setImageDetail(fd);
     });
   };
 
@@ -198,12 +204,27 @@ const ManageAccount = props => {
       company: company,
       email: profile?.user_email,
       Location: Location,
+      country: country,
+      region: region,
       favorite_quote: favorite_quote,
       expertise_areas1: expertise_areas1,
       professional_summary: professional_summary,
     },
     onSubmit: async values => {
-      await updateUser(values).then(response => {
+      await updateUser(values).then(async response => {
+        //image upload code
+        await uploadImage(imageDetail).then(async response => {
+          await updateImage({attachment_id: response?.payload?.id}).then(
+            response => {
+              if (response?.payload?.code === 200) {
+                navigation.navigate('Account');
+                // ToastMessage.show(
+                //   'Your profile has been successfully updated.',
+                // );
+              }
+            },
+          );
+        });
         if (response?.payload?.code === 200) {
           navigation.navigate('Account');
           ToastMessage.show('Your profile has been successfully updated.');
@@ -336,7 +357,9 @@ const ManageAccount = props => {
                 )}
                 <Text style={styles.headingText1}>{profile?.user_login}</Text>
                 <Text style={{color: '#222B45'}}>
-                  {profile.user_meta?.title}
+                  {profile?.user_meta?.title === undefined
+                    ? profile?.user_meta?.Title[0]
+                    : profile?.user_meta?.title[0]}
                 </Text>
               </View>
             </View>
@@ -353,7 +376,7 @@ const ManageAccount = props => {
                       </Text>
                     </View>
                   )}
-                  {profileLoading && <Loading />}
+                  {/* {profileLoading && <Loading />} */}
 
                   <View style={styles.middleWrapper}>
                     <View style={styles.middleImage}>
@@ -437,7 +460,7 @@ const ManageAccount = props => {
                       editable={false}
                     />
 
-                    <Text
+                    {/* <Text
                       style={{marginLeft: 10, fontSize: 10, color: '#8F9BB3'}}>
                       Region
                     </Text>
@@ -448,7 +471,7 @@ const ManageAccount = props => {
                       onBlur={handleBlur('Location')}
                       error={errors.Location}
                       touched={touched.Location}
-                    />
+                    /> */}
 
                     <Text
                       style={{marginLeft: 10, fontSize: 10, color: '#8F9BB3'}}>

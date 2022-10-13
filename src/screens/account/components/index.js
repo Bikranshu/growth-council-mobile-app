@@ -14,7 +14,7 @@ import Font from 'react-native-vector-icons/FontAwesome5';
 import Ionicon from 'react-native-vector-icons/Ionicons';
 import ButtonToggleGroup from 'react-native-button-toggle-group';
 import {BubblesLoader} from 'react-native-indicator';
-
+import analytics from '@react-native-firebase/analytics';
 import {CommonStyles, Colors, Typography} from '../../../theme';
 import {PRIMARY_BACKGROUND_COLOR} from '../../../theme/colors';
 import Footer from '../../../shared/footer';
@@ -78,7 +78,7 @@ const Profile = props => {
           <Image
             source={require('../../../assets/img/appBG.png')}
             style={{
-              height: (Dimensions.get('screen').height -150)/ 3,
+              height: (Dimensions.get('screen').height - 150) / 3,
               paddingTop: Dimensions.get('screen').height / 9,
               width: win.width,
             }}
@@ -99,7 +99,13 @@ const Profile = props => {
                 marginTop: 10,
                 marginRight: 10,
               }}>
-              <TouchableOpacity onPress={() => navigation.navigate('Settings')}>
+              <TouchableOpacity
+                onPress={async () => {
+                  navigation.navigate('Settings');
+                  await analytics().logEvent('ProfileSettings', {
+                    item: 'Profile Settings',
+                  });
+                }}>
                 <Ionicon
                   name={'settings-outline'}
                   size={24}
@@ -119,7 +125,10 @@ const Profile = props => {
               <View style={styles.header}>
                 <Text style={styles.headingText1}>{profile?.user_login}</Text>
                 <Text style={{color: '#222B45'}}>
-                  {profile?.user_meta?.title}
+					{profile?.user_meta?.title === undefined
+                      ? profile?.user_meta?.Title[0]
+                      : profile?.user_meta?.title[0]}
+                  {/* {profile?.user_meta?.title} */}
                 </Text>
               </View>
             </View>

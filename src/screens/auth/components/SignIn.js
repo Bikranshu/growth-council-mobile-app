@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react';
+import React, {useCallback, useState, useEffect} from 'react';
 import {
   StyleSheet,
   Text,
@@ -8,19 +8,24 @@ import {
   Dimensions,
   ImageBackground,
   Image,
+  Modal,
 } from 'react-native';
-import { useFocusEffect } from '@react-navigation/native';
-import { Button } from 'native-base';
+
+import {Button} from 'native-base';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import { useFormik } from 'formik';
+import {useFormik} from 'formik';
 import * as Yup from 'yup';
-import { BubblesLoader } from 'react-native-indicator';
-import messaging from '@react-native-firebase/messaging';
-import axios from 'axios';
-import { CommonStyles, Colors, Typography } from '../../../theme';
-import { useAuthentication } from '../../../context/auth';
+import {BubblesLoader} from 'react-native-indicator';
+import {Picker} from '@react-native-picker/picker';
+import {
+  useFocusEffect,
+  NavigationContainer,
+  useNavigationContainerRef,
+} from '@react-navigation/native';
+import analytics from '@react-native-firebase/analytics';
+import {CommonStyles, Colors, Typography} from '../../../theme';
+import {useAuthentication} from '../../../context/auth';
 import FlatTextInput from '../../../shared/form/FlatTextInput';
-import { API_URL } from '../../../constants';
 
 const screenHeight = Math.round(Dimensions.get('window').height);
 
@@ -30,12 +35,36 @@ const signInSchema = Yup.object().shape({
 });
 
 const SignInForm = props => {
-  const { navigation } = props;
+  const {
+    navigation,
+    profile,
+    profileLoading,
+    profileError,
+    fetchProfile,
+    cleanProfile,
+    userLoading,
+    updateUser,
+  } = props;
 
   const [hidePass, setHidePass] = useState(true);
+  const [userProfile, setUserProfile] = useState(false);
 
-  const { loading, setLoading, message, setMessage, signIn } =
-    useAuthentication();
+  const {
+    loading,
+    setLoading,
+    message,
+    setMessage,
+    signIn,
+    userCountry,
+    setLoggedIn,
+  } = useAuthentication();
+
+  useEffect(() => {
+    const fetchProfileAsync = async () => {
+      await fetchProfile();
+    };
+    fetchProfileAsync();
+  }, []);
 
   const {
     handleChange,
@@ -47,12 +76,11 @@ const SignInForm = props => {
     isValid,
   } = useFormik({
     validationSchema: signInSchema,
-    initialValues: { username: '', password: '' },
+    initialValues: {username: '', password: ''},
     onSubmit: async values => {
       await signIn(values);
     },
   });
-
 
   const areAllFieldsFilled = values.username != '' && values.password != '';
 
@@ -67,29 +95,28 @@ const SignInForm = props => {
       setMessage(null);
       ``;
       setLoading(false);
-
     }, []),
   );
 
   return (
     <ScrollView
-      contentContainerStyle={{ flexGrow: 1, height: screenHeight + 100 }}>
+      contentContainerStyle={{flexGrow: 1, height: screenHeight + 100}}>
       <View style={styles.container}>
         <ImageBackground
           source={require('../../../assets/img/splash-screen.png')}
           resizeMode="cover">
-          <View style={{ height: '15%' }} />
+          <View style={{height: '15%'}} />
 
           <View>
             <View style={styles.content}>
               <View style={styles.header}>
                 <Image
-                  style={{ width: '80%' }}
+                  style={{width: '80%'}}
                   source={require('../../../assets/img/GILCouncil.jpg')}
                   resizeMode="contain"
                 />
               </View>
-              <View style={{ marginTop: 10 }}>
+              <View style={{marginTop: 10}}>
                 <Text style={styles.headingText1}>
                   Growth Innovation
                   {'\n'}
@@ -120,42 +147,43 @@ const SignInForm = props => {
                   autoCapitalize="none"
                 />
                 {errors.username && (
-                  <Text style={{ fontSize: 10, color: 'red' }}>
+                  <Text style={{fontSize: 10, color: 'red'}}>
                     {errors.username}
                   </Text>
                 )}
+                <View>
+                  <FlatTextInput
+                    label="Password *"
+                    value={values.password}
+                    secureTextEntry={hidePass}
+                    onChangeText={handleChange('password')}
+                    onFocus={handleBlur('password')}
+                    error={errors.password}
+                    touched={touched.password}
+                    autoCapitalize="none"
+                  />
+                  {errors.password && (
+                    <Text style={{fontSize: 10, color: 'red'}}>
+                      {errors.password}
+                    </Text>
+                  )}
 
-                <FlatTextInput
-                  label="Password *"
-                  value={values.password}
-                  secureTextEntry={hidePass}
-                  onChangeText={handleChange('password')}
-                  onFocus={handleBlur('password')}
-                  error={errors.password}
-                  touched={touched.password}
-                  autoCapitalize="none"
-                />
-                {errors.password && (
-                  <Text style={{ fontSize: 10, color: 'red' }}>
-                    {errors.password}
-                  </Text>
-                )}
-
-                <Ionicons
-                  name={!hidePass ? 'eye-outline' : 'eye-off-outline'}
-                  size={22}
-                  color={
-                    !hidePass
-                      ? Colors.PRIMARY_BACKGROUND_ICON_COLOR
-                      : Colors.PRIMARY_HEADING_COLOR
-                  }
-                  onPress={() => setHidePass(!hidePass)}
-                  style={{
-                    position: 'absolute',
-                    bottom: 20,
-                    right: 15,
-                  }}
-                />
+                  <Ionicons
+                    name={!hidePass ? 'eye-outline' : 'eye-off-outline'}
+                    size={22}
+                    color={
+                      !hidePass
+                        ? Colors.PRIMARY_BACKGROUND_ICON_COLOR
+                        : Colors.PRIMARY_HEADING_COLOR
+                    }
+                    onPress={() => setHidePass(!hidePass)}
+                    style={{
+                      position: 'absolute',
+                      top: 15,
+                      right: 15,
+                    }}
+                  />
+                </View>
               </View>
               {!message?.success && (
                 <View style={styles.message}>
@@ -169,7 +197,7 @@ const SignInForm = props => {
                     !areAllFieldsFilled
                       ? styles.loginButton1
                       : styles.loginButton,
-                    loading && { backgroundColor: 'grey' },
+                    loading && {backgroundColor: 'grey'},
                   ]}
                   onPress={handleSubmit}
                   disabled={!areAllFieldsFilled || loading}>
@@ -188,7 +216,7 @@ const SignInForm = props => {
               <View style={styles.signuptext}>
                 <Text>Join Growth Innovation Leadership Council</Text>
                 <Text
-                  style={{ color: '#31ade5', fontWeight: '700' }}
+                  style={{color: '#31ade5', fontWeight: '700'}}
                   onPress={() => navigation.navigate('SignUp')}>
                   {' '}
                   Sign Up{' '}
@@ -197,13 +225,20 @@ const SignInForm = props => {
               <View
                 style={[
                   styles.signuptext,
-                  { marginTop: Platform.OS === 'ios' ? 40 : 80 },
+                  {marginTop: Platform.OS === 'ios' ? 40 : 80},
                 ]}>
                 {/* <Ionicons name="help-circle-outline" size={20} color={'#31ade5'}/> */}
                 <Text>Need Help? </Text>
                 <Text
-                  style={{ color: '#31ade5', fontWeight: '700' }}
-                  onPress={() => navigation.navigate('Email')}>
+                  style={{color: '#31ade5', fontWeight: '700'}}
+                  onPress={async () => {
+                    navigation.navigate('Email', {
+                      title: 'Account Assistance',
+                    });
+                    await analytics().logEvent('signinEmail', {
+                      item: 'click email button from login page',
+                    });
+                  }}>
                   Contact Us
                 </Text>
               </View>
@@ -297,6 +332,27 @@ const styles = StyleSheet.create({
 
   signuptext: {
     flexDirection: 'row',
+  },
+  dropdown: {
+    justifyContent: 'center',
+    borderRadius: 10,
+    paddingVertical: 5,
+    height: 50,
+    borderWidth: 0.3,
+    marginTop: 10,
+    flexDirection: 'row',
+    shadowColor: '#000',
+  },
+  shadowProp: {
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+
+    elevation: 5,
   },
 
   loading1: {

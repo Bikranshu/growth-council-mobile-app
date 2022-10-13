@@ -37,6 +37,10 @@ const OthersAccount = props => {
   } = props;
 
   let Title = otherProfiles?.user_meta?.Title;
+  let titledisplay = Title
+    ? otherProfiles?.user_meta?.Title[0]
+    : otherProfiles?.user_meta?.title[0];
+
   let company = otherProfiles?.user_meta?.company;
   let Location = otherProfiles?.user_meta?.Location;
 
@@ -123,10 +127,14 @@ const OthersAccount = props => {
             </View>
             <View style={styles.header}>
               <Text style={styles.headingText1}>
-                {otherProfiles?.user_meta?.first_name}{' '}
-                {otherProfiles?.user_meta?.last_name}
+                {otherProfiles?.user_login}{' '}
+                {/* {otherProfiles?.user_meta?.last_name} */}
               </Text>
-              <Text>{otherProfiles?.user_meta?.Title}</Text>
+              <Text>
+                {otherProfiles?.user_meta?.Title === undefined
+                  ? otherProfiles?.user_meta?.title
+                  : otherProfiles?.user_meta?.Title}
+              </Text>
             </View>
           </View>
         </View>
@@ -159,8 +167,8 @@ const OthersAccount = props => {
                   style={styles.input}
                   keyboardType="default"
                   value={
-                    typeof Title === 'undefined'
-                      ? ''
+                    otherProfiles?.user_meta?.Title === undefined
+                      ? otherProfiles?.user_meta?.title[0]
                       : otherProfiles?.user_meta?.Title[0]
                   }
                   editable={false}
@@ -196,7 +204,7 @@ const OthersAccount = props => {
                   editable={false}
                 />
 
-                <Text style={styles.title}>Region</Text>
+                {/* <Text style={styles.title}>Region</Text>
                 <TextInput
                   style={styles.input}
                   keyboardType="default"
@@ -206,7 +214,7 @@ const OthersAccount = props => {
                       : otherProfiles?.user_meta?.Location[0]
                   }
                   editable={false}
-                />
+                /> */}
 
                 <Text style={styles.title}>Favorite Quote</Text>
                 <TextInput

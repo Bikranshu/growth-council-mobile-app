@@ -11,7 +11,10 @@ import {
   TouchableOpacity,
   TextInput,
   SafeAreaView,
+  Keyboard,
+  TouchableWithoutFeedback
 } from 'react-native';
+
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import {useIsFocused} from '@react-navigation/native';
 import * as Yup from 'yup';
@@ -99,6 +102,8 @@ const Email = props => {
             </View>
           </SafeAreaView>
           <View style={{padding: 20, backgroundColor: 'white'}}>
+
+		  <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
             <View style={{flexDirection: 'row'}}>
               <Text style={{fontSize: 18, marginTop: 10}}>From:</Text>
 
@@ -112,8 +117,11 @@ const Email = props => {
                 touched={touched.sender}
               />
             </View>
+			</TouchableWithoutFeedback>
+			
             {sendMailLoading && <Loading />}
 
+			<TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
             <View style={{marginTop: 10}}>
               <Text style={{fontSize: 18}}>Subject:</Text>
               <TextInput
@@ -128,7 +136,9 @@ const Email = props => {
                 touched={touched.subject}
               />
             </View>
-
+			</TouchableWithoutFeedback>
+			
+			<TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
             <View style={{marginTop: 10}}>
               <Text style={{fontSize: 18}}>Messages:</Text>
               <TextInput
@@ -142,6 +152,7 @@ const Email = props => {
                 touched={touched.message}
               />
             </View>
+			</TouchableWithoutFeedback>
 
             <View style={styles.buttonWrapper}>
               <TouchableOpacity style={styles.button} onPress={handleSubmit}>

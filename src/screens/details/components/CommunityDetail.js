@@ -564,7 +564,12 @@ const CommunityDetail = props => {
                 <View style={styles.buttonWrapper}>
                   <View style={styles.memberWrapper}>
                     <TouchableOpacity
-                      onPress={() => navigation.navigate('People')}>
+                      onPress={() =>
+                        navigation.navigate('People', {
+                          name: 'arrow-back-sharp',
+                          id: poeDetails?.term_id,
+                        })
+                      }>
                       <ImageBackground
                         style={{width: '100%', height: 160, borderRadius: 20}}
                         source={require('../../../assets/img/people.jpg')}>
@@ -604,7 +609,12 @@ const CommunityDetail = props => {
                     </TouchableOpacity>
                   </View>
                   <TouchableOpacity
-                    onPress={() => navigation.navigate('UserList')}>
+                    onPress={() =>
+                      navigation.navigate('UserList', {
+                        name: 'arrow-back-sharp',
+                        id: poeDetails?.term_id,
+                      })
+                    }>
                     <View style={styles.chatbutton}>
                       <Ionicons name="chatbox" size={20} color="white" />
                       <Text style={styles.chatbuttonText}>
@@ -618,7 +628,7 @@ const CommunityDetail = props => {
               {poeDetails?.slug === 'transformational-think-tanks' ||
               poeDetails?.slug === 'mega-trends-workshop' ||
               poeDetails?.slug === 'executive-mindxchange-events' ||
-              poeDetails?.slug === 'innovative-center-tours' ? (
+              poeDetails?.slug === 'innovation-center-tours' ? (
                 <View style={styles.buttonWrapper}>
                   <View style={styles.btnWrapper}>
                     <TouchableOpacity
@@ -650,12 +660,12 @@ const CommunityDetail = props => {
                             resourcesName: poeDetails?.name,
                           });
                         } else if (
-                          poeDetails?.slug === 'innovative-center-tours'
+                          poeDetails?.slug === 'innovation-center-tours'
                         ) {
-							navigation.navigate('LibraryDetail', {
-								resources: 205,
-								itemname: poeDetails?.name,
-							  });
+                          navigation.navigate('LibraryDetail', {
+                            resources: 205,
+                            itemname: poeDetails?.name,
+                          });
                         } else {
                           navigation.navigate('ContentDetail', {
                             resourceId: poeDetails?.ID,

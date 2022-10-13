@@ -13,21 +13,27 @@ import {
   getAsyncStorage,
 } from '../../utils/storageUtil';
 import {isTokenExpired} from '../../utils/jwtUtil';
-import {JWT_TOKEN, API_URL, USER_NAME, USER_AVATAR} from '../../constants';
+import {JWT_TOKEN, API_URL, USER_NAME, USER_AVATAR, USER_REGION} from '../../constants';
 
 export const AuthContext = createContext({});
 
-export const AuthProvider = ({children}) => {
+export const AuthProvider = props => {
+  const {navigation, children} = props;
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState(null);
   const [loggedIn, setLoggedIn] = useState(false);
   const [emailId, setEmailId] = useState('');
+  const [userCountry, setUserCountry] = useState('');
 
   useEffect(() => {
     (async () => {
+		const region = await getAsyncStorage(USER_REGION)
+		console.log('ad', region);
       const token = await getAsyncStorage(JWT_TOKEN);
       if (token) {
         setLoggedIn(true);
+
+
         await isTokenExpired(token);
       } else {
         setLoggedIn(false);
@@ -43,18 +49,13 @@ export const AuthProvider = ({children}) => {
       await clearAsyncStorage(USER_NAME);
       await clearAsyncStorage(USER_AVATAR);
       setLoggedIn(false);
-
-    }else if(decoded.exp < Date.now() / 1000) {
-
-		await clearAsyncStorage(JWT_TOKEN);
+    } else if (decoded.exp < Date.now() / 1000) {
+      await clearAsyncStorage(JWT_TOKEN);
       await clearAsyncStorage(USER_NAME);
       await clearAsyncStorage(USER_AVATAR);
       setLoggedIn(false);
-	}
-	else{
-		
-	}
-
+    } else {
+    }
   };
 
   const createUser = () =>
@@ -95,7 +96,7 @@ export const AuthProvider = ({children}) => {
     await setAsyncStorage(JWT_TOKEN, data.token ?? data.JWT_TOKEN);
     await setAsyncStorage(USER_NAME, data.user_display_name ?? data.USER_NAME);
     await setAsyncStorage(USER_AVATAR, data.avatar ?? data.USER_AVATAR);
-
+	await setAsyncStorage(USER_REGION, data.region ?? data.USER_REGION);
     const token = await res.user;
     await Promise.all([
       crashlytics().setUserId(response?.data?.user_email),
@@ -138,6 +139,7 @@ export const AuthProvider = ({children}) => {
               },
             );
 
+            setUserCountry(response?.data?.region);
             const messageToken = await messaging().getToken();
             await postToAPI(response.data.user_email, messageToken);
 
@@ -149,6 +151,7 @@ export const AuthProvider = ({children}) => {
                   JWT_TOKEN: response.data.token,
                   USER_NAME: response.data.user_display_name,
                   USER_AVATAR: response.data.avatar,
+                  USER_REGION: response.data.region,
                 }),
               );
 

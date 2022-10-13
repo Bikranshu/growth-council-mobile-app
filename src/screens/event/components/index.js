@@ -15,18 +15,23 @@ import Feather from 'react-native-vector-icons/Feather';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import HTMLView from 'react-native-htmlview';
-import moment from 'moment-timezone';
+import {Linking} from 'react-native';
 
-// import 'moment-timezone';
-import * as RNLocalize from 'react-native-localize';
+import analytics from '@react-native-firebase/analytics';
 import {formatTimeByOffset} from './timezone';
-import {BubblesLoader} from 'react-native-indicator';
+import * as RNLocalize from 'react-native-localize';
+import moment from 'moment-timezone';
 
 import {CommonStyles, Colors, Typography} from '../../../theme';
 import ToastMessage from '../../../shared/toast';
 import Footer from '../../../shared/footer';
 import Loading from '../../../shared/loading';
-import { GROWTH_COACHING_ID, GROWTH_COMMUNITY_ID, GROWTH_CONTENT_ID } from '../../../constants';
+import {
+  GROWTH_COACHING_ID,
+  GROWTH_COMMUNITY_ID,
+  GROWTH_CONTENT_ID,
+} from '../../../constants';
+import {COMMUNITY_COLOR} from '../../../theme/colors';
 
 const Event = props => {
   const {
@@ -46,6 +51,7 @@ const Event = props => {
 
   const toast = useToast();
   const [eventStatus, setEventStatus] = useState(events?.register_status);
+  const [actualtimeZone, setactualtimeZone] = useState(events?.time_zone);
   const [timeToDisplay, setTimeToDisplay] = useState('');
   const [timeToEnd, setTimeToEnd] = useState('');
 
@@ -59,6 +65,10 @@ const Event = props => {
   useEffect(() => {
     setEventStatus(events?.register_status);
   }, [events]);
+
+  useEffect(() => {
+    setactualtimeZone(events?.time_zone);
+  }, [events, eventID]);
 
   const registerEventByEventID = async eventID => {
     const response = await registerEventByIdentifier({
@@ -102,42 +112,125 @@ const Event = props => {
 
   const isEventLoaded = Object.keys(events).length === 0;
 
-  const backStartTimeStamp = events?.event_start;
-  const backEndTimeStamp = events?.event_end;
+  const eventDate = moment(events?.event_start).format('MMMM D dddd, h:mma - ');
+
+  const eventStartMonth = moment(events?.event_start).format('MMMM D dddd');
+  const eventStartTime = moment(events?.event_start).format('h:mma ');
+  const eventEndTime = moment(events?.event_end).format(' h:mma');
+  const eventEndMonth = moment(events?.event_end).format('MMMM D dddd');
+
+  const comma = '/';
+
+  const backStartTimeStamp = moment(events?.event_start).format('h : mm a');
+  const backEndTimeStamp = moment(events?.event_end).format('h : mm a');
+  //   const [day, setDay] = useState([]);
+
+  let day = [
+    'Sunday,',
+    'Monday,',
+    'Tuesday,',
+    'Wednesday,',
+    'Thursday,',
+    'Friday,',
+    'Saturday,',
+  ];
+
   const deviceTimeZone = RNLocalize.getTimeZone();
 
   const today = moment().tz(deviceTimeZone);
-  const currentTimeZoneOffsetInHours = today.utcOffset() / 60;
+  const deviceOffset = today?.utcOffset();
+  console.log('deviceOffset', deviceOffset);
 
-  const eventDate = moment(events?.event_start).format('MMMM D dddd, h:mma - ');
-  const eventEnd = moment(events?.event_end).format('MMMM D dddd, h:mma');
+  let Today = moment().tz(actualtimeZone);
+  console.log(
+    'a',
+    backStartTimeStamp.split(/(\s+)/)[6],
+    backStartTimeStamp.split(/(\s+)/)[10],
+  );
+  let eventOffset = Today?.utcOffset();
 
-  const eventStartMonth = moment(events?.event_start).format('MMMM D dddd');
+  const com = ':';
 
-  const eventEndTime = moment(events?.event_end).format('h:mma ');
-  const eventEndMonth = moment(events?.event_end).format('MMMM D dddd');
+  //calculating gobal timezone of event.start
 
-  const GobalDate = moment(timeToDisplay).format('MMMM D, h:mma - ');
-  const GobalStartMonth = moment(timeToDisplay).format('MMMM D');
+  const startHours = Number(backStartTimeStamp.split(/(\s+)/)[0]);
+  const min =
+    Number(backStartTimeStamp.split(/(\s+)/)[3]) +
+    Number(backStartTimeStamp.split(/(\s+)/)[4]);
+  const hourCal =
+    backStartTimeStamp.split(/(\s+)/)[6] === 'am'
+      ? startHours * 60 + min
+      : (startHours + 12) * 60 + min;
+  const startDateCal = (hourCal - eventOffset + deviceOffset) / 60;
 
-  const GobalEndTime = moment(timeToEnd).format('h:mma ');
-  const GobalEndMonth = moment(timeToEnd).format('MMMM D');
+  const gobalStart =
+    startDateCal > 12 && startDateCal < 24
+      ? startDateCal - 12 + eventDate.split(/(\s+)/)[7] + 'pm'
+      : startDateCal > 24
+      ? startDateCal - 24 + 'am'
+      : startDateCal + eventDate.split(/(\s+)/)[7] + 'am';
 
-  useEffect(() => {
-    const convertedToLocalTime = formatTimeByOffset(
-      backStartTimeStamp,
-      currentTimeZoneOffsetInHours,
-    );
-    setTimeToDisplay(convertedToLocalTime);
-  }, [events]);
+  let nextDay = day?.indexOf(eventDate.split(/(\s+)/)[4]) + 1;
+  let previousDay = day?.indexOf(eventDate.split(/(\s+)/)[4]) - 1;
 
-  useEffect(() => {
-    const convertedToLocalTimeEnd = formatTimeByOffset(
-      backEndTimeStamp,
-      currentTimeZoneOffsetInHours,
-    );
-    setTimeToEnd(convertedToLocalTimeEnd);
-  }, [events]);
+  const gobalDate =
+    startDateCal > 24
+      ? Number(eventDate.split(/(\s+)/)[2]) +
+        1 +
+        eventDate.split(/(\s+)/)[7] +
+        day[nextDay]
+      : startDateCal < 0
+      ? Number(eventDate.split(/(\s+)/)[2]) -
+        1 +
+        eventDate.split(/(\s+)/)[7] +
+        day[previousDay]
+      : null;
+
+  const first = gobalStart?.split('.')[0];
+  const second = gobalStart?.split('.')[1];
+
+  const third = '0.' + second?.split('')[0] + second?.split('')[1];
+
+  const fourth =
+    third !== '0.undefinedundefined' ? com + Number(third) * 60 : '';
+  const fifth =
+    gobalStart.split(' ')[1] === undefined ? '' : gobalStart.split(' ')[1];
+  const six = first?.indexOf(fifth) > -1 !== false ? '' : fifth;
+
+  const GobalStartTime = first + fourth + six;
+  const actualGobalStartTime =
+    GobalStartTime === 'NaNam:' ? '' : GobalStartTime;
+
+  console.log('GobalStartTime', first, six);
+
+  //calculating gobal timezone of event.end
+  const endHours = Number(backEndTimeStamp.split(/(\s+)/)[0]);
+  const min1 =
+    Number(backEndTimeStamp.split(/(\s+)/)[3]) +
+    Number(backEndTimeStamp.split(/(\s+)/)[4]);
+  const hourCal1 =
+    backEndTimeStamp.split(/(\s+)/)[6] === 'am'
+      ? endHours * 60 + min1
+      : (endHours + 12) * 60 + min1;
+
+  const endDateCal = (hourCal1 - eventOffset + deviceOffset) / 60;
+  const gobalEnd =
+    endDateCal > 12 && endDateCal < 24
+      ? endDateCal - 12 + eventDate.split(/(\s+)/)[7] + 'pm'
+      : endDateCal > 24
+      ? endDateCal - 24 + '' + ' am'
+      : endDateCal + eventDate.split(/(\s+)/)[7] + 'am';
+
+  const a = gobalEnd.split('.')[0];
+  const b = gobalEnd.split('.')[1];
+  const c = '0.' + b?.split('')[0] + b?.split('')[1];
+  const d = c !== '0.undefinedundefined' ? com + Number(c) * 60 : '';
+  const e = gobalEnd.split(' ')[1] === undefined ? '' : gobalEnd.split(' ')[1];
+  const f = a?.indexOf(e) > -1 !== false ? '' : e;
+  const GobalEndTime = a + d + f;
+  const actualGobalEndTime = GobalEndTime === 'NaNam:' ? '' : GobalEndTime;
+
+  console.log('GobalEndTime', a, d, f);
 
   let title = '';
   const pillarname = events?.pillar_categories
@@ -164,6 +257,7 @@ const Event = props => {
         events?.pillar_categories[0]?.name;
       break;
   }
+
   return (
     <ScrollView style={styles.scrollBox}>
       <View style={styles.container}>
@@ -225,19 +319,79 @@ const Event = props => {
                           GobalDate.split(/(\s+)/)[6] +
                           GobalDate.split(/(\s+)/)[7] +
                           GobalEndMonth}{' '}
-                      ({deviceTimeZone}) /{' '} */}
+                      (
+                      {deviceTimeZone.split('/')[1] +
+                        comma +
+                        deviceTimeZone.split('/')[0]}
+                      ) /{' '} */}
                       {eventStartMonth === eventEndMonth
-                        ? eventDate + eventEndTime
+                        ? eventStartMonth
                         : eventStartMonth +
                           eventDate.split(/(\s+)/)[7] +
                           eventDate.split(/(\s+)/)[8] +
                           eventDate.split(/(\s+)/)[7] +
                           eventEndMonth}
-                      {eventDate.split(/(\s+)/)[5]}
+                      {/* {eventDate.split(/(\s+)/)[5]}
                       {events?.event_meta?.evo_event_timezone !== undefined
                         ? events?.event_meta?.evo_event_timezone
-                        : ''}
+                        : ''} */}
                     </Text>
+                    {eventStartMonth === eventEndMonth ? (
+                      <View style={{flexDirection: 'row'}}>
+                        <Text style={{fontSize: 12, marginLeft: 5}}>
+                          {eventStartTime}
+                          {eventDate.split(/(\s+)/)[8]}
+                          {eventEndTime}
+                        </Text>
+                        <Text
+                          style={{
+                            fontSize: 12,
+                            marginLeft: 5,
+                            color: COMMUNITY_COLOR,
+                          }}>
+                          {events?.time_zone !== undefined
+                            ? events?.time_zone
+                            : ''}
+                        </Text>
+                      </View>
+                    ) : null}
+                    {eventStartMonth === eventEndMonth ? (
+                      <View>
+                        {gobalDate && (
+                          <Text
+                            style={{
+                              fontSize: 12,
+                              marginLeft: 5,
+                              fontWeight: 'bold',
+                              color: 'black',
+                            }}>
+                            {eventDate.split(/(\s+)/)[0] +
+                              eventDate.split(/(\s+)/)[7] +
+                              gobalDate}
+                          </Text>
+                        )}
+
+                        <View style={{flexDirection: 'row'}}>
+                          <Text style={{fontSize: 12, marginLeft: 5}}>
+                            {actualGobalStartTime +
+                              eventDate.split(/(\s+)/)[7] +
+                              eventDate.split(/(\s+)/)[8] +
+                              eventDate.split(/(\s+)/)[7] +
+                              actualGobalEndTime}
+                          </Text>
+                          <Text
+                            style={{
+                              fontSize: 12,
+                              marginLeft: 5,
+                              color: COMMUNITY_COLOR,
+                            }}>
+                            {deviceTimeZone.split('/')[1] +
+                              comma +
+                              deviceTimeZone.split('/')[0]}
+                          </Text>
+                        </View>
+                      </View>
+                    ) : null}
                   </View>
                   {!eventStatus && (
                     <View
@@ -387,6 +541,224 @@ const Event = props => {
                     )}
                   </View>
                 )}
+              {/* {events?.title ===
+                '16TH ANNUAL GROWTH, INNOVATION AND LEADERSHIP' &&
+                eventStatus && (
+                  <View>
+                    <Text
+                      style={[
+                        styles.contentHeading,
+                        {marginTop: 20, alignItems: 'center'},
+                      ]}>
+                      Downloading the Mobile App {'\n'}
+                      Your Full Event Guide!
+                    </Text>
+
+                    <View style={{flexDirection: 'row', marginTop: 10}}>
+                      <MaterialIcons
+                        name={'circle'}
+                        size={10}
+                        style={{color: 'black', marginTop: 5}}
+                      />
+                      <Text
+                        style={{
+                          marginLeft: 5,
+                          textAlign: 'justify',
+                          marginRight: 5,
+                        }}>
+                        Search for{' '}
+                        <Text
+                          style={{
+                            marginLeft: 5,
+                            textAlign: 'justify',
+                            marginRight: 5,
+                            fontWeight: 'bold',
+                            color: 'black',
+                          }}>
+                          "CrowdCompass Attendee Hub"
+                        </Text>{' '}
+                        in your phone's app store/ (Blackberry and Windows users
+                        can access the event app using this URL:
+                      </Text>
+                    </View>
+                    <TouchableOpacity
+                      onPress={() =>
+                        Linking.openURL(
+                          'https://event.crowdcompass.com/gil2022',
+                        )
+                      }>
+                      <Text style={{color: 'blue', marginLeft: 15}}>
+                        https://event.crowdcompass.com/gil2022
+                      </Text>
+                    </TouchableOpacity>
+                    <View style={{flexDirection: 'row', marginTop: 10}}>
+                      <MaterialIcons
+                        name={'circle'}
+                        size={10}
+                        style={{color: 'black', marginTop: 5}}
+                      />
+                      <Text
+                        style={{
+                          marginLeft: 5,
+                          textAlign: 'justify',
+                          marginRight: 5,
+                        }}>
+                        Open the app and search for{' '}
+                        <Text
+                          style={{
+                            marginLeft: 5,
+                            textAlign: 'justify',
+                            marginRight: 5,
+                            fontWeight: 'bold',
+                            color: 'black',
+                          }}>
+                          "16 Annual Growth, Innovation and leadership"{' '}
+                        </Text>
+                        Tap on "Download" adn enter the password "gil22sj" to
+                        gain access
+                      </Text>
+                    </View>
+                    <View style={{flexDirection: 'row', marginTop: 10}}>
+                      <MaterialIcons
+                        name={'circle'}
+                        size={10}
+                        style={{color: 'black', marginTop: 5}}
+                      />
+                      <Text
+                        style={{
+                          marginLeft: 5,
+                          textAlign: 'justify',
+                          marginRight: 5,
+                        }}>
+                        Tap on the{' '}
+                        <Text
+                          style={{
+                            marginLeft: 5,
+                            textAlign: 'justify',
+                            marginRight: 5,
+                            fontWeight: 'bold',
+                            color: 'black',
+                          }}>
+                          "Profile"
+                        </Text>{' '}
+                        icon on the bottom and click on{' '}
+                        <Text
+                          style={{
+                            marginLeft: 5,
+                            textAlign: 'justify',
+                            marginRight: 5,
+                            fontWeight: 'bold',
+                            color: 'black',
+                          }}>
+                          "Log in" .
+                        </Text>
+                        Enter you first and last name, followed by your email
+                        address.
+                        {'\n'}
+                        <Text
+                          style={{
+                            marginLeft: 5,
+                            textAlign: 'justify',
+                            marginRight: 5,
+                            fontWeight: 'bold',
+                            color: 'black',
+                          }}>
+                          If you do not login, you won't have access to full
+                          participant list.
+                        </Text>
+                      </Text>
+                    </View>
+
+                    <View style={{flexDirection: 'row', marginTop: 10}}>
+                      <MaterialIcons
+                        name={'circle'}
+                        size={10}
+                        style={{color: 'black', marginTop: 5}}
+                      />
+                      <Text
+                        style={{
+                          marginLeft: 5,
+                          textAlign: 'justify',
+                          marginRight: 5,
+                        }}>
+                        You will be sent a verificaton email with 6 digit
+                        codethat will need to be entered in to app. (this may
+                        take a few minute. If you have any issues please see us
+                        at the registeryion desk!
+                      </Text>
+                    </View>
+                    <View style={{flexDirection: 'row', marginTop: 10}}>
+                      <MaterialIcons
+                        name={'circle'}
+                        size={10}
+                        style={{color: 'black', marginTop: 5}}
+                      />
+                      <Text
+                        style={{
+                          marginLeft: 5,
+                          textAlign: 'justify',
+                          marginRight: 5,
+                        }}>
+                        Then click back in{' '}
+                        <Text
+                          style={{
+                            marginLeft: 5,
+                            textAlign: 'justify',
+                            marginRight: 5,
+                            fontWeight: 'bold',
+                            color: 'black',
+                          }}>
+                          {' '}
+                          "Profile"
+                        </Text>{' '}
+                        and tap on{' '}
+                        <Text
+                          style={{
+                            marginLeft: 5,
+                            textAlign: 'justify',
+                            marginRight: 5,
+                            fontWeight: 'bold',
+                            color: 'black',
+                          }}>
+                          {' '}
+                          "Edit"{' '}
+                        </Text>
+                        to edit your profile.
+                      </Text>
+                    </View>
+
+                    <View style={{flexDirection: 'row', marginTop: 10}}>
+                      <MaterialIcons
+                        name={'circle'}
+                        size={10}
+                        style={{color: 'black', marginTop: 5}}
+                      />
+                      <Text
+                        style={{
+                          marginLeft: 5,
+                          textAlign: 'justify',
+                          marginRight: 5,
+                        }}>
+                        You can either manually enter your information/photo or
+                        scroll to the bottom and{' '}
+                        <Text
+                          style={{
+                            marginLeft: 5,
+                            textAlign: 'justify',
+                            marginRight: 5,
+                            fontWeight: 'bold',
+                            color: 'black',
+                          }}>
+                          {' '}
+                          "Connect"
+                        </Text>{' '}
+                        with LinkedIn to have it automatically entered. Now you
+                        are visible on the participant list and can interact
+                        with peers!
+                      </Text>
+                    </View>
+                  </View>
+                )} */}
 
               <View
                 style={{
@@ -398,7 +770,14 @@ const Event = props => {
                 {!eventStatus && (
                   <Button
                     style={styles.acceptButton}
-                    onPress={() => registerEventByEventID(route?.params?.id)}>
+                    onPress={async () => {
+                      registerEventByEventID(route?.params?.id);
+                      let eventName = events?.title;
+                      await analytics().logEvent(eventName, {
+                        item: events?.title,
+                        description: 'Event Register',
+                      });
+                    }}>
                     <Text style={styles.acceptButtonText}>RSVP</Text>
                   </Button>
                 )}

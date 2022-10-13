@@ -18,6 +18,7 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import Material from 'react-native-vector-icons/MaterialIcons';
 import {Picker} from '@react-native-picker/picker';
 import {useToast} from 'native-base';
+import analytics from '@react-native-firebase/analytics';
 import {useIsFocused, useFocusEffect} from '@react-navigation/native';
 import {Colors, Typography} from '../../../theme';
 import ToastMessage from '../../../shared/toast';
@@ -48,13 +49,30 @@ const People = props => {
     expertiseError,
     fetchAllExpertises,
     cleanExperties,
+
+    profile,
+    profileLoading,
+    profileError,
   } = props;
+
+  let profileRegion = profile?.user_meta?.region[0]
+  if (
+    typeof profileRegion === 'undefined' ||
+    profileRegion === 'null' ||
+    profileRegion === ''
+  ) {
+    profileRegion = 'Region';
+  } else {
+    profileRegion = profile?.user_meta?.region[0];
+  }
 
   const toast = useToast();
   const isFocused = useIsFocused();
   const [category, setCategory] = useState('');
   const [account, setAccount] = useState('');
-  const [region, setRegion] = useState('');
+  const [region, setRegion] = useState(
+    profileRegion === 'NORTH-AMERICA' ? 'AMERICAS' : profileRegion,
+  );
   const [searchKey, setSearchKey] = useState('');
   const [sorting, setSorting] = useState('ASC');
   const [memberConnection, setMemberConnection] = useState([]);
@@ -109,9 +127,9 @@ const People = props => {
 
   const countries = {
     Region: 'Region',
-    AMERICAS: 'AMERICAS',
     APAC: 'APAC',
     MEASA: 'MEASA',
+    AMERICAS: 'AMERICAS',
   };
 
   const pillar = {
@@ -153,7 +171,13 @@ const People = props => {
           </View>
           {!memberConnection[index]?.connection && (
             <TouchableOpacity
-              onPress={() => connectMemberByMemberID(item.ID, index)}>
+              onPress={async () => {
+                connectMemberByMemberID(item.ID, index);
+                await analytics().logEvent('Member', {
+                  item: item?.user_meta?.first_name,
+                  description: 'Member Connection',
+                });
+              }}>
               <Ionicons
                 name="add-circle"
                 size={30}
@@ -208,7 +232,6 @@ const People = props => {
                   region: region,
                 });
               }}
-
             />
           </View>
           <View style={styles.iconWrapper}>
