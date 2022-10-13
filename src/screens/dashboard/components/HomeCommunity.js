@@ -93,7 +93,7 @@ const HomeCommunity = props => {
   const isFocused = useIsFocused();
 
   let region = profile?.user_meta?.region;
-  if (typeof region === 'undefined' || region === 'null') {
+  if (typeof region === undefined || region === null) {
     region = ' ';
   } else {
     region = profile?.user_meta?.region[0];
@@ -103,7 +103,7 @@ const HomeCommunity = props => {
   if (string) string = string.toLowerCase();
 
   let regionUser = profile?.user_meta?.region;
-  if (typeof regionUser === 'undefined' || regionUser === 'null') {
+  if (typeof regionUser === undefined || regionUser === null) {
     regionUser = ' ';
   } else {
     regionUser = profile?.user_meta?.region[0];
@@ -678,19 +678,21 @@ const HomeCommunity = props => {
                 />
               </View>
             )}
-          {users !== undefined && users !== null && users !== false && (
-            <View style={styles.bottom}>
-              <Text style={styles.title}>Welcome New Members</Text>
-              <View>
-                <FlatList
-                  horizontal
-                  showsHorizontalScrollIndicator={false}
-                  data={communityMembers}
-                  renderItem={_renderItem}
-                />
+          {communityMembers !== undefined &&
+            communityMembers !== null &&
+            communityMembers !== false && (
+              <View style={styles.bottom}>
+                <Text style={styles.title}>Welcome New Members</Text>
+                <View>
+                  <FlatList
+                    horizontal
+                    showsHorizontalScrollIndicator={false}
+                    data={communityMembers}
+                    renderItem={_renderItem}
+                  />
+                </View>
               </View>
-            </View>
-          )}
+            )}
 
           {/* external_links */}
 
