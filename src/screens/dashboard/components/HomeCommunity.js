@@ -93,7 +93,7 @@ const HomeCommunity = props => {
   const isFocused = useIsFocused();
 
   let region = profile?.user_meta?.region;
-  if (typeof region === 'undefined' || region === 'null') {
+  if (typeof region === undefined || region === null) {
     region = ' ';
   } else {
     region = profile?.user_meta?.region[0];
@@ -103,7 +103,7 @@ const HomeCommunity = props => {
   if (string) string = string.toLowerCase();
 
   let regionUser = profile?.user_meta?.region;
-  if (typeof regionUser === 'undefined' || regionUser === 'null') {
+  if (typeof regionUser === undefined || regionUser === null) {
     regionUser = ' ';
   } else {
     regionUser = profile?.user_meta?.region[0];
@@ -396,51 +396,55 @@ const HomeCommunity = props => {
     const pillarname = 'Growth Community';
     const image = require('../../../assets/img/Rectangle2.png');
     return (
-      <View style={styles.topWrapper} key={index}>
-        <TouchableOpacity
-          onPress={async () => {
-            navigation.navigate('EventDetail', {
-              id: item.ID,
-              title: pillarname,
-              image: image,
-            });
+      <>
+        {item?.pillar_categories[0]?.parent === 0 && (
+          <View style={styles.topWrapper} key={index}>
+            <TouchableOpacity
+              onPress={async () => {
+                navigation.navigate('EventDetail', {
+                  id: item.ID,
+                  title: pillarname,
+                  image: image,
+                });
 
-            await analytics().logEvent(item?.title, {
-              id: item.ID,
-              item: item.title,
-            });
-          }}>
-          <ImageBackground
-            style={{
-              width: '100%',
-              height: '100%',
-              borderRadius: 20,
-            }}
-            source={require('../../../assets/img/Rectangle2.png')}>
-            <View
-              style={{
-                width: 50,
-                height: 50,
-                marginTop: 10,
-                marginLeft: 200,
-                backgroundColor: '#EBECF0',
-                borderRadius: 10,
-                padding: 5,
-                alignItems: 'center',
+                await analytics().logEvent(item?.title, {
+                  id: item.ID,
+                  item: item.title,
+                });
               }}>
-              <Text style={{color: '#030303'}}>{date[0]}</Text>
-              <Text style={{color: '#030303'}}>{date[1]}</Text>
-            </View>
+              <ImageBackground
+                style={{
+                  width: '100%',
+                  height: '100%',
+                  borderRadius: 20,
+                }}
+                source={require('../../../assets/img/Rectangle2.png')}>
+                <View
+                  style={{
+                    width: 50,
+                    height: 50,
+                    marginTop: 10,
+                    marginLeft: 200,
+                    backgroundColor: '#EBECF0',
+                    borderRadius: 10,
+                    padding: 5,
+                    alignItems: 'center',
+                  }}>
+                  <Text style={{color: '#030303'}}>{date[0]}</Text>
+                  <Text style={{color: '#030303'}}>{date[1]}</Text>
+                </View>
 
-            <View style={styles.header}>
-              <Text style={styles.headingText1}>{item.title}</Text>
-              <Text style={styles.headingText2}>
-                {organizer} {description}
-              </Text>
-            </View>
-          </ImageBackground>
-        </TouchableOpacity>
-      </View>
+                <View style={styles.header}>
+                  <Text style={styles.headingText1}>{item.title}</Text>
+                  <Text style={styles.headingText2}>
+                    {organizer} {description}
+                  </Text>
+                </View>
+              </ImageBackground>
+            </TouchableOpacity>
+          </View>
+        )}
+      </>
     );
   };
 
@@ -674,19 +678,21 @@ const HomeCommunity = props => {
                 />
               </View>
             )}
-          {users !== undefined && users !== null && users !== false && (
-            <View style={styles.bottom}>
-              <Text style={styles.title}>Welcome New Members</Text>
-              <View>
-                <FlatList
-                  horizontal
-                  showsHorizontalScrollIndicator={false}
-                  data={communityMembers}
-                  renderItem={_renderItem}
-                />
+          {communityMembers !== undefined &&
+            communityMembers !== null &&
+            communityMembers !== false && (
+              <View style={styles.bottom}>
+                <Text style={styles.title}>Welcome New Members</Text>
+                <View>
+                  <FlatList
+                    horizontal
+                    showsHorizontalScrollIndicator={false}
+                    data={communityMembers}
+                    renderItem={_renderItem}
+                  />
+                </View>
               </View>
-            </View>
-          )}
+            )}
 
           {/* external_links */}
 

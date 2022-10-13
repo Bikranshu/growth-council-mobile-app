@@ -98,7 +98,6 @@ const Event = props => {
     case GROWTH_CONTENT_ID:
       backgroundColor = Colors.PRACTICE_COLOR;
       break;
-
     default:
       backgroundColor = Colors.COACHING_COLOR;
   }

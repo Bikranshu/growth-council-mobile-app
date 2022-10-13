@@ -56,8 +56,8 @@ const EventCalendar = props => {
 
 
   let profileRegion = profile?.user_meta?.region[0];
-  if (typeof profileRegion === 'undefined' ||
-    profileRegion === 'null' ||
+  if (typeof profileRegion === undefined ||
+    profileRegion === null ||
     profileRegion === ''
   ) {
     profileRegion = 'Region';

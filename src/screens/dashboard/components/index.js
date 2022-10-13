@@ -112,7 +112,7 @@ const Dashboard = props => {
   } = props;
 
   let region = profile?.user_meta?.region;
-  if (typeof region === 'undefined' || region === 'null') {
+  if (typeof region === undefined || region === null || region === '') {
     region = ' ';
   } else {
     region = profile?.user_meta?.region[0];
@@ -128,7 +128,11 @@ const Dashboard = props => {
   if (string) string = string.toLowerCase();
 
   let regionUser = profile?.user_meta?.region;
-  if (typeof regionUser === 'undefined' || regionUser === 'null') {
+  if (
+    typeof regionUser === undefined ||
+    regionUser === null ||
+    regionUser === ''
+  ) {
     regionUser = ' ';
   } else {
     regionUser = profile?.user_meta?.region[0];
