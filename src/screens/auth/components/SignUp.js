@@ -678,7 +678,7 @@ const SignUpForm = props => {
                         ? 'MEASA'
                         : america.indexOf(itemValue) > -1 !== false
                         ? 'AMERICAS'
-                        : null,
+                        : 'AMERICAS',
                     );
                   }
                 }}>
