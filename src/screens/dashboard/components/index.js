@@ -646,9 +646,6 @@ const Dashboard = props => {
               </View>
             </View>
           )}
-        {criticalIssue?.critical_issue_mobile_lists?.length !== 0 &&
-          criticalIssue?.critical_issue_mobile_lists !== null &&
-          criticalIssue?.critical_issue_mobile_lists !== false && (
             <View style={styles.content}>
               <Text style={styles.title}>
                 {criticalIssue?.critical_issue_mobile_title}
@@ -665,7 +662,6 @@ const Dashboard = props => {
                 />
               </View>
             </View>
-          )}
       </ScrollView>
       <BottomNav {...props} navigation={navigation} />
     </View>
