@@ -32,6 +32,7 @@ const SignInScreen = props => {
       profileError={profileError}
       fetchProfile={fetchProfile}
       cleanProfile={cleanProfile}
+      userLoading={userLoading}
       updateUser={updateUser}
     />
   );

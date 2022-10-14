@@ -15,7 +15,7 @@ import {Button} from 'native-base';
 import Loading from '../../../shared/loading';
 import {useFormik} from 'formik';
 import {Picker} from '@react-native-picker/picker';
-
+import {BubblesLoader} from 'react-native-indicator';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import {CommonStyles, Colors, Typography} from '../../../theme';
 import {style} from '@mui/system';
@@ -23,7 +23,17 @@ import {style} from '@mui/system';
 const screenHeight = Math.round(Dimensions.get('window').height);
 
 const CountryPopup = props => {
-  const {navigation, route} = props;
+  const {
+    navigation,
+    route,
+    profile,
+    profileLoading,
+    profileError,
+    fetchProfile,
+    cleanProfile,
+    userLoading,
+    updateUser,
+  } = props;
 
   const [isPickerVisible, setIsPickerVisible] = useState(false);
   const [regionVisible, setRegionVisible] = useState(false);
@@ -32,9 +42,10 @@ const CountryPopup = props => {
   const [country, setCountry] = useState('United States');
   const [countryRegion, setCountryRegion] = useState('');
 
-  const profile = route?.params?.profile;
-  const userLoading = route?.params?.userLoading;
-  const updateUser = route?.params?.updateUser;
+//   const profile = route?.params?.profile;
+//   const userLoading = route?.params?.userLoading;
+//   const updateUser = route?.params?.updateUser;
+//   console.log(profile)
 
   let title = profile?.user_meta?.title;
   if (typeof title === 'undefined') {
@@ -89,6 +100,13 @@ const CountryPopup = props => {
     ? profile?.expertise_areas1
     : [];
 
+  //   useEffect(() => {
+  //     const fetchProfileAsync = async () => {
+  //       await fetchProfile();
+  //     };
+  //     fetchProfileAsync();
+  //   }, []);
+
   const {
     handleChange,
     handleBlur,
@@ -116,7 +134,7 @@ const CountryPopup = props => {
       await updateUser(values).then(async response => {
         if (response?.payload?.code === 200) {
           console.log('response', response);
-          navigation.navigate('Dashboard', {region: response?.region});
+          navigation.navigate('Dashboard');
         }
       });
     },
@@ -323,197 +341,34 @@ const CountryPopup = props => {
 
   const Region = ['AMERICAS', 'APAC', 'MEASA'];
 
-  const Apac = [
-    'Afghanistan',
-    'Albania',
-    'Algeria',
-    'Andorra',
-    'Angola',
-    'Antigua & Deps',
-    'Argentina',
-    'Armenia',
-    'Australia',
-    'Austria',
-    'Azerbaijan',
-    'Bahamas',
-    'Bahrain',
-    'Bangladesh',
-    'Barbados',
-    'Belarus',
-    'Belgium',
-    'Belize',
-    'Benin',
-    'Bhutan',
-    'Bolivia',
-    'Bosnia Herzegovina',
-    'Botswana',
-    'Brazil',
-    'Brunei',
-    'Bulgaria',
-    'Burkina',
-    'Burundi',
-    'Cambodia',
-    'Cameroon',
-    'Canada',
-    'Cape Verde',
-    'Central African Rep',
-    'Chad',
-    'Chile',
-    'China',
-    'Colombia',
-    'Comoros',
-    'Congo',
-    'Costa Rica',
-    'Croatia',
-    'Cuba',
-    'Cyprus',
-    'Czech Republic',
-    'Denmark',
-    'Djibouti',
-    'Dominica',
-    'Dominican Republic',
-    'Nepal',
-    'India',
-    'Sri Lanka',
-    'Maldives',
-  ];
-
   const measa = [
-    'Gabon',
-    'Gambia',
-    'Georgia',
-    'Germany',
-    'Ghana',
-    'Greece',
-    'Grenada',
-    'Guatemala',
-    'Guinea',
-    'Guinea-Bissau',
-    'Guyana',
-    'Haiti',
-    'Honduras',
-    'Hungary',
-    'Iceland',
-    'Indonesia',
-    'Iran',
-    'Iraq',
-    'Ireland {Republic}',
-    'Israel',
-    'Italy',
-    'Ivory Coast',
-    'Jamaica',
-    'Japan',
-    'Jordan',
-    'Kazakhstan',
-    'Kenya',
-    'Kiribati',
-    'Korea North',
-    'Korea South',
-    'Kosovo',
-    'Kuwait',
-    'Kyrgyzstan',
-    'Laos',
-    'Latvia',
-    'Lebanon',
-    'Lesotho',
-    'Liberia',
-    'Libya',
-    'Liechtenstein',
-    'Lithuania',
-    'Luxembourg',
-    'Macedonia',
-    'Madagascar',
-    'Malawi',
-    'Malaysia',
-    'Maldives',
-    'Mali',
-    'Malta',
-    'Marshall Islands',
-    'Mauritania',
-    'Mauritius',
-    'Mexico',
-    'Micronesia',
-    'Moldova',
-    'Monaco',
-    'Mongolia',
-    'Montenegro',
-    'Morocco',
-    'Mozambique',
-    'Myanmar, {Burma}',
-    'Namibia',
-    'Nauru',
-    'Netherlands',
-    'New Zealand',
-    'Nicaragua',
-    'Niger',
-    'Nigeria',
-    'Norway',
-    'Oman',
+    'India',
     'Pakistan',
-    'Palau',
-    'Panama',
-    'Papua New Guinea',
-    'Paraguay',
-    'Peru',
-    'Philippines',
-    'Poland',
-    'Portugal',
-    'Qatar',
-    'Romania',
-    'Russian Federation',
-    'Rwanda',
-    'St Kitts & Nevis',
-    'St Lucia',
-    'Saint Vincent & the Grenadines',
-    'Samoa',
-    'San Marino',
-    'Sao Tome & Principe',
-    'Saudi Arabia',
-    'Senegal',
-    'Serbia',
-    'Seychelles',
-    'Sierra Leone',
-    'Singapore',
-    'Slovakia',
-    'Slovenia',
-    'Solomon Islands',
-    'Somalia',
-    'South Africa',
-    'South Sudan',
-    'Spain',
-    'Sudan',
-    'Suriname',
-    'Swaziland',
-    'Sweden',
-    'Switzerland',
-    'Syria',
-    'Taiwan',
-    'Tajikistan',
-    'Tanzania',
-    'Thailand',
-    'Togo',
-    'Tonga',
-    'Trinidad & Tobago',
-    'Tunisia',
-    'Turkey',
-    'Turkmenistan',
-    'Tuvalu',
-    'Uganda',
-    'Ukraine',
-    'United Arab Emirates',
-    'United Kingdom',
-    'Uruguay',
-    'Uzbekistan',
-    'Vanuatu',
-    'Vatican City',
-    'Venezuela',
-    'Vietnam',
-    'Yemen',
-    'Zambia',
-    'Zimbabwe',
+    'Sri Lanka ',
+    'Middle east',
+    'Nepal',
+    'Bangladesh',
+    'Bhutan',
+    'Maldives',
   ];
 
-  const america = ['United States'];
+  const Apac = [
+    'Brunei',
+    'Burma',
+    'Cambodia',
+    'Timor- Leste ',
+    'Indonesia ',
+    'Laos',
+    'Malaysia',
+    'Philippines',
+    'Singapore',
+    'Thailand',
+    'Vietnam',
+    'Australia',
+    'Japan',
+  ];
+
+  const america = ['United States', 'Canada', 'Mexio'];
 
   console.log('country', countryRegion, country);
   return (
@@ -536,6 +391,14 @@ const CountryPopup = props => {
 
           <View>
             <View style={styles.content}>
+              {userLoading && (
+                <View style={styles.loading1}>
+                  <BubblesLoader
+                    color={Colors.SECONDARY_TEXT_COLOR}
+                    size={60}
+                  />
+                </View>
+              )}
               <View style={styles.header}>
                 <Image
                   style={{width: '80%'}}
@@ -565,8 +428,8 @@ const CountryPopup = props => {
                   </Text>
                 </TouchableOpacity>
               </View>
-              {userLoading && <Loading />}
-              <View>
+
+              {/* <View>
                 <Text style={{color: 'black', marginTop: 10}}>Your Region</Text>
                 <TouchableOpacity onPress={() => setRegionVisible(true)}>
                   <View
@@ -592,7 +455,7 @@ const CountryPopup = props => {
                     </Text>
                   </View>
                 </TouchableOpacity>
-              </View>
+              </View> */}
 
               <View style={styles.loginButtonWrapper}>
                 <Button style={styles.loginButton} onPress={handleSubmit}>
@@ -673,7 +536,7 @@ const CountryPopup = props => {
                         ? 'MEASA'
                         : america.indexOf(itemValue) > -1 !== false
                         ? 'AMERICAS'
-                        : 'AMERICAS',
+                        : '',
                     );
                   }
                 }}>
