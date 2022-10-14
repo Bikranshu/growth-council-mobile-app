@@ -30,17 +30,8 @@ export const AuthProvider = props => {
       const token = await getAsyncStorage(JWT_TOKEN);
 
       if (token) {
-        if (
-          userCountry === 'APAC' ||
-          userCountry === 'MEASA' ||
-          userCountry === 'AMERICAS'
-        ) {
-          setLoggedIn(true);
-          navigation.navigate('Dashboard');
-        } else {
-          navigation.navigate('CountryPop');
-        }
-        // setLoggedIn(true);
+      
+        setLoggedIn(true);
         await isTokenExpired(token);
       } else {
         setLoggedIn(false);

@@ -72,15 +72,7 @@ const SignInForm = props => {
     initialValues: {username: '', password: ''},
     onSubmit: async values => {
       await signIn(values);
-      if (
-        userCountry !== 'APAC' ||
-        userCountry !== 'MEASA' ||
-        userCountry !== 'AMERICAS'
-      ) {
-        navigation.navigate('CountryPop');
-      } else {
-        navigation.navigate('Dashboard');
-      }
+    
     },
   });
 
