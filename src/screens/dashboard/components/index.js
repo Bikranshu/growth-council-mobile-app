@@ -113,7 +113,7 @@ const Dashboard = props => {
 
   let region = profile?.user_meta?.region;
   if (typeof region === 'undefined' || region === null) {
-    region = "";
+    region = '';
     console.log('asdasd');
   } else {
     region = profile?.user_meta?.region[0];
@@ -130,7 +130,7 @@ const Dashboard = props => {
 
   let regionUser = profile?.user_meta?.region;
   if (typeof regionUser === 'undefined' || regionUser === null) {
-    regionUser = "";
+    regionUser = '';
   } else {
     regionUser = profile?.user_meta?.region[0];
   }
@@ -646,23 +646,26 @@ const Dashboard = props => {
               </View>
             </View>
           )}
-
-        <View style={styles.content}>
-          <Text style={styles.title}>
-            {criticalIssue?.critical_issue_mobile_title}
-          </Text>
-          <View
-            ref={ref => {
-              setRef(ref);
-            }}>
-            <FlatList
-              numColumns={2}
-              showsHorizontalScrollIndicator={false}
-              data={criticalIssue?.critical_issue_mobile_lists}
-              renderItem={_renderCritical}
-            />
-          </View>
-        </View>
+        {criticalIssue?.critical_issue_mobile_lists?.length !== 0 &&
+          criticalIssue?.critical_issue_mobile_lists !== null &&
+          criticalIssue?.critical_issue_mobile_lists !== false && (
+            <View style={styles.content}>
+              <Text style={styles.title}>
+                {criticalIssue?.critical_issue_mobile_title}
+              </Text>
+              <View
+                ref={ref => {
+                  setRef(ref);
+                }}>
+                <FlatList
+                  numColumns={2}
+                  showsHorizontalScrollIndicator={false}
+                  data={criticalIssue?.critical_issue_mobile_lists}
+                  renderItem={_renderCritical}
+                />
+              </View>
+            </View>
+          )}
       </ScrollView>
       <BottomNav {...props} navigation={navigation} />
     </View>

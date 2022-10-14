@@ -93,7 +93,7 @@ const HomeCommunity = props => {
   const isFocused = useIsFocused();
 
   let region = profile?.user_meta?.region;
-  if (typeof region === "undefined" ||  region === null) {
+  if (typeof region === 'undefined' || region === null) {
     region = ' ';
   } else {
     region = profile?.user_meta?.region[0];
@@ -103,7 +103,7 @@ const HomeCommunity = props => {
   if (string) string = string.toLowerCase();
 
   let regionUser = profile?.user_meta?.region;
-  if (typeof regionUser === "undefined" ||  regionUser === null) {
+  if (typeof regionUser === 'undefined' || regionUser === null) {
     regionUser = ' ';
   } else {
     regionUser = profile?.user_meta?.region[0];
@@ -226,10 +226,9 @@ const HomeCommunity = props => {
     } else {
       user = item?.user_meta?.region[0];
     }
-    
+
     return (
       <>
-      
         <View style={[styles.bottomWrapper, styles.shadowProp]} key={index}>
           <TouchableOpacity
             onPress={() => navigation.navigate('OthersAccount', {id: item.ID})}>
@@ -278,7 +277,6 @@ const HomeCommunity = props => {
             )}
           </View>
         </View>
-      
       </>
     );
   };
@@ -625,6 +623,7 @@ const HomeCommunity = props => {
               </View>
             )}
           {communityMembers !== undefined &&
+            communityMembers?.length !== 0 &&
             communityMembers !== null &&
             communityMembers !== false && (
               <View style={styles.bottom}>
