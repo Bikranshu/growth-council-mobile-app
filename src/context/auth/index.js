@@ -13,13 +13,7 @@ import {
   getAsyncStorage,
 } from '../../utils/storageUtil';
 import {isTokenExpired} from '../../utils/jwtUtil';
-import {
-  JWT_TOKEN,
-  API_URL,
-  USER_NAME,
-  USER_AVATAR,
-  USER_REGION,
-} from '../../constants';
+import {JWT_TOKEN, API_URL, USER_NAME, USER_AVATAR} from '../../constants';
 
 export const AuthContext = createContext({});
 
@@ -43,7 +37,7 @@ export const AuthProvider = props => {
         ) {
           setLoggedIn(true);
           navigation.navigate('Dashboard');
-        } else  {
+        } else {
           navigation.navigate('CountryPop');
         }
         // setLoggedIn(true);
@@ -151,9 +145,9 @@ export const AuthProvider = props => {
                 responseType: 'json',
               },
             );
-
-            setUserCountry(response?.data?.region);
             console.log('userCountry', response?.data?.region);
+            setUserCountry(response?.data?.region);
+
             const messageToken = await messaging().getToken();
             await postToAPI(response.data.user_email, messageToken);
 

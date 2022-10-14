@@ -73,19 +73,13 @@ const SignInForm = props => {
     onSubmit: async values => {
       await signIn(values);
       if (
-        userCountry === 'APAC' ||
-        userCountry === 'MEASA' ||
-        userCountry === 'AMERICAS'
+        userCountry !== 'APAC' ||
+        userCountry !== 'MEASA' ||
+        userCountry !== 'AMERICAS'
       ) {
-        navigation.navigate('Dashboard');
+        navigation.navigate('CountryPop');
       } else {
-        navigation.navigate('CountryPop', {
-          profile: profile,
-          updateUser: updateUser,
-          userLoading: userLoading,
-          navigation: navigation,
-    
-        });
+        navigation.navigate('Dashboard');
       }
     },
   });

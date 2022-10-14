@@ -15,6 +15,8 @@ import {Button} from 'native-base';
 import Loading from '../../../shared/loading';
 import {useFormik} from 'formik';
 import {Picker} from '@react-native-picker/picker';
+import {getAsyncStorage} from '../../../utils/storageUtil';
+import {JWT_TOKEN, USER_NAME, USER_AVATAR} from '../../../constants';
 import {useAuthentication} from '../../../context/auth';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import {CommonStyles, Colors, Typography} from '../../../theme';
@@ -35,26 +37,9 @@ const CountryPopup = props => {
     updateUser,
   } = props;
 
-  const {setLoggedIn} = useAuthentication();
   const [isPickerVisible, setIsPickerVisible] = useState(false);
-  const [regionVisible, setRegionVisible] = useState(false);
-
-  //   const [region, setRegion] = useState(countryRegion);
   const [country, setCountry] = useState('United States');
   const [countryRegion, setCountryRegion] = useState('AMERICAS');
-
-  useEffect(() => {
-    const fetchProfileAsync = async () => {
-      await fetchProfile();
-    };
-    fetchProfileAsync();
-  }, []);
-
-  //   const profile = route?.params?.profile;
-  //   const userLoading = route?.params?.userLoading;
-  //   const updateUser = route?.params?.updateUser;
-
-  console.log(profile);
 
   let title = profile?.user_meta?.title;
   if (typeof title === 'undefined') {
@@ -136,12 +121,18 @@ const CountryPopup = props => {
       await updateUser(values).then(async response => {
         if (response?.payload?.code === 200) {
           console.log('response', response);
-        //   setLoggedIn(true);
-            navigation.navigate('Dashboard');
+          navigation.navigate('SignIn');
         }
       });
     },
   });
+
+  useEffect(() => {
+    const fetchProfileAsync = async () => {
+      await fetchProfile();
+    };
+    fetchProfileAsync();
+  }, []);
 
   const countries = [
     'Afghanistan',
@@ -371,6 +362,8 @@ const CountryPopup = props => {
 
   const america = ['United States', 'Canada', 'Mexio'];
 
+  console.log(country, countryRegion);
+
   return (
     <ScrollView
       contentContainerStyle={{flexGrow: 1, height: screenHeight + 100}}>
@@ -390,6 +383,7 @@ const CountryPopup = props => {
           <View style={{height: '5%'}} />
 
           <View>
+            {userLoading && <Loading />}
             <View style={styles.content}>
               <View style={styles.header}>
                 <Image
@@ -398,7 +392,7 @@ const CountryPopup = props => {
                   resizeMode="contain"
                 />
               </View>
-              {userLoading && <Loading />}
+
               <View style={{marginTop: 10}}>
                 <Text style={styles.headingText1}>Select Your Country</Text>
                 <Text style={{marginTop: 20, color: 'black'}}>Country *</Text>

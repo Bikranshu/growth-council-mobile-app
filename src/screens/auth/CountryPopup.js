@@ -27,14 +27,13 @@ const CountryPopupScreen = props => {
   return (
     <CountryPopup
       {...props}
-
-	  profile={profile}
+      profile={profile}
       profileLoading={profileLoading}
       profileError={profileError}
       fetchProfile={fetchProfile}
       cleanProfile={cleanProfile}
+      userLoading={userLoading}
       updateUser={updateUser}
-
     />
   );
 };
