@@ -623,7 +623,6 @@ const HomeCommunity = props => {
               </View>
             )}
           {communityMembers !== undefined &&
-            communityMembers?.length !== 0 &&
             communityMembers !== null &&
             communityMembers !== false && (
               <View style={styles.bottom}>
