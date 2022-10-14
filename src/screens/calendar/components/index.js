@@ -54,12 +54,9 @@ const EventCalendar = props => {
   const [pickerVisible, setPickerVisible] = useState(false);
   const [regionVisible, setRegionVisible] = useState(false);
 
-
-  let profileRegion = profile?.user_meta?.region[0];
-  if (typeof profileRegion === undefined ||
-    profileRegion === null ||
-    profileRegion === ''
-  ) {
+  let profileRegion = profile?.user_meta?.region;
+  console.log('ada', profileRegion);
+  if (typeof profileRegion === 'undefined') {
     profileRegion = 'Region';
   } else {
     profileRegion = profile?.user_meta?.region[0];

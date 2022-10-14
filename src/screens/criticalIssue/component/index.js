@@ -44,16 +44,23 @@ const CriticalIssue = props => {
     Userregion,
   } = props;
 
-  let profileRegion = profile?.user_meta?.region[0]
-    ? profile?.user_meta?.region[0]
-    : 'NORTH-AMERICA';
+  let profileRegion = profile?.user_meta?.region;
+
+  if (typeof profileRegion === 'undefined' || profileRegion === null) {
+    profileRegion = 'NORTH-AMERICA';
+  } else {
+    profileRegion = profile?.user_meta?.region[0];
+  }
+  //   let profileRegion = profile?.user_meta?.region[0]
+  //     ? profile?.user_meta?.region[0]
+  //     : 'NORTH-AMERICA';
   let UserRegion =
     profileRegion === 'MEASA'
       ? 'APAC'
       : profileRegion === 'AMERICAS'
       ? 'NORTH-AMERICA'
       : profileRegion;
-//   console.log('UserRegion', profile?.user_meta?.region[0]);
+
 
   const listRef = useRef(null);
   const [regionVisible, setRegionVisible] = useState(false);
