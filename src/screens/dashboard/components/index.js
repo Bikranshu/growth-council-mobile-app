@@ -437,7 +437,12 @@ const Dashboard = props => {
     // console.log('lowercaseRegion', userRegion);
 
     if (userRegion === 'MEASA') lowercaseRegion = 'apac';
-    if (userRegion === '' || userRegion === 'AMERICAS')
+    if (
+      userRegion === '' ||
+      userRegion === 'AMERICAS' ||
+      typeof userRegion === 'undefined' ||
+      userRegion === null
+    )
       lowercaseRegion = 'north-america';
     return (
       <>
@@ -526,46 +531,7 @@ const Dashboard = props => {
             </View>
           </TouchableOpacity>
         ) : (
-          <TouchableOpacity
-            onPress={() => {
-              navigation.navigate('CriticalIssue', {
-                index,
-                Userregion: lowercaseRegion,
-              });
-            }}>
-            <View
-              style={styles.ContentWrapper}
-              key={index}
-              onLayout={items => {
-                const layout = items.nativeEvent.layout;
-                dataSourceCords[index] = layout.y;
-                setDataSourceCords(dataSourceCords);
-              }}
-              onScroll={e => setPos(e.nativeEvent.contentOffset.y)}>
-              <View
-                style={{
-                  flexDirection: 'row',
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                }}>
-                <View style={[styles.criticalW, styles.shadowCritical]}>
-                  <Image
-                    source={{uri: item?.icon}}
-                    style={{width: 36, height: 36}}
-                  />
-                </View>
-                <Text
-                  style={{
-                    fontSize: 10,
-                    width: '60%',
-                    paddingLeft: 5,
-                    // paddingRight: 10,
-                  }}>
-                  {item?.heading}
-                </Text>
-              </View>
-            </View>
-          </TouchableOpacity>
+          <></>
         )}
       </>
     );
