@@ -50,6 +50,12 @@ const People = props => {
     fetchAllExpertises,
     cleanExperties,
 
+    region,
+    regionLoading,
+    regionError,
+    fetchAllRegions,
+    cleanRegion,
+
     profile,
     profileLoading,
     profileError,
@@ -70,7 +76,7 @@ const People = props => {
   const isFocused = useIsFocused();
   const [category, setCategory] = useState('');
   const [account, setAccount] = useState('');
-  const [region, setRegion] = useState(
+  const [mobileRegion, setMobileRegion] = useState(
     profileRegion === 'NORTH-AMERICA' ? 'AMERICAS' : profileRegion,
   );
   const [searchKey, setSearchKey] = useState('');
@@ -85,7 +91,7 @@ const People = props => {
           sort: sorting,
           expertise_areas: category,
           account: account,
-          region: region,
+          region: mobileRegion,
         });
       };
       fetchAllUsersAsync();
@@ -103,6 +109,12 @@ const People = props => {
     fetchAllExpertises();
   }, []);
 
+  useEffect(() => {
+    fetchAllRegions();
+  }, []);
+
+  //   console.log(region.region_options);
+
   const connectMemberByMemberID = async (memberID, index) => {
     const response = await connectMemberByIdentifier({member_id: memberID});
     if (response?.payload?.code === 200) {
@@ -116,7 +128,7 @@ const People = props => {
         sort: sorting,
         expertise_areas: category,
         account: account,
-        region: region,
+        region: mobileRegion,
       });
       ToastMessage.show('You have successfully connected.');
     } else {
@@ -125,18 +137,27 @@ const People = props => {
     }
   };
 
-  const countries = {
-    Region: 'Region',
-    APAC: 'APAC',
-    MEASA: 'MEASA',
-    AMERICAS: 'AMERICAS',
-  };
+  //   const countries = {
+  //     Region: 'Region',
+  //     APAC: 'APAC',
+  //     MEASA: 'MEASA',
+  //     AMERICAS: 'AMERICAS',
+  //   };
 
-  const pillar = {
-    'Account Type': 'Account Type',
-    'Council Member': 'Council Member',
-    'Associate Member': 'Associate Member',
-  };
+  let memberExpertise = expertise?.data?.choices;
+  if (typeof memberExpertise === 'undefined') {
+    memberExpertise = 'Expertise Area';
+  } else {
+    memberExpertise = expertise?.data?.choices;
+  }
+
+//   console.log(memberExpertise);
+
+//   const pillar = {
+//     'Account Type': 'Account Type',
+//     'Council Member': 'Council Member',
+//     'Associate Member': 'Associate Member',
+//   };
 
   const _renderItem = ({item, index}) => {
     return (
@@ -227,7 +248,7 @@ const People = props => {
                   sort: sorting,
                   expertise_areas: category,
                   account: account,
-                  region: region,
+                  region: mobileRegion,
                 });
               }}
             />
@@ -279,7 +300,7 @@ const People = props => {
                 borderTopRightRadius: 10,
               }}>
               <Text style={{fontSize: 11, color: '#222B45'}}>
-                {region ? region : 'Region'}
+                {mobileRegion ? mobileRegion : 'Region'}
               </Text>
             </TouchableOpacity>
           </View>
@@ -359,14 +380,14 @@ const People = props => {
                     sort: sorting,
                     expertise_areas: itemValue,
                     account: account,
-                    region: region,
+                    region: mobileRegion,
                   });
                 }}>
-                {Object.keys(expertise).map(key => {
+                {Object.keys(memberExpertise).map(key => {
                   return (
                     <Picker.Item
-                      label={expertise[key]}
-                      value={expertise[key]}
+                      label={memberExpertise[key]}
+                      value={memberExpertise[key]}
                       key={key}
                       style={{fontSize: 14}}
                     />
@@ -418,15 +439,25 @@ const People = props => {
                     sort: sorting,
                     expertise_areas: category,
                     account: itemValue,
-                    region: region,
+                    region: mobileRegion,
                   });
                 }}>
-                {Object.keys(pillar).map(key => {
+                {/* {Object.keys(pillar).map(key => {
                   return (
                     <Picker.Item
                       label={pillar[key]}
                       value={pillar[key]}
                       key={key}
+                      style={{fontSize: 14}}
+                    />
+                  );
+                })} */}
+                {expertise?.data?.account_type?.map(item => {
+                  return (
+                    <Picker.Item
+                      label={item?.account_type}
+                      value={item?.account_type}
+                      //   key={key}
                       style={{fontSize: 14}}
                     />
                   );
@@ -466,11 +497,11 @@ const People = props => {
             </TouchableOpacity>
             <View style={{marginBottom: 40}}>
               <Picker
-                selectedValue={region}
+                selectedValue={mobileRegion}
                 mode="dropdown"
                 itemTextStyle={{fontSize: 12}}
                 onValueChange={async itemValue => {
-                  setRegion(itemValue);
+                  setMobileRegion(itemValue);
 
                   await fetchAllUsers({
                     s: searchKey,
@@ -480,12 +511,12 @@ const People = props => {
                     region: itemValue,
                   });
                 }}>
-                {Object.keys(countries).map(key => {
+                {region?.region_options?.map(item => {
                   return (
                     <Picker.Item
-                      label={countries[key]}
-                      value={countries[key]}
-                      key={key}
+                      label={item?.mobile_region}
+                      value={item?.mobile_region}
+                      //   key={key}
                       style={{fontSize: 14}}
                     />
                   );

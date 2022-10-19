@@ -42,6 +42,12 @@ const CriticalIssue = props => {
     fetchProfile,
     cleanProfile,
     Userregion,
+
+    region,
+    regionLoading,
+    regionError,
+    fetchAllRegions,
+    cleanRegion,
   } = props;
 
   let profileRegion = profile?.user_meta?.region;
@@ -61,17 +67,20 @@ const CriticalIssue = props => {
       ? 'NORTH-AMERICA'
       : profileRegion;
 
-
   const listRef = useRef(null);
   const [regionVisible, setRegionVisible] = useState(false);
-  const [region, setRegion] = useState(UserRegion);
-  const countries = {
-    APAC: 'APAC',
-    AMERICAS: 'NORTH-AMERICA',
-    // MEASA: 'MEASA',
-  };
+  const [mobileRegion, setMobileRegion] = useState(UserRegion);
+
   useEffect(() => {
-    setRegion(UserRegion);
+    fetchAllRegions();
+  }, []);
+  //   const countries = {
+  //     APAC: 'APAC',
+  //     AMERICAS: 'NORTH-AMERICA',
+  //     // MEASA: 'MEASA',
+  //   };
+  useEffect(() => {
+    setMobileRegion(UserRegion);
   }, [profile]);
 
   useEffect(() => {
@@ -101,7 +110,7 @@ const CriticalIssue = props => {
 
   const _renderCritical = ({item, index}) => {
     let lowercaseRegion = '';
-    if (region) lowercaseRegion = region.toLowerCase();
+    if (mobileRegion) lowercaseRegion = mobileRegion.toLowerCase();
     else console.log("lowercaseRegion doesn't exist, look into it");
     return (
       <>
@@ -198,7 +207,13 @@ const CriticalIssue = props => {
                         left: 20,
                         top: 10,
                       }}>
-                      {region ? region : 'Region'}
+                      {mobileRegion
+                        ? mobileRegion === 'NORTH-AMERICA'
+                          ? 'AMERICAS'
+                          : mobileRegion === 'MEASA'
+                          ? 'APAC'
+                          : mobileRegion
+                        : 'Region'}
                     </Text>
                     <Ionicons
                       name="chevron-down-outline"
@@ -250,18 +265,24 @@ const CriticalIssue = props => {
             </TouchableOpacity>
             <View style={{marginBottom: 40}}>
               <Picker
-                selectedValue={region}
+                selectedValue={mobileRegion}
                 mode="dropdown"
                 itemTextStyle={{fontSize: 12}}
                 onValueChange={async itemValue => {
-                  setRegion(itemValue);
+                  setMobileRegion(
+                    itemValue === 'AMERICAS'
+                      ? 'NORTH-AMERICA'
+                      : itemValue === 'MEASA'
+                      ? 'APAC'
+                      : itemValue,
+                  );
                 }}>
-                {Object.keys(countries).map(key => {
+                {region?.region_options?.map(item => {
                   return (
                     <Picker.Item
-                      label={countries[key]}
-                      value={countries[key]}
-                      key={key}
+                      label={item?.mobile_region}
+                      value={item?.mobile_region}
+                      //   key={key}
                       style={{fontSize: 14}}
                     />
                   );

@@ -67,6 +67,7 @@ import searchReducer from '../screens/search/searchSlice';
 import uploadProfileImageReducer from '../screens/account/slice/uploadProfileImageSlice';
 import updateReducer from '../screens/account/slice/updateProfileImageSlice';
 import expertiseReducer from '../screens/people/slice/expertiseSlice';
+import regionReducer from '../screens/people/slice/reginSlice';
 import coachingSessionReducer from '../screens/details/slice/sessionlistSlice';
 import traitsReducer from '../screens/coachingSession/slice/sessionTraitsSlice';
 import subTraitReducer from '../screens/coachingSession/slice/subTraitsSlice';
@@ -141,6 +142,7 @@ const reducers = combineReducers({
   calendarEvents: calendarEventReducer,
   searches: searchReducer,
   expertise: expertiseReducer,
+  region: regionReducer,
   uploadProfileImages: uploadProfileImageReducer,
   updateEntities: updateReducer,
   coachingSession: coachingSessionReducer,
