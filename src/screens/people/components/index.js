@@ -26,6 +26,7 @@ import ToastMessage from '../../../shared/toast';
 import {Searchbar} from 'react-native-paper';
 import BottomNav from '../../../layout/BottomLayout';
 import Loading from '../../../shared/loading';
+import { PRACTICE_COLOR } from '../../../theme/colors';
 
 const win = Dimensions.get('window');
 const contentContainerWidth = win.width - 30;
@@ -221,7 +222,7 @@ const People = props => {
             <View style={{flexDirection: 'row'}}>
               <Material
                 name="check-circle"
-                size={20}
+                size={25}
                 color="#14A2E2"
                 style={{marginTop: 25}}
               />
@@ -229,11 +230,11 @@ const People = props => {
                 onPress={async () => {
                   deleteMemberByMemberID(item.ID, index);
                 }}>
-                <AntDesign
-                  name="deleteuser"
-                  size={20}
-                  color="#14A2E2"
-                  style={{marginTop: 25, marginLeft: 10}}
+                <Material
+                  name="delete-forever"
+                  size={25}
+                  color={PRACTICE_COLOR}
+                  style={{marginTop: 25, marginLeft: 5}}
                 />
               </TouchableOpacity>
             </View>
