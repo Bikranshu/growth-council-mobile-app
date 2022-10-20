@@ -1,4 +1,4 @@
-import React, {useState, useRef, useEffect} from 'react';
+import React, {useState, useCallback, useEffect} from 'react';
 import {
   StyleSheet,
   Text,
@@ -11,9 +11,10 @@ import {
   Modal,
 } from 'react-native';
 import {Button} from 'native-base';
-
+import {useAuthentication} from '../../../context/auth';
 import Loading from '../../../shared/loading';
 import {useFormik} from 'formik';
+import {useFocusEffect} from '@react-navigation/native';
 import {Picker} from '@react-native-picker/picker';
 import {BubblesLoader} from 'react-native-indicator';
 import Ionicons from 'react-native-vector-icons/Ionicons';
@@ -37,15 +38,27 @@ const CountryPopup = props => {
 
   const [isPickerVisible, setIsPickerVisible] = useState(false);
   const [regionVisible, setRegionVisible] = useState(false);
-
+  const {
+    loading,
+    setLoading,
+    message,
+    setMessage,
+    signIn,
+    userCountry,
+    setLoggedIn,
+  } = useAuthentication();
   const [region, setRegion] = useState(countryRegion);
   const [country, setCountry] = useState('United States');
-  const [countryRegion, setCountryRegion] = useState('');
+  const [countryRegion, setCountryRegion] = useState('AMERICAS');
 
-//   const profile = route?.params?.profile;
-//   const userLoading = route?.params?.userLoading;
-//   const updateUser = route?.params?.updateUser;
-//   console.log(profile)
+  const username = route?.params?.username;
+  const password = route?.params?.password;
+  const [userSign, setUserSign] = useState({
+    username: username,
+    password: password,
+  });
+
+  console.log('profile', userSign);
 
   let title = profile?.user_meta?.title;
   if (typeof title === 'undefined') {
@@ -100,12 +113,12 @@ const CountryPopup = props => {
     ? profile?.expertise_areas1
     : [];
 
-  //   useEffect(() => {
-  //     const fetchProfileAsync = async () => {
-  //       await fetchProfile();
-  //     };
-  //     fetchProfileAsync();
-  //   }, []);
+  useEffect(() => {
+    const fetchProfileAsync = async () => {
+      await fetchProfile();
+    };
+    fetchProfileAsync();
+  }, []);
 
   const {
     handleChange,
@@ -129,16 +142,26 @@ const CountryPopup = props => {
       professional_summary: professional_summary,
       country: country,
       region: countryRegion,
+      username: route?.params?.username,
+      password: route?.params?.password,
     },
     onSubmit: async values => {
       await updateUser(values).then(async response => {
+        await signIn(userSign);
         if (response?.payload?.code === 200) {
           console.log('response', response);
-          navigation.navigate('Dashboard');
+          // navigation.navigate('Dashboard');
         }
       });
     },
   });
+  useFocusEffect(
+    useCallback(() => {
+      setMessage(null);
+      ``;
+      setLoading(false);
+    }, []),
+  );
 
   const countries = [
     'Afghanistan',
@@ -399,6 +422,14 @@ const CountryPopup = props => {
                   />
                 </View>
               )}
+			   {loading && (
+                <View style={styles.loading1}>
+                  <BubblesLoader
+                    color={Colors.SECONDARY_TEXT_COLOR}
+                    size={60}
+                  />
+                </View>
+              )}
               <View style={styles.header}>
                 <Image
                   style={{width: '80%'}}
@@ -462,6 +493,11 @@ const CountryPopup = props => {
                   <Text style={styles.loginButtonText}>Proceed</Text>
                 </Button>
               </View>
+              {!message?.success && (
+                <View style={styles.message}>
+                  <Text style={styles.errorText}>{message?.message}</Text>
+                </View>
+              )}
 
               <View
                 style={[
@@ -680,11 +716,11 @@ const styles = StyleSheet.create({
   },
 
   loading1: {
-    top: 10,
+    top: 200,
     left: 0,
     right: 0,
     bottom: 0,
-    justifyContent: 'center',
+    // justifyContent: 'center',
     alignItems: 'center',
     position: 'absolute',
     zIndex: 1011,
