@@ -424,7 +424,7 @@ const AppStack = () => (
         pillarId: route?.params?.pillarId,
         header: () => (
           <SubHeader
-            subtitle="Growth Community"
+            subtitle={route?.params?.title}
             id={GROWTH_COMMUNITY_ID}
             title={route?.params?.title}
             image={route?.params?.image}

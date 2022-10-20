@@ -65,7 +65,9 @@ const CriticalIssue = props => {
       ? 'APAC'
       : profileRegion === 'AMERICAS'
       ? 'NORTH-AMERICA'
-      : profileRegion;
+      : profileRegion
+	
+
 
   const listRef = useRef(null);
   const [regionVisible, setRegionVisible] = useState(false);
