@@ -321,7 +321,7 @@ const Dashboard = props => {
             {memberConnection[index]?.connection && (
               <View style={{flexDirection: 'row'}}>
                 <Material name="check-circle" size={20} color="#14A2E2" />
-                <TouchableOpacity
+                {/* <TouchableOpacity
                   onPress={async () => {
                     deleteMemberByMemberID(item.ID, index);
                   }}>
@@ -331,7 +331,7 @@ const Dashboard = props => {
                     color="#14A2E2"
                     style={{marginLeft: 5}}
                   />
-                </TouchableOpacity>
+                </TouchableOpacity> */}
               </View>
             )}
           </View>

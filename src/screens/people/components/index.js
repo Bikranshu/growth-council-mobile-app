@@ -230,12 +230,12 @@ const People = props => {
                 onPress={async () => {
                   deleteMemberByMemberID(item.ID, index);
                 }}>
-                <Material
-                  name="delete-forever"
-                  size={25}
-                  color={PRACTICE_COLOR}
-                  style={{marginTop: 25, marginLeft: 5}}
-                />
+                  <AntDesign
+                    name="deleteuser"
+                    size={25}
+                    color="#14A2E2"
+                    style={{marginLeft: 5, marginTop: 25}}
+                  />
               </TouchableOpacity>
             </View>
           )}
