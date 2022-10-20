@@ -241,8 +241,15 @@ const ManageAccount = props => {
     fetchAllExpertises();
   }, []);
 
+
+  let memberExpertise = expertise?.data?.choices;
+  if (typeof memberExpertise === 'undefined') {
+    memberExpertise = 'Expertise Area';
+  } else {
+    memberExpertise = expertise?.data?.choices;
+  }
   useEffect(() => {
-    const result = Object.entries(expertise)
+    const result = Object.entries(memberExpertise)
       ?.filter(function ([key, value]) {
         if (value === 'Expertise Areas') {
           return false; // skip

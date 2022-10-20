@@ -113,8 +113,8 @@ const Dashboard = props => {
 
   let region = profile?.user_meta?.region;
   if (typeof region === 'undefined' || region === null) {
-    region = "";
-    console.log('asdasd');
+    region = '';
+    // console.log('asdasd');
   } else {
     region = profile?.user_meta?.region[0];
   }
@@ -130,7 +130,7 @@ const Dashboard = props => {
 
   let regionUser = profile?.user_meta?.region;
   if (typeof regionUser === 'undefined' || regionUser === null) {
-    regionUser = "";
+    regionUser = '';
   } else {
     regionUser = profile?.user_meta?.region[0];
   }
@@ -437,7 +437,13 @@ const Dashboard = props => {
     // console.log('lowercaseRegion', userRegion);
 
     if (userRegion === 'MEASA') lowercaseRegion = 'apac';
-    if (userRegion === '' || userRegion === 'AMERICAS')
+    if (
+      userRegion === '' ||
+      userRegion === 'AMERICAS' ||
+	  userRegion === 'north america' ||
+      typeof userRegion === 'undefined' ||
+      userRegion === null
+    )
       lowercaseRegion = 'north-america';
     return (
       <>
@@ -526,46 +532,7 @@ const Dashboard = props => {
             </View>
           </TouchableOpacity>
         ) : (
-          <TouchableOpacity
-            onPress={() => {
-              navigation.navigate('CriticalIssue', {
-                index,
-                Userregion: lowercaseRegion,
-              });
-            }}>
-            <View
-              style={styles.ContentWrapper}
-              key={index}
-              onLayout={items => {
-                const layout = items.nativeEvent.layout;
-                dataSourceCords[index] = layout.y;
-                setDataSourceCords(dataSourceCords);
-              }}
-              onScroll={e => setPos(e.nativeEvent.contentOffset.y)}>
-              <View
-                style={{
-                  flexDirection: 'row',
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                }}>
-                <View style={[styles.criticalW, styles.shadowCritical]}>
-                  <Image
-                    source={{uri: item?.icon}}
-                    style={{width: 36, height: 36}}
-                  />
-                </View>
-                <Text
-                  style={{
-                    fontSize: 10,
-                    width: '60%',
-                    paddingLeft: 5,
-                    // paddingRight: 10,
-                  }}>
-                  {item?.heading}
-                </Text>
-              </View>
-            </View>
-          </TouchableOpacity>
+          <></>
         )}
       </>
     );
@@ -680,23 +647,22 @@ const Dashboard = props => {
               </View>
             </View>
           )}
-
-        <View style={styles.content}>
-          <Text style={styles.title}>
-            {criticalIssue?.critical_issue_mobile_title}
-          </Text>
-          <View
-            ref={ref => {
-              setRef(ref);
-            }}>
-            <FlatList
-              numColumns={2}
-              showsHorizontalScrollIndicator={false}
-              data={criticalIssue?.critical_issue_mobile_lists}
-              renderItem={_renderCritical}
-            />
-          </View>
-        </View>
+            <View style={styles.content}>
+              <Text style={styles.title}>
+                {criticalIssue?.critical_issue_mobile_title}
+              </Text>
+              <View
+                ref={ref => {
+                  setRef(ref);
+                }}>
+                <FlatList
+                  numColumns={2}
+                  showsHorizontalScrollIndicator={false}
+                  data={criticalIssue?.critical_issue_mobile_lists}
+                  renderItem={_renderCritical}
+                />
+              </View>
+            </View>
       </ScrollView>
       <BottomNav {...props} navigation={navigation} />
     </View>

@@ -8,6 +8,7 @@ import {
   resetConnectMember,
 } from './slice/memberConnectionSlice';
 import {fetchAllExpertise, resetExpertise} from './slice/expertiseSlice';
+import {fetchAllRegion, resetRegion} from './slice/reginSlice';
 import {fetchProfileByID, resetProfile} from '../account/slice/profileSlice';
 
 const PeopleScreen = props => {
@@ -19,7 +20,9 @@ const PeopleScreen = props => {
   const {expertise, expertiseLoading, expertiseError} = useSelector(
     state => state.expertise,
   );
-
+  const {region, regionLoading, regionError} = useSelector(
+    state => state.region,
+  );
   const {profile, profileLoading, profileError} = useSelector(
     state => state.profile,
   );
@@ -40,6 +43,10 @@ const PeopleScreen = props => {
     dispatch(fetchAllExpertise());
   };
 
+  const fetchAllRegions = () => {
+    dispatch(fetchAllRegion());
+  };
+
   const cleanUser = () => {
     dispatch(resetUser());
   };
@@ -55,6 +62,11 @@ const PeopleScreen = props => {
   const cleanExperties = () => {
     dispatch(resetExpertise());
   };
+  
+  const cleanRegion = () => {
+    dispatch(resetRegion());
+  };
+
 
   useEffect(() => {
     fetchProfileByID();
@@ -81,6 +93,11 @@ const PeopleScreen = props => {
       expertiseError={expertiseError}
       fetchAllExpertises={fetchAllExpertises}
       cleanExperties={cleanExperties}
+	  region={region}
+      regionLoading={regionLoading}
+      regionError={regionError}
+      fetchAllRegions={fetchAllRegions}
+      cleanRegion={cleanRegion}
       profile={profile}
       profileLoading={profileLoading}
       profileError={profileError}
