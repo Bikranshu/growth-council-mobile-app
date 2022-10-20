@@ -33,8 +33,8 @@ export const AuthProvider = props => {
 
   useEffect(() => {
     (async () => {
-    //   const region = await getAsyncStorage(USER_REGION);
-    //   console.log('ad', region);
+      //   const region = await getAsyncStorage(USER_REGION);
+      //   console.log('ad', region);
       const token = await getAsyncStorage(JWT_TOKEN);
       if (token) {
         if (
@@ -42,13 +42,9 @@ export const AuthProvider = props => {
           userCountry === null ||
           userCountry === ''
         ) {
-          setLoggedIn(true);
-          navigation.navigate('Dashboard');
-        } else {
           navigation.navigate('CountryPop');
         }
-        // setLoggedIn(true);
-
+        setLoggedIn(true);
         await isTokenExpired(token);
       } else {
         setLoggedIn(false);
