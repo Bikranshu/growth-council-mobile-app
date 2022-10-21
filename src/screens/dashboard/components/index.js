@@ -122,7 +122,7 @@ const Dashboard = props => {
   let region = profile?.user_meta?.region;
   if (typeof region === 'undefined' || region === null) {
     region = '';
-    // console.log('asdasd');
+
   } else {
     region = profile?.user_meta?.region[0];
   }
