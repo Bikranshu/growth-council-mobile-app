@@ -30,7 +30,6 @@ export const AuthProvider = props => {
       const token = await getAsyncStorage(JWT_TOKEN);
 
       if (token) {
-      
         setLoggedIn(true);
         await isTokenExpired(token);
       } else {

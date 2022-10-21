@@ -120,8 +120,9 @@ const Dashboard = props => {
   } = props;
 
   let region = profile?.user_meta?.region;
-  if (typeof region === 'undefined' || region === 'null') {
-    region = ' ';
+  if (typeof region === 'undefined' || region === null) {
+    region = '';
+    // console.log('asdasd');
   } else {
     region = profile?.user_meta?.region[0];
   }
@@ -137,8 +138,8 @@ const Dashboard = props => {
   if (string) string = string.toLowerCase();
 
   let regionUser = profile?.user_meta?.region;
-  if (typeof regionUser === 'undefined' || regionUser === 'null') {
-    regionUser = ' ';
+  if (typeof regionUser === 'undefined' || regionUser === null) {
+    regionUser = '';
   } else {
     regionUser = profile?.user_meta?.region[0];
   }
@@ -270,11 +271,9 @@ const Dashboard = props => {
     } else {
       user = item?.user_meta?.region[0];
     }
-    // console.log('a', user, userRegion);
-    // console.log('a', item?.user_meta?.region);
+
     return (
       <>
-        {/* {user === userRegion ? ( */}
         <View style={[styles.bottomWrapper, styles.shadowProp]} key={index}>
           <TouchableOpacity
             onPress={() => navigation.navigate('OthersAccount', {id: item.ID})}>
@@ -481,7 +480,13 @@ const Dashboard = props => {
     // console.log('lowercaseRegion', userRegion);
 
     if (userRegion === 'MEASA') lowercaseRegion = 'apac';
-    if (userRegion === '' || userRegion === 'AMERICAS')
+    if (
+      userRegion === '' ||
+      userRegion === 'AMERICAS' ||
+	  userRegion === 'north america' ||
+      typeof userRegion === 'undefined' ||
+      userRegion === null
+    )
       lowercaseRegion = 'north-america';
     return (
       <>
@@ -619,7 +624,7 @@ const Dashboard = props => {
         <View style={{height: 60}} />
         {regionEvents?.length !== 0 &&
           regionEvents !== null &&
-          regionEvents !== false && (
+          regionEvents !== undefined && (
             <View style={styles.top}>
               <View style={styles.eventWrapper}>
                 <Text style={styles.title}>Upcoming Events</Text>
@@ -669,7 +674,7 @@ const Dashboard = props => {
           )}
         {communityMembers?.length !== 0 &&
           communityMembers !== null &&
-          communityMembers !== false && (
+          communityMembers !== undefined && (
             <View style={styles.bottom}>
               <View
                 style={{
@@ -690,23 +695,22 @@ const Dashboard = props => {
               </View>
             </View>
           )}
-
-        <View style={styles.content}>
-          <Text style={styles.title}>
-            {criticalIssue?.critical_issue_mobile_title}
-          </Text>
-          <View
-            ref={ref => {
-              setRef(ref);
-            }}>
-            <FlatList
-              numColumns={2}
-              showsHorizontalScrollIndicator={false}
-              data={criticalIssue?.critical_issue_mobile_lists}
-              renderItem={_renderCritical}
-            />
-          </View>
-        </View>
+            <View style={styles.content}>
+              <Text style={styles.title}>
+                {criticalIssue?.critical_issue_mobile_title}
+              </Text>
+              <View
+                ref={ref => {
+                  setRef(ref);
+                }}>
+                <FlatList
+                  numColumns={2}
+                  showsHorizontalScrollIndicator={false}
+                  data={criticalIssue?.critical_issue_mobile_lists}
+                  renderItem={_renderCritical}
+                />
+              </View>
+            </View>
       </ScrollView>
       <BottomNav {...props} navigation={navigation} />
     </View>

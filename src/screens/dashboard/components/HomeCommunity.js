@@ -100,7 +100,7 @@ const HomeCommunity = props => {
   const isFocused = useIsFocused();
 
   let region = profile?.user_meta?.region;
-  if (typeof region === 'undefined' || region === 'null') {
+  if (typeof region === 'undefined' || region === null) {
     region = ' ';
   } else {
     region = profile?.user_meta?.region[0];
@@ -110,7 +110,7 @@ const HomeCommunity = props => {
   if (string) string = string.toLowerCase();
 
   let regionUser = profile?.user_meta?.region;
-  if (typeof regionUser === 'undefined' || regionUser === 'null') {
+  if (typeof regionUser === 'undefined' || regionUser === null) {
     regionUser = ' ';
   } else {
     regionUser = profile?.user_meta?.region[0];
@@ -257,11 +257,9 @@ const HomeCommunity = props => {
     } else {
       user = item?.user_meta?.region[0];
     }
-    // console.log('a', user, userRegion);
-    // console.log('a', item?.user_meta?.region);
+
     return (
       <>
-        {/* {user === userRegion ? ( */}
         <View style={[styles.bottomWrapper, styles.shadowProp]} key={index}>
           <TouchableOpacity
             onPress={() => navigation.navigate('OthersAccount', {id: item.ID})}>
@@ -306,24 +304,10 @@ const HomeCommunity = props => {
               </TouchableOpacity>
             )}
             {memberConnection[index]?.connection && (
-              <View style={{flexDirection: 'row'}}>
-                <Material name="check-circle" size={20} color="#14A2E2" />
-                {/* <TouchableOpacity
-                  onPress={async () => {
-                    deleteMemberByMemberID(item.ID, index);
-                  }}>
-                  <AntDesign
-                    name="deleteuser"
-                    size={20}
-                    color="#14A2E2"
-                    style={{marginLeft: 10}}
-                  />
-                </TouchableOpacity> */}
-              </View>
+              <Material name="check-circle" size={20} color="#14A2E2" />
             )}
           </View>
         </View>
-      
       </>
     );
   };
@@ -387,51 +371,56 @@ const HomeCommunity = props => {
     const pillarname = 'Growth Community';
     const image = require('../../../assets/img/Rectangle2.png');
     return (
-      <View style={styles.topWrapper} key={index}>
-        <TouchableOpacity
-          onPress={async () => {
-            navigation.navigate('EventDetail', {
-              id: item.ID,
-              title: pillarname,
-              image: image,
-            });
+      <>
+        {item?.pillar_categories[0]?.parent === 0 ||
+          (item?.pillar_categories[0]?.parent === GROWTH_COMMUNITY_ID && (
+            <View style={styles.topWrapper} key={index}>
+              <TouchableOpacity
+                onPress={async () => {
+                  navigation.navigate('EventDetail', {
+                    id: item.ID,
+                    title: pillarname,
+                    image: image,
+                  });
 
-            await analytics().logEvent(item?.title, {
-              id: item.ID,
-              item: item.title,
-            });
-          }}>
-          <ImageBackground
-            style={{
-              width: '100%',
-              height: '100%',
-              borderRadius: 20,
-            }}
-            source={require('../../../assets/img/Rectangle2.png')}>
-            <View
-              style={{
-                width: 50,
-                height: 50,
-                marginTop: 10,
-                marginLeft: 200,
-                backgroundColor: '#EBECF0',
-                borderRadius: 10,
-                padding: 5,
-                alignItems: 'center',
-              }}>
-              <Text style={{color: '#030303'}}>{date[0]}</Text>
-              <Text style={{color: '#030303'}}>{date[1]}</Text>
-            </View>
+                  await analytics().logEvent(item?.title, {
+                    id: item.ID,
+                    item: item.title,
+                  });
+                }}>
+                <ImageBackground
+                  style={{
+                    width: '100%',
+                    height: '100%',
+                    borderRadius: 20,
+                  }}
+                  source={require('../../../assets/img/Rectangle2.png')}>
+                  <View
+                    style={{
+                      width: 50,
+                      height: 50,
+                      marginTop: 10,
+                      marginLeft: 200,
+                      backgroundColor: '#EBECF0',
+                      borderRadius: 10,
+                      padding: 5,
+                      alignItems: 'center',
+                    }}>
+                    <Text style={{color: '#030303'}}>{date[0]}</Text>
+                    <Text style={{color: '#030303'}}>{date[1]}</Text>
+                  </View>
 
-            <View style={styles.header}>
-              <Text style={styles.headingText1}>{item.title}</Text>
-              <Text style={styles.headingText2}>
-                {organizer} {description}
-              </Text>
+                  <View style={styles.header}>
+                    <Text style={styles.headingText1}>{item.title}</Text>
+                    <Text style={styles.headingText2}>
+                      {organizer} {description}
+                    </Text>
+                  </View>
+                </ImageBackground>
+              </TouchableOpacity>
             </View>
-          </ImageBackground>
-        </TouchableOpacity>
-      </View>
+          ))}
+      </>
     );
   };
 
@@ -593,7 +582,7 @@ const HomeCommunity = props => {
         <View style={styles.container}>
           {regionEvents?.length !== 0 &&
             regionEvents !== null &&
-            regionEvents !== false && (
+            regionEvents !== undefined && (
               <View style={styles.top}>
                 <Text style={styles.title}>Growth Community Events</Text>
 
@@ -669,19 +658,22 @@ const HomeCommunity = props => {
                 />
               </View>
             )}
-          {users !== undefined && users !== null && users !== false && (
-            <View style={styles.bottom}>
-              <Text style={styles.title}>Welcome New Members</Text>
-              <View>
-                <FlatList
-                  horizontal
-                  showsHorizontalScrollIndicator={false}
-                  data={communityMembers}
-                  renderItem={_renderItem}
-                />
+          {communityMembers !== undefined &&
+            communityMembers?.length !== 0 &&
+            communityMembers !== null &&
+            communityMembers !== false && (
+              <View style={styles.bottom}>
+                <Text style={styles.title}>Welcome New Members</Text>
+                <View>
+                  <FlatList
+                    horizontal
+                    showsHorizontalScrollIndicator={false}
+                    data={communityMembers}
+                    renderItem={_renderItem}
+                  />
+                </View>
               </View>
-            </View>
-          )}
+            )}
 
           {/* external_links */}
 

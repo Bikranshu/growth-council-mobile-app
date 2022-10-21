@@ -279,6 +279,7 @@ const AppStack = navigation => (
         header: ({navigation}) => (
           <SubHeader
             title="Growth Content"
+			
             image={require('../assets/img/best-practice-bg.png')}
             navigation={navigation}
             noDrawer
@@ -294,6 +295,7 @@ const AppStack = navigation => (
         header: () => (
           <SubHeader
             title="Growth Content"
+			id="Growth Content"
             image={require('../assets/img/best-practice-bg.png')}
             navigation={navigation}
             noDrawer
@@ -309,6 +311,7 @@ const AppStack = navigation => (
         header: () => (
           <SubHeader
             title="Growth Content"
+			id="Growth Content"
             image={require('../assets/img/best-practice-bg.png')}
             navigation={navigation}
             noDrawer
@@ -430,7 +433,7 @@ const AppStack = navigation => (
         pillarId: route?.params?.pillarId,
         header: () => (
           <SubHeader
-            subtitle="Growth Community"
+            subtitle={route?.params?.title}
             id={GROWTH_COMMUNITY_ID}
             title={route?.params?.title}
             image={route?.params?.image}
