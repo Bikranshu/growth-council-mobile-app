@@ -288,6 +288,7 @@ const AppStack = () => (
         header: () => (
           <SubHeader
             title="Growth Content"
+			id="Growth Content"
             image={require('../assets/img/best-practice-bg.png')}
             navigation={navigation}
             noDrawer
@@ -303,6 +304,7 @@ const AppStack = () => (
         header: () => (
           <SubHeader
             title="Growth Content"
+			id="Growth Content"
             image={require('../assets/img/best-practice-bg.png')}
             navigation={navigation}
             noDrawer

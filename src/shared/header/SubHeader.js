@@ -55,6 +55,8 @@ const SubHeader = props => {
                     title: 'Growth Community',
                     image: require('../../assets/img/Rectangle2.png'),
                   });
+                } else if (props.id == 'Growth Content') {
+                  navigation.navigate('Dashboard');
                 } else {
                   navigation.navigate(props.subtitle, {
                     poeId: props.id,

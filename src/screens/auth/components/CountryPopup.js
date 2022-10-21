@@ -58,7 +58,6 @@ const CountryPopup = props => {
     password: password,
   });
 
-  console.log('profile', userSign);
 
   let title = profile?.user_meta?.title;
   if (typeof title === 'undefined') {

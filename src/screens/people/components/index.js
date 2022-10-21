@@ -151,13 +151,13 @@ const People = props => {
     memberExpertise = expertise?.data?.choices;
   }
 
-//   console.log(memberExpertise);
+  //   console.log(memberExpertise);
 
-//   const pillar = {
-//     'Account Type': 'Account Type',
-//     'Council Member': 'Council Member',
-//     'Associate Member': 'Associate Member',
-//   };
+  //   const pillar = {
+  //     'Account Type': 'Account Type',
+  //     'Council Member': 'Council Member',
+  //     'Associate Member': 'Associate Member',
+  //   };
 
   const _renderItem = ({item, index}) => {
     return (
@@ -300,7 +300,7 @@ const People = props => {
                 borderTopRightRadius: 10,
               }}>
               <Text style={{fontSize: 11, color: '#222B45'}}>
-                {mobileRegion ? mobileRegion : 'Region'}
+                {mobileRegion ? mobileRegion : 'ALL REGION'}
               </Text>
             </TouchableOpacity>
           </View>

@@ -30,20 +30,15 @@ export const AuthProvider = props => {
   const [loggedIn, setLoggedIn] = useState(false);
   const [emailId, setEmailId] = useState('');
   const [userCountry, setUserCountry] = useState('');
-
+ 
   useEffect(() => {
     (async () => {
-      //   const region = await getAsyncStorage(USER_REGION);
-      //   console.log('ad', region);
+        const region = await getAsyncStorage(USER_REGION);
+        console.log('ad', region);
       const token = await getAsyncStorage(JWT_TOKEN);
+	  console.log("tok", token)
       if (token) {
-        if (
-          userCountry === undefined ||
-          userCountry === null ||
-          userCountry === ''
-        ) {
-          navigation.navigate('CountryPop');
-        }
+     
         setLoggedIn(true);
         await isTokenExpired(token);
       } else {
@@ -51,6 +46,15 @@ export const AuthProvider = props => {
       }
     })();
   });
+  const popup = () => {
+    if (
+      userCountry === undefined ||
+      userCountry === null ||
+      userCountry === ''
+    ) {
+      navigation.navigate('CountryPop');
+    }
+  };
 
   const isTokenExpired = async token => {
     const decoded = jwt_decode(token);
@@ -75,7 +79,7 @@ export const AuthProvider = props => {
         const raw_data = await getAsyncStorage('tempData');
         const data = JSON.parse(raw_data);
 
-        const {formData, JWT_TOKEN, USER_AVATAR, USER_NAME} = data;
+        const {formData, JWT_TOKEN, USER_AVATAR, USER_NAME,USER_REGION} = data;
 
         const res = await auth().createUserWithEmailAndPassword(
           formData.username,
@@ -86,6 +90,7 @@ export const AuthProvider = props => {
           JWT_TOKEN,
           USER_AVATAR,
           USER_NAME,
+		  USER_REGION,
         });
         resolve(true);
       } catch (error) {

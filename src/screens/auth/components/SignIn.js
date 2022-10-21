@@ -88,9 +88,7 @@ const SignInForm = props => {
           username: values.username,
           password: values.password,
         });
-      } else {
-        navigation.navigate('Dashboard');
-      }
+      } 
     },
   });
 

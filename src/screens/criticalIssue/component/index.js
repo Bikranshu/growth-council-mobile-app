@@ -65,13 +65,17 @@ const CriticalIssue = props => {
       ? 'APAC'
       : profileRegion === 'AMERICAS'
       ? 'NORTH-AMERICA'
-      : profileRegion
-	
-
+      : profileRegion;
 
   const listRef = useRef(null);
   const [regionVisible, setRegionVisible] = useState(false);
-  const [mobileRegion, setMobileRegion] = useState(UserRegion);
+  const [mobileRegion, setMobileRegion] = useState(
+    profileRegion === 'MEASA'
+      ? 'APAC'
+      : profileRegion === 'AMERICAS'
+      ? 'NORTH-AMERICA'
+      : profileRegion,
+  );
 
   useEffect(() => {
     fetchAllRegions();
@@ -81,9 +85,9 @@ const CriticalIssue = props => {
   //     AMERICAS: 'NORTH-AMERICA',
   //     // MEASA: 'MEASA',
   //   };
-  useEffect(() => {
-    setMobileRegion(UserRegion);
-  }, [profile]);
+  //   useEffect(() => {
+  //     setMobileRegion(UserRegion);
+  //   }, [profile]);
 
   useEffect(() => {
     fetchProfile();
@@ -117,6 +121,43 @@ const CriticalIssue = props => {
     return (
       <>
         {lowercaseRegion === item?.region ? (
+          <View style={styles.content}>
+            <Image
+              style={{
+                width: Dimensions.get('window').width - 40,
+                height: 120,
+                borderRadius: 8,
+              }}
+              source={{uri: item?.image}}
+            />
+            <View style={styles.contentWrapper}>
+              <Text style={{color: 'black', fontSize: 14, marginBottom: 10}}>
+                {item?.heading}
+              </Text>
+              {item?.areas_of_focus?.map(items => (
+                <View
+                  style={{
+                    marginBottom: 10,
+                    paddingRight: 20,
+                    flexDirection: 'row',
+                    alignItems: 'center',
+                  }}>
+                  <Entypo name="dot-single" size={20} color="black" />
+
+                  <HTMLView
+                    value={items.point}
+                    textComponentProps={{
+                      style: {
+                        fontSize: 10,
+                        color: 'black',
+                      },
+                    }}
+                  />
+                </View>
+              ))}
+            </View>
+          </View>
+        ) : lowercaseRegion === 'all region' ? (
           <View style={styles.content}>
             <Image
               style={{
@@ -212,10 +253,8 @@ const CriticalIssue = props => {
                       {mobileRegion
                         ? mobileRegion === 'NORTH-AMERICA'
                           ? 'AMERICAS'
-                          : mobileRegion === 'MEASA'
-                          ? 'APAC'
                           : mobileRegion
-                        : 'Region'}
+                        : 'ALL REGION'}
                     </Text>
                     <Ionicons
                       name="chevron-down-outline"
