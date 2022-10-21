@@ -30,15 +30,17 @@ export const AuthProvider = props => {
   const [loggedIn, setLoggedIn] = useState(false);
   const [emailId, setEmailId] = useState('');
   const [userCountry, setUserCountry] = useState('');
- 
+
   useEffect(() => {
     (async () => {
-        const region = await getAsyncStorage(USER_REGION);
-        console.log('ad', region);
+      const region = await getAsyncStorage(USER_REGION);
+      console.log('ad', region);
       const token = await getAsyncStorage(JWT_TOKEN);
-	  console.log("tok", token)
-      if (token) {
-     
+
+      if (token && region) {
+        if (region === null) {
+          navigation.navigate('CountryPop');
+        }
         setLoggedIn(true);
         await isTokenExpired(token);
       } else {
@@ -79,7 +81,7 @@ export const AuthProvider = props => {
         const raw_data = await getAsyncStorage('tempData');
         const data = JSON.parse(raw_data);
 
-        const {formData, JWT_TOKEN, USER_AVATAR, USER_NAME,USER_REGION} = data;
+        const {formData, JWT_TOKEN, USER_AVATAR, USER_NAME, USER_REGION} = data;
 
         const res = await auth().createUserWithEmailAndPassword(
           formData.username,
@@ -90,7 +92,7 @@ export const AuthProvider = props => {
           JWT_TOKEN,
           USER_AVATAR,
           USER_NAME,
-		  USER_REGION,
+          USER_REGION,
         });
         resolve(true);
       } catch (error) {
@@ -104,7 +106,7 @@ export const AuthProvider = props => {
       email,
       '6AWgM#.Y(fE8Q2=',
     );
-    console.log('clearing cache...');
+
     console.log('login', res);
     await clearAsyncStorage('tempData');
 
@@ -161,16 +163,16 @@ export const AuthProvider = props => {
             await postToAPI(response.data.user_email, messageToken);
 
             if (response.data.token) {
-              await setAsyncStorage(
-                'tempData',
-                JSON.stringify({
-                  formData: fromData,
-                  JWT_TOKEN: response.data.token,
-                  USER_NAME: response.data.user_display_name,
-                  USER_AVATAR: response.data.avatar,
-                  USER_REGION: response.data.region,
-                }),
-              );
+              //   await setAsyncStorage(
+              //     'tempData',
+              //     JSON.stringify({
+              //       formData: fromData,
+              //       JWT_TOKEN: response.data.token,
+              //       USER_NAME: response.data.user_display_name,
+              //       USER_AVATAR: response.data.avatar,
+              //       USER_REGION: response.data.region,
+              //     }),
+              //   );
 
               await loginWithFirebase(
                 response.data.user_email,

@@ -50,10 +50,26 @@ import SessionCompleted from '../screens/coachingSession/component/sessionComple
 import DrawerNavigation from '../navigations/DrawerNavigation';
 import Header from '../shared/header/header';
 
-import {GROWTH_COMMUNITY_ID} from '../constants';
+import {GROWTH_COMMUNITY_ID, USER_REGION} from '../constants';
+import {getAsyncStorage} from '../utils/storageUtil';
 
+// const localRegion = async () => {
+//   await getAsyncStorage(USER_REGION);
+// };
+// console.log('localRegion', localRegion);
 const AppStack = () => (
   <Navigator>
+    {/* {localRegion === null && ( */}
+      {/* <Screen
+        name="CountryPop"
+        component={CountryPopupScreen}
+        options={({route, navigation}) => ({
+          headerShown: false,
+          ...TransitionPresets.RevealFromBottomAndroid,
+          gestureDirection: 'horizontal-inverted',
+        })}
+      /> */}
+    {/* )} */}
     <Screen
       name="Drawer"
       component={DrawerNavigation}
@@ -64,15 +80,7 @@ const AppStack = () => (
         headerLeft: () => null,
       })}
     />
-    {/* <Screen
-      name="CountryPop"
-      component={CountryPopupScreen}
-      options={({route, navigation}) => ({
-        headerShown: false,
-        ...TransitionPresets.RevealFromBottomAndroid,
-        gestureDirection: 'horizontal-inverted',
-      })}
-    /> */}
+
     <Screen
       name="Journey"
       component={JourneyScreen}
@@ -288,7 +296,7 @@ const AppStack = () => (
         header: () => (
           <SubHeader
             title="Growth Content"
-			id="Growth Content"
+            id="Growth Content"
             image={require('../assets/img/best-practice-bg.png')}
             navigation={navigation}
             noDrawer
@@ -304,7 +312,7 @@ const AppStack = () => (
         header: () => (
           <SubHeader
             title="Growth Content"
-			id="Growth Content"
+            id="Growth Content"
             image={require('../assets/img/best-practice-bg.png')}
             navigation={navigation}
             noDrawer
