@@ -16,6 +16,7 @@ import {
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import Material from 'react-native-vector-icons/MaterialIcons';
 import FeatherIcon from 'react-native-vector-icons/Feather';
+import AntDesign from 'react-native-vector-icons/AntDesign';
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome';
 import moment from 'moment';
 import analytics from '@react-native-firebase/analytics';
@@ -75,6 +76,12 @@ const HomeCommunity = props => {
     connectMemberByIdentifier,
     cleanConnectMember,
 
+    deleteConnections,
+    deleteConnectionLoading,
+    deleteConnectionError,
+    deleteMemberByIdentifier,
+    cleanDeleteMember,
+
     regionEvents,
     regionEventLoading,
     regionEventError,
@@ -112,6 +119,7 @@ const HomeCommunity = props => {
   region = region === 'AMERICAS' ? 'north-america' : region;
   const [userRegion, setUserRegion] = useState(region);
   const [memberConnection, setMemberConnection] = useState([]);
+  const [deleteConnect, setDeleteConnect] = useState([]);
 
   useEffect(() => {
     fetchProfile();
@@ -170,20 +178,22 @@ const HomeCommunity = props => {
   );
 
   regionUser = regionUser === 'NORTH-AMERICA' ? 'AMERICAS' : regionUser;
-  useEffect(() => {
-    const fetchAllCommunityMemberAsync = async () => {
-      await fetchAllCommunityMember({
-        s: '',
-        sort: 'Desc',
-        region: regionUser,
-      });
-    };
-    fetchAllCommunityMemberAsync();
+  useFocusEffect(
+    useCallback(() => {
+      const fetchAllCommunityMemberAsync = async () => {
+        await fetchAllCommunityMember({
+          s: '',
+          sort: 'Desc',
+          region: regionUser,
+        });
+      };
+      fetchAllCommunityMemberAsync();
 
-    return () => {
-      cleanCommunityMember();
-    };
-  }, []);
+      return () => {
+        cleanCommunityMember();
+      };
+    }, []),
+  );
 
   useFocusEffect(
     useCallback(() => {
@@ -202,6 +212,7 @@ const HomeCommunity = props => {
 
   useEffect(() => {
     setMemberConnection(communityMembers);
+    setDeleteConnect(communityMembers);
   }, [communityMembers]);
 
   const connectMemberByMemberID = async (memberID, index) => {
@@ -215,6 +226,26 @@ const HomeCommunity = props => {
       ToastMessage.show('You have successfully connected.');
     } else {
       //   toast.closeAll();
+      ToastMessage.show(response?.payload?.response);
+    }
+  };
+
+  const deleteMemberByMemberID = async (memberID, index) => {
+    const response = await deleteMemberByIdentifier({member_id: memberID});
+    if (response?.payload?.code === 200) {
+      let items = [...deleteConnect];
+      let item = {...items[index]};
+      item.connection = true;
+      items[index] = item;
+      setDeleteConnect(items);
+      fetchAllCommunityMember({
+        s: '',
+        sort: 'Desc',
+        region: regionUser,
+      });
+      ToastMessage.show('You have successfully deleted.');
+    } else {
+      toast.closeAll();
       ToastMessage.show(response?.payload?.response);
     }
   };
@@ -341,53 +372,54 @@ const HomeCommunity = props => {
     const image = require('../../../assets/img/Rectangle2.png');
     return (
       <>
-        {item?.pillar_categories[0]?.parent === 0 && (
-          <View style={styles.topWrapper} key={index}>
-            <TouchableOpacity
-              onPress={async () => {
-                navigation.navigate('EventDetail', {
-                  id: item.ID,
-                  title: pillarname,
-                  image: image,
-                });
+        {item?.pillar_categories[0]?.parent === 0 ||
+          (item?.pillar_categories[0]?.parent === GROWTH_COMMUNITY_ID && (
+            <View style={styles.topWrapper} key={index}>
+              <TouchableOpacity
+                onPress={async () => {
+                  navigation.navigate('EventDetail', {
+                    id: item.ID,
+                    title: pillarname,
+                    image: image,
+                  });
 
-                await analytics().logEvent(item?.title, {
-                  id: item.ID,
-                  item: item.title,
-                });
-              }}>
-              <ImageBackground
-                style={{
-                  width: '100%',
-                  height: '100%',
-                  borderRadius: 20,
-                }}
-                source={require('../../../assets/img/Rectangle2.png')}>
-                <View
+                  await analytics().logEvent(item?.title, {
+                    id: item.ID,
+                    item: item.title,
+                  });
+                }}>
+                <ImageBackground
                   style={{
-                    width: 50,
-                    height: 50,
-                    marginTop: 10,
-                    marginLeft: 200,
-                    backgroundColor: '#EBECF0',
-                    borderRadius: 10,
-                    padding: 5,
-                    alignItems: 'center',
-                  }}>
-                  <Text style={{color: '#030303'}}>{date[0]}</Text>
-                  <Text style={{color: '#030303'}}>{date[1]}</Text>
-                </View>
+                    width: '100%',
+                    height: '100%',
+                    borderRadius: 20,
+                  }}
+                  source={require('../../../assets/img/Rectangle2.png')}>
+                  <View
+                    style={{
+                      width: 50,
+                      height: 50,
+                      marginTop: 10,
+                      marginLeft: 200,
+                      backgroundColor: '#EBECF0',
+                      borderRadius: 10,
+                      padding: 5,
+                      alignItems: 'center',
+                    }}>
+                    <Text style={{color: '#030303'}}>{date[0]}</Text>
+                    <Text style={{color: '#030303'}}>{date[1]}</Text>
+                  </View>
 
-                <View style={styles.header}>
-                  <Text style={styles.headingText1}>{item.title}</Text>
-                  <Text style={styles.headingText2}>
-                    {organizer} {description}
-                  </Text>
-                </View>
-              </ImageBackground>
-            </TouchableOpacity>
-          </View>
-        )}
+                  <View style={styles.header}>
+                    <Text style={styles.headingText1}>{item.title}</Text>
+                    <Text style={styles.headingText2}>
+                      {organizer} {description}
+                    </Text>
+                  </View>
+                </ImageBackground>
+              </TouchableOpacity>
+            </View>
+          ))}
       </>
     );
   };
@@ -550,7 +582,7 @@ const HomeCommunity = props => {
         <View style={styles.container}>
           {regionEvents?.length !== 0 &&
             regionEvents !== null &&
-            regionEvents !== false && (
+            regionEvents !== undefined && (
               <View style={styles.top}>
                 <Text style={styles.title}>Growth Community Events</Text>
 
@@ -579,7 +611,11 @@ const HomeCommunity = props => {
               <Loading />
             </View>
           )}
-
+          {deleteConnectionLoading && (
+            <View style={{marginTop: 40}}>
+              <Loading />
+            </View>
+          )}
           {pillarPOEs?.length !== 0 && (
             <View style={styles.middle}>
               <Text style={styles.title}>Points of Engagement</Text>

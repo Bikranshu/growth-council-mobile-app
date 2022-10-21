@@ -15,6 +15,7 @@ import {
 } from 'react-native';
 
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import AntDesign from 'react-native-vector-icons/AntDesign';
 import Material from 'react-native-vector-icons/MaterialIcons';
 import {Picker} from '@react-native-picker/picker';
 import {useToast} from 'native-base';
@@ -25,6 +26,7 @@ import ToastMessage from '../../../shared/toast';
 import {Searchbar} from 'react-native-paper';
 import BottomNav from '../../../layout/BottomLayout';
 import Loading from '../../../shared/loading';
+import {PRACTICE_COLOR} from '../../../theme/colors';
 
 const win = Dimensions.get('window');
 const contentContainerWidth = win.width - 30;
@@ -44,11 +46,23 @@ const People = props => {
     connectMemberByIdentifier,
     cleanConnectMember,
 
+    deleteConnections,
+    deleteConnectionLoading,
+    deleteConnectionError,
+    deleteMemberByIdentifier,
+    cleanDeleteMember,
+
     expertise,
     expertiseLoading,
     expertiseError,
     fetchAllExpertises,
     cleanExperties,
+
+    region,
+    regionLoading,
+    regionError,
+    fetchAllRegions,
+    cleanRegion,
 
     profile,
     profileLoading,
@@ -70,12 +84,13 @@ const People = props => {
   const isFocused = useIsFocused();
   const [category, setCategory] = useState('');
   const [account, setAccount] = useState('');
-  const [region, setRegion] = useState(
+  const [mobileRegion, setMobileRegion] = useState(
     profileRegion === 'NORTH-AMERICA' ? 'AMERICAS' : profileRegion,
   );
   const [searchKey, setSearchKey] = useState('');
   const [sorting, setSorting] = useState('ASC');
   const [memberConnection, setMemberConnection] = useState([]);
+  const [deleteConnect, setDeleteConnect] = useState([]);
 
   useFocusEffect(
     useCallback(() => {
@@ -85,7 +100,7 @@ const People = props => {
           sort: sorting,
           expertise_areas: category,
           account: account,
-          region: region,
+          region: mobileRegion,
         });
       };
       fetchAllUsersAsync();
@@ -97,11 +112,18 @@ const People = props => {
 
   useEffect(() => {
     setMemberConnection(users);
+    setDeleteConnect(users);
   }, [users]);
 
   useEffect(() => {
     fetchAllExpertises();
   }, []);
+
+  useEffect(() => {
+    fetchAllRegions();
+  }, []);
+
+  //   console.log(region.region_options);
 
   const connectMemberByMemberID = async (memberID, index) => {
     const response = await connectMemberByIdentifier({member_id: memberID});
@@ -116,9 +138,31 @@ const People = props => {
         sort: sorting,
         expertise_areas: category,
         account: account,
-        region: region,
+        region: mobileRegion,
       });
       ToastMessage.show('You have successfully connected.');
+    } else {
+      toast.closeAll();
+      ToastMessage.show(response?.payload?.response);
+    }
+  };
+
+  const deleteMemberByMemberID = async (memberID, index) => {
+    const response = await deleteMemberByIdentifier({member_id: memberID});
+    if (response?.payload?.code === 200) {
+      let items = [...deleteConnect];
+      let item = {...items[index]};
+      item.connection = true;
+      items[index] = item;
+      setDeleteConnect(items);
+      fetchAllUsers({
+        s: searchKey,
+        sort: sorting,
+        expertise_areas: category,
+        account: account,
+        region: region,
+      });
+      ToastMessage.show('You have successfully deleted.');
     } else {
       toast.closeAll();
       ToastMessage.show(response?.payload?.response);
@@ -131,12 +175,27 @@ const People = props => {
     MEASA: 'MEASA',
     AMERICAS: 'AMERICAS',
   };
+  //   const countries = {
+  //     Region: 'Region',
+  //     APAC: 'APAC',
+  //     MEASA: 'MEASA',
+  //     AMERICAS: 'AMERICAS',
+  //   };
 
-  const pillar = {
-    'Account Type': 'Account Type',
-    'Council Member': 'Council Member',
-    'Associate Member': 'Associate Member',
-  };
+  let memberExpertise = expertise?.data?.choices;
+  if (typeof memberExpertise === 'undefined') {
+    memberExpertise = 'Expertise Area';
+  } else {
+    memberExpertise = expertise?.data?.choices;
+  }
+
+  //   console.log(memberExpertise);
+
+  //   const pillar = {
+  //     'Account Type': 'Account Type',
+  //     'Council Member': 'Council Member',
+  //     'Associate Member': 'Associate Member',
+  //   };
 
   const _renderItem = ({item, index}) => {
     return (
@@ -170,29 +229,45 @@ const People = props => {
             </Text>
           </View>
           {!memberConnection[index]?.connection && (
-            <TouchableOpacity
-              onPress={async () => {
-                connectMemberByMemberID(item.ID, index);
-                await analytics().logEvent('Member', {
-                  item: item?.user_meta?.first_name,
-                  description: 'Member Connection',
-                });
-              }}>
-              <Ionicons
-                name="add-circle"
-                size={30}
-                color="#B2B3B9"
-                style={{marginTop: 25}}
-              />
-            </TouchableOpacity>
+            <View>
+              <TouchableOpacity
+                onPress={async () => {
+                  connectMemberByMemberID(item.ID, index);
+                  await analytics().logEvent('Member', {
+                    item: item?.user_meta?.first_name,
+                    description: 'Member Connection',
+                  });
+                }}>
+                <Ionicons
+                  name="add-circle"
+                  size={30}
+                  color="#B2B3B9"
+                  style={{marginTop: 25}}
+                />
+              </TouchableOpacity>
+            </View>
           )}
           {memberConnection[index]?.connection && (
-            <Material
-              name="check-circle"
-              size={30}
-              color="#14A2E2"
-              style={{marginTop: 25}}
-            />
+            <View style={{flexDirection: 'row'}}>
+              <Material
+                name="check-circle"
+                size={25}
+                color="#14A2E2"
+                style={{marginTop: 25}}
+              />
+
+              <TouchableOpacity
+                onPress={async () => {
+                  deleteMemberByMemberID(item.ID, index);
+                }}>
+                <AntDesign
+                  name="deleteuser"
+                  size={25}
+                  color="#14A2E2"
+                  style={{marginLeft: 5, marginTop: 25}}
+                />
+              </TouchableOpacity>
+            </View>
           )}
         </View>
       </TouchableOpacity>
@@ -227,7 +302,7 @@ const People = props => {
                   sort: sorting,
                   expertise_areas: category,
                   account: account,
-                  region: region,
+                  region: mobileRegion,
                 });
               }}
             />
@@ -279,12 +354,14 @@ const People = props => {
                 borderTopRightRadius: 10,
               }}>
               <Text style={{fontSize: 11, color: '#222B45'}}>
-                {region ? region : 'Region'}
+                {mobileRegion ? mobileRegion : 'Region'}
               </Text>
             </TouchableOpacity>
           </View>
         </View>
         {userLoading && <Loading />}
+        {memberConnectionLoading && <Loading />}
+        {deleteConnectionLoading && <Loading />}
         <ScrollView
           contentContainerStyle={{
             flexGrow: 1,
@@ -293,7 +370,6 @@ const People = props => {
             paddingBottom: 50,
           }}>
           <View style={{marginTop: 10}}>
-            {memberConnectionLoading && <Loading />}
             {users === null && users === [] ? (
               <View style={{justifyContent: 'center', alignItems: 'center'}}>
                 <Text
@@ -359,14 +435,14 @@ const People = props => {
                     sort: sorting,
                     expertise_areas: itemValue,
                     account: account,
-                    region: region,
+                    region: mobileRegion,
                   });
                 }}>
-                {Object.keys(expertise).map(key => {
+                {Object.keys(memberExpertise).map(key => {
                   return (
                     <Picker.Item
-                      label={expertise[key]}
-                      value={expertise[key]}
+                      label={memberExpertise[key]}
+                      value={memberExpertise[key]}
                       key={key}
                       style={{fontSize: 14}}
                     />
@@ -418,15 +494,25 @@ const People = props => {
                     sort: sorting,
                     expertise_areas: category,
                     account: itemValue,
-                    region: region,
+                    region: mobileRegion,
                   });
                 }}>
-                {Object.keys(pillar).map(key => {
+                {/* {Object.keys(pillar).map(key => {
                   return (
                     <Picker.Item
                       label={pillar[key]}
                       value={pillar[key]}
                       key={key}
+                      style={{fontSize: 14}}
+                    />
+                  );
+                })} */}
+                {expertise?.data?.account_type?.map(item => {
+                  return (
+                    <Picker.Item
+                      label={item?.account_type}
+                      value={item?.account_type}
+                      //   key={key}
                       style={{fontSize: 14}}
                     />
                   );
@@ -466,11 +552,11 @@ const People = props => {
             </TouchableOpacity>
             <View style={{marginBottom: 40}}>
               <Picker
-                selectedValue={region}
+                selectedValue={mobileRegion}
                 mode="dropdown"
                 itemTextStyle={{fontSize: 12}}
                 onValueChange={async itemValue => {
-                  setRegion(itemValue);
+                  setMobileRegion(itemValue);
 
                   await fetchAllUsers({
                     s: searchKey,
@@ -480,12 +566,12 @@ const People = props => {
                     region: itemValue,
                   });
                 }}>
-                {Object.keys(countries).map(key => {
+                {region?.region_options?.map(item => {
                   return (
                     <Picker.Item
-                      label={countries[key]}
-                      value={countries[key]}
-                      key={key}
+                      label={item?.mobile_region}
+                      value={item?.mobile_region}
+                      //   key={key}
                       style={{fontSize: 14}}
                     />
                   );
@@ -557,9 +643,9 @@ const styles = StyleSheet.create({
   loading1: {
     top: 0,
     left: 0,
-    right: 0,
+    right: 50,
     bottom: 0,
-    justifyContent: 'center',
+    // justifyContent: 'center',
     alignItems: 'center',
     position: 'absolute',
     zIndex: 1011,

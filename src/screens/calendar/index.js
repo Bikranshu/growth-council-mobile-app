@@ -4,6 +4,7 @@ import {useDispatch, useSelector} from 'react-redux';
 import EventCalendar from './components';
 import {fetchAllCalendarEvents, resetCalendarEvent} from './calendarEventSlice';
 import {fetchProfileByID, resetProfile} from '../account/slice/profileSlice';
+import {fetchAllRegion, resetRegion} from '../people/slice/reginSlice';
 
 const EventCalendarScreen = props => {
   const dispatch = useDispatch();
@@ -14,6 +15,9 @@ const EventCalendarScreen = props => {
   const {profile, profileLoading, profileError} = useSelector(
     state => state.profile,
   );
+  const {region, regionLoading, regionError} = useSelector(
+    state => state.region,
+  );
   /**
    * Fetch all calendar events data.
    *
@@ -22,10 +26,6 @@ const EventCalendarScreen = props => {
     return dispatch(fetchAllCalendarEvents(formData));
   };
 
-  /**
-   * Clear calendar event data.
-   *
-   */
   const cleanCalendarEvent = () => {
     dispatch(resetCalendarEvent());
   };
@@ -38,6 +38,12 @@ const EventCalendarScreen = props => {
     dispatch(resetProfile());
   };
 
+  const fetchAllRegions = () => {
+    dispatch(fetchAllRegion());
+  };
+  const cleanRegion = () => {
+    dispatch(resetRegion());
+  };
   return (
     <EventCalendar
       {...props}
@@ -51,6 +57,11 @@ const EventCalendarScreen = props => {
       profileError={profileError}
       fetchProfile={fetchProfile}
       cleanProfile={cleanProfile}
+      region={region}
+      regionLoading={regionLoading}
+      regionError={regionError}
+      fetchAllRegions={fetchAllRegions}
+      cleanRegion={cleanRegion}
     />
   );
 };

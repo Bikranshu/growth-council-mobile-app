@@ -49,15 +49,8 @@ const SignInForm = props => {
   const [hidePass, setHidePass] = useState(true);
   const [userProfile, setUserProfile] = useState(false);
 
-  const {
-    loading,
-    setLoading,
-    message,
-    setMessage,
-    signIn,
-    userCountry,
-    setLoggedIn,
-  } = useAuthentication();
+  const {loading, setLoading, message, setMessage, signIn, userCountry} =
+    useAuthentication();
 
   useEffect(() => {
     const fetchProfileAsync = async () => {
@@ -79,8 +72,11 @@ const SignInForm = props => {
     initialValues: {username: '', password: ''},
     onSubmit: async values => {
       await signIn(values);
+    
     },
   });
+
+  //   console.log(values.username, values.password);
 
   const areAllFieldsFilled = values.username != '' && values.password != '';
 

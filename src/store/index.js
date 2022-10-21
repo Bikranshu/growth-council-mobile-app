@@ -67,6 +67,7 @@ import searchReducer from '../screens/search/searchSlice';
 import uploadProfileImageReducer from '../screens/account/slice/uploadProfileImageSlice';
 import updateReducer from '../screens/account/slice/updateProfileImageSlice';
 import expertiseReducer from '../screens/people/slice/expertiseSlice';
+import regionReducer from '../screens/people/slice/reginSlice';
 import coachingSessionReducer from '../screens/details/slice/sessionlistSlice';
 import traitsReducer from '../screens/coachingSession/slice/sessionTraitsSlice';
 import subTraitReducer from '../screens/coachingSession/slice/subTraitsSlice';
@@ -91,6 +92,7 @@ import termsReducer from '../screens/terms/component/termsSlice';
 import getIdReducer from '../screens/details/slice/getIdBySlug';
 import coachingSignupReducer from '../screens/details/slice/coachingSignupSlice';
 import regionEventsReducer from '../screens/dashboard/slice/eventByRegionSlice';
+import deleteConnectionReducer from '../screens/people/slice/deleteConnectionSlice';
 
 const persistConfig = {
   key: 'root',
@@ -141,6 +143,7 @@ const reducers = combineReducers({
   calendarEvents: calendarEventReducer,
   searches: searchReducer,
   expertise: expertiseReducer,
+  region: regionReducer,
   uploadProfileImages: uploadProfileImageReducer,
   updateEntities: updateReducer,
   coachingSession: coachingSessionReducer,
@@ -165,6 +168,7 @@ const reducers = combineReducers({
   getSlug: getIdReducer,
   coachingSignup: coachingSignupReducer,
   regionEvents: regionEventsReducer,
+  deleteConnections: deleteConnectionReducer,
 });
 
 const persistedReducer = persistReducer(persistConfig, reducers);

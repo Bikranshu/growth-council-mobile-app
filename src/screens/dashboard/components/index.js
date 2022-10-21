@@ -17,6 +17,8 @@ import {
 } from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
+import AntDesign from 'react-native-vector-icons/AntDesign';
+
 import moment from 'moment';
 import {
   NavigationContainer,
@@ -98,6 +100,12 @@ const Dashboard = props => {
     connectMemberByIdentifier,
     cleanConnectMember,
 
+    deleteConnections,
+    deleteConnectionLoading,
+    deleteConnectionError,
+    deleteMemberByIdentifier,
+    cleanDeleteMember,
+
     profile,
     profileLoading,
     profileError,
@@ -114,12 +122,13 @@ const Dashboard = props => {
   let region = profile?.user_meta?.region;
   if (typeof region === 'undefined' || region === null) {
     region = '';
-    console.log('asdasd');
+    // console.log('asdasd');
   } else {
     region = profile?.user_meta?.region[0];
   }
 
   const [memberConnection, setMemberConnection] = useState([]);
+  const [deleteConnect, setDeleteConnect] = useState([]);
 
   const [dataSourceCords, setDataSourceCords] = useState(criticalIssue);
   const [ref, setRef] = useState(null);
@@ -216,6 +225,7 @@ const Dashboard = props => {
 
   useEffect(() => {
     setMemberConnection(communityMembers);
+    setDeleteConnect(communityMembers);
   }, [communityMembers]);
 
   const connectMemberByMemberID = async (memberID, index) => {
@@ -229,6 +239,26 @@ const Dashboard = props => {
       ToastMessage.show('You have successfully connected.');
     } else {
       //   toast.closeAll();
+      ToastMessage.show(response?.payload?.response);
+    }
+  };
+
+  const deleteMemberByMemberID = async (memberID, index) => {
+    const response = await deleteMemberByIdentifier({member_id: memberID});
+    if (response?.payload?.code === 200) {
+      let items = [...deleteConnect];
+      let item = {...items[index]};
+      item.connection = true;
+      items[index] = item;
+      setDeleteConnect(items);
+      fetchAllCommunityMember({
+        s: '',
+        sort: 'Desc',
+        region: regionUser,
+      });
+      ToastMessage.show('You have successfully deleted.');
+    } else {
+      toast.closeAll();
       ToastMessage.show(response?.payload?.response);
     }
   };
@@ -288,7 +318,20 @@ const Dashboard = props => {
               </TouchableOpacity>
             )}
             {memberConnection[index]?.connection && (
-              <Material name="check-circle" size={20} color="#14A2E2" />
+              <View style={{flexDirection: 'row'}}>
+                <Material name="check-circle" size={20} color="#14A2E2" />
+                {/* <TouchableOpacity
+                  onPress={async () => {
+                    deleteMemberByMemberID(item.ID, index);
+                  }}>
+                  <AntDesign
+                    name="deleteuser"
+                    size={20}
+                    color="#14A2E2"
+                    style={{marginLeft: 5}}
+                  />
+                </TouchableOpacity> */}
+              </View>
             )}
           </View>
         </View>
@@ -440,6 +483,7 @@ const Dashboard = props => {
     if (
       userRegion === '' ||
       userRegion === 'AMERICAS' ||
+	  userRegion === 'north america' ||
       typeof userRegion === 'undefined' ||
       userRegion === null
     )
@@ -580,7 +624,7 @@ const Dashboard = props => {
         <View style={{height: 60}} />
         {regionEvents?.length !== 0 &&
           regionEvents !== null &&
-          regionEvents !== false && (
+          regionEvents !== undefined && (
             <View style={styles.top}>
               <View style={styles.eventWrapper}>
                 <Text style={styles.title}>Upcoming Events</Text>
@@ -607,6 +651,11 @@ const Dashboard = props => {
             <Loading />
           </View>
         )}
+        {deleteConnectionLoading && (
+          <View style={{marginTop: 40}}>
+            <Loading />
+          </View>
+        )}
         {latestContent?.length !== 0 &&
           latestContent !== null &&
           latestContent !== undefined && (
@@ -625,7 +674,7 @@ const Dashboard = props => {
           )}
         {communityMembers?.length !== 0 &&
           communityMembers !== null &&
-          communityMembers !== false && (
+          communityMembers !== undefined && (
             <View style={styles.bottom}>
               <View
                 style={{

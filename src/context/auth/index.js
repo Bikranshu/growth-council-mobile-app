@@ -13,7 +13,7 @@ import {
   getAsyncStorage,
 } from '../../utils/storageUtil';
 import {isTokenExpired} from '../../utils/jwtUtil';
-import {JWT_TOKEN, API_URL, USER_NAME, USER_AVATAR, USER_REGION} from '../../constants';
+import {JWT_TOKEN, API_URL, USER_NAME, USER_AVATAR} from '../../constants';
 
 export const AuthContext = createContext({});
 
@@ -27,13 +27,10 @@ export const AuthProvider = props => {
 
   useEffect(() => {
     (async () => {
-		const region = await getAsyncStorage(USER_REGION)
-		console.log('ad', region);
       const token = await getAsyncStorage(JWT_TOKEN);
+
       if (token) {
         setLoggedIn(true);
-
-
         await isTokenExpired(token);
       } else {
         setLoggedIn(false);
@@ -96,7 +93,7 @@ export const AuthProvider = props => {
     await setAsyncStorage(JWT_TOKEN, data.token ?? data.JWT_TOKEN);
     await setAsyncStorage(USER_NAME, data.user_display_name ?? data.USER_NAME);
     await setAsyncStorage(USER_AVATAR, data.avatar ?? data.USER_AVATAR);
-	await setAsyncStorage(USER_REGION, data.region ?? data.USER_REGION);
+
     const token = await res.user;
     await Promise.all([
       crashlytics().setUserId(response?.data?.user_email),
@@ -138,8 +135,9 @@ export const AuthProvider = props => {
                 responseType: 'json',
               },
             );
-
+            console.log('userCountry', response?.data?.region);
             setUserCountry(response?.data?.region);
+
             const messageToken = await messaging().getToken();
             await postToAPI(response.data.user_email, messageToken);
 

@@ -7,7 +7,7 @@ import {
   fetchAllCriticalIssue,
   resetCriticalIssue,
 } from './slice/criticalIssueSlice';
-
+import {fetchAllRegion, resetRegion} from '../people/slice/reginSlice';
 import {fetchProfileByID, resetProfile} from '../account/slice/profileSlice';
 
 const CriticalIssueScreen = props => {
@@ -21,6 +21,9 @@ const CriticalIssueScreen = props => {
 
   const {profile, profileLoading, profileError} = useSelector(
     state => state.profile,
+  );
+  const {region, regionLoading, regionError} = useSelector(
+    state => state.region,
   );
 
   const fetchCritcalIssue = () => {
@@ -39,6 +42,13 @@ const CriticalIssueScreen = props => {
     dispatch(resetProfile());
   };
 
+  const fetchAllRegions = () => {
+    dispatch(fetchAllRegion());
+  };
+  const cleanRegion = () => {
+    dispatch(resetRegion());
+  };
+
   return (
     <CriticalIssue
       {...props}
@@ -53,6 +63,11 @@ const CriticalIssueScreen = props => {
       profileError={profileError}
       fetchProfile={fetchProfile}
       cleanProfile={cleanProfile}
+	  region={region}
+      regionLoading={regionLoading}
+      regionError={regionError}
+      fetchAllRegions={fetchAllRegions}
+      cleanRegion={cleanRegion}
     />
   );
 };

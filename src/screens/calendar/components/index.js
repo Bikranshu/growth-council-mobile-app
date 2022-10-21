@@ -44,6 +44,12 @@ const EventCalendar = props => {
     profileError,
     fetchProfile,
     cleanProfile,
+
+    region,
+    regionLoading,
+    regionError,
+    fetchAllRegions,
+    cleanRegion,
   } = props;
 
   const [currentMonth, setCurrentMonth] = useState(moment().format('MMMM'));
@@ -64,22 +70,24 @@ const EventCalendar = props => {
 
   //   let UserRegion =
   //     profileRegion === 'AMERICAS' ? 'NORTH-AMERICA' : profileRegion;
-  const [region, setRegion] = useState(
+  const [mobileRegion, setMobileRegion] = useState(
     profileRegion === 'AMERICAS' ? 'NORTH-AMERICA' : profileRegion,
   );
 
-  const countries = {
-    Region: 'Region',
-    'NORTH-AMERICA': 'NORTH-AMERICA',
-    APAC: 'APAC',
-    MEASA: 'MEASA',
-  };
+//   const countries = {
+//     Region: 'Region',
+//     'NORTH-AMERICA': 'NORTH-AMERICA',
+//     APAC: 'APAC',
+//     MEASA: 'MEASA',
+//   };
 
   useEffect(() => {
     fetchProfile();
   }, []);
 
-  //   const [markedDay, setMarkedDay] = useState([]);
+  useEffect(() => {
+    fetchAllRegions();
+  }, []);
 
   useEffect(() => {
     const fetchAllCalendarEventAsync = async () => {
@@ -364,10 +372,10 @@ const EventCalendar = props => {
                   fontSize: 12,
                   color: '#030303',
                 }}>
-                {region
-                  ? region === 'AMERICAS'
-                    ? 'NORTH-AMERICA'
-                    : region
+                {mobileRegion
+                  ? mobileRegion === 'NORTH-AMERICA'
+                    ? 'AMERICAS'
+                    : mobileRegion
                   : 'Region'}
               </Text>
               <Ionicons
@@ -391,7 +399,7 @@ const EventCalendar = props => {
                   year: moment(month?.dateString).format('YYYY'),
                   month: moment(month?.dateString).format('MM'),
                   all_events: showAllEvents,
-                  region: region,
+                  region: mobileRegion,
                 })
                   .then(response => {
                     if (response?.payload?.code === 200) {
@@ -460,7 +468,7 @@ const EventCalendar = props => {
                         year: calendarYear,
                         month: calendarMonth,
                         all_events: itemValue,
-                        region: region,
+                        region: mobileRegion,
                       })
                         .then(response => {
                           if (response?.payload?.code === 200) {
@@ -509,11 +517,13 @@ const EventCalendar = props => {
                 </TouchableOpacity>
                 <View style={{marginBottom: 40}}>
                   <Picker
-                    selectedValue={region}
+                    selectedValue={mobileRegion}
                     mode="dropdown"
                     itemTextStyle={{fontSize: 12}}
                     onValueChange={async itemValue => {
-                      setRegion(itemValue);
+                      setMobileRegion(
+                        itemValue === 'AMERICAS' ? 'NORTH-AMERICA' : itemValue,
+                      );
 
                       await fetchAllCalendarEvent({
                         year: calendarYear,
@@ -532,12 +542,12 @@ const EventCalendar = props => {
                           setCurrentEvents([]);
                         });
                     }}>
-                    {Object.keys(countries).map(key => {
+                    {region?.region_options?.map(item => {
                       return (
                         <Picker.Item
-                          label={countries[key]}
-                          value={countries[key]}
-                          key={key}
+                          label={item?.mobile_region}
+                          value={item?.mobile_region}
+                          //   key={key}
                           style={{fontSize: 14}}
                         />
                       );
