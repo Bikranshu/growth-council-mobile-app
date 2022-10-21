@@ -26,7 +26,7 @@ import ToastMessage from '../../../shared/toast';
 import {Searchbar} from 'react-native-paper';
 import BottomNav from '../../../layout/BottomLayout';
 import Loading from '../../../shared/loading';
-import { PRACTICE_COLOR } from '../../../theme/colors';
+import {PRACTICE_COLOR} from '../../../theme/colors';
 
 const win = Dimensions.get('window');
 const contentContainerWidth = win.width - 30;
@@ -63,7 +63,7 @@ const People = props => {
     profileError,
   } = props;
 
-  let profileRegion = profile?.user_meta?.region[0]
+  let profileRegion = profile?.user_meta?.region[0];
   if (
     typeof profileRegion === 'undefined' ||
     profileRegion === 'null' ||
@@ -202,21 +202,24 @@ const People = props => {
             </Text>
           </View>
           {!memberConnection[index]?.connection && (
-            <TouchableOpacity
-              onPress={async () => {
-                connectMemberByMemberID(item.ID, index);
-                await analytics().logEvent('Member', {
-                  item: item?.user_meta?.first_name,
-                  description: 'Member Connection',
-                });
-              }}>
-              <Ionicons
-                name="add-circle"
-                size={30}
-                color="#B2B3B9"
-                style={{marginTop: 25}}
-              />
-            </TouchableOpacity>
+            <View>
+             
+              <TouchableOpacity
+                onPress={async () => {
+                  connectMemberByMemberID(item.ID, index);
+                  await analytics().logEvent('Member', {
+                    item: item?.user_meta?.first_name,
+                    description: 'Member Connection',
+                  });
+                }}>
+                <Ionicons
+                  name="add-circle"
+                  size={30}
+                  color="#B2B3B9"
+                  style={{marginTop: 25}}
+                />
+              </TouchableOpacity>
+            </View>
           )}
           {memberConnection[index]?.connection && (
             <View style={{flexDirection: 'row'}}>
@@ -226,16 +229,18 @@ const People = props => {
                 color="#14A2E2"
                 style={{marginTop: 25}}
               />
+
+            
               <TouchableOpacity
                 onPress={async () => {
                   deleteMemberByMemberID(item.ID, index);
                 }}>
-                  <AntDesign
-                    name="deleteuser"
-                    size={25}
-                    color="#14A2E2"
-                    style={{marginLeft: 5, marginTop: 25}}
-                  />
+                <AntDesign
+                  name="deleteuser"
+                  size={25}
+                  color="#14A2E2"
+                  style={{marginLeft: 5, marginTop: 25}}
+                />
               </TouchableOpacity>
             </View>
           )}
@@ -330,6 +335,8 @@ const People = props => {
           </View>
         </View>
         {userLoading && <Loading />}
+		{memberConnectionLoading && <Loading />}
+		{deleteConnectionLoading && <Loading />}
         <ScrollView
           contentContainerStyle={{
             flexGrow: 1,
@@ -338,8 +345,6 @@ const People = props => {
             paddingBottom: 50,
           }}>
           <View style={{marginTop: 10}}>
-            {memberConnectionLoading && <Loading />}
-            {deleteConnectionLoading && <Loading />}
             {users === null && users === [] ? (
               <View style={{justifyContent: 'center', alignItems: 'center'}}>
                 <Text
@@ -603,9 +608,9 @@ const styles = StyleSheet.create({
   loading1: {
     top: 0,
     left: 0,
-    right: 0,
+    right: 50,
     bottom: 0,
-    justifyContent: 'center',
+    // justifyContent: 'center',
     alignItems: 'center',
     position: 'absolute',
     zIndex: 1011,
