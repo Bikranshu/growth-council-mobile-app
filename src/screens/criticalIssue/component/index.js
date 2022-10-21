@@ -41,7 +41,7 @@ const CriticalIssue = props => {
     profileError,
     fetchProfile,
     cleanProfile,
-    Userregion,
+
 
     region,
     regionLoading,
@@ -53,22 +53,22 @@ const CriticalIssue = props => {
   let profileRegion = profile?.user_meta?.region;
 
   if (typeof profileRegion === 'undefined' || profileRegion === null) {
-    profileRegion = 'NORTH-AMERICA';
+    profileRegion = 'ALL REGION';
   } else {
     profileRegion = profile?.user_meta?.region[0];
   }
   //   let profileRegion = profile?.user_meta?.region[0]
   //     ? profile?.user_meta?.region[0]
   //     : 'NORTH-AMERICA';
-  let UserRegion = profileRegion
-    ? profileRegion === 'AMERICAS'
-      ? 'NORTH-AMERICA'
-      : profileRegion
-    : profileRegion;
+//   let UserRegion = profileRegion
+//     ? profileRegion === 'AMERICAS'
+//       ? 'NORTH-AMERICA'
+//       : profileRegion
+//     : profileRegion;
 
   const listRef = useRef(null);
   const [regionVisible, setRegionVisible] = useState(false);
-  const [mobileRegion, setMobileRegion] = useState(UserRegion);
+  const [mobileRegion, setMobileRegion] = useState(profileRegion);
 
   useEffect(() => {
     fetchAllRegions();
@@ -79,7 +79,7 @@ const CriticalIssue = props => {
   //     // MEASA: 'MEASA',
   //   };
   useEffect(() => {
-    setMobileRegion(UserRegion);
+    setMobileRegion(profileRegion);
   }, [profile]);
 
   useEffect(() => {
@@ -243,11 +243,7 @@ const CriticalIssue = props => {
                         left: 20,
                         top: 10,
                       }}>
-                      {mobileRegion
-                        ? mobileRegion === 'NORTH-AMERICA'
-                          ? 'AMERICAS'
-                          : mobileRegion
-                        : 'ALL REGION'}
+                      {mobileRegion ? mobileRegion : 'ALL REGION'}
                     </Text>
                     <Ionicons
                       name="chevron-down-outline"
@@ -303,13 +299,7 @@ const CriticalIssue = props => {
                 mode="dropdown"
                 itemTextStyle={{fontSize: 12}}
                 onValueChange={itemValue => {
-                  setMobileRegion(
-                    itemValue
-                      ? itemValue === 'AMERICAS'
-                        ? 'NORTH-AMERICA'
-                        : itemValue
-                      : itemValue,
-                  );
+                  setMobileRegion(itemValue);
                 }}>
                 {region?.region_options?.map(item => {
                   return (
@@ -326,62 +316,7 @@ const CriticalIssue = props => {
           </View>
         </View>
       </Modal>
-      {/* <Modal transparent visible={regionVisible}>
-        <View
-          style={{
-            flex: 1,
-            backgroundColor: 'rgba(56,56,56,0.3)',
-            justifyContent: 'flex-end',
-          }}>
-          <View
-            style={{
-              height: 300,
-              backgroundColor: 'white',
-              borderTopLeftRadius: 20,
-              borderTopRightRadius: 20,
-              padding: 20,
-            }}>
-            <TouchableOpacity
-              activeOpacity={0.7}
-              onPress={() => setRegionVisible(false)}
-              style={{alignItems: 'flex-end'}}>
-              <Text
-                style={{
-                  padding: 15,
-                  fontSize: 18,
-                }}>
-                Done
-              </Text>
-            </TouchableOpacity>
-            <View style={{marginBottom: 40}}>
-              <Picker
-                selectedValue={mobileRegion}
-                mode="dropdown"
-                itemTextStyle={{fontSize: 12}}
-                onValueChange={async itemValue => {
-                  setMobileRegion(
-                    itemValue === 'AMERICAS'
-                      ? 'NORTH-AMERICA'
-                      : //   : itemValue === 'MEASA'
-                        //   ? 'APAC'
-                        itemValue,
-                  );
-                }}>
-                {region?.region_options?.map(item => {
-                  return (
-                    <Picker.Item
-                      label={item?.mobile_region}
-                      value={item?.mobile_region}
-                      //   key={key}
-                      style={{fontSize: 14}}
-                    />
-                  );
-                })}
-              </Picker>
-            </View>
-          </View>
-        </View>
-      </Modal> */}
+      
 
       <BottomNav {...props} navigation={navigation} />
     </SafeAreaView>

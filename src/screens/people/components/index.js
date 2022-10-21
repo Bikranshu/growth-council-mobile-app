@@ -84,9 +84,7 @@ const People = props => {
   const isFocused = useIsFocused();
   const [category, setCategory] = useState('');
   const [account, setAccount] = useState('');
-  const [mobileRegion, setMobileRegion] = useState(
-    profileRegion === 'NORTH-AMERICA' ? 'AMERICAS' : profileRegion,
-  );
+  const [mobileRegion, setMobileRegion] = useState(profileRegion);
   const [searchKey, setSearchKey] = useState('');
   const [sorting, setSorting] = useState('ASC');
   const [memberConnection, setMemberConnection] = useState([]);
@@ -160,7 +158,7 @@ const People = props => {
         sort: sorting,
         expertise_areas: category,
         account: account,
-        region: region,
+        region: mobileRegion,
       });
       ToastMessage.show('You have successfully deleted.');
     } else {
@@ -169,9 +167,6 @@ const People = props => {
     }
   };
 
- 
-
-
   let memberExpertise = expertise?.data?.choices;
   if (typeof memberExpertise === 'undefined') {
     memberExpertise = 'Expertise Area';
@@ -179,7 +174,6 @@ const People = props => {
     memberExpertise = expertise?.data?.choices;
   }
 
-  
   const _renderItem = ({item, index}) => {
     return (
       <TouchableOpacity
@@ -195,7 +189,7 @@ const People = props => {
             }}
           />
 
-          <View style={{margin: 10, width: '55%'}}>
+          <View style={{margin: 10, width: '50%'}}>
             <Text
               style={{
                 fontSize: 14,
@@ -247,7 +241,7 @@ const People = props => {
                   name="deleteuser"
                   size={25}
                   color="#14A2E2"
-                  style={{right: 8, marginTop: 25}}
+                  style={{marginRight: 15, marginTop: 25}}
                 />
               </TouchableOpacity>
             </View>

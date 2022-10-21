@@ -144,7 +144,7 @@ const Dashboard = props => {
     regionUser = profile?.user_meta?.region[0];
   }
 
-  region = region === 'AMERICAS' ? 'north-america' : region;
+//   region = region === 'AMERICAS' ? 'north-america' : region;
   const [userRegion, setUserRegion] = useState(region);
 
   useEffect(() => {
@@ -177,7 +177,7 @@ const Dashboard = props => {
     });
   }, [profile]);
 
-  regionUser = regionUser === 'NORTH-AMERICA' ? 'AMERICAS' : regionUser;
+//   regionUser = regionUser === 'NORTH-AMERICA' ? 'AMERICAS' : regionUser;
 
   useEffect(() => {
     fetchAllCommunityMember({
@@ -480,14 +480,14 @@ const Dashboard = props => {
     // console.log('lowercaseRegion', userRegion);
 
     if (userRegion === 'MEASA') lowercaseRegion = 'apac';
-    if (
-      userRegion === '' ||
-      userRegion === 'AMERICAS' ||
-	  userRegion === 'north america' ||
-      typeof userRegion === 'undefined' ||
-      userRegion === null
-    )
-      lowercaseRegion = 'north-america';
+    // if (
+    //   userRegion === '' ||
+    //   userRegion === 'AMERICAS' ||
+
+    //   typeof userRegion === 'undefined' ||
+    //   userRegion === null
+    // )
+    //   lowercaseRegion = 'north-america';
     return (
       <>
         {lowercaseRegion === item?.region ? (

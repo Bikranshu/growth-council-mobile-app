@@ -70,9 +70,7 @@ const EventCalendar = props => {
 
   //   let UserRegion =
   //     profileRegion === 'AMERICAS' ? 'NORTH-AMERICA' : profileRegion;
-  const [mobileRegion, setMobileRegion] = useState(
-    profileRegion === 'AMERICAS' ? 'NORTH-AMERICA' : profileRegion,
-  );
+  const [mobileRegion, setMobileRegion] = useState(profileRegion);
 
   //   const countries = {
   //     Region: 'Region',
@@ -372,11 +370,7 @@ const EventCalendar = props => {
                   fontSize: 12,
                   color: '#030303',
                 }}>
-                {mobileRegion
-                  ? mobileRegion === 'NORTH-AMERICA'
-                    ? 'AMERICAS'
-                    : mobileRegion
-                  : 'ALL REGION'}
+                {mobileRegion ? mobileRegion : 'ALL REGION'}
               </Text>
               <Ionicons
                 name="chevron-down-outline"
@@ -521,13 +515,7 @@ const EventCalendar = props => {
                     mode="dropdown"
                     itemTextStyle={{fontSize: 12}}
                     onValueChange={async itemValue => {
-                      setMobileRegion(
-                        itemValue
-                          ? itemValue === 'AMERICAS'
-                            ? 'NORTH-AMERICA'
-                            : itemValue
-                          : itemValue,
-                      );
+                      setMobileRegion(itemValue);
 
                       await fetchAllCalendarEvent({
                         year: calendarYear,
