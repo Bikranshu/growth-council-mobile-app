@@ -63,7 +63,7 @@ const EventCalendar = props => {
   let profileRegion = profile?.user_meta?.region;
   console.log('ada', profileRegion);
   if (typeof profileRegion === 'undefined') {
-    profileRegion = 'Region';
+    profileRegion = 'ALL REGION';
   } else {
     profileRegion = profile?.user_meta?.region[0];
   }
@@ -74,12 +74,12 @@ const EventCalendar = props => {
     profileRegion === 'AMERICAS' ? 'NORTH-AMERICA' : profileRegion,
   );
 
-//   const countries = {
-//     Region: 'Region',
-//     'NORTH-AMERICA': 'NORTH-AMERICA',
-//     APAC: 'APAC',
-//     MEASA: 'MEASA',
-//   };
+  //   const countries = {
+  //     Region: 'Region',
+  //     'NORTH-AMERICA': 'NORTH-AMERICA',
+  //     APAC: 'APAC',
+  //     MEASA: 'MEASA',
+  //   };
 
   useEffect(() => {
     fetchProfile();
@@ -376,7 +376,7 @@ const EventCalendar = props => {
                   ? mobileRegion === 'NORTH-AMERICA'
                     ? 'AMERICAS'
                     : mobileRegion
-                  : 'Region'}
+                  : 'ALL REGION'}
               </Text>
               <Ionicons
                 name="chevron-down-outline"
@@ -522,7 +522,11 @@ const EventCalendar = props => {
                     itemTextStyle={{fontSize: 12}}
                     onValueChange={async itemValue => {
                       setMobileRegion(
-                        itemValue === 'AMERICAS' ? 'NORTH-AMERICA' : itemValue,
+                        itemValue
+                          ? itemValue === 'AMERICAS'
+                            ? 'NORTH-AMERICA'
+                            : itemValue
+                          : itemValue,
                       );
 
                       await fetchAllCalendarEvent({

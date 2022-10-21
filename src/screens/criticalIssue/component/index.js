@@ -60,12 +60,11 @@ const CriticalIssue = props => {
   //   let profileRegion = profile?.user_meta?.region[0]
   //     ? profile?.user_meta?.region[0]
   //     : 'NORTH-AMERICA';
-  let UserRegion =
-    profileRegion === 'MEASA'
-      ? 'APAC'
-      : profileRegion === 'AMERICAS'
+  let UserRegion = profileRegion
+    ? profileRegion === 'AMERICAS'
       ? 'NORTH-AMERICA'
-      : profileRegion;
+      : profileRegion
+    : profileRegion;
 
   const listRef = useRef(null);
   const [regionVisible, setRegionVisible] = useState(false);
@@ -247,9 +246,7 @@ const CriticalIssue = props => {
                       {mobileRegion
                         ? mobileRegion === 'NORTH-AMERICA'
                           ? 'AMERICAS'
-                          : //   : mobileRegion === 'MEASA'
-                            //   ? 'APAC'
-                            mobileRegion
+                          : mobileRegion
                         : 'ALL REGION'}
                     </Text>
                     <Ionicons
@@ -307,11 +304,11 @@ const CriticalIssue = props => {
                 itemTextStyle={{fontSize: 12}}
                 onValueChange={itemValue => {
                   setMobileRegion(
-                    itemValue === 'AMERICAS'
-                      ? 'NORTH-AMERICA'
-                      : //   : itemValue === 'MEASA'
-                        //   ? 'APAC'
-                        itemValue,
+                    itemValue
+                      ? itemValue === 'AMERICAS'
+                        ? 'NORTH-AMERICA'
+                        : itemValue
+                      : itemValue,
                   );
                 }}>
                 {region?.region_options?.map(item => {

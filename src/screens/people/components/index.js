@@ -169,18 +169,8 @@ const People = props => {
     }
   };
 
-  const countries = {
-    Region: 'Region',
-    APAC: 'APAC',
-    MEASA: 'MEASA',
-    AMERICAS: 'AMERICAS',
-  };
-  //   const countries = {
-  //     Region: 'Region',
-  //     APAC: 'APAC',
-  //     MEASA: 'MEASA',
-  //     AMERICAS: 'AMERICAS',
-  //   };
+ 
+
 
   let memberExpertise = expertise?.data?.choices;
   if (typeof memberExpertise === 'undefined') {
@@ -189,14 +179,7 @@ const People = props => {
     memberExpertise = expertise?.data?.choices;
   }
 
-  //   console.log(memberExpertise);
-
-  //   const pillar = {
-  //     'Account Type': 'Account Type',
-  //     'Council Member': 'Council Member',
-  //     'Associate Member': 'Associate Member',
-  //   };
-
+  
   const _renderItem = ({item, index}) => {
     return (
       <TouchableOpacity
@@ -221,10 +204,10 @@ const People = props => {
               }}>
               {item?.user_meta?.first_name} {item?.user_meta?.last_name}
             </Text>
-            <Text style={{fontSize: 12, color: '#222B45'}}>
+            <Text style={{fontSize: 11, color: '#222B45'}}>
               {item?.user_email}
             </Text>
-            <Text style={{fontSize: 12, color: '#222B45'}}>
+            <Text style={{fontSize: 11, color: '#222B45'}}>
               {item?.company}
             </Text>
           </View>
@@ -253,7 +236,7 @@ const People = props => {
                 name="check-circle"
                 size={25}
                 color="#14A2E2"
-                style={{marginTop: 25}}
+                style={{marginTop: 25, marginRight: 5}}
               />
 
               <TouchableOpacity
@@ -264,7 +247,7 @@ const People = props => {
                   name="deleteuser"
                   size={25}
                   color="#14A2E2"
-                  style={{marginLeft: 5, marginTop: 25}}
+                  style={{right: 8, marginTop: 25}}
                 />
               </TouchableOpacity>
             </View>
@@ -360,8 +343,7 @@ const People = props => {
           </View>
         </View>
         {userLoading && <Loading />}
-        {memberConnectionLoading && <Loading />}
-        {deleteConnectionLoading && <Loading />}
+
         <ScrollView
           contentContainerStyle={{
             flexGrow: 1,
@@ -370,7 +352,9 @@ const People = props => {
             paddingBottom: 50,
           }}>
           <View style={{marginTop: 10}}>
-            {users === null && users === [] ? (
+            {memberConnectionLoading && <Loading />}
+            {deleteConnectionLoading && <Loading />}
+            {/* {users === null && users === [] ? (
               <View style={{justifyContent: 'center', alignItems: 'center'}}>
                 <Text
                   style={{
@@ -382,14 +366,14 @@ const People = props => {
                   No User{' '}
                 </Text>
               </View>
-            ) : (
-              <FlatList
-                vertical
-                showsVerticalScrollIndicator={false}
-                data={users}
-                renderItem={_renderItem}
-              />
-            )}
+            ) : ( */}
+            <FlatList
+              vertical
+              showsVerticalScrollIndicator={false}
+              data={users}
+              renderItem={_renderItem}
+            />
+            {/* )} */}
           </View>
           {/* <Footer /> */}
         </ScrollView>
