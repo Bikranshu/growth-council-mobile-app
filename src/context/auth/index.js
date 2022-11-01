@@ -38,6 +38,7 @@ export const AuthProvider = props => {
     })();
   });
 
+  // check for token expiration
   const isTokenExpired = async token => {
     const decoded = jwt_decode(token);
 
