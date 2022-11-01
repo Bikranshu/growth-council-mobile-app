@@ -282,9 +282,9 @@ const HomeCommunity = props => {
               </Text>
               <Text style={{fontSize: 6, color: '#030303', marginTop: 5}}>
                 {item?.registered_date}
-                {'\n'}
-                {'\n'}
-                {item?.user_meta?.Title}
+                {/* {'\n'}
+                {'\n'} */}
+                {/* {item?.user_meta?.Title} */}
               </Text>
             </View>
           </TouchableOpacity>

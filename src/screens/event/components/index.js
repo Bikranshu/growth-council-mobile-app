@@ -384,9 +384,10 @@ const Event = props => {
                               marginLeft: 5,
                               color: COMMUNITY_COLOR,
                             }}>
-                            {deviceTimeZone.split('/')[1] +
+                            {/* {deviceTimeZone.split('/')[1] +
                               comma +
-                              deviceTimeZone.split('/')[0]}
+                              deviceTimeZone.split('/')[0]} */}
+							  {deviceTimeZone}
                           </Text>
                         </View>
                       </View>

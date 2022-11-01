@@ -62,7 +62,11 @@ const EventCalendar = props => {
 
   let profileRegion = profile?.user_meta?.region;
   console.log('ada', profileRegion);
-  if (typeof profileRegion === 'undefined') {
+  if (
+    typeof profileRegion === 'undefined' ||
+    profileRegion === null ||
+    profileRegion === ''
+  ) {
     profileRegion = 'ALL REGION';
   } else {
     profileRegion = profile?.user_meta?.region[0];
@@ -93,7 +97,7 @@ const EventCalendar = props => {
         year: moment().format('YYYY'),
         month: moment().format('MM'),
         all_events: showAllEvents,
-        region: region,
+        region: mobileRegion,
       })
         .then(response => {
           if (response?.payload?.code === 200) {
@@ -202,7 +206,7 @@ const EventCalendar = props => {
       currentTimeZoneOffsetInHours,
     );
 
-    const time = moment(convertedToLocalTime).format('h:mma');
+    const time = moment(item.event_start).format('h:mma');
 
     let organizer = item?.organizer?.term_name;
     let description = item?.organizer?.description;
