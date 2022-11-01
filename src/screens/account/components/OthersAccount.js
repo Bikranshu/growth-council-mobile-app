@@ -69,18 +69,19 @@ const OthersAccount = props => {
 
   const isFocused = useIsFocused();
 
-  useEffect(() => {
-    const setLoggedInUserInfoAsync = async () => {
-      let token = await getAsyncStorage(JWT_TOKEN);
-      setUserID(decodeUserID(token));
-      let avatar = await getAsyncStorage(USER_AVATAR);
-      setAvatarImg(avatar);
-      let username = await getAsyncStorage(USER_NAME);
-      setUserName(username);
-    };
-    setLoggedInUserInfoAsync();
-  }, [isFocused]);
+  //   useEffect(() => {
+  //     const setLoggedInUserInfoAsync = async () => {
+  //       let token = await getAsyncStorage(JWT_TOKEN);
+  //       setUserID(decodeUserID(token));
+  //       let avatar = await getAsyncStorage(USER_AVATAR);
+  //       setAvatarImg(avatar);
+  //       let username = await getAsyncStorage(USER_NAME);
+  //       setUserName(username);
+  //     };
+  //     setLoggedInUserInfoAsync();
+  //   }, [isFocused]);
 
+  console.log('afdh', otherProfiles);
   return (
     <ScrollView
       onScroll={e => {
@@ -127,7 +128,7 @@ const OthersAccount = props => {
             </View>
             <View style={styles.header}>
               <Text style={styles.headingText1}>
-                {otherProfiles?.user_login}{' '}
+                {otherProfiles?.display_name}{' '}
                 {/* {otherProfiles?.user_meta?.last_name} */}
               </Text>
               <Text>
@@ -167,9 +168,9 @@ const OthersAccount = props => {
                   style={styles.input}
                   keyboardType="default"
                   value={
-                    otherProfiles?.user_meta?.Title === undefined
-                      ? otherProfiles?.user_meta?.title[0]
-                      : otherProfiles?.user_meta?.Title[0]
+					otherProfiles?.user_meta?.Title === undefined
+					? otherProfiles?.user_meta?.title[0]
+					: otherProfiles?.user_meta?.Title[0]
                   }
                   editable={false}
                 />
@@ -183,7 +184,7 @@ const OthersAccount = props => {
                   value={
                     typeof company === 'undefined'
                       ? ''
-                      : otherProfiles?.user_meta?.company[0]
+					  : otherProfiles?.user_meta?.company[0]
                   }
                   editable={false}
                 />
@@ -307,8 +308,7 @@ const OthersAccount = props => {
                           fontWeight: '500',
                           color: 'white',
                         }}>
-                        Chat with {otherProfiles?.user_meta?.first_name}{' '}
-                        {otherProfiles?.user_meta?.last_name}
+                        Chat with {otherProfiles?.display_name}
                       </Text>
                     </View>
                   </TouchableOpacity>
@@ -413,7 +413,7 @@ const styles = StyleSheet.create({
     borderColor: '#707070',
   },
   textarea: {
-    textAlignHorizontal: 'left',
+    // textAlignHorizontal: 'left',
     marginTop: 10,
     marginBottom: 10,
     borderWidth: 0.5,

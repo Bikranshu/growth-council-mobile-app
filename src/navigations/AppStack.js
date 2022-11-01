@@ -235,7 +235,7 @@ const AppStack = navigation => (
         id: route?.params?.id,
         header: () => (
           <Header
-            title="Others Account"
+            title=""
             image={require('../assets/img/appBG.png')}
             navigation={navigation}
             noDrawer={true}

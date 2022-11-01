@@ -12,13 +12,14 @@ import {
   Modal,
   SafeAreaView,
   StatusBar,
+  Pressable,
 } from 'react-native';
 
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import Material from 'react-native-vector-icons/MaterialIcons';
 import {Picker} from '@react-native-picker/picker';
-import {useToast} from 'native-base';
+import {Button, useToast} from 'native-base';
 import analytics from '@react-native-firebase/analytics';
 import {useIsFocused, useFocusEffect} from '@react-navigation/native';
 import {Colors, Typography} from '../../../theme';
@@ -34,6 +35,7 @@ const contentContainerWidth = win.width - 30;
 const People = props => {
   const {
     navigation,
+    route,
     users,
     userLoading,
     userError,
@@ -75,7 +77,7 @@ const People = props => {
     profileRegion === null ||
     profileRegion === ''
   ) {
-    profileRegion = 'Region';
+    profileRegion = 'ALL REGION';
   } else {
     profileRegion = profile?.user_meta?.region[0];
   }
@@ -89,23 +91,25 @@ const People = props => {
   const [sorting, setSorting] = useState('ASC');
   const [memberConnection, setMemberConnection] = useState([]);
   const [deleteConnect, setDeleteConnect] = useState([]);
+  const [modalVisible, setModalVisible] = useState(false);
+  const [deleteId, setDeleteId] = useState();
 
   useFocusEffect(
     useCallback(() => {
-      const fetchAllUsersAsync = async () => {
-        await fetchAllUsers({
-          s: searchKey,
-          sort: sorting,
-          expertise_areas: category,
-          account: account,
-          region: mobileRegion,
-        });
-      };
-      fetchAllUsersAsync();
+      //   const fetchAllUsersAsync = async () => {
+      fetchAllUsers({
+        s: searchKey,
+        sort: sorting,
+        expertise_areas: category,
+        account: account,
+        region: mobileRegion,
+      });
+      //   };
+      //   fetchAllUsersAsync();
       return () => {
         cleanUser();
       };
-    }, []),
+    }, [isFocused]),
   );
 
   useEffect(() => {
@@ -117,9 +121,15 @@ const People = props => {
     fetchAllExpertises();
   }, []);
 
+  useFocusEffect(
+    useCallback(() => {
+      fetchAllRegions();
+    }, [isFocused]),
+  );
+
   useEffect(() => {
-    fetchAllRegions();
-  }, []);
+    setMobileRegion(profileRegion);
+  }, [region]);
 
   //   console.log(region.region_options);
 
@@ -234,8 +244,12 @@ const People = props => {
               />
 
               <TouchableOpacity
-                onPress={async () => {
-                  deleteMemberByMemberID(item.ID, index);
+                // onPress={async () => {
+                //   deleteMemberByMemberID(item.ID, index);
+                // }}
+
+                onPress={() => {
+                  setModalVisible(true), setDeleteId(item.ID);
                 }}>
                 <AntDesign
                   name="deleteuser"
@@ -331,7 +345,7 @@ const People = props => {
                 borderTopRightRadius: 10,
               }}>
               <Text style={{fontSize: 11, color: '#222B45'}}>
-                {mobileRegion ? mobileRegion : 'Region'}
+                {mobileRegion}
               </Text>
             </TouchableOpacity>
           </View>
@@ -348,19 +362,7 @@ const People = props => {
           <View style={{marginTop: 10}}>
             {memberConnectionLoading && <Loading />}
             {deleteConnectionLoading && <Loading />}
-            {/* {users === null && users === [] ? (
-              <View style={{justifyContent: 'center', alignItems: 'center'}}>
-                <Text
-                  style={{
-                    justifyContent: 'center',
-                    fontSize: 16,
-                    alignItems: 'center',
-                    color: 'black',
-                  }}>
-                  No User{' '}
-                </Text>
-              </View>
-            ) : ( */}
+
             <FlatList
               vertical
               showsVerticalScrollIndicator={false}
@@ -560,6 +562,62 @@ const People = props => {
         </View>
       </Modal>
 
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={modalVisible}
+        onRequestClose={() => {
+          //   Alert.alert('Modal has been closed.');
+          setModalVisible(!modalVisible);
+        }}>
+        <View style={styles.centeredView}>
+          <View style={styles.modalView}>
+            {/* <View
+              style={{
+                width: 70,
+                height: 70,
+                backgroundColor: '#E5E4E2',
+                borderRadius: 50,
+              }}>
+              <Image
+                source={require('../../../assets/img/bin.png')}
+                style={{
+                  width: 60,
+                  height: 40,
+                  marginTop: 'auto',
+                  marginBottom: 'auto',
+                  marginRight: 'auto',
+                }}
+                resizeMode="contain"
+              />
+            </View> */}
+
+            {/* <Text style={styles.topText}>Are you sure? {deleteId}</Text> */}
+            <Text style={styles.modalText}>
+              Do you want to delete this member from your connection?
+            </Text>
+
+            <View style={{flexDirection: 'row'}}>
+              <Button
+                type="button"
+                style={{marginRight: 10}}
+                onPress={() => setModalVisible(!modalVisible)}>
+                Cancel
+              </Button>
+              <Button
+                type="button"
+                onPress={async () => {
+                  deleteMemberByMemberID(deleteId),
+                    setModalVisible(!modalVisible);
+                }}
+                style={{marginLeft: 10, backgroundColor: '#FF5733'}}>
+                Confirm
+              </Button>
+            </View>
+          </View>
+        </View>
+      </Modal>
+
       <BottomNav {...props} navigation={navigation} />
     </SafeAreaView>
   );
@@ -606,6 +664,56 @@ const styles = StyleSheet.create({
     marginLeft: 5,
     fontSize: 14,
     color: '#7E7F84',
+  },
+  //delete modal
+  centeredView: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: 22,
+  },
+  modalView: {
+    margin: 20,
+    backgroundColor: 'white',
+    borderRadius: 20,
+    padding: 35,
+    alignItems: 'center',
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5,
+  },
+  button: {
+    borderRadius: 20,
+    padding: 10,
+    elevation: 2,
+  },
+  buttonOpen: {
+    backgroundColor: '#F194FF',
+  },
+  buttonClose: {
+    backgroundColor: '#2196F3',
+  },
+  textStyle: {
+    color: 'white',
+    fontWeight: 'bold',
+    textAlign: 'center',
+  },
+  //   topText: {
+  //     marginBottom: 10,
+  //     marginTop: 10,
+  //     textAlign: 'center',
+  //     fontSize: 20,
+  //     color: 'black',
+  //   },
+  modalText: {
+    marginBottom: 15,
+    textAlign: 'center',
+    fontSize: 16,
   },
   shadowProp: {
     shadowColor: '#000',

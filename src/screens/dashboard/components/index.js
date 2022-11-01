@@ -296,9 +296,9 @@ const Dashboard = props => {
               </Text>
               <Text style={{fontSize: 6, color: '#030303', marginTop: 5}}>
                 {item?.registered_date}
+                {/* {'\n'}
                 {'\n'}
-                {'\n'}
-                {item?.user_meta?.Title}
+                {item?.user_meta?.Title} */}
               </Text>
             </View>
           </TouchableOpacity>
