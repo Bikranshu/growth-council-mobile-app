@@ -121,6 +121,7 @@ const HomeCommunity = props => {
   const [userRegion, setUserRegion] = useState(region);
   const [memberConnection, setMemberConnection] = useState([]);
   const [deleteConnect, setDeleteConnect] = useState([]);
+  const [hideEvents, setHideEvents] = useState();
 
   useEffect(() => {
     fetchProfile();
@@ -167,9 +168,6 @@ const HomeCommunity = props => {
     }, []),
   );
 
-
-
-
   useFocusEffect(
     useCallback(() => {
       const fetchAllCommunityMemberAsync = async () => {
@@ -186,7 +184,6 @@ const HomeCommunity = props => {
       };
     }, []),
   );
-
 
   useEffect(() => {
     setMemberConnection(communityMembers);
@@ -366,6 +363,10 @@ const HomeCommunity = props => {
                     item: item.title,
                   });
                 }}>
+                {setHideEvents(
+                  item?.pillar_categories[0]?.parent === 0 ||
+                    item?.pillar_categories[0]?.parent === GROWTH_COMMUNITY_ID,
+                )}
                 <ImageBackground
                   style={{
                     width: '100%',
@@ -558,12 +559,13 @@ const HomeCommunity = props => {
         showsVerticalScrollIndicator={false}
         style={{backgroundColor: Colors.PRIMARY_BACKGROUND_COLOR}}>
         <View style={styles.container}>
-          {pillarEvents?.length !== 0 &&
-            pillarEvents !== null &&
-            pillarEvents !== undefined && (
+          {regionEvents?.length !== 0 &&
+            regionEvents !== null &&
+            regionEvents !== undefined && (
               <View style={styles.top}>
-                <Text style={styles.title}>Growth Community Events</Text>
-
+                {hideEvents && (
+                  <Text style={styles.title}>Growth Community Events</Text>
+                )}
                 <View
                   style={{
                     display: 'flex',
@@ -572,7 +574,7 @@ const HomeCommunity = props => {
                   <FlatList
                     horizontal
                     showsHorizontalScrollIndicator={false}
-                    data={pillarEvents}
+                    data={regionEvents}
                     renderItem={item => _renderTopItem(item, navigation)}
                   />
                 </View>

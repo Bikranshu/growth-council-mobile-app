@@ -128,7 +128,7 @@ const People = props => {
   );
 
   useEffect(() => {
-    setMobileRegion(profileRegion);
+    setMobileRegion(mobileRegion);
   }, [region]);
 
   //   console.log(region.region_options);

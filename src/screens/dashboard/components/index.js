@@ -122,13 +122,13 @@ const Dashboard = props => {
   let region = profile?.user_meta?.region;
   if (typeof region === 'undefined' || region === null) {
     region = '';
-
   } else {
     region = profile?.user_meta?.region[0];
   }
 
   const [memberConnection, setMemberConnection] = useState([]);
   const [deleteConnect, setDeleteConnect] = useState([]);
+  const [hideCritical, setHideCritical] = useState(false);
 
   const [dataSourceCords, setDataSourceCords] = useState(criticalIssue);
   const [ref, setRef] = useState(null);
@@ -144,7 +144,7 @@ const Dashboard = props => {
     regionUser = profile?.user_meta?.region[0];
   }
 
-//   region = region === 'AMERICAS' ? 'north-america' : region;
+  //   region = region === 'AMERICAS' ? 'north-america' : region;
   const [userRegion, setUserRegion] = useState(region);
 
   useEffect(() => {
@@ -169,22 +169,19 @@ const Dashboard = props => {
       }, ms);
     });
 
-
-
   useEffect(() => {
     fetchEventRegion({
       region: userRegion,
     });
   }, [profile]);
 
-
-useFocusEffect(
+  useFocusEffect(
     useCallback(() => {
       const fetchAllCommunityMemberAsync = async () => {
         await fetchAllCommunityMember({
           s: '',
           sort: 'Desc',
-          region: "",
+          region: '',
         });
       };
       fetchAllCommunityMemberAsync();
@@ -486,7 +483,7 @@ useFocusEffect(
     if (userRegion) lowercaseRegion = userRegion.toLowerCase();
     // console.log('lowercaseRegion', userRegion);
 
-    if (userRegion === 'MEASA') lowercaseRegion = 'apac';
+    // if (userRegion === 'MEASA') lowercaseRegion = 'apac';
     // if (
     //   userRegion === '' ||
     //   userRegion === 'AMERICAS' ||
@@ -495,6 +492,8 @@ useFocusEffect(
     //   userRegion === null
     // )
     //   lowercaseRegion = 'north-america';
+
+    console.log('asvja', hideCritical);
     return (
       <>
         {lowercaseRegion === item?.region ? (
@@ -505,6 +504,8 @@ useFocusEffect(
                 Userregion: lowercaseRegion,
               });
             }}>
+            {setHideCritical(lowercaseRegion === item?.region ? true : false)}
+
             <View
               style={styles.ContentWrapper}
               key={index}
@@ -702,22 +703,24 @@ useFocusEffect(
               </View>
             </View>
           )}
-            <View style={styles.content}>
-              <Text style={styles.title}>
-                {criticalIssue?.critical_issue_mobile_title}
-              </Text>
-              <View
-                ref={ref => {
-                  setRef(ref);
-                }}>
-                <FlatList
-                  numColumns={2}
-                  showsHorizontalScrollIndicator={false}
-                  data={criticalIssue?.critical_issue_mobile_lists}
-                  renderItem={_renderCritical}
-                />
-              </View>
-            </View>
+        <View style={styles.content}>
+          {hideCritical && (
+            <Text style={styles.title}>
+              {criticalIssue?.critical_issue_mobile_title}
+            </Text>
+          )}
+          <View
+            ref={ref => {
+              setRef(ref);
+            }}>
+            <FlatList
+              numColumns={2}
+              showsHorizontalScrollIndicator={false}
+              data={criticalIssue?.critical_issue_mobile_lists}
+              renderItem={_renderCritical}
+            />
+          </View>
+        </View>
       </ScrollView>
       <BottomNav {...props} navigation={navigation} />
     </View>
