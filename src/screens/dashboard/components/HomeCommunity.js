@@ -116,7 +116,8 @@ const HomeCommunity = props => {
     regionUser = profile?.user_meta?.region[0];
   }
 
-  region = region === 'AMERICAS' ? 'north-america' : region;
+  console.log(regionUser);
+  //   region = region === 'AMERICAS' ? 'north-america' : region;
   const [userRegion, setUserRegion] = useState(region);
   const [memberConnection, setMemberConnection] = useState([]);
   const [deleteConnect, setDeleteConnect] = useState([]);
@@ -153,31 +154,22 @@ const HomeCommunity = props => {
     }, []),
   );
 
-  //   useFocusEffect(
-  //     useCallback(() => {
-  //       const fetchAllPillarEventAsync = async () => {
-  //         await fetchAllPillarEvent(pillarId);
-  //       };
-  //       fetchAllPillarEventAsync();
-
-  //       return () => {
-  //         cleanPillarEvent();
-  //       };
-  //     }, []),
-  //   );
-
   useFocusEffect(
     useCallback(() => {
-      const fetchAllPillarMemberContentAsync = async () => {
-        let token = await getAsyncStorage(JWT_TOKEN);
-        let userID = decodeUserID(token);
-        await fetchAllPillarMemberContent(pillarId);
+      const fetchAllPillarEventAsync = async () => {
+        await fetchAllPillarEvent(pillarId);
       };
-      fetchAllPillarMemberContentAsync();
-    }, [isFocused]),
+      fetchAllPillarEventAsync();
+
+      return () => {
+        cleanPillarEvent();
+      };
+    }, []),
   );
 
-  regionUser = regionUser === 'NORTH-AMERICA' ? 'AMERICAS' : regionUser;
+
+
+
   useFocusEffect(
     useCallback(() => {
       const fetchAllCommunityMemberAsync = async () => {
@@ -195,20 +187,6 @@ const HomeCommunity = props => {
     }, []),
   );
 
-  useFocusEffect(
-    useCallback(() => {
-      const fetchAllUsersAsync = async () => {
-        await fetchAllUsers({
-          sort: 'ASC',
-        });
-      };
-      fetchAllUsersAsync();
-
-      return () => {
-        cleanUser();
-      };
-    }, [isFocused]),
-  );
 
   useEffect(() => {
     setMemberConnection(communityMembers);
@@ -230,25 +208,25 @@ const HomeCommunity = props => {
     }
   };
 
-  const deleteMemberByMemberID = async (memberID, index) => {
-    const response = await deleteMemberByIdentifier({member_id: memberID});
-    if (response?.payload?.code === 200) {
-      let items = [...deleteConnect];
-      let item = {...items[index]};
-      item.connection = true;
-      items[index] = item;
-      setDeleteConnect(items);
-      fetchAllCommunityMember({
-        s: '',
-        sort: 'Desc',
-        region: regionUser,
-      });
-      ToastMessage.show('You have successfully deleted.');
-    } else {
-      toast.closeAll();
-      ToastMessage.show(response?.payload?.response);
-    }
-  };
+  //   const deleteMemberByMemberID = async (memberID, index) => {
+  //     const response = await deleteMemberByIdentifier({member_id: memberID});
+  //     if (response?.payload?.code === 200) {
+  //       let items = [...deleteConnect];
+  //       let item = {...items[index]};
+  //       item.connection = true;
+  //       items[index] = item;
+  //       setDeleteConnect(items);
+  //       fetchAllCommunityMember({
+  //         s: '',
+  //         sort: 'Desc',
+  //         region: regionUser,
+  //       });
+  //       ToastMessage.show('You have successfully deleted.');
+  //     } else {
+  //       toast.closeAll();
+  //       ToastMessage.show(response?.payload?.response);
+  //     }
+  //   };
 
   const _renderItem = ({item, index}) => {
     let user = item?.user_meta?.region;
@@ -580,9 +558,9 @@ const HomeCommunity = props => {
         showsVerticalScrollIndicator={false}
         style={{backgroundColor: Colors.PRIMARY_BACKGROUND_COLOR}}>
         <View style={styles.container}>
-          {regionEvents?.length !== 0 &&
-            regionEvents !== null &&
-            regionEvents !== undefined && (
+          {pillarEvents?.length !== 0 &&
+            pillarEvents !== null &&
+            pillarEvents !== undefined && (
               <View style={styles.top}>
                 <Text style={styles.title}>Growth Community Events</Text>
 
@@ -594,14 +572,14 @@ const HomeCommunity = props => {
                   <FlatList
                     horizontal
                     showsHorizontalScrollIndicator={false}
-                    data={regionEvents}
+                    data={pillarEvents}
                     renderItem={item => _renderTopItem(item, navigation)}
                   />
                 </View>
               </View>
             )}
 
-          {pillarMemberContentLoading && (
+          {pillarPOELoading && (
             <View style={{marginTop: 40}}>
               <Loading />
             </View>

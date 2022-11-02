@@ -169,7 +169,7 @@ const Dashboard = props => {
       }, ms);
     });
 
-  //   console.log('a', userRegion);
+
 
   useEffect(() => {
     fetchEventRegion({
@@ -177,16 +177,23 @@ const Dashboard = props => {
     });
   }, [profile]);
 
-//   regionUser = regionUser === 'NORTH-AMERICA' ? 'AMERICAS' : regionUser;
 
-  useEffect(() => {
-    fetchAllCommunityMember({
-      s: '',
-      sort: 'Desc',
-      region: regionUser,
-    });
-  }, [profile]);
+useFocusEffect(
+    useCallback(() => {
+      const fetchAllCommunityMemberAsync = async () => {
+        await fetchAllCommunityMember({
+          s: '',
+          sort: 'Desc',
+          region: "",
+        });
+      };
+      fetchAllCommunityMemberAsync();
 
+      return () => {
+        cleanCommunityMember();
+      };
+    }, []),
+  );
   //   useEffect(() => {
   //     fetchAllUpcomingEvent();
   //   }, []);
