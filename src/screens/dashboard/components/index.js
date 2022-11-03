@@ -269,7 +269,6 @@ const Dashboard = props => {
 
   const _renderItem = ({item, index}) => {
     let user = item?.user_meta?.region;
-    // console.log(user);
     if (typeof user === 'undefined' || user === 'null') {
       user = ' ';
     } else {
@@ -481,7 +480,7 @@ const Dashboard = props => {
   const _renderCritical = ({item, index}) => {
     let lowercaseRegion = '';
     if (userRegion) lowercaseRegion = userRegion.toLowerCase();
-    // console.log('lowercaseRegion', userRegion);
+
 
     // if (userRegion === 'MEASA') lowercaseRegion = 'apac';
     // if (
@@ -493,7 +492,7 @@ const Dashboard = props => {
     // )
     //   lowercaseRegion = 'north-america';
 
-    console.log('asvja', hideCritical);
+
     return (
       <>
         {lowercaseRegion === item?.region ? (
