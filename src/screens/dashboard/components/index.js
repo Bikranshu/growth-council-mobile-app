@@ -295,13 +295,15 @@ const Dashboard = props => {
                   fontFamily: Typography.FONT_SF_SEMIBOLD,
                   color: '#030303',
                 }}>
-                {item?.user_meta?.first_name} {item?.user_meta?.last_name}
+                {item?.display_name}
               </Text>
-              <Text style={{fontSize: 6, color: '#030303', marginTop: 5}}>
+              <Text style={{fontSize: 8, color: '#030303', marginTop: 3}}>
                 {item?.registered_date}
-                {/* {'\n'}
                 {'\n'}
-                {item?.user_meta?.Title} */}
+                {'\n'}
+                {item?.user_meta?.Title === undefined
+                  ? item?.user_meta?.title
+                  : item?.user_meta?.Title}
               </Text>
             </View>
           </TouchableOpacity>
@@ -481,7 +483,6 @@ const Dashboard = props => {
     let lowercaseRegion = '';
     if (userRegion) lowercaseRegion = userRegion.toLowerCase();
 
-
     // if (userRegion === 'MEASA') lowercaseRegion = 'apac';
     // if (
     //   userRegion === '' ||
@@ -491,7 +492,6 @@ const Dashboard = props => {
     //   userRegion === null
     // )
     //   lowercaseRegion = 'north-america';
-
 
     return (
       <>

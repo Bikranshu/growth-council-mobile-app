@@ -253,12 +253,15 @@ const HomeCommunity = props => {
                   fontFamily: Typography.FONT_SF_SEMIBOLD,
                   color: '#030303',
                 }}>
-                {item?.user_meta?.first_name} {item?.user_meta?.last_name}
+               {item?.display_name}
               </Text>
-              <Text style={{fontSize: 6, color: '#030303', marginTop: 5}}>
+              <Text style={{fontSize: 8, color: '#030303', marginTop: 3}}>
                 {item?.registered_date}
-                {/* {'\n'}
-                {'\n'} */}
+                {'\n'}
+                {'\n'}
+				{item?.user_meta?.Title === undefined
+                  ? item?.user_meta?.title
+                  : item?.user_meta?.Title}
                 {/* {item?.user_meta?.Title} */}
               </Text>
             </View>

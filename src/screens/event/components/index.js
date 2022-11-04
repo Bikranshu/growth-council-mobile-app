@@ -139,7 +139,6 @@ const Event = props => {
   const today = moment().tz(deviceTimeZone);
   const deviceOffset = today?.utcOffset();
 
-
   let Today = moment().tz(actualtimeZone);
   console.log(
     'a',
@@ -349,6 +348,9 @@ const Event = props => {
                             marginLeft: 5,
                             color: COMMUNITY_COLOR,
                           }}>
+                          {/* {events?.event_meta?.evo_event_timezone !== undefined
+                            ? events?.event_meta?.evo_event_timezone
+                            : ''} */}
                           {events?.time_zone !== undefined
                             ? events?.time_zone
                             : ''}

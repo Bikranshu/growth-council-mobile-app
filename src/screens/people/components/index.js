@@ -206,13 +206,15 @@ const People = props => {
                 fontFamily: Typography.FONT_SF_REGULAR,
                 color: '#222B45',
               }}>
-              {item?.user_meta?.first_name} {item?.user_meta?.last_name}
+              {item?.display_name}
             </Text>
-            <Text style={{fontSize: 11, color: '#222B45'}}>
+            {/* <Text style={{fontSize: 11, color: '#222B45'}}>
               {item?.user_email}
-            </Text>
-            <Text style={{fontSize: 11, color: '#222B45'}}>
-              {item?.company}
+            </Text> */}
+            <Text style={{fontSize: 11, color: '#222B45', marginTop: 5}}>
+              {item?.user_meta?.Title === undefined
+                ? item?.user_meta?.title
+                : item?.user_meta?.Title}
             </Text>
           </View>
           {!memberConnection[index]?.connection && (
