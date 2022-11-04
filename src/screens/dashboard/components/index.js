@@ -301,9 +301,9 @@ const Dashboard = props => {
                 {item?.registered_date}
                 {'\n'}
                 {'\n'}
-                {item?.user_meta?.Title === undefined
+                {/* {item?.user_meta?.Title === undefined
                   ? item?.user_meta?.title
-                  : item?.user_meta?.Title}
+                  : item?.user_meta?.Title} */}
               </Text>
             </View>
           </TouchableOpacity>
