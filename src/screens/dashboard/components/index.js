@@ -799,7 +799,7 @@ const styles = StyleSheet.create({
     marginLeft: 5,
   },
   middleWrapper: {
-    height: 150,
+    height: 180,
     width: 256,
     marginLeft: 15,
     marginTop: 20,
