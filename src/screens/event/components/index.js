@@ -149,6 +149,7 @@ const Event = props => {
 
   const com = ':';
 
+  console.log('ad', deviceOffset);
   //calculating gobal timezone of event.start
 
   const startHours = Number(backStartTimeStamp.split(/(\s+)/)[0]);
@@ -191,7 +192,10 @@ const Event = props => {
   const third = '0.' + second?.split('')[0] + second?.split('')[1];
 
   const fourth =
-    third !== '0.undefinedundefined' ? com + Number(third) * 60 : '';
+    third !== '0.undefinedundefined'
+      ? com + Math.round(Number(third) * 60)
+      : '';
+	  
   const fifth =
     gobalStart.split(' ')[1] === undefined ? '' : gobalStart.split(' ')[1];
   const six = first?.indexOf(fifth) > -1 !== false ? '' : fifth;
@@ -200,7 +204,7 @@ const Event = props => {
   const actualGobalStartTime =
     GobalStartTime === 'NaNam:' ? '' : GobalStartTime;
 
-  console.log('GobalStartTime', first);
+  console.log('GobalStartTime', fourth, six);
 
   //calculating gobal timezone of event.end
   const endHours = Number(backEndTimeStamp.split(/(\s+)/)[0]);
@@ -223,13 +227,16 @@ const Event = props => {
   const a = gobalEnd.split('.')[0] === '0' ? '12' : gobalEnd.split('.')[0];
   const b = gobalEnd.split('.')[1];
   const c = '0.' + b?.split('')[0] + b?.split('')[1];
-  const d = c !== '0.undefinedundefined' ? com + Number(c) * 60 : '';
+  const c1 = Number(c) * 60;
+  const d =
+    c !== '0.undefinedundefined' ? com + Math.round(Number(c) * 60) : '';
   const e = gobalEnd.split(' ')[1] === undefined ? '' : gobalEnd.split(' ')[1];
   const f = a?.indexOf(e) > -1 !== false ? '' : e;
+
   const GobalEndTime = a + d + f;
   const actualGobalEndTime = GobalEndTime === 'NaNam:' ? '' : GobalEndTime;
 
-  console.log('GobalEndTime', a);
+  console.log('GobalEndTime', d);
 
   let title = '';
   const pillarname = events?.pillar_categories
