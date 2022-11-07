@@ -1,4 +1,4 @@
-import React, {useState, useRef, useCallback} from 'react';
+import React, {useState, useRef, useCallback, useEffect} from 'react';
 import {
   Platform,
   StyleSheet,
@@ -11,12 +11,14 @@ import {
   Image,
 } from 'react-native';
 import {useFocusEffect} from '@react-navigation/native';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 import {Button} from 'native-base';
 import {useFormik} from 'formik';
 import * as Yup from 'yup';
 import {Picker} from '@react-native-picker/picker';
 import {BubblesLoader} from 'react-native-indicator';
 import uuid from 'react-native-uuid';
+import analytics from '@react-native-firebase/analytics';
 import PhoneInput from 'react-native-phone-number-input';
 import {CommonStyles, Colors, Typography} from '../../../theme';
 import FlatTextInput from '../../../shared/form/FlatTextInput';
@@ -54,11 +56,18 @@ const SignUpForm = props => {
     cleanCustomer,
     setLoading,
   } = props;
+
   const phoneInput = useRef(null);
 
   const min = 1;
   const max = 100;
   const rand = min + Math.random() * (max - min);
+
+  const [isPickerVisible, setIsPickerVisible] = useState(false);
+  const [regionVisible, setRegionVisible] = useState(false);
+
+  const [country, setCountry] = useState('United States');
+  const [countryRegion, setCountryRegion] = useState('AMERICAS');
 
   const {
     handleChange,
@@ -82,14 +91,16 @@ const SignUpForm = props => {
       company: '',
       phone: '',
       email: '',
-      country: 'United States',
+      country: country,
       checked: false,
       firebase_password: uuid.v4(),
+      region: countryRegion,
     },
+
     onSubmit: async values => {
       values.name = values.first_name + ' ' + values.last_name;
       values.username = values.first_name + ' ' + values.last_name;
-
+      values.region = countryRegion;
       //   values.email.substring(
       //     0,
       //     values.email.lastIndexOf('@'),
@@ -141,9 +152,8 @@ const SignUpForm = props => {
     },
   });
 
+  console.log(values);
   const [checked, setChecked] = React.useState(false);
-
-  const [country, setCountry] = useState('United States');
 
   const countries = [
     'Afghanistan',
@@ -344,7 +354,37 @@ const SignUpForm = props => {
     'Zimbabwe',
   ];
 
-  const [isPickerVisible, setIsPickerVisible] = useState(false);
+  const measa = [
+    'India',
+    'Pakistan',
+    'Sri Lanka ',
+    'Middle east',
+    'Nepal',
+    'Bangladesh',
+    'Bhutan',
+    'Maldives',
+  ];
+
+  const Apac = [
+    'Brunei',
+    'Burma',
+    'Cambodia',
+    'Timor- Leste ',
+    'Indonesia ',
+    'Laos',
+    'Malaysia',
+    'Philippines',
+    'Singapore',
+    'Thailand',
+    'Vietnam',
+    'Australia',
+    'Japan',
+  ];
+
+  const america = ['United States', 'Canada', 'Mexio'];
+
+  console.log('country', countryRegion, country);
+
   const areAllFieldsFilled =
     values.first_name != '' &&
     values.last_name != '' &&
@@ -483,7 +523,7 @@ const SignUpForm = props => {
                   paddingLeft: 20,
                 }}>
                 <Text style={{fontWeight: 'bold', color: 'gray'}}>
-                  {values.country ? values.country : 'Select a Country'}
+                  {country}
                 </Text>
               </TouchableOpacity>
               {errors.country && (
@@ -491,6 +531,37 @@ const SignUpForm = props => {
                   {errors.country}
                 </Text>
               )}
+              {/* <View>
+                <Text style={{color: 'black', marginTop: 10}}>Your Region</Text>
+                <View
+                  style={{
+                    borderRadius: 5,
+                    borderWidth: 0.5,
+                    overflow: 'hidden',
+                    height: 50,
+                    marginTop: 10,
+                    marginBottom: 10,
+                    justifyContent: 'center',
+                    paddingLeft: 20,
+                  }}>
+                  <Text
+                    style={{
+                      position: 'absolute',
+                      left: 20,
+                      top: 12,
+                      color: 'gray',
+                    }}>
+                    {countryRegion}
+                  </Text>
+                  <Ionicons
+                      name="chevron-down-outline"
+                      size={30}
+                      color="gray"
+                      style={{position: 'absolute', right: 15, top: 8}}
+                    />
+                </View>
+            
+              </View>  */}
 
               <View style={{flex: 1}}>
                 <View style={{flexDirection: 'row', flex: 0.2}}>
@@ -600,6 +671,15 @@ const SignUpForm = props => {
                     setFieldValue('country', itemValue);
                     setCountry(itemValue);
                     setErrors({});
+                    setCountryRegion(
+                      Apac.indexOf(itemValue) > -1 !== false
+                        ? 'APAC'
+                        : measa.indexOf(itemValue) > -1 !== false
+                        ? 'MEASA'
+                        : america.indexOf(itemValue) > -1 !== false
+                        ? 'AMERICAS'
+                        : "",
+                    );
                   }
                 }}>
                 {countries.map((value, index) => {
@@ -616,6 +696,60 @@ const SignUpForm = props => {
           </View>
         </View>
       </Modal>
+
+      {/* <Modal transparent visible={regionVisible}>
+        <View
+          style={{
+            flex: 1,
+            backgroundColor: 'rgba(56,56,56,0.3)',
+            justifyContent: 'flex-end',
+          }}>
+          <View
+            style={{
+              height: 300,
+              backgroundColor: 'white',
+              borderTopLeftRadius: 20,
+              borderTopRightRadius: 20,
+              padding: 20,
+            }}>
+            <TouchableOpacity
+              activeOpacity={0.7}
+              onPress={() => setRegionVisible(false)}
+              style={{alignItems: 'flex-end'}}>
+              <Text
+                style={{
+                  padding: 15,
+                  fontSize: 18,
+                }}>
+                Done
+              </Text>
+            </TouchableOpacity>
+            <View style={{marginBottom: 40}}>
+              <Picker
+                selectedValue={region}
+                mode={'dropdown'}
+                // onValueChange={(itemValue, itemIndex) => setCountry(itemValue)}>
+                onValueChange={(itemValue, itemIndex) => {
+                  if (itemValue !== null) {
+                    setFieldValue('countryRegion', itemValue);
+                    setRegion(itemValue);
+                    setErrors({});
+                  }
+                }}>
+                {Region.map((value, index) => {
+                  return (
+                    <Picker.Item
+                      label={value}
+                      value={value}
+                      style={{fontSize: 12}}
+                    />
+                  );
+                })}
+              </Picker>
+            </View>
+          </View>
+        </View>
+      </Modal> */}
     </View>
   );
 };

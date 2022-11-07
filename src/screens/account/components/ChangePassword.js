@@ -13,7 +13,7 @@ import {useFormik} from 'formik';
 import * as Yup from 'yup';
 import {BubblesLoader} from 'react-native-indicator';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-
+import analytics from '@react-native-firebase/analytics';
 import {CommonStyles, Colors, Typography} from '../../../theme';
 import FlatTextInput from '../../../shared/form/FlatTextInput';
 import ToastMessage from '../../../shared/toast';
@@ -22,11 +22,12 @@ import Loading from '../../../shared/loading';
 
 const passwordSchema = Yup.object().shape({
   oldPassword: Yup.string()
-    .min(6, 'Too Short!')
+    .min(6, 'Too Short! Password should be atleast 6 character.')
     .required('Old password is required.'),
   newPassword: Yup.string()
-    .min(6, 'Too Short!')
+    .min(6, 'Too Short! Password should be atleast 6 character.')
     .required('New Password is required.'),
+
   confirmPassword: Yup.string()
     .oneOf(
       [Yup.ref('newPassword'), null],
@@ -72,11 +73,9 @@ const ChangePasswordForm = props => {
     onSubmit: async values => {
       delete values.confirmPassword;
       await updateCustomerPassword(values).then(response => {
-       
         if (response?.payload?.code === 200) {
           navigation.navigate('Dashboard');
           ToastMessage.show(response?.payload?.message);
-          
         }
       });
     },
@@ -124,10 +123,8 @@ const ChangePasswordForm = props => {
               />
             </View>
             <View style={styles.header}>
-              <Text style={styles.headingText1}>
-                {profile?.user_meta?.first_name} {profile?.user_meta?.last_name}
-              </Text>
-              <Text>{profile.user_email}</Text>
+              <Text style={styles.headingText1}>{profile?.user_login}</Text>
+              <Text>{profile?.user_meta?.title}</Text>
             </View>
           </View>
         </View>
@@ -192,6 +189,17 @@ const ChangePasswordForm = props => {
                   {errors.newPassword}
                 </Text>
               )}
+              {values?.oldPassword !== values?.newPassword ||
+                (values?.oldPassword !== '' && values?.newPassword !== '' && (
+                  <Text
+                    style={{
+                      fontSize: 10,
+                      color: 'red',
+                      textAlign: 'left',
+                    }}>
+                    old Password and new password should not be same.
+                  </Text>
+                ))}
               <Ionicons
                 name={hidePass1 ? 'eye-outline' : 'eye-off-outline'}
                 size={25}
@@ -208,7 +216,7 @@ const ChangePasswordForm = props => {
               <FlatTextInput
                 label="Confirm Password"
                 value={values.confirmPassword}
-                secureTextEntry={hidePass1}
+                secureTextEntry={hidePass2}
                 onChangeText={handleChange('confirmPassword')}
                 onFocus={handleBlur('confirmPassword')}
                 error={errors.confirmPassword}
@@ -223,7 +231,7 @@ const ChangePasswordForm = props => {
                 name={hidePass2 ? 'eye-outline' : 'eye-off-outline'}
                 size={25}
                 color={Colors.PRIMARY_HEADING_COLOR}
-                onPress={() => setHidePass2(!hidePass1)}
+                onPress={() => setHidePass2(!hidePass2)}
                 style={{
                   position: 'absolute',
                   bottom: 20,
@@ -234,9 +242,9 @@ const ChangePasswordForm = props => {
           </View>
 
           <View style={styles.buttonWrapper}>
-            <Button style={styles.button} onPress={handleSubmit}>
+            <TouchableOpacity style={styles.button} onPress={handleSubmit}>
               <Text style={styles.buttonText}>Update Password</Text>
-            </Button>
+            </TouchableOpacity>
           </View>
 
           <View style={styles.cancelWrapper}>

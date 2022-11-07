@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useState, useRef} from 'react';
 import {
   StyleSheet,
   View,
@@ -12,7 +12,13 @@ import {
 } from 'react-native';
 import {Calendar} from 'react-native-calendars';
 import moment from 'moment-timezone';
-import {BubblesLoader} from 'react-native-indicator';
+import {
+  useFocusEffect,
+  NavigationContainer,
+  useNavigationContainerRef,
+} from '@react-navigation/native';
+import analytics from '@react-native-firebase/analytics';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 import * as RNLocalize from 'react-native-localize';
 import {Picker} from '@react-native-picker/picker';
 import {CommonStyles, Colors} from '../../../theme';
@@ -21,7 +27,7 @@ import Footer from '../../../shared/footer';
 import ToastMessage from '../../../shared/toast';
 import {formatTimeByOffset} from '../../event/components/timezone';
 import Loading from '../../../shared/loading';
-import { GROWTH_COMMUNITY_ID, GROWTH_CONTENT_ID } from '../../../constants';
+import {GROWTH_COMMUNITY_ID, GROWTH_CONTENT_ID} from '../../../constants';
 
 const EventCalendar = props => {
   const {
@@ -32,6 +38,18 @@ const EventCalendar = props => {
     calendarEventError,
     fetchAllCalendarEvent,
     cleanCalendarEvent,
+
+    profile,
+    profileLoading,
+    profileError,
+    fetchProfile,
+    cleanProfile,
+
+    region,
+    regionLoading,
+    regionError,
+    fetchAllRegions,
+    cleanRegion,
   } = props;
 
   const [currentMonth, setCurrentMonth] = useState(moment().format('MMMM'));
@@ -40,7 +58,38 @@ const EventCalendar = props => {
   const [currentEvents, setCurrentEvents] = useState([]);
   const [showAllEvents, setShowAllEvents] = useState(true);
   const [pickerVisible, setPickerVisible] = useState(false);
-  //   const [markedDay, setMarkedDay] = useState([]);
+  const [regionVisible, setRegionVisible] = useState(false);
+
+  let profileRegion = profile?.user_meta?.region;
+  console.log('ada', profileRegion);
+  if (
+    typeof profileRegion === 'undefined' ||
+    profileRegion === null ||
+    profileRegion === ''
+  ) {
+    profileRegion = 'ALL REGION';
+  } else {
+    profileRegion = profile?.user_meta?.region[0];
+  }
+
+  //   let UserRegion =
+  //     profileRegion === 'AMERICAS' ? 'NORTH-AMERICA' : profileRegion;
+  const [mobileRegion, setMobileRegion] = useState(profileRegion);
+
+  //   const countries = {
+  //     Region: 'Region',
+  //     'NORTH-AMERICA': 'NORTH-AMERICA',
+  //     APAC: 'APAC',
+  //     MEASA: 'MEASA',
+  //   };
+
+  useEffect(() => {
+    fetchProfile();
+  }, []);
+
+  useEffect(() => {
+    fetchAllRegions();
+  }, []);
 
   useEffect(() => {
     const fetchAllCalendarEventAsync = async () => {
@@ -48,6 +97,7 @@ const EventCalendar = props => {
         year: moment().format('YYYY'),
         month: moment().format('MM'),
         all_events: showAllEvents,
+        region: mobileRegion,
       })
         .then(response => {
           if (response?.payload?.code === 200) {
@@ -104,7 +154,8 @@ const EventCalendar = props => {
       markedDay[startDate] = {
         color: backgroundColor,
         textColor: 'white',
-        borderRadius: 10,
+        borderWidth: 1,
+        borderColor: 'black',
       };
     } else {
       const dates = getDates(
@@ -144,7 +195,6 @@ const EventCalendar = props => {
     const startdate = eventStart.split(' ', 3)[1].split('', 3);
     const enddate = eventEnd.split(' ', 3)[1].split('', 3);
 
-	
     const backStartTimeStamp = item?.event_start;
     const deviceTimeZone = RNLocalize.getTimeZone();
 
@@ -156,7 +206,7 @@ const EventCalendar = props => {
       currentTimeZoneOffsetInHours,
     );
 
-    const time = moment(convertedToLocalTime).format('h:mma');
+    const time = moment(item.event_start).format('h:mma');
 
     let organizer = item?.organizer?.term_name;
     let description = item?.organizer?.description;
@@ -208,13 +258,17 @@ const EventCalendar = props => {
     return (
       <View>
         <TouchableOpacity
-          onPress={() =>
+          onPress={async () => {
             navigation.navigate(nav, {
               id: item.ID,
               title: pillarname,
               image: backgroundImage,
-            })
-          }>
+            });
+            await analytics().logEvent(item?.title, {
+              id: item.ID,
+              item: item.title,
+            });
+          }}>
           <View style={[styles.eventCard, styles.shadowProp]} key={index}>
             <Text
               style={{
@@ -283,16 +337,51 @@ const EventCalendar = props => {
               onPress={() => setPickerVisible(true)}
               style={{
                 flex: 1,
-                alignItems: 'center',
-                borderWidth: 1,
+                // alignItems: 'center',
+                borderWidth: 0.3,
                 paddingVertical: 10,
                 borderRadius: 10,
+                paddingLeft: 20,
+                width: 100,
                 borderColor: 'gray',
-                marginRight: 30,
+                marginRight: 10,
               }}>
               <Text style={{fontSize: 12, color: '#030303'}}>
                 {showAllEvents ? 'All Events' : 'My Events'}
               </Text>
+              <Ionicons
+                name="chevron-down-outline"
+                size={20}
+                color="black"
+                style={{position: 'absolute', right: 15, top: 8}}
+              />
+            </TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => setRegionVisible(true)}
+              style={{
+                flex: 1,
+                // alignItems: 'center',
+                borderWidth: 0.3,
+                paddingVertical: 10,
+                borderRadius: 10,
+                width: 100,
+                paddingLeft: 20,
+                borderColor: 'gray',
+                marginRight: 10,
+              }}>
+              <Text
+                style={{
+                  fontSize: 12,
+                  color: '#030303',
+                }}>
+                {mobileRegion ? mobileRegion : 'ALL REGION'}
+              </Text>
+              <Ionicons
+                name="chevron-down-outline"
+                size={20}
+                color="black"
+                style={{position: 'absolute', right: 15, top: 8}}
+              />
             </TouchableOpacity>
           </View>
           <View style={[styles.calendar, styles.shadowProp]}>
@@ -308,6 +397,7 @@ const EventCalendar = props => {
                   year: moment(month?.dateString).format('YYYY'),
                   month: moment(month?.dateString).format('MM'),
                   all_events: showAllEvents,
+                  region: mobileRegion,
                 })
                   .then(response => {
                     if (response?.payload?.code === 200) {
@@ -376,24 +466,88 @@ const EventCalendar = props => {
                         year: calendarYear,
                         month: calendarMonth,
                         all_events: itemValue,
+                        region: mobileRegion,
                       })
                         .then(response => {
                           if (response?.payload?.code === 200) {
                             setCurrentEvents(response?.payload?.data);
                           } else {
-                            // setMarkedDay([]);
                             setCurrentEvents([]);
                           }
                         })
                         .catch(e => {
-                          //   ToastMessage.show(e?.response?.payload?.response);
-
-                          //   setMarkedDay([]);
                           setCurrentEvents([]);
                         });
                     }}>
                     <Picker.Item label="All Events" value={true} />
                     <Picker.Item label="My Events" value={false} />
+                  </Picker>
+                </View>
+              </View>
+            </View>
+          </Modal>
+          <Modal transparent visible={regionVisible}>
+            <View
+              style={{
+                flex: 1,
+                backgroundColor: 'rgba(56,56,56,0.3)',
+                justifyContent: 'flex-end',
+              }}>
+              <View
+                style={{
+                  height: 300,
+                  backgroundColor: 'white',
+                  borderTopLeftRadius: 20,
+                  borderTopRightRadius: 20,
+                  padding: 20,
+                }}>
+                <TouchableOpacity
+                  activeOpacity={0.7}
+                  onPress={() => setRegionVisible(false)}
+                  style={{alignItems: 'flex-end'}}>
+                  <Text
+                    style={{
+                      padding: 15,
+                      fontSize: 18,
+                    }}>
+                    Done
+                  </Text>
+                </TouchableOpacity>
+                <View style={{marginBottom: 40}}>
+                  <Picker
+                    selectedValue={mobileRegion}
+                    mode="dropdown"
+                    itemTextStyle={{fontSize: 12}}
+                    onValueChange={async itemValue => {
+                      setMobileRegion(itemValue);
+
+                      await fetchAllCalendarEvent({
+                        year: calendarYear,
+                        month: calendarMonth,
+                        all_events: showAllEvents,
+                        region: itemValue,
+                      })
+                        .then(response => {
+                          if (response?.payload?.code === 200) {
+                            setCurrentEvents(response?.payload?.data);
+                          } else {
+                            setCurrentEvents([]);
+                          }
+                        })
+                        .catch(e => {
+                          setCurrentEvents([]);
+                        });
+                    }}>
+                    {region?.region_options?.map(item => {
+                      return (
+                        <Picker.Item
+                          label={item?.mobile_region}
+                          value={item?.mobile_region}
+                          //   key={key}
+                          style={{fontSize: 14}}
+                        />
+                      );
+                    })}
                   </Picker>
                 </View>
               </View>
@@ -523,6 +677,7 @@ const styles = StyleSheet.create({
     marginTop: 15,
     marginLeft: 20,
   },
+  dropdown: {},
   pickerWrapper: {
     display: 'flex',
     flexDirection: 'row',

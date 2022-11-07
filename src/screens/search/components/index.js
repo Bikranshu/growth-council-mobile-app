@@ -16,6 +16,7 @@ import Font from 'react-native-vector-icons/FontAwesome5';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import moment from 'moment';
 import SearchBox from '../../../shared/form/SearchBar';
+import analytics from '@react-native-firebase/analytics';
 import {BubblesLoader} from 'react-native-indicator';
 import {
   GROWTH_COACHING_ID,
@@ -199,27 +200,29 @@ const Search = props => {
             });
           }
         }}>
-        {item?.parent !== GROWTH_CONTENT_ID && item?.parent !== 184 && item?.parent !== 188 &&(
-          <View style={styles.middleWrapper}>
-            <View style={[styles.middleW, styles.shadowProp]}>
-              <Image
-                source={{uri: item?.image}}
-                style={{width: 30, height: 30}}
-                resizeMode="contain"
-              />
+        {item?.parent !== GROWTH_CONTENT_ID &&
+          item?.parent !== 184 &&
+          item?.parent !== 188 && (
+            <View style={styles.middleWrapper}>
+              <View style={[styles.middleW, styles.shadowProp]}>
+                <Image
+                  source={{uri: item?.image}}
+                  style={{width: 30, height: 30}}
+                  resizeMode="contain"
+                />
+              </View>
+              <Text
+                style={{
+                  marginTop: 10,
+                  fontSize: 8,
+                  marginHorizontal: 9,
+                  textAlign: 'center',
+                  color: '#222B45',
+                }}>
+                {item?.name}
+              </Text>
             </View>
-            <Text
-              style={{
-                marginTop: 10,
-                fontSize: 8,
-                marginHorizontal: 9,
-                textAlign: 'center',
-                color: '#222B45',
-              }}>
-              {item?.name}
-            </Text>
-          </View>
-        )}
+          )}
       </TouchableOpacity>
     );
   };
@@ -249,7 +252,10 @@ const Search = props => {
               justifyContent: 'center',
               width: '95%',
             }}>
-            <SearchBox searchEventsByIdentifier={searchEventsByIdentifier} />
+            <SearchBox
+              searchEventsByIdentifier={searchEventsByIdentifier}
+              
+            />
           </View>
         </ImageBackground>
         <ScrollView

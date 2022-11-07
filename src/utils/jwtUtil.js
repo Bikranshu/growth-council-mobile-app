@@ -1,19 +1,16 @@
 import jwt_decode from 'jwt-decode';
 
 import {getAsyncStorage} from './storageUtil';
-import {useAuthentication} from '../context/auth';
 import {JWT_TOKEN} from '../constants';
 
-const {loading, setLoading, message, setMessage, signOut} = useAuthentication();
 
-export const isTokenExpired = async token => {
+export const isTokenExpired =  token => {
   try {
-    const token = await getAsyncStorage(JWT_TOKEN);
     const decoded = jwt_decode(token);
     if (decoded.exp < Date.now() / 1000) {
       // Checking if token is expired.
-      //   return true;
-      await signOut();
+        return true;
+     
     }
   } catch (e) {
     return false;

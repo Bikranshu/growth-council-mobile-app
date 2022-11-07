@@ -10,18 +10,20 @@ import {
   FlatList,
   TouchableOpacity,
   ImageBackground,
+  Modal,
   Dimensions,
   StatusBar,
 } from 'react-native';
 import {Colors, Typography} from '../../../theme';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import Footer from '../../../shared/footer';
+import {Picker} from '@react-native-picker/picker';
 import BottomNav from '../../../layout/BottomLayout';
 import HTMLView from 'react-native-htmlview';
 import {BubblesLoader} from 'react-native-indicator';
 import Entypo from 'react-native-vector-icons/Entypo';
 import Loading from '../../../shared/loading';
-import { useFocusEffect } from '@react-navigation/native';
+import {useFocusEffect} from '@react-navigation/native';
 
 const CriticalIssue = props => {
   const {
@@ -32,70 +34,163 @@ const CriticalIssue = props => {
     criticalIssueError,
     fetchCritcalIssue,
     cleanCriticalIssue,
-    index
+    index,
+
+    profile,
+    profileLoading,
+    profileError,
+    fetchProfile,
+    cleanProfile,
+
+
+    region,
+    regionLoading,
+    regionError,
+    fetchAllRegions,
+    cleanRegion,
   } = props;
 
-  const listRef = useRef(null);
+  let profileRegion = profile?.user_meta?.region;
 
+  if (typeof profileRegion === 'undefined' || profileRegion === null) {
+    profileRegion = 'ALL REGION';
+  } else {
+    profileRegion = profile?.user_meta?.region[0];
+  }
+  //   let profileRegion = profile?.user_meta?.region[0]
+  //     ? profile?.user_meta?.region[0]
+  //     : 'NORTH-AMERICA';
+//   let UserRegion = profileRegion
+//     ? profileRegion === 'AMERICAS'
+//       ? 'NORTH-AMERICA'
+//       : profileRegion
+//     : profileRegion;
+
+  const listRef = useRef(null);
+  const [regionVisible, setRegionVisible] = useState(false);
+  const [mobileRegion, setMobileRegion] = useState(profileRegion);
+
+  useEffect(() => {
+    fetchAllRegions();
+  }, []);
+  //   const countries = {
+  //     APAC: 'APAC',
+  //     AMERICAS: 'NORTH-AMERICA',
+  //     // MEASA: 'MEASA',
+  //   };
+  useEffect(() => {
+    setMobileRegion(profileRegion);
+  }, [profile]);
+
+  useEffect(() => {
+    fetchProfile();
+  }, []);
 
   useEffect(() => {
     fetchCritcalIssue();
   }, []);
 
-  useFocusEffect(useCallback(() => {wait(500).then(() => scrollToIndex())}, [criticalIssueLoading]))
+  useFocusEffect(
+    useCallback(() => {
+      wait(500).then(() => scrollToIndex());
+    }, [criticalIssueLoading]),
+  );
 
-  const wait = (ms) => new Promise(resolve => {
-    setTimeout(() => {
-       resolve(true);
-    }, ms)
-  })
+  const wait = ms =>
+    new Promise(resolve => {
+      setTimeout(() => {
+        resolve(true);
+      }, ms);
+    });
 
   const scrollToIndex = () => {
-      listRef.current.scrollToIndex({animated: true, index});
-  }
-
+    listRef.current.scrollToIndex({animated: true, index});
+  };
 
   const _renderCritical = ({item, index}) => {
+    let lowercaseRegion = '';
+    if (mobileRegion) lowercaseRegion = mobileRegion.toLowerCase();
+    else console.log("lowercaseRegion doesn't exist, look into it");
     return (
-      <View style={styles.content} 
-
-	  >
-        <Image
-          style={{
-            width: Dimensions.get('window').width - 40,
-            height: 120,
-            borderRadius: 8,
-          }}
-          source={{uri: item?.image}}
-        />
-        <View style={styles.contentWrapper}>
-          
-          <Text style={{color: 'black', fontSize: 14, marginBottom: 10}}>
-            {item?.heading}
-          </Text>
-          {item?.areas_of_focus?.map(items => (
-            <View
+      <>
+        {lowercaseRegion === item?.region ? (
+          <View style={styles.content}>
+            <Image
               style={{
-                marginBottom: 10,
-                paddingRight: 20,
-                flexDirection: 'row',
-                alignItems: 'center',
-              }}>
-              <Entypo name="dot-single" size={20} color="black" />
+                width: Dimensions.get('window').width - 40,
+                height: 120,
+                borderRadius: 8,
+              }}
+              source={{uri: item?.image}}
+            />
+            <View style={styles.contentWrapper}>
+              <Text style={{color: 'black', fontSize: 14, marginBottom: 10}}>
+                {item?.heading}
+              </Text>
+              {item?.areas_of_focus?.map(items => (
+                <View
+                  style={{
+                    marginBottom: 10,
+                    paddingRight: 20,
+                    flexDirection: 'row',
+                    alignItems: 'center',
+                  }}>
+                  <Entypo name="dot-single" size={20} color="black" />
 
-              <HTMLView
-                value={items.point}
-                textComponentProps={{
-                  style: {
-                    fontSize: 10,
-                    color: 'black',
-                  },
-                }}
-              />
+                  <HTMLView
+                    value={items.point}
+                    textComponentProps={{
+                      style: {
+                        fontSize: 10,
+                        color: 'black',
+                      },
+                    }}
+                  />
+                </View>
+              ))}
             </View>
-          ))}
-        </View>
-      </View>
+          </View>
+        ) : lowercaseRegion === 'all region' ? (
+          <View style={styles.content}>
+            <Image
+              style={{
+                width: Dimensions.get('window').width - 40,
+                height: 120,
+                borderRadius: 8,
+              }}
+              source={{uri: item?.image}}
+            />
+            <View style={styles.contentWrapper}>
+              <Text style={{color: 'black', fontSize: 14, marginBottom: 10}}>
+                {item?.heading}
+              </Text>
+              {item?.areas_of_focus?.map(items => (
+                <View
+                  style={{
+                    marginBottom: 10,
+                    paddingRight: 20,
+                    flexDirection: 'row',
+                    alignItems: 'center',
+                  }}>
+                  <Entypo name="dot-single" size={20} color="black" />
+
+                  <HTMLView
+                    value={items.point}
+                    textComponentProps={{
+                      style: {
+                        fontSize: 10,
+                        color: 'black',
+                      },
+                    }}
+                  />
+                </View>
+              ))}
+            </View>
+          </View>
+        ) : (
+          <></>
+        )}
+      </>
     );
   };
 
@@ -107,13 +202,14 @@ const CriticalIssue = props => {
         backgroundColor="#001D3F"
         translucent={false}
       />
-        <View style={styles.container}>
-          {criticalIssueLoading && <Loading />}
-          <View>
-            <FlatList
-              ref={listRef}
-              ListHeaderComponent={() => (
-                <View style={styles.title}>
+      <View style={styles.container}>
+        {criticalIssueLoading && <Loading />}
+
+        <View>
+          <FlatList
+            ref={listRef}
+            ListHeaderComponent={() => (
+              <View style={styles.title}>
                 <Text
                   style={{
                     color: 'black',
@@ -124,18 +220,103 @@ const CriticalIssue = props => {
                   {criticalIssue?.critical_issue_mobile_title}
                 </Text>
                 <View style={styles.titleBorder} />
-    
+
+                <View>
+                  <Text style={{fontSize: 16, marginTop: 20}}>
+                    Select Region
+                  </Text>
+                  <TouchableOpacity
+                    onPress={() => setRegionVisible(true)}
+                    style={{
+                      borderWidth: 0.3,
+                      paddingVertical: 5,
+                      height: 50,
+                      justifyContent: 'center',
+                      borderRadius: 10,
+                      marginTop: 10,
+                      flexDirection: 'row',
+                    }}>
+                    <Text
+                      style={{
+                        fontSize: 16,
+                        position: 'absolute',
+                        left: 20,
+                        top: 10,
+                      }}>
+                      {mobileRegion ? mobileRegion : 'ALL REGION'}
+                    </Text>
+                    <Ionicons
+                      name="chevron-down-outline"
+                      size={30}
+                      color="black"
+                      style={{position: 'absolute', right: 15, top: 8}}
+                    />
+                  </TouchableOpacity>
+                </View>
+
                 <Text style={styles.titleText}>
                   {criticalIssue?.critical_issue_mobile_description}
                 </Text>
               </View>
-              )}
-              showsVerticalScrollIndicator={false}
-              data={criticalIssue?.critical_issue_mobile_lists}
-              renderItem={_renderCritical}
-            />
+            )}
+            showsVerticalScrollIndicator={false}
+            data={criticalIssue?.critical_issue_mobile_lists}
+            renderItem={_renderCritical}
+          />
+        </View>
+      </View>
+
+      <Modal transparent visible={regionVisible}>
+        <View
+          style={{
+            flex: 1,
+            backgroundColor: 'rgba(56,56,56,0.3)',
+            justifyContent: 'flex-end',
+          }}>
+          <View
+            style={{
+              height: 300,
+              backgroundColor: 'white',
+              borderTopLeftRadius: 20,
+              borderTopRightRadius: 20,
+              padding: 20,
+            }}>
+            <TouchableOpacity
+              activeOpacity={0.7}
+              onPress={() => setRegionVisible(false)}
+              style={{alignItems: 'flex-end'}}>
+              <Text
+                style={{
+                  padding: 15,
+                  fontSize: 18,
+                }}>
+                Done
+              </Text>
+            </TouchableOpacity>
+            <View style={{marginBottom: 40}}>
+              <Picker
+                selectedValue={mobileRegion}
+                mode="dropdown"
+                itemTextStyle={{fontSize: 12}}
+                onValueChange={itemValue => {
+                  setMobileRegion(itemValue);
+                }}>
+                {region?.region_options?.map(item => {
+                  return (
+                    <Picker.Item
+                      label={item?.mobile_region}
+                      value={item?.mobile_region}
+                      //   key={key}
+                      style={{fontSize: 14}}
+                    />
+                  );
+                })}
+              </Picker>
+            </View>
           </View>
         </View>
+      </Modal>
+      
 
       <BottomNav {...props} navigation={navigation} />
     </SafeAreaView>

@@ -16,12 +16,12 @@ import {
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import Material from 'react-native-vector-icons/MaterialIcons';
 import FeatherIcon from 'react-native-vector-icons/Feather';
+import AntDesign from 'react-native-vector-icons/AntDesign';
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome';
 import moment from 'moment';
+import analytics from '@react-native-firebase/analytics';
 import {Linking} from 'react-native';
-import {BubblesLoader} from 'react-native-indicator';
 import {useFocusEffect, useIsFocused} from '@react-navigation/native';
-import Footer from '../../../shared/footer';
 import BottomNav from '../../../layout/BottomLayout';
 import Player from './Player';
 import {getAsyncStorage} from '../../../utils/storageUtil';
@@ -52,7 +52,7 @@ const HomeCommunity = props => {
     fetchAllCommunityMember,
     cleanCommunityMember,
 
-	pillarMemberContents,
+    pillarMemberContents,
     pillarMemberContentLoading,
     pillarMemberContentError,
     fetchAllPillarMemberContent,
@@ -69,14 +69,77 @@ const HomeCommunity = props => {
     userError,
     fetchAllUsers,
     cleanUser,
+
+    memberConnections,
+    memberConnectionLoading,
+    memberConnectionError,
+    connectMemberByIdentifier,
+    cleanConnectMember,
+
+    deleteConnections,
+    deleteConnectionLoading,
+    deleteConnectionError,
+    deleteMemberByIdentifier,
+    cleanDeleteMember,
+
+    regionEvents,
+    regionEventLoading,
+    regionEventError,
+    fetchEventRegion,
+    cleanEventRegion,
+
+    profile,
+    profileLoading,
+    profileError,
+    fetchProfile,
+    cleanProfile,
   } = props;
 
   const pillarId = GROWTH_COMMUNITY_ID;
 
   const isFocused = useIsFocused();
 
-  const [memberConnection, setMemberConnection] = useState(
-    pillarMemberContents?.members,
+  let region = profile?.user_meta?.region;
+  if (typeof region === 'undefined' || region === null) {
+    region = ' ';
+  } else {
+    region = profile?.user_meta?.region[0];
+  }
+
+  let string = region;
+  if (string) string = string.toLowerCase();
+
+  let regionUser = profile?.user_meta?.region;
+  if (typeof regionUser === 'undefined' || regionUser === null) {
+    regionUser = ' ';
+  } else {
+    regionUser = profile?.user_meta?.region[0];
+  }
+
+  console.log(regionUser);
+  //   region = region === 'AMERICAS' ? 'north-america' : region;
+  const [userRegion, setUserRegion] = useState(region);
+  const [memberConnection, setMemberConnection] = useState([]);
+  const [deleteConnect, setDeleteConnect] = useState([]);
+  const [hideEvents, setHideEvents] = useState();
+
+  useEffect(() => {
+    fetchProfile();
+  }, []);
+
+  useEffect(() => {
+    setUserRegion(region);
+  }, [profile]);
+
+  useFocusEffect(
+    useCallback(() => {
+      fetchEventRegion({
+        region: userRegion,
+      });
+      return () => {
+        cleanEventRegion();
+      };
+    }, []),
   );
 
   useFocusEffect(
@@ -105,92 +168,125 @@ const HomeCommunity = props => {
     }, []),
   );
 
-    useFocusEffect(
-      useCallback(() => {
-        const fetchAllPillarMemberContentAsync = async () => {
-          let token = await getAsyncStorage(JWT_TOKEN);
-          let userID = decodeUserID(token);
-          await fetchAllPillarMemberContent(pillarId);
-        };
-        fetchAllPillarMemberContentAsync();
-      }, [isFocused]),
-    );
-
-  useEffect(() => {
-    const fetchAllCommunityMemberAsync = async () => {
-      await fetchAllCommunityMember({
-        s: '',
-        sort: 'Desc',
-      });
-    };
-    fetchAllCommunityMemberAsync();
-
-    return () => {
-      cleanCommunityMember();
-    };
-  }, []);
-
   useFocusEffect(
     useCallback(() => {
-      const fetchAllUsersAsync = async () => {
-        await fetchAllUsers({
-          sort: 'ASC',
+      const fetchAllCommunityMemberAsync = async () => {
+        await fetchAllCommunityMember({
+          s: '',
+          sort: 'Desc',
+          region: regionUser,
         });
       };
-      fetchAllUsersAsync();
+      fetchAllCommunityMemberAsync();
 
       return () => {
-        cleanUser();
+        cleanCommunityMember();
       };
-    }, [isFocused]),
+    }, []),
   );
 
   useEffect(() => {
-    setMemberConnection(users);
-  }, [users]);
+    setMemberConnection(communityMembers);
+    setDeleteConnect(communityMembers);
+  }, [communityMembers]);
+
+  const connectMemberByMemberID = async (memberID, index) => {
+    const response = await connectMemberByIdentifier({member_id: memberID});
+    if (response?.payload?.code === 200) {
+      let items = [...memberConnection];
+      let item = {...items[index]};
+      item.connection = true;
+      items[index] = item;
+      setMemberConnection(items);
+      ToastMessage.show('You have successfully connected.');
+    } else {
+      //   toast.closeAll();
+      ToastMessage.show(response?.payload?.response);
+    }
+  };
+
+  //   const deleteMemberByMemberID = async (memberID, index) => {
+  //     const response = await deleteMemberByIdentifier({member_id: memberID});
+  //     if (response?.payload?.code === 200) {
+  //       let items = [...deleteConnect];
+  //       let item = {...items[index]};
+  //       item.connection = true;
+  //       items[index] = item;
+  //       setDeleteConnect(items);
+  //       fetchAllCommunityMember({
+  //         s: '',
+  //         sort: 'Desc',
+  //         region: regionUser,
+  //       });
+  //       ToastMessage.show('You have successfully deleted.');
+  //     } else {
+  //       toast.closeAll();
+  //       ToastMessage.show(response?.payload?.response);
+  //     }
+  //   };
 
   const _renderItem = ({item, index}) => {
-    return (
-      <View style={[styles.bottomWrapper, styles.shadowProp]} key={index}>
-        <TouchableOpacity
-          onPress={() => navigation.navigate('OthersAccount', {id: item.ID})}>
-          <Image
-            source={{uri: item.avatar}}
-            style={{
-              width: '100%',
-              height: 83,
-              borderRadius: 10,
-            }}
-          />
-          <View style={{padding: 10, paddingBottom: 20}}>
-            <Text
-              style={{
-                fontSize: 10,
-                fontFamily: Typography.FONT_SF_SEMIBOLD,
-                color: '#030303',
-              }}>
-              {item?.user_meta?.first_name} {item?.user_meta?.last_name}
-            </Text>
-            <Text style={{fontSize: 6, color: '#030303', marginTop: 5}}>
-              {item?.registered_date}
-              {'\n'}
-              {'\n'}
-              {item?.user_meta?.Title}
-            </Text>
-          </View>
-        </TouchableOpacity>
+    let user = item?.user_meta?.region;
+    if (typeof user === 'undefined' || user === 'null') {
+      user = ' ';
+    } else {
+      user = item?.user_meta?.region[0];
+    }
 
-        <View style={styles.chatIcon}>
-          {/* { !memberConnection[index]?.connection && (
-            <TouchableOpacity onPress={() => navigation.navigate('People')}>
-              <Ionicons name="add-circle" size={20} color="#B2B3B9" />
-            </TouchableOpacity>
-          )}
-          { memberConnection[index]?.connection && (
+    return (
+      <>
+        <View style={[styles.bottomWrapper, styles.shadowProp]} key={index}>
+          <TouchableOpacity
+            onPress={() => navigation.navigate('OthersAccount', {id: item.ID})}>
+            <Image
+              source={{uri: item.avatar}}
+              style={{
+                width: '100%',
+                height: 83,
+                borderRadius: 10,
+              }}
+            />
+            <View style={{padding: 10, paddingBottom: 20}}>
+              <Text
+                style={{
+                  fontSize: 10,
+                  fontFamily: Typography.FONT_SF_SEMIBOLD,
+                  color: '#030303',
+                }}>
+               {item?.display_name}
+              </Text>
+              <Text style={{fontSize: 8, color: '#030303', marginTop: 3}}>
+                {item?.registered_date}
+                {'\n'}
+                {'\n'}
+				{/* {item?.user_meta?.Title === undefined
+                  ? item?.user_meta?.title
+                  : item?.user_meta?.Title} */}
+                {/* {item?.user_meta?.Title} */}
+              </Text>
+            </View>
+          </TouchableOpacity>
+
+          <View style={styles.chatIcon}>
+            {!memberConnection[index]?.connection && (
+              <TouchableOpacity
+                onPress={async () => {
+                  connectMemberByMemberID(item.ID, index);
+
+                  await analytics().logEvent('dashboard', {
+                    item: item?.user_meta?.first_name,
+                    description: 'Dashboard Member Connection',
+                  });
+                }}>
+                <Ionicons name="add-circle" size={20} color="#B2B3B9" />
+              </TouchableOpacity>
+            )}
+            {memberConnection[index]?.connection && (
               <Material name="check-circle" size={20} color="#14A2E2" />
-            )} */}
+            )}
+          </View>
         </View>
-      </View>
+      </>
     );
   };
 
@@ -253,46 +349,60 @@ const HomeCommunity = props => {
     const pillarname = 'Growth Community';
     const image = require('../../../assets/img/Rectangle2.png');
     return (
-      <View style={styles.topWrapper} key={index}>
-        <TouchableOpacity
-          onPress={() =>
-            navigation.navigate('EventDetail', {
-              id: item.ID,
-              title: pillarname,
-              image: image,
-            })
-          }>
-          <ImageBackground
-            style={{
-              width: '100%',
-              height: '100%',
-              borderRadius: 20,
-            }}
-            source={require('../../../assets/img/Rectangle2.png')}>
-            <View
-              style={{
-                width: 50,
-                height: 50,
-                marginTop: 10,
-                marginLeft: 200,
-                backgroundColor: '#EBECF0',
-                borderRadius: 10,
-                padding: 5,
-                alignItems: 'center',
-              }}>
-              <Text style={{color: '#030303'}}>{date[0]}</Text>
-              <Text style={{color: '#030303'}}>{date[1]}</Text>
-            </View>
+      <>
+        {item?.pillar_categories[0]?.parent === 0 ||
+          (item?.pillar_categories[0]?.parent === GROWTH_COMMUNITY_ID && (
+            <View style={styles.topWrapper} key={index}>
+              <TouchableOpacity
+                onPress={async () => {
+                  navigation.navigate('EventDetail', {
+                    id: item.ID,
+                    title: pillarname,
+                    image: image,
+                  });
 
-            <View style={styles.header}>
-              <Text style={styles.headingText1}>{item.title}</Text>
-              <Text style={styles.headingText2}>
-                {organizer} {description}
-              </Text>
+                  await analytics().logEvent(item?.title, {
+                    id: item.ID,
+                    item: item.title,
+                  });
+                }}>
+                {setHideEvents(
+                  item?.pillar_categories[0]?.parent === 0 ||
+                    item?.pillar_categories[0]?.parent === GROWTH_COMMUNITY_ID,
+                )}
+                <ImageBackground
+                  style={{
+                    width: '100%',
+                    height: '100%',
+                    borderRadius: 20,
+                  }}
+                  source={require('../../../assets/img/Rectangle2.png')}>
+                  <View
+                    style={{
+                      width: 50,
+                      height: 50,
+                      marginTop: 10,
+                      marginLeft: 200,
+                      backgroundColor: '#EBECF0',
+                      borderRadius: 10,
+                      padding: 5,
+                      alignItems: 'center',
+                    }}>
+                    <Text style={{color: '#030303'}}>{date[0]}</Text>
+                    <Text style={{color: '#030303'}}>{date[1]}</Text>
+                  </View>
+
+                  <View style={styles.header}>
+                    <Text style={styles.headingText1}>{item.title}</Text>
+                    <Text style={styles.headingText2}>
+                      {organizer} {description}
+                    </Text>
+                  </View>
+                </ImageBackground>
+              </TouchableOpacity>
             </View>
-          </ImageBackground>
-        </TouchableOpacity>
-      </View>
+          ))}
+      </>
     );
   };
 
@@ -452,12 +562,13 @@ const HomeCommunity = props => {
         showsVerticalScrollIndicator={false}
         style={{backgroundColor: Colors.PRIMARY_BACKGROUND_COLOR}}>
         <View style={styles.container}>
-          {pillarEvents?.length !== 0 &&
-            pillarEvents !== null &&
-            pillarEvents !== false && (
+          {regionEvents?.length !== 0 &&
+            regionEvents !== null &&
+            regionEvents !== undefined && (
               <View style={styles.top}>
-                <Text style={styles.title}>Growth Community Events</Text>
-
+                {hideEvents && (
+                  <Text style={styles.title}>Growth Community Events</Text>
+                )}
                 <View
                   style={{
                     display: 'flex',
@@ -466,19 +577,28 @@ const HomeCommunity = props => {
                   <FlatList
                     horizontal
                     showsHorizontalScrollIndicator={false}
-                    data={pillarEvents}
+                    data={regionEvents}
                     renderItem={item => _renderTopItem(item, navigation)}
                   />
                 </View>
               </View>
             )}
 
-          {pillarMemberContentLoading && (
+          {pillarPOELoading && (
             <View style={{marginTop: 40}}>
               <Loading />
             </View>
           )}
-
+          {memberConnectionLoading && (
+            <View style={{marginTop: 40}}>
+              <Loading />
+            </View>
+          )}
+          {deleteConnectionLoading && (
+            <View style={{marginTop: 40}}>
+              <Loading />
+            </View>
+          )}
           {pillarPOEs?.length !== 0 && (
             <View style={styles.middle}>
               <Text style={styles.title}>Points of Engagement</Text>
@@ -521,19 +641,22 @@ const HomeCommunity = props => {
                 />
               </View>
             )}
-          {users !== undefined && users !== null && users !== false && (
-            <View style={styles.bottom}>
-              <Text style={styles.title}>Welcome New Members</Text>
-              <View>
-                <FlatList
-                  horizontal
-                  showsHorizontalScrollIndicator={false}
-                  data={communityMembers}
-                  renderItem={_renderItem}
-                />
+          {communityMembers !== undefined &&
+            communityMembers?.length !== 0 &&
+            communityMembers !== null &&
+            communityMembers !== false && (
+              <View style={styles.bottom}>
+                <Text style={styles.title}>Welcome New Members</Text>
+                <View>
+                  <FlatList
+                    horizontal
+                    showsHorizontalScrollIndicator={false}
+                    data={communityMembers}
+                    renderItem={_renderItem}
+                  />
+                </View>
               </View>
-            </View>
-          )}
+            )}
 
           {/* external_links */}
 

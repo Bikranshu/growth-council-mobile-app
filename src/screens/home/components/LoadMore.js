@@ -12,9 +12,10 @@ import {
 } from 'react-native';
 import moment from 'moment';
 import ToastMessage from '../../../shared/toast';
+import {Toast, useToast} from 'native-base';
 
 import {CommonStyles, Colors, Typography} from '../../../theme';
-import { GROWTH_COMMUNITY_ID, GROWTH_CONTENT_ID } from '../../../constants';
+import {GROWTH_COMMUNITY_ID, GROWTH_CONTENT_ID} from '../../../constants';
 
 const CouncilAllDetail = props => {
   const {
@@ -73,9 +74,7 @@ const CouncilAllDetail = props => {
     return (
       <View>
         <TouchableOpacity
-          onPress={() =>
-            ToastMessage.show('Please login to review further.')
-          }>
+          onPress={() => ToastMessage.show('Please login to review further.')}>
           <View style={styles.eventCard} key={index}>
             <View style={[styles.eventTheme, {borderColor: backgroundColor}]} />
             <View style={styles.eventDetails}>
@@ -99,14 +98,22 @@ const CouncilAllDetail = props => {
       </View>
     );
   };
+  const toast = useToast();
+  const id = 'test-toast';
 
   const _renderPOE = ({item, index}) => {
     return (
       <View>
         <TouchableOpacity
-          onPress={() =>
-            ToastMessage.show('Please login to review further.')
-          }>
+          onPress={() => {
+            if (!toast.isActive(id)) {
+              toast.show({
+                id,
+                title: 'Please login to review further.',
+              });
+            }
+            // ToastMessage.show('Please login to review further.')
+          }}>
           <View style={styles.poeCard} key={index}>
             <View style={[styles.poeTheme, styles.shadowProp]}>
               <Image

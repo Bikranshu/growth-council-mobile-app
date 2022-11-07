@@ -3,8 +3,6 @@ import {createStackNavigator, TransitionPresets} from '@react-navigation/stack';
 import {Platform} from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
-const {Navigator, Screen} = createStackNavigator();
-
 import SignUpNextScreen from '../screens/auth/SignUpNext';
 import JourneyScreen from '../screens/auth/Journey';
 
@@ -39,7 +37,7 @@ import CoachingSessionDetailScreen from '../screens/coachingSession';
 import SelfLearnDetailScreen from '../screens/selfLearn';
 import PDFDetailScreen from '../screens/selfLearn/pdf';
 import SelfAssessment from '../screens/coachingSession/component/selfAssessment';
-
+// import CountryPopupScreen from '../screens/auth/CountryPopup';
 import MainHeader from '../shared/header/MainHeader';
 import UserListScreen from '../screens/chat/UserList';
 import PeopleScreen from '../screens/people';
@@ -50,8 +48,12 @@ import SessionCompleted from '../screens/coachingSession/component/sessionComple
 import DrawerNavigation from '../navigations/DrawerNavigation';
 import Header from '../shared/header/header';
 
-const AppStack = () => (
+import {GROWTH_COMMUNITY_ID} from '../constants';
+
+const {Navigator, Screen} = createStackNavigator();
+const AppStack = navigation => (
   <Navigator>
+    {/*    */}
     <Screen
       name="Drawer"
       component={DrawerNavigation}
@@ -111,6 +113,21 @@ const AppStack = () => (
         ),
       })}
     />
+    {/* <Screen
+      name="CountryPop"
+      component={CountryPopupScreen}
+      options={({route, navigation}) => ({
+        header: () => (
+          <SubHeader
+            title="CountryPopup"
+            image={require('../assets/img/appBG.png')}
+            navigation={navigation}
+            noDrawer={true}
+          />
+        ),
+      })}
+    /> */}
+
     <Screen
       name="selfAssessment"
       component={SelfAssessment}
@@ -218,7 +235,7 @@ const AppStack = () => (
         id: route?.params?.id,
         header: () => (
           <Header
-            title="Others Account"
+            title=""
             image={require('../assets/img/appBG.png')}
             navigation={navigation}
             noDrawer={true}
@@ -262,6 +279,7 @@ const AppStack = () => (
         header: ({navigation}) => (
           <SubHeader
             title="Growth Content"
+			
             image={require('../assets/img/best-practice-bg.png')}
             navigation={navigation}
             noDrawer
@@ -277,6 +295,7 @@ const AppStack = () => (
         header: () => (
           <SubHeader
             title="Growth Content"
+			id="Growth Content"
             image={require('../assets/img/best-practice-bg.png')}
             navigation={navigation}
             noDrawer
@@ -292,6 +311,7 @@ const AppStack = () => (
         header: () => (
           <SubHeader
             title="Growth Content"
+			id="Growth Content"
             image={require('../assets/img/best-practice-bg.png')}
             navigation={navigation}
             noDrawer
@@ -413,6 +433,8 @@ const AppStack = () => (
         pillarId: route?.params?.pillarId,
         header: () => (
           <SubHeader
+            subtitle={route?.params?.title}
+            id={GROWTH_COMMUNITY_ID}
             title={route?.params?.title}
             image={route?.params?.image}
             navigation={navigation}

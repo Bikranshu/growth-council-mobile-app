@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useRef} from 'react';
 import {
   Platform,
   Text,
@@ -10,6 +10,12 @@ import {
   Dimensions,
   useWindowDimensions,
 } from 'react-native';
+import {
+  useFocusEffect,
+  NavigationContainer,
+  useNavigationContainerRef,
+} from '@react-navigation/native';
+import analytics from '@react-native-firebase/analytics';
 import {Button} from 'native-base';
 import {Linking} from 'react-native';
 import HTMLView from 'react-native-htmlview';
@@ -140,11 +146,14 @@ const About = props => {
                 styles.plainButton,
                 {backgroundColor: Colors.SECONDARY_BUTTON_COLOR},
               ]}
-              onPress={() =>
+              onPress={async () => {
                 navigation.navigate('Gmail', {
                   title: 'Account Assistance',
-                })
-              }>
+                });
+                await analytics().logEvent('aboutGmail', {
+                  item: 'about',
+                });
+              }}>
               <Text style={[styles.buttonText, styles.plainButtonText]}>
                 Contact Us
               </Text>

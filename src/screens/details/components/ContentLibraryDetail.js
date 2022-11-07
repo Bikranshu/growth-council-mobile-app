@@ -22,6 +22,7 @@ import RNFetchBlob from 'react-native-blob-util';
 import BottomNav from '../../../layout/BottomLayout';
 import ArticleFeedbackCard from '../../../shared/card/ArticleFeedbackCard';
 import Footer from '../../../shared/footer';
+import analytics from '@react-native-firebase/analytics';
 import SearchHeader from '../../../shared/header/SearchHeader';
 import {Colors, CommonStyles} from '../../../theme';
 import Ionicons from 'react-native-vector-icons/Ionicons';
@@ -159,12 +160,16 @@ const ContentLibraryDetail = props => {
     };
     return (
       <TouchableOpacity
-        onPress={() =>
+        onPress={async () => {
+          await analytics().logEvent('ContentLibraryPDF', {
+            item: item?.file?.title,
+            description: 'pdf open from content library details page',
+          });
           navigation.navigate('pdf', {
             paramsFile: item?.file?.url,
             title: item?.file?.title,
-          })
-        }>
+          });
+        }}>
         <View style={styles.attachmentContainer}>
           <View style={{flex: 1, flexDirection: 'row'}}>
             <FontAwesomeIcon name="file-pdf-o" size={35} color="#9B9CA0" />
