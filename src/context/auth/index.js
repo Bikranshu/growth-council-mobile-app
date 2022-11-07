@@ -5,6 +5,7 @@ import uuid from 'react-native-uuid';
 import crashlytics from '@react-native-firebase/crashlytics';
 import auth from '@react-native-firebase/auth';
 import messaging from '@react-native-firebase/messaging';
+import {HOME_URL} from '../../constants';
 
 import {
   setAsyncStorage,
@@ -16,29 +17,42 @@ import {JWT_TOKEN, API_URL, USER_NAME, USER_AVATAR} from '../../constants';
 
 export const AuthContext = createContext({});
 
-export const AuthProvider = ({children}) => {
+export const AuthProvider = props => {
+  const {navigation, children} = props;
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState(null);
   const [loggedIn, setLoggedIn] = useState(false);
   const [emailId, setEmailId] = useState('');
+  const [userCountry, setUserCountry] = useState('');
 
   useEffect(() => {
     (async () => {
       const token = await getAsyncStorage(JWT_TOKEN);
+
       if (token) {
         setLoggedIn(true);
-      } else {
         await isTokenExpired(token);
+      } else {
         setLoggedIn(false);
       }
     })();
   });
 
+  // check for token expiration
   const isTokenExpired = async token => {
     const decoded = jwt_decode(token);
-    if (decoded.exp < Date.now() / 1000) {
-  
-      await signOut();
+
+    if (decoded?.iss !== HOME_URL) {
+      await clearAsyncStorage(JWT_TOKEN);
+      await clearAsyncStorage(USER_NAME);
+      await clearAsyncStorage(USER_AVATAR);
+      setLoggedIn(false);
+    } else if (decoded.exp < Date.now() / 1000) {
+      await clearAsyncStorage(JWT_TOKEN);
+      await clearAsyncStorage(USER_NAME);
+      await clearAsyncStorage(USER_AVATAR);
+      setLoggedIn(false);
+    } else {
     }
   };
 
@@ -122,6 +136,8 @@ export const AuthProvider = ({children}) => {
                 responseType: 'json',
               },
             );
+            console.log('userCountry', response?.data?.region);
+            setUserCountry(response?.data?.region);
 
             const messageToken = await messaging().getToken();
             await postToAPI(response.data.user_email, messageToken);
@@ -134,6 +150,7 @@ export const AuthProvider = ({children}) => {
                   JWT_TOKEN: response.data.token,
                   USER_NAME: response.data.user_display_name,
                   USER_AVATAR: response.data.avatar,
+                  USER_REGION: response.data.region,
                 }),
               );
 

@@ -12,18 +12,22 @@ import {
   Modal,
   SafeAreaView,
   StatusBar,
+  Pressable,
 } from 'react-native';
 
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import AntDesign from 'react-native-vector-icons/AntDesign';
 import Material from 'react-native-vector-icons/MaterialIcons';
 import {Picker} from '@react-native-picker/picker';
-import {useToast} from 'native-base';
+import {Button, useToast} from 'native-base';
+import analytics from '@react-native-firebase/analytics';
 import {useIsFocused, useFocusEffect} from '@react-navigation/native';
 import {Colors, Typography} from '../../../theme';
 import ToastMessage from '../../../shared/toast';
 import {Searchbar} from 'react-native-paper';
 import BottomNav from '../../../layout/BottomLayout';
 import Loading from '../../../shared/loading';
+import {PRACTICE_COLOR} from '../../../theme/colors';
 
 const win = Dimensions.get('window');
 const contentContainerWidth = win.width - 30;
@@ -31,6 +35,7 @@ const contentContainerWidth = win.width - 30;
 const People = props => {
   const {
     navigation,
+    route,
     users,
     userLoading,
     userError,
@@ -43,47 +48,90 @@ const People = props => {
     connectMemberByIdentifier,
     cleanConnectMember,
 
+    deleteConnections,
+    deleteConnectionLoading,
+    deleteConnectionError,
+    deleteMemberByIdentifier,
+    cleanDeleteMember,
+
     expertise,
     expertiseLoading,
     expertiseError,
     fetchAllExpertises,
     cleanExperties,
+
+    region,
+    regionLoading,
+    regionError,
+    fetchAllRegions,
+    cleanRegion,
+
+    profile,
+    profileLoading,
+    profileError,
   } = props;
+
+  let profileRegion = profile?.user_meta?.region;
+  if (
+    typeof profileRegion === 'undefined' ||
+    profileRegion === null ||
+    profileRegion === ''
+  ) {
+    profileRegion = 'ALL REGION';
+  } else {
+    profileRegion = profile?.user_meta?.region[0];
+  }
 
   const toast = useToast();
   const isFocused = useIsFocused();
   const [category, setCategory] = useState('');
   const [account, setAccount] = useState('');
-  const [region, setRegion] = useState('');
+  const [mobileRegion, setMobileRegion] = useState(profileRegion);
   const [searchKey, setSearchKey] = useState('');
   const [sorting, setSorting] = useState('ASC');
   const [memberConnection, setMemberConnection] = useState([]);
+  const [deleteConnect, setDeleteConnect] = useState([]);
+  const [modalVisible, setModalVisible] = useState(false);
+  const [deleteId, setDeleteId] = useState();
 
   useFocusEffect(
     useCallback(() => {
-      const fetchAllUsersAsync = async () => {
-        await fetchAllUsers({
-          s: searchKey,
-          sort: sorting,
-          expertise_areas: category,
-          account: account,
-          region: region,
-        });
-      };
-      fetchAllUsersAsync();
+      //   const fetchAllUsersAsync = async () => {
+      fetchAllUsers({
+        s: searchKey,
+        sort: sorting,
+        expertise_areas: category,
+        account: account,
+        region: mobileRegion,
+      });
+      //   };
+      //   fetchAllUsersAsync();
       return () => {
         cleanUser();
       };
-    }, []),
+    }, [isFocused]),
   );
 
   useEffect(() => {
     setMemberConnection(users);
+    setDeleteConnect(users);
   }, [users]);
 
   useEffect(() => {
     fetchAllExpertises();
   }, []);
+
+  useFocusEffect(
+    useCallback(() => {
+      fetchAllRegions();
+    }, [isFocused]),
+  );
+
+  useEffect(() => {
+    setMobileRegion(mobileRegion);
+  }, [region]);
+
+  //   console.log(region.region_options);
 
   const connectMemberByMemberID = async (memberID, index) => {
     const response = await connectMemberByIdentifier({member_id: memberID});
@@ -98,7 +146,7 @@ const People = props => {
         sort: sorting,
         expertise_areas: category,
         account: account,
-        region: region,
+        region: mobileRegion,
       });
       ToastMessage.show('You have successfully connected.');
     } else {
@@ -107,18 +155,34 @@ const People = props => {
     }
   };
 
-  const countries = {
-    Region: 'Region',
-    AMERICAS: 'AMERICAS',
-    APAC: 'APAC',
-    MEASA: 'MEASA',
+  const deleteMemberByMemberID = async (memberID, index) => {
+    const response = await deleteMemberByIdentifier({member_id: memberID});
+    if (response?.payload?.code === 200) {
+      let items = [...deleteConnect];
+      let item = {...items[index]};
+      item.connection = true;
+      items[index] = item;
+      setDeleteConnect(items);
+      fetchAllUsers({
+        s: searchKey,
+        sort: sorting,
+        expertise_areas: category,
+        account: account,
+        region: mobileRegion,
+      });
+      ToastMessage.show('You have successfully deleted.');
+    } else {
+      toast.closeAll();
+      ToastMessage.show(response?.payload?.response);
+    }
   };
 
-  const pillar = {
-    'Account Type': 'Account Type',
-    'Council Member': 'Council Member',
-    'Associate Member': 'Associate Member',
-  };
+  let memberExpertise = expertise?.data?.choices;
+  if (typeof memberExpertise === 'undefined') {
+    memberExpertise = 'Expertise Area';
+  } else {
+    memberExpertise = expertise?.data?.choices;
+  }
 
   const _renderItem = ({item, index}) => {
     return (
@@ -135,40 +199,68 @@ const People = props => {
             }}
           />
 
-          <View style={{margin: 10, width: '55%'}}>
+          <View style={{margin: 10, width: '50%'}}>
             <Text
               style={{
                 fontSize: 14,
                 fontFamily: Typography.FONT_SF_REGULAR,
                 color: '#222B45',
               }}>
-              {item?.user_meta?.first_name} {item?.user_meta?.last_name}
+              {item?.display_name}
             </Text>
-            <Text style={{fontSize: 12, color: '#222B45'}}>
+            {/* <Text style={{fontSize: 11, color: '#222B45'}}>
               {item?.user_email}
-            </Text>
-            <Text style={{fontSize: 12, color: '#222B45'}}>
-              {item?.company}
+            </Text> */}
+            <Text style={{fontSize: 11, color: '#222B45', marginTop: 5}}>
+              {item?.user_meta?.Title === undefined
+                ? item?.user_meta?.title
+                : item?.user_meta?.Title}
             </Text>
           </View>
           {!memberConnection[index]?.connection && (
-            <TouchableOpacity
-              onPress={() => connectMemberByMemberID(item.ID, index)}>
-              <Ionicons
-                name="add-circle"
-                size={30}
-                color="#B2B3B9"
-                style={{marginTop: 25}}
-              />
-            </TouchableOpacity>
+            <View>
+              <TouchableOpacity
+                onPress={async () => {
+                  connectMemberByMemberID(item.ID, index);
+                  await analytics().logEvent('Member', {
+                    item: item?.user_meta?.first_name,
+                    description: 'Member Connection',
+                  });
+                }}>
+                <Ionicons
+                  name="add-circle"
+                  size={30}
+                  color="#B2B3B9"
+                  style={{marginTop: 25}}
+                />
+              </TouchableOpacity>
+            </View>
           )}
           {memberConnection[index]?.connection && (
-            <Material
-              name="check-circle"
-              size={30}
-              color="#14A2E2"
-              style={{marginTop: 25}}
-            />
+            <View style={{flexDirection: 'row'}}>
+              <Material
+                name="check-circle"
+                size={25}
+                color="#14A2E2"
+                style={{marginTop: 25, marginRight: 5}}
+              />
+
+              <TouchableOpacity
+                // onPress={async () => {
+                //   deleteMemberByMemberID(item.ID, index);
+                // }}
+
+                onPress={() => {
+                  setModalVisible(true), setDeleteId(item.ID);
+                }}>
+                <AntDesign
+                  name="deleteuser"
+                  size={25}
+                  color="#14A2E2"
+                  style={{marginRight: 15, marginTop: 25}}
+                />
+              </TouchableOpacity>
+            </View>
           )}
         </View>
       </TouchableOpacity>
@@ -178,8 +270,6 @@ const People = props => {
   const [pickerVisible, setPickerVisible] = useState(false);
   const [accountVisible, setAccountVisible] = useState(false);
   const [regionVisible, setRegionVisible] = useState(false);
-
-  console.log({users});
 
   return (
     <SafeAreaView style={{flex: 1}}>
@@ -205,10 +295,9 @@ const People = props => {
                   sort: sorting,
                   expertise_areas: category,
                   account: account,
-                  region: region,
+                  region: mobileRegion,
                 });
               }}
-
             />
           </View>
           <View style={styles.iconWrapper}>
@@ -258,12 +347,13 @@ const People = props => {
                 borderTopRightRadius: 10,
               }}>
               <Text style={{fontSize: 11, color: '#222B45'}}>
-                {region ? region : 'Region'}
+                {mobileRegion}
               </Text>
             </TouchableOpacity>
           </View>
         </View>
         {userLoading && <Loading />}
+
         <ScrollView
           contentContainerStyle={{
             flexGrow: 1,
@@ -273,26 +363,15 @@ const People = props => {
           }}>
           <View style={{marginTop: 10}}>
             {memberConnectionLoading && <Loading />}
-            {users === null && users === [] ? (
-              <View style={{justifyContent: 'center', alignItems: 'center'}}>
-                <Text
-                  style={{
-                    justifyContent: 'center',
-                    fontSize: 16,
-                    alignItems: 'center',
-                    color: 'black',
-                  }}>
-                  No User{' '}
-                </Text>
-              </View>
-            ) : (
-              <FlatList
-                vertical
-                showsVerticalScrollIndicator={false}
-                data={users}
-                renderItem={_renderItem}
-              />
-            )}
+            {deleteConnectionLoading && <Loading />}
+
+            <FlatList
+              vertical
+              showsVerticalScrollIndicator={false}
+              data={users}
+              renderItem={_renderItem}
+            />
+            {/* )} */}
           </View>
           {/* <Footer /> */}
         </ScrollView>
@@ -338,14 +417,14 @@ const People = props => {
                     sort: sorting,
                     expertise_areas: itemValue,
                     account: account,
-                    region: region,
+                    region: mobileRegion,
                   });
                 }}>
-                {Object.keys(expertise).map(key => {
+                {Object.keys(memberExpertise).map(key => {
                   return (
                     <Picker.Item
-                      label={expertise[key]}
-                      value={expertise[key]}
+                      label={memberExpertise[key]}
+                      value={memberExpertise[key]}
                       key={key}
                       style={{fontSize: 14}}
                     />
@@ -397,15 +476,25 @@ const People = props => {
                     sort: sorting,
                     expertise_areas: category,
                     account: itemValue,
-                    region: region,
+                    region: mobileRegion,
                   });
                 }}>
-                {Object.keys(pillar).map(key => {
+                {/* {Object.keys(pillar).map(key => {
                   return (
                     <Picker.Item
                       label={pillar[key]}
                       value={pillar[key]}
                       key={key}
+                      style={{fontSize: 14}}
+                    />
+                  );
+                })} */}
+                {expertise?.data?.account_type?.map(item => {
+                  return (
+                    <Picker.Item
+                      label={item?.account_type}
+                      value={item?.account_type}
+                      //   key={key}
                       style={{fontSize: 14}}
                     />
                   );
@@ -445,11 +534,11 @@ const People = props => {
             </TouchableOpacity>
             <View style={{marginBottom: 40}}>
               <Picker
-                selectedValue={region}
+                selectedValue={mobileRegion}
                 mode="dropdown"
                 itemTextStyle={{fontSize: 12}}
                 onValueChange={async itemValue => {
-                  setRegion(itemValue);
+                  setMobileRegion(itemValue);
 
                   await fetchAllUsers({
                     s: searchKey,
@@ -459,17 +548,73 @@ const People = props => {
                     region: itemValue,
                   });
                 }}>
-                {Object.keys(countries).map(key => {
+                {region?.region_options?.map(item => {
                   return (
                     <Picker.Item
-                      label={countries[key]}
-                      value={countries[key]}
-                      key={key}
+                      label={item?.mobile_region}
+                      value={item?.mobile_region}
+                      //   key={key}
                       style={{fontSize: 14}}
                     />
                   );
                 })}
               </Picker>
+            </View>
+          </View>
+        </View>
+      </Modal>
+
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={modalVisible}
+        onRequestClose={() => {
+          //   Alert.alert('Modal has been closed.');
+          setModalVisible(!modalVisible);
+        }}>
+        <View style={styles.centeredView}>
+          <View style={styles.modalView}>
+            {/* <View
+              style={{
+                width: 70,
+                height: 70,
+                backgroundColor: '#E5E4E2',
+                borderRadius: 50,
+              }}>
+              <Image
+                source={require('../../../assets/img/bin.png')}
+                style={{
+                  width: 60,
+                  height: 40,
+                  marginTop: 'auto',
+                  marginBottom: 'auto',
+                  marginRight: 'auto',
+                }}
+                resizeMode="contain"
+              />
+            </View> */}
+
+            {/* <Text style={styles.topText}>Are you sure? {deleteId}</Text> */}
+            <Text style={styles.modalText}>
+              Do you want to delete this member from your connection?
+            </Text>
+
+            <View style={{flexDirection: 'row'}}>
+              <Button
+                type="button"
+                style={{marginRight: 10}}
+                onPress={() => setModalVisible(!modalVisible)}>
+                Cancel
+              </Button>
+              <Button
+                type="button"
+                onPress={async () => {
+                  deleteMemberByMemberID(deleteId),
+                    setModalVisible(!modalVisible);
+                }}
+                style={{marginLeft: 10, backgroundColor: '#FF5733'}}>
+                Confirm
+              </Button>
             </View>
           </View>
         </View>
@@ -522,6 +667,56 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: '#7E7F84',
   },
+  //delete modal
+  centeredView: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: 22,
+  },
+  modalView: {
+    margin: 20,
+    backgroundColor: 'white',
+    borderRadius: 20,
+    padding: 35,
+    alignItems: 'center',
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5,
+  },
+  button: {
+    borderRadius: 20,
+    padding: 10,
+    elevation: 2,
+  },
+  buttonOpen: {
+    backgroundColor: '#F194FF',
+  },
+  buttonClose: {
+    backgroundColor: '#2196F3',
+  },
+  textStyle: {
+    color: 'white',
+    fontWeight: 'bold',
+    textAlign: 'center',
+  },
+  //   topText: {
+  //     marginBottom: 10,
+  //     marginTop: 10,
+  //     textAlign: 'center',
+  //     fontSize: 20,
+  //     color: 'black',
+  //   },
+  modalText: {
+    marginBottom: 15,
+    textAlign: 'center',
+    fontSize: 16,
+  },
   shadowProp: {
     shadowColor: '#000',
     shadowOffset: {
@@ -536,9 +731,9 @@ const styles = StyleSheet.create({
   loading1: {
     top: 0,
     left: 0,
-    right: 0,
+    right: 50,
     bottom: 0,
-    justifyContent: 'center',
+    // justifyContent: 'center',
     alignItems: 'center',
     position: 'absolute',
     zIndex: 1011,

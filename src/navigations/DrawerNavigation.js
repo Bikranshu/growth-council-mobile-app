@@ -300,9 +300,12 @@ const DrawerNavigation = () => {
           title: null,
           drawerIcon: () => null,
           drawerItemStyle: {height: 0},
-          header: ({navigation}) => (
+          header: ({navigation, route}) => (
             <SubHeader
               title="Chat"
+              name={route?.params?.name}
+              id={route?.params?.id}
+              subtitle="CommunityDetail"
               image={require('../assets/img/appBG.png')}
               navigation={navigation}
             />
@@ -319,9 +322,12 @@ const DrawerNavigation = () => {
           title: null,
           drawerIcon: () => null,
           drawerItemStyle: {height: 0},
-          header: ({navigation}) => (
+          header: ({navigation, route}) => (
             <SubHeader
               title="Growth Council Members"
+              name={route?.params?.name}
+              id={route?.params?.id}
+              subtitle="CommunityDetail"
               image={require('../assets/img/appBG.png')}
               navigation={navigation}
             />

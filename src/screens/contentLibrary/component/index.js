@@ -12,9 +12,12 @@ import {
   ImageBackground,
   StatusBar,
   Dimensions,
+  Keyboard,
+  TouchableWithoutFeedback,
 } from 'react-native';
 import {Searchbar} from 'react-native-paper';
 import {Colors} from '../../../theme';
+import analytics from '@react-native-firebase/analytics';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import Footer from '../../../shared/footer';
 import BottomNav from '../../../layout/BottomLayout';
@@ -57,33 +60,36 @@ const Content = props => {
     return (
       <>
         {/* {item?.children_count !== 0 && ( */}
-          <TouchableOpacity
-            key={index}
-            style={[styles.content, styles.shadowProp]}
-            onPress={() => {
-              if (item?.count !== 0) {
-                navigation.navigate('LibraryDetail', {
-                  resources: item?.term_id,
-                  itemname: item?.name,
-                });
-              } else {
-                navigation.navigate('ContentDetail', {
-                  resourceId: item?.term_id,
-                  resourcesName: item?.name,
-                });
-              }
-            }}>
-            <>
-              <Image
-                style={{
-                  width: '100%',
-                  height: 170,
-                  borderTopLeftRadius: 14,
-                  borderTopRightRadius: 14,
-                }}
-                source={{uri: item?.image}}
-              />
-              {/* <View style={styles.contentWrapper}>
+        <TouchableOpacity
+          key={index}
+          style={[styles.content, styles.shadowProp]}
+          onPress={async () => {
+            await analytics().logEvent('ContentLibrary', {
+              item: 'Content Library list',
+            });
+            if (item?.count !== 0) {
+              navigation.navigate('LibraryDetail', {
+                resources: item?.term_id,
+                itemname: item?.name,
+              });
+            } else {
+              navigation.navigate('ContentDetail', {
+                resourceId: item?.term_id,
+                resourcesName: item?.name,
+              });
+            }
+          }}>
+          <>
+            <Image
+              style={{
+                width: '100%',
+                height: 170,
+                borderTopLeftRadius: 14,
+                borderTopRightRadius: 14,
+              }}
+              source={{uri: item?.image}}
+            />
+            {/* <View style={styles.contentWrapper}>
                 <Text style={{color: 'black'}}>
                   {item?.children_count === 0
                     ? item?.count
@@ -112,19 +118,19 @@ const Content = props => {
                   </Text>
                 )}
               </View> */}
-              <View style={styles.wrapper}>
-                <HTMLView
-                  value={item?.name}
-                  textComponentProps={{
-                    style: {
-                      color: 'black',
-                      fontWeight: '600',
-                    },
-                  }}
-                />
-              </View>
-            </>
-          </TouchableOpacity>
+            <View style={styles.wrapper}>
+              <HTMLView
+                value={item?.name}
+                textComponentProps={{
+                  style: {
+                    color: 'black',
+                    fontWeight: '600',
+                  },
+                }}
+              />
+            </View>
+          </>
+        </TouchableOpacity>
         {/* )} */}
       </>
     );
@@ -160,18 +166,22 @@ const Content = props => {
             }}>
             <Ionicons name="chevron-back-outline" size={30} color="#B2B3B9" />
           </TouchableOpacity>
-          <Searchbar
-            style={styles.input}
-            inputStyle={{
-              height: 38,
-              paddingVertical: 0,
-            }}
-            placeholder="Search"
-            placeholderTextColor="#B2B3B9"
-            iconColor="#B2B3B9"
-            value={search}
-            onChangeText={text => searchFilterFunction(text)}
-          />
+          <TouchableWithoutFeedback
+            onPress={Keyboard.dismiss}
+            accessible={false}>
+            <Searchbar
+              style={styles.input}
+              inputStyle={{
+                height: 38,
+                paddingVertical: 0,
+              }}
+              placeholder="Search"
+              placeholderTextColor="#B2B3B9"
+              iconColor="#B2B3B9"
+              value={search}
+              onChangeText={text => searchFilterFunction(text)}
+            />
+          </TouchableWithoutFeedback>
         </View>
 
         {/* <View

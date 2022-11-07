@@ -12,7 +12,7 @@ import SignUpScreen from '../screens/auth/SignUp';
 import TermScreen from '../screens/terms';
 import PrivacyScreen from '../screens/privacy/pivacy';
 import EmailScreen from '../screens/email/email';
-
+// import CountryPopupScreen from '../screens/auth/CountryPopup';
 import OptionHeader from '../shared/header/optionHeader';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
@@ -102,6 +102,16 @@ const AuthStack = () => {
           gestureDirection: 'horizontal-inverted',
         })}
       />
+      {/* <Screen
+        name="CountryPop"
+        component={CountryPopupScreen}
+        options={({route, navigation}) => ({
+          headerShown: false,
+          ...TransitionPresets.RevealFromBottomAndroid,
+          gestureDirection: 'horizontal-inverted',
+        })}
+      /> */}
+
       <Screen
         name="Forgot"
         component={ForgotScreen}

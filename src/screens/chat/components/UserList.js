@@ -19,7 +19,7 @@ import {
   useIsFocused,
   useNavigation,
 } from '@react-navigation/native';
-
+import analytics from '@react-native-firebase/analytics';
 import {CommonStyles, Colors, Typography} from '../../../theme';
 import {getAsyncStorage} from '../../../utils/storageUtil';
 import {JWT_TOKEN, USER_NAME, USER_AVATAR} from '../../../constants';
@@ -161,7 +161,11 @@ const UserList = props => {
     return (
       <View>
         <TouchableOpacity
-          onPress={() =>
+          onPress={async () => {
+            await analytics().logEvent('Userlist', {
+              item: item?.display_name,
+              description: 'click user to chat',
+            });
             navigation.navigate('Chat', {
               friendID: item?.ID,
               friendName: item?.display_name,
@@ -169,8 +173,8 @@ const UserList = props => {
               userID: userID,
               userName: userName,
               userAvatar: avatarImg,
-            })
-          }>
+            });
+          }}>
           <View style={[styles.wrapper, styles.shadowProp]} key={index}>
             <Image
               source={{uri: item?.avatar}}
@@ -285,7 +289,12 @@ const UserList = props => {
           <TouchableOpacity>
             <Button
               style={[styles.button]}
-              onPress={() => navigation.navigate('Gmail')}>
+              onPress={async () => {
+                navigation.navigate('Gmail');
+                await analytics().logEvent('userlistGmail', {
+                  item: 'userlist',
+                });
+              }}>
               <Text style={styles.buttonText}>Contact us</Text>
             </Button>
           </TouchableOpacity>

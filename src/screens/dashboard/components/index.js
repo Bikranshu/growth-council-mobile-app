@@ -1,4 +1,4 @@
-import React, {useEffect, useState, useRef} from 'react';
+import React, {useEffect, useState, useCallback} from 'react';
 import {
   StyleSheet,
   View,
@@ -15,43 +15,63 @@ import {
   Alert,
   BackHandler,
 } from 'react-native';
-import {useAuthentication} from '../../../context/auth';
-
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
-import {BubblesLoader} from 'react-native-indicator';
+import AntDesign from 'react-native-vector-icons/AntDesign';
+
 import moment from 'moment';
-import {useIsFocused, useNavigation} from '@react-navigation/native';
+import {
+  NavigationContainer,
+  useIsFocused,
+  useNavigation,
+  useNavigationContainerRef,
+} from '@react-navigation/native';
+
+import analytics from '@react-native-firebase/analytics';
 import Material from 'react-native-vector-icons/MaterialIcons';
 import PillarList from './PillarList';
 import {CommonStyles, Colors, Typography} from '../../../theme';
 import {PRIMARY_TEXT_COLOR, SECONDARY_TEXT_COLOR} from '../../../theme/colors';
 import Footer from '../../../shared/footer';
-
+import ToastMessage from '../../../shared/toast';
 import BottomNav from '../../../layout/BottomLayout';
 import HTMLView from 'react-native-htmlview';
 import Loading from '../../../shared/loading';
+import {useFocusEffect} from '@react-navigation/native';
+
 import {isTokenExpired} from '../../../utils/jwtUtil';
 
 import messaging from '@react-native-firebase/messaging';
 
-import {GROWTH_COMMUNITY_ID, GROWTH_CONTENT_ID} from '../../../constants';
+import {
+  GROWTH_COMMUNITY_ID,
+  GROWTH_CONTENT_ID,
+  USER_REGION,
+} from '../../../constants';
 
 const win = Dimensions.get('window').width;
 const contentContainerWidth = win / 2;
 
 const Dashboard = props => {
   const {
-    upcomingEvents,
-    upcomingEventLoading,
-    upcomingEventError,
-    fetchAllUpcomingEvent,
-    cleanUpcomingEvent,
-    poes,
-    poeLoading,
-    poeError,
-    fetchAllPOE,
-    cleanPOE,
+    // upcomingEvents,
+    // upcomingEventLoading,
+    // upcomingEventError,
+    // fetchAllUpcomingEvent,
+    // cleanUpcomingEvent,
+    // poes,
+    // poeLoading,
+    // poeError,
+    // fetchAllPOE,
+    // cleanPOE,
+
+    // pillarEventLists,
+    // pillarEventLoading,
+    // pillarEventError,
+    // fetchAllPillarEvent,
+    // cleanPillarEvent,
+    // contentSlider,
+
     communityMembers,
     communityMemberLoading,
     communityMemberError,
@@ -62,12 +82,6 @@ const Dashboard = props => {
     pillarSliderError,
     fetchAllPillarSlider,
     cleanPillarSlider,
-    pillarEventLists,
-    pillarEventLoading,
-    pillarEventError,
-    fetchAllPillarEvent,
-    cleanPillarEvent,
-    contentSlider,
 
     latestContent,
     latestContentLoading,
@@ -79,23 +93,63 @@ const Dashboard = props => {
     criticalIssueError,
     fetchCritcalIssue,
     cleanCriticalIssue,
+
+    memberConnections,
+    memberConnectionLoading,
+    memberConnectionError,
+    connectMemberByIdentifier,
+    cleanConnectMember,
+
+    deleteConnections,
+    deleteConnectionLoading,
+    deleteConnectionError,
+    deleteMemberByIdentifier,
+    cleanDeleteMember,
+
+    profile,
+    profileLoading,
+    profileError,
+    // fetchProfile,
+    // cleanProfile,
+
+    regionEvents,
+    regionEventLoading,
+    regionEventError,
+    fetchEventRegion,
+    cleanEventRegion,
   } = props;
 
-  const isFocused = useIsFocused();
+  let region = profile?.user_meta?.region;
+  if (typeof region === 'undefined' || region === null) {
+    region = '';
+  } else {
+    region = profile?.user_meta?.region[0];
+  }
+
   const [memberConnection, setMemberConnection] = useState([]);
+  const [deleteConnect, setDeleteConnect] = useState([]);
+  const [hideCritical, setHideCritical] = useState(false);
 
   const [dataSourceCords, setDataSourceCords] = useState(criticalIssue);
   const [ref, setRef] = useState(null);
-  const {loading, setLoading, message, setMessage, signOut} =
-    useAuthentication();
   const navigation = useNavigation();
 
+  let string = region;
+  if (string) string = string.toLowerCase();
+
+  let regionUser = profile?.user_meta?.region;
+  if (typeof regionUser === 'undefined' || regionUser === null) {
+    regionUser = '';
+  } else {
+    regionUser = profile?.user_meta?.region[0];
+  }
+
+  //   region = region === 'AMERICAS' ? 'north-america' : region;
+  const [userRegion, setUserRegion] = useState(region);
+
   useEffect(() => {
-    const fetchAllUpcomingEventAsync = async () => {
-      await fetchAllUpcomingEvent();
-    };
-    fetchAllUpcomingEventAsync();
-  }, []);
+    setUserRegion(region);
+  }, [profile]);
 
   useEffect(() => {
     messaging()
@@ -103,45 +157,47 @@ const Dashboard = props => {
 
       .then(token => {
         async () => {
-          if (isTokenExpired) {
-            await signOut();
-          }
           console.log('FCM ---> ' + token);
         };
       });
   }, []);
 
-  useEffect(() => {
-    const fetchAllCommunityMemberAsync = async () => {
-      await fetchAllCommunityMember({
-        s: '',
-        sort: 'Desc',
-      });
-    };
-    fetchAllCommunityMemberAsync();
+  const wait = ms =>
+    new Promise(resolve => {
+      setTimeout(() => {
+        resolve(true);
+      }, ms);
+    });
 
-    return () => {
-      cleanCommunityMember();
-    };
+  useEffect(() => {
+    fetchEventRegion({
+      region: userRegion,
+    });
+  }, [profile]);
+
+  useFocusEffect(
+    useCallback(() => {
+      const fetchAllCommunityMemberAsync = async () => {
+        await fetchAllCommunityMember({
+          s: '',
+          sort: 'Desc',
+          region: '',
+        });
+      };
+      fetchAllCommunityMemberAsync();
+
+      return () => {
+        cleanCommunityMember();
+      };
+    }, []),
+  );
+  //   useEffect(() => {
+  //     fetchAllUpcomingEvent();
+  //   }, []);
+
+  useEffect(() => {
+    fetchAllPillarSlider();
   }, []);
-
-  useEffect(() => {
-    const fetchPillarSliderAsync = async () => {
-      await fetchAllPillarSlider();
-    };
-    fetchPillarSliderAsync();
-  }, []);
-
-  useEffect(() => {
-    const fetchAllPOEAsync = async () => {
-      await fetchAllPOE();
-    };
-    fetchAllPOEAsync();
-  }, []);
-
-  useEffect(() => {
-    setMemberConnection(communityMembers);
-  }, [communityMembers]);
 
   useEffect(() => {
     const fetchLatestContentAsync = async () => {
@@ -151,7 +207,7 @@ const Dashboard = props => {
   }, []);
 
   useEffect(() => {
-    fetchCritcalIssue();
+    wait(5000).then(() => fetchCritcalIssue());
   }, []);
 
   useEffect(() => {
@@ -171,48 +227,120 @@ const Dashboard = props => {
     return () => backHandler.remove();
   }, []);
 
-  const _renderItem = ({item, index}) => {
-    return (
-      <View style={[styles.bottomWrapper, styles.shadowProp]} key={index}>
-        <TouchableOpacity
-          onPress={() => navigation.navigate('OthersAccount', {id: item.ID})}>
-          <Image
-            source={{uri: item.avatar}}
-            style={{
-              width: '100%',
-              height: 83,
-              borderRadius: 10,
-            }}
-          />
-          <View style={{padding: 10, paddingBottom: 20}}>
-            <Text
-              style={{
-                fontSize: 10,
-                fontFamily: Typography.FONT_SF_SEMIBOLD,
-                color: '#030303',
-              }}>
-              {item?.user_meta?.first_name} {item?.user_meta?.last_name}
-            </Text>
-            <Text style={{fontSize: 6, color: '#030303', marginTop: 5}}>
-              {item?.registered_date}
-              {'\n'}
-              {'\n'}
-              {item?.user_meta?.Title}
-            </Text>
-          </View>
-        </TouchableOpacity>
+  useEffect(() => {
+    setMemberConnection(communityMembers);
+    setDeleteConnect(communityMembers);
+  }, [communityMembers]);
 
-        <View style={styles.chatIcon}>
-          {!memberConnection[index]?.connection && (
-            <TouchableOpacity onPress={() => navigation.navigate('People')}>
-              <Ionicons name="add-circle" size={20} color="#B2B3B9" />
-            </TouchableOpacity>
-          )}
-          {memberConnection[index]?.connection && (
-            <Material name="check-circle" size={20} color="#14A2E2" />
-          )}
+  const connectMemberByMemberID = async (memberID, index) => {
+    const response = await connectMemberByIdentifier({member_id: memberID});
+    if (response?.payload?.code === 200) {
+      let items = [...memberConnection];
+      let item = {...items[index]};
+      item.connection = true;
+      items[index] = item;
+      setMemberConnection(items);
+      ToastMessage.show('You have successfully connected.');
+    } else {
+      //   toast.closeAll();
+      ToastMessage.show(response?.payload?.response);
+    }
+  };
+
+  const deleteMemberByMemberID = async (memberID, index) => {
+    const response = await deleteMemberByIdentifier({member_id: memberID});
+    if (response?.payload?.code === 200) {
+      let items = [...deleteConnect];
+      let item = {...items[index]};
+      item.connection = true;
+      items[index] = item;
+      setDeleteConnect(items);
+      fetchAllCommunityMember({
+        s: '',
+        sort: 'Desc',
+        region: regionUser,
+      });
+      ToastMessage.show('You have successfully deleted.');
+    } else {
+      toast.closeAll();
+      ToastMessage.show(response?.payload?.response);
+    }
+  };
+
+  const _renderItem = ({item, index}) => {
+    let user = item?.user_meta?.region;
+    if (typeof user === 'undefined' || user === 'null') {
+      user = ' ';
+    } else {
+      user = item?.user_meta?.region[0];
+    }
+
+    return (
+      <>
+        <View style={[styles.bottomWrapper, styles.shadowProp]} key={index}>
+          <TouchableOpacity
+            onPress={() => navigation.navigate('OthersAccount', {id: item.ID})}>
+            <Image
+              source={{uri: item.avatar}}
+              style={{
+                width: '100%',
+                height: 83,
+                borderRadius: 10,
+              }}
+            />
+            <View style={{padding: 10, paddingBottom: 20}}>
+              <Text
+                style={{
+                  fontSize: 10,
+                  fontFamily: Typography.FONT_SF_SEMIBOLD,
+                  color: '#030303',
+                }}>
+                {item?.display_name}
+              </Text>
+              <Text style={{fontSize: 8, color: '#030303', marginTop: 3}}>
+                {item?.registered_date}
+                {'\n'}
+                {'\n'}
+                {/* {item?.user_meta?.Title === undefined
+                  ? item?.user_meta?.title
+                  : item?.user_meta?.Title} */}
+              </Text>
+            </View>
+          </TouchableOpacity>
+
+          <View style={styles.chatIcon}>
+            {!memberConnection[index]?.connection && (
+              <TouchableOpacity
+                onPress={async () => {
+                  connectMemberByMemberID(item.ID, index);
+
+                  await analytics().logEvent('dashboard', {
+                    item: item?.user_meta?.first_name,
+                    description: 'Dashboard Member Connection',
+                  });
+                }}>
+                <Ionicons name="add-circle" size={20} color="#B2B3B9" />
+              </TouchableOpacity>
+            )}
+            {memberConnection[index]?.connection && (
+              <View style={{flexDirection: 'row'}}>
+                <Material name="check-circle" size={20} color="#14A2E2" />
+                {/* <TouchableOpacity
+                  onPress={async () => {
+                    deleteMemberByMemberID(item.ID, index);
+                  }}>
+                  <AntDesign
+                    name="deleteuser"
+                    size={20}
+                    color="#14A2E2"
+                    style={{marginLeft: 5}}
+                  />
+                </TouchableOpacity> */}
+              </View>
+            )}
+          </View>
         </View>
-      </View>
+      </>
     );
   };
 
@@ -309,13 +437,18 @@ const Dashboard = props => {
     return (
       <View key={index} style={styles.topWrapper}>
         <TouchableOpacity
-          onPress={() =>
+          onPress={async () => {
             navigation.navigate('EventDetail', {
               id: item.ID,
               title: pillarname,
               image: backgroundImage,
-            })
-          }>
+            });
+
+            await analytics().logEvent(item?.title, {
+              id: item.ID,
+              item: item.title,
+            });
+          }}>
           <ImageBackground
             style={{width: '100%', height: 190, borderRadius: 20}}
             source={backgroundImage}>
@@ -347,44 +480,111 @@ const Dashboard = props => {
   };
 
   const _renderCritical = ({item, index}) => {
+    let lowercaseRegion = '';
+    if (userRegion) lowercaseRegion = userRegion.toLowerCase();
+
+    // if (userRegion === 'MEASA') lowercaseRegion = 'apac';
+    // if (
+    //   userRegion === '' ||
+    //   userRegion === 'AMERICAS' ||
+
+    //   typeof userRegion === 'undefined' ||
+    //   userRegion === null
+    // )
+    //   lowercaseRegion = 'north-america';
+
     return (
-      <TouchableOpacity
-        onPress={() => {
-          navigation.navigate('CriticalIssue', {index});
-        }}>
-        <View
-          style={styles.ContentWrapper}
-          key={index}
-          onLayout={items => {
-            const layout = items.nativeEvent.layout;
-            dataSourceCords[index] = layout.y;
-            setDataSourceCords(dataSourceCords);
-          }}
-          onScroll={e => setPos(e.nativeEvent.contentOffset.y)}>
-          <View
-            style={{
-              flexDirection: 'row',
-              justifyContent: 'center',
-              alignItems: 'center',
+      <>
+        {lowercaseRegion === item?.region ? (
+          <TouchableOpacity
+            onPress={() => {
+              navigation.navigate('CriticalIssue', {
+                index,
+                Userregion: lowercaseRegion,
+              });
             }}>
-            <View style={[styles.criticalW, styles.shadowCritical]}>
-              <Image
-                source={{uri: item?.icon}}
-                style={{width: 36, height: 36}}
-              />
+            {setHideCritical(lowercaseRegion === item?.region ? true : false)}
+
+            <View
+              style={styles.ContentWrapper}
+              key={index}
+              onLayout={items => {
+                const layout = items.nativeEvent.layout;
+                dataSourceCords[index] = layout.y;
+                setDataSourceCords(dataSourceCords);
+              }}
+              onScroll={e => setPos(e.nativeEvent.contentOffset.y)}>
+              <View
+                style={{
+                  flexDirection: 'row',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                }}>
+                <View style={[styles.criticalW, styles.shadowCritical]}>
+                  <Image
+                    source={{uri: item?.icon}}
+                    style={{width: 36, height: 36}}
+                  />
+                </View>
+                <Text
+                  style={{
+                    fontSize: 10,
+                    width: '60%',
+                    paddingLeft: 5,
+                    // paddingRight: 10,
+                  }}>
+                  {item?.heading}
+                </Text>
+              </View>
             </View>
-            <Text
-              style={{
-                fontSize: 10,
-                width: '60%',
-                paddingLeft: 5,
-                // paddingRight: 10,
-              }}>
-              {item?.heading}
-            </Text>
-          </View>
-        </View>
-      </TouchableOpacity>
+          </TouchableOpacity>
+        ) : lowercaseRegion === null ||
+          lowercaseRegion === undefined ||
+          lowercaseRegion === '' ? (
+          <TouchableOpacity
+            onPress={() => {
+              navigation.navigate('CriticalIssue', {
+                index,
+                Userregion: lowercaseRegion,
+              });
+            }}>
+            <View
+              style={styles.ContentWrapper}
+              key={index}
+              onLayout={items => {
+                const layout = items.nativeEvent.layout;
+                dataSourceCords[index] = layout.y;
+                setDataSourceCords(dataSourceCords);
+              }}
+              onScroll={e => setPos(e.nativeEvent.contentOffset.y)}>
+              <View
+                style={{
+                  flexDirection: 'row',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                }}>
+                <View style={[styles.criticalW, styles.shadowCritical]}>
+                  <Image
+                    source={{uri: item?.icon}}
+                    style={{width: 36, height: 36}}
+                  />
+                </View>
+                <Text
+                  style={{
+                    fontSize: 10,
+                    width: '60%',
+                    paddingLeft: 5,
+                    // paddingRight: 10,
+                  }}>
+                  {item?.heading}
+                </Text>
+              </View>
+            </View>
+          </TouchableOpacity>
+        ) : (
+          <></>
+        )}
+      </>
     );
   };
   return (
@@ -428,9 +628,10 @@ const Dashboard = props => {
             </View>
           </ImageBackground>
         </View>
-        {upcomingEvents?.length !== 0 &&
-          upcomingEvents !== null &&
-          upcomingEvents !== false && (
+        <View style={{height: 60}} />
+        {regionEvents?.length !== 0 &&
+          regionEvents !== null &&
+          regionEvents !== undefined && (
             <View style={styles.top}>
               <View style={styles.eventWrapper}>
                 <Text style={styles.title}>Upcoming Events</Text>
@@ -445,16 +646,26 @@ const Dashboard = props => {
                 <FlatList
                   horizontal
                   showsHorizontalScrollIndicator={false}
-                  data={upcomingEvents}
+                  data={regionEvents}
                   renderItem={item => _renderTopItem(item, navigation)}
                 />
               </View>
             </View>
           )}
-        {latestContentLoading && <Loading />}
+        {regionEventLoading && <Loading />}
+        {memberConnectionLoading && (
+          <View style={{marginTop: 40}}>
+            <Loading />
+          </View>
+        )}
+        {deleteConnectionLoading && (
+          <View style={{marginTop: 40}}>
+            <Loading />
+          </View>
+        )}
         {latestContent?.length !== 0 &&
           latestContent !== null &&
-          latestContent !== false && (
+          latestContent !== undefined && (
             <View style={styles.middle}>
               <Text style={[styles.title, {marginLeft: 15}]}>
                 Latest Growth Content
@@ -470,7 +681,7 @@ const Dashboard = props => {
           )}
         {communityMembers?.length !== 0 &&
           communityMembers !== null &&
-          communityMembers !== false && (
+          communityMembers !== undefined && (
             <View style={styles.bottom}>
               <View
                 style={{
@@ -491,11 +702,12 @@ const Dashboard = props => {
               </View>
             </View>
           )}
-
         <View style={styles.content}>
-          <Text style={styles.title}>
-            {criticalIssue?.critical_issue_mobile_title}
-          </Text>
+          {hideCritical && (
+            <Text style={styles.title}>
+              {criticalIssue?.critical_issue_mobile_title}
+            </Text>
+          )}
           <View
             ref={ref => {
               setRef(ref);
@@ -545,7 +757,7 @@ const styles = StyleSheet.create({
   top: {
     height: 210,
     marginBottom: 10,
-    marginTop: 70,
+    marginTop: 10,
     justifyContent: 'center',
     marginLeft: 5,
   },
@@ -587,7 +799,7 @@ const styles = StyleSheet.create({
     marginLeft: 5,
   },
   middleWrapper: {
-    height: 150,
+    height: 180,
     width: 256,
     marginLeft: 15,
     marginTop: 20,

@@ -11,6 +11,8 @@ import {
   TouchableOpacity,
   ImageBackground,
   StatusBar,
+  Keyboard,
+  TouchableWithoutFeedback,
 } from 'react-native';
 import {Searchbar} from 'react-native-paper';
 import {Colors, Typography} from '../../../theme';
@@ -93,18 +95,22 @@ const ContactTags = props => {
               />
             </TouchableOpacity>
 
-            <Searchbar
-              style={styles.input}
-              inputStyle={{
-                height: 38,
-                paddingVertical: 0,
-              }}
-              placeholder="Search"
-              placeholderTextColor="#B2B3B9"
-              iconColor="#B2B3B9"
-              value={search}
-              onChangeText={text => searchFilterFunction(text)}
-            />
+            <TouchableWithoutFeedback
+              onPress={Keyboard.dismiss}
+              accessible={false}>
+              <Searchbar
+                style={styles.input}
+                inputStyle={{
+                  height: 38,
+                  paddingVertical: 0,
+                }}
+                placeholder="Search"
+                placeholderTextColor="#B2B3B9"
+                iconColor="#B2B3B9"
+                value={search}
+                onChangeText={text => searchFilterFunction(text)}
+              />
+            </TouchableWithoutFeedback>
           </View>
 
           <View

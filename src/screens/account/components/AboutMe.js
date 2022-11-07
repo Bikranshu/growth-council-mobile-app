@@ -40,7 +40,7 @@ const AboutMe = props => {
 
   let company = profile?.user_meta?.company;
 
-  let Location = profile?.user_meta?.Location;
+  let Location = profile?.user_meta?.region;
 
   let favorite_quote = profile?.user_meta?.favorite_quote;
 
@@ -73,9 +73,11 @@ const AboutMe = props => {
                 </Text>
                 <TextInput
                   style={styles.input}
-                  value={typeof title === 'undefined'
-				  ? ''
-				  : profile?.user_meta?.title[0]}
+                  value={
+                    typeof title === 'undefined'
+                      ? profile?.user_meta?.Title[0]
+                      : profile?.user_meta?.title[0]
+                  }
                   editable={false}
                 />
 
@@ -91,9 +93,10 @@ const AboutMe = props => {
                 <TextInput
                   style={styles.input}
                   value={
-					typeof company === 'undefined'
-					? ''
-					: profile?.user_meta?.company[0]}
+                    typeof company === 'undefined'
+                      ? ''
+                      : profile?.user_meta?.company[0]
+                  }
                   editable={false}
                 />
 
@@ -123,7 +126,7 @@ const AboutMe = props => {
                   editable={false}
                 />
 
-                <Text style={{marginLeft: 10, fontSize: 10, color: '#8F9BB3'}}>
+                {/* <Text style={{marginLeft: 10, fontSize: 10, color: '#8F9BB3'}}>
                   Region
                 </Text>
                 <TextInput
@@ -132,10 +135,10 @@ const AboutMe = props => {
                   value={
                     typeof Location === 'undefined'
                       ? ''
-                      : profile?.user_meta?.Location[0]
+                      : profile?.user_meta?.region[0]
                   }
                   editable={false}
-                />
+                /> */}
 
                 <Text style={{marginLeft: 10, fontSize: 10, color: '#8F9BB3'}}>
                   Favorite Quote
