@@ -253,13 +253,13 @@ const HomeCommunity = props => {
                   fontFamily: Typography.FONT_SF_SEMIBOLD,
                   color: '#030303',
                 }}>
-               {item?.display_name}
+                {item?.display_name}
               </Text>
               <Text style={{fontSize: 8, color: '#030303', marginTop: 3}}>
                 {item?.registered_date}
                 {'\n'}
                 {'\n'}
-				{/* {item?.user_meta?.Title === undefined
+                {/* {item?.user_meta?.Title === undefined
                   ? item?.user_meta?.title
                   : item?.user_meta?.Title} */}
                 {/* {item?.user_meta?.Title} */}
@@ -351,57 +351,61 @@ const HomeCommunity = props => {
     return (
       <>
         {item?.pillar_categories[0]?.parent === 0 ||
-          (item?.pillar_categories[0]?.parent === GROWTH_COMMUNITY_ID && (
-            <View style={styles.topWrapper} key={index}>
-              <TouchableOpacity
-                onPress={async () => {
-                  navigation.navigate('EventDetail', {
-                    id: item.ID,
-                    title: pillarname,
-                    image: image,
-                  });
+        item?.pillar_categories[0]?.parent === GROWTH_COMMUNITY_ID ? (
+          <View style={styles.topWrapper} key={index}>
+            <TouchableOpacity
+              onPress={async () => {
+                navigation.navigate('EventDetail', {
+                  id: item.ID,
+                  title: pillarname,
+                  image: image,
+                });
 
-                  await analytics().logEvent(item?.title, {
-                    id: item.ID,
-                    item: item.title,
-                  });
-                }}>
-                {setHideEvents(
-                  item?.pillar_categories[0]?.parent === 0 ||
-                    item?.pillar_categories[0]?.parent === GROWTH_COMMUNITY_ID,
-                )}
-                <ImageBackground
+                await analytics().logEvent(item?.title, {
+                  id: item.ID,
+                  item: item.title,
+                });
+              }}>
+              {setHideEvents(
+                item?.pillar_categories[0]?.parent === 0 ||
+                  item?.pillar_categories[0]?.parent === GROWTH_COMMUNITY_ID
+                  ? true
+                  : false,
+              )}
+              <ImageBackground
+                style={{
+                  width: '100%',
+                  height: '100%',
+                  borderRadius: 20,
+                }}
+                source={require('../../../assets/img/Rectangle2.png')}>
+                <View
                   style={{
-                    width: '100%',
-                    height: '100%',
-                    borderRadius: 20,
-                  }}
-                  source={require('../../../assets/img/Rectangle2.png')}>
-                  <View
-                    style={{
-                      width: 50,
-                      height: 50,
-                      marginTop: 10,
-                      marginLeft: 200,
-                      backgroundColor: '#EBECF0',
-                      borderRadius: 10,
-                      padding: 5,
-                      alignItems: 'center',
-                    }}>
-                    <Text style={{color: '#030303'}}>{date[0]}</Text>
-                    <Text style={{color: '#030303'}}>{date[1]}</Text>
-                  </View>
+                    width: 50,
+                    height: 50,
+                    marginTop: 10,
+                    marginLeft: 200,
+                    backgroundColor: '#EBECF0',
+                    borderRadius: 10,
+                    padding: 5,
+                    alignItems: 'center',
+                  }}>
+                  <Text style={{color: '#030303'}}>{date[0]}</Text>
+                  <Text style={{color: '#030303'}}>{date[1]}</Text>
+                </View>
 
-                  <View style={styles.header}>
-                    <Text style={styles.headingText1}>{item.title}</Text>
-                    <Text style={styles.headingText2}>
-                      {organizer} {description}
-                    </Text>
-                  </View>
-                </ImageBackground>
-              </TouchableOpacity>
-            </View>
-          ))}
+                <View style={styles.header}>
+                  <Text style={styles.headingText1}>{item.title}</Text>
+                  <Text style={styles.headingText2}>
+                    {organizer} {description}
+                  </Text>
+                </View>
+              </ImageBackground>
+            </TouchableOpacity>
+          </View>
+        ) : (
+          <></>
+        )}
       </>
     );
   };
