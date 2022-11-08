@@ -140,11 +140,7 @@ const Event = props => {
   const deviceOffset = today?.utcOffset();
 
   let Today = moment().tz(actualtimeZone);
-  console.log(
-    'a',
-    backStartTimeStamp.split(/(\s+)/)[6],
-    backStartTimeStamp.split(/(\s+)/)[10],
-  );
+ 
   let eventOffset = Today?.utcOffset();
 
   const com = ':';
@@ -166,7 +162,7 @@ const Event = props => {
     startDateCal > 12 && startDateCal < 24
       ? startDateCal - 12 + eventDate.split(/(\s+)/)[7] + 'pm'
       : startDateCal > 24
-      ? startDateCal - 24 + 'am'
+      ? startDateCal - 24 + ' am'
       : startDateCal + eventDate.split(/(\s+)/)[7] + 'am';
 
   let nextDay = day?.indexOf(eventDate.split(/(\s+)/)[4]) + 1;
@@ -204,7 +200,7 @@ const Event = props => {
   const actualGobalStartTime =
     GobalStartTime === 'NaNam:' ? '' : GobalStartTime;
 
-  console.log('GobalStartTime', fourth, six);
+  console.log('GobalStartTime', first?.indexOf(fifth) > -1 !== false,"ad", gobalStart.split(' '));
 
   //calculating gobal timezone of event.end
   const endHours = Number(backEndTimeStamp.split(/(\s+)/)[0]);
