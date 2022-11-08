@@ -33,7 +33,7 @@ import Player from './Player';
 import {CommonStyles, Colors, Typography} from '../../../theme';
 import {isEmptyArray} from 'formik';
 import Loading from '../../../shared/loading';
-import { GROWTH_COACHING_ID } from '../../../constants';
+import {GROWTH_COACHING_ID} from '../../../constants';
 
 const win = Dimensions.get('window');
 const contentContainerWidth = win.width - 30;
@@ -57,12 +57,51 @@ const GrowthCoaching = props => {
     pillarPOEError,
     fetchAllPillarPOE,
     cleanPillarPOE,
+    regionEvents,
+    regionEventLoading,
+    regionEventError,
+    fetchEventRegion,
+    cleanEventRegion,
+
+    profile,
+    profileLoading,
+    profileError,
+    fetchProfile,
+    cleanProfile,
   } = props;
 
   const pillarId = GROWTH_COACHING_ID;
 
   const isFocused = useIsFocused();
   const [memberConnection, setMemberConnection] = useState([]);
+
+  let region = profile?.user_meta?.region;
+  if (typeof region === 'undefined' || region === null) {
+    region = ' ';
+  } else {
+    region = profile?.user_meta?.region[0];
+  }
+
+  const [userRegion, setUserRegion] = useState(region);
+  const [hideEvents, setHideEvents] = useState();
+  useEffect(() => {
+    fetchProfile();
+  }, []);
+
+  useEffect(() => {
+    setUserRegion(region);
+  }, [profile]);
+
+  useFocusEffect(
+    useCallback(() => {
+      fetchEventRegion({
+        region: userRegion,
+      });
+      return () => {
+        cleanEventRegion();
+      };
+    }, []),
+  );
 
   useFocusEffect(
     useCallback(() => {
@@ -210,51 +249,65 @@ const GrowthCoaching = props => {
     const pillarname = 'Growth Coaching';
     const image = require('../../../assets/img/Rectangle.png');
     return (
-      <View style={styles.topWrapper}>
-        <TouchableOpacity
-          onPress={async () => {
-            navigation.navigate('EventDetail', {
-              id: item.ID,
-              title: pillarname,
-              image: image,
-            });
+      <>
+        {item?.pillar_categories[0]?.slug === 'growth-coaching' ||
+        item?.pillar_categories[1]?.slug === 'growth-coaching' ||
+        item?.pillar_categories[0]?.parent === GROWTH_COACHING_ID ? (
+          <View style={styles.topWrapper} key={index}>
+            <TouchableOpacity
+              onPress={async () => {
+                navigation.navigate('EventDetail', {
+                  id: item.ID,
+                  title: pillarname,
+                  image: image,
+                });
 
-            await analytics().logEvent(item?.title, {
-              id: item.ID,
-              item: item.title,
-            });
-          }}>
-          <ImageBackground
-            style={{
-              width: '100%',
-              height: '100%',
-              borderRadius: 20,
-            }}
-            source={require('../../../assets/img/Rectangle.png')}>
-            <View
-              style={{
-                width: 50,
-                height: 50,
-                marginTop: 10,
-                marginLeft: 200,
-                backgroundColor: '#EBECF0',
-                borderRadius: 10,
-                padding: 5,
-                alignItems: 'center',
+                await analytics().logEvent(item?.title, {
+                  id: item.ID,
+                  item: item.title,
+                });
               }}>
-              <Text style={{color: '#030303'}}>{date[0]}</Text>
-              <Text style={{color: '#030303'}}>{date[1]}</Text>
-            </View>
+              {setHideEvents(
+                item?.pillar_categories[0]?.parent === 0 ||
+                  item?.pillar_categories[0]?.parent === GROWTH_COACHING_ID
+                  ? true
+                  : false,
+              )}
+              <ImageBackground
+                style={{
+                  width: '100%',
+                  height: '100%',
+                  borderRadius: 20,
+                }}
+                source={require('../../../assets/img/Rectangle.png')}>
+                <View
+                  style={{
+                    width: 50,
+                    height: 50,
+                    marginTop: 10,
+                    marginLeft: 200,
+                    backgroundColor: '#EBECF0',
+                    borderRadius: 10,
+                    padding: 5,
+                    alignItems: 'center',
+                  }}>
+                  <Text style={{color: '#030303'}}>{date[0]}</Text>
+                  <Text style={{color: '#030303'}}>{date[1]}</Text>
+                </View>
 
-            <View style={styles.header}>
-              <Text style={styles.headingText1}>{item.title}</Text>
-              <Text style={styles.headingText2}>
-                {organizer} {description}
-              </Text>
-            </View>
-          </ImageBackground>
-        </TouchableOpacity>
-      </View>
+                <View style={styles.header}>
+                  <Text style={styles.headingText1}>{item.title}</Text>
+                  <Text style={styles.headingText2}>
+                    {organizer} {description}
+                  </Text>
+                </View>
+              </ImageBackground>
+            </TouchableOpacity>
+          </View>
+        ) : (
+          <></>
+        )}
+      </>
     );
   };
 
@@ -420,7 +473,9 @@ const GrowthCoaching = props => {
             pillarEvents !== null &&
             pillarEvents !== false && (
               <View style={styles.top}>
-                <Text style={styles.title}>Growth Coaching Events</Text>
+                {hideEvents && (
+                  <Text style={styles.title}>Growth Coaching Events</Text>
+                )}
                 <View
                   style={{
                     display: 'flex',
@@ -429,7 +484,7 @@ const GrowthCoaching = props => {
                   <FlatList
                     horizontal
                     showsHorizontalScrollIndicator={false}
-                    data={pillarEvents}
+                    data={regionEvents}
                     //renderItem={_renderTopItem}
                     renderItem={item => _renderTopItem(item, navigation)}
                   />
@@ -543,11 +598,13 @@ const styles = StyleSheet.create({
   },
 
   topWrapper: {
-    height: 144,
+    height: 180,
     width: 256,
-    marginTop: 20,
     marginLeft: 15,
-    borderRadius: 20,
+    borderRadius: 16,
+    overflow: 'hidden',
+    marginRight: 5,
+    marginTop: 15,
   },
   header: {
     margin: 10,
