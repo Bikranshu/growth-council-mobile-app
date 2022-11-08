@@ -138,7 +138,6 @@ const Event = props => {
 
   const today = moment().tz(deviceTimeZone);
   const deviceOffset = today?.utcOffset();
-  console.log('deviceOffset', deviceOffset);
 
   let Today = moment().tz(actualtimeZone);
   console.log(
@@ -150,6 +149,7 @@ const Event = props => {
 
   const com = ':';
 
+  console.log('ad', deviceOffset);
   //calculating gobal timezone of event.start
 
   const startHours = Number(backStartTimeStamp.split(/(\s+)/)[0]);
@@ -185,13 +185,17 @@ const Event = props => {
         day[previousDay]
       : null;
 
-  const first = gobalStart?.split('.')[0];
+  const first =
+    gobalStart?.split('.')[0] === '0' ? '12' : gobalStart?.split('.')[0];
   const second = gobalStart?.split('.')[1];
 
   const third = '0.' + second?.split('')[0] + second?.split('')[1];
 
   const fourth =
-    third !== '0.undefinedundefined' ? com + Number(third) * 60 : '';
+    third !== '0.undefinedundefined'
+      ? com + Math.round(Number(third) * 60)
+      : '';
+	  
   const fifth =
     gobalStart.split(' ')[1] === undefined ? '' : gobalStart.split(' ')[1];
   const six = first?.indexOf(fifth) > -1 !== false ? '' : fifth;
@@ -200,7 +204,7 @@ const Event = props => {
   const actualGobalStartTime =
     GobalStartTime === 'NaNam:' ? '' : GobalStartTime;
 
-  console.log('GobalStartTime', first, six);
+  console.log('GobalStartTime', fourth, six);
 
   //calculating gobal timezone of event.end
   const endHours = Number(backEndTimeStamp.split(/(\s+)/)[0]);
@@ -220,16 +224,19 @@ const Event = props => {
       ? endDateCal - 24 + '' + ' am'
       : endDateCal + eventDate.split(/(\s+)/)[7] + 'am';
 
-  const a = gobalEnd.split('.')[0];
+  const a = gobalEnd.split('.')[0] === '0' ? '12' : gobalEnd.split('.')[0];
   const b = gobalEnd.split('.')[1];
   const c = '0.' + b?.split('')[0] + b?.split('')[1];
-  const d = c !== '0.undefinedundefined' ? com + Number(c) * 60 : '';
+  const c1 = Number(c) * 60;
+  const d =
+    c !== '0.undefinedundefined' ? com + Math.round(Number(c) * 60) : '';
   const e = gobalEnd.split(' ')[1] === undefined ? '' : gobalEnd.split(' ')[1];
   const f = a?.indexOf(e) > -1 !== false ? '' : e;
+
   const GobalEndTime = a + d + f;
   const actualGobalEndTime = GobalEndTime === 'NaNam:' ? '' : GobalEndTime;
 
-  console.log('GobalEndTime', a, d, f);
+  console.log('GobalEndTime', d);
 
   let title = '';
   const pillarname = events?.pillar_categories
@@ -348,6 +355,9 @@ const Event = props => {
                             marginLeft: 5,
                             color: COMMUNITY_COLOR,
                           }}>
+                          {/* {events?.event_meta?.evo_event_timezone !== undefined
+                            ? events?.event_meta?.evo_event_timezone
+                            : ''} */}
                           {events?.time_zone !== undefined
                             ? events?.time_zone
                             : ''}
@@ -387,7 +397,7 @@ const Event = props => {
                             {/* {deviceTimeZone.split('/')[1] +
                               comma +
                               deviceTimeZone.split('/')[0]} */}
-							  {deviceTimeZone}
+                            {deviceTimeZone}
                           </Text>
                         </View>
                       </View>

@@ -116,10 +116,12 @@ const HomeCommunity = props => {
     regionUser = profile?.user_meta?.region[0];
   }
 
-  region = region === 'AMERICAS' ? 'north-america' : region;
+  console.log(regionUser);
+  //   region = region === 'AMERICAS' ? 'north-america' : region;
   const [userRegion, setUserRegion] = useState(region);
   const [memberConnection, setMemberConnection] = useState([]);
   const [deleteConnect, setDeleteConnect] = useState([]);
+  const [hideEvents, setHideEvents] = useState();
 
   useEffect(() => {
     fetchProfile();
@@ -153,31 +155,19 @@ const HomeCommunity = props => {
     }, []),
   );
 
-  //   useFocusEffect(
-  //     useCallback(() => {
-  //       const fetchAllPillarEventAsync = async () => {
-  //         await fetchAllPillarEvent(pillarId);
-  //       };
-  //       fetchAllPillarEventAsync();
-
-  //       return () => {
-  //         cleanPillarEvent();
-  //       };
-  //     }, []),
-  //   );
-
   useFocusEffect(
     useCallback(() => {
-      const fetchAllPillarMemberContentAsync = async () => {
-        let token = await getAsyncStorage(JWT_TOKEN);
-        let userID = decodeUserID(token);
-        await fetchAllPillarMemberContent(pillarId);
+      const fetchAllPillarEventAsync = async () => {
+        await fetchAllPillarEvent(pillarId);
       };
-      fetchAllPillarMemberContentAsync();
-    }, [isFocused]),
+      fetchAllPillarEventAsync();
+
+      return () => {
+        cleanPillarEvent();
+      };
+    }, []),
   );
 
-  regionUser = regionUser === 'NORTH-AMERICA' ? 'AMERICAS' : regionUser;
   useFocusEffect(
     useCallback(() => {
       const fetchAllCommunityMemberAsync = async () => {
@@ -193,21 +183,6 @@ const HomeCommunity = props => {
         cleanCommunityMember();
       };
     }, []),
-  );
-
-  useFocusEffect(
-    useCallback(() => {
-      const fetchAllUsersAsync = async () => {
-        await fetchAllUsers({
-          sort: 'ASC',
-        });
-      };
-      fetchAllUsersAsync();
-
-      return () => {
-        cleanUser();
-      };
-    }, [isFocused]),
   );
 
   useEffect(() => {
@@ -230,25 +205,25 @@ const HomeCommunity = props => {
     }
   };
 
-  const deleteMemberByMemberID = async (memberID, index) => {
-    const response = await deleteMemberByIdentifier({member_id: memberID});
-    if (response?.payload?.code === 200) {
-      let items = [...deleteConnect];
-      let item = {...items[index]};
-      item.connection = true;
-      items[index] = item;
-      setDeleteConnect(items);
-      fetchAllCommunityMember({
-        s: '',
-        sort: 'Desc',
-        region: regionUser,
-      });
-      ToastMessage.show('You have successfully deleted.');
-    } else {
-      toast.closeAll();
-      ToastMessage.show(response?.payload?.response);
-    }
-  };
+  //   const deleteMemberByMemberID = async (memberID, index) => {
+  //     const response = await deleteMemberByIdentifier({member_id: memberID});
+  //     if (response?.payload?.code === 200) {
+  //       let items = [...deleteConnect];
+  //       let item = {...items[index]};
+  //       item.connection = true;
+  //       items[index] = item;
+  //       setDeleteConnect(items);
+  //       fetchAllCommunityMember({
+  //         s: '',
+  //         sort: 'Desc',
+  //         region: regionUser,
+  //       });
+  //       ToastMessage.show('You have successfully deleted.');
+  //     } else {
+  //       toast.closeAll();
+  //       ToastMessage.show(response?.payload?.response);
+  //     }
+  //   };
 
   const _renderItem = ({item, index}) => {
     let user = item?.user_meta?.region;
@@ -278,12 +253,15 @@ const HomeCommunity = props => {
                   fontFamily: Typography.FONT_SF_SEMIBOLD,
                   color: '#030303',
                 }}>
-                {item?.user_meta?.first_name} {item?.user_meta?.last_name}
+               {item?.display_name}
               </Text>
-              <Text style={{fontSize: 6, color: '#030303', marginTop: 5}}>
+              <Text style={{fontSize: 8, color: '#030303', marginTop: 3}}>
                 {item?.registered_date}
-                {/* {'\n'}
-                {'\n'} */}
+                {'\n'}
+                {'\n'}
+				{/* {item?.user_meta?.Title === undefined
+                  ? item?.user_meta?.title
+                  : item?.user_meta?.Title} */}
                 {/* {item?.user_meta?.Title} */}
               </Text>
             </View>
@@ -388,6 +366,10 @@ const HomeCommunity = props => {
                     item: item.title,
                   });
                 }}>
+                {setHideEvents(
+                  item?.pillar_categories[0]?.parent === 0 ||
+                    item?.pillar_categories[0]?.parent === GROWTH_COMMUNITY_ID,
+                )}
                 <ImageBackground
                   style={{
                     width: '100%',
@@ -584,8 +566,9 @@ const HomeCommunity = props => {
             regionEvents !== null &&
             regionEvents !== undefined && (
               <View style={styles.top}>
-                <Text style={styles.title}>Growth Community Events</Text>
-
+                {hideEvents && (
+                  <Text style={styles.title}>Growth Community Events</Text>
+                )}
                 <View
                   style={{
                     display: 'flex',
@@ -601,7 +584,7 @@ const HomeCommunity = props => {
               </View>
             )}
 
-          {pillarMemberContentLoading && (
+          {pillarPOELoading && (
             <View style={{marginTop: 40}}>
               <Loading />
             </View>
