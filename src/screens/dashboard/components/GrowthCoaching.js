@@ -468,10 +468,10 @@ const GrowthCoaching = props => {
         showsVerticalScrollIndicator={false}
         style={{backgroundColor: Colors.PRIMARY_BACKGROUND_COLOR}}>
         <View style={styles.container}>
-          {pillarEvents?.length !== 0 &&
-            pillarEvents !== undefined &&
-            pillarEvents !== null &&
-            pillarEvents !== false && (
+          {regionEvents?.length !== 0 &&
+            regionEvents !== undefined &&
+            regionEvents !== null &&
+            regionEvents !== false && (
               <View style={styles.top}>
                 {hideEvents && (
                   <Text style={styles.title}>Growth Coaching Events</Text>

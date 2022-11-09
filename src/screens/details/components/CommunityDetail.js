@@ -664,7 +664,7 @@ const CommunityDetail = props => {
                         ) {
                           // live= 205 and stgaing= 206
                           navigation.navigate('LibraryDetail', {
-                            resources: 206,
+                            resources: 205,
                             itemname: poeDetails?.name,
                           });
                         } else {
