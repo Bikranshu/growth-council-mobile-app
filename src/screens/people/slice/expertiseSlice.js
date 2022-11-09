@@ -5,7 +5,7 @@ import {fetch} from '../../../utils/httpUtil';
 export const fetchAllExpertise = createAsyncThunk(
   'expertise/fetchAll',
   (_, {rejectWithValue}) => {
-    return fetch(`jwt-auth/v1/expertise_areas`)
+    return fetch(`jwt-auth/v1/new/expertise_areas`)
       .then(response => response.data)
       .catch(error => rejectWithValue(error?.response?.data || error));
   },
