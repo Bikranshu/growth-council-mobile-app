@@ -25,7 +25,6 @@ export const GROWTH_COMMUNITY_ID = 194; //169
 export const GROWTH_CONTENT_ID = 171; //170
 export const GROWTH_COACHING_ID = 172; //171
 
-
 // // staging
 // export const GROWTH_COMMUNITY_ID = 169
 // export const GROWTH_CONTENT_ID = 170
