@@ -241,7 +241,6 @@ const ManageAccount = props => {
     fetchAllExpertises();
   }, []);
 
-
   let memberExpertise = expertise?.data?.choices;
   if (typeof memberExpertise === 'undefined') {
     memberExpertise = 'Expertise Area';
@@ -334,13 +333,31 @@ const ManageAccount = props => {
               </TouchableOpacity>
             </View>
             <View style={styles.profileWrapper}>
-              <View style={styles.icon}>
-                <Image
-                  source={{uri: image}}
-                  style={{width: '100%', height: '100%'}}
-                  resizeMode="cover"
-                />
-              </View>
+              {profile?.um_member_directory_data?.profile_photo === true ? (
+                <View style={styles.icon}>
+                  <Image
+                    source={{
+                      uri:
+                        profile?.um_profile_image +
+                        profile?.user_meta?.profile_photo[0],
+                    }}
+                    style={{width: '100%', height: '100%'}}
+                    resizeMode="cover"
+                  />
+                 
+                </View>
+              ) : (
+                <View style={styles.icon}>
+                  <Image
+                    source={{
+                      uri: 'https://staging.gilcouncil.com/wp-content/plugins/ultimate-member/assets/img/default_avatar.jpg',
+                    }}
+                    style={{width: '100%', height: '100%'}}
+                    resizeMode="cover"
+                  />
+                </View>
+              )}
+              
               <View style={styles.header}>
                 {uploadProfileImageLoading && (
                   <>
