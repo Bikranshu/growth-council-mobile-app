@@ -129,7 +129,7 @@ const CommunityDetail = props => {
     }, [isFocused]),
   );
 
-  const sendEmailToAdmin = async () => {
+  const GrowthPipelineDialogueButton = async () => {
     const response = await sendEmailThroughButtons({});
     if (response?.payload?.code === 200) {
       // setStatus(true);

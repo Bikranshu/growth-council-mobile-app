@@ -90,7 +90,7 @@ const Event = props => {
     }
   };
 
-  const sendEmailToAdmin = async () => {
+  const GrowthPipelineDialogueButton = async () => {
     const response = await sendEmailThroughButtons({});
     if (response?.payload?.code === 200) {
       // setStatus(true);
@@ -220,6 +220,8 @@ const Event = props => {
     GobalStartTime === 'NaNam:' ? '' : GobalStartTime;
 
   //Calculation part for start date
+
+  //End of calculating gobal timezone of event.start
   
 
   //calculating gobal timezone of event.end
@@ -240,25 +242,25 @@ const Event = props => {
       ? endDateCal - 24 + '' + ' am'
       : endDateCal + eventDate.split(/(\s+)/)[7] + 'am';
 
-  //Calculation part for end date of local time
+	//Calculation part for end date of local time
 
-  const endCal1 =
-    gobalEnd.split('.')[0] === '0' ? '12' : gobalEnd.split('.')[0];
-  const endCal2 = gobalEnd.split('.')[1];
-  const endCal3 = '0.' + endCal2?.split('')[0] + endCal2?.split('')[1];
-  const endCal4 =
-    endCal3 !== '0.undefinedundefined'
-      ? com + Math.round(Number(endCal3) * 60)
-      : '';
-  const endCal5 =
-    gobalEnd.split(' ')[1] === undefined ? '' : gobalEnd.split(' ')[1];
-  const endCal6 = endCal1?.indexOf(endCal5) > -1 !== false ? '' : endCal5;
+	const endCal1 =
+		gobalEnd.split('.')[0] === '0' ? '12' : gobalEnd.split('.')[0];
+	const endCal2 = gobalEnd.split('.')[1];
+	const endCal3 = '0.' + endCal2?.split('')[0] + endCal2?.split('')[1];
+	const endCal4 =
+		endCal3 !== '0.undefinedundefined'
+		? com + Math.round(Number(endCal3) * 60)
+		: '';
+	const endCal5 =
+		gobalEnd.split(' ')[1] === undefined ? '' : gobalEnd.split(' ')[1];
+	const endCal6 = endCal1?.indexOf(endCal5) > -1 !== false ? '' : endCal5;
 
-  const GobalEndTime = endCal1 + endCal4 + endCal6;
-  const actualGobalEndTime = GobalEndTime === 'NaNam:' ? '' : GobalEndTime;
+	const GobalEndTime = endCal1 + endCal4 + endCal6;
+	const actualGobalEndTime = GobalEndTime === 'NaNam:' ? '' : GobalEndTime;
 
-  // End of Calculation part for end date
-
+	// End of Calculation part for end date
+	//  End of calculating gobal timezone of event.end
 
 
   let title = '';

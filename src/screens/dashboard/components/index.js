@@ -205,6 +205,11 @@ const Dashboard = props => {
   }, []);
 
   useEffect(() => {
+    fetchOneDailyQuote();
+  }, []);
+
+//   console.log('dailyQuote', dailyQuote);
+  useEffect(() => {
     const fetchLatestContentAsync = async () => {
       await fetchLatestContent();
     };

@@ -18,6 +18,7 @@ import Material from 'react-native-vector-icons/MaterialIcons';
 import FeatherIcon from 'react-native-vector-icons/Feather';
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome';
 import moment from 'moment';
+import {Toast, useToast} from 'native-base';
 import analytics from '@react-native-firebase/analytics';
 import {Linking} from 'react-native';
 import {BubblesLoader} from 'react-native-indicator';
@@ -81,6 +82,15 @@ const GrowthCoaching = props => {
   } else {
     region = profile?.user_meta?.region[0];
   }
+
+  let persona = profile?.user_meta?.user_persona;
+  if (typeof persona === 'undefined' || persona === null) {
+    persona = ' ';
+  } else {
+    persona = profile?.user_meta?.user_persona[0];
+  }
+
+  console.log('user_persona1', persona);
 
   const [userRegion, setUserRegion] = useState(region);
   const [hideEvents, setHideEvents] = useState();
@@ -188,6 +198,8 @@ const GrowthCoaching = props => {
     );
   };
 
+  const toast = useToast();
+  const id = 'test-toast';
   const _renderMiddleItem = ({item, index}) => {
     let navigationPath = ' ';
     if (item?.slug === 'growth-leadership-coaching') {
@@ -198,14 +210,27 @@ const GrowthCoaching = props => {
 
     return (
       <TouchableOpacity
-        onPress={() =>
-          navigation.navigate(navigationPath, {
-            poeId: item?.term_id,
-            // pillarId: item?.parent,
-            title: 'Growth Coaching',
-            image: require('../../../assets/img/Rectangle.png'),
-          })
-        }>
+        onPress={() => {
+          if (
+            item?.growth_council_persona_classifcation?.includes(persona) ===
+            true
+          ) {
+            navigation.navigate(navigationPath, {
+              poeId: item?.term_id,
+              // pillarId: item?.parent,
+              title: 'Growth Coaching',
+              image: require('../../../assets/img/Rectangle.png'),
+            });
+          } else {
+            if (!toast.isActive(id)) {
+              toast.show({
+                id,
+                title: 'You have no access to this content',
+              });
+            }
+            // ToastMessage.show('You have no access to this content');
+          }
+        }}>
         <View style={styles.middleWrapper}>
           <View style={[styles.middleW, styles.shadowProp]}>
             <Image

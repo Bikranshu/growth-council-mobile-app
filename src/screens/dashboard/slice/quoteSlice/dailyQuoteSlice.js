@@ -5,7 +5,7 @@ import {fetch} from '../../../../utils/httpUtil';
 export const fetchDailyQuote = createAsyncThunk(
   'dailyQuote/fetchAll',
   (_, {rejectWithValue}) => {
-    return fetch(`jwt-auth/v1/`)
+    return fetch(`jwt-auth/v1/get_daily_quote`)
       .then(response => response.data.data)
       .catch(error => rejectWithValue(error?.response?.data || error));
   },
