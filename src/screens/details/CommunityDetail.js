@@ -20,7 +20,7 @@ import {
 import {
   fetchAllPillarPOEs,
   resetPillarPOE,
-} from '../dashboard/slice/pillarPOESlice';
+} from '../dashboard/slice/POE/pillarPOESlice';
 
 import {getIdBySlug, resetGetSlug} from './slice/getIdBySlug';
 

@@ -1,7 +1,7 @@
 import {createAsyncThunk, createSlice} from '@reduxjs/toolkit';
-import { GROWTH_COACHING_ID } from '../../../constants';
+import { GROWTH_COACHING_ID } from '../../../../constants';
 
-import {fetch} from '../../../utils/httpUtil';
+import {fetch} from '../../../../utils/httpUtil';
 
 export const fetchAllgrowthCoachingMemberContents = createAsyncThunk(
     'growthCoachingMemberContents/fetchAll',

@@ -1,7 +1,7 @@
 import {createAsyncThunk, createSlice} from '@reduxjs/toolkit';
-import { GROWTH_COMMUNITY_ID } from '../../../constants';
+import { GROWTH_COMMUNITY_ID } from '../../../../constants';
 
-import {fetch} from '../../../utils/httpUtil';
+import {fetch} from '../../../../utils/httpUtil';
 
 export const fetchAllCommunities = createAsyncThunk(
     'community/fetchAll',

@@ -223,7 +223,6 @@ const Event = props => {
   const a = gobalEnd.split('.')[0] === '0' ? '12' : gobalEnd.split('.')[0];
   const b = gobalEnd.split('.')[1];
   const c = '0.' + b?.split('')[0] + b?.split('')[1];
-  const c1 = Number(c) * 60;
   const d =
     c !== '0.undefinedundefined' ? com + Math.round(Number(c) * 60) : '';
   const e = gobalEnd.split(' ')[1] === undefined ? '' : gobalEnd.split(' ')[1];

@@ -12,12 +12,12 @@ import {
   resetPillarSlider,
 } from '../home/slice/pillarSliderSlice';
 
-import {fetchAllPOEs, resetPOE} from './slice/pointOfEngagementSlice';
+import {fetchAllPOEs, resetPOE} from './slice/POE/pointOfEngagementSlice';
 
 import {
   fetchAllCommunityMembers,
   resetCommunityMember,
-} from './slice/communityMemberSlice';
+} from './slice/Community/communityMemberSlice';
 
 import {
   fetchAllLatestContent,
@@ -38,6 +38,10 @@ import {
 } from '../people/slice/deleteConnectionSlice';
 import {fetchProfileByID, resetProfile} from '../account/slice/profileSlice';
 import {fetchEventByRegion, resetRegionEvent} from './slice/eventByRegionSlice';
+import {
+  fetchDailyQuote,
+  resetDailyQuote,
+} from './slice/quoteSlice/dailyQuoteSlice';
 
 const DashboardScreen = props => {
   const dispatch = useDispatch();
@@ -73,6 +77,10 @@ const DashboardScreen = props => {
 
   const {regionEvents, regionEventLoading, regionEventError} = useSelector(
     state => state.regionEvents,
+  );
+
+  const {dailyQuote, dailyQuoteLoading, dailyQuoteError} = useSelector(
+    state => state.dailyQuote,
   );
 
   useEffect(() => {
@@ -161,6 +169,15 @@ const DashboardScreen = props => {
   useEffect(() => {
     fetchProfileByID();
   }, []);
+
+  const fetchOneDailyQuote = () => {
+    dispatch(fetchDailyQuote());
+  };
+
+  const cleanDailyQuote = () => {
+    dispatch(resetDailyQuote());
+  };
+
   return (
     <Dashboard
       {...props}
@@ -215,6 +232,14 @@ const DashboardScreen = props => {
       deleteConnectionError={deleteConnectionError}
       deleteMemberByIdentifier={deleteMemberByIdentifier}
       cleanDeleteMember={cleanDeleteMember}
+
+	  //daily quote
+	  dailyQuote={dailyQuote}
+	  dailyQuoteLoading={dailyQuoteLoading}
+	  dailyQuoteError={dailyQuoteError}
+	  fetchOneDailyQuote={fetchOneDailyQuote}
+	  cleanDailyQuote={cleanDailyQuote}
+
     />
   );
 };

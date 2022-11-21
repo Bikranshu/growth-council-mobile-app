@@ -10,7 +10,7 @@ import {
   fetchAllPillarMemberContents,
   resetPillarMemberContent,
 } from '../details/slice/pillarMembersContentsSlice';
-import {fetchAllPillarPOEs, resetPillarPOE} from './slice/pillarPOESlice';
+import {fetchAllPillarPOEs, resetPillarPOE} from './slice/POE/pillarPOESlice';
 import {fetchEventByRegion, resetRegionEvent} from './slice/eventByRegionSlice';
 import {fetchProfileByID, resetProfile} from '../account/slice/profileSlice';
 
