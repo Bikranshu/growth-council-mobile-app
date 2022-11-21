@@ -6,8 +6,6 @@ export const formatTimeByOffset = (dateString, offset) => {
   if (!dateString) return '';
   if (dateString.length === 0) return '';
 
-  console.log('abcd', dateString);
-
 		const abcsd= offset
 // Step 1: Parse the backend date string
   const year = dateString.slice(0, 4);
@@ -23,23 +21,15 @@ export const formatTimeByOffset = (dateString, offset) => {
     `${year}-${month}-${day}T${hour}:${minute}:${second}`,
   );
 
-//   console.log('dateObject', dateObject);
-
   // Step 3: Get the current hours from the object
   const currentHours = dateObject.getHours();
-
-//   console.log('currentHours', currentHours);
-//   console.log('abcde', currentHours);
-
 
   // Step 4: Add the offset to the date object
   dateObject.setHours(currentHours + offset);
 
-
   // Step 5: stringify the date object, replace the T with a space and slice off the seconds.
   const newDateString = dateObject.toISOString().replace('T', ' ').slice(0, 16);
 
-//   console.log('newDateString', newDateString);
 
   // Step 6: Return the new formatted date string with the added offset
   return `${newDateString}`;

@@ -8,6 +8,7 @@ import {
   registerEventByID,
   resetEventRegister,
 } from './slice/eventRegisterSlice';
+import {sendEmailThroughButton, resetsendEmail} from './slice/emailButtonSlice';
 
 const EventDetailScreen = props => {
   const dispatch = useDispatch();
@@ -16,6 +17,8 @@ const EventDetailScreen = props => {
   const {eventRegisters, eventRegisterLoading, eventRegisterError} =
     useSelector(state => state.eventRegisters);
 
+  const {sendEmail, sendEmailLoading, sendEmailError} = 
+  useSelector(state => state.sendEmail);
   /**
    * Fetch event data.
    * @param {string} identifier
@@ -50,6 +53,19 @@ const EventDetailScreen = props => {
     dispatch(resetEventRegister());
   };
 
+  /**
+   * Send email through button.
+   * @param {object} formData
+   *
+   */
+  const sendEmailThroughButtons = formData => {
+    return dispatch(sendEmailThroughButton(formData));
+  };
+
+  const cleanSendEmail = () => {
+    dispatch(resetsendEmail());
+  };
+
   return (
     <Event
       {...props}
@@ -58,11 +74,19 @@ const EventDetailScreen = props => {
       eventError={eventError}
       fetchEventByIdentifier={fetchEventByIdentifier}
       cleanEvent={cleanEvent}
+      // event Register
       eventRegisters={eventRegisters}
       eventRegisterLoading={eventRegisterLoading}
       eventRegisterError={eventRegisterError}
       registerEventByIdentifier={registerEventByIdentifier}
       cleanEventRegister={cleanEventRegister}
+	  
+      // Send Email
+      sendEmail={sendEmail}
+      sendEmailLoading={sendEmailLoading}
+      sendEmailError={sendEmailError}
+      sendEmailThroughButtons={sendEmailThroughButtons}
+      cleanSendEmail={cleanSendEmail}
     />
   );
 };

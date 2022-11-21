@@ -118,11 +118,11 @@ const Dashboard = props => {
     fetchEventRegion,
     cleanEventRegion,
 
-	dailyQuote,
-	dailyQuoteLoading,
-	dailyQuoteError,
-	fetchOneDailyQuote,
-	cleanDailyQuote
+    dailyQuote,
+    dailyQuoteLoading,
+    dailyQuoteError,
+    fetchOneDailyQuote,
+    cleanDailyQuote,
   } = props;
 
   let region = profile?.user_meta?.region;
@@ -519,10 +519,10 @@ const Dashboard = props => {
 
                 dataSourceCords[index] = layout.y;
                 setDataSourceCords(dataSourceCords);
-                console.log(dataSourceCords);
+
                 console.log('height:', layout.height);
-                console.log('width:', layout.width);
-                console.log('x:', layout.x);
+                console.log('width:', (dataSourceCords[index] = layout.y));
+
                 console.log('y:', layout.y);
               }}
               onScroll={e => setPos(e.nativeEvent.contentOffset.y)}>

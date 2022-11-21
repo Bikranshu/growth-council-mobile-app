@@ -70,6 +70,12 @@ const GrowthDetail = props => {
     profileError,
     fetchProfile,
     cleanProfile,
+
+    sendEmail,
+    sendEmailLoading,
+    sendEmailError,
+    sendEmailThroughButtons,
+    cleanSendEmail,
   } = props;
 
   const toast = useToast();
@@ -131,6 +137,17 @@ const GrowthDetail = props => {
     );
   }
 
+  const sendEmailToAdmin = async () => {
+    const response = await sendEmailThroughButtons({});
+    if (response?.payload?.code === 200) {
+      // setStatus(true);
+      ToastMessage.show(response.payload.message);
+    } else {
+      toast.closeAll();
+      ToastMessage.show(response?.payload?.message);
+    }
+  };
+
   const GrowthCoachingSignup = async () => {
     const response = await signupCoachingSession({});
     if (response?.payload?.code === 200) {
@@ -155,7 +172,7 @@ const GrowthDetail = props => {
   //   let check = SessionID.filter(item => previousSession.includes(item));
 
   let check = SessionID.filter(el => previousSession.indexOf(el) === -1);
-   console.log('check', check);
+
 
   //   const index = previousSession.findIndex(array1Item => {
   //     // This will return the index if found, otherwise -1
@@ -324,27 +341,27 @@ const GrowthDetail = props => {
               {coachingSessionLoading && <Loading />}
 
               {/* {check[0] && ( */}
-                <View>
-                  {coachingSession?.length !== 0 &&
-                    coachingSession !== null &&
-                    coachingSession !== false && (
-                      <View style={styles.middle}>
-                        <Text style={styles.title}>Sessions</Text>
-                        <View
-                          style={{
-                            display: 'flex',
-                            flexDirection: 'row',
-                          }}>
-                          <FlatList
-                            horizontal
-                            showsHorizontalScrollIndicator={false}
-                            data={coachingSession}
-                            renderItem={_renderMiddleItem}
-                          />
-                        </View>
+              <View>
+                {coachingSession?.length !== 0 &&
+                  coachingSession !== null &&
+                  coachingSession !== false && (
+                    <View style={styles.middle}>
+                      <Text style={styles.title}>Sessions</Text>
+                      <View
+                        style={{
+                          display: 'flex',
+                          flexDirection: 'row',
+                        }}>
+                        <FlatList
+                          horizontal
+                          showsHorizontalScrollIndicator={false}
+                          data={coachingSession}
+                          renderItem={_renderMiddleItem}
+                        />
                       </View>
-                    )}
-                </View>
+                    </View>
+                  )}
+              </View>
               {/* )} */}
 
               {/* 

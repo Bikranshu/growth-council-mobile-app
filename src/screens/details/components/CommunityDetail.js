@@ -72,6 +72,12 @@ const CommunityDetail = props => {
     getSlugError,
     GetIdBySlug,
     cleanSlug,
+
+    sendEmail,
+    sendEmailLoading,
+    sendEmailError,
+    sendEmailThroughButtons,
+    cleanSendEmail,
   } = props;
 
   const isFocused = useIsFocused();
@@ -122,6 +128,17 @@ const CommunityDetail = props => {
       };
     }, [isFocused]),
   );
+
+  const sendEmailToAdmin = async () => {
+    const response = await sendEmailThroughButtons({});
+    if (response?.payload?.code === 200) {
+      // setStatus(true);
+      ToastMessage.show(response.payload.message);
+    } else {
+      toast.closeAll();
+      ToastMessage.show(response?.payload?.message);
+    }
+  };
 
   //   useEffect(() => {
   //  GetIdBySlug({

@@ -47,6 +47,12 @@ const Event = props => {
     eventRegisterError,
     registerEventByIdentifier,
     cleanEventRegister,
+
+	sendEmail,
+	sendEmailLoading,
+	sendEmailError,
+	sendEmailThroughButtons,
+	cleanSendEmail
   } = props;
 
   const toast = useToast();
@@ -81,6 +87,17 @@ const Event = props => {
     } else {
       toast.closeAll();
       ToastMessage.show(response?.payload?.response);
+    }
+  };
+
+  const sendEmailToAdmin = async () => {
+    const response = await sendEmailThroughButtons({});
+    if (response?.payload?.code === 200) {
+      // setStatus(true);
+      ToastMessage.show(response.payload.message);
+    } else {
+      toast.closeAll();
+      ToastMessage.show(response?.payload?.message);
     }
   };
 
@@ -140,12 +157,12 @@ const Event = props => {
   const deviceOffset = today?.utcOffset();
 
   let Today = moment().tz(actualtimeZone);
- 
+
   let eventOffset = Today?.utcOffset();
 
   const com = ':';
 
-  console.log('ad', deviceOffset);
+
   //calculating gobal timezone of event.start
 
   const startHours = Number(backStartTimeStamp.split(/(\s+)/)[0]);
@@ -181,26 +198,29 @@ const Event = props => {
         day[previousDay]
       : null;
 
-  const first =
+  //Calculation part for start date of local time
+  const startCal1 =
     gobalStart?.split('.')[0] === '0' ? '12' : gobalStart?.split('.')[0];
-  const second = gobalStart?.split('.')[1];
+  const startCal2 = gobalStart?.split('.')[1];
 
-  const third = '0.' + second?.split('')[0] + second?.split('')[1];
+  const startCal3 = '0.' + startCal2?.split('')[0] + startCal2?.split('')[1];
 
-  const fourth =
-    third !== '0.undefinedundefined'
-      ? com + Math.round(Number(third) * 60)
+  const startCal4 =
+    startCal3 !== '0.undefinedundefined'
+      ? com + Math.round(Number(startCal3) * 60)
       : '';
-	  
-  const fifth =
-    gobalStart.split(' ')[1] === undefined ? '' : gobalStart.split(' ')[1];
-  const six = first?.indexOf(fifth) > -1 !== false ? '' : fifth;
 
-  const GobalStartTime = first + fourth + six;
+  const startCal5 =
+    gobalStart.split(' ')[1] === undefined ? '' : gobalStart.split(' ')[1];
+  const startCal6 =
+    startCal1?.indexOf(startCal5) > -1 !== false ? '' : startCal5;
+
+  const GobalStartTime = startCal1 + startCal4 + startCal6;
   const actualGobalStartTime =
     GobalStartTime === 'NaNam:' ? '' : GobalStartTime;
 
-  console.log('GobalStartTime', first?.indexOf(fifth) > -1 !== false,"ad", gobalStart.split(' '));
+  //Calculation part for start date
+  
 
   //calculating gobal timezone of event.end
   const endHours = Number(backEndTimeStamp.split(/(\s+)/)[0]);
@@ -220,18 +240,26 @@ const Event = props => {
       ? endDateCal - 24 + '' + ' am'
       : endDateCal + eventDate.split(/(\s+)/)[7] + 'am';
 
-  const a = gobalEnd.split('.')[0] === '0' ? '12' : gobalEnd.split('.')[0];
-  const b = gobalEnd.split('.')[1];
-  const c = '0.' + b?.split('')[0] + b?.split('')[1];
-  const d =
-    c !== '0.undefinedundefined' ? com + Math.round(Number(c) * 60) : '';
-  const e = gobalEnd.split(' ')[1] === undefined ? '' : gobalEnd.split(' ')[1];
-  const f = a?.indexOf(e) > -1 !== false ? '' : e;
+  //Calculation part for end date of local time
 
-  const GobalEndTime = a + d + f;
+  const endCal1 =
+    gobalEnd.split('.')[0] === '0' ? '12' : gobalEnd.split('.')[0];
+  const endCal2 = gobalEnd.split('.')[1];
+  const endCal3 = '0.' + endCal2?.split('')[0] + endCal2?.split('')[1];
+  const endCal4 =
+    endCal3 !== '0.undefinedundefined'
+      ? com + Math.round(Number(endCal3) * 60)
+      : '';
+  const endCal5 =
+    gobalEnd.split(' ')[1] === undefined ? '' : gobalEnd.split(' ')[1];
+  const endCal6 = endCal1?.indexOf(endCal5) > -1 !== false ? '' : endCal5;
+
+  const GobalEndTime = endCal1 + endCal4 + endCal6;
   const actualGobalEndTime = GobalEndTime === 'NaNam:' ? '' : GobalEndTime;
 
-  console.log('GobalEndTime', d);
+  // End of Calculation part for end date
+
+
 
   let title = '';
   const pillarname = events?.pillar_categories

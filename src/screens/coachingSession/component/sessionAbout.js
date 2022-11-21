@@ -125,7 +125,7 @@ const sessionAbout = props => {
     setTimeToEnd(convertedToLocalTimeEnd);
   }, [sessions]);
 
-  console.log('show', sessions.show_date_in_app);
+ 
 
   return (
     <View>

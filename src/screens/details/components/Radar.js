@@ -73,7 +73,7 @@ const Radar = props => {
       ? profile?.session_score?.map(item => item?.session)
       : [0];
 
-  console.log(previousSession);
+
 
   function LoadingIndicatorView() {
     return (

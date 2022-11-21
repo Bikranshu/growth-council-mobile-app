@@ -24,6 +24,11 @@ import {
 
 import {getIdBySlug, resetGetSlug} from './slice/getIdBySlug';
 
+import {
+  sendEmailThroughButton,
+  resetsendEmail,
+} from '../event/slice/emailButtonSlice';
+
 const CommunityDetailScreen = props => {
   const dispatch = useDispatch();
 
@@ -50,6 +55,10 @@ const CommunityDetailScreen = props => {
 
   const {getSlug, getSlugLoading, getSlugError} = useSelector(
     state => state.getSlug,
+  );
+
+  const {sendEmail, sendEmailLoading, sendEmailError} = useSelector(
+    state => state.sendEmail,
   );
 
   /**
@@ -119,6 +128,18 @@ const CommunityDetailScreen = props => {
     dispatch(resetGetSlug());
   };
 
+  /**
+   * Send email through button.
+   * @param {object} formData
+   *
+   */
+  const sendEmailThroughButtons = formData => {
+    return dispatch(sendEmailThroughButton(formData));
+  };
+
+  const cleanSendEmail = () => {
+    dispatch(resetsendEmail());
+  };
   return (
     <CommunityDetail
       {...props}
@@ -147,13 +168,17 @@ const CommunityDetailScreen = props => {
       pillarPOEError={pillarPOEError}
       fetchAllPillarPOE={fetchAllPillarPOE}
       cleanPillarPOE={cleanPillarPOE}
-
-
-	  getSlug={getSlug}
-	  getSlugLoading={getSlugLoading}
-	  getSlugError={getSlugError}
-	  GetIdBySlug={GetIdBySlug}
-	  cleanSlug={cleanSlug}
+      getSlug={getSlug}
+      getSlugLoading={getSlugLoading}
+      getSlugError={getSlugError}
+      GetIdBySlug={GetIdBySlug}
+      cleanSlug={cleanSlug}
+      // Send Email
+      sendEmail={sendEmail}
+      sendEmailLoading={sendEmailLoading}
+      sendEmailError={sendEmailError}
+      sendEmailThroughButtons={sendEmailThroughButtons}
+      cleanSendEmail={cleanSendEmail}
     />
   );
 };

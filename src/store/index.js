@@ -94,6 +94,7 @@ import coachingSignupReducer from '../screens/details/slice/coachingSignupSlice'
 import regionEventsReducer from '../screens/dashboard/slice/eventByRegionSlice';
 import deleteConnectionReducer from '../screens/people/slice/deleteConnectionSlice';
 import dailyQuoteReducer from '../screens/dashboard/slice/quoteSlice/dailyQuoteSlice';
+import sendEmailReducer from '../screens/event/slice/emailButtonSlice';
 
 const persistConfig = {
   key: 'root',
@@ -170,7 +171,8 @@ const reducers = combineReducers({
   coachingSignup: coachingSignupReducer,
   regionEvents: regionEventsReducer,
   deleteConnections: deleteConnectionReducer,
-  dailyQuote:dailyQuoteReducer
+  dailyQuote: dailyQuoteReducer,
+  sendEmail: sendEmailReducer,
 });
 
 const persistedReducer = persistReducer(persistConfig, reducers);

@@ -28,7 +28,10 @@ import {
 } from './slice/coachingSignupSlice';
 
 import {fetchProfileByID, resetProfile} from '../account/slice/profileSlice';
-
+import {
+  sendEmailThroughButton,
+  resetsendEmail,
+} from '../event/slice/emailButtonSlice';
 
 const GrowthDetailScreen = props => {
   const dispatch = useDispatch();
@@ -59,10 +62,13 @@ const GrowthDetailScreen = props => {
   const {coachingSignup, coachingSignupLoading, coachingSignupError} =
     useSelector(state => state.coachingSignup);
 
-	const {profile, profileLoading, profileError} = useSelector(
-		state => state.profile,
-	  );
+  const {profile, profileLoading, profileError} = useSelector(
+    state => state.profile,
+  );
 
+  const {sendEmail, sendEmailLoading, sendEmailError} = useSelector(
+    state => state.sendEmail,
+  );
 
   /**
    * Fetch event data.
@@ -127,6 +133,19 @@ const GrowthDetailScreen = props => {
     dispatch(resetProfile());
   };
 
+  /**
+   * Send email through button.
+   * @param {object} formData
+   *
+   */
+  const sendEmailThroughButtons = formData => {
+    return dispatch(sendEmailThroughButton(formData));
+  };
+
+  const cleanSendEmail = () => {
+    dispatch(resetsendEmail());
+  };
+
   return (
     <GrowthDetail
       {...props}
@@ -154,18 +173,22 @@ const GrowthDetailScreen = props => {
       radarMemberDetailsLoading={radarMemberDetailsLoading}
       radarMemberDetailsError={radarMemberDetailsError}
       fetchRadarMemberDetail={fetchRadarMemberDetail}
-
       coachingSignup={coachingSignup}
       coachingSignupLoading={coachingSignupLoading}
       coachingSignupError={coachingSignupError}
       signupCoachingSession={signupCoachingSession}
       cleanSignUpCoaching={cleanSignUpCoaching}
-
-	  profile={profile}
+      profile={profile}
       profileLoading={profileLoading}
       profileError={profileError}
       fetchProfile={fetchProfile}
       cleanProfile={cleanProfile}
+      // Send Email
+      sendEmail={sendEmail}
+      sendEmailLoading={sendEmailLoading}
+      sendEmailError={sendEmailError}
+      sendEmailThroughButtons={sendEmailThroughButtons}
+      cleanSendEmail={cleanSendEmail}
     />
   );
 };
