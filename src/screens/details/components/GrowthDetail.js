@@ -340,7 +340,7 @@ const GrowthDetail = props => {
                 style={{
                   justifyContent: 'center',
                   alignItems: 'center',
-                  marginButton: 10,
+                  marginBottom: 10,
                   paddingHorizontal: 15,
                 }}>
                 {sendEmailLoading && <Loading />}
