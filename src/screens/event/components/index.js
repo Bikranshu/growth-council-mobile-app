@@ -31,7 +31,7 @@ import {
   GROWTH_COMMUNITY_ID,
   GROWTH_CONTENT_ID,
 } from '../../../constants';
-import {COMMUNITY_COLOR} from '../../../theme/colors';
+import {COACHING_COLOR, COMMUNITY_COLOR} from '../../../theme/colors';
 
 const Event = props => {
   const {
@@ -48,15 +48,16 @@ const Event = props => {
     registerEventByIdentifier,
     cleanEventRegister,
 
-	sendEmail,
-	sendEmailLoading,
-	sendEmailError,
-	sendEmailThroughButtons,
-	cleanSendEmail
+    sendEmail,
+    sendEmailLoading,
+    sendEmailError,
+    sendEmailThroughButtons,
+    cleanSendEmail,
   } = props;
 
   const toast = useToast();
   const [eventStatus, setEventStatus] = useState(events?.register_status);
+  const [emailStatus, setEmailStatus] = useState(false);
   const [actualtimeZone, setactualtimeZone] = useState(events?.time_zone);
   const [timeToDisplay, setTimeToDisplay] = useState('');
   const [timeToEnd, setTimeToEnd] = useState('');
@@ -93,11 +94,11 @@ const Event = props => {
   const GrowthPipelineDialogueButton = async () => {
     const response = await sendEmailThroughButtons({});
     if (response?.payload?.code === 200) {
-      // setStatus(true);
-      ToastMessage.show(response.payload.message);
+      setEmailStatus(true);
+      ToastMessage.show(response);
     } else {
       toast.closeAll();
-      ToastMessage.show(response?.payload?.message);
+      ToastMessage.show(response);
     }
   };
 
@@ -162,7 +163,6 @@ const Event = props => {
 
   const com = ':';
 
-
   //calculating gobal timezone of event.start
 
   const startHours = Number(backStartTimeStamp.split(/(\s+)/)[0]);
@@ -222,7 +222,6 @@ const Event = props => {
   //Calculation part for start date
 
   //End of calculating gobal timezone of event.start
-  
 
   //calculating gobal timezone of event.end
   const endHours = Number(backEndTimeStamp.split(/(\s+)/)[0]);
@@ -242,26 +241,25 @@ const Event = props => {
       ? endDateCal - 24 + '' + ' am'
       : endDateCal + eventDate.split(/(\s+)/)[7] + 'am';
 
-	//Calculation part for end date of local time
+  //Calculation part for end date of local time
 
-	const endCal1 =
-		gobalEnd.split('.')[0] === '0' ? '12' : gobalEnd.split('.')[0];
-	const endCal2 = gobalEnd.split('.')[1];
-	const endCal3 = '0.' + endCal2?.split('')[0] + endCal2?.split('')[1];
-	const endCal4 =
-		endCal3 !== '0.undefinedundefined'
-		? com + Math.round(Number(endCal3) * 60)
-		: '';
-	const endCal5 =
-		gobalEnd.split(' ')[1] === undefined ? '' : gobalEnd.split(' ')[1];
-	const endCal6 = endCal1?.indexOf(endCal5) > -1 !== false ? '' : endCal5;
+  const endCal1 =
+    gobalEnd.split('.')[0] === '0' ? '12' : gobalEnd.split('.')[0];
+  const endCal2 = gobalEnd.split('.')[1];
+  const endCal3 = '0.' + endCal2?.split('')[0] + endCal2?.split('')[1];
+  const endCal4 =
+    endCal3 !== '0.undefinedundefined'
+      ? com + Math.round(Number(endCal3) * 60)
+      : '';
+  const endCal5 =
+    gobalEnd.split(' ')[1] === undefined ? '' : gobalEnd.split(' ')[1];
+  const endCal6 = endCal1?.indexOf(endCal5) > -1 !== false ? '' : endCal5;
 
-	const GobalEndTime = endCal1 + endCal4 + endCal6;
-	const actualGobalEndTime = GobalEndTime === 'NaNam:' ? '' : GobalEndTime;
+  const GobalEndTime = endCal1 + endCal4 + endCal6;
+  const actualGobalEndTime = GobalEndTime === 'NaNam:' ? '' : GobalEndTime;
 
-	// End of Calculation part for end date
-	//  End of calculating gobal timezone of event.end
-
+  // End of Calculation part for end date
+  //  End of calculating gobal timezone of event.end
 
   let title = '';
   const pillarname = events?.pillar_categories
@@ -801,6 +799,32 @@ const Event = props => {
                   alignItems: 'center',
                   marginTop: 10,
                 }}>
+                {sendEmailLoading && <Loading />}
+                {!emailStatus && (
+                  <Button
+                    style={[styles.emailButton]}
+                    onPress={async () => {
+                      GrowthPipelineDialogueButton();
+                    }}>
+                    <Text style={styles.acceptButtonText}>
+                      Growth Pipeline Dialogue
+                    </Text>
+                  </Button>
+                )}
+                {emailStatus && (
+                  <TouchableOpacity style={styles.sendRegisterButton}>
+                    <Text style={styles.emailButtonText}>
+                      Growth Pipeline Dialogue
+                    </Text>
+                  </TouchableOpacity>
+                )}
+              </View>
+
+              <View
+                style={{
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                }}>
                 {eventRegisterLoading && <Loading />}
                 {!eventStatus && (
                   <Button
@@ -923,6 +947,30 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
+  emailButton: {
+    borderRadius: 10,
+    marginLeft: 15,
+    marginRight: 15,
+    width: '100%',
+    height: 50,
+    backgroundColor: COACHING_COLOR,
+    marginTop: 25,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  sendRegisterButton: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: 10,
+    width: '100%',
+    height: 50,
+    backgroundColor: '#ffffff',
+    marginTop: 25,
+    borderColor: COACHING_COLOR,
+    borderWidth: 2,
+    position: 'relative',
+  },
   registeredButton: {
     flexDirection: 'row',
     justifyContent: 'center',
@@ -944,6 +992,9 @@ const styles = StyleSheet.create({
   },
   registeredButtonText: {
     color: '#F26722',
+  },
+  emailButtonText: {
+    color: COACHING_COLOR,
   },
   topbanner: {
     backgroundColor: 'rgba(54,147,172,1)',

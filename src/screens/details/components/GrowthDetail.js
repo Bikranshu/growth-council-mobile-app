@@ -14,16 +14,13 @@ import {
   ActivityIndicator,
 } from 'react-native';
 import {Button, useToast} from 'native-base';
-import Ionicons from 'react-native-vector-icons/Ionicons';
 import moment from 'moment';
-
+import {COACHING_COLOR, COMMUNITY_COLOR} from '../../../theme/colors';
 import {useIsFocused} from '@react-navigation/native';
 import HTMLView from 'react-native-htmlview';
 import {CommonStyles, Colors, Typography} from '../../../theme';
 import {WebView} from 'react-native-webview';
-import ToastMessage from '../../../shared/toast';
 import Loading from '../../../shared/loading';
-import {HOME_URL} from '../../../constants';
 
 const screenHeight = Math.round(Dimensions.get('window').height);
 const win = Dimensions.get('window');
@@ -81,6 +78,8 @@ const GrowthDetail = props => {
   const toast = useToast();
   const isFocused = useIsFocused();
   const [status, setStatus] = useState(false);
+  const [emailStatus, setEmailStatus] = useState(false);
+
   const [showChartButton, setShowChartButton] = useState(true);
   const webviewRef = React.useRef(null);
   const [userId, setUserId] = useState(0);
@@ -140,7 +139,7 @@ const GrowthDetail = props => {
   const sendEmailToAdmin = async () => {
     const response = await sendEmailThroughButtons({});
     if (response?.payload?.code === 200) {
-      // setStatus(true);
+      setEmailStatus(true);
       ToastMessage.show(response.payload.message);
     } else {
       toast.closeAll();
@@ -172,7 +171,6 @@ const GrowthDetail = props => {
   //   let check = SessionID.filter(item => previousSession.includes(item));
 
   let check = SessionID.filter(el => previousSession.indexOf(el) === -1);
-
 
   //   const index = previousSession.findIndex(array1Item => {
   //     // This will return the index if found, otherwise -1
@@ -336,6 +334,34 @@ const GrowthDetail = props => {
                     </View>
                   </View>
                 </TouchableOpacity>
+              </View>
+
+              <View
+                style={{
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  marginButton: 10,
+                  paddingHorizontal: 15,
+                }}>
+                {sendEmailLoading && <Loading />}
+                {!emailStatus && (
+                  <Button
+                    style={[styles.emailButton]}
+                    onPress={async () => {
+                      GrowthPipelineDialogueButton();
+                    }}>
+                    <Text style={styles.acceptButtonText}>
+                      Growth Pipeline Dialogue
+                    </Text>
+                  </Button>
+                )}
+                {emailStatus && (
+                  <TouchableOpacity style={styles.sendRegisterButton}>
+                    <Text style={styles.emailButtonText}>
+                      Growth Pipeline Dialogue
+                    </Text>
+                  </TouchableOpacity>
+                )}
               </View>
 
               {coachingSessionLoading && <Loading />}
@@ -639,5 +665,38 @@ const styles = StyleSheet.create({
   ActivityIndicatorStyle: {
     flex: 1,
     justifyContent: 'center',
+  },
+  emailButton: {
+    borderRadius: 10,
+    marginLeft: 15,
+    marginRight: 15,
+    width: '100%',
+    height: 50,
+    backgroundColor: COACHING_COLOR,
+
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  sendRegisterButton: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: 10,
+    width: '100%',
+    height: 50,
+    backgroundColor: '#ffffff',
+    marginTop: 25,
+    borderColor: COACHING_COLOR,
+    borderWidth: 2,
+    position: 'relative',
+  },
+  acceptButtonText: {
+    width: '100%',
+    height: 20,
+    fontSize: 14,
+    color: '#ffffff',
+  },
+  emailButtonText: {
+    color: COACHING_COLOR,
   },
 });

@@ -5,7 +5,7 @@ import {store} from '../../../utils/httpUtil';
 export const sendEmailThroughButton = createAsyncThunk(
   'sendEmail/sendEmailThroughButton',
   (formData, {rejectWithValue}) => {
-    return store(`jwt-auth/v1/`, formData)
+    return store(`jwt-auth/v1/gpd_email`, formData)
       .then(response => response.data)
       .catch(error => rejectWithValue(error?.response?.data || error));
   },
