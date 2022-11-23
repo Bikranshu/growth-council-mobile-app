@@ -23,10 +23,9 @@ import {
 } from '../dashboard/slice/POE/pillarPOESlice';
 
 import {getIdBySlug, resetGetSlug} from './slice/getIdBySlug';
-
 import {
-  sendEmailThroughButton,
-  resetsendEmail,
+  GrowthPipelineEmail,
+  resetSendEmail,
 } from '../event/slice/emailButtonSlice';
 
 const CommunityDetailScreen = props => {
@@ -133,12 +132,12 @@ const CommunityDetailScreen = props => {
    * @param {object} formData
    *
    */
-  const sendEmailThroughButtons = formData => {
-    return dispatch(sendEmailThroughButton(formData));
+  const GDPButton = formData => {
+    return dispatch(GrowthPipelineEmail(formData));
   };
 
-  const cleanSendEmail = () => {
-    dispatch(resetsendEmail());
+  const cleanGDPButton = () => {
+    dispatch(resetSendEmail());
   };
   return (
     <CommunityDetail
@@ -177,8 +176,8 @@ const CommunityDetailScreen = props => {
       sendEmail={sendEmail}
       sendEmailLoading={sendEmailLoading}
       sendEmailError={sendEmailError}
-      sendEmailThroughButtons={sendEmailThroughButtons}
-      cleanSendEmail={cleanSendEmail}
+      GDPButton={GDPButton}
+      cleanGDPButton={cleanGDPButton}
     />
   );
 };

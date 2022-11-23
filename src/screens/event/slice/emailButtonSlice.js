@@ -2,8 +2,8 @@ import {createAsyncThunk, createSlice} from '@reduxjs/toolkit';
 
 import {store} from '../../../utils/httpUtil';
 
-export const sendEmailThroughButton = createAsyncThunk(
-  'sendEmail/sendEmailThroughButton',
+export const GrowthPipelineEmail = createAsyncThunk(
+  'sendEmail/PipelineEmail',
   (formData, {rejectWithValue}) => {
     return store(`jwt-auth/v1/gpd_email`, formData)
       .then(response => response.data)
@@ -19,27 +19,26 @@ const sendEmailSlice = createSlice({
     sendEmailError: null,
   },
   reducers: {
-    resetsendEmail: state => {
+    resetSendEmail: state => {
       state.sendEmail = [];
       state.sendEmailLoading = false;
       state.sendEmailError = null;
     },
   },
   extraReducers: {
-    [sendEmailThroughButton.pending]: (state, action) => {
+    [GrowthPipelineEmail.pending]: (state, action) => {
       state.sendEmailLoading = true;
       state.sendEmailError = null;
     },
-    [sendEmailThroughButton.fulfilled]: (state, action) => {
+    [GrowthPipelineEmail.fulfilled]: (state, action) => {
       state.sendEmail = action.payload;
       state.sendEmailLoading = false;
       state.sendEmailError = null;
     },
-    [sendEmailThroughButton.rejected]: (state, action) => {
+    [GrowthPipelineEmail.rejected]: (state, action) => {
       state.sendEmailLoading = false;
       if (action.payload) {
-        state.sendEmailError =
-          action.payload.response || action?.payload?.error?.message;
+        state.sendEmailError = action?.payload?.error?.message;
       } else {
         state.sendEmailError = action.error;
       }
@@ -47,5 +46,5 @@ const sendEmailSlice = createSlice({
   },
 });
 
-export const {resetsendEmail} = sendEmailSlice.actions;
+export const {resetSendEmail} = sendEmailSlice.actions;
 export default sendEmailSlice.reducer;

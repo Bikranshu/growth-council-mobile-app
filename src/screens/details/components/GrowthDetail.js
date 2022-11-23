@@ -71,8 +71,8 @@ const GrowthDetail = props => {
     sendEmail,
     sendEmailLoading,
     sendEmailError,
-    sendEmailThroughButtons,
-    cleanSendEmail,
+    GDPButton,
+    cleanGDPButton,
   } = props;
 
   const toast = useToast();
@@ -136,11 +136,12 @@ const GrowthDetail = props => {
     );
   }
 
-  const sendEmailToAdmin = async () => {
-    const response = await sendEmailThroughButtons({});
+  const GrowthPipelineDialogueButton = async () => {
+    const response = await GDPButton({});
+    console.log('asfdfa', response);
     if (response?.payload?.code === 200) {
-      setEmailStatus(true);
-      ToastMessage.show(response.payload.message);
+      // setStatus(true);
+      ToastMessage.show(response.payload.data);
     } else {
       toast.closeAll();
       ToastMessage.show(response?.payload?.message);
@@ -149,6 +150,7 @@ const GrowthDetail = props => {
 
   const GrowthCoachingSignup = async () => {
     const response = await signupCoachingSession({});
+    console.log('abcd', response);
     if (response?.payload?.code === 200) {
       // setStatus(true);
       ToastMessage.show(response.payload.message);

@@ -72,11 +72,11 @@ const CommunityDetail = props => {
     GetIdBySlug,
     cleanSlug,
 
-    sendEmail,
+	sendEmail,
     sendEmailLoading,
     sendEmailError,
-    sendEmailThroughButtons,
-    cleanSendEmail,
+    GDPButton,
+    cleanGDPButton,
   } = props;
 
   const isFocused = useIsFocused();
@@ -131,10 +131,11 @@ const CommunityDetail = props => {
   );
 
   const GrowthPipelineDialogueButton = async () => {
-    const response = await sendEmailThroughButtons({});
+    const response = await GDPButton({});
+    console.log('asfdfa', response);
     if (response?.payload?.code === 200) {
-      setEmailStatus(true);
-      ToastMessage.show(response.payload.message);
+      // setStatus(true);
+      ToastMessage.show(response.payload.data);
     } else {
       toast.closeAll();
       ToastMessage.show(response?.payload?.message);

@@ -51,8 +51,8 @@ const Event = props => {
     sendEmail,
     sendEmailLoading,
     sendEmailError,
-    sendEmailThroughButtons,
-    cleanSendEmail,
+    GDPButton,
+    cleanGDPButton,
   } = props;
 
   const toast = useToast();
@@ -92,15 +92,18 @@ const Event = props => {
   };
 
   const GrowthPipelineDialogueButton = async () => {
-    const response = await sendEmailThroughButtons({});
+	const response = await GDPButton({});
+	console.log("asfdfa",response)
     if (response?.payload?.code === 200) {
-      setEmailStatus(true);
-      ToastMessage.show(response);
+      // setStatus(true);
+      ToastMessage.show(response.payload.data);
     } else {
       toast.closeAll();
-      ToastMessage.show(response);
+      ToastMessage.show(response?.payload?.message);
     }
   };
+
+
 
   let backgroundColor = '';
   const pillarCategory = events?.pillar_categories
@@ -155,6 +158,8 @@ const Event = props => {
   const deviceTimeZone = RNLocalize.getTimeZone();
 
   const today = moment().tz(deviceTimeZone);
+  //   const dei = 'PST';
+  //   console.log('sdaf', moment().tz(dei));
   const deviceOffset = today?.utcOffset();
 
   let Today = moment().tz(actualtimeZone);
