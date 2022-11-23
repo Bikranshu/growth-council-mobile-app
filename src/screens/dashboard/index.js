@@ -38,10 +38,7 @@ import {
 } from '../people/slice/deleteConnectionSlice';
 import {fetchProfileByID, resetProfile} from '../account/slice/profileSlice';
 import {fetchEventByRegion, resetRegionEvent} from './slice/eventByRegionSlice';
-import {
-  fetchDailyQuote,
-  resetDailyQuote,
-} from './slice/quoteSlice/dailyQuoteSlice';
+import {fetchAllDailyQuote, resetDailyQuote} from './slice/dailyQuoteSlice';
 
 const DashboardScreen = props => {
   const dispatch = useDispatch();
@@ -67,9 +64,6 @@ const DashboardScreen = props => {
 
   const {memberConnections, memberConnectionLoading, memberConnectionError} =
     useSelector(state => state.memberConnections);
-
-  const {deleteConnections, deleteConnectionLoading, deleteConnectionError} =
-    useSelector(state => state.deleteConnections);
 
   const {profile, profileLoading, profileError} = useSelector(
     state => state.profile,
@@ -170,13 +164,14 @@ const DashboardScreen = props => {
     fetchProfileByID();
   }, []);
 
-  const fetchOneDailyQuote = () => {
-    dispatch(fetchDailyQuote());
+  const fetchDailyQuote = () => {
+    dispatch(fetchAllDailyQuote());
   };
 
   const cleanDailyQuote = () => {
     dispatch(resetDailyQuote());
   };
+
 
   return (
     <Dashboard
@@ -227,19 +222,11 @@ const DashboardScreen = props => {
       regionEventError={regionEventError}
       fetchEventRegion={fetchEventRegion}
       cleanEventRegion={cleanEventRegion}
-      deleteConnections={deleteConnections}
-      deleteConnectionLoading={deleteConnectionLoading}
-      deleteConnectionError={deleteConnectionError}
-      deleteMemberByIdentifier={deleteMemberByIdentifier}
-      cleanDeleteMember={cleanDeleteMember}
-
-	  //daily quote
-	  dailyQuote={dailyQuote}
+      //daily quote
+      dailyQuote={dailyQuote}
 	  dailyQuoteLoading={dailyQuoteLoading}
-	  dailyQuoteError={dailyQuoteError}
-	  fetchOneDailyQuote={fetchOneDailyQuote}
+      fetchDailyQuote={fetchDailyQuote}
 	  cleanDailyQuote={cleanDailyQuote}
-
     />
   );
 };

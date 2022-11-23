@@ -100,12 +100,6 @@ const Dashboard = props => {
     connectMemberByIdentifier,
     cleanConnectMember,
 
-    deleteConnections,
-    deleteConnectionLoading,
-    deleteConnectionError,
-    deleteMemberByIdentifier,
-    cleanDeleteMember,
-
     profile,
     profileLoading,
     profileError,
@@ -120,8 +114,8 @@ const Dashboard = props => {
 
     dailyQuote,
     dailyQuoteLoading,
-    dailyQuoteError,
-    fetchOneDailyQuote,
+    // dailyQuoteError,
+    fetchDailyQuote,
     cleanDailyQuote,
   } = props;
 
@@ -133,7 +127,7 @@ const Dashboard = props => {
   }
 
   const [memberConnection, setMemberConnection] = useState([]);
-  const [deleteConnect, setDeleteConnect] = useState([]);
+
   const [hideCritical, setHideCritical] = useState(false);
 
   const [dataSourceCords, setDataSourceCords] = useState(criticalIssue);
@@ -196,19 +190,15 @@ const Dashboard = props => {
       };
     }, []),
   );
-  //   useEffect(() => {
-  //     fetchAllUpcomingEvent();
-  //   }, []);
 
   useEffect(() => {
     fetchAllPillarSlider();
   }, []);
 
   useEffect(() => {
-    fetchOneDailyQuote();
+    fetchDailyQuote();
   }, []);
 
-//   console.log('dailyQuote', dailyQuote);
   useEffect(() => {
     const fetchLatestContentAsync = async () => {
       await fetchLatestContent();
@@ -239,7 +229,6 @@ const Dashboard = props => {
 
   useEffect(() => {
     setMemberConnection(communityMembers);
-    setDeleteConnect(communityMembers);
   }, [communityMembers]);
 
   const connectMemberByMemberID = async (memberID, index) => {
@@ -257,24 +246,48 @@ const Dashboard = props => {
     }
   };
 
-  const deleteMemberByMemberID = async (memberID, index) => {
-    const response = await deleteMemberByIdentifier({member_id: memberID});
-    if (response?.payload?.code === 200) {
-      let items = [...deleteConnect];
-      let item = {...items[index]};
-      item.connection = true;
-      items[index] = item;
-      setDeleteConnect(items);
-      fetchAllCommunityMember({
-        s: '',
-        sort: 'Desc',
-        region: regionUser,
-      });
-      ToastMessage.show('You have successfully deleted.');
-    } else {
-      toast.closeAll();
-      ToastMessage.show(response?.payload?.response);
-    }
+  const _renderDailyQuoteItem = ({item, index}) => {
+    const date = new Date();
+    let localTime = date.getTime();
+    let localOffset = date.getTimezoneOffset() * 60000;
+    let utc = localTime + localOffset;
+    let target_offset = -8; //PST from UTC 7 hours behind right now, will need to fix for daylight
+    let los_angles = utc + 3600000 * target_offset;
+    const nd = new Date(los_angles);
+    const PSTTime = nd.toLocaleString();
+    const ActualPSTTime = moment(PSTTime).format('D/MM/yyyy');
+
+    // console.log(PSTTime);
+    return (
+      <>
+        {ActualPSTTime === item?.quote_date ? (
+          <View
+            style={{
+              padding: 20,
+              borderRadius: 10,
+              borderWidth: 0.5,
+              borderColor: 'black',
+            }}>
+            <Text style={{color: 'black', width: 250}}>
+              {item?.daily_quote}
+            </Text>
+            <Text
+              style={{
+                color: 'black',
+                position: 'absolute',
+                right: 5,
+                bottom: 10,
+                fontWeight: 'bold',
+                marginTop: 20,
+              }}>
+              {item?.quote_author}
+            </Text>
+          </View>
+        ) : (
+          <></>
+        )}
+      </>
+    );
   };
 
   const _renderItem = ({item, index}) => {
@@ -335,17 +348,6 @@ const Dashboard = props => {
             {memberConnection[index]?.connection && (
               <View style={{flexDirection: 'row'}}>
                 <Material name="check-circle" size={20} color="#14A2E2" />
-                {/* <TouchableOpacity
-                  onPress={async () => {
-                    deleteMemberByMemberID(item.ID, index);
-                  }}>
-                  <AntDesign
-                    name="deleteuser"
-                    size={20}
-                    color="#14A2E2"
-                    style={{marginLeft: 5}}
-                  />
-                </TouchableOpacity> */}
               </View>
             )}
           </View>
@@ -493,16 +495,6 @@ const Dashboard = props => {
     let lowercaseRegion = '';
     if (userRegion) lowercaseRegion = userRegion.toLowerCase();
 
-    // if (userRegion === 'MEASA') lowercaseRegion = 'apac';
-    // if (
-    //   userRegion === '' ||
-    //   userRegion === 'AMERICAS' ||
-
-    //   typeof userRegion === 'undefined' ||
-    //   userRegion === null
-    // )
-    //   lowercaseRegion = 'north-america';
-
     return (
       <>
         {lowercaseRegion === item?.region ? (
@@ -525,10 +517,10 @@ const Dashboard = props => {
                 dataSourceCords[index] = layout.y;
                 setDataSourceCords(dataSourceCords);
 
-                console.log('height:', layout.height);
-                console.log('width:', (dataSourceCords[index] = layout.y));
+                // console.log('height:', layout.height);
+                // console.log('width:', (dataSourceCords[index] = layout.y));
 
-                console.log('y:', layout.y);
+                // console.log('y:', layout.y);
               }}
               onScroll={e => setPos(e.nativeEvent.contentOffset.y)}>
               <View
@@ -670,16 +662,28 @@ const Dashboard = props => {
             </View>
           )}
         {regionEventLoading && <Loading />}
+        {/* <View style={{padding: 20}}>
+          <Text style={styles.title}>Daily Quote</Text>
+          <View
+            style={{
+              //   display: 'flex',
+              //   flexDirection: 'row',
+              marginTop: 20,
+            }}>
+            <FlatList
+              horizontal
+              showsHorizontalScrollIndicator={false}
+              data={dailyQuote}
+              renderItem={_renderDailyQuoteItem}
+            />
+          </View>
+        </View> */}
         {memberConnectionLoading && (
           <View style={{marginTop: 40}}>
             <Loading />
           </View>
         )}
-        {deleteConnectionLoading && (
-          <View style={{marginTop: 40}}>
-            <Loading />
-          </View>
-        )}
+
         {latestContent?.length !== 0 &&
           latestContent !== null &&
           latestContent !== undefined && (

@@ -94,7 +94,7 @@ import coachingSignupReducer from '../screens/details/slice/coachingSignupSlice'
 import regionEventsReducer from '../screens/dashboard/slice/eventByRegionSlice';
 import deleteConnectionReducer from '../screens/people/slice/deleteConnectionSlice';
 import sendEmailReducer from '../screens/event/slice/emailButtonSlice';
-import dailyQuoteReducer from '../screens/dashboard/slice/quoteSlice/dailyQuoteSlice';
+import dailyQuoteReducer from '../screens/dashboard/slice/dailyQuoteSlice';
 
 const persistConfig = {
   key: 'root',
