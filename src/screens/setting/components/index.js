@@ -50,6 +50,7 @@ const Setting = props => {
     fetchProfileAsync();
   }, []);
 
+  console.log('abcd', isEnabled);
   return (
     <>
       <StatusBar
@@ -151,8 +152,9 @@ const Setting = props => {
                       </View>
                     </View>
                   </TouchableOpacity>
-
-                  {/* <View style={[styles.middleWrapper, {borderBottomWidth: 0}]}>
+                </View>
+                <View>
+                  <View style={[styles.middleWrapper, {borderBottomWidth: 0}]}>
                     <View style={styles.middleImage}>
                       <Ionicons
                         name={'notifications'}
@@ -168,12 +170,11 @@ const Setting = props => {
                       onValueChange={toggleSwitch}
                       value={isEnabled}
                       style={{
-                        // transform: [{scaleX: 1.4}, {scaleY: 1.5}],
                         right: 0,
                         position: 'absolute',
                       }}
                     />
-                  </View> */}
+                  </View>
                 </View>
                 <View style={styles.wrapper}>
                   <TouchableOpacity
