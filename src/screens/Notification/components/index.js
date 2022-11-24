@@ -14,6 +14,8 @@ import {
 import {Button} from 'native-base';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import ToastMessage from '../../../shared/toast';
+import {useFormik} from 'formik';
+
 import {CommonStyles, Colors, Typography} from '../../../theme';
 import {PRIMARY_BACKGROUND_COLOR} from '../../../theme/colors';
 
@@ -21,11 +23,6 @@ const Notification = props => {
   const {
     navigation,
     route,
-    upcomingEvents,
-    upcomingEventLoading,
-    upcomingEventError,
-    fetchAllUpcomingEvent,
-    cleanUpcomingEvent,
     profile,
     profileLoading,
     profileError,
@@ -33,14 +30,60 @@ const Notification = props => {
     cleanProfile,
   } = props;
 
+  const {
+    handleChange,
+    handleBlur,
+    handleSubmit,
+    values,
+    errors,
+    setErrors,
+    touched,
+    isValid,
+    setFieldValue,
+  } = useFormik({
+    initialValues: {
+      username: profile?.user_login,
+      contentEnabled: false,
+      eventEnabled: false,
+      memberEnabled: false,
+    },
+    onSubmit: async values => {
+      console.log(values);
+    },
+  });
+
   const [contentEnabled, setContentEnabled] = useState(false);
   const [eventEnabled, setEventEnabled] = useState(false);
   const [memberEnabled, setMemberEnabled] = useState(false);
 
-  const contentSwitch = () =>
-    setContentEnabled(previousState => !previousState);
-  const eventSwitch = () => setEventEnabled(previousState => !previousState);
-  const memberSwitch = () => setMemberEnabled(previousState => !previousState);
+//   const contentsEnabled = 1;
+//   const eventsEnabled = 2;
+//   const membersEnabled = 3;
+
+  const contentSwitch = () => {
+    setFieldValue('contentEnabled', !contentEnabled);
+    setContentEnabled(!contentEnabled);
+	
+    // if (notificationType === 1) {
+    //   setContentEnabled(!notificationEnabled);
+    // } else if (notificationType === 2) {
+    //   setEventEnabled(!notificationEnabled);
+    // } else if (notificationType === 3) {
+    //   setMemberEnabled(!notificationEnabled);
+    // }
+
+    handleSubmit();
+  };
+
+  const eventSwitch = () => {
+    setFieldValue('eventEnabled', !eventEnabled);
+    setEventEnabled(!eventEnabled);
+    handleSubmit();
+  };
+  const memberSwitch = () => {
+    setFieldValue('memberEnabled', !memberEnabled);
+    setMemberEnabled(!memberEnabled);
+  };
 
   useEffect(() => {
     const fetchProfileAsync = async () => {
@@ -186,11 +229,11 @@ const Notification = props => {
                   }}
                 />
               </View>
-              <View style={{alignItems: 'center', justifyContent: 'center'}}>
-                <Button style={styles.moreButton}>
+              {/* <View style={{alignItems: 'center', justifyContent: 'center'}}>
+                <Button style={styles.moreButton} onPress={handleSubmit}>
                   <Text style={styles.moreButtonText}>Submit</Text>
                 </Button>
-              </View>
+              </View> */}
             </View>
           </View>
         </View>
