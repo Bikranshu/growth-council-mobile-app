@@ -155,18 +155,28 @@ const Profile = props => {
               </View>
             </View>
           </View>
-          <View style={{marginVertical: 20}}>
+          <View style={{marginVertical: 10}}>
+            <Text
+              style={{
+                textAlign: 'center',
+                color: '#00b0f0',
+                margin: 10,
+                fontWeight: 'bold',
+                fontSize: 20,
+              }}>
+              TRAIL PERIOD
+            </Text>
             <CountDown
               until={totalDuration}
               //style of countdown
               digitStyle={{
-                backgroundColor: '#FFF',
+                backgroundColor: 'black',
                 borderWidth: 2,
-                borderColor: '#1CC625',
-              }}
-              digitTxtStyle={{color: '#1CC625'}}
-              timeLabelStyle={{color: 'red', fontWeight: 'bold'}}
-              separatorStyle={{color: '#1CC625', marginBottom: 20}}
+                borderColor: 'white',
+              }}  
+              digitTxtStyle={{color: 'white'}}
+              timeLabelStyle={{color: '#B2BEB5', fontWeight: 'bold'}}
+              separatorStyle={{color: 'black', marginBottom: 20}}
               //duration of countdown in seconds
               timetoShow={('H', 'M', 'S')}
               timeLabels={{d: 'Days', h: 'Hour', m: 'Min', s: 'Sec'}}
@@ -178,6 +188,17 @@ const Profile = props => {
               size={20}
               showSeparator
             />
+            <Text
+              style={{
+                textAlign: 'center',
+                color: '#B2BEB5',
+                margin: 10,
+                fontWeight: 'bold',
+                fontSize: 10,
+              }}>
+              Your trail period is about to expire. Please contact the Growth
+              Council Admin.
+            </Text>
           </View>
 
           <View style={styles.container}>
