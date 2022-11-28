@@ -47,6 +47,7 @@ import DashboardScreen from '../screens/dashboard';
 import SessionCompleted from '../screens/coachingSession/component/sessionCompleted';
 import DrawerNavigation from '../navigations/DrawerNavigation';
 import Header from '../shared/header/header';
+import NotificationListScreen from '../screens/Notification/notificationList';
 
 import {GROWTH_COMMUNITY_ID} from '../constants';
 
@@ -237,6 +238,21 @@ const AppStack = navigation => (
       options={() => ({
         header: ({navigation}) => (
           <Header
+            title="Notification"
+            image={require('../assets/img/appBG.png')}
+            navigation={navigation}
+            noDrawer={true}
+          />
+        ),
+      })}
+    />
+
+    <Screen
+      name="NotificationList"
+      component={NotificationListScreen}
+      options={() => ({
+        header: ({navigation}) => (
+          <SubHeader
             title="Notification"
             image={require('../assets/img/appBG.png')}
             navigation={navigation}

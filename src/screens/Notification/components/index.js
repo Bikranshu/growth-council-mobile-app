@@ -133,6 +133,13 @@ const Notification = props => {
     fetchNotificationOption();
   }, []);
 
+  useEffect(() => {
+    setContentEnabled(content);
+    setEventEnabled(event);
+    setChatEnabled(chat);
+    setMemberEnabled(member);
+  }, [notificationOptions]);
+
   return (
     <>
       <StatusBar
