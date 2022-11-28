@@ -236,7 +236,7 @@ const AppStack = navigation => (
       component={NotificationScreen}
       options={() => ({
         header: ({navigation}) => (
-          <SubHeader
+          <Header
             title="Notification"
             image={require('../assets/img/appBG.png')}
             navigation={navigation}

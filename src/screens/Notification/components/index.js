@@ -15,6 +15,7 @@ import {Button} from 'native-base';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import ToastMessage from '../../../shared/toast';
 import {useFormik} from 'formik';
+import Loading from '../../../shared/loading';
 
 import {CommonStyles, Colors, Typography} from '../../../theme';
 import {PRIMARY_BACKGROUND_COLOR} from '../../../theme/colors';
@@ -32,7 +33,46 @@ const Notification = props => {
     notificationOptions,
     notificationOptionLoading,
     notificationOptionError,
+    fetchNotificationOption,
+
+    updateNotification,
+    updateNotificationLoading,
+    updateNotificationError,
+    updateUserNotification,
   } = props;
+
+  let content = notificationOptions?.content_notification;
+  if (content === '1') {
+    content = true;
+  } else {
+    content = false;
+  }
+
+  let event = notificationOptions?.event_notification;
+  if (event === '1') {
+    event = true;
+  } else {
+    event = false;
+  }
+
+  let member = notificationOptions?.member_connection_add_delete_notification;
+  if (member === '1') {
+    member = true;
+  } else {
+    member = false;
+  }
+
+  let chat = notificationOptions?.chat_notification;
+  if (chat === '1') {
+    chat = true;
+  } else {
+    chat = false;
+  }
+
+  const [contentEnabled, setContentEnabled] = useState(content);
+  const [eventEnabled, setEventEnabled] = useState(event);
+  const [memberEnabled, setMemberEnabled] = useState(member);
+  const [chatEnabled, setChatEnabled] = useState(chat);
 
   const {
     handleChange,
@@ -46,47 +86,40 @@ const Notification = props => {
     setFieldValue,
   } = useFormik({
     initialValues: {
-      username: profile?.user_login,
-      contentEnabled: false,
-      eventEnabled: false,
-      memberEnabled: false,
+      event_notification: eventEnabled,
+      member_connection_add_delete_notification: memberEnabled,
+      chat_notification: chatEnabled,
+      content_notification: contentEnabled,
     },
     onSubmit: async values => {
-      console.log(values);
+      await updateUserNotification(values).then(response => {
+        console.log(response);
+      });
     },
   });
 
-  const [contentEnabled, setContentEnabled] = useState(false);
-  const [eventEnabled, setEventEnabled] = useState(false);
-  const [memberEnabled, setMemberEnabled] = useState(false);
-
-  //   const contentsEnabled = 1;
-  //   const eventsEnabled = 2;
-  //   const membersEnabled = 3;
-
   const contentSwitch = () => {
-    setFieldValue('contentEnabled', !contentEnabled);
+    setFieldValue('content_notification', !contentEnabled);
     setContentEnabled(!contentEnabled);
-
-    // if (notificationType === 1) {
-    //   setContentEnabled(!notificationEnabled);
-    // } else if (notificationType === 2) {
-    //   setEventEnabled(!notificationEnabled);
-    // } else if (notificationType === 3) {
-    //   setMemberEnabled(!notificationEnabled);
-    // }
-
     handleSubmit();
   };
 
   const eventSwitch = () => {
-    setFieldValue('eventEnabled', !eventEnabled);
+    setFieldValue('event_notification', !eventEnabled);
     setEventEnabled(!eventEnabled);
     handleSubmit();
   };
+
   const memberSwitch = () => {
-    setFieldValue('memberEnabled', !memberEnabled);
+    setFieldValue('member_connection_add_delete_notification', !memberEnabled);
     setMemberEnabled(!memberEnabled);
+    handleSubmit();
+  };
+
+  const chatSwitch = () => {
+    setFieldValue('chat_notification', !chatEnabled);
+    setChatEnabled(!chatEnabled);
+    handleSubmit();
   };
 
   useEffect(() => {
@@ -96,7 +129,9 @@ const Notification = props => {
     fetchProfileAsync();
   }, []);
 
-  console.log({notificationOptions});
+  useEffect(() => {
+    fetchNotificationOption();
+  }, []);
 
   return (
     <>
@@ -135,7 +170,7 @@ const Notification = props => {
           <View
             style={{
               display: 'flex',
-              marginTop: -120,
+              marginTop: -80,
               alignContent: 'center',
               marginLeft: 'auto',
               marginRight: 'auto',
@@ -169,46 +204,14 @@ const Notification = props => {
               </View>
             </View>
           </View>
-
+          {updateNotificationLoading && <Loading />}
           <View style={styles.container}>
             <View style={styles.wrapper}>
-              <TouchableOpacity
-                onPress={async () => {
-                  navigation.navigate('Notification');
-                }}>
-                <View style={[styles.middleWrapper, {borderBottomWidth: 0.5}]}>
-                  <View style={styles.middleImage}>
-                    <Ionicons name={'notifications'} size={20} color="white" />
-                  </View>
-                  <Text style={styles.text}>Notifications</Text>
-
-                  <View style={{right: 0, position: 'absolute'}}>
-                    <Ionicons
-                      name="chevron-down-outline"
-                      size={30}
-                      color="#d7d7d7"
-                    />
-                  </View>
+              <View style={styles.middleWrapper}>
+                <View style={styles.middleImage}>
+                  <Ionicons name="person-outline" color="white" size={20} />
                 </View>
-              </TouchableOpacity>
-            </View>
-            <View>
-              <View style={[styles.subWrapper]}>
-                <Text style={styles.subText}>Content Notifications</Text>
-                <Switch
-                  trackColor={{false: '#767577', true: '#32a32e'}}
-                  thumbColor={contentEnabled ? 'white' : 'white'}
-                  ios_backgroundColor="#3e3e3e"
-                  onValueChange={contentSwitch}
-                  value={contentEnabled}
-                  style={{
-                    right: 0,
-                    position: 'absolute',
-                  }}
-                />
-              </View>
-              <View style={[styles.subWrapper]}>
-                <Text style={styles.subText}>Event Notifications</Text>
+                <Text style={styles.text}>Event</Text>
                 <Switch
                   trackColor={{false: '#767577', true: '#32a32e'}}
                   thumbColor={eventEnabled ? 'white' : 'white'}
@@ -221,8 +224,14 @@ const Notification = props => {
                   }}
                 />
               </View>
-              <View style={[styles.subWrapper]}>
-                <Text style={styles.subText}>Member Notifications</Text>
+            </View>
+
+            <View style={styles.wrapper}>
+              <View style={styles.middleWrapper}>
+                <View style={styles.middleImage}>
+                  <Ionicons name="person-outline" color="white" size={20} />
+                </View>
+                <Text style={styles.text}>New Member</Text>
                 <Switch
                   trackColor={{false: '#767577', true: '#32a32e'}}
                   thumbColor={memberEnabled ? 'white' : 'white'}
@@ -235,12 +244,47 @@ const Notification = props => {
                   }}
                 />
               </View>
-              {/* <View style={{alignItems: 'center', justifyContent: 'center'}}>
-                <Button style={styles.moreButton} onPress={handleSubmit}>
-                  <Text style={styles.moreButtonText}>Submit</Text>
-                </Button>
-              </View> */}
             </View>
+
+            <View style={styles.wrapper}>
+              <View style={styles.middleWrapper}>
+                <View style={styles.middleImage}>
+                  <Ionicons name="person-outline" color="white" size={20} />
+                </View>
+                <Text style={styles.text}>Chat</Text>
+                <Switch
+                  trackColor={{false: '#767577', true: '#32a32e'}}
+                  thumbColor={chatEnabled ? 'white' : 'white'}
+                  ios_backgroundColor="#3e3e3e"
+                  onValueChange={chatSwitch}
+                  value={chatEnabled}
+                  style={{
+                    right: 0,
+                    position: 'absolute',
+                  }}
+                />
+              </View>
+            </View>
+            <View style={styles.wrapper}>
+              <View style={styles.middleWrapper}>
+                <View style={styles.middleImage}>
+                  <Ionicons name="person-outline" color="white" size={20} />
+                </View>
+                <Text style={styles.text}>Content</Text>
+                <Switch
+                  trackColor={{false: '#767577', true: '#32a32e'}}
+                  thumbColor={contentEnabled ? 'white' : 'white'}
+                  ios_backgroundColor="#3e3e3e"
+                  onValueChange={contentSwitch}
+                  value={contentEnabled}
+                  style={{
+                    right: 0,
+                    position: 'absolute',
+                  }}
+                />
+              </View>
+            </View>
+            <View></View>
           </View>
         </View>
 
@@ -254,8 +298,9 @@ export default Notification;
 
 const styles = StyleSheet.create({
   container: {
-    ...CommonStyles.container,
+    // ...CommonStyles.container,
     backgroundColor: PRIMARY_BACKGROUND_COLOR,
+    paddingTop: 10,
     paddingLeft: Platform.OS === 'ios' ? 40 : 50,
     paddingRight: Platform.OS === 'ios' ? 40 : 50,
   },
@@ -281,15 +326,15 @@ const styles = StyleSheet.create({
   },
 
   wrapper: {
-    marginTop: 15,
-    borderBottomColor: '#d7d7d7',
+    // marginTop: 5,
+    // borderBottomColor: '#d7d7d7',
   },
   middleWrapper: {
     display: 'flex',
     flexDirection: 'row',
-    paddingTop: 15,
-    paddingBottom: 15,
-    borderBottomWidth: 1,
+    paddingTop: 10,
+    paddingBottom: 10,
+    borderBottomWidth: 0,
     alignItems: 'center',
 
     position: 'relative',
@@ -305,7 +350,7 @@ const styles = StyleSheet.create({
   },
 
   text: {
-    fontSize: 20,
+    fontSize: 16,
     fontWeight: '600',
     margin: 15,
     color: '#222B45',

@@ -151,7 +151,6 @@ const SignUpForm = props => {
     },
   });
 
- 
   const [checked, setChecked] = React.useState(false);
 
   const countries = [
@@ -381,7 +380,6 @@ const SignUpForm = props => {
   ];
 
   const america = ['United States', 'Canada', 'Mexio'];
-
 
   const areAllFieldsFilled =
     values.first_name != '' &&
@@ -676,7 +674,7 @@ const SignUpForm = props => {
                         ? 'MEASA'
                         : america.indexOf(itemValue) > -1 !== false
                         ? 'AMERICAS'
-                        : "",
+                        : '',
                     );
                   }
                 }}>

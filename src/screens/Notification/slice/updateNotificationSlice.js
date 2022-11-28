@@ -14,13 +14,13 @@ export const updateNotificationByUser = createAsyncThunk(
 const updateNotificationSlice = createSlice({
   name: 'updateNotification',
   initialState: {
-    updateNotification: [],
+    updateNotification: {},
     updateNotificationLoading: false,
     updateNotificationError: null,
   },
   reducers: {
     resetUpdateNotification: state => {
-      state.updateNotification = [];
+      state.updateNotification = {};
       state.updateNotificationLoading = false;
       state.updateNotificationError = null;
     },
