@@ -95,6 +95,8 @@ import regionEventsReducer from '../screens/dashboard/slice/eventByRegionSlice';
 import deleteConnectionReducer from '../screens/people/slice/deleteConnectionSlice';
 import sendEmailReducer from '../screens/event/slice/emailButtonSlice';
 import dailyQuoteReducer from '../screens/dashboard/slice/dailyQuoteSlice';
+import notificationOptionsReducer from '../screens/Notification/slice/notificationOptionsSlice';
+import updateNotificationReducer from '../screens/Notification/slice/updateNotificationSlice';
 
 const persistConfig = {
   key: 'root',
@@ -173,6 +175,8 @@ const reducers = combineReducers({
   deleteConnections: deleteConnectionReducer,
   sendEmail: sendEmailReducer,
   dailyQuote: dailyQuoteReducer,
+  notificationOptions: notificationOptionsReducer,
+  updateNotification: updateNotificationReducer,
 });
 
 const persistedReducer = persistReducer(persistConfig, reducers);

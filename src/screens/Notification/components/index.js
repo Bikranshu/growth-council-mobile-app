@@ -28,6 +28,10 @@ const Notification = props => {
     profileError,
     fetchProfile,
     cleanProfile,
+
+    notificationOptions,
+    notificationOptionLoading,
+    notificationOptionError,
   } = props;
 
   const {
@@ -56,14 +60,14 @@ const Notification = props => {
   const [eventEnabled, setEventEnabled] = useState(false);
   const [memberEnabled, setMemberEnabled] = useState(false);
 
-//   const contentsEnabled = 1;
-//   const eventsEnabled = 2;
-//   const membersEnabled = 3;
+  //   const contentsEnabled = 1;
+  //   const eventsEnabled = 2;
+  //   const membersEnabled = 3;
 
   const contentSwitch = () => {
     setFieldValue('contentEnabled', !contentEnabled);
     setContentEnabled(!contentEnabled);
-	
+
     // if (notificationType === 1) {
     //   setContentEnabled(!notificationEnabled);
     // } else if (notificationType === 2) {
@@ -91,6 +95,8 @@ const Notification = props => {
     };
     fetchProfileAsync();
   }, []);
+
+  console.log({notificationOptions});
 
   return (
     <>
