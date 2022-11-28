@@ -41,39 +41,29 @@ const Notification = props => {
     updateUserNotification,
   } = props;
 
-  let content = notificationOptions?.content_notification;
-  if (content === '1') {
-    content = true;
-  } else {
-    content = false;
-  }
+  const [contentEnabled, setContentEnabled] = useState(
+    notificationOptions?.content_notification === '1' ? true : false,
+  );
+  const [eventEnabled, setEventEnabled] = useState(
+    notificationOptions?.event_notification === '1' ? true : false,
+  );
+  const [memberEnabled, setMemberEnabled] = useState(
+    notificationOptions?.member_connection_add_delete_notification === '1'
+      ? true
+      : false,
+  );
+  const [chatEnabled, setChatEnabled] = useState(
+    notificationOptions?.chat_notification === '1' ? true : false,
+  );
 
-  let event = notificationOptions?.event_notification;
-  if (event === '1') {
-    event = true;
-  } else {
-    event = false;
-  }
-
-  let member = notificationOptions?.member_connection_add_delete_notification;
-  if (member === '1') {
-    member = true;
-  } else {
-    member = false;
-  }
-
-  let chat = notificationOptions?.chat_notification;
-  if (chat === '1') {
-    chat = true;
-  } else {
-    chat = false;
-  }
-
-  const [contentEnabled, setContentEnabled] = useState(content);
-  const [eventEnabled, setEventEnabled] = useState(event);
-  const [memberEnabled, setMemberEnabled] = useState(member);
-  const [chatEnabled, setChatEnabled] = useState(chat);
-
+  console.log(
+    'contentEnabled',
+    contentEnabled,
+    'eventEnabled',
+    eventEnabled,
+    'memberEnabled',
+    memberEnabled,
+  );
   const {
     handleChange,
     handleBlur,
@@ -133,11 +123,22 @@ const Notification = props => {
     fetchNotificationOption();
   }, []);
 
+
   useEffect(() => {
-    setContentEnabled(content);
-    setEventEnabled(event);
-    setChatEnabled(chat);
-    setMemberEnabled(member);
+    setContentEnabled(
+      notificationOptions?.content_notification === '1' ? true : false,
+    );
+    setEventEnabled(
+      notificationOptions?.event_notification === '1' ? true : false,
+    );
+    setChatEnabled(
+      notificationOptions?.chat_notification === '1' ? true : false,
+    );
+    setMemberEnabled(
+      notificationOptions?.member_connection_add_delete_notification === '1'
+        ? true
+        : false,
+    );
   }, [notificationOptions]);
 
   return (
