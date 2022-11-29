@@ -321,7 +321,7 @@ const sessionAbout = props => {
                 style: {
                   fontSize: 12,
                   lineHeight: 20,
-                  fontWeight: 'regular',
+               
                   color: '#666767',
                   alignItems: 'center',
                   textAlign: 'justify',

@@ -34,7 +34,6 @@ const HeaderTitle = props => {
           fontFamily: Typography.FONT_SF_MEDIUM,
           color: 'white',
           fontSize: Platform.OS === 'ios' ? 16 : 18,
-          fontWeight: 'normal',
         }}>
         {title === undefined ? profile?.user_login : title}
       </Text>
