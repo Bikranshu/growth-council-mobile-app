@@ -48,6 +48,7 @@ import SessionCompleted from '../screens/coachingSession/component/sessionComple
 import DrawerNavigation from '../navigations/DrawerNavigation';
 import Header from '../shared/header/header';
 import NotificationListScreen from '../screens/Notification/notificationList';
+import DiscussionScreen from '../screens/discussionForum';
 
 import {GROWTH_COMMUNITY_ID} from '../constants';
 
@@ -261,7 +262,20 @@ const AppStack = navigation => (
         ),
       })}
     />
-
+    <Screen
+      name="Discussion"
+      component={DiscussionScreen}
+      options={() => ({
+        header: ({navigation}) => (
+          <SubHeader
+            title="Discussion"
+            image={require('../assets/img/appBG.png')}
+            navigation={navigation}
+            noDrawer={true}
+          />
+        ),
+      })}
+    />
     <Screen
       name="ChangePassword"
       component={ChangePasswordScreen}
