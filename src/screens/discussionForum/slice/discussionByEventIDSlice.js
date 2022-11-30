@@ -5,7 +5,7 @@ import {store} from '../../../utils/httpUtil';
 export const discussionByEventID = createAsyncThunk(
   'discussionForum/discussionByEventID',
   (formData, {rejectWithValue}) => {
-    return store(`jwt-auth/v1/event/comments`, formData)
+    return store(`jwt-auth/v1/event/get_comments`, formData)
       .then(response => response.data)
       .catch(error => rejectWithValue(error?.response?.data || error));
   },

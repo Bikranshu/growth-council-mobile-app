@@ -35,8 +35,8 @@ const Discussion = props => {
     fetchProfile,
   } = props;
 
-  //   const eventID = route.params.eventID;
-
+  //   const eventID = route?.params?.eventID;
+  //   console.log({eventID});
   const eventID = 6308;
   const isFocused = useIsFocused();
   const [backendComments, setBackendComments] = useState([]);
@@ -62,7 +62,7 @@ const Discussion = props => {
         avatar: profile?.avatar,
         comment_author: profile?.user_login,
         comment_content: '',
-		comment_parent: '0',
+        comment_parent: '0',
       },
       onSubmit: async values => {
         console.log(values);

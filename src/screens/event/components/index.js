@@ -582,7 +582,7 @@ const Event = props => {
                 <TouchableOpacity
                   style={styles.forumButton}
                   onPress={() =>
-                    navigation.navigate('Discussion', {eventID: eventID})
+                    navigation.navigate('Discussion', {eventID: events?.ID})
                   }>
                   <Text style={styles.forumText}>Discussion Forum</Text>
                 </TouchableOpacity>
@@ -728,7 +728,6 @@ const styles = StyleSheet.create({
     marginBottom: 25,
     color: Colors.TERTIARY_TEXT_COLOR,
     textAlign: 'left',
-    
   },
   acceptButton: {
     borderRadius: 10,
