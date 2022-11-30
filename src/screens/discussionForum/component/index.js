@@ -40,7 +40,7 @@ const Discussion = props => {
   const eventID = 6308;
   const isFocused = useIsFocused();
   const [backendComments, setBackendComments] = useState([]);
-  //   const [replyID, setReplyId] = useState('');
+  const [activeComment, setActiveComment] = useState(null);
   const rootComments = backendComments?.filter(
     backendComment => backendComment?.comment_parent === '0',
   );
@@ -51,6 +51,10 @@ const Discussion = props => {
     );
   };
 
+  const deleteComment = commentId => {
+    console.log('Are you sure that you want to remove');
+  };
+  const currentUserId = '412';
 
   const {handleChange, handleBlur, handleSubmit, values, errors, touched} =
     useFormik({
@@ -58,6 +62,7 @@ const Discussion = props => {
         avatar: profile?.avatar,
         comment_author: profile?.user_login,
         comment_content: '',
+		comment_parent: '0',
       },
       onSubmit: async values => {
         console.log(values);
@@ -78,7 +83,6 @@ const Discussion = props => {
     fetchProfileAsync();
   }, [isFocused]);
 
-
   return (
     <>
       <StatusBar
@@ -97,6 +101,11 @@ const Discussion = props => {
               key={rootComment?.comment_ID}
               comment={rootComment}
               replies={getReplies(rootComment?.comment_ID)}
+              currentUserId={currentUserId}
+              deleteComment={deleteComment}
+              activeComment={activeComment}
+              setActiveComment={setActiveComment}
+              profile={profile}
             />
           ))}
         </View>
