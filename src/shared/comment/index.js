@@ -24,6 +24,7 @@ const Comments = ({
   eventID,
   deleteDiscusssionLoading,
   postDiscussionByEvent,
+  discussionForumByIdentifier,
 }) => {
   const fiveMinutes = 300000;
   const timePassed = new Date() - new Date(comment?.comment_date) > fiveMinutes;
@@ -36,7 +37,6 @@ const Comments = ({
 
   const replyId = parentId ? parentId : comment?.comment_ID;
 
-  console.log('re', eventID);
   const {
     handleChange,
     handleBlur,
@@ -58,6 +58,9 @@ const Comments = ({
       await postDiscussionByEvent(values).then(response => {
         if (response?.payload?.code === 200) {
           console.log(response);
+          discussionForumByIdentifier({
+            event_id: eventID,
+          });
         }
       });
       resetForm(values?.content);
@@ -153,4 +156,13 @@ const Comments = ({
 };
 
 export default Comments;
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  textarea: {
+    width: '70%',
+    padding: 5,
+    fontSize: 16,
+    borderWidth: 0.2,
+    borderRadius: 5,
+    marginLeft: 10,
+  },
+});

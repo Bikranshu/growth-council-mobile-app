@@ -1,5 +1,4 @@
-import {position} from 'native-base/lib/typescript/theme/styled-system';
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useCallback} from 'react';
 import {
   StyleSheet,
   Text,
@@ -14,7 +13,7 @@ import {
 } from 'react-native';
 import {Button} from 'react-native-paper';
 import {useFormik} from 'formik';
-import {useIsFocused} from '@react-navigation/native';
+import {useFocusEffect, useIsFocused} from '@react-navigation/native';
 import Loading from '../../../shared/loading';
 import {CommonStyles, Colors, Typography} from '../../../theme';
 import {PRIMARY_TEXT_COLOR, SECONDARY_TEXT_COLOR} from '../../../theme/colors';
@@ -52,14 +51,16 @@ const Discussion = props => {
   const isFocused = useIsFocused();
   const [backendComments, setBackendComments] = useState([]);
   const [activeComment, setActiveComment] = useState(null);
-  const [rootComments, setRootComments] = useState([]);
 
+  const rootComments = backendComments?.filter(
+    backendComment => backendComment?.comment_parent === '0',
+  );
   const getReplies = replyID => {
     return backendComments.filter(
       backendComments => backendComments?.comment_parent === replyID,
     );
   };
- 
+
   const {
     handleChange,
     handleBlur,
@@ -81,16 +82,12 @@ const Discussion = props => {
       await postDiscussionByEvent(values).then(response => {
         if (response?.payload?.code === 200) {
           console.log(response);
+          discussionForumByIdentifier({
+            event_id: eventID,
+          });
         }
       });
       resetForm(values?.content);
-      setBackendComments(discussionForum?.data);
-      setRootComments(
-        backendComments?.filter(
-          backendComment => backendComment?.comment_parent === '0',
-        ),
-      );
- 
     },
   });
 
@@ -99,33 +96,25 @@ const Discussion = props => {
     const response = await deleteDiscussionByIndentifier({
       comment_id: deleteID,
     });
+    if (response?.payload?.code === 200) {
+      discussionForumByIdentifier({
+        event_id: eventID,
+      });
+    }
     console.log('Are you sure that you want to remove', response);
-    setBackendComments(discussionForum?.data);
-    setRootComments(
-      backendComments?.filter(
-        backendComment => backendComment?.comment_parent === '0',
-      ),
-    );
-   
   };
 
   useEffect(() => {
     discussionForumByIdentifier({
       event_id: eventID,
     });
-    setBackendComments(discussionForum?.data);
   }, []);
 
-  
   useEffect(() => {
-    setBackendComments(discussionForum?.data);
-    setRootComments(
-      backendComments?.filter(
-        backendComment => backendComment?.comment_parent === '0',
-      ),
-    );
+    setBackendComments(discussionForum);
   }, [discussionForum]);
 
+  //   console.log(discussionForum);
   useEffect(() => {
     const fetchProfileAsync = async () => {
       await fetchProfile();
@@ -167,6 +156,7 @@ const Discussion = props => {
                   eventID={eventID}
                   deleteDiscusssionLoading={deleteDiscusssionLoading}
                   postDiscussionByEvent={postDiscussionByEvent}
+                  discussionForumByIdentifier={discussionForumByIdentifier}
                 />
               ))}
             </View>
