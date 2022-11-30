@@ -19,6 +19,7 @@ import Loading from '../../../shared/loading';
 import {CommonStyles, Colors, Typography} from '../../../theme';
 import {PRIMARY_TEXT_COLOR, SECONDARY_TEXT_COLOR} from '../../../theme/colors';
 import Comments from '../../../shared/comment';
+import ToastMessage from '../../../shared/toast';
 
 const Discussion = props => {
   const {
@@ -28,46 +29,85 @@ const Discussion = props => {
     discussionForumLoading,
     discussionForumError,
     discussionForumByIdentifier,
+    cleanForum,
 
     profile,
     profileLoading,
     profileError,
     fetchProfile,
+
+    postDiscussion,
+    postDiscussionLoading,
+    postDiscussionByEvent,
+    cleanPostDiscussion,
+
+    deleteDiscusssion,
+    deleteDiscusssionLoading,
+    deleteDiscussionByIndentifier,
   } = props;
 
-  //   const eventID = route?.params?.eventID;
-  //   console.log({eventID});
-  const eventID = 6308;
+  const eventID = route?.params?.eventID;
+
+  //   const eventID = 6308;
   const isFocused = useIsFocused();
   const [backendComments, setBackendComments] = useState([]);
   const [activeComment, setActiveComment] = useState(null);
-  const rootComments = backendComments?.filter(
-    backendComment => backendComment?.comment_parent === '0',
-  );
+  const [rootComments, setRootComments] = useState([]);
 
   const getReplies = replyID => {
     return backendComments.filter(
       backendComments => backendComments?.comment_parent === replyID,
     );
   };
+ 
+  const {
+    handleChange,
+    handleBlur,
+    handleSubmit,
+    values,
+    errors,
+    touched,
+    resetForm,
+  } = useFormik({
+    initialValues: {
+      event_id: route?.params?.eventID,
+      author_name: profile?.user_login,
+      author_email: profile?.user_email,
+      content: '',
+      author_id: profile?.ID,
+      parent_id: '0',
+    },
+    onSubmit: async values => {
+      await postDiscussionByEvent(values).then(response => {
+        if (response?.payload?.code === 200) {
+          console.log(response);
+        }
+      });
+      resetForm(values?.content);
+      setBackendComments(discussionForum?.data);
+      setRootComments(
+        backendComments?.filter(
+          backendComment => backendComment?.comment_parent === '0',
+        ),
+      );
+ 
+    },
+  });
 
-  const deleteComment = commentId => {
-    console.log('Are you sure that you want to remove');
-  };
-  const currentUserId = '412';
-
-  const {handleChange, handleBlur, handleSubmit, values, errors, touched} =
-    useFormik({
-      initialValues: {
-        avatar: profile?.avatar,
-        comment_author: profile?.user_login,
-        comment_content: '',
-        comment_parent: '0',
-      },
-      onSubmit: async values => {
-        console.log(values);
-      },
+  const deleteComment = async commentId => {
+    const deleteID = parseInt(commentId);
+    const response = await deleteDiscussionByIndentifier({
+      comment_id: deleteID,
     });
+    console.log('Are you sure that you want to remove', response);
+    setBackendComments(discussionForum?.data);
+    setRootComments(
+      backendComments?.filter(
+        backendComment => backendComment?.comment_parent === '0',
+      ),
+    );
+   
+  };
 
   useEffect(() => {
     discussionForumByIdentifier({
@@ -75,6 +115,16 @@ const Discussion = props => {
     });
     setBackendComments(discussionForum?.data);
   }, []);
+
+  
+  useEffect(() => {
+    setBackendComments(discussionForum?.data);
+    setRootComments(
+      backendComments?.filter(
+        backendComment => backendComment?.comment_parent === '0',
+      ),
+    );
+  }, [discussionForum]);
 
   useEffect(() => {
     const fetchProfileAsync = async () => {
@@ -91,49 +141,62 @@ const Discussion = props => {
         backgroundColor="#001D3F"
         translucent={false}
       />
-      <View style={styles.forum}>
-        <Text style={styles.heading}>Discussion Forum</Text>
-        {discussionForumLoading && <Loading />}
-        {/* comment Data from backend */}
-        <View>
-          {rootComments?.map(rootComment => (
-            <Comments
-              key={rootComment?.comment_ID}
-              comment={rootComment}
-              replies={getReplies(rootComment?.comment_ID)}
-              currentUserId={currentUserId}
-              deleteComment={deleteComment}
-              activeComment={activeComment}
-              setActiveComment={setActiveComment}
-              profile={profile}
-            />
-          ))}
-        </View>
+      <ScrollView
+        showsVerticalScrollIndicator={false}
+        style={{backgroundColor: Colors.PRIMARY_BACKGROUND_COLOR}}>
+        <View style={styles.forum}>
+          <Text style={styles.heading}>Discussion Forum</Text>
+          {discussionForumLoading && <Loading />}
+          {/* comment Data from backend */}
+          <ScrollView
+            showsVerticalScrollIndicator={false}
+            style={{
+              backgroundColor: Colors.PRIMARY_BACKGROUND_COLOR,
+            }}>
+            <View>
+              {rootComments?.map(rootComment => (
+                <Comments
+                  key={rootComment?.comment_ID}
+                  comment={rootComment}
+                  replies={getReplies(rootComment?.comment_ID)}
+                  currentUserId={profile?.ID}
+                  deleteComment={deleteComment}
+                  activeComment={activeComment}
+                  setActiveComment={setActiveComment}
+                  profile={profile}
+                  eventID={eventID}
+                  deleteDiscusssionLoading={deleteDiscusssionLoading}
+                  postDiscussionByEvent={postDiscussionByEvent}
+                />
+              ))}
+            </View>
+          </ScrollView>
 
-        {/* //Comment Form */}
-        <View>
-          <View style={{flexDirection: 'row', margin: 10}}>
-            <Image
-              style={{width: 50, height: 50, borderRadius: 30}}
-              source={{
-                uri: 'https://reactnative.dev/img/tiny_logo.png',
-              }}
-            />
-            <TextInput
-              multiline={true}
-              numberOfLines={2}
-              style={styles.textarea}
-              value={values?.comment_content}
-              placeholder="Write comment"
-              onChangeText={handleChange('comment_content')}
-              onFocus={handleBlur('comment_content')}
-              error={errors.comment_content}
-              touched={touched.comment_content}
-            />
+          {/* //Comment Form */}
+          <View>
+            <View style={{flexDirection: 'row', margin: 10}}>
+              <Image
+                style={{width: 50, height: 50, borderRadius: 30}}
+                source={{
+                  uri: profile?.avatar,
+                }}
+              />
+              <TextInput
+                multiline={true}
+                numberOfLines={2}
+                style={styles.textarea}
+                value={values?.content}
+                placeholder="Write comment"
+                onChangeText={handleChange('content')}
+                onFocus={handleBlur('content')}
+                error={errors.content}
+                touched={touched.content}
+              />
+            </View>
+            <Button onPress={handleSubmit}>Write</Button>
           </View>
-          <Button onPress={handleSubmit}>Write</Button>
         </View>
-      </View>
+      </ScrollView>
     </>
   );
 };

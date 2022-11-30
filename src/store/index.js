@@ -98,6 +98,8 @@ import dailyQuoteReducer from '../screens/dashboard/slice/dailyQuoteSlice';
 import notificationOptionsReducer from '../screens/Notification/slice/notificationOptionsSlice';
 import updateNotificationReducer from '../screens/Notification/slice/updateNotificationSlice';
 import discussionForumReducer from '../screens/discussionForum/slice/discussionByEventIDSlice';
+import postDiscussionReducer from '../screens/discussionForum/slice/postDiscussionByEventIDSlice';
+import deleteDiscussionReducer from '../screens/discussionForum/slice/deleteDiscussionByEventIDSlice';
 
 const persistConfig = {
   key: 'root',
@@ -179,6 +181,8 @@ const reducers = combineReducers({
   notificationOptions: notificationOptionsReducer,
   updateNotification: updateNotificationReducer,
   discussionForum: discussionForumReducer,
+  postDiscussion: postDiscussionReducer,
+  deleteDiscussion: deleteDiscussionReducer,
 });
 
 const persistedReducer = persistReducer(persistConfig, reducers);
