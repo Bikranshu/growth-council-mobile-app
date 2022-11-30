@@ -82,6 +82,7 @@ const Notification = props => {
       content_notification: contentEnabled,
     },
     onSubmit: async values => {
+      console.log({values});
       await updateUserNotification(values).then(response => {
         console.log(response);
       });
@@ -90,24 +91,44 @@ const Notification = props => {
 
   const contentSwitch = () => {
     setFieldValue('content_notification', !contentEnabled);
+
+    setFieldValue('event_notification', eventEnabled);
+    setFieldValue('member_connection_add_delete_notification', memberEnabled);
+    setFieldValue('chat_notification', chatEnabled);
+
     setContentEnabled(!contentEnabled);
     handleSubmit();
   };
 
   const eventSwitch = () => {
     setFieldValue('event_notification', !eventEnabled);
+
+    setFieldValue('member_connection_add_delete_notification', memberEnabled);
+    setFieldValue('chat_notification', chatEnabled);
+    setFieldValue('content_notification', contentEnabled);
+
     setEventEnabled(!eventEnabled);
     handleSubmit();
   };
 
   const memberSwitch = () => {
     setFieldValue('member_connection_add_delete_notification', !memberEnabled);
+
+    setFieldValue('content_notification', contentEnabled);
+    setFieldValue('chat_notification', chatEnabled);
+    setFieldValue('event_notification', eventEnabled);
+
     setMemberEnabled(!memberEnabled);
     handleSubmit();
   };
 
   const chatSwitch = () => {
     setFieldValue('chat_notification', !chatEnabled);
+
+    setFieldValue('event_notification', eventEnabled);
+    setFieldValue('content_notification', contentEnabled);
+    setFieldValue('member_connection_add_delete_notification', memberEnabled);
+
     setChatEnabled(!chatEnabled);
     handleSubmit();
   };
@@ -122,7 +143,6 @@ const Notification = props => {
   useEffect(() => {
     fetchNotificationOption();
   }, []);
-
 
   useEffect(() => {
     setContentEnabled(

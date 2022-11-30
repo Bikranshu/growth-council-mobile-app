@@ -214,13 +214,12 @@ const Chat = props => {
         .collection(`rooms/${chatID()}/messages`)
         .add({_id, createdAt, text, user, status: 'read'});
       // await addDoc(chatsCol, {_id, createdAt, text, user, status: 'read'});
+    } else {
+      await firestore()
+        .collection(`rooms/${chatID()}/messages`)
+        .add({_id, createdAt, text, user, status: 'unread'});
+      // await addDoc(chatsCol, {_id, createdAt, text, user, status: 'unread'});
     }
-    // else {
-    //   await firestore()
-    //     .collection(`rooms/${chatID()}/messages`)
-    //     .add({_id, createdAt, text, user, status: 'read'});
-    //   // await addDoc(chatsCol, {_id, createdAt, text, user, status: 'unread'});
-    // }
 
     // update the last message Status
     await firestore()
