@@ -56,6 +56,7 @@ const Notification = props => {
     notificationOptions?.chat_notification === '1' ? true : false,
   );
 
+  const [boardEnabled, setBoardEnabled] = useState(false);
   console.log(
     'contentEnabled',
     contentEnabled,
@@ -305,6 +306,27 @@ const Notification = props => {
                   ios_backgroundColor="#3e3e3e"
                   onValueChange={contentSwitch}
                   value={contentEnabled}
+                  style={{
+                    right: 0,
+                    position: 'absolute',
+                  }}
+                />
+              </View>
+            </View>
+            <View style={styles.wrapper}>
+              <View style={styles.middleWrapper}>
+                <View style={styles.middleImage}>
+                  <Ionicons name="person-outline" color="white" size={20} />
+                </View>
+                <Text style={styles.text}>Discussion Board</Text>
+                <Switch
+                  trackColor={{false: '#767577', true: '#32a32e'}}
+                  thumbColor={boardEnabled ? 'white' : 'white'}
+                  ios_backgroundColor="#3e3e3e"
+                  onValueChange={() => {
+                    setBoardEnabled(!boardEnabled);
+                  }}
+                  value={boardEnabled}
                   style={{
                     right: 0,
                     position: 'absolute',
