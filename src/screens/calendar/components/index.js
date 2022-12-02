@@ -61,7 +61,7 @@ const EventCalendar = props => {
   const [regionVisible, setRegionVisible] = useState(false);
 
   let profileRegion = profile?.user_meta?.region;
-  console.log('ada', profileRegion);
+
   if (
     typeof profileRegion === 'undefined' ||
     profileRegion === null ||

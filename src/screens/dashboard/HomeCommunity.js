@@ -16,7 +16,7 @@ import {
 import {
   fetchAllCommunityMembers,
   resetCommunityMember,
-} from './slice/communityMemberSlice';
+} from './slice/Community/communityMemberSlice';
 import {
   connectMemberByID,
   resetConnectMember,
@@ -28,7 +28,7 @@ import {
 
 import {fetchUsersByKey, resetUser} from '../account/slice/userSlice';
 
-import {fetchAllPillarPOEs, resetPillarPOE} from './slice/pillarPOESlice';
+import {fetchAllPillarPOEs, resetPillarPOE} from './slice/POE/pillarPOESlice';
 import {fetchProfileByID, resetProfile} from '../account/slice/profileSlice';
 
 import {fetchEventByRegion, resetRegionEvent} from './slice/eventByRegionSlice';

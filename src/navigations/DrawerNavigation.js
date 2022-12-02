@@ -34,6 +34,7 @@ import GrowthCoachingScreen from '../screens/dashboard/GrowthCoaching';
 import SettingScreen from '../screens/setting/index';
 import SubHeader from '../shared/header/SubHeader';
 import ContentLibraryScreen from '../screens/contentLibrary/contentLibrary';
+import EventForumScreen from '../screens/discussionForum/eventForum';
 
 import {fetchProfileByID} from '../screens/account/slice/profileSlice';
 import DashboardScreen from '../screens/dashboard';
@@ -288,6 +289,23 @@ const DrawerNavigation = () => {
           header: () => (
             <SubHeader
               title="Contribute Ideas"
+              image={require('../assets/img/appBG.png')}
+              navigation={navigation}
+            />
+          ),
+        })}
+      />
+
+      <Drawer.Screen
+        name="EventForum"
+        component={EventForumScreen}
+        options={({navigation}) => ({
+          //   drawerIcon: ({focused, size}) => (
+          //     <Ionicons name="calendar-outline" color={'#00008B'} size={20} />
+          //   ),
+          header: () => (
+            <SubHeader
+              title="Discussion"
               image={require('../assets/img/appBG.png')}
               navigation={navigation}
             />

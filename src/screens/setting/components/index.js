@@ -39,9 +39,9 @@ const Setting = props => {
     cleanProfile,
   } = props;
 
-  const [isEnabled, setIsEnabled] = useState(false);
+//   const [isEnabled, setIsEnabled] = useState(false);
 
-  const toggleSwitch = () => setIsEnabled(previousState => !previousState);
+//   const toggleSwitch = () => setIsEnabled(previousState => !previousState);
 
   useEffect(() => {
     const fetchProfileAsync = async () => {
@@ -151,29 +151,33 @@ const Setting = props => {
                       </View>
                     </View>
                   </TouchableOpacity>
-
-                  {/* <View style={[styles.middleWrapper, {borderBottomWidth: 0}]}>
-                    <View style={styles.middleImage}>
-                      <Ionicons
-                        name={'notifications'}
-                        size={20}
-                        color="white"
-                      />
-                    </View>
-                    <Text style={styles.menuText}>Notifications</Text>
-                    <Switch
+                  <TouchableOpacity
+                    onPress={async () => {
+                      navigation.navigate('Notification');
+                    }}>
+                    <View
+                      style={[styles.middleWrapper, {borderBottomWidth: 0}]}>
+                      <View style={styles.middleImage}>
+                        <Ionicons
+                          name={'notifications'}
+                          size={20}
+                          color="white"
+                        />
+                      </View>
+                      <Text style={styles.menuText}>Notifications</Text>
+                      {/* <Switch
                       trackColor={{false: '#767577', true: '#32a32e'}}
                       thumbColor={isEnabled ? 'white' : 'white'}
                       ios_backgroundColor="#3e3e3e"
                       onValueChange={toggleSwitch}
                       value={isEnabled}
                       style={{
-                        // transform: [{scaleX: 1.4}, {scaleY: 1.5}],
                         right: 0,
                         position: 'absolute',
                       }}
-                    />
-                  </View> */}
+                    /> */}
+                    </View>
+                  </TouchableOpacity>
                 </View>
                 <View style={styles.wrapper}>
                   <TouchableOpacity

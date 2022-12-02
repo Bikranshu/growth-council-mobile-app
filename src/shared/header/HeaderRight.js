@@ -14,6 +14,11 @@ const HeaderRight = props => {
     <View style={{flexDirection: 'row', alignItems: 'center'}}>
       <TouchableOpacity
         style={{marginRight: 8}}
+        onPress={() => navigation.navigate('NotificationList')}>
+        <Ionicons name="notifications" color="white" size={25} />
+      </TouchableOpacity>
+      <TouchableOpacity
+        style={{marginRight: 8}}
         onPress={() => navigation.navigate('Search')}>
         <Ionicons name="search-outline" color={'white'} size={25} />
       </TouchableOpacity>

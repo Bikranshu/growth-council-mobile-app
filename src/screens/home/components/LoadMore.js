@@ -309,11 +309,11 @@ const styles = StyleSheet.create({
   eventTitle: {
     marginBottom: 8,
     fontSize: 14,
-    fontWeight: 'normal',
+    
   },
   eventParagraph: {
     fontSize: 8,
-    fontWeight: 'regular',
+    
   },
   eventDate: {
     flex: 1,
@@ -327,7 +327,7 @@ const styles = StyleSheet.create({
   eventDateText: {
     textAlign: 'center',
     fontSize: 14,
-    fontWeight: 'normal',
+   
   },
 });
 export default CouncilAllDetail;

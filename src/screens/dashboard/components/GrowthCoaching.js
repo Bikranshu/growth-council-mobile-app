@@ -18,6 +18,7 @@ import Material from 'react-native-vector-icons/MaterialIcons';
 import FeatherIcon from 'react-native-vector-icons/Feather';
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome';
 import moment from 'moment';
+import {Toast, useToast} from 'native-base';
 import analytics from '@react-native-firebase/analytics';
 import {Linking} from 'react-native';
 import {BubblesLoader} from 'react-native-indicator';
@@ -33,7 +34,7 @@ import Player from './Player';
 import {CommonStyles, Colors, Typography} from '../../../theme';
 import {isEmptyArray} from 'formik';
 import Loading from '../../../shared/loading';
-import { GROWTH_COACHING_ID } from '../../../constants';
+import {GROWTH_COACHING_ID} from '../../../constants';
 
 const win = Dimensions.get('window');
 const contentContainerWidth = win.width - 30;
@@ -57,12 +58,60 @@ const GrowthCoaching = props => {
     pillarPOEError,
     fetchAllPillarPOE,
     cleanPillarPOE,
+    regionEvents,
+    regionEventLoading,
+    regionEventError,
+    fetchEventRegion,
+    cleanEventRegion,
+
+    profile,
+    profileLoading,
+    profileError,
+    fetchProfile,
+    cleanProfile,
   } = props;
 
   const pillarId = GROWTH_COACHING_ID;
 
   const isFocused = useIsFocused();
   const [memberConnection, setMemberConnection] = useState([]);
+
+  let region = profile?.user_meta?.region;
+  if (typeof region === 'undefined' || region === null) {
+    region = ' ';
+  } else {
+    region = profile?.user_meta?.region[0];
+  }
+
+  let persona = profile?.user_meta?.user_persona;
+  if (typeof persona === 'undefined' || persona === null) {
+    persona = ' ';
+  } else {
+    persona = profile?.user_meta?.user_persona[0];
+  }
+
+  console.log('user_persona1', persona);
+
+  const [userRegion, setUserRegion] = useState(region);
+  const [hideEvents, setHideEvents] = useState();
+  useEffect(() => {
+    fetchProfile();
+  }, []);
+
+  useEffect(() => {
+    setUserRegion(region);
+  }, [profile]);
+
+  useFocusEffect(
+    useCallback(() => {
+      fetchEventRegion({
+        region: userRegion,
+      });
+      return () => {
+        cleanEventRegion();
+      };
+    }, []),
+  );
 
   useFocusEffect(
     useCallback(() => {
@@ -149,6 +198,8 @@ const GrowthCoaching = props => {
     );
   };
 
+  const toast = useToast();
+  const id = 'test-toast';
   const _renderMiddleItem = ({item, index}) => {
     let navigationPath = ' ';
     if (item?.slug === 'growth-leadership-coaching') {
@@ -159,14 +210,27 @@ const GrowthCoaching = props => {
 
     return (
       <TouchableOpacity
-        onPress={() =>
-          navigation.navigate(navigationPath, {
-            poeId: item?.term_id,
-            // pillarId: item?.parent,
-            title: 'Growth Coaching',
-            image: require('../../../assets/img/Rectangle.png'),
-          })
-        }>
+        onPress={() => {
+          if (
+            item?.growth_council_persona_classifcation?.includes(persona) ===
+            true
+          ) {
+            navigation.navigate(navigationPath, {
+              poeId: item?.term_id,
+              // pillarId: item?.parent,
+              title: 'Growth Coaching',
+              image: require('../../../assets/img/Rectangle.png'),
+            });
+          } else {
+            if (!toast.isActive(id)) {
+              toast.show({
+                id,
+                title: 'You have no access to this content',
+              });
+            }
+            // ToastMessage.show('You have no access to this content');
+          }
+        }}>
         <View style={styles.middleWrapper}>
           <View style={[styles.middleW, styles.shadowProp]}>
             <Image
@@ -210,51 +274,65 @@ const GrowthCoaching = props => {
     const pillarname = 'Growth Coaching';
     const image = require('../../../assets/img/Rectangle.png');
     return (
-      <View style={styles.topWrapper}>
-        <TouchableOpacity
-          onPress={async () => {
-            navigation.navigate('EventDetail', {
-              id: item.ID,
-              title: pillarname,
-              image: image,
-            });
+      <>
+        {item?.pillar_categories[0]?.slug === 'growth-coaching' ||
+        item?.pillar_categories[1]?.slug === 'growth-coaching' ||
+        item?.pillar_categories[0]?.parent === GROWTH_COACHING_ID ? (
+          <View style={styles.topWrapper} key={index}>
+            <TouchableOpacity
+              onPress={async () => {
+                navigation.navigate('EventDetail', {
+                  id: item.ID,
+                  title: pillarname,
+                  image: image,
+                });
 
-            await analytics().logEvent(item?.title, {
-              id: item.ID,
-              item: item.title,
-            });
-          }}>
-          <ImageBackground
-            style={{
-              width: '100%',
-              height: '100%',
-              borderRadius: 20,
-            }}
-            source={require('../../../assets/img/Rectangle.png')}>
-            <View
-              style={{
-                width: 50,
-                height: 50,
-                marginTop: 10,
-                marginLeft: 200,
-                backgroundColor: '#EBECF0',
-                borderRadius: 10,
-                padding: 5,
-                alignItems: 'center',
+                await analytics().logEvent(item?.title, {
+                  id: item.ID,
+                  item: item.title,
+                });
               }}>
-              <Text style={{color: '#030303'}}>{date[0]}</Text>
-              <Text style={{color: '#030303'}}>{date[1]}</Text>
-            </View>
+              {setHideEvents(
+                item?.pillar_categories[0]?.parent === 0 ||
+                  item?.pillar_categories[0]?.parent === GROWTH_COACHING_ID
+                  ? true
+                  : false,
+              )}
+              <ImageBackground
+                style={{
+                  width: '100%',
+                  height: '100%',
+                  borderRadius: 20,
+                }}
+                source={require('../../../assets/img/Rectangle.png')}>
+                <View
+                  style={{
+                    width: 50,
+                    height: 50,
+                    marginTop: 10,
+                    marginLeft: 200,
+                    backgroundColor: '#EBECF0',
+                    borderRadius: 10,
+                    padding: 5,
+                    alignItems: 'center',
+                  }}>
+                  <Text style={{color: '#030303'}}>{date[0]}</Text>
+                  <Text style={{color: '#030303'}}>{date[1]}</Text>
+                </View>
 
-            <View style={styles.header}>
-              <Text style={styles.headingText1}>{item.title}</Text>
-              <Text style={styles.headingText2}>
-                {organizer} {description}
-              </Text>
-            </View>
-          </ImageBackground>
-        </TouchableOpacity>
-      </View>
+                <View style={styles.header}>
+                  <Text style={styles.headingText1}>{item.title}</Text>
+                  <Text style={styles.headingText2}>
+                    {organizer} {description}
+                  </Text>
+                </View>
+              </ImageBackground>
+            </TouchableOpacity>
+          </View>
+        ) : (
+          <></>
+        )}
+      </>
     );
   };
 
@@ -415,12 +493,14 @@ const GrowthCoaching = props => {
         showsVerticalScrollIndicator={false}
         style={{backgroundColor: Colors.PRIMARY_BACKGROUND_COLOR}}>
         <View style={styles.container}>
-          {pillarEvents?.length !== 0 &&
-            pillarEvents !== undefined &&
-            pillarEvents !== null &&
-            pillarEvents !== false && (
+          {regionEvents?.length !== 0 &&
+            regionEvents !== undefined &&
+            regionEvents !== null &&
+            regionEvents !== false && (
               <View style={styles.top}>
-                <Text style={styles.title}>Growth Coaching Events</Text>
+                {hideEvents && (
+                  <Text style={styles.title}>Growth Coaching Events</Text>
+                )}
                 <View
                   style={{
                     display: 'flex',
@@ -429,7 +509,7 @@ const GrowthCoaching = props => {
                   <FlatList
                     horizontal
                     showsHorizontalScrollIndicator={false}
-                    data={pillarEvents}
+                    data={regionEvents}
                     //renderItem={_renderTopItem}
                     renderItem={item => _renderTopItem(item, navigation)}
                   />
@@ -543,11 +623,13 @@ const styles = StyleSheet.create({
   },
 
   topWrapper: {
-    height: 144,
+    height: 180,
     width: 256,
-    marginTop: 20,
     marginLeft: 15,
-    borderRadius: 20,
+    borderRadius: 16,
+    overflow: 'hidden',
+    marginRight: 5,
+    marginTop: 15,
   },
   header: {
     margin: 10,

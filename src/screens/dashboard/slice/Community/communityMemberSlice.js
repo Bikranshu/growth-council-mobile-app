@@ -1,6 +1,6 @@
 import {createAsyncThunk, createSlice} from '@reduxjs/toolkit';
 
-import {store} from '../../../utils/httpUtil';
+import {store} from '../../../../utils/httpUtil';
 
 export const fetchAllCommunityMembers = createAsyncThunk(
   'communityMember/fetchAll',

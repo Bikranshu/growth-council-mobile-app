@@ -102,57 +102,62 @@ const Email = props => {
             </View>
           </SafeAreaView>
           <View style={{padding: 20, backgroundColor: 'white'}}>
+            <TouchableWithoutFeedback
+              onPress={Keyboard.dismiss}
+              accessible={false}>
+              <View style={{flexDirection: 'row'}}>
+                <Text style={{fontSize: 18, marginTop: 10}}>From:</Text>
 
-		  <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
-            <View style={{flexDirection: 'row'}}>
-              <Text style={{fontSize: 18, marginTop: 10}}>From:</Text>
+                <TextInput
+                  multiline={true}
+                  style={[styles.input, {color: 'blue'}]}
+                  value={values.sender}
+                  onChangeText={handleChange('sender')}
+                  onFocus={handleBlur('sender')}
+                  error={errors.sender}
+                  touched={touched.sender}
+                />
+              </View>
+            </TouchableWithoutFeedback>
 
-              <TextInput
-                multiline={true}
-                style={[styles.input, {color: 'blue'}]}
-                value={values.sender}
-                onChangeText={handleChange('sender')}
-                onFocus={handleBlur('sender')}
-                error={errors.sender}
-                touched={touched.sender}
-              />
-            </View>
-			</TouchableWithoutFeedback>
-			
             {sendMailLoading && <Loading />}
 
-			<TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
-            <View style={{marginTop: 10}}>
-              <Text style={{fontSize: 18}}>Subject:</Text>
-              <TextInput
-                multiline={true}
-                numberOfLines={2}
-                style={styles.textarea}
-                value={values.subject}
-                placeholder="Account Assistance"
-                onChangeText={handleChange('subject')}
-                onFocus={handleBlur('subject')}
-                error={errors.subject}
-                touched={touched.subject}
-              />
-            </View>
-			</TouchableWithoutFeedback>
-			
-			<TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
-            <View style={{marginTop: 10}}>
-              <Text style={{fontSize: 18}}>Messages:</Text>
-              <TextInput
-                multiline={true}
-                numberOfLines={15}
-                style={styles.textarea1}
-                value={values.message}
-                onChangeText={handleChange('message')}
-                onFocus={handleBlur('message')}
-                error={errors.message}
-                touched={touched.message}
-              />
-            </View>
-			</TouchableWithoutFeedback>
+            <TouchableWithoutFeedback
+              onPress={Keyboard.dismiss}
+              accessible={false}>
+              <View style={{marginTop: 10}}>
+                <Text style={{fontSize: 18}}>Subject:</Text>
+                <TextInput
+                  multiline={true}
+                  numberOfLines={2}
+                  style={styles.textarea}
+                  value={values.subject}
+                  placeholder="Account Assistance"
+                  onChangeText={handleChange('subject')}
+                  onFocus={handleBlur('subject')}
+                  error={errors.subject}
+                  touched={touched.subject}
+                />
+              </View>
+            </TouchableWithoutFeedback>
+
+            <TouchableWithoutFeedback
+              onPress={Keyboard.dismiss}
+              accessible={false}>
+              <View style={{marginTop: 10}}>
+                <Text style={{fontSize: 18}}>Messages:</Text>
+                <TextInput
+                  multiline={true}
+                  numberOfLines={15}
+                  style={styles.textarea1}
+                  value={values.message}
+                  onChangeText={handleChange('message')}
+                  onFocus={handleBlur('message')}
+                  error={errors.message}
+                  touched={touched.message}
+                />
+              </View>
+            </TouchableWithoutFeedback>
 
             <View style={styles.buttonWrapper}>
               <TouchableOpacity style={styles.button} onPress={handleSubmit}>

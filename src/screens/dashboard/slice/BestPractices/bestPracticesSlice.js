@@ -1,7 +1,7 @@
 import {createAsyncThunk, createSlice} from '@reduxjs/toolkit';
-import { GROWTH_CONTENT_ID } from '../../../constants';
+import { GROWTH_CONTENT_ID } from '../../../../constants';
 
-import {fetch} from '../../../utils/httpUtil';
+import {fetch} from '../../../../utils/httpUtil';
 
 export const fetchAllbestPractices = createAsyncThunk(
     'bestPractices/fetchAll',

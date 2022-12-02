@@ -112,7 +112,6 @@ const SignUpForm = props => {
         );
         const token = await response.user.getIdToken();
         // const response = await registerCustomer(values);
-        console.log(response);
         if (token) {
           await registerCustomer(values).then(response => {
             if (response?.payload?.code === 200) {
@@ -152,7 +151,6 @@ const SignUpForm = props => {
     },
   });
 
-  console.log(values);
   const [checked, setChecked] = React.useState(false);
 
   const countries = [
@@ -382,8 +380,6 @@ const SignUpForm = props => {
   ];
 
   const america = ['United States', 'Canada', 'Mexio'];
-
-  console.log('country', countryRegion, country);
 
   const areAllFieldsFilled =
     values.first_name != '' &&
@@ -678,7 +674,7 @@ const SignUpForm = props => {
                         ? 'MEASA'
                         : america.indexOf(itemValue) > -1 !== false
                         ? 'AMERICAS'
-                        : "",
+                        : '',
                     );
                   }
                 }}>

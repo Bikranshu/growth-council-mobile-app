@@ -14,16 +14,13 @@ import {
   ActivityIndicator,
 } from 'react-native';
 import {Button, useToast} from 'native-base';
-import Ionicons from 'react-native-vector-icons/Ionicons';
 import moment from 'moment';
-
+import {COACHING_COLOR, COMMUNITY_COLOR} from '../../../theme/colors';
 import {useIsFocused} from '@react-navigation/native';
 import HTMLView from 'react-native-htmlview';
 import {CommonStyles, Colors, Typography} from '../../../theme';
 import {WebView} from 'react-native-webview';
-import ToastMessage from '../../../shared/toast';
 import Loading from '../../../shared/loading';
-import {HOME_URL} from '../../../constants';
 
 const screenHeight = Math.round(Dimensions.get('window').height);
 const win = Dimensions.get('window');
@@ -70,11 +67,19 @@ const GrowthDetail = props => {
     profileError,
     fetchProfile,
     cleanProfile,
+
+    sendEmail,
+    sendEmailLoading,
+    sendEmailError,
+    GDPButton,
+    cleanGDPButton,
   } = props;
 
   const toast = useToast();
   const isFocused = useIsFocused();
   const [status, setStatus] = useState(false);
+  const [emailStatus, setEmailStatus] = useState(false);
+
   const [showChartButton, setShowChartButton] = useState(true);
   const webviewRef = React.useRef(null);
   const [userId, setUserId] = useState(0);
@@ -131,8 +136,21 @@ const GrowthDetail = props => {
     );
   }
 
+  const GrowthPipelineDialogueButton = async () => {
+    const response = await GDPButton({});
+    console.log('asfdfa', response);
+    if (response?.payload?.code === 200) {
+      // setStatus(true);
+      ToastMessage.show(response.payload.data);
+    } else {
+      toast.closeAll();
+      ToastMessage.show(response?.payload?.message);
+    }
+  };
+
   const GrowthCoachingSignup = async () => {
     const response = await signupCoachingSession({});
+    console.log('abcd', response);
     if (response?.payload?.code === 200) {
       // setStatus(true);
       ToastMessage.show(response.payload.message);
@@ -155,7 +173,6 @@ const GrowthDetail = props => {
   //   let check = SessionID.filter(item => previousSession.includes(item));
 
   let check = SessionID.filter(el => previousSession.indexOf(el) === -1);
-   console.log('check', check);
 
   //   const index = previousSession.findIndex(array1Item => {
   //     // This will return the index if found, otherwise -1
@@ -321,30 +338,58 @@ const GrowthDetail = props => {
                 </TouchableOpacity>
               </View>
 
+              <View
+                style={{
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  marginBottom: 10,
+                  paddingHorizontal: 15,
+                }}>
+                {sendEmailLoading && <Loading />}
+                {!emailStatus && (
+                  <Button
+                    style={[styles.emailButton]}
+                    onPress={async () => {
+                      GrowthPipelineDialogueButton();
+                    }}>
+                    <Text style={styles.acceptButtonText}>
+                      Growth Pipeline Dialogue
+                    </Text>
+                  </Button>
+                )}
+                {emailStatus && (
+                  <TouchableOpacity style={styles.sendRegisterButton}>
+                    <Text style={styles.emailButtonText}>
+                      Growth Pipeline Dialogue
+                    </Text>
+                  </TouchableOpacity>
+                )}
+              </View>
+
               {coachingSessionLoading && <Loading />}
 
               {/* {check[0] && ( */}
-                <View>
-                  {coachingSession?.length !== 0 &&
-                    coachingSession !== null &&
-                    coachingSession !== false && (
-                      <View style={styles.middle}>
-                        <Text style={styles.title}>Sessions</Text>
-                        <View
-                          style={{
-                            display: 'flex',
-                            flexDirection: 'row',
-                          }}>
-                          <FlatList
-                            horizontal
-                            showsHorizontalScrollIndicator={false}
-                            data={coachingSession}
-                            renderItem={_renderMiddleItem}
-                          />
-                        </View>
+              <View>
+                {coachingSession?.length !== 0 &&
+                  coachingSession !== null &&
+                  coachingSession !== false && (
+                    <View style={styles.middle}>
+                      <Text style={styles.title}>Sessions</Text>
+                      <View
+                        style={{
+                          display: 'flex',
+                          flexDirection: 'row',
+                        }}>
+                        <FlatList
+                          horizontal
+                          showsHorizontalScrollIndicator={false}
+                          data={coachingSession}
+                          renderItem={_renderMiddleItem}
+                        />
                       </View>
-                    )}
-                </View>
+                    </View>
+                  )}
+              </View>
               {/* )} */}
 
               {/* 
@@ -622,5 +667,38 @@ const styles = StyleSheet.create({
   ActivityIndicatorStyle: {
     flex: 1,
     justifyContent: 'center',
+  },
+  emailButton: {
+    borderRadius: 10,
+    marginLeft: 15,
+    marginRight: 15,
+    width: '100%',
+    height: 50,
+    backgroundColor: COACHING_COLOR,
+
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  sendRegisterButton: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: 10,
+    width: '100%',
+    height: 50,
+    backgroundColor: '#ffffff',
+    marginTop: 25,
+    borderColor: COACHING_COLOR,
+    borderWidth: 2,
+    position: 'relative',
+  },
+  acceptButtonText: {
+    width: '100%',
+    height: 20,
+    fontSize: 14,
+    color: '#ffffff',
+  },
+  emailButtonText: {
+    color: COACHING_COLOR,
   },
 });

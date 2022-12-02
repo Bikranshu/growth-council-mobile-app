@@ -131,7 +131,7 @@ const People = props => {
     setMobileRegion(mobileRegion);
   }, [region]);
 
-  //   console.log(region.region_options);
+
 
   const connectMemberByMemberID = async (memberID, index) => {
     const response = await connectMemberByIdentifier({member_id: memberID});

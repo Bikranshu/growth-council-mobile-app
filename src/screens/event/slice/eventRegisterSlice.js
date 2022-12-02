@@ -11,6 +11,7 @@ export const registerEventByID = createAsyncThunk(
   },
 );
 
+
 const eventRegisterSlice = createSlice({
   name: 'eventRegister',
   initialState: {

@@ -8,6 +8,7 @@ import {
   registerEventByID,
   resetEventRegister,
 } from './slice/eventRegisterSlice';
+import {GrowthPipelineEmail, resetSendEmail} from './slice/emailButtonSlice';
 
 const EventDetailScreen = props => {
   const dispatch = useDispatch();
@@ -15,6 +16,10 @@ const EventDetailScreen = props => {
   const {events, eventLoading, eventError} = useSelector(state => state.events);
   const {eventRegisters, eventRegisterLoading, eventRegisterError} =
     useSelector(state => state.eventRegisters);
+
+  const {sendEmail, sendEmailLoading, sendEmailError} = useSelector(
+    state => state.sendEmail,
+  );
 
   /**
    * Fetch event data.
@@ -50,6 +55,14 @@ const EventDetailScreen = props => {
     dispatch(resetEventRegister());
   };
 
+  const GDPButton = formData => {
+    return dispatch(GrowthPipelineEmail(formData));
+  };
+
+  const cleanGDPButton = () => {
+    dispatch(resetSendEmail());
+  };
+
   return (
     <Event
       {...props}
@@ -58,11 +71,19 @@ const EventDetailScreen = props => {
       eventError={eventError}
       fetchEventByIdentifier={fetchEventByIdentifier}
       cleanEvent={cleanEvent}
+      // event Register
       eventRegisters={eventRegisters}
       eventRegisterLoading={eventRegisterLoading}
       eventRegisterError={eventRegisterError}
       registerEventByIdentifier={registerEventByIdentifier}
       cleanEventRegister={cleanEventRegister}
+      // Send Email
+
+      sendEmail={sendEmail}
+      sendEmailLoading={sendEmailLoading}
+      sendEmailError={sendEmailError}
+      GDPButton={GDPButton}
+      cleanGDPButton={cleanGDPButton}
     />
   );
 };

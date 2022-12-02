@@ -16,6 +16,7 @@ import {
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import Material from 'react-native-vector-icons/MaterialIcons';
 import FeatherIcon from 'react-native-vector-icons/Feather';
+import {Toast, useToast} from 'native-base';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome';
 import moment from 'moment';
@@ -106,6 +107,15 @@ const HomeCommunity = props => {
     region = profile?.user_meta?.region[0];
   }
 
+  let persona = profile?.user_meta?.user_persona;
+  if (typeof persona === 'undefined' || persona === null) {
+    persona = ' ';
+  } else {
+    persona = profile?.user_meta?.user_persona[0];
+  }
+
+  console.log('user_persona', persona);
+
   let string = region;
   if (string) string = string.toLowerCase();
 
@@ -116,7 +126,7 @@ const HomeCommunity = props => {
     regionUser = profile?.user_meta?.region[0];
   }
 
-  console.log(regionUser);
+
   //   region = region === 'AMERICAS' ? 'north-america' : region;
   const [userRegion, setUserRegion] = useState(region);
   const [memberConnection, setMemberConnection] = useState([]);
@@ -253,13 +263,13 @@ const HomeCommunity = props => {
                   fontFamily: Typography.FONT_SF_SEMIBOLD,
                   color: '#030303',
                 }}>
-               {item?.display_name}
+                {item?.display_name}
               </Text>
               <Text style={{fontSize: 8, color: '#030303', marginTop: 3}}>
                 {item?.registered_date}
                 {'\n'}
                 {'\n'}
-				{/* {item?.user_meta?.Title === undefined
+                {/* {item?.user_meta?.Title === undefined
                   ? item?.user_meta?.title
                   : item?.user_meta?.Title} */}
                 {/* {item?.user_meta?.Title} */}
@@ -290,22 +300,42 @@ const HomeCommunity = props => {
     );
   };
 
+  const toast = useToast();
+  const id = 'test-toast';
+
   const _renderMiddleItem = ({item, index}, navigation) => {
     return (
       <TouchableOpacity
         onPress={() => {
-          if (item.slug === 'brainstorming-strategy-discussions') {
-            navigation.navigate('Growth Community');
-          } else {
-            navigation.navigate('CommunityDetail', {
-              poeId: item?.term_id,
-              pillarId: item?.parent,
+          if (
+            item?.growth_council_persona_classifcation?.includes(persona) ===
+            true
+          ) {
+            if (item.slug === 'brainstorming-strategy-discussions') {
+              navigation.navigate('Growth Community');
+            } else {
+              navigation.navigate('CommunityDetail', {
+                poeId: item?.term_id,
+                pillarId: item?.parent,
 
-              title: 'Growth Community',
-              image: require('../../../assets/img/Rectangle2.png'),
-            });
+                title: 'Growth Community',
+                image: require('../../../assets/img/Rectangle2.png'),
+              });
+            }
+          } else {
+			if (!toast.isActive(id)) {
+				toast.show({
+				  id,
+				  title: 'You have no access to this content',
+				});
+			  }
+            // ToastMessage.show('You have no access to this content');
           }
         }}>
+        {console.log(
+          'hlkfd',
+          item?.growth_council_persona_classifcation?.includes(persona),
+        )}
         <View style={styles.middleWrapper}>
           <View style={[styles.middleW, styles.shadowProp]}>
             <Image
@@ -351,57 +381,61 @@ const HomeCommunity = props => {
     return (
       <>
         {item?.pillar_categories[0]?.parent === 0 ||
-          (item?.pillar_categories[0]?.parent === GROWTH_COMMUNITY_ID && (
-            <View style={styles.topWrapper} key={index}>
-              <TouchableOpacity
-                onPress={async () => {
-                  navigation.navigate('EventDetail', {
-                    id: item.ID,
-                    title: pillarname,
-                    image: image,
-                  });
+        item?.pillar_categories[0]?.parent === GROWTH_COMMUNITY_ID ? (
+          <View style={styles.topWrapper} key={index}>
+            <TouchableOpacity
+              onPress={async () => {
+                navigation.navigate('EventDetail', {
+                  id: item.ID,
+                  title: pillarname,
+                  image: image,
+                });
 
-                  await analytics().logEvent(item?.title, {
-                    id: item.ID,
-                    item: item.title,
-                  });
-                }}>
-                {setHideEvents(
-                  item?.pillar_categories[0]?.parent === 0 ||
-                    item?.pillar_categories[0]?.parent === GROWTH_COMMUNITY_ID,
-                )}
-                <ImageBackground
+                await analytics().logEvent(item?.title, {
+                  id: item.ID,
+                  item: item.title,
+                });
+              }}>
+              {setHideEvents(
+                item?.pillar_categories[0]?.parent === 0 ||
+                  item?.pillar_categories[0]?.parent === GROWTH_COMMUNITY_ID
+                  ? true
+                  : false,
+              )}
+              <ImageBackground
+                style={{
+                  width: '100%',
+                  height: '100%',
+                  borderRadius: 20,
+                }}
+                source={require('../../../assets/img/Rectangle2.png')}>
+                <View
                   style={{
-                    width: '100%',
-                    height: '100%',
-                    borderRadius: 20,
-                  }}
-                  source={require('../../../assets/img/Rectangle2.png')}>
-                  <View
-                    style={{
-                      width: 50,
-                      height: 50,
-                      marginTop: 10,
-                      marginLeft: 200,
-                      backgroundColor: '#EBECF0',
-                      borderRadius: 10,
-                      padding: 5,
-                      alignItems: 'center',
-                    }}>
-                    <Text style={{color: '#030303'}}>{date[0]}</Text>
-                    <Text style={{color: '#030303'}}>{date[1]}</Text>
-                  </View>
+                    width: 50,
+                    height: 50,
+                    marginTop: 10,
+                    marginLeft: 200,
+                    backgroundColor: '#EBECF0',
+                    borderRadius: 10,
+                    padding: 5,
+                    alignItems: 'center',
+                  }}>
+                  <Text style={{color: '#030303'}}>{date[0]}</Text>
+                  <Text style={{color: '#030303'}}>{date[1]}</Text>
+                </View>
 
-                  <View style={styles.header}>
-                    <Text style={styles.headingText1}>{item.title}</Text>
-                    <Text style={styles.headingText2}>
-                      {organizer} {description}
-                    </Text>
-                  </View>
-                </ImageBackground>
-              </TouchableOpacity>
-            </View>
-          ))}
+                <View style={styles.header}>
+                  <Text style={styles.headingText1}>{item.title}</Text>
+                  <Text style={styles.headingText2}>
+                    {organizer} {description}
+                  </Text>
+                </View>
+              </ImageBackground>
+            </TouchableOpacity>
+          </View>
+        ) : (
+          <></>
+        )}
       </>
     );
   };
