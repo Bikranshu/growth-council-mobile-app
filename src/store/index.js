@@ -100,6 +100,7 @@ import updateNotificationReducer from '../screens/Notification/slice/updateNotif
 import discussionForumReducer from '../screens/discussionForum/slice/discussionByEventIDSlice';
 import postDiscussionReducer from '../screens/discussionForum/slice/postDiscussionByEventIDSlice';
 import deleteDiscussionReducer from '../screens/discussionForum/slice/deleteDiscussionByEventIDSlice';
+import pastEventReducer from '../screens/discussionForum/slice/pastEventSlice';
 
 const persistConfig = {
   key: 'root',
@@ -183,6 +184,7 @@ const reducers = combineReducers({
   discussionForum: discussionForumReducer,
   postDiscussion: postDiscussionReducer,
   deleteDiscussion: deleteDiscussionReducer,
+  pastEvent: pastEventReducer,
 });
 
 const persistedReducer = persistReducer(persistConfig, reducers);

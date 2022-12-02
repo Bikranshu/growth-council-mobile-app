@@ -49,6 +49,7 @@ import DrawerNavigation from '../navigations/DrawerNavigation';
 import Header from '../shared/header/header';
 import NotificationListScreen from '../screens/Notification/notificationList';
 import DiscussionScreen from '../screens/discussionForum';
+// import EventForumScreen from '../screens/discussionForum/eventForum';
 
 import {GROWTH_COMMUNITY_ID} from '../constants';
 
@@ -262,6 +263,21 @@ const AppStack = navigation => (
         ),
       })}
     />
+    {/* <Screen
+      name="EventForum"
+      component={EventForumScreen}
+      options={() => ({
+        header: ({navigation}) => (
+          <SubHeader
+            title="Discussion Board"
+            image={require('../assets/img/appBG.png')}
+            navigation={navigation}
+            noDrawer={true}
+          />
+        ),
+      })}
+    /> */}
+
     <Screen
       name="Discussion"
       component={DiscussionScreen}
