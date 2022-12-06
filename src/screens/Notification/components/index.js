@@ -56,6 +56,7 @@ const Notification = props => {
     notificationOptions?.chat_notification === '1' ? true : false,
   );
 
+  const [boardEnabled, setBoardEnabled] = useState(false);
   console.log(
     'contentEnabled',
     contentEnabled,
@@ -82,6 +83,7 @@ const Notification = props => {
       content_notification: contentEnabled,
     },
     onSubmit: async values => {
+      console.log({values});
       await updateUserNotification(values).then(response => {
         console.log(response);
       });
@@ -90,24 +92,44 @@ const Notification = props => {
 
   const contentSwitch = () => {
     setFieldValue('content_notification', !contentEnabled);
+
+    setFieldValue('event_notification', eventEnabled);
+    setFieldValue('member_connection_add_delete_notification', memberEnabled);
+    setFieldValue('chat_notification', chatEnabled);
+
     setContentEnabled(!contentEnabled);
     handleSubmit();
   };
 
   const eventSwitch = () => {
     setFieldValue('event_notification', !eventEnabled);
+
+    setFieldValue('member_connection_add_delete_notification', memberEnabled);
+    setFieldValue('chat_notification', chatEnabled);
+    setFieldValue('content_notification', contentEnabled);
+
     setEventEnabled(!eventEnabled);
     handleSubmit();
   };
 
   const memberSwitch = () => {
     setFieldValue('member_connection_add_delete_notification', !memberEnabled);
+
+    setFieldValue('content_notification', contentEnabled);
+    setFieldValue('chat_notification', chatEnabled);
+    setFieldValue('event_notification', eventEnabled);
+
     setMemberEnabled(!memberEnabled);
     handleSubmit();
   };
 
   const chatSwitch = () => {
     setFieldValue('chat_notification', !chatEnabled);
+
+    setFieldValue('event_notification', eventEnabled);
+    setFieldValue('content_notification', contentEnabled);
+    setFieldValue('member_connection_add_delete_notification', memberEnabled);
+
     setChatEnabled(!chatEnabled);
     handleSubmit();
   };
@@ -122,7 +144,6 @@ const Notification = props => {
   useEffect(() => {
     fetchNotificationOption();
   }, []);
-
 
   useEffect(() => {
     setContentEnabled(
@@ -285,6 +306,27 @@ const Notification = props => {
                   ios_backgroundColor="#3e3e3e"
                   onValueChange={contentSwitch}
                   value={contentEnabled}
+                  style={{
+                    right: 0,
+                    position: 'absolute',
+                  }}
+                />
+              </View>
+            </View>
+            <View style={styles.wrapper}>
+              <View style={styles.middleWrapper}>
+                <View style={styles.middleImage}>
+                  <Ionicons name="person-outline" color="white" size={20} />
+                </View>
+                <Text style={styles.text}>Discussion Board</Text>
+                <Switch
+                  trackColor={{false: '#767577', true: '#32a32e'}}
+                  thumbColor={boardEnabled ? 'white' : 'white'}
+                  ios_backgroundColor="#3e3e3e"
+                  onValueChange={() => {
+                    setBoardEnabled(!boardEnabled);
+                  }}
+                  value={boardEnabled}
                   style={{
                     right: 0,
                     position: 'absolute',

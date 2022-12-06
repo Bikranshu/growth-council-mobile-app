@@ -19,7 +19,6 @@ const ChatCount = props => {
     return chatIDPre.join('_');
   };
 
-  console.log({userID});
   const messageCount = async item => {
     // const chatsCol = firestore().collection(`rooms/${chatID(item)}/messages`);
 
