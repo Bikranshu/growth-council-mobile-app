@@ -41,7 +41,15 @@ const Comments = ({
 
   const replyId = parentId ? parentId : comment?.comment_ID;
   const [friendToken, setFriendToken] = useState('');
+  const [parentUserId, setparentUserId] = useState(
+    replyId === comment?.comment_ID
+      ? comment?.comment_parent === '0'
+        ? comment?.user_id
+        : ''
+      : '',
+  );
 
+  console.log({replyId});
   const {
     handleChange,
     handleBlur,
@@ -70,14 +78,14 @@ const Comments = ({
       resetForm(values?.content);
     },
   });
-  console.log({replyId});
+
   useEffect(() => {
-    getFCMTOkenForUser(replyId)
+    getFCMTOkenForUser(parentUserId)
       .then(res => {
-        const token = res.data;
-        // if (token == null) {
-        //   console.log(res.data?.message);
-        // }
+        const token = res.data.data;
+        if (token == null) {
+          console.log(res.data?.message);
+        }
         console.log('token', token);
         setFriendToken(typeof token == 'string' ? token : token?.[0]);
       })
@@ -86,7 +94,7 @@ const Comments = ({
       });
   }, []);
 
-  console.log({friendToken});
+  console.log({parentUserId});
 
   sendNotification(
     friendToken,
@@ -99,13 +107,12 @@ const Comments = ({
       userID: replyId,
       userAvatar: parentName,
     },
-
-    console.log('profile', parentName),
   );
 
   return (
     <>
       {deleteDiscusssionLoading && <Loading />}
+
       <View style={{flexDirection: 'row', margin: 10}}>
         <Image
           style={{width: 50, height: 50, borderRadius: 30}}
