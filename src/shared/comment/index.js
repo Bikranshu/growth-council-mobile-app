@@ -11,6 +11,9 @@ import {
 import {useFormik} from 'formik';
 import {Button} from 'react-native-paper';
 import Loading from '../loading';
+import {getFCMTOkenForUser} from '../../utils/httpUtil';
+
+import {sendNotification} from '../../utils/sendNotification';
 
 const Comments = ({
   comment,
@@ -20,6 +23,7 @@ const Comments = ({
   activeComment,
   setActiveComment,
   parentId = null,
+  parentName,
   profile,
   eventID,
   deleteDiscusssionLoading,
@@ -33,9 +37,10 @@ const Comments = ({
   const isReplying =
     activeComment &&
     activeComment.type === 'replying' &&
-    activeComment.id === comment.comment_ID;
+    activeComment.id === comment?.comment_ID;
 
   const replyId = parentId ? parentId : comment?.comment_ID;
+  const [friendToken, setFriendToken] = useState('');
 
   const {
     handleChange,
@@ -57,7 +62,6 @@ const Comments = ({
     onSubmit: async values => {
       await postDiscussionByEvent(values).then(response => {
         if (response?.payload?.code === 200) {
-          console.log(response);
           discussionForumByIdentifier({
             event_id: eventID,
           });
@@ -66,6 +70,37 @@ const Comments = ({
       resetForm(values?.content);
     },
   });
+
+  useEffect(() => {
+    getFCMTOkenForUser(replyId)
+      .then(res => {
+        const token = res?.data?.data;
+        if (token == null) {
+          console.log(res.data?.message);
+        }
+        console.log(token);
+        setFriendToken(typeof token == 'string' ? token : token?.[0]);
+      })
+      .catch(error => {
+        console.log(error);
+      });
+  }, []);
+
+  sendNotification(
+    friendToken,
+    `${profile?.user_login} has replied to your comment`,
+    values.content,
+    {
+      type: 'chat',
+      friendID: profile?.ID,
+      friendName: profile?.user_login,
+      userID: replyId,
+      userAvatar: parentName,
+    },
+
+    console.log('profile', parentName),
+  );
+
   return (
     <>
       {deleteDiscusssionLoading && <Loading />}
@@ -118,7 +153,12 @@ const Comments = ({
                     activeComment={activeComment}
                     setActiveComment={setActiveComment}
                     parentId={comment?.comment_ID}
+                    parentName={comment?.comment_author}
                     profile={profile}
+                    eventID={eventID}
+                    // deleteDiscusssionLoading={deleteDiscusssionLoading}
+                    postDiscussionByEvent={postDiscussionByEvent}
+                    discussionForumByIdentifier={discussionForumByIdentifier}
                   />
                 ))}
               </View>

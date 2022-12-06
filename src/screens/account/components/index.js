@@ -155,7 +155,7 @@ const Profile = props => {
               </View>
             </View>
           </View>
-          <View style={{marginVertical: 10}}>
+          {/* <View style={{marginVertical: 10}}>
             <Text
               style={{
                 textAlign: 'center',
@@ -199,7 +199,7 @@ const Profile = props => {
               Your trail period is about to expire. Please contact the Growth
               Council Admin.
             </Text>
-          </View>
+          </View> */}
 
           <View style={styles.container}>
             <View>

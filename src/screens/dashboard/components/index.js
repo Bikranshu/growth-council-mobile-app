@@ -37,6 +37,7 @@ import ToastMessage from '../../../shared/toast';
 import BottomNav from '../../../layout/BottomLayout';
 import HTMLView from 'react-native-htmlview';
 import Loading from '../../../shared/loading';
+import FloatingButton from '../../../shared/floatingButton';
 import {useFocusEffect} from '@react-navigation/native';
 
 import {isTokenExpired} from '../../../utils/jwtUtil';
@@ -742,6 +743,7 @@ const Dashboard = props => {
           </View>
         </View>
       </ScrollView>
+      <FloatingButton />
       <BottomNav {...props} navigation={navigation} />
     </View>
   );

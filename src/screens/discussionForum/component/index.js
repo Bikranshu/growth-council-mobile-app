@@ -18,7 +18,6 @@ import Loading from '../../../shared/loading';
 import {CommonStyles, Colors, Typography} from '../../../theme';
 import {PRIMARY_TEXT_COLOR, SECONDARY_TEXT_COLOR} from '../../../theme/colors';
 import Comments from '../../../shared/comment';
-import ToastMessage from '../../../shared/toast';
 
 const Discussion = props => {
   const {
@@ -114,7 +113,7 @@ const Discussion = props => {
     setBackendComments(discussionForum);
   }, [discussionForum]);
 
-  //   console.log(discussionForum);
+//   console.log(discussionForum);
   useEffect(() => {
     const fetchProfileAsync = async () => {
       await fetchProfile();
