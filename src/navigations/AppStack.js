@@ -281,7 +281,8 @@ const AppStack = navigation => (
     <Screen
       name="Discussion"
       component={DiscussionScreen}
-      options={() => ({
+      options={route => ({
+        eventID: route?.params?.eventID,
         header: ({navigation}) => (
           <SubHeader
             title="Discussion"

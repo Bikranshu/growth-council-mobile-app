@@ -70,15 +70,15 @@ const Comments = ({
       resetForm(values?.content);
     },
   });
-
+  console.log({replyId});
   useEffect(() => {
     getFCMTOkenForUser(replyId)
       .then(res => {
-        const token = res?.data?.data;
-        if (token == null) {
-          console.log(res.data?.message);
-        }
-        console.log(token);
+        const token = res.data;
+        // if (token == null) {
+        //   console.log(res.data?.message);
+        // }
+        console.log('token', token);
         setFriendToken(typeof token == 'string' ? token : token?.[0]);
       })
       .catch(error => {
@@ -86,10 +86,12 @@ const Comments = ({
       });
   }, []);
 
+  console.log({friendToken});
+
   sendNotification(
     friendToken,
     `${profile?.user_login} has replied to your comment`,
-    values.content,
+    values?.content,
     {
       type: 'chat',
       friendID: profile?.ID,
@@ -142,7 +144,7 @@ const Comments = ({
 
           <View>
             {replies?.length > 0 && (
-              <View style={{marginLeft: 0}}>
+              <View>
                 {replies?.map(reply => (
                   <Comments
                     comment={reply}
@@ -171,7 +173,7 @@ const Comments = ({
                 <Image
                   style={{width: 50, height: 50, borderRadius: 30}}
                   source={{
-                    uri: comment?.avatar,
+                    uri: profile?.avatar,
                   }}
                 />
                 <TextInput

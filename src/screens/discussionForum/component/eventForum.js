@@ -34,8 +34,6 @@ const EventForum = props => {
     pastEventForum();
   }, []);
 
-  console.log({pastEvent});
-
   const _renderItem = ({item, index}) => {
     const actualDate = moment(item?.event_start).format('LLLL').split(',', 6);
     const date = actualDate[1].split(' ', 3);
@@ -73,36 +71,35 @@ const EventForum = props => {
       nav = 'EventDetail';
     }
 
-    let backgroundImage = '';
-    let pillarname = '';
-    switch (
-      item?.pillar_categories[0]?.parent ||
-      item?.pillar_categories[1]?.parent
-    ) {
-      case GROWTH_COMMUNITY_ID:
-      case 0:
-        backgroundImage = require('../../../assets/img/Rectangle2.png');
-        pillarname = 'Growth Community';
-        break;
-      case GROWTH_CONTENT_ID:
-      case 0:
-        backgroundImage = require('../../../assets/img/best-practice-bg.png');
-        pillarname = 'Growth Content';
-        break;
+    // let backgroundImage = '';
+    // let pillarname = '';
+    // switch (
+    //   item?.pillar_categories[0]?.parent ||
+    //   item?.pillar_categories[1]?.parent
+    // ) {
+    //   case GROWTH_COMMUNITY_ID:
+    //   case 0:
+    //     backgroundImage = require('../../../assets/img/Rectangle2.png');
+    //     pillarname = 'Growth Community';
+    //     break;
+    //   case GROWTH_CONTENT_ID:
+    //   case 0:
+    //     backgroundImage = require('../../../assets/img/best-practice-bg.png');
+    //     pillarname = 'Growth Content';
+    //     break;
 
-      default:
-        backgroundImage = require('../../../assets/img/Rectangle.png');
-        pillarname = 'Growth Coaching';
-    }
+    //   default:
+    //     backgroundImage = require('../../../assets/img/Rectangle.png');
+    //     pillarname = 'Growth Coaching';
+    // }
 
     return (
       <View key={index}>
         <TouchableOpacity
           onPress={() =>
-            navigation.navigate(nav, {
-              id: item?.ID,
-              title: pillarname,
-              image: backgroundImage,
+            navigation.navigate('Discussion', {
+              eventID: item?.ID,
+              title: item?.title,
             })
           }>
           <View style={[styles.middleWrapper, styles.shadowProp]}>

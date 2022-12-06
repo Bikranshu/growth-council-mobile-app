@@ -18,6 +18,7 @@ const {width, height} = Dimensions.get('window');
 const {add, block, concat, cond, event, eq, set, Value} = Animated;
 
 const FloatingButton = props => {
+  const {navigation} = props;
   const rotationRef = useRef();
   const panRef = useRef();
   const pinchRef = useRef();
@@ -55,66 +56,59 @@ const FloatingButton = props => {
   ]);
 
   return (
-    <>
-      <View style={styles.container}>
-        <PanGestureHandler
-          minDist={10}
-          ref={panRef}
-          onGestureEvent={onPan}
-          onHandlerStateChange={onPan}
-          simultaneousHandlers={[rotationRef, pinchRef]}>
-          <Animated.View style={styles.area}>
-            <RotationGestureHandler
-              onGestureEvent={onRotate}
-              onHandlerStateChange={onRotate}
-              ref={rotationRef}
-              simultaneousHandlers={[pinchRef, panRef]}>
-              <Animated.View
-                style={[
-                  styles.circle,
-                  {
-                    transform: [
-                      {translateX: X},
-                      {translateY: Y},
-                      {rotate: concat(R, 'rad')},
-                    ],
-                  },
-                ]}>
-                <TouchableOpacity>
-                  <Ionicons name="add-circle" size={30} color="white" />
-                </TouchableOpacity>
-              </Animated.View>
-            </RotationGestureHandler>
-          </Animated.View>
-        </PanGestureHandler>
-      </View>
-    </>
+    <View style={styles.container}>
+      <PanGestureHandler
+        minDist={10}
+        ref={panRef}
+        onGestureEvent={onPan}
+        onHandlerStateChange={onPan}
+        simultaneousHandlers={[rotationRef, pinchRef]}>
+        <Animated.View style={styles.area}>
+          <RotationGestureHandler
+            onGestureEvent={onRotate}
+            onHandlerStateChange={onRotate}
+            ref={rotationRef}
+            simultaneousHandlers={[pinchRef, panRef]}>
+            <Animated.View
+              style={[
+                styles.circle,
+                {
+                  transform: [
+                    {translateX: X},
+                    {translateY: Y},
+                    {rotate: concat(R, 'rad')},
+                  ],
+                },
+              ]}>
+              <TouchableOpacity>
+                <Ionicons name="add-circle" size={30} color="white" />
+              </TouchableOpacity>
+            </Animated.View>
+          </RotationGestureHandler>
+        </Animated.View>
+      </PanGestureHandler>
+    </View>
   );
 };
 export default FloatingButton;
-const CIRCLE_SIZE = 70;
+
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    position: 'absolute',
+    bottom: 40,
+    zIndex: 1011,
   },
   circle: {
     borderWidth: 1,
     borderColor: 'rgba(0,0,0,0.2)',
     alignItems: 'center',
     justifyContent: 'center',
-    width: 70,
+    padding: 10,
     position: 'absolute',
-    bottom: 90,
+    bottom: 50,
     right: -160,
-    height: 70,
-    zIndex: 999,
     backgroundColor: 'green',
     borderRadius: 50,
-  },
-
-  area: {
-    position: 'absolute',
-    top: 0,
-    zIndex: 999,
+    marginBottom: 10,
   },
 });

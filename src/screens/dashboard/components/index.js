@@ -743,7 +743,7 @@ const Dashboard = props => {
           </View>
         </View>
       </ScrollView>
-      <FloatingButton />
+      <FloatingButton {...props} navigation={navigation}/>
       <BottomNav {...props} navigation={navigation} />
     </View>
   );

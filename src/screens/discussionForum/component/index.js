@@ -16,8 +16,8 @@ import {useFormik} from 'formik';
 import {useFocusEffect, useIsFocused} from '@react-navigation/native';
 import Loading from '../../../shared/loading';
 import {CommonStyles, Colors, Typography} from '../../../theme';
-import {PRIMARY_TEXT_COLOR, SECONDARY_TEXT_COLOR} from '../../../theme/colors';
 import Comments from '../../../shared/comment';
+import {COMMUNITY_COLOR} from '../../../theme/colors';
 
 const Discussion = props => {
   const {
@@ -46,7 +46,6 @@ const Discussion = props => {
 
   const eventID = route?.params?.eventID;
 
-  //   const eventID = 6308;
   const isFocused = useIsFocused();
   const [backendComments, setBackendComments] = useState([]);
   const [activeComment, setActiveComment] = useState(null);
@@ -59,7 +58,7 @@ const Discussion = props => {
       backendComments => backendComments?.comment_parent === replyID,
     );
   };
-
+  console.log({eventID});
   const {
     handleChange,
     handleBlur,
@@ -103,17 +102,22 @@ const Discussion = props => {
     console.log('Are you sure that you want to remove', response);
   };
 
-  useEffect(() => {
-    discussionForumByIdentifier({
-      event_id: eventID,
-    });
-  }, []);
+  useFocusEffect(
+    useCallback(() => {
+      discussionForumByIdentifier({
+        event_id: eventID,
+      });
+      return () => {
+        cleanForum();
+      };
+    }, []),
+  );
 
   useEffect(() => {
     setBackendComments(discussionForum);
   }, [discussionForum]);
 
-//   console.log(discussionForum);
+  console.log({discussionForum});
   useEffect(() => {
     const fetchProfileAsync = async () => {
       await fetchProfile();
@@ -133,7 +137,13 @@ const Discussion = props => {
         showsVerticalScrollIndicator={false}
         style={{backgroundColor: Colors.PRIMARY_BACKGROUND_COLOR}}>
         <View style={styles.forum}>
-          <Text style={styles.heading}>Discussion Forum</Text>
+          <Text style={[styles.heading, {color: COMMUNITY_COLOR}]}>
+            {route?.params?.title}
+          </Text>
+          <Text style={[styles.heading, {marginTop: 10}]}>
+            Discussion Forum
+          </Text>
+
           {discussionForumLoading && <Loading />}
           {/* comment Data from backend */}
           <ScrollView

@@ -582,7 +582,10 @@ const Event = props => {
                 <TouchableOpacity
                   style={styles.forumButton}
                   onPress={() =>
-                    navigation.navigate('Discussion', {eventID: events?.ID})
+                    navigation.navigate('Discussion', {
+                      eventID: events?.ID,
+                      title: events?.title,
+                    })
                   }>
                   <Text style={styles.forumText}>Discussion Forum</Text>
                 </TouchableOpacity>
