@@ -21,6 +21,8 @@ import Comments from '../../../shared/comment';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import {COMMUNITY_COLOR} from '../../../theme/colors';
 
+const screenHeight = Math.round(Dimensions.get('window').height);
+
 const Discussion = props => {
   const {
     navigation,
@@ -60,7 +62,7 @@ const Discussion = props => {
       backendComments => backendComments?.comment_parent === replyID,
     );
   };
-  console.log({eventID});
+
   const {
     handleChange,
     handleBlur,
@@ -104,19 +106,17 @@ const Discussion = props => {
     }
   };
 
-  useFocusEffect(
-    useCallback(() => {
-      setInterval(() => {
-        discussionForumByIdentifier({
-          event_id: eventID,
-        });
-      }, 9000);
+  useEffect(() => {
+    setInterval(() => {
+      discussionForumByIdentifier({
+        event_id: eventID,
+      });
+    }, 9000);
 
-      return () => {
-        cleanForum();
-      };
-    }, []),
-  );
+    return () => {
+      cleanForum();
+    };
+  }, []);
 
   useEffect(() => {
     setBackendComments(discussionForum);
@@ -131,17 +131,7 @@ const Discussion = props => {
   }, [isFocused]);
 
   return (
-    <>
-      <StatusBar
-        barStyle="light-content"
-        hidden={false}
-        backgroundColor="#001D3F"
-        translucent={false}
-      />
-      {/* <ScrollView
-      // style={{backgroundColor: Colors.COACHING_COLOR}}
-      // directionalLockEnabled={false}
-      > */}
+    <ScrollView contentContainerStyle={{flexGrow: 1}}>
       <View style={styles.container}>
         <ImageBackground
           source={require('../../../assets/img/splash-screen.png')}
@@ -150,9 +140,9 @@ const Discussion = props => {
 
           <View>
             <View style={styles.forum}>
-              {/* <Text style={[styles.heading, {color: COMMUNITY_COLOR}]}>
-					{route?.params?.title}
-				</Text> */}
+              <Text style={[styles.heading, {color: COMMUNITY_COLOR}]}>
+                {route?.params?.title}
+              </Text>
               <Text style={[styles.heading, {marginTop: 10, marginBottom: 20}]}>
                 Welcome to the Discussion Forum
               </Text>
@@ -160,10 +150,9 @@ const Discussion = props => {
               {postDiscussionLoading && <Loading />}
               {/* comment Data from backend */}
               <ScrollView
-                contentContainerStyle={{
-                  flexGrow: 1,
+                showsVerticalScrollIndicator={false}
+                style={{
                   backgroundColor: Colors.PRIMARY_BACKGROUND_COLOR,
-                  paddingBottom: 10,
                 }}>
                 <View>
                   {rootComments?.map(rootComment => (
@@ -191,7 +180,6 @@ const Discussion = props => {
                 style={{
                   height: 70,
                   justifyContent: 'center',
-
                   borderTopWidth: 0.2,
                 }}>
                 <View
@@ -227,7 +215,7 @@ const Discussion = props => {
                       backgroundColor: COMMUNITY_COLOR,
                       borderRadius: 30,
                     }}>
-                    <Ionicons name="person-outline" color="white" size={30} />
+                    <Ionicons name="send" color="white" size={30} />
                   </TouchableOpacity>
                 </View>
               </View>
@@ -235,8 +223,7 @@ const Discussion = props => {
           </View>
         </ImageBackground>
       </View>
-      {/* </ScrollView> */}
-    </>
+    </ScrollView>
   );
 };
 
@@ -248,6 +235,7 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.PRIMARY_BACKGROUND_COLOR,
     flex: 1,
     marginBottom: 10,
+    justifyContent: 'flex-end',
   },
   forum: {
     width: Dimensions.get('window').width,
@@ -255,7 +243,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     padding: 10,
     borderRadius: 18,
-    height: 510,
+    height: 550,
   },
   heading: {
     fontSize: 16,

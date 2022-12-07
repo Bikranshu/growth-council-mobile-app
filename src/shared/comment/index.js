@@ -14,6 +14,7 @@ import Loading from '../loading';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import {getFCMTOkenForUser} from '../../utils/httpUtil';
 import {sendNotification} from '../../utils/sendNotification';
+import {COMMUNITY_COLOR} from '../../theme/colors';
 
 const Comments = ({
   comment,
@@ -51,31 +52,6 @@ const Comments = ({
       : '',
   );
 
-  const discussion_board =
-    comment?.comment_ID.includes(parentDetails) === true
-      ? comment?.comment_parent === '0'
-        ? comment?.user_data?.discussion_board_notification[0]
-        : ''
-      : '';
-
-  console.log(discussion_board);
-  console.log({parentUserId});
-  useEffect(() => {
-    getFCMTOkenForUser(parentUserId)
-      .then(res => {
-        const token = res.data.data;
-        if (token == null) {
-          console.log(res.data?.message);
-        }
-        console.log('token', token);
-        setFriendToken(typeof token == 'string' ? token : token?.[0]);
-      })
-
-      .catch(error => {
-        console.log(error);
-      });
-  }, []);
-
   const {
     handleChange,
     handleBlur,
@@ -95,8 +71,6 @@ const Comments = ({
     },
     onSubmit: async values => {
       await postDiscussionByEvent(values).then(response => {
-        console.log('aewa', response.meta.arg.parent_id);
-        setParentDetails(response.meta.arg.parent_id);
         if (response?.payload?.code === 200) {
           discussionForumByIdentifier({
             event_id: eventID,
@@ -110,7 +84,7 @@ const Comments = ({
         `${profile?.user_login} has replied to your comment`,
         values?.content,
         {
-          type: 'forum',
+          type: 'chat',
           friendID: profile?.ID,
           friendName: profile?.user_login,
           userID: replyId,
@@ -119,6 +93,22 @@ const Comments = ({
       );
     },
   });
+
+  useEffect(() => {
+    getFCMTOkenForUser(parentUserId)
+      .then(res => {
+        const token = res.data.data;
+        if (token == null) {
+          console.log(res.data?.message);
+        }
+        console.log('token', token);
+        setFriendToken(typeof token == 'string' ? token : token?.[0]);
+      })
+
+      .catch(error => {
+        console.log(error);
+      });
+  }, []);
 
   return (
     <>
@@ -144,9 +134,21 @@ const Comments = ({
                 height: 'auto',
                 minHeight: 20,
               }}>
-              <Text style={{color: '#00008B', fontSize: 16}}>
-                {comment?.comment_author}
-              </Text>
+              <View style={{flexDirection: 'row'}}>
+                <Text style={{color: '#00008B', fontSize: 16}}>
+                  {comment?.comment_author}
+                </Text>
+                <Text
+                  style={{
+                    color: 'grey',
+                    fontSize: 8,
+                    position: 'absolute',
+                    right: 1,
+                  }}>
+                  {comment?.comment_date}
+                </Text>
+              </View>
+
               <Text style={{color: 'black', fontSize: 12}}>
                 {comment?.comment_content}
               </Text>
@@ -209,12 +211,16 @@ const Comments = ({
                   error={errors.content}
                   touched={touched.content}
                 />
+                <TouchableOpacity
+                  onPress={handleSubmit}
+                  style={{
+                    padding: 10,
+                    backgroundColor: COMMUNITY_COLOR,
+                    borderRadius: 30,
+                  }}>
+                  <Ionicons name="send" color="white" size={30} />
+                </TouchableOpacity>
               </View>
-              <TouchableOpacity
-                onPress={handleSubmit}
-                style={{padding: 5, backgroundColor: 'blue'}}>
-           
-              </TouchableOpacity>
             </View>
           )}
 
@@ -251,12 +257,13 @@ const Comments = ({
 export default Comments;
 const styles = StyleSheet.create({
   textarea: {
-    width: '70%',
+    width: '50%',
     padding: 5,
     fontSize: 16,
-
+    borderWidth: 0.2,
     borderRadius: 5,
     marginLeft: 10,
+    marginRight: 5,
   },
   commentSection: {
     width: '70%',
