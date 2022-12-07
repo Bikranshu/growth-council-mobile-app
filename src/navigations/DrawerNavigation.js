@@ -232,6 +232,28 @@ const DrawerNavigation = () => {
           ),
         })}
       />
+{/* 
+      <Drawer.Screen
+        name="GPD"
+        component={HomeCommunityScreen}
+        options={({navigation, route}) => ({
+          pillarId: route?.params?.pillarId,
+          drawerIcon: ({focused, size}) => (
+            <Image
+              source={require('../../src/assets/img/CommunityIcon_Blue.png')}
+              style={{width: 20, height: 20}}
+              resizeMode="cover"
+            />
+          ),
+          header: () => (
+            <SubHeader
+              title="Growth Pipeline Dailogue"
+              image={require('../assets/img/Rectangle2.png')}
+              navigation={navigation}
+            />
+          ),
+        })}
+      /> */}
 
       <Drawer.Screen
         name="Calendar"

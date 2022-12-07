@@ -48,11 +48,6 @@ const Event = props => {
     registerEventByIdentifier,
     cleanEventRegister,
 
-    sendEmail,
-    sendEmailLoading,
-    sendEmailError,
-    GDPButton,
-    cleanGDPButton,
   } = props;
 
   const toast = useToast();
@@ -91,17 +86,6 @@ const Event = props => {
     }
   };
 
-  const GrowthPipelineDialogueButton = async () => {
-    const response = await GDPButton({});
-    console.log('asfdfa', response);
-    if (response?.payload?.code === 200) {
-      // setStatus(true);
-      ToastMessage.show(response.payload.data);
-    } else {
-      toast.closeAll();
-      ToastMessage.show(response?.payload?.message);
-    }
-  };
 
   let backgroundColor = '';
   const pillarCategory = events?.pillar_categories
@@ -596,25 +580,8 @@ const Event = props => {
                   alignItems: 'center',
                   marginTop: 10,
                 }}>
-                {sendEmailLoading && <Loading />}
-                {!emailStatus && (
-                  <Button
-                    style={[styles.emailButton]}
-                    onPress={async () => {
-                      GrowthPipelineDialogueButton();
-                    }}>
-                    <Text style={styles.acceptButtonText}>
-                      Growth Pipeline Dialogue
-                    </Text>
-                  </Button>
-                )}
-                {emailStatus && (
-                  <TouchableOpacity style={styles.sendRegisterButton}>
-                    <Text style={styles.emailButtonText}>
-                      Growth Pipeline Dialogue
-                    </Text>
-                  </TouchableOpacity>
-                )}
+              
+              
               </View>
 
               <View

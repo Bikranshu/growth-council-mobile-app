@@ -14,14 +14,45 @@ import {
   State,
 } from 'react-native-gesture-handler';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import {Picker} from '@react-native-picker/picker';
 import {Button} from 'native-base';
+import {useDispatch, useSelector} from 'react-redux';
+import {
+  GrowthPipelineEmail,
+  resetSendEmail,
+} from '../../screens/event/slice/emailButtonSlice';
+import Loading from '../loading';
+import {COACHING_COLOR} from '../../theme/colors';
 
 const {width, height} = Dimensions.get('window');
 const {add, block, concat, cond, event, eq, set, Value} = Animated;
 
 const FloatingButton = props => {
   const {navigation} = props;
+  const dispatch = useDispatch();
+  const [emailStatus, setEmailStatus] = useState(false);
+  const {sendEmail, sendEmailLoading, sendEmailError} = useSelector(
+    state => state.sendEmail,
+  );
+
+  const GDPButton = formData => {
+    return dispatch(GrowthPipelineEmail(formData));
+  };
+
+  const cleanGDPButton = () => {
+    dispatch(resetSendEmail());
+  };
+
+  const GrowthPipelineDialogueButton = async () => {
+    const response = await GDPButton({});
+    console.log('asfdfa', response);
+    if (response?.payload?.code === 200) {
+      setEmailStatus(true);
+      ToastMessage.show(response.payload.data);
+    } else {
+      toast.closeAll();
+      ToastMessage.show(response?.payload?.message);
+    }
+  };
   const rotationRef = useRef();
   const panRef = useRef();
   const pinchRef = useRef();
@@ -128,18 +159,26 @@ const FloatingButton = props => {
                 style={{fontSize: 18, textAlign: 'center', fontWeight: 'bold'}}>
                 Growth Pipeline Dialogue
               </Text>
-
+              {sendEmailLoading && <Loading />}
               <View>
-                <Button
-                  type="button"
-                  onPress={async () => {}}
-                  style={{
-                    marginLeft: 10,
-                    backgroundColor: '#FF5733',
-                    marginTop: 20,
-                  }}>
-                  Growth Pipeline Dialogue
-                </Button>
+                {!emailStatus && (
+                  <Button
+                    style={[styles.emailButton]}
+                    onPress={async () => {
+                      GrowthPipelineDialogueButton();
+                    }}>
+                    <Text style={styles.acceptButtonText}>
+                      Growth Pipeline Dialogue
+                    </Text>
+                  </Button>
+                )}
+                {emailStatus && (
+                  <TouchableOpacity style={styles.sendRegisterButton}>
+                    <Text style={styles.emailButtonText}>
+                      Growth Pipeline Dialogue
+                    </Text>
+                  </TouchableOpacity>
+                )}
               </View>
             </View>
           </View>
@@ -155,13 +194,13 @@ const styles = StyleSheet.create({
     position: 'absolute',
     bottom: 40,
     zIndex: 1011,
-	alignItems: 'flex-end'
+    alignItems: 'flex-end',
   },
   circle: {
     borderWidth: 1,
     borderColor: 'rgba(0,0,0,0.2)',
     // alignItems: 'center',
-	alignItems: 'flex-end',
+    alignItems: 'flex-end',
     justifyContent: 'center',
     padding: 10,
     position: 'absolute',
@@ -170,5 +209,38 @@ const styles = StyleSheet.create({
     backgroundColor: 'green',
     borderRadius: 50,
     marginBottom: 10,
+  },
+  sendRegisterButton: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: 10,
+    width: '100%',
+    height: 50,
+    backgroundColor: '#ffffff',
+    marginTop: 25,
+    borderColor: COACHING_COLOR,
+    borderWidth: 2,
+    position: 'relative',
+  },
+  emailButton: {
+    borderRadius: 10,
+    marginLeft: 15,
+    marginRight: 15,
+    width: '100%',
+    height: 50,
+    backgroundColor: COACHING_COLOR,
+    marginTop: 25,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  emailButtonText: {
+    color: COACHING_COLOR,
+  },
+  acceptButtonText: {
+    width: '100%',
+    height: 20,
+    fontSize: 14,
+    color: '#ffffff',
   },
 });
