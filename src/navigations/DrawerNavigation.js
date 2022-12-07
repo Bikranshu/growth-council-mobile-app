@@ -35,6 +35,7 @@ import SettingScreen from '../screens/setting/index';
 import SubHeader from '../shared/header/SubHeader';
 import ContentLibraryScreen from '../screens/contentLibrary/contentLibrary';
 import EventForumScreen from '../screens/discussionForum/eventForum';
+import GPDScreen from '../screens/GPD';
 
 import {fetchProfileByID} from '../screens/account/slice/profileSlice';
 import DashboardScreen from '../screens/dashboard';
@@ -232,12 +233,11 @@ const DrawerNavigation = () => {
           ),
         })}
       />
-{/* 
+
       <Drawer.Screen
         name="GPD"
-        component={HomeCommunityScreen}
+        component={GPDScreen}
         options={({navigation, route}) => ({
-          pillarId: route?.params?.pillarId,
           drawerIcon: ({focused, size}) => (
             <Image
               source={require('../../src/assets/img/CommunityIcon_Blue.png')}
@@ -253,7 +253,7 @@ const DrawerNavigation = () => {
             />
           ),
         })}
-      /> */}
+      />
 
       <Drawer.Screen
         name="Calendar"

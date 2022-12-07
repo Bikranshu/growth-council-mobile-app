@@ -225,8 +225,7 @@ const styles = StyleSheet.create({
   },
   emailButton: {
     borderRadius: 10,
-    marginLeft: 15,
-    marginRight: 15,
+    marginRight: 5,
     width: '100%',
     height: 50,
     backgroundColor: COACHING_COLOR,
