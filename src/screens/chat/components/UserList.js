@@ -158,6 +158,13 @@ const UserList = props => {
   }, [text]);
 
   const _renderItems = ({item, index}) => {
+    let chat = item?.user_meta?.chat_notification;
+    if (typeof chat === 'undefined') {
+      chat = '';
+    } else {
+      chat = item?.user_meta?.chat_notification[0];
+    }
+
     return (
       <View>
         <TouchableOpacity
@@ -173,6 +180,7 @@ const UserList = props => {
               userID: userID,
               userName: userName,
               userAvatar: avatarImg,
+              userChat: chat,
             });
           }}>
           <View style={[styles.wrapper, styles.shadowProp]} key={index}>

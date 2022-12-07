@@ -12,7 +12,6 @@ import {useFormik} from 'formik';
 import {Button} from 'react-native-paper';
 import Loading from '../loading';
 import {getFCMTOkenForUser} from '../../utils/httpUtil';
-
 import {sendNotification} from '../../utils/sendNotification';
 
 const Comments = ({
@@ -28,6 +27,7 @@ const Comments = ({
   eventID,
   deleteDiscusssionLoading,
   postDiscussionByEvent,
+  postDiscussionLoading,
   discussionForumByIdentifier,
 }) => {
   const fiveMinutes = 300000;
@@ -41,6 +41,7 @@ const Comments = ({
 
   const replyId = parentId ? parentId : comment?.comment_ID;
   const [friendToken, setFriendToken] = useState('');
+  const [parentDetails, setParentDetails] = useState();
   const [parentUserId, setparentUserId] = useState(
     replyId === comment?.comment_ID
       ? comment?.comment_parent === '0'
@@ -49,13 +50,15 @@ const Comments = ({
       : '',
   );
 
-  let discussion_board = profile?.user_meta?.discussion_board_notification;
-  if (typeof discussion_board === 'undefined') {
-    discussion_board = profile?.user_meta?.discussion_board_notification[0];
-  } else {
-    discussion_board = profile?.user_meta?.discussion_board_notification[0];
-  }
-  console.log({discussion_board});
+  const discussion_board =
+    comment?.comment_ID.includes(parentDetails) === true
+      ? comment?.comment_parent === '0'
+        ? comment?.user_data?.discussion_board_notification[0]
+        : ''
+      : '';
+
+  console.log(discussion_board);
+  console.log({parentUserId})
   useEffect(() => {
     {
       discussion_board === "1" ? (
@@ -97,6 +100,8 @@ const Comments = ({
     },
     onSubmit: async values => {
       await postDiscussionByEvent(values).then(response => {
+        console.log('aewa', response.meta.arg.parent_id);
+        setParentDetails(response.meta.arg.parent_id);
         if (response?.payload?.code === 200) {
           discussionForumByIdentifier({
             event_id: eventID,
@@ -123,7 +128,7 @@ const Comments = ({
   return (
     <>
       {deleteDiscusssionLoading && <Loading />}
-
+      {postDiscussionLoading && <Loading />}
       <View style={{flexDirection: 'row', margin: 10}}>
         <Image
           style={{width: 50, height: 50, borderRadius: 30}}

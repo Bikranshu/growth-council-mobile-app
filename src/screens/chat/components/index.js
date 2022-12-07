@@ -41,6 +41,7 @@ const Chat = props => {
   const userID = route.params.userID;
   const userAvatar = route.params.userAvatar;
   const userName = route.params.userName;
+  const userChat = route?.params?.userChat
 
   const [userScreen, setUserScreen] = useState(false);
   const [friendScreen, setFriendScreen] = useState(false);
@@ -54,22 +55,14 @@ const Chat = props => {
     return chatIDPre.join('_');
   };
 
-  useEffect(() => {
-    fetchProfileByIdentifier();
-  }, []);
 
   const [messages, setMessages] = useState([]);
 
-  let discussion_board = profile?.user_meta?.discussion_board_notification;
-  if (typeof discussion_board === 'undefined') {
-    discussion_board = profile?.user_meta?.discussion_board_notification[0];
-  } else {
-    discussion_board = profile?.user_meta?.discussion_board_notification[0];
-  }
-  console.log({discussion_board});
+
+  console.log({userChat});
   useEffect(() => {
     {
-      discussion_board === "1" ? (
+		userChat === "1" ? (
         (console.log('The friend ID is ' + friendID),
         getFCMTOkenForUser(friendID)
           .then(res => {

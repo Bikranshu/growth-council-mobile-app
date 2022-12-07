@@ -78,6 +78,7 @@ const Discussion = props => {
     },
     onSubmit: async values => {
       await postDiscussionByEvent(values).then(response => {
+        console.log(response);
         if (response?.payload?.code === 200) {
           console.log(response);
           discussionForumByIdentifier({
@@ -145,6 +146,7 @@ const Discussion = props => {
           </Text>
 
           {discussionForumLoading && <Loading />}
+          {/* {postDiscussionLoading && <Loading />} */}
           {/* comment Data from backend */}
           <ScrollView
             showsVerticalScrollIndicator={false}
@@ -164,6 +166,7 @@ const Discussion = props => {
                   profile={profile}
                   eventID={eventID}
                   deleteDiscusssionLoading={deleteDiscusssionLoading}
+                  postDiscussionLoading={postDiscussionLoading}
                   postDiscussionByEvent={postDiscussionByEvent}
                   discussionForumByIdentifier={discussionForumByIdentifier}
                 />
