@@ -56,7 +56,10 @@ const Notification = props => {
     notificationOptions?.chat_notification === '1' ? true : false,
   );
 
-  const [boardEnabled, setBoardEnabled] = useState(false);
+  const [boardEnabled, setBoardEnabled] = useState(
+    notificationOptions?.discussion_board_notification === '1' ? true : false,
+  );
+
   console.log(
     'contentEnabled',
     contentEnabled,
@@ -81,6 +84,7 @@ const Notification = props => {
       member_connection_add_delete_notification: memberEnabled,
       chat_notification: chatEnabled,
       content_notification: contentEnabled,
+      discussion_board_notification: boardEnabled,
     },
     onSubmit: async values => {
       console.log({values});
@@ -96,6 +100,7 @@ const Notification = props => {
     setFieldValue('event_notification', eventEnabled);
     setFieldValue('member_connection_add_delete_notification', memberEnabled);
     setFieldValue('chat_notification', chatEnabled);
+    setFieldValue('discussion_board_notification', boardEnabled);
 
     setContentEnabled(!contentEnabled);
     handleSubmit();
@@ -107,6 +112,7 @@ const Notification = props => {
     setFieldValue('member_connection_add_delete_notification', memberEnabled);
     setFieldValue('chat_notification', chatEnabled);
     setFieldValue('content_notification', contentEnabled);
+    setFieldValue('discussion_board_notification', boardEnabled);
 
     setEventEnabled(!eventEnabled);
     handleSubmit();
@@ -118,6 +124,7 @@ const Notification = props => {
     setFieldValue('content_notification', contentEnabled);
     setFieldValue('chat_notification', chatEnabled);
     setFieldValue('event_notification', eventEnabled);
+    setFieldValue('discussion_board_notification', boardEnabled);
 
     setMemberEnabled(!memberEnabled);
     handleSubmit();
@@ -129,8 +136,21 @@ const Notification = props => {
     setFieldValue('event_notification', eventEnabled);
     setFieldValue('content_notification', contentEnabled);
     setFieldValue('member_connection_add_delete_notification', memberEnabled);
+    setFieldValue('discussion_board_notification', boardEnabled);
 
     setChatEnabled(!chatEnabled);
+    handleSubmit();
+  };
+
+  const boardSwitch = () => {
+    setFieldValue('discussion_board_notification', !boardEnabled);
+
+    setFieldValue('chat_notification', chatEnabled);
+    setFieldValue('event_notification', eventEnabled);
+    setFieldValue('content_notification', contentEnabled);
+    setFieldValue('member_connection_add_delete_notification', memberEnabled);
+
+    setBoardEnabled(!boardEnabled);
     handleSubmit();
   };
 
@@ -159,6 +179,9 @@ const Notification = props => {
       notificationOptions?.member_connection_add_delete_notification === '1'
         ? true
         : false,
+    );
+    setBoardEnabled(
+      notificationOptions?.discussion_board_notification === '1' ? true : false,
     );
   }, [notificationOptions]);
 
@@ -323,9 +346,7 @@ const Notification = props => {
                   trackColor={{false: '#767577', true: '#32a32e'}}
                   thumbColor={boardEnabled ? 'white' : 'white'}
                   ios_backgroundColor="#3e3e3e"
-                  onValueChange={() => {
-                    setBoardEnabled(!boardEnabled);
-                  }}
+                  onValueChange={boardSwitch}
                   value={boardEnabled}
                   style={{
                     right: 0,

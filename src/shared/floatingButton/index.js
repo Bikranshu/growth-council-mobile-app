@@ -5,6 +5,7 @@ import {
   View,
   Dimensions,
   TouchableOpacity,
+  Modal,
 } from 'react-native';
 import Animated from 'react-native-reanimated';
 import {
@@ -13,6 +14,8 @@ import {
   State,
 } from 'react-native-gesture-handler';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import {Picker} from '@react-native-picker/picker';
+import {Button} from 'native-base';
 
 const {width, height} = Dimensions.get('window');
 const {add, block, concat, cond, event, eq, set, Value} = Animated;
@@ -30,6 +33,8 @@ const FloatingButton = props => {
   const [X] = useState(new Value(0));
   const [Y] = useState(new Value(0));
   const [R] = useState(new Value(0));
+
+  const [modalVisible, setModalVisible] = useState(false);
 
   const onPan = event([
     {
@@ -63,7 +68,7 @@ const FloatingButton = props => {
         onGestureEvent={onPan}
         onHandlerStateChange={onPan}
         simultaneousHandlers={[rotationRef, pinchRef]}>
-        <Animated.View style={styles.area}>
+        <Animated.View>
           <RotationGestureHandler
             onGestureEvent={onRotate}
             onHandlerStateChange={onRotate}
@@ -76,17 +81,70 @@ const FloatingButton = props => {
                   transform: [
                     {translateX: X},
                     {translateY: Y},
-                    {rotate: concat(R, 'rad')},
+                    // {rotate: concat(R, 'rad')},
                   ],
                 },
               ]}>
-              <TouchableOpacity>
+              <TouchableOpacity
+                onPress={() => {
+                  setModalVisible(true);
+                }}>
                 <Ionicons name="add-circle" size={30} color="white" />
               </TouchableOpacity>
             </Animated.View>
           </RotationGestureHandler>
         </Animated.View>
       </PanGestureHandler>
+
+      <Modal transparent visible={modalVisible}>
+        <View
+          style={{
+            flex: 1,
+            backgroundColor: 'rgba(56,56,56,0.3)',
+            justifyContent: 'flex-end',
+          }}>
+          <View
+            style={{
+              height: 500,
+              backgroundColor: 'white',
+              borderTopLeftRadius: 20,
+              borderTopRightRadius: 20,
+              padding: 20,
+            }}>
+            <TouchableOpacity
+              activeOpacity={0.7}
+              onPress={() => setModalVisible(false)}
+              style={{alignItems: 'flex-end'}}>
+              <Text
+                style={{
+                  padding: 15,
+                  fontSize: 18,
+                }}>
+                Done
+              </Text>
+            </TouchableOpacity>
+            <View style={{marginBottom: 40}}>
+              <Text
+                style={{fontSize: 18, textAlign: 'center', fontWeight: 'bold'}}>
+                Growth Pipeline Dialogue
+              </Text>
+
+              <View>
+                <Button
+                  type="button"
+                  onPress={async () => {}}
+                  style={{
+                    marginLeft: 10,
+                    backgroundColor: '#FF5733',
+                    marginTop: 20,
+                  }}>
+                  Growth Pipeline Dialogue
+                </Button>
+              </View>
+            </View>
+          </View>
+        </View>
+      </Modal>
     </View>
   );
 };
@@ -97,16 +155,18 @@ const styles = StyleSheet.create({
     position: 'absolute',
     bottom: 40,
     zIndex: 1011,
+	alignItems: 'flex-end'
   },
   circle: {
     borderWidth: 1,
     borderColor: 'rgba(0,0,0,0.2)',
-    alignItems: 'center',
+    // alignItems: 'center',
+	alignItems: 'flex-end',
     justifyContent: 'center',
     padding: 10,
     position: 'absolute',
     bottom: 50,
-    right: -160,
+    right: -150,
     backgroundColor: 'green',
     borderRadius: 50,
     marginBottom: 10,

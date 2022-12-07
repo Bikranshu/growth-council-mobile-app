@@ -117,7 +117,7 @@ const Discussion = props => {
     setBackendComments(discussionForum);
   }, [discussionForum]);
 
-//   console.log({discussionForum});
+  //   console.log({discussionForum});
   useEffect(() => {
     const fetchProfileAsync = async () => {
       await fetchProfile();

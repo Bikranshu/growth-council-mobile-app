@@ -49,7 +49,35 @@ const Comments = ({
       : '',
   );
 
-  console.log({replyId});
+  let discussion_board = profile?.user_meta?.discussion_board_notification;
+  if (typeof discussion_board === 'undefined') {
+    discussion_board = profile?.user_meta?.discussion_board_notification[0];
+  } else {
+    discussion_board = profile?.user_meta?.discussion_board_notification[0];
+  }
+  console.log({discussion_board});
+  useEffect(() => {
+    {
+      discussion_board === "1" ? (
+        getFCMTOkenForUser(parentUserId)
+          .then(res => {
+            const token = res.data.data;
+            if (token == null) {
+              console.log(res.data?.message);
+            }
+            console.log('token', token);
+            setFriendToken(typeof token == 'string' ? token : token?.[0]);
+          })
+
+          .catch(error => {
+            console.log(error);
+          })
+      ) : (
+        <></>
+      );
+    }
+  }, []);
+
   const {
     handleChange,
     handleBlur,
@@ -76,38 +104,21 @@ const Comments = ({
         }
       });
       resetForm(values?.content);
+
+      sendNotification(
+        friendToken,
+        `${profile?.user_login} has replied to your comment`,
+        values?.content,
+        {
+          type: 'forum',
+          friendID: profile?.ID,
+          friendName: profile?.user_login,
+          userID: replyId,
+          userName: parentName,
+        },
+      );
     },
   });
-
-  useEffect(() => {
-    getFCMTOkenForUser(parentUserId)
-      .then(res => {
-        const token = res.data.data;
-        if (token == null) {
-          console.log(res.data?.message);
-        }
-        console.log('token', token);
-        setFriendToken(typeof token == 'string' ? token : token?.[0]);
-      })
-      .catch(error => {
-        console.log(error);
-      });
-  }, []);
-
-  console.log({parentUserId});
-
-  sendNotification(
-    friendToken,
-    `${profile?.user_login} has replied to your comment`,
-    values?.content,
-    {
-      type: 'chat',
-      friendID: profile?.ID,
-      friendName: profile?.user_login,
-      userID: replyId,
-      userAvatar: parentName,
-    },
-  );
 
   return (
     <>

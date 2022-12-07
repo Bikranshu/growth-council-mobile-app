@@ -27,6 +27,12 @@ const Chat = props => {
     notificationError,
     sendNotificationByIdentifier,
     cleanNotification,
+
+    profile,
+    profileLoading,
+    profileError,
+    fetchProfileByIdentifier,
+    cleanProfile,
   } = props;
 
   const friendID = route.params.friendID;
@@ -48,22 +54,39 @@ const Chat = props => {
     return chatIDPre.join('_');
   };
 
+  useEffect(() => {
+    fetchProfileByIdentifier();
+  }, []);
+
   const [messages, setMessages] = useState([]);
 
+  let discussion_board = profile?.user_meta?.discussion_board_notification;
+  if (typeof discussion_board === 'undefined') {
+    discussion_board = profile?.user_meta?.discussion_board_notification[0];
+  } else {
+    discussion_board = profile?.user_meta?.discussion_board_notification[0];
+  }
+  console.log({discussion_board});
   useEffect(() => {
-    console.log('The friend ID is ' + friendID);
-    getFCMTOkenForUser(friendID)
-      .then(res => {
-        const token = res?.data?.data;
-        if (token == null) {
-          console.log(res.data?.message);
-        }
-        console.log(token);
-        setFriendToken(typeof token == 'string' ? token : token?.[0]);
-      })
-      .catch(error => {
-        console.log(error);
-      });
+    {
+      discussion_board === "1" ? (
+        (console.log('The friend ID is ' + friendID),
+        getFCMTOkenForUser(friendID)
+          .then(res => {
+            const token = res?.data?.data;
+            if (token == null) {
+              console.log(res.data?.message);
+            }
+            console.log(token);
+            setFriendToken(typeof token == 'string' ? token : token?.[0]);
+          })
+          .catch(error => {
+            console.log(error);
+          }))
+      ) : (
+        <></>
+      );
+    }
   }, []);
 
   useLayoutEffect(() => {
