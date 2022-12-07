@@ -100,18 +100,20 @@ const Discussion = props => {
         event_id: eventID,
       });
     }
-    console.log('Are you sure that you want to remove', response);
   };
 
   useFocusEffect(
     useCallback(() => {
-      discussionForumByIdentifier({
-        event_id: eventID,
-      });
+      setInterval(() => {
+        discussionForumByIdentifier({
+          event_id: eventID,
+        });
+      }, 3000);
+
       return () => {
         cleanForum();
       };
-    }, []),
+    }, [isFocused]),
   );
 
   useEffect(() => {
@@ -145,8 +147,8 @@ const Discussion = props => {
             Discussion Forum
           </Text>
 
-          {discussionForumLoading && <Loading />}
-          {/* {postDiscussionLoading && <Loading />} */}
+          {/* {discussionForumLoading && <Loading />} */}
+          {postDiscussionLoading && <Loading />}
           {/* comment Data from backend */}
           <ScrollView
             showsVerticalScrollIndicator={false}

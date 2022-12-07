@@ -58,27 +58,21 @@ const Comments = ({
       : '';
 
   console.log(discussion_board);
-  console.log({parentUserId})
+  console.log({parentUserId});
   useEffect(() => {
-    {
-      discussion_board === "1" ? (
-        getFCMTOkenForUser(parentUserId)
-          .then(res => {
-            const token = res.data.data;
-            if (token == null) {
-              console.log(res.data?.message);
-            }
-            console.log('token', token);
-            setFriendToken(typeof token == 'string' ? token : token?.[0]);
-          })
+    getFCMTOkenForUser(parentUserId)
+      .then(res => {
+        const token = res.data.data;
+        if (token == null) {
+          console.log(res.data?.message);
+        }
+        console.log('token', token);
+        setFriendToken(typeof token == 'string' ? token : token?.[0]);
+      })
 
-          .catch(error => {
-            console.log(error);
-          })
-      ) : (
-        <></>
-      );
-    }
+      .catch(error => {
+        console.log(error);
+      });
   }, []);
 
   const {
