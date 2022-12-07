@@ -10,6 +10,7 @@ import {
   Dimensions,
   FlatList,
   TextInput,
+  ImageBackground,
 } from 'react-native';
 import {Button} from 'react-native-paper';
 import {useFormik} from 'formik';
@@ -17,6 +18,7 @@ import {useFocusEffect, useIsFocused} from '@react-navigation/native';
 import Loading from '../../../shared/loading';
 import {CommonStyles, Colors, Typography} from '../../../theme';
 import Comments from '../../../shared/comment';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 import {COMMUNITY_COLOR} from '../../../theme/colors';
 
 const Discussion = props => {
@@ -108,12 +110,12 @@ const Discussion = props => {
         discussionForumByIdentifier({
           event_id: eventID,
         });
-      }, 3000);
+      }, 9000);
 
       return () => {
         cleanForum();
       };
-    }, [isFocused]),
+    }, []),
   );
 
   useEffect(() => {
@@ -136,71 +138,104 @@ const Discussion = props => {
         backgroundColor="#001D3F"
         translucent={false}
       />
-      <ScrollView
-        showsVerticalScrollIndicator={false}
-        style={{backgroundColor: Colors.PRIMARY_BACKGROUND_COLOR}}>
-        <View style={styles.forum}>
-          <Text style={[styles.heading, {color: COMMUNITY_COLOR}]}>
-            {route?.params?.title}
-          </Text>
-          <Text style={[styles.heading, {marginTop: 10}]}>
-            Discussion Forum
-          </Text>
+      {/* <ScrollView
+      // style={{backgroundColor: Colors.COACHING_COLOR}}
+      // directionalLockEnabled={false}
+      > */}
+      <View style={styles.container}>
+        <ImageBackground
+          source={require('../../../assets/img/splash-screen.png')}
+          resizeMode="cover">
+          <View style={{height: '30%'}} />
 
-          {/* {discussionForumLoading && <Loading />} */}
-          {postDiscussionLoading && <Loading />}
-          {/* comment Data from backend */}
-          <ScrollView
-            showsVerticalScrollIndicator={false}
-            style={{
-              backgroundColor: Colors.PRIMARY_BACKGROUND_COLOR,
-            }}>
-            <View>
-              {rootComments?.map(rootComment => (
-                <Comments
-                  key={rootComment?.comment_ID}
-                  comment={rootComment}
-                  replies={getReplies(rootComment?.comment_ID)}
-                  currentUserId={profile?.ID}
-                  deleteComment={deleteComment}
-                  activeComment={activeComment}
-                  setActiveComment={setActiveComment}
-                  profile={profile}
-                  eventID={eventID}
-                  deleteDiscusssionLoading={deleteDiscusssionLoading}
-                  postDiscussionLoading={postDiscussionLoading}
-                  postDiscussionByEvent={postDiscussionByEvent}
-                  discussionForumByIdentifier={discussionForumByIdentifier}
-                />
-              ))}
-            </View>
-          </ScrollView>
-
-          {/* //Comment Form */}
           <View>
-            <View style={{flexDirection: 'row', margin: 10}}>
-              <Image
-                style={{width: 50, height: 50, borderRadius: 30}}
-                source={{
-                  uri: profile?.avatar,
-                }}
-              />
-              <TextInput
-                multiline={true}
-                numberOfLines={2}
-                style={styles.textarea}
-                value={values?.content}
-                placeholder="Write comment"
-                onChangeText={handleChange('content')}
-                onFocus={handleBlur('content')}
-                error={errors.content}
-                touched={touched.content}
-              />
+            <View style={styles.forum}>
+              {/* <Text style={[styles.heading, {color: COMMUNITY_COLOR}]}>
+					{route?.params?.title}
+				</Text> */}
+              <Text style={[styles.heading, {marginTop: 10, marginBottom: 20}]}>
+                Welcome to the Discussion Forum
+              </Text>
+
+              {postDiscussionLoading && <Loading />}
+              {/* comment Data from backend */}
+              <ScrollView
+                contentContainerStyle={{
+                  flexGrow: 1,
+                  backgroundColor: Colors.PRIMARY_BACKGROUND_COLOR,
+                  paddingBottom: 10,
+                }}>
+                <View>
+                  {rootComments?.map(rootComment => (
+                    <Comments
+                      key={rootComment?.comment_ID}
+                      comment={rootComment}
+                      replies={getReplies(rootComment?.comment_ID)}
+                      currentUserId={profile?.ID}
+                      deleteComment={deleteComment}
+                      activeComment={activeComment}
+                      setActiveComment={setActiveComment}
+                      profile={profile}
+                      eventID={eventID}
+                      deleteDiscusssionLoading={deleteDiscusssionLoading}
+                      postDiscussionLoading={postDiscussionLoading}
+                      postDiscussionByEvent={postDiscussionByEvent}
+                      discussionForumByIdentifier={discussionForumByIdentifier}
+                    />
+                  ))}
+                </View>
+              </ScrollView>
+
+              {/* //Comment Form */}
+              <View
+                style={{
+                  height: 70,
+                  justifyContent: 'center',
+
+                  borderTopWidth: 0.2,
+                }}>
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    backgroundColor: 'white',
+                    position: 'absolute',
+                    bottom: 10,
+                    marginTop: 10,
+                    justifyContent: 'center',
+                  }}>
+                  <Image
+                    style={{width: 50, height: 50, borderRadius: 100}}
+                    source={{
+                      uri: profile?.avatar,
+                    }}
+                  />
+                  <TextInput
+                    multiline={true}
+                    numberOfLines={2}
+                    style={styles.textarea}
+                    value={values?.content}
+                    placeholder="Write comment"
+                    onChangeText={handleChange('content')}
+                    onFocus={handleBlur('content')}
+                    error={errors.content}
+                    touched={touched.content}
+                  />
+                  <TouchableOpacity
+                    onPress={handleSubmit}
+                    style={{
+                      padding: 10,
+                      backgroundColor: COMMUNITY_COLOR,
+                      borderRadius: 30,
+                    }}>
+                    <Ionicons name="person-outline" color="white" size={30} />
+                  </TouchableOpacity>
+                </View>
+              </View>
             </View>
-            <Button onPress={handleSubmit}>Write</Button>
           </View>
-        </View>
-      </ScrollView>
+        </ImageBackground>
+      </View>
+      {/* </ScrollView> */}
     </>
   );
 };
@@ -208,25 +243,32 @@ const Discussion = props => {
 export default Discussion;
 
 const styles = StyleSheet.create({
+  container: {
+    // ...CommonStyles.container,
+    backgroundColor: Colors.PRIMARY_BACKGROUND_COLOR,
+    flex: 1,
+    marginBottom: 10,
+  },
   forum: {
-    width: Dimensions.get('window').width - 20,
+    width: Dimensions.get('window').width,
     borderRadius: 10,
-    margin: 5,
-    marginLeft: 10,
     backgroundColor: 'white',
     padding: 10,
+    borderRadius: 18,
+    height: 510,
   },
   heading: {
     fontSize: 16,
     color: 'black',
   },
   textarea: {
-    width: '80%',
+    width: '70%',
     padding: 5,
     fontSize: 16,
     borderWidth: 0.2,
     borderRadius: 5,
     marginLeft: 10,
+    marginRight: 5,
   },
   shadowProp: {
     shadowColor: '#000',

@@ -11,6 +11,7 @@ import {
 import {useFormik} from 'formik';
 import {Button} from 'react-native-paper';
 import Loading from '../loading';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 import {getFCMTOkenForUser} from '../../utils/httpUtil';
 import {sendNotification} from '../../utils/sendNotification';
 
@@ -125,39 +126,97 @@ const Comments = ({
       {postDiscussionLoading && <Loading />}
       <View style={{flexDirection: 'row', margin: 10}}>
         <Image
-          style={{width: 50, height: 50, borderRadius: 30}}
+          style={{
+            width: 50,
+            height: 50,
+            borderRadius: 30,
+            marginVertical: 10,
+          }}
           source={{
             uri: comment?.avatar,
           }}
         />
-        <View style={{margin: 5}}>
-          <View>
-            <Text style={{color: '#00008B', fontSize: 16}}>
-              {comment?.comment_author}
-            </Text>
-            <Text style={{color: 'black', fontSize: 12}}>
-              {comment?.comment_content}
-            </Text>
+        <View style={{margin: 5, width: '100%', padding: 5}}>
+          <View style={[styles.commentSection, styles.shadowProp]}>
+            <View
+              style={{
+                marginBottom: 40,
+                height: 'auto',
+                minHeight: 20,
+              }}>
+              <Text style={{color: '#00008B', fontSize: 16}}>
+                {comment?.comment_author}
+              </Text>
+              <Text style={{color: 'black', fontSize: 12}}>
+                {comment?.comment_content}
+              </Text>
+            </View>
+            {/* <View
+              style={{
+                height: 1,
+                borderWidth: 0.2,
+                marginTop: 10,
+                borderBottomColor: '#EDF1F7',
+              }}
+            /> */}
+            <View
+              style={{
+                flexDirection: 'row',
+                position: 'absolute',
+                right: 10,
+                bottom: 0,
+              }}>
+              {canReply && (
+                <TouchableOpacity
+                  style={{marginLeft: 10}}
+                  onPress={() =>
+                    setActiveComment({
+                      id: comment?.comment_ID,
+                      type: 'replying',
+                    })
+                  }>
+                  <Text style={{color: '#77C3ED', marginVertical: 10}}>
+                    Reply
+                  </Text>
+                </TouchableOpacity>
+              )}
+              {canDelete && (
+                <TouchableOpacity
+                  style={{marginLeft: 10}}
+                  onPress={() => deleteComment(comment?.comment_ID)}>
+                  <Text style={{color: 'red', marginVertical: 10}}>Delete</Text>
+                </TouchableOpacity>
+              )}
+            </View>
           </View>
-
-          <View style={{flexDirection: 'row', margin: 10}}>
-            {canReply && (
+          {isReplying && (
+            <View>
+              <View style={{flexDirection: 'row', margin: 10}}>
+                <Image
+                  style={{width: 50, height: 50, borderRadius: 30}}
+                  source={{
+                    uri: profile?.avatar,
+                  }}
+                />
+                <TextInput
+                  multiline={true}
+                  numberOfLines={2}
+                  style={styles.textarea}
+                  value={values?.content}
+                  placeholder="Write comment"
+                  onChangeText={handleChange('content')}
+                  onFocus={handleBlur('content')}
+                  error={errors.content}
+                  touched={touched.content}
+                />
+              </View>
               <TouchableOpacity
-                style={{marginLeft: 10}}
-                onPress={() =>
-                  setActiveComment({id: comment?.comment_ID, type: 'replying'})
-                }>
-                <Text style={{color: '#77C3ED'}}>Reply</Text>
+                onPress={handleSubmit}
+                style={{padding: 5, backgroundColor: 'blue'}}>
+           
               </TouchableOpacity>
-            )}
-            {canDelete && (
-              <TouchableOpacity
-                style={{marginLeft: 10}}
-                onPress={() => deleteComment(comment?.comment_ID)}>
-                <Text style={{color: 'red'}}>Delete</Text>
-              </TouchableOpacity>
-            )}
-          </View>
+            </View>
+          )}
 
           <View>
             {replies?.length > 0 && (
@@ -183,31 +242,6 @@ const Comments = ({
               </View>
             )}
           </View>
-
-          {isReplying && (
-            <View>
-              <View style={{flexDirection: 'row', margin: 10}}>
-                <Image
-                  style={{width: 50, height: 50, borderRadius: 30}}
-                  source={{
-                    uri: profile?.avatar,
-                  }}
-                />
-                <TextInput
-                  multiline={true}
-                  numberOfLines={2}
-                  style={styles.textarea}
-                  value={values?.content}
-                  placeholder="Write comment"
-                  onChangeText={handleChange('content')}
-                  onFocus={handleBlur('content')}
-                  error={errors.content}
-                  touched={touched.content}
-                />
-              </View>
-              <Button onPress={handleSubmit}>Write</Button>
-            </View>
-          )}
         </View>
       </View>
     </>
@@ -220,8 +254,26 @@ const styles = StyleSheet.create({
     width: '70%',
     padding: 5,
     fontSize: 16,
-    borderWidth: 0.2,
+
     borderRadius: 5,
     marginLeft: 10,
+  },
+  commentSection: {
+    width: '70%',
+    // borderWidth: 0.3,
+    padding: 10,
+    borderRadius: 10,
+
+    backgroundColor: 'white',
+  },
+  shadowProp: {
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
   },
 });
