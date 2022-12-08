@@ -75,7 +75,6 @@ const CustomDrawerContent = props => {
     <SafeAreaView style={{flex: 1}}>
       <View
         style={{
-          paddingHorizontal: 10,
           justifyContent: 'space-between',
         }}>
         <TouchableOpacity onPress={toggleDrawer}>
@@ -235,7 +234,7 @@ const DrawerNavigation = () => {
       />
 
       <Drawer.Screen
-        name="GPD"
+        name="Growth Pipeline Dailogue"
         component={GPDScreen}
         options={({navigation, route}) => ({
           drawerIcon: ({focused, size}) => (
@@ -255,6 +254,22 @@ const DrawerNavigation = () => {
         })}
       />
 
+      <Drawer.Screen
+        name="Discussion Board"
+        component={EventForumScreen}
+        options={({navigation}) => ({
+          drawerIcon: ({focused, size}) => (
+            <Ionicons name="calendar-outline" color={'#00008B'} size={20} />
+          ),
+          header: () => (
+            <SubHeader
+              title="Discussion"
+              image={require('../assets/img/appBG.png')}
+              navigation={navigation}
+            />
+          ),
+        })}
+      />
       <Drawer.Screen
         name="Calendar"
         component={CalendarScreen}
@@ -318,22 +333,6 @@ const DrawerNavigation = () => {
         })}
       />
 
-      <Drawer.Screen
-        name="EventForum"
-        component={EventForumScreen}
-        options={({navigation}) => ({
-          //   drawerIcon: ({focused, size}) => (
-          //     <Ionicons name="calendar-outline" color={'#00008B'} size={20} />
-          //   ),
-          header: () => (
-            <SubHeader
-              title="Discussion"
-              image={require('../assets/img/appBG.png')}
-              navigation={navigation}
-            />
-          ),
-        })}
-      />
       <Drawer.Screen
         options={{
           drawerLabel: () => null,
@@ -399,7 +398,6 @@ const styles = StyleSheet.create({
   iconStyle: {
     width: 15,
     height: 15,
-    marginHorizontal: 5,
   },
   footer: {
     justifyContent: 'center',

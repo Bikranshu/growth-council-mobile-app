@@ -36,7 +36,7 @@ const PushNotificationsConfigs = {
               } else if (data?.type == 'event') {
                 navigate('EventDetail', {id: data?.post_id});
               } else if (data?.type == 'forum') {
-                navigate('Discussion', {
+                navigate('Discussion Board', {
                   friendID: data?.friendID,
                   friendName: data?.friendName,
                   userID: data?.userID,

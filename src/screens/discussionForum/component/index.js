@@ -111,11 +111,9 @@ const Discussion = props => {
 
   useFocusEffect(
     useCallback(() => {
-      setInterval(() => {
-        discussionForumByIdentifier({
-          event_id: eventID,
-        });
-      }, 300000);
+      discussionForumByIdentifier({
+        event_id: eventID,
+      });
 
       return () => {
         cleanForum();
@@ -124,6 +122,9 @@ const Discussion = props => {
   );
 
   useEffect(() => {
+    setInterval(() => {
+      rootComments;
+    }, 300000);
     setBackendComments(discussionForum);
   }, [discussionForum]);
 
@@ -134,7 +135,11 @@ const Discussion = props => {
     };
     fetchProfileAsync();
   }, [isFocused]);
-  const backgroundColor = 'blue';
+
+  const backgroundColor =
+    route?.params?.backgroundColor === undefined
+      ? COMMUNITY_COLOR
+      : route?.params?.backgroundColor;
 
   return (
     // <ScrollView contentContainerStyle={{flexGrow: 1}}>
@@ -156,7 +161,7 @@ const Discussion = props => {
               <View
                 style={{
                   position: 'absolute',
-                  top: 70,
+                  top: 65,
                   left: 10,
                   justifyContent: 'center',
                   alignItems: 'center',
@@ -178,7 +183,7 @@ const Discussion = props => {
               <View
                 style={{
                   position: 'absolute',
-                  top: 70,
+                  top: 65,
                   left: 140,
                   justifyContent: 'center',
                   alignItems: 'center',
@@ -200,7 +205,7 @@ const Discussion = props => {
               <View
                 style={{
                   position: 'absolute',
-                  top: 70,
+                  top: 65,
                   right: 10,
                   justifyContent: 'center',
                   alignItems: 'center',
@@ -244,7 +249,7 @@ const Discussion = props => {
                   justifyContent: 'center',
                 }}>
                 <Text style={{fontSize: 14, fontWeight: '500', color: 'white'}}>
-                  sghdfhdf
+                  {route?.params?.organizer}
                 </Text>
                 <Text
                   style={{fontSize: 14, fontStyle: 'italic', color: 'white'}}>

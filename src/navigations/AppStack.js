@@ -263,21 +263,7 @@ const AppStack = navigation => (
         ),
       })}
     />
-    {/* <Screen
-      name="EventForum"
-      component={EventForumScreen}
-      options={() => ({
-        header: ({navigation}) => (
-          <SubHeader
-            title="Discussion Board"
-            image={require('../assets/img/appBG.png')}
-            navigation={navigation}
-            noDrawer={true}
-          />
-        ),
-      })}
-    /> */}
-
+  
     <Screen
       name="Discussion"
       component={DiscussionScreen}
