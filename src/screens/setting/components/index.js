@@ -290,7 +290,7 @@ const Setting = props => {
                         <Ionicons
                           name="chevron-forward-outline"
                           size={20}
-                          color="#d7d7d7"
+                          color="black"
                         />
                       </View>
                     </View>
@@ -315,7 +315,18 @@ const Setting = props => {
                   <View>
                     <List.Section>
                       <List.Accordion
-                        title="Notification"
+                        title={
+                          <View>
+                            <Text
+                              style={{
+                                fontSize: 14,
+                                color: '#222B45',
+                                fontWeight: '500',
+                              }}>
+                              Notification
+                            </Text>
+                          </View>
+                        }
                         left={props => (
                           <View
                             style={{
@@ -337,11 +348,25 @@ const Setting = props => {
                         expanded={expanded}
                         onPress={handlePress}
                         style={{
-                          borderBottomWidth: 0,
+                          borderBottomWidth: 1,
+                          alignItems: 'center',
+                          borderBottomColor: '#EDF1F7',
                           backgroundColor: 'white',
+                          paddingBottom: 15,
                         }}>
                         <List.Item
-                          title="Event"
+                          title={
+                            <View>
+                              <Text
+                                style={{
+                                  fontSize: 14,
+                                  color: '#222B45',
+                                  fontWeight: '500',
+                                }}>
+                                Events
+                              </Text>
+                            </View>
+                          }
                           left={props => (
                             <View
                               style={{
@@ -351,7 +376,6 @@ const Setting = props => {
                                 justifyContent: 'center',
                                 alignItems: 'center',
                                 borderRadius: 10,
-                                marginLeft: 20,
                               }}>
                               <Ionicons
                                 name="person-outline"
@@ -373,10 +397,31 @@ const Setting = props => {
                               }}
                             />
                           )}
-                          style={{marginVertical: 5}}
+                          style={{
+                            marginVertical: 5,
+                            borderBottomWidth: 1,
+                            alignItems: 'center',
+                            borderBottomColor: '#EDF1F7',
+                            paddingBottom: 15,
+                            paddingTop: 15,
+
+                            width: 300,
+                            marginLeft: 20,
+                          }}
                         />
                         <List.Item
-                          title="New Member"
+                          title={
+                            <View>
+                              <Text
+                                style={{
+                                  fontSize: 14,
+                                  color: '#222B45',
+                                  fontWeight: '500',
+                                }}>
+                                Member Connections
+                              </Text>
+                            </View>
+                          }
                           left={props => (
                             <View
                               style={{
@@ -386,7 +431,6 @@ const Setting = props => {
                                 justifyContent: 'center',
                                 alignItems: 'center',
                                 borderRadius: 10,
-                                marginLeft: 20,
                               }}>
                               <Ionicons
                                 name="person-outline"
@@ -408,10 +452,29 @@ const Setting = props => {
                               }}
                             />
                           )}
-                          style={{marginVertical: 5}}
+                          style={{
+                            marginVertical: 5,
+                            borderBottomWidth: 1,
+                            alignItems: 'center',
+                            borderBottomColor: '#EDF1F7',
+                            paddingBottom: 15,
+                            width: 300,
+                            marginLeft: 20,
+                          }}
                         />
                         <List.Item
-                          title="Chat"
+                          title={
+                            <View>
+                              <Text
+                                style={{
+                                  fontSize: 14,
+                                  color: '#222B45',
+                                  fontWeight: '500',
+                                }}>
+                                Chat
+                              </Text>
+                            </View>
+                          }
                           left={props => (
                             <View
                               style={{
@@ -421,7 +484,6 @@ const Setting = props => {
                                 justifyContent: 'center',
                                 alignItems: 'center',
                                 borderRadius: 10,
-                                marginLeft: 20,
                               }}>
                               <Ionicons
                                 name="person-outline"
@@ -443,10 +505,29 @@ const Setting = props => {
                               }}
                             />
                           )}
-                          style={{marginVertical: 5}}
+                          style={{
+                            marginVertical: 5,
+                            borderBottomWidth: 1,
+                            alignItems: 'center',
+                            borderBottomColor: '#EDF1F7',
+                            paddingBottom: 15,
+                            width: 300,
+                            marginLeft: 20,
+                          }}
                         />
                         <List.Item
-                          title="Content"
+                          title={
+                            <View>
+                              <Text
+                                style={{
+                                  fontSize: 14,
+                                  color: '#222B45',
+                                  fontWeight: '500',
+                                }}>
+                                Content
+                              </Text>
+                            </View>
+                          }
                           left={props => (
                             <View
                               style={{
@@ -456,7 +537,6 @@ const Setting = props => {
                                 justifyContent: 'center',
                                 alignItems: 'center',
                                 borderRadius: 10,
-                                marginLeft: 20,
                               }}>
                               <Ionicons
                                 name="person-outline"
@@ -478,10 +558,29 @@ const Setting = props => {
                               }}
                             />
                           )}
-                          style={{marginVertical: 5}}
+                          style={{
+                            marginVertical: 5,
+                            borderBottomWidth: 1,
+                            alignItems: 'center',
+                            borderBottomColor: '#EDF1F7',
+                            paddingBottom: 15,
+                            width: 300,
+                            marginLeft: 20,
+                          }}
                         />
                         <List.Item
-                          title="Discussion Board"
+                          title={
+                            <View>
+                              <Text
+                                style={{
+                                  fontSize: 14,
+                                  color: '#222B45',
+                                  fontWeight: '500',
+                                }}>
+                                Discussion Boards
+                              </Text>
+                            </View>
+                          }
                           left={props => (
                             <View
                               style={{
@@ -491,7 +590,6 @@ const Setting = props => {
                                 justifyContent: 'center',
                                 alignItems: 'center',
                                 borderRadius: 10,
-                                marginLeft: 20,
                               }}>
                               <Ionicons
                                 name="person-outline"
@@ -513,7 +611,16 @@ const Setting = props => {
                               }}
                             />
                           )}
-                          style={{marginVertical: 5}}
+                          style={{
+                            marginVertical: 5,
+                            borderBottomWidth: 1,
+                            alignItems: 'center',
+                            borderBottomColor: '#EDF1F7',
+                            paddingBottom: 15,
+                            // backgroundColor: 'red',
+                            width: 300,
+                            marginLeft: 20,
+                          }}
                         />
                       </List.Accordion>
                     </List.Section>

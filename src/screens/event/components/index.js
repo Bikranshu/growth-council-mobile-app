@@ -47,7 +47,6 @@ const Event = props => {
     eventRegisterError,
     registerEventByIdentifier,
     cleanEventRegister,
-
   } = props;
 
   const toast = useToast();
@@ -85,7 +84,6 @@ const Event = props => {
       ToastMessage.show(response?.payload?.response);
     }
   };
-
 
   let backgroundColor = '';
   const pillarCategory = events?.pillar_categories
@@ -317,7 +315,7 @@ const Event = props => {
                       styles.infoicon,
                       {backgroundColor: backgroundColor},
                     ]}>
-                    <MaterialIcons name={'event'} size={25} color={'white'} />
+                    <MaterialIcons name={'event'} size={20} color={'black'} />
                   </View>
 
                   <View
@@ -579,10 +577,7 @@ const Event = props => {
                   justifyContent: 'center',
                   alignItems: 'center',
                   marginTop: 10,
-                }}>
-              
-              
-              </View>
+                }}></View>
 
               <View
                 style={{

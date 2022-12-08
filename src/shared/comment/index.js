@@ -12,6 +12,7 @@ import {useFormik} from 'formik';
 import {Button} from 'react-native-paper';
 import Loading from '../loading';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import Entypo from 'react-native-vector-icons/Entypo';
 import {getFCMTOkenForUser} from '../../utils/httpUtil';
 import {sendNotification} from '../../utils/sendNotification';
 import {COMMUNITY_COLOR} from '../../theme/colors';
@@ -52,6 +53,21 @@ const Comments = ({
       : '',
   );
 
+  useEffect(() => {
+    getFCMTOkenForUser(parentUserId)
+      .then(res => {
+        const token = res.data.data;
+        if (token == null) {
+          console.log(res.data?.message);
+        }
+        console.log('token', token);
+        setFriendToken(typeof token == 'string' ? token : token?.[0]);
+      })
+
+      .catch(error => {
+        console.log(error);
+      });
+  }, []);
   const {
     handleChange,
     handleBlur,
@@ -94,22 +110,6 @@ const Comments = ({
     },
   });
 
-  useEffect(() => {
-    getFCMTOkenForUser(parentUserId)
-      .then(res => {
-        const token = res.data.data;
-        if (token == null) {
-          console.log(res.data?.message);
-        }
-        console.log('token', token);
-        setFriendToken(typeof token == 'string' ? token : token?.[0]);
-      })
-
-      .catch(error => {
-        console.log(error);
-      });
-  }, []);
-
   return (
     <>
       {deleteDiscusssionLoading && <Loading />}
@@ -130,9 +130,9 @@ const Comments = ({
           <View style={[styles.commentSection, styles.shadowProp]}>
             <View
               style={{
-                marginBottom: 40,
+                paddingBottom: 15,
                 height: 'auto',
-                minHeight: 20,
+                minHeight: 50,
               }}>
               <View style={{flexDirection: 'row'}}>
                 <Text style={{color: '#00008B', fontSize: 16}}>
@@ -153,40 +153,62 @@ const Comments = ({
                 {comment?.comment_content}
               </Text>
             </View>
-            {/* <View
-              style={{
-                height: 1,
-                borderWidth: 0.2,
-                marginTop: 10,
-                borderBottomColor: '#EDF1F7',
-              }}
-            /> */}
+
             <View
               style={{
                 flexDirection: 'row',
-                position: 'absolute',
-                right: 10,
-                bottom: 0,
+                position: 'relative',
+                right: 0,
+                borderTopWidth: 1,
+                borderTopColor: '#EDF1F7',
               }}>
               {canReply && (
                 <TouchableOpacity
-                  style={{marginLeft: 10}}
+                  style={{marginLeft: '50%'}}
                   onPress={() =>
                     setActiveComment({
                       id: comment?.comment_ID,
                       type: 'replying',
                     })
                   }>
-                  <Text style={{color: '#77C3ED', marginVertical: 10}}>
-                    Reply
-                  </Text>
+                  <View style={{flexDirection: 'row'}}>
+                    <Entypo
+                      name="reply"
+                      size={15}
+                      color="grey"
+                      style={{marginVertical: 10}}
+                    />
+                    <Text
+                      style={{
+                        color: 'grey',
+                        marginVertical: 10,
+                        fontSize: 10,
+                      }}>
+                      Reply
+                    </Text>
+                  </View>
                 </TouchableOpacity>
               )}
               {canDelete && (
                 <TouchableOpacity
                   style={{marginLeft: 10}}
                   onPress={() => deleteComment(comment?.comment_ID)}>
-                  <Text style={{color: 'red', marginVertical: 10}}>Delete</Text>
+                  <View style={{flexDirection: 'row'}}>
+                    <Ionicons
+                      name="trash-bin"
+                      size={15}
+                      color="grey"
+                      style={{marginVertical: 10}}
+                    />
+                    <Text
+                      style={{
+                        color: 'grey',
+                        marginVertical: 10,
+                        fontSize: 10,
+                      }}>
+                      Delete
+                    </Text>
+                  </View>
                 </TouchableOpacity>
               )}
             </View>
