@@ -22,7 +22,11 @@ import {
   resetSendEmail,
 } from '../../screens/event/slice/emailButtonSlice';
 import Loading from '../loading';
-import {COACHING_COLOR, COMMUNITY_COLOR} from '../../theme/colors';
+import {
+  COACHING_COLOR,
+  COMMUNITY_COLOR,
+  PRACTICE_COLOR,
+} from '../../theme/colors';
 
 const {width, height} = Dimensions.get('window');
 const {add, block, concat, cond, event, eq, set, Value} = Animated;
@@ -147,13 +151,13 @@ const FloatingButton = props => {
           }}>
           <View
             style={{
-              height: 300,
+              height: 250,
               backgroundColor: 'white',
               borderTopLeftRadius: 20,
               borderTopRightRadius: 20,
               padding: 20,
             }}>
-            <TouchableOpacity
+            {/* <TouchableOpacity
               activeOpacity={0.7}
               onPress={() => setModalVisible(false)}
               style={{alignItems: 'flex-end'}}>
@@ -161,15 +165,15 @@ const FloatingButton = props => {
                 style={{
                   padding: 15,
                   fontSize: 18,
-                  color: COMMUNITY_COLOR,
+                  color: PRACTICE_COLOR,
                 }}>
                 X
               </Text>
-            </TouchableOpacity>
+            </TouchableOpacity> */}
             <View style={{marginTop: 20}}>
               <Text
                 style={{fontSize: 16, textAlign: 'center', fontWeight: 'bold'}}>
-                Would you like to initaite Growth Pipeline Dialogue ?
+                Would you like to initiate Growth Pipeline Dialogue ?
               </Text>
               <View
                 style={{
@@ -232,7 +236,7 @@ const styles = StyleSheet.create({
     // padding: 10,
     position: 'absolute',
     bottom: 50,
-    right: -150,
+    right: -160,
     backgroundColor: 'white',
     borderRadius: 50,
     marginBottom: 10,
@@ -246,18 +250,18 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     width: 150,
     height: 50,
-    backgroundColor: '#ffffff',
+    backgroundColor: '#EBECF0',
     marginTop: 25,
-    borderColor: COMMUNITY_COLOR,
+    borderColor: PRACTICE_COLOR,
     borderWidth: 1,
     position: 'relative',
   },
   emailButton: {
     borderRadius: 20,
     marginRight: 5,
-    width: 160,
+    width: 150,
     height: 50,
-    backgroundColor: COMMUNITY_COLOR,
+    backgroundColor: PRACTICE_COLOR,
     marginTop: 25,
     justifyContent: 'center',
     alignItems: 'center',

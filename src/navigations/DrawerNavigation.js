@@ -239,9 +239,9 @@ const DrawerNavigation = () => {
         options={({navigation, route}) => ({
           drawerIcon: ({focused, size}) => (
             <Image
-              source={require('../../src/assets/img/CommunityIcon_Blue.png')}
-              style={{width: 20, height: 20}}
-              resizeMode="cover"
+              source={require('../../src/assets/img/gpd.png')}
+              style={{width: 20, height: 25}}
+              resizeMode="contain"
             />
           ),
           header: () => (
@@ -259,7 +259,11 @@ const DrawerNavigation = () => {
         component={EventForumScreen}
         options={({navigation}) => ({
           drawerIcon: ({focused, size}) => (
-            <Ionicons name="calendar-outline" color={'#00008B'} size={20} />
+            <Image
+              source={require('../../src/assets/img/pastevent.png')}
+              style={{width: 20, height: 20}}
+              resizeMode="cover"
+            />
           ),
           header: () => (
             <SubHeader

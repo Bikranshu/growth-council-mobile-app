@@ -37,7 +37,6 @@ import {PRIMARY_TEXT_COLOR, SECONDARY_TEXT_COLOR} from '../../../theme/colors';
 const EventForum = props => {
   const {navigation, route, pastEvent, pastEventLoading, pastEventForum} =
     props;
-  const [value, setValue] = useState('Current/Upcoming Events');
 
   useEffect(() => {
     pastEventForum();
@@ -100,7 +99,7 @@ const EventForum = props => {
               title: item?.title,
               backgroundColor: backgroundColor,
               organizer: organizer?.term_name,
-			  image: backgroundImage,
+              image: backgroundImage,
             })
           }>
           <View style={[styles.middleWrapper, styles.shadowProp]}>
@@ -195,8 +194,8 @@ const EventForum = props => {
       <ScrollView
         showsVerticalScrollIndicator={false}
         style={{backgroundColor: Colors.PRIMARY_BACKGROUND_COLOR}}>
+        {pastEventLoading && <Loading />}
         <View style={styles.container}>
-          {pastEventLoading && <Loading />}
           <FlatList
             Vertical
             showsVerticalScrollIndicator={false}

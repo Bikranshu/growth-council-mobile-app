@@ -271,7 +271,7 @@ const Event = props => {
         events?.pillar_categories[0]?.name;
       break;
   }
-
+  const image = require('../../../assets/img/Rectangle2.png');
   return (
     <ScrollView style={styles.scrollBox}>
       <View style={styles.container}>
@@ -567,6 +567,7 @@ const Event = props => {
                     navigation.navigate('Discussion', {
                       eventID: events?.ID,
                       title: events?.title,
+                      image: {image},
                     })
                   }>
                   <Text style={styles.forumText}>Discussion Forum</Text>
