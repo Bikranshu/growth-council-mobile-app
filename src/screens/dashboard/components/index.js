@@ -499,7 +499,7 @@ const Dashboard = props => {
 
     return (
       <>
-        {lowercaseRegion === item?.region ? (
+        {item?.region?.includes(lowercaseRegion) === true ? (
           <TouchableOpacity
             onPress={() => {
               navigation.navigate('CriticalIssue', {
@@ -507,7 +507,9 @@ const Dashboard = props => {
                 Userregion: lowercaseRegion,
               });
             }}>
-            {setHideCritical(lowercaseRegion === item?.region ? true : false)}
+            {setHideCritical(
+              item?.region?.includes(lowercaseRegion) === true ? true : false,
+            )}
             {/* {console.log("hello", index)} */}
 
             <View
