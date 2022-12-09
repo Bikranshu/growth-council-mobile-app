@@ -261,7 +261,14 @@ const Notification = props => {
             <View style={styles.wrapper}>
               <View style={styles.middleWrapper}>
                 <View style={styles.middleImage}>
-                  <Ionicons name="person-outline" color="white" size={20} />
+                  <Image
+                    source={require('../../../../src/assets/img/event.png')}
+                    style={{
+                      width: 40,
+                      height: 40,
+                    }}
+                    resizeMode="contain"
+                  />
                 </View>
                 <Text style={styles.text}>Event</Text>
                 <Switch
@@ -281,7 +288,14 @@ const Notification = props => {
             <View style={styles.wrapper}>
               <View style={styles.middleWrapper}>
                 <View style={styles.middleImage}>
-                  <Ionicons name="person-outline" color="white" size={20} />
+                  <Image
+                    source={require('../../../../src/assets/img/connection.png')}
+                    style={{
+                      width: 40,
+                      height: 40,
+                    }}
+                    resizeMode="contain"
+                  />
                 </View>
                 <Text style={styles.text}>New Member</Text>
                 <Switch
@@ -301,7 +315,14 @@ const Notification = props => {
             <View style={styles.wrapper}>
               <View style={styles.middleWrapper}>
                 <View style={styles.middleImage}>
-                  <Ionicons name="person-outline" color="white" size={20} />
+                  <Image
+                    source={require('../../../../src/assets/img/chatN.png')}
+                    style={{
+                      width: 40,
+                      height: 40,
+                    }}
+                    resizeMode="contain"
+                  />
                 </View>
                 <Text style={styles.text}>Chat</Text>
                 <Switch
@@ -320,7 +341,14 @@ const Notification = props => {
             <View style={styles.wrapper}>
               <View style={styles.middleWrapper}>
                 <View style={styles.middleImage}>
-                  <Ionicons name="person-outline" color="white" size={20} />
+                  <Image
+                    source={require('../../../../src/assets/img/contentN.png')}
+                    style={{
+                      width: 40,
+                      height: 40,
+                    }}
+                    resizeMode="contain"
+                  />
                 </View>
                 <Text style={styles.text}>Content</Text>
                 <Switch
@@ -339,7 +367,14 @@ const Notification = props => {
             <View style={styles.wrapper}>
               <View style={styles.middleWrapper}>
                 <View style={styles.middleImage}>
-                  <Ionicons name="person-outline" color="white" size={20} />
+                  <Image
+                    source={require('../../../../src/assets/img/board.png')}
+                    style={{
+                      width: 40,
+                      height: 40,
+                    }}
+                    resizeMode="contain"
+                  />
                 </View>
                 <Text style={styles.text}>Discussion Board</Text>
                 <Switch

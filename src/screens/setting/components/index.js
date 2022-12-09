@@ -377,10 +377,13 @@ const Setting = props => {
                                 alignItems: 'center',
                                 borderRadius: 10,
                               }}>
-                              <Ionicons
-                                name="person-outline"
-                                color="white"
-                                size={20}
+                              <Image
+                                source={require('../../../../src/assets/img/event.png')}
+                                style={{
+                                  width: 20,
+                                  height: 20,
+                                }}
+                                resizeMode="contain"
                               />
                             </View>
                           )}
@@ -432,10 +435,13 @@ const Setting = props => {
                                 alignItems: 'center',
                                 borderRadius: 10,
                               }}>
-                              <Ionicons
-                                name="person-outline"
-                                color="white"
-                                size={20}
+                              <Image
+                                source={require('../../../../src/assets/img/connection.png')}
+                                style={{
+                                  width: 25,
+                                  height: 25,
+                                }}
+                                resizeMode="contain"
                               />
                             </View>
                           )}
@@ -485,10 +491,13 @@ const Setting = props => {
                                 alignItems: 'center',
                                 borderRadius: 10,
                               }}>
-                              <Ionicons
-                                name="person-outline"
-                                color="white"
-                                size={20}
+                              <Image
+                                source={require('../../../../src/assets/img/chatN.png')}
+                                style={{
+                                  width: 20,
+                                  height: 20,
+                                }}
+                                resizeMode="contain"
                               />
                             </View>
                           )}
@@ -538,10 +547,13 @@ const Setting = props => {
                                 alignItems: 'center',
                                 borderRadius: 10,
                               }}>
-                              <Ionicons
-                                name="person-outline"
-                                color="white"
-                                size={20}
+                              <Image
+                                source={require('../../../../src/assets/img/contentN.png')}
+                                style={{
+                                  width: 20,
+                                  height: 20,
+                                }}
+                                resizeMode="contain"
                               />
                             </View>
                           )}
@@ -591,10 +603,13 @@ const Setting = props => {
                                 alignItems: 'center',
                                 borderRadius: 10,
                               }}>
-                              <Ionicons
-                                name="person-outline"
-                                color="white"
-                                size={20}
+                              <Image
+                                source={require('../../../../src/assets/img/board.png')}
+                                style={{
+                                  width: 20,
+                                  height: 20,
+                                }}
+                                resizeMode="contain"
                               />
                             </View>
                           )}

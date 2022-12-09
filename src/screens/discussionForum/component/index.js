@@ -145,8 +145,9 @@ const Discussion = props => {
     // <ScrollView contentContainerStyle={{flexGrow: 1}}>
     <View style={styles.container}>
       <ImageBackground
-        source={require('../../../assets/img/splash-screen.png')}
-        resizeMode="cover">
+        source={require('../../../assets/img/event_main_image.png')}
+        resizeMode="cover"
+        imageStyle={{opacity: 0.3}}>
         <View style={{height: '40%'}}>
           <View
             style={{

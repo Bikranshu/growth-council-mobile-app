@@ -6,6 +6,7 @@ import {
   Dimensions,
   TouchableOpacity,
   Modal,
+  Image,
 } from 'react-native';
 import Animated from 'react-native-reanimated';
 import {
@@ -21,7 +22,7 @@ import {
   resetSendEmail,
 } from '../../screens/event/slice/emailButtonSlice';
 import Loading from '../loading';
-import {COACHING_COLOR} from '../../theme/colors';
+import {COACHING_COLOR, COMMUNITY_COLOR} from '../../theme/colors';
 
 const {width, height} = Dimensions.get('window');
 const {add, block, concat, cond, event, eq, set, Value} = Animated;
@@ -119,8 +120,18 @@ const FloatingButton = props => {
               <TouchableOpacity
                 onPress={() => {
                   setModalVisible(true);
-                }}>
-                <Ionicons name="add-circle" size={30} color="white" />
+                }}
+                style={{marginLeft: 20}}>
+                <Image
+                  source={require('../../../src/assets/img/FloatingButton.png')}
+                  style={{
+                    width: 80,
+                    height: 80,
+                    marginLeft: 20,
+                  }}
+                  resizeMode="contain"
+                />
+                {/* <Ionicons name="add-circle" size={30} color="white" /> */}
               </TouchableOpacity>
             </Animated.View>
           </RotationGestureHandler>
@@ -136,7 +147,7 @@ const FloatingButton = props => {
           }}>
           <View
             style={{
-              height: 500,
+              height: 300,
               backgroundColor: 'white',
               borderTopLeftRadius: 20,
               borderTopRightRadius: 20,
@@ -150,35 +161,51 @@ const FloatingButton = props => {
                 style={{
                   padding: 15,
                   fontSize: 18,
+                  color: COMMUNITY_COLOR,
                 }}>
-                Done
+                X
               </Text>
             </TouchableOpacity>
-            <View style={{marginBottom: 40}}>
+            <View style={{marginTop: 20}}>
               <Text
-                style={{fontSize: 18, textAlign: 'center', fontWeight: 'bold'}}>
-                Growth Pipeline Dialogue
+                style={{fontSize: 16, textAlign: 'center', fontWeight: 'bold'}}>
+                Would you like to initaite Growth Pipeline Dialogue ?
               </Text>
+              <View
+                style={{
+                  height: 1,
+                  width: 150,
+                  backgroundColor: 'grey',
+                  marginLeft: 100,
+                  marginTop: 20,
+                }}
+              />
+
               {sendEmailLoading && <Loading />}
-              <View>
-                {!emailStatus && (
-                  <Button
-                    style={[styles.emailButton]}
-                    onPress={async () => {
-                      GrowthPipelineDialogueButton();
-                    }}>
-                    <Text style={styles.acceptButtonText}>
-                      Growth Pipeline Dialogue
-                    </Text>
-                  </Button>
-                )}
-                {emailStatus && (
-                  <TouchableOpacity style={styles.sendRegisterButton}>
-                    <Text style={styles.emailButtonText}>
-                      Growth Pipeline Dialogue
-                    </Text>
-                  </TouchableOpacity>
-                )}
+              <View
+                style={{flexDirection: 'row', justifyContent: 'space-between'}}>
+                <TouchableOpacity
+                  style={styles.sendRegisterButton}
+                  onPress={() => setModalVisible(false)}>
+                  <Text style={styles.emailButtonText}>Cancel</Text>
+                </TouchableOpacity>
+
+                <View>
+                  {!emailStatus && (
+                    <Button
+                      style={[styles.emailButton]}
+                      onPress={async () => {
+                        GrowthPipelineDialogueButton();
+                      }}>
+                      <Text style={styles.acceptButtonText}>Proceed</Text>
+                    </Button>
+                  )}
+                  {emailStatus && (
+                    <TouchableOpacity style={styles.sendRegisterButton}>
+                      <Text style={styles.emailButtonText}>Proceed</Text>
+                    </TouchableOpacity>
+                  )}
+                </View>
               </View>
             </View>
           </View>
@@ -202,39 +229,41 @@ const styles = StyleSheet.create({
     // alignItems: 'center',
     alignItems: 'flex-end',
     justifyContent: 'center',
-    padding: 10,
+    // padding: 10,
     position: 'absolute',
     bottom: 50,
     right: -150,
-    backgroundColor: 'green',
+    backgroundColor: 'white',
     borderRadius: 50,
     marginBottom: 10,
+    width: 80,
+    height: 80,
   },
   sendRegisterButton: {
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
-    borderRadius: 10,
-    width: '100%',
+    borderRadius: 20,
+    width: 150,
     height: 50,
     backgroundColor: '#ffffff',
     marginTop: 25,
-    borderColor: COACHING_COLOR,
-    borderWidth: 2,
+    borderColor: COMMUNITY_COLOR,
+    borderWidth: 1,
     position: 'relative',
   },
   emailButton: {
-    borderRadius: 10,
+    borderRadius: 20,
     marginRight: 5,
-    width: '100%',
+    width: 160,
     height: 50,
-    backgroundColor: COACHING_COLOR,
+    backgroundColor: COMMUNITY_COLOR,
     marginTop: 25,
     justifyContent: 'center',
     alignItems: 'center',
   },
   emailButtonText: {
-    color: COACHING_COLOR,
+    color: 'grey',
   },
   acceptButtonText: {
     width: '100%',

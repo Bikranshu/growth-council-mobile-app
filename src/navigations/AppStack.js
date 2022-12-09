@@ -263,16 +263,16 @@ const AppStack = navigation => (
         ),
       })}
     />
-  
+
     <Screen
       name="Discussion"
       component={DiscussionScreen}
       options={route => ({
         eventID: route?.params?.eventID,
-        header: ({navigation}) => (
+        header: ({navigation, route}) => (
           <SubHeader
             title="Discussion"
-            image={require('../assets/img/appBG.png')}
+			image={route?.params?.image}
             navigation={navigation}
             noDrawer={true}
           />

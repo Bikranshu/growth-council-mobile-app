@@ -17,24 +17,7 @@ import HTMLView from 'react-native-htmlview';
 import {CommonStyles, Colors, Typography} from '../../theme';
 
 const GPDScreen = props => {
-//   const [textShown, setTextShown] = useState(false); //To show ur remaining Text
-  const [lengthMore, setLengthMore] = useState(false); //to show the "Read more & Less Line"
-  const [modalVisible, setModalVisible] = useState(false);
 
-//   const toggleNumberOfLines = () => {
-//     //To toggle the show text or hide it
-//     setTextShown(!textShown);
-//   };
-
-  const onTextLayout = useCallback(e => {
-    setLengthMore(e.nativeEvent.lines.length >= 2); //to check the text is more than 4 lines or not
-    // console.log(e.nativeEvent);
-  }, []);
-
-  
-  const description = "The Growth Innovation Leadership Council's mission ";
-  const longText =
-    'Text is also commonly used to refer to a text message or to send a text message. Text has several other senses as a noun. Text refers to the actual words written in a book, newspaper, blog post, or any other written work. Pictures, charts, and other images are not text. Text could be movies, scripts, paintings, songs, political cartoons, advertisements and maps. If we can look at something with words and sentences, explore it, find layers of meaning in it, and draw information and conclusions from it, you`re looking at a text.';
   return (
     <>
       <StatusBar
@@ -51,112 +34,37 @@ const GPDScreen = props => {
               <View style={styles.titleBorder}></View>
             </View>
             <View>
-              <HTMLView
-                value={description}
-                textComponentProps={{
-                  style: {
-                    fontSize: 16,
-                    paddingBottom: 30,
-                    textAlign: 'justify',
-                  },
-                }}
-              />
-            </View>
-
-            <View>
               <Text
-                onTextLayout={onTextLayout}
-                numberOfLines={2}
-                style={{lineHeight: 21}}>
-                {longText}
-              </Text>
-              <TouchableOpacity
-                onPress={() => {
-                  setModalVisible(true);
+                style={{
+                  fontSize: 14,
+                  paddingBottom: 30,
+                  textAlign: 'justify',
+                  whiteSpace: 'pre-wrap',
                 }}>
-                <Text>'Read More...' </Text>
-              </TouchableOpacity>
-
-              {/* {lengthMore ? (
-              <Text
-                onPress={toggleNumberOfLines}
-                style={{lineHeight: 21, marginTop: 10}}>
-                {textShown ? 'Read less...' : 'Read more...'}
+                The Growth Innovation Leadership Council`s mission is to enable
+                exacutive to achieve transformational growth fo themselves,
+                their companies and for industry and society at large through
+                enlightened leadership.
+                {'\n'}
+                {'\n'}
+                The Council delivers thought leader and year-round networking
+                around a member-defined set of Critical Issues shaping our
+                futures
+                {'\n'}
+                {'\n'}
+                Each year, Council Members work together to set the Critical
+                Issues Agenda for the year ahead. These issues then guide the
+                development of our live events, virtual events and curated
+                content on the portal. Setting the Critical Issues Agendais akey
+                role in ensuring the content for the Council is driven by its
+                members.
               </Text>
-            ) : null} */}
             </View>
+
+       
           </View>
         </View>
-        <Modal
-          animationType="slide"
-          transparent={true}
-          visible={modalVisible}
-          onRequestClose={() => {
-            setModalVisible(!modalVisible);
-          }}>
-          <View
-            style={{
-              flex: 1,
-              justifyContent: 'center',
-              alignItems: 'center',
-              marginTop: 22,
-            }}>
-            <View
-              style={{
-                margin: 20,
-                backgroundColor: 'white',
-                borderRadius: 20,
-                padding: 35,
-                alignItems: 'center',
-                shadowColor: '#000',
-                shadowOffset: {
-                  width: 0,
-                  height: 2,
-                },
-                shadowOpacity: 0.25,
-                shadowRadius: 4,
-                elevation: 5,
-              }}>
-              <TouchableOpacity
-                activeOpacity={0.7}
-                onPress={() => setModalVisible(false)}
-                style={{
-                  alignItems: 'flex-end',
-                  position: 'absolute',
-                  right: 0,
-                  margin: 15,
-                }}>
-                <Text
-                  style={{
-                    padding: 15,
-                    fontSize: 18,
-                  }}>
-                  Close
-                </Text>
-              </TouchableOpacity>
-              <Text
-                // onTextLayout={onTextLayout}
-                // numberOfLines={textShown ? undefined : 2}
-                style={{lineHeight: 21, marginTop: 30}}>
-                {longText}
-              </Text>
-
-              {/* {lengthMore ? (
-                // <Text
-                //   onPress={toggleNumberOfLines}
-                //   style={{lineHeight: 21, marginTop: 10}}>
-                //   {textShown ? 'Read less...' : 'Read more...'}
-                // </Text>
-                <TouchableOpacity
-                  onPress={() => {
-                    setModalVisible(!modalVisible);
-                  }}>
-                  <Text>'Read less...' </Text>
-                </TouchableOpacity>
-              ) : null} */}
-            </View>
-          </View>
-        </Modal>
+       
       </ScrollView>
     </>
   );

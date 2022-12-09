@@ -100,6 +100,7 @@ const EventForum = props => {
               title: item?.title,
               backgroundColor: backgroundColor,
               organizer: organizer?.term_name,
+			  image: backgroundImage,
             })
           }>
           <View style={[styles.middleWrapper, styles.shadowProp]}>
@@ -163,10 +164,13 @@ const EventForum = props => {
                 padding: 10,
               }}>
               <View style={{alignItems: 'center'}}>
-                <Ionicon
-                  name={'chatbox-ellipses'}
-                  size={30}
-                  color={COMMUNITY_COLOR}
+                <Image
+                  source={require('../../../assets/img/JoinDiscussion.png')}
+                  style={{
+                    width: 40,
+                    height: 40,
+                  }}
+                  resizeMode="cover"
                 />
                 <Text
                   style={[styles.text, {fontSize: 10, color: COMMUNITY_COLOR}]}>

@@ -49,6 +49,7 @@ import {
   GROWTH_CONTENT_ID,
   USER_REGION,
 } from '../../../constants';
+import Quote from './quote';
 
 const win = Dimensions.get('window').width;
 const contentContainerWidth = win / 2;
@@ -626,10 +627,16 @@ const Dashboard = props => {
           <ImageBackground
             style={{
               width: '100%',
-              height: (Dimensions.get('screen').height - 80) / 3,
+              height: (Dimensions.get('screen').height - 180) / 2,
               paddingTop: Dimensions.get('screen').height / 10,
             }}
             source={require('../../../assets/img/appBG.png')}>
+            <View
+              style={{
+                alignItems: 'center',
+              }}>
+              <Quote dailyQuote={dailyQuote} navigation={navigation} />
+            </View>
             <View style={styles.pillar}>
               <PillarList
                 pillarSliders={pillarSliders}
@@ -663,22 +670,7 @@ const Dashboard = props => {
             </View>
           )}
         {regionEventLoading && <Loading />}
-        {/* <View style={{padding: 20}}>
-          <Text style={styles.title}>Daily Quote</Text>
-          <View
-            style={{
-              //   display: 'flex',
-              //   flexDirection: 'row',
-              marginTop: 20,
-            }}>
-            <FlatList
-              horizontal
-              showsHorizontalScrollIndicator={false}
-              data={dailyQuote}
-              renderItem={_renderDailyQuoteItem}
-            />
-          </View>
-        </View> */}
+   
         {memberConnectionLoading && (
           <View style={{marginTop: 40}}>
             <Loading />
@@ -743,7 +735,7 @@ const Dashboard = props => {
           </View>
         </View>
       </ScrollView>
-      <FloatingButton {...props} navigation={navigation}/>
+      <FloatingButton {...props} navigation={navigation} />
       <BottomNav {...props} navigation={navigation} />
     </View>
   );
@@ -756,12 +748,13 @@ const styles = StyleSheet.create({
     width: '100%',
     marginBottom: 40,
   },
+
   pillar: {
     display: 'flex',
     flexDirection: 'row',
     marginLeft: 10,
     marginRight: 10,
-    marginTop: Platform.OS === 'ios' ? 65 : 50,
+    marginTop: Platform.OS === 'ios' ? 65 : 20,
     justifyContent: 'space-between',
   },
 

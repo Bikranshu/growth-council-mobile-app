@@ -54,6 +54,16 @@ const Comments = ({
   );
 
   useEffect(() => {
+    setparentUserId(
+      replyId === comment?.comment_ID
+        ? comment?.comment_parent === '0'
+          ? comment?.user_id
+          : ''
+        : '',
+    );
+  }, []);
+  useEffect(() => {
+    console.log({parentUserId});
     getFCMTOkenForUser(parentUserId)
       .then(res => {
         const token = res.data.data;
