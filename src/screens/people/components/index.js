@@ -19,6 +19,7 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import Material from 'react-native-vector-icons/MaterialIcons';
 import {Picker} from '@react-native-picker/picker';
+import FloatingButton from '../../../shared/floatingButton';
 import {Button, useToast} from 'native-base';
 import analytics from '@react-native-firebase/analytics';
 import {useIsFocused, useFocusEffect} from '@react-navigation/native';
@@ -130,8 +131,6 @@ const People = props => {
   useEffect(() => {
     setMobileRegion(mobileRegion);
   }, [region]);
-
-  //   console.log(region.region_options);
 
   const connectMemberByMemberID = async (memberID, index) => {
     const response = await connectMemberByIdentifier({member_id: memberID});
@@ -619,6 +618,8 @@ const People = props => {
           </View>
         </View>
       </Modal>
+
+      <FloatingButton {...props} navigation={navigation} />
 
       <BottomNav {...props} navigation={navigation} />
     </SafeAreaView>

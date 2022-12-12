@@ -81,7 +81,6 @@ const OthersAccount = props => {
   //     setLoggedInUserInfoAsync();
   //   }, [isFocused]);
 
-  console.log('afdh', otherProfiles);
   return (
     <ScrollView
       onScroll={e => {

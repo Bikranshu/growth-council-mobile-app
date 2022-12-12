@@ -37,7 +37,7 @@ import CoachingSessionDetailScreen from '../screens/coachingSession';
 import SelfLearnDetailScreen from '../screens/selfLearn';
 import PDFDetailScreen from '../screens/selfLearn/pdf';
 import SelfAssessment from '../screens/coachingSession/component/selfAssessment';
-// import CountryPopupScreen from '../screens/auth/CountryPopup';
+import NotificationScreen from '../screens/Notification';
 import MainHeader from '../shared/header/MainHeader';
 import UserListScreen from '../screens/chat/UserList';
 import PeopleScreen from '../screens/people';
@@ -47,6 +47,9 @@ import DashboardScreen from '../screens/dashboard';
 import SessionCompleted from '../screens/coachingSession/component/sessionCompleted';
 import DrawerNavigation from '../navigations/DrawerNavigation';
 import Header from '../shared/header/header';
+import NotificationListScreen from '../screens/Notification/notificationList';
+import DiscussionScreen from '../screens/discussionForum';
+// import EventForumScreen from '../screens/discussionForum/eventForum';
 
 import {GROWTH_COMMUNITY_ID} from '../constants';
 
@@ -113,20 +116,6 @@ const AppStack = navigation => (
         ),
       })}
     />
-    {/* <Screen
-      name="CountryPop"
-      component={CountryPopupScreen}
-      options={({route, navigation}) => ({
-        header: () => (
-          <SubHeader
-            title="CountryPopup"
-            image={require('../assets/img/appBG.png')}
-            navigation={navigation}
-            noDrawer={true}
-          />
-        ),
-      })}
-    /> */}
 
     <Screen
       name="selfAssessment"
@@ -186,6 +175,7 @@ const AppStack = navigation => (
         ),
       })}
     />
+
     <Screen
       name="SubPoeList"
       component={SubPOEListDetailScreen}
@@ -245,6 +235,51 @@ const AppStack = navigation => (
     />
 
     <Screen
+      name="Notification"
+      component={NotificationScreen}
+      options={() => ({
+        header: ({navigation}) => (
+          <Header
+            title="Notification"
+            image={require('../assets/img/appBG.png')}
+            navigation={navigation}
+            noDrawer={true}
+          />
+        ),
+      })}
+    />
+
+    <Screen
+      name="NotificationList"
+      component={NotificationListScreen}
+      options={() => ({
+        header: ({navigation}) => (
+          <SubHeader
+            title="Notification"
+            image={require('../assets/img/appBG.png')}
+            navigation={navigation}
+            noDrawer={true}
+          />
+        ),
+      })}
+    />
+
+    <Screen
+      name="Discussion"
+      component={DiscussionScreen}
+      options={route => ({
+        eventID: route?.params?.eventID,
+        header: ({navigation, route}) => (
+          <SubHeader
+            title="Discussion"
+			image={route?.params?.image}
+            navigation={navigation}
+            noDrawer={true}
+          />
+        ),
+      })}
+    />
+    <Screen
       name="ChangePassword"
       component={ChangePasswordScreen}
       options={({navigation}) => ({
@@ -279,7 +314,6 @@ const AppStack = navigation => (
         header: ({navigation}) => (
           <SubHeader
             title="Growth Content"
-			
             image={require('../assets/img/best-practice-bg.png')}
             navigation={navigation}
             noDrawer
@@ -295,7 +329,7 @@ const AppStack = navigation => (
         header: () => (
           <SubHeader
             title="Growth Content"
-			id="Growth Content"
+            id="Growth Content"
             image={require('../assets/img/best-practice-bg.png')}
             navigation={navigation}
             noDrawer
@@ -311,7 +345,7 @@ const AppStack = navigation => (
         header: () => (
           <SubHeader
             title="Growth Content"
-			id="Growth Content"
+            id="Growth Content"
             image={require('../assets/img/best-practice-bg.png')}
             navigation={navigation}
             noDrawer

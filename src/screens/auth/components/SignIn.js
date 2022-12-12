@@ -76,7 +76,6 @@ const SignInForm = props => {
     },
   });
 
-  //   console.log(values.username, values.password);
 
   const areAllFieldsFilled = values.username != '' && values.password != '';
 

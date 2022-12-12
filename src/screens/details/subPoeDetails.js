@@ -16,7 +16,7 @@ import {
 import {
   fetchAllPillarPOEs,
   resetPillarPOE,
-} from '../dashboard/slice/pillarPOESlice';
+} from '../dashboard/slice/POE/pillarPOESlice';
 
 const SubPOEDetailScreen = props => {
   const dispatch = useDispatch();

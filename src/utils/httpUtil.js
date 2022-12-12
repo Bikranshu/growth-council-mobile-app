@@ -23,4 +23,3 @@ export function uploadImage(endpoint, data) {
 export function getFCMTOkenForUser(userID) {
   return httpBase().post('/jwt-auth/v1/fcm', {user_id: userID});
 }
-

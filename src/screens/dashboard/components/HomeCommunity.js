@@ -16,6 +16,7 @@ import {
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import Material from 'react-native-vector-icons/MaterialIcons';
 import FeatherIcon from 'react-native-vector-icons/Feather';
+import {Toast, useToast} from 'native-base';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome';
 import moment from 'moment';
@@ -24,7 +25,7 @@ import {Linking} from 'react-native';
 import {useFocusEffect, useIsFocused} from '@react-navigation/native';
 import BottomNav from '../../../layout/BottomLayout';
 import Player from './Player';
-import {getAsyncStorage} from '../../../utils/storageUtil';
+import FloatingButton from '../../../shared/floatingButton';
 import {GROWTH_COMMUNITY_ID, JWT_TOKEN} from '../../../constants';
 import {decodeUserID} from '../../../utils/jwtUtil';
 import RNFetchBlob from 'react-native-blob-util';
@@ -106,6 +107,15 @@ const HomeCommunity = props => {
     region = profile?.user_meta?.region[0];
   }
 
+  let persona = profile?.user_meta?.user_persona;
+  if (typeof persona === 'undefined' || persona === null) {
+    persona = ' ';
+  } else {
+    persona = profile?.user_meta?.user_persona[0];
+  }
+
+  console.log('user_persona', persona);
+
   let string = region;
   if (string) string = string.toLowerCase();
 
@@ -116,7 +126,6 @@ const HomeCommunity = props => {
     regionUser = profile?.user_meta?.region[0];
   }
 
-  console.log(regionUser);
   //   region = region === 'AMERICAS' ? 'north-america' : region;
   const [userRegion, setUserRegion] = useState(region);
   const [memberConnection, setMemberConnection] = useState([]);
@@ -290,13 +299,21 @@ const HomeCommunity = props => {
     );
   };
 
+  const toast = useToast();
+  const id = 'test-toast';
+
   const _renderMiddleItem = ({item, index}, navigation) => {
     return (
       <TouchableOpacity
-        onPress={() => {
-          if (item.slug === 'brainstorming-strategy-discussions') {
-            navigation.navigate('Growth Community');
-          } else {
+        onPress={
+          () => {
+            //   if (
+            //     item?.growth_council_persona_classifcation?.includes(persona) ===
+            //     true
+            //   ) {
+            //     if (item.slug === 'brainstorming-strategy-discussions') {
+            //       navigation.navigate('Growth Community');
+            //     } else {
             navigation.navigate('CommunityDetail', {
               poeId: item?.term_id,
               pillarId: item?.parent,
@@ -305,7 +322,17 @@ const HomeCommunity = props => {
               image: require('../../../assets/img/Rectangle2.png'),
             });
           }
-        }}>
+          //   } else {
+          //     if (!toast.isActive(id)) {
+          //       toast.show({
+          //         id,
+          //         title: 'You have no access to this content',
+          //       });
+          //     }
+          //     // ToastMessage.show('You have no access to this content');
+        }
+        // }}
+      >
         <View style={styles.middleWrapper}>
           <View style={[styles.middleW, styles.shadowProp]}>
             <Image
@@ -687,6 +714,7 @@ const HomeCommunity = props => {
           {/* <Footer /> */}
         </View>
       </ScrollView>
+      <FloatingButton {...props} navigation={navigation} />
       <BottomNav {...props} navigation={navigation} />
     </View>
   );

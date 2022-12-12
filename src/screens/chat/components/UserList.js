@@ -13,6 +13,8 @@ import {
 } from 'react-native';
 import {Searchbar, Button} from 'react-native-paper';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import FloatingButton from '../../../shared/floatingButton';
+
 import Material from 'react-native-vector-icons/MaterialIcons';
 import {
   useFocusEffect,
@@ -158,6 +160,13 @@ const UserList = props => {
   }, [text]);
 
   const _renderItems = ({item, index}) => {
+    let chat = item?.user_meta?.chat_notification;
+    if (typeof chat === 'undefined') {
+      chat = '';
+    } else {
+      chat = item?.user_meta?.chat_notification[0];
+    }
+
     return (
       <View>
         <TouchableOpacity
@@ -173,6 +182,7 @@ const UserList = props => {
               userID: userID,
               userName: userName,
               userAvatar: avatarImg,
+              userChat: chat,
             });
           }}>
           <View style={[styles.wrapper, styles.shadowProp]} key={index}>
@@ -323,7 +333,7 @@ const UserList = props => {
         style={{paddingBottom: 20, backgroundColor: 'white', marginTop: 10}}>
         <Footer />
       </View> */}
-
+	  <FloatingButton {...props} navigation={navigation} />
       <BottomNav {...props} navigation={navigation} />
     </SafeAreaView>
   );

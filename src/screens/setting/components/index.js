@@ -12,36 +12,157 @@ import {
   StatusBar,
   Dimensions,
 } from 'react-native';
+import {List} from 'react-native-paper';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import Footer from '../../../shared/footer';
 import ToastMessage from '../../../shared/toast';
 import analytics from '@react-native-firebase/analytics';
+import {useFormik} from 'formik';
+import Loading from '../../../shared/loading';
+import FloatingButton from '../../../shared/floatingButton';
 
 import {CommonStyles, Colors, Typography} from '../../../theme';
 import {PRIMARY_BACKGROUND_COLOR} from '../../../theme/colors';
-import {clearAsyncStorage} from '../../../utils/storageUtil';
-import {Linking} from 'react-native';
 
 const Setting = props => {
   const {
     navigation,
     route,
-    upcomingEvents,
-    upcomingEventLoading,
-    upcomingEventError,
-    fetchAllUpcomingEvent,
-    cleanUpcomingEvent,
+
     profile,
     profileLoading,
     profileError,
     fetchProfile,
     cleanProfile,
+
+    notificationOptions,
+    notificationOptionLoading,
+    notificationOptionError,
+    fetchNotificationOption,
+
+    updateNotification,
+    updateNotificationLoading,
+    updateNotificationError,
+    updateUserNotification,
   } = props;
 
-  const [isEnabled, setIsEnabled] = useState(false);
+  const [expanded, setExpanded] = React.useState(false);
 
-  const toggleSwitch = () => setIsEnabled(previousState => !previousState);
+  const handlePress = () => setExpanded(!expanded);
+
+  const [contentEnabled, setContentEnabled] = useState(
+    notificationOptions?.content_notification === '1' ? true : false,
+  );
+  const [eventEnabled, setEventEnabled] = useState(
+    notificationOptions?.event_notification === '1' ? true : false,
+  );
+  const [memberEnabled, setMemberEnabled] = useState(
+    notificationOptions?.member_connection_add_delete_notification === '1'
+      ? true
+      : false,
+  );
+  const [chatEnabled, setChatEnabled] = useState(
+    notificationOptions?.chat_notification === '1' ? true : false,
+  );
+
+  const [boardEnabled, setBoardEnabled] = useState(
+    notificationOptions?.discussion_board_notification === '1' ? true : false,
+  );
+
+  console.log(
+    'contentEnabled',
+    contentEnabled,
+    'eventEnabled',
+    eventEnabled,
+    'memberEnabled',
+    memberEnabled,
+  );
+  const {
+    handleChange,
+    handleBlur,
+    handleSubmit,
+    values,
+    errors,
+    setErrors,
+    touched,
+    isValid,
+    setFieldValue,
+  } = useFormik({
+    initialValues: {
+      event_notification: eventEnabled,
+      member_connection_add_delete_notification: memberEnabled,
+      chat_notification: chatEnabled,
+      content_notification: contentEnabled,
+      discussion_board_notification: boardEnabled,
+    },
+    onSubmit: async values => {
+      //   console.log({values});
+      await updateUserNotification(values).then(response => {
+        console.log(response);
+      });
+    },
+  });
+
+  const contentSwitch = () => {
+    setFieldValue('content_notification', !contentEnabled);
+
+    setFieldValue('event_notification', eventEnabled);
+    setFieldValue('member_connection_add_delete_notification', memberEnabled);
+    setFieldValue('chat_notification', chatEnabled);
+    setFieldValue('discussion_board_notification', boardEnabled);
+
+    setContentEnabled(!contentEnabled);
+    handleSubmit();
+  };
+
+  const eventSwitch = () => {
+    setFieldValue('event_notification', !eventEnabled);
+
+    setFieldValue('member_connection_add_delete_notification', memberEnabled);
+    setFieldValue('chat_notification', chatEnabled);
+    setFieldValue('content_notification', contentEnabled);
+    setFieldValue('discussion_board_notification', boardEnabled);
+
+    setEventEnabled(!eventEnabled);
+    handleSubmit();
+  };
+
+  const memberSwitch = () => {
+    setFieldValue('member_connection_add_delete_notification', !memberEnabled);
+
+    setFieldValue('content_notification', contentEnabled);
+    setFieldValue('chat_notification', chatEnabled);
+    setFieldValue('event_notification', eventEnabled);
+    setFieldValue('discussion_board_notification', boardEnabled);
+
+    setMemberEnabled(!memberEnabled);
+    handleSubmit();
+  };
+
+  const chatSwitch = () => {
+    setFieldValue('chat_notification', !chatEnabled);
+
+    setFieldValue('event_notification', eventEnabled);
+    setFieldValue('content_notification', contentEnabled);
+    setFieldValue('member_connection_add_delete_notification', memberEnabled);
+    setFieldValue('discussion_board_notification', boardEnabled);
+
+    setChatEnabled(!chatEnabled);
+    handleSubmit();
+  };
+
+  const boardSwitch = () => {
+    setFieldValue('discussion_board_notification', !boardEnabled);
+
+    setFieldValue('chat_notification', chatEnabled);
+    setFieldValue('event_notification', eventEnabled);
+    setFieldValue('content_notification', contentEnabled);
+    setFieldValue('member_connection_add_delete_notification', memberEnabled);
+
+    setBoardEnabled(!boardEnabled);
+    handleSubmit();
+  };
 
   useEffect(() => {
     const fetchProfileAsync = async () => {
@@ -50,8 +171,32 @@ const Setting = props => {
     fetchProfileAsync();
   }, []);
 
+  useEffect(() => {
+    fetchNotificationOption();
+  }, []);
+
+  useEffect(() => {
+    setContentEnabled(
+      notificationOptions?.content_notification === '1' ? true : false,
+    );
+    setEventEnabled(
+      notificationOptions?.event_notification === '1' ? true : false,
+    );
+    setChatEnabled(
+      notificationOptions?.chat_notification === '1' ? true : false,
+    );
+    setMemberEnabled(
+      notificationOptions?.member_connection_add_delete_notification === '1'
+        ? true
+        : false,
+    );
+    setBoardEnabled(
+      notificationOptions?.discussion_board_notification === '1' ? true : false,
+    );
+  }, [notificationOptions]);
+
   return (
-    <>
+    <View style={{flex: 1}}>
       <StatusBar
         barStyle="light-content"
         hidden={false}
@@ -142,38 +287,360 @@ const Setting = props => {
                         />
                       </View>
                       <Text style={styles.menuText}>Account</Text>
-                      <View style={{right: 0, position: 'absolute'}}>
+                      <View style={{right: 15, position: 'absolute'}}>
                         <Ionicons
                           name="chevron-forward-outline"
                           size={20}
-                          color="#d7d7d7"
+                          color="black"
                         />
                       </View>
                     </View>
                   </TouchableOpacity>
-
-                  {/* <View style={[styles.middleWrapper, {borderBottomWidth: 0}]}>
-                    <View style={styles.middleImage}>
-                      <Ionicons
-                        name={'notifications'}
-                        size={20}
-                        color="white"
-                      />
+                  {/* <TouchableOpacity
+                    onPress={async () => {
+                      navigation.navigate('Notification');
+                    }}>
+                    <View
+                      style={[styles.middleWrapper, {borderBottomWidth: 0}]}>
+                      <View style={styles.middleImage}>
+                        <Ionicons
+                          name={'notifications'}
+                          size={20}
+                          color="white"
+                        />
+                      </View>
+                      <Text style={styles.menuText}>Notifications</Text>
+                     
                     </View>
-                    <Text style={styles.menuText}>Notifications</Text>
-                    <Switch
-                      trackColor={{false: '#767577', true: '#32a32e'}}
-                      thumbColor={isEnabled ? 'white' : 'white'}
-                      ios_backgroundColor="#3e3e3e"
-                      onValueChange={toggleSwitch}
-                      value={isEnabled}
-                      style={{
-                        // transform: [{scaleX: 1.4}, {scaleY: 1.5}],
-                        right: 0,
-                        position: 'absolute',
-                      }}
-                    />
-                  </View> */}
+                  </TouchableOpacity> */}
+                  <View>
+                    <List.Section>
+                      <List.Accordion
+                        title={
+                          <View>
+                            <Text
+                              style={{
+                                fontSize: 14,
+                                color: '#222B45',
+                                fontWeight: '500',
+                              }}>
+                              Notification
+                            </Text>
+                          </View>
+                        }
+                        left={props => (
+                          <View
+                            style={{
+                              width: 40,
+                              height: 40,
+                              backgroundColor: '#3A9BDC',
+                              justifyContent: 'center',
+                              alignItems: 'center',
+                              borderRadius: 10,
+                              marginRight: 8,
+                            }}>
+                            <Ionicons
+                              name={'notifications'}
+                              size={20}
+                              color="white"
+                            />
+                          </View>
+                        )}
+                        expanded={expanded}
+                        onPress={handlePress}
+                        style={{
+                          borderBottomWidth: 1,
+                          alignItems: 'center',
+                          borderBottomColor: '#EDF1F7',
+                          backgroundColor: 'white',
+                          paddingBottom: 15,
+                        }}>
+                        <List.Item
+                          title={
+                            <View>
+                              <Text
+                                style={{
+                                  fontSize: 14,
+                                  color: '#222B45',
+                                  fontWeight: '500',
+                                }}>
+                                Events
+                              </Text>
+                            </View>
+                          }
+                          left={props => (
+                            <View
+                              style={{
+                                width: 40,
+                                height: 40,
+                                backgroundColor: '#3A9BDC',
+                                justifyContent: 'center',
+                                alignItems: 'center',
+                                borderRadius: 10,
+                              }}>
+                              <Image
+                                source={require('../../../../src/assets/img/event.png')}
+                                style={{
+                                  width: 20,
+                                  height: 20,
+                                }}
+                                resizeMode="contain"
+                              />
+                            </View>
+                          )}
+                          right={props => (
+                            <Switch
+                              trackColor={{false: '#767577', true: '#32a32e'}}
+                              thumbColor={eventEnabled ? 'white' : 'white'}
+                              ios_backgroundColor="#3e3e3e"
+                              onValueChange={eventSwitch}
+                              value={eventEnabled}
+                              style={{
+                                right: 0,
+                                position: 'absolute',
+                              }}
+                            />
+                          )}
+                          style={{
+                            marginVertical: 5,
+                            borderBottomWidth: 1,
+                            alignItems: 'center',
+                            borderBottomColor: '#EDF1F7',
+                            paddingBottom: 15,
+                            paddingTop: 15,
+
+                            width: 300,
+                            marginLeft: 20,
+                          }}
+                        />
+                        <List.Item
+                          title={
+                            <View>
+                              <Text
+                                style={{
+                                  fontSize: 14,
+                                  color: '#222B45',
+                                  fontWeight: '500',
+                                }}>
+                                Member Connections
+                              </Text>
+                            </View>
+                          }
+                          left={props => (
+                            <View
+                              style={{
+                                width: 40,
+                                height: 40,
+                                backgroundColor: '#3A9BDC',
+                                justifyContent: 'center',
+                                alignItems: 'center',
+                                borderRadius: 10,
+                              }}>
+                              <Image
+                                source={require('../../../../src/assets/img/connection.png')}
+                                style={{
+                                  width: 25,
+                                  height: 25,
+                                }}
+                                resizeMode="contain"
+                              />
+                            </View>
+                          )}
+                          right={props => (
+                            <Switch
+                              trackColor={{false: '#767577', true: '#32a32e'}}
+                              thumbColor={memberEnabled ? 'white' : 'white'}
+                              ios_backgroundColor="#3e3e3e"
+                              onValueChange={memberSwitch}
+                              value={memberEnabled}
+                              style={{
+                                right: 0,
+                                position: 'absolute',
+                              }}
+                            />
+                          )}
+                          style={{
+                            marginVertical: 5,
+                            borderBottomWidth: 1,
+                            alignItems: 'center',
+                            borderBottomColor: '#EDF1F7',
+                            paddingBottom: 15,
+                            width: 300,
+                            marginLeft: 20,
+                          }}
+                        />
+                        <List.Item
+                          title={
+                            <View>
+                              <Text
+                                style={{
+                                  fontSize: 14,
+                                  color: '#222B45',
+                                  fontWeight: '500',
+                                }}>
+                                Chat
+                              </Text>
+                            </View>
+                          }
+                          left={props => (
+                            <View
+                              style={{
+                                width: 40,
+                                height: 40,
+                                backgroundColor: '#3A9BDC',
+                                justifyContent: 'center',
+                                alignItems: 'center',
+                                borderRadius: 10,
+                              }}>
+                              <Image
+                                source={require('../../../../src/assets/img/chatN.png')}
+                                style={{
+                                  width: 20,
+                                  height: 20,
+                                }}
+                                resizeMode="contain"
+                              />
+                            </View>
+                          )}
+                          right={props => (
+                            <Switch
+                              trackColor={{false: '#767577', true: '#32a32e'}}
+                              thumbColor={chatEnabled ? 'white' : 'white'}
+                              ios_backgroundColor="#3e3e3e"
+                              onValueChange={chatSwitch}
+                              value={chatEnabled}
+                              style={{
+                                right: 0,
+                                position: 'absolute',
+                              }}
+                            />
+                          )}
+                          style={{
+                            marginVertical: 5,
+                            borderBottomWidth: 1,
+                            alignItems: 'center',
+                            borderBottomColor: '#EDF1F7',
+                            paddingBottom: 15,
+                            width: 300,
+                            marginLeft: 20,
+                          }}
+                        />
+                        <List.Item
+                          title={
+                            <View>
+                              <Text
+                                style={{
+                                  fontSize: 14,
+                                  color: '#222B45',
+                                  fontWeight: '500',
+                                }}>
+                                Content
+                              </Text>
+                            </View>
+                          }
+                          left={props => (
+                            <View
+                              style={{
+                                width: 40,
+                                height: 40,
+                                backgroundColor: '#3A9BDC',
+                                justifyContent: 'center',
+                                alignItems: 'center',
+                                borderRadius: 10,
+                              }}>
+                              <Image
+                                source={require('../../../../src/assets/img/contentN.png')}
+                                style={{
+                                  width: 20,
+                                  height: 20,
+                                }}
+                                resizeMode="contain"
+                              />
+                            </View>
+                          )}
+                          right={props => (
+                            <Switch
+                              trackColor={{false: '#767577', true: '#32a32e'}}
+                              thumbColor={contentEnabled ? 'white' : 'white'}
+                              ios_backgroundColor="#3e3e3e"
+                              onValueChange={contentSwitch}
+                              value={contentEnabled}
+                              style={{
+                                right: 0,
+                                position: 'absolute',
+                              }}
+                            />
+                          )}
+                          style={{
+                            marginVertical: 5,
+                            borderBottomWidth: 1,
+                            alignItems: 'center',
+                            borderBottomColor: '#EDF1F7',
+                            paddingBottom: 15,
+                            width: 300,
+                            marginLeft: 20,
+                          }}
+                        />
+                        <List.Item
+                          title={
+                            <View>
+                              <Text
+                                style={{
+                                  fontSize: 14,
+                                  color: '#222B45',
+                                  fontWeight: '500',
+                                }}>
+                                Discussion Boards
+                              </Text>
+                            </View>
+                          }
+                          left={props => (
+                            <View
+                              style={{
+                                width: 40,
+                                height: 40,
+                                backgroundColor: '#3A9BDC',
+                                justifyContent: 'center',
+                                alignItems: 'center',
+                                borderRadius: 10,
+                              }}>
+                              <Image
+                                source={require('../../../../src/assets/img/board.png')}
+                                style={{
+                                  width: 20,
+                                  height: 20,
+                                }}
+                                resizeMode="contain"
+                              />
+                            </View>
+                          )}
+                          right={props => (
+                            <Switch
+                              trackColor={{false: '#767577', true: '#32a32e'}}
+                              thumbColor={boardEnabled ? 'white' : 'white'}
+                              ios_backgroundColor="#3e3e3e"
+                              onValueChange={boardSwitch}
+                              value={boardEnabled}
+                              style={{
+                                right: 0,
+                                position: 'absolute',
+                              }}
+                            />
+                          )}
+                          style={{
+                            marginVertical: 5,
+                            borderBottomWidth: 1,
+                            alignItems: 'center',
+                            borderBottomColor: '#EDF1F7',
+                            paddingBottom: 15,
+                            // backgroundColor: 'red',
+                            width: 300,
+                            marginLeft: 20,
+                          }}
+                        />
+                      </List.Accordion>
+                    </List.Section>
+                  </View>
                 </View>
                 <View style={styles.wrapper}>
                   <TouchableOpacity
@@ -211,9 +678,9 @@ const Setting = props => {
             </View>
           </View>
         </View>
-        {/* <Footer /> */}
       </ScrollView>
-    </>
+      <FloatingButton {...props} navigation={navigation} />
+    </View>
   );
 };
 
@@ -223,8 +690,8 @@ const styles = StyleSheet.create({
   container: {
     ...CommonStyles.container,
     backgroundColor: PRIMARY_BACKGROUND_COLOR,
-    paddingLeft: Platform.OS === 'ios' ? 40 : 50,
-    paddingRight: Platform.OS === 'ios' ? 40 : 50,
+    paddingLeft: Platform.OS === 'ios' ? 35 : 40,
+    paddingRight: Platform.OS === 'ios' ? 35 : 40,
   },
   header: {
     alignItems: 'center',

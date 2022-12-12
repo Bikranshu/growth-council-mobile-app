@@ -1,6 +1,6 @@
 import {createAsyncThunk, createSlice} from '@reduxjs/toolkit';
 
-import {fetch} from '../../../utils/httpUtil';
+import {fetch} from '../../../../utils/httpUtil';
 
 export const fetchAllPOEs = createAsyncThunk(
     'POEs/fetchAll',

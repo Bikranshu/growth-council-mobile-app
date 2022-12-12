@@ -42,7 +42,6 @@ const CriticalIssue = props => {
     fetchProfile,
     cleanProfile,
 
-
     region,
     regionLoading,
     regionError,
@@ -60,11 +59,11 @@ const CriticalIssue = props => {
   //   let profileRegion = profile?.user_meta?.region[0]
   //     ? profile?.user_meta?.region[0]
   //     : 'NORTH-AMERICA';
-//   let UserRegion = profileRegion
-//     ? profileRegion === 'AMERICAS'
-//       ? 'NORTH-AMERICA'
-//       : profileRegion
-//     : profileRegion;
+  //   let UserRegion = profileRegion
+  //     ? profileRegion === 'AMERICAS'
+  //       ? 'NORTH-AMERICA'
+  //       : profileRegion
+  //     : profileRegion;
 
   const listRef = useRef(null);
   const [regionVisible, setRegionVisible] = useState(false);
@@ -113,7 +112,7 @@ const CriticalIssue = props => {
     else console.log("lowercaseRegion doesn't exist, look into it");
     return (
       <>
-        {lowercaseRegion === item?.region ? (
+        {item?.region?.includes(lowercaseRegion) === true ? (
           <View style={styles.content}>
             <Image
               style={{
@@ -316,7 +315,6 @@ const CriticalIssue = props => {
           </View>
         </View>
       </Modal>
-      
 
       <BottomNav {...props} navigation={navigation} />
     </SafeAreaView>

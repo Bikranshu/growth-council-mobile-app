@@ -298,7 +298,7 @@ const styles = StyleSheet.create({
   },
   eventParagraph: {
     fontSize: 8,
-    fontWeight: 'regular',
+    
   },
   eventDate: {
     flex: 1,
@@ -312,7 +312,7 @@ const styles = StyleSheet.create({
   eventDateText: {
     textAlign: 'center',
     fontSize: 14,
-    fontWeight: 'normal',
+  
   },
   shadowProp: {
     shadowColor: '#000',

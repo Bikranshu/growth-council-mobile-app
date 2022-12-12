@@ -34,6 +34,8 @@ import GrowthCoachingScreen from '../screens/dashboard/GrowthCoaching';
 import SettingScreen from '../screens/setting/index';
 import SubHeader from '../shared/header/SubHeader';
 import ContentLibraryScreen from '../screens/contentLibrary/contentLibrary';
+import EventForumScreen from '../screens/discussionForum/eventForum';
+import GPDScreen from '../screens/GPD';
 
 import {fetchProfileByID} from '../screens/account/slice/profileSlice';
 import DashboardScreen from '../screens/dashboard';
@@ -73,7 +75,6 @@ const CustomDrawerContent = props => {
     <SafeAreaView style={{flex: 1}}>
       <View
         style={{
-          paddingHorizontal: 10,
           justifyContent: 'space-between',
         }}>
         <TouchableOpacity onPress={toggleDrawer}>
@@ -233,6 +234,47 @@ const DrawerNavigation = () => {
       />
 
       <Drawer.Screen
+        name="Growth Pipeline Dailog"
+        component={GPDScreen}
+        options={({navigation, route}) => ({
+          drawerIcon: ({focused, size}) => (
+            <Image
+              source={require('../../src/assets/img/gpd.png')}
+              style={{width: 20, height: 25}}
+              resizeMode="contain"
+            />
+          ),
+          header: () => (
+            <SubHeader
+              title="Growth Pipeline Dailog"
+              image={require('../assets/img/Rectangle2.png')}
+              navigation={navigation}
+            />
+          ),
+        })}
+      />
+
+      <Drawer.Screen
+        name="Discussion Board"
+        component={EventForumScreen}
+        options={({navigation}) => ({
+          drawerIcon: ({focused, size}) => (
+            <Image
+              source={require('../../src/assets/img/pastevent.png')}
+              style={{width: 20, height: 20}}
+              resizeMode="cover"
+            />
+          ),
+          header: () => (
+            <SubHeader
+              title="Discussion"
+              image={require('../assets/img/appBG.png')}
+              navigation={navigation}
+            />
+          ),
+        })}
+      />
+      <Drawer.Screen
         name="Calendar"
         component={CalendarScreen}
         options={({navigation}) => ({
@@ -294,6 +336,7 @@ const DrawerNavigation = () => {
           ),
         })}
       />
+
       <Drawer.Screen
         options={{
           drawerLabel: () => null,
@@ -359,7 +402,6 @@ const styles = StyleSheet.create({
   iconStyle: {
     width: 15,
     height: 15,
-    marginHorizontal: 5,
   },
   footer: {
     justifyContent: 'center',

@@ -12,6 +12,8 @@ import {
 } from 'react-native';
 import {Calendar} from 'react-native-calendars';
 import moment from 'moment-timezone';
+import FloatingButton from '../../../shared/floatingButton';
+
 import {
   useFocusEffect,
   NavigationContainer,
@@ -61,7 +63,7 @@ const EventCalendar = props => {
   const [regionVisible, setRegionVisible] = useState(false);
 
   let profileRegion = profile?.user_meta?.region;
-  console.log('ada', profileRegion);
+
   if (
     typeof profileRegion === 'undefined' ||
     profileRegion === null ||
@@ -555,6 +557,7 @@ const EventCalendar = props => {
           </Modal>
         </View>
       </ScrollView>
+	  <FloatingButton {...props} navigation={navigation} />
       <BottomNav {...props} navigation={navigation} />
     </SafeAreaView>
   );

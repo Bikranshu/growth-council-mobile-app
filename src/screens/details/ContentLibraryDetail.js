@@ -6,6 +6,10 @@ import {
   fetchAllContentLibraryDetails,
   resetContentLibraryDetails,
 } from './slice/contentLibraryDetailSlice';
+import {
+  sendEmailThroughButton,
+  resetsendEmail,
+} from '../event/slice/emailButtonSlice';
 
 const ContentLibraryDetailScreen = props => {
   const dispatch = useDispatch();
@@ -15,6 +19,9 @@ const ContentLibraryDetailScreen = props => {
     contentLibraryDetailsLoading,
     contentLibraryDetailsError,
   } = useSelector(state => state.contentLibraryDetails);
+  const {sendEmail, sendEmailLoading, sendEmailError} = useSelector(
+    state => state.sendEmail,
+  );
 
   const fetchContentLibraryDetail = id => {
     dispatch(fetchAllContentLibraryDetails(id));
@@ -22,6 +29,19 @@ const ContentLibraryDetailScreen = props => {
 
   const cleanContentLibraryDetail = () => {
     dispatch(resetContentLibraryDetails());
+  };
+
+  /**
+   * Send email through button.
+   * @param {object} formData
+   *
+   */
+  const sendEmailThroughButtons = formData => {
+    return dispatch(sendEmailThroughButton(formData));
+  };
+
+  const cleanSendEmail = () => {
+    dispatch(resetsendEmail());
   };
 
   return (
@@ -32,6 +52,12 @@ const ContentLibraryDetailScreen = props => {
       contentLibraryDetailsError={contentLibraryDetailsError}
       fetchContentLibraryDetail={fetchContentLibraryDetail}
       cleanContentLibraryDetail={cleanContentLibraryDetail}
+      // Send Email
+      sendEmail={sendEmail}
+      sendEmailLoading={sendEmailLoading}
+      sendEmailError={sendEmailError}
+      sendEmailThroughButtons={sendEmailThroughButtons}
+      cleanSendEmail={cleanSendEmail}
     />
   );
 };

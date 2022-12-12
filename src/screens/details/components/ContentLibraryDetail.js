@@ -8,10 +8,11 @@ import {
   StyleSheet,
   FlatList,
   PermissionsAndroid,
-  Button,
   StatusBar,
   Dimensions,
 } from 'react-native';
+import {Button, useToast} from 'native-base';
+import FloatingButton from '../../../shared/floatingButton';
 
 import FeatherIcon from 'react-native-vector-icons/Feather';
 import Entypo from 'react-native-vector-icons/Entypo';
@@ -29,7 +30,7 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import {Searchbar} from 'react-native-paper';
 import {useFocusEffect, useIsFocused} from '@react-navigation/native';
 import {Linking} from 'react-native';
-import {BubblesLoader} from 'react-native-indicator';
+import {COACHING_COLOR, COMMUNITY_COLOR} from '../../../theme/colors';
 import WebView from 'react-native-autoheight-webview';
 import HTMLView from 'react-native-htmlview';
 import Loading from '../../../shared/loading';
@@ -43,6 +44,12 @@ const ContentLibraryDetail = props => {
     contentLibraryDetailsError,
     fetchContentLibraryDetail,
     cleanContentLibraryDetail,
+
+    sendEmail,
+    sendEmailLoading,
+    sendEmailError,
+    sendEmailThroughButtons,
+    cleanSendEmail,
   } = props;
 
   const isFocused = useIsFocused();
@@ -54,6 +61,18 @@ const ContentLibraryDetail = props => {
       };
     }, [isFocused]),
   );
+
+  const [emailStatus, setEmailStatus] = useState(false);
+  const GrowthPipelineDialogueButton = async () => {
+    const response = await sendEmailThroughButtons({});
+    if (response?.payload?.code === 200) {
+      setEmailStatus(true);
+      ToastMessage.show(response.payload.message);
+    } else {
+      toast.closeAll();
+      ToastMessage.show(response?.payload?.message);
+    }
+  };
 
   const [isTrue, setIsTrue] = useState(true);
 
@@ -466,7 +485,33 @@ const ContentLibraryDetail = props => {
                 />
               </View>
             )}
-
+          <View
+            style={{
+              justifyContent: 'center',
+              alignItems: 'center',
+              marginTop: 10,
+              paddingHorizontal: 5,
+            }}>
+            {sendEmailLoading && <Loading />}
+            {!emailStatus && (
+              <Button
+                style={[styles.emailButton]}
+                onPress={async () => {
+                  GrowthPipelineDialogueButton();
+                }}>
+                <Text style={styles.acceptButtonText}>
+                  Growth Pipeline Dialogue
+                </Text>
+              </Button>
+            )}
+            {emailStatus && (
+              <TouchableOpacity style={styles.sendRegisterButton}>
+                <Text style={styles.emailButtonText}>
+                  Growth Pipeline Dialogue
+                </Text>
+              </TouchableOpacity>
+            )}
+          </View>
           {/* Article Feedback Section */}
           <View style={{marginTop: 20}}>
             <ArticleFeedbackCard
@@ -476,6 +521,7 @@ const ContentLibraryDetail = props => {
           </View>
         </ScrollView>
       </View>
+      <FloatingButton {...props} navigation={navigation} />
 
       {/* Bottom Navigation Section */}
       <BottomNav {...props} navigation={navigation} />
@@ -485,6 +531,7 @@ const ContentLibraryDetail = props => {
 const styles = StyleSheet.create({
   container: {
     ...CommonStyles.container,
+    flex: 1,
   },
   bodyContainer: {
     ...CommonStyles.container,
@@ -629,6 +676,40 @@ const styles = StyleSheet.create({
     marginLeft: 10,
     borderRadius: 20,
     backgroundColor: '#F5F5F5',
+  },
+
+  emailButton: {
+    borderRadius: 10,
+    marginLeft: 15,
+    marginRight: 15,
+    width: '100%',
+    height: 50,
+    backgroundColor: COACHING_COLOR,
+
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  sendRegisterButton: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: 10,
+    width: '100%',
+    height: 50,
+    backgroundColor: '#ffffff',
+    marginTop: 25,
+    borderColor: COACHING_COLOR,
+    borderWidth: 2,
+    position: 'relative',
+  },
+  acceptButtonText: {
+    width: '100%',
+    height: 20,
+    fontSize: 14,
+    color: '#ffffff',
+  },
+  emailButtonText: {
+    color: COACHING_COLOR,
   },
   loading1: {
     top: 0,

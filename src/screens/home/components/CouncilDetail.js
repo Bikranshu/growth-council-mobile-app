@@ -113,7 +113,7 @@ const CouncilDetail = props => {
               textComponentProps={{
                 style: {
                   fontSize: 14,
-                  fontWeight: 'regular',
+                 
                   color: '#666767',
                   alignItems: 'center',
                   textAlign: 'justify',
@@ -163,7 +163,7 @@ const styles = StyleSheet.create({
     fontFamily: Typography.FONT_NORMAL,
     fontSize: 14,
     lineHeight: 10,
-    fontWeight: 'regular',
+  
     color: '#666767',
     textAlign: 'left',
   },
@@ -180,7 +180,7 @@ const styles = StyleSheet.create({
   moreButtonText: {
     color: Colors.PRIMARY_BUTTON_TEXT_COLOR,
     fontSize: 12,
-    fontWeight: 'normal',
+  
   },
   loading1: {
     top: 10,

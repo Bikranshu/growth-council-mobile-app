@@ -125,7 +125,7 @@ const sessionAbout = props => {
     setTimeToEnd(convertedToLocalTimeEnd);
   }, [sessions]);
 
-  console.log('show', sessions.show_date_in_app);
+ 
 
   return (
     <View>
@@ -321,7 +321,7 @@ const sessionAbout = props => {
                 style: {
                   fontSize: 12,
                   lineHeight: 20,
-                  fontWeight: 'regular',
+               
                   color: '#666767',
                   alignItems: 'center',
                   textAlign: 'justify',

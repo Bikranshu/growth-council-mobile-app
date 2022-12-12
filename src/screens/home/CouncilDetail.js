@@ -12,7 +12,7 @@ import {
 import {
   fetchAllPillarPOEs,
   resetPillarPOE,
-} from '../dashboard/slice/pillarPOESlice';
+} from '../dashboard/slice/POE/pillarPOESlice';
 
 const CouncilDetailScreen = props => {
   const dispatch = useDispatch();

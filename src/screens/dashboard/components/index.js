@@ -17,8 +17,7 @@ import {
 } from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
-import AntDesign from 'react-native-vector-icons/AntDesign';
-
+import {BlurView} from '@react-native-community/blur';
 import moment from 'moment';
 import {
   NavigationContainer,
@@ -32,15 +31,12 @@ import Material from 'react-native-vector-icons/MaterialIcons';
 import PillarList from './PillarList';
 import {CommonStyles, Colors, Typography} from '../../../theme';
 import {PRIMARY_TEXT_COLOR, SECONDARY_TEXT_COLOR} from '../../../theme/colors';
-import Footer from '../../../shared/footer';
 import ToastMessage from '../../../shared/toast';
 import BottomNav from '../../../layout/BottomLayout';
 import HTMLView from 'react-native-htmlview';
 import Loading from '../../../shared/loading';
+import FloatingButton from '../../../shared/floatingButton';
 import {useFocusEffect} from '@react-navigation/native';
-
-import {isTokenExpired} from '../../../utils/jwtUtil';
-
 import messaging from '@react-native-firebase/messaging';
 
 import {
@@ -48,6 +44,7 @@ import {
   GROWTH_CONTENT_ID,
   USER_REGION,
 } from '../../../constants';
+import Quote from './quote';
 
 const win = Dimensions.get('window').width;
 const contentContainerWidth = win / 2;
@@ -100,12 +97,6 @@ const Dashboard = props => {
     connectMemberByIdentifier,
     cleanConnectMember,
 
-    deleteConnections,
-    deleteConnectionLoading,
-    deleteConnectionError,
-    deleteMemberByIdentifier,
-    cleanDeleteMember,
-
     profile,
     profileLoading,
     profileError,
@@ -117,6 +108,12 @@ const Dashboard = props => {
     regionEventError,
     fetchEventRegion,
     cleanEventRegion,
+
+    dailyQuote,
+    dailyQuoteLoading,
+    // dailyQuoteError,
+    fetchDailyQuote,
+    cleanDailyQuote,
   } = props;
 
   let region = profile?.user_meta?.region;
@@ -127,8 +124,9 @@ const Dashboard = props => {
   }
 
   const [memberConnection, setMemberConnection] = useState([]);
-  const [deleteConnect, setDeleteConnect] = useState([]);
+
   const [hideCritical, setHideCritical] = useState(false);
+  const [modalVisible, setModalVisible] = useState(false);
 
   const [dataSourceCords, setDataSourceCords] = useState(criticalIssue);
   const [ref, setRef] = useState(null);
@@ -144,7 +142,6 @@ const Dashboard = props => {
     regionUser = profile?.user_meta?.region[0];
   }
 
-  
   const [userRegion, setUserRegion] = useState(region);
 
   useEffect(() => {
@@ -191,12 +188,13 @@ const Dashboard = props => {
       };
     }, []),
   );
-  //   useEffect(() => {
-  //     fetchAllUpcomingEvent();
-  //   }, []);
 
   useEffect(() => {
     fetchAllPillarSlider();
+  }, []);
+
+  useEffect(() => {
+    fetchDailyQuote();
   }, []);
 
   useEffect(() => {
@@ -229,7 +227,6 @@ const Dashboard = props => {
 
   useEffect(() => {
     setMemberConnection(communityMembers);
-    setDeleteConnect(communityMembers);
   }, [communityMembers]);
 
   const connectMemberByMemberID = async (memberID, index) => {
@@ -247,24 +244,48 @@ const Dashboard = props => {
     }
   };
 
-  const deleteMemberByMemberID = async (memberID, index) => {
-    const response = await deleteMemberByIdentifier({member_id: memberID});
-    if (response?.payload?.code === 200) {
-      let items = [...deleteConnect];
-      let item = {...items[index]};
-      item.connection = true;
-      items[index] = item;
-      setDeleteConnect(items);
-      fetchAllCommunityMember({
-        s: '',
-        sort: 'Desc',
-        region: regionUser,
-      });
-      ToastMessage.show('You have successfully deleted.');
-    } else {
-      toast.closeAll();
-      ToastMessage.show(response?.payload?.response);
-    }
+  const _renderDailyQuoteItem = ({item, index}) => {
+    const date = new Date();
+    let localTime = date.getTime();
+    let localOffset = date.getTimezoneOffset() * 60000;
+    let utc = localTime + localOffset;
+    let target_offset = -8; //PST from UTC 7 hours behind right now, will need to fix for daylight
+    let los_angles = utc + 3600000 * target_offset;
+    const nd = new Date(los_angles);
+    const PSTTime = nd.toLocaleString();
+    const ActualPSTTime = moment(PSTTime).format('D/MM/yyyy');
+
+    // console.log(PSTTime);
+    return (
+      <>
+        {ActualPSTTime === item?.quote_date ? (
+          <View
+            style={{
+              padding: 20,
+              borderRadius: 10,
+              borderWidth: 0.5,
+              borderColor: 'black',
+            }}>
+            <Text style={{color: 'black', width: 250}}>
+              {item?.daily_quote}
+            </Text>
+            <Text
+              style={{
+                color: 'black',
+                position: 'absolute',
+                right: 5,
+                bottom: 10,
+                fontWeight: 'bold',
+                marginTop: 20,
+              }}>
+              {item?.quote_author}
+            </Text>
+          </View>
+        ) : (
+          <></>
+        )}
+      </>
+    );
   };
 
   const _renderItem = ({item, index}) => {
@@ -325,17 +346,6 @@ const Dashboard = props => {
             {memberConnection[index]?.connection && (
               <View style={{flexDirection: 'row'}}>
                 <Material name="check-circle" size={20} color="#14A2E2" />
-                {/* <TouchableOpacity
-                  onPress={async () => {
-                    deleteMemberByMemberID(item.ID, index);
-                  }}>
-                  <AntDesign
-                    name="deleteuser"
-                    size={20}
-                    color="#14A2E2"
-                    style={{marginLeft: 5}}
-                  />
-                </TouchableOpacity> */}
               </View>
             )}
           </View>
@@ -483,19 +493,9 @@ const Dashboard = props => {
     let lowercaseRegion = '';
     if (userRegion) lowercaseRegion = userRegion.toLowerCase();
 
-    // if (userRegion === 'MEASA') lowercaseRegion = 'apac';
-    // if (
-    //   userRegion === '' ||
-    //   userRegion === 'AMERICAS' ||
-
-    //   typeof userRegion === 'undefined' ||
-    //   userRegion === null
-    // )
-    //   lowercaseRegion = 'north-america';
-
     return (
       <>
-        {lowercaseRegion === item?.region ? (
+        {item?.region?.includes(lowercaseRegion) === true ? (
           <TouchableOpacity
             onPress={() => {
               navigation.navigate('CriticalIssue', {
@@ -503,15 +503,24 @@ const Dashboard = props => {
                 Userregion: lowercaseRegion,
               });
             }}>
-            {setHideCritical(lowercaseRegion === item?.region ? true : false)}
+            {setHideCritical(
+              item?.region?.includes(lowercaseRegion) === true ? true : false,
+            )}
+            {/* {console.log("hello", index)} */}
 
             <View
               style={styles.ContentWrapper}
               key={index}
               onLayout={items => {
                 const layout = items.nativeEvent.layout;
+
                 dataSourceCords[index] = layout.y;
                 setDataSourceCords(dataSourceCords);
+
+                // console.log('height:', layout.height);
+                // console.log('width:', (dataSourceCords[index] = layout.y));
+
+                // console.log('y:', layout.y);
               }}
               onScroll={e => setPos(e.nativeEvent.contentOffset.y)}>
               <View
@@ -613,114 +622,140 @@ const Dashboard = props => {
           backgroundColor: Colors.PRIMARY_BACKGROUND_COLOR,
         }}>
         <View>
-          <ImageBackground
-            style={{
-              width: '100%',
-              height: (Dimensions.get('screen').height - 80) / 3,
-              paddingTop: Dimensions.get('screen').height / 10,
-            }}
-            source={require('../../../assets/img/appBG.png')}>
-            <View style={styles.pillar}>
-              <PillarList
-                pillarSliders={pillarSliders}
-                navigation={navigation}
-              />
-            </View>
-          </ImageBackground>
-        </View>
-        <View style={{height: 60}} />
-        {regionEvents?.length !== 0 &&
-          regionEvents !== null &&
-          regionEvents !== undefined && (
-            <View style={styles.top}>
-              <View style={styles.eventWrapper}>
-                <Text style={styles.title}>Upcoming Events</Text>
-              </View>
-
+          <View>
+            <ImageBackground
+              style={{
+                width: '100%',
+                height: (Dimensions.get('screen').height - 180) / 2,
+                paddingTop: Dimensions.get('screen').height / 10,
+              }}
+              source={require('../../../assets/img/appBG.png')}>
               <View
                 style={{
-                  display: 'flex',
-                  flexDirection: 'row',
-                  marginTop: 20,
+                  alignItems: 'center',
                 }}>
+                <Quote
+                  dailyQuote={dailyQuote}
+                  navigation={navigation}
+                  setModalVisible={setModalVisible}
+                  modalVisible={modalVisible}
+                />
+              </View>
+              <View style={styles.pillar}>
+                <PillarList
+                  pillarSliders={pillarSliders}
+                  navigation={navigation}
+                />
+              </View>
+            </ImageBackground>
+          </View>
+          <View style={{height: 60}} />
+          {regionEvents?.length !== 0 &&
+            regionEvents !== null &&
+            regionEvents !== undefined && (
+              <View style={styles.top}>
+                <View style={styles.eventWrapper}>
+                  <Text style={styles.title}>Upcoming Events</Text>
+                </View>
+
+                <View
+                  style={{
+                    display: 'flex',
+                    flexDirection: 'row',
+                    marginTop: 20,
+                  }}>
+                  <FlatList
+                    horizontal
+                    showsHorizontalScrollIndicator={false}
+                    data={regionEvents}
+                    renderItem={item => _renderTopItem(item, navigation)}
+                  />
+                </View>
+              </View>
+            )}
+          {regionEventLoading && <Loading />}
+
+          {memberConnectionLoading && (
+            <View style={{marginTop: 40}}>
+              <Loading />
+            </View>
+          )}
+
+          {latestContent?.length !== 0 &&
+            latestContent !== null &&
+            latestContent !== undefined && (
+              <View style={styles.middle}>
+                <Text style={[styles.title, {marginLeft: 15}]}>
+                  Latest Growth Content
+                </Text>
+
                 <FlatList
                   horizontal
                   showsHorizontalScrollIndicator={false}
-                  data={regionEvents}
-                  renderItem={item => _renderTopItem(item, navigation)}
+                  data={latestContent}
+                  renderItem={_renderContent}
                 />
               </View>
-            </View>
-          )}
-        {regionEventLoading && <Loading />}
-        {memberConnectionLoading && (
-          <View style={{marginTop: 40}}>
-            <Loading />
-          </View>
-        )}
-        {deleteConnectionLoading && (
-          <View style={{marginTop: 40}}>
-            <Loading />
-          </View>
-        )}
-        {latestContent?.length !== 0 &&
-          latestContent !== null &&
-          latestContent !== undefined && (
-            <View style={styles.middle}>
-              <Text style={[styles.title, {marginLeft: 15}]}>
-                Latest Growth Content
+            )}
+          {communityMembers?.length !== 0 &&
+            communityMembers !== null &&
+            communityMembers !== undefined && (
+              <View style={styles.bottom}>
+                <View
+                  style={{
+                    display: 'flex',
+                    flexDirection: 'row',
+                    marginLeft: 15,
+                    marginRight: 15,
+                  }}>
+                  <Text style={styles.title}>Welcome New Members</Text>
+                </View>
+                <View>
+                  <FlatList
+                    horizontal
+                    showsHorizontalScrollIndicator={false}
+                    data={communityMembers}
+                    renderItem={_renderItem}
+                  />
+                </View>
+              </View>
+            )}
+          <View style={styles.content}>
+            {hideCritical && (
+              <Text style={styles.title}>
+                {criticalIssue?.critical_issue_mobile_title}
               </Text>
-
+            )}
+            <View
+              ref={ref => {
+                setRef(ref);
+              }}>
               <FlatList
-                horizontal
+                numColumns={2}
                 showsHorizontalScrollIndicator={false}
-                data={latestContent}
-                renderItem={_renderContent}
+                data={criticalIssue?.critical_issue_mobile_lists}
+                renderItem={_renderCritical}
               />
             </View>
-          )}
-        {communityMembers?.length !== 0 &&
-          communityMembers !== null &&
-          communityMembers !== undefined && (
-            <View style={styles.bottom}>
-              <View
-                style={{
-                  display: 'flex',
-                  flexDirection: 'row',
-                  marginLeft: 15,
-                  marginRight: 15,
-                }}>
-                <Text style={styles.title}>Welcome New Members</Text>
-              </View>
-              <View>
-                <FlatList
-                  horizontal
-                  showsHorizontalScrollIndicator={false}
-                  data={communityMembers}
-                  renderItem={_renderItem}
-                />
-              </View>
-            </View>
-          )}
-        <View style={styles.content}>
-          {hideCritical && (
-            <Text style={styles.title}>
-              {criticalIssue?.critical_issue_mobile_title}
-            </Text>
-          )}
-          <View
-            ref={ref => {
-              setRef(ref);
-            }}>
-            <FlatList
-              numColumns={2}
-              showsHorizontalScrollIndicator={false}
-              data={criticalIssue?.critical_issue_mobile_lists}
-              renderItem={_renderCritical}
-            />
           </View>
+
+          {modalVisible && (
+            <BlurView
+              style={{
+                position: 'absolute',
+                top: 0,
+                left: 0,
+                bottom: 0,
+                right: 0,
+              }}
+              blurType="light"
+              blurAmount={10}
+              reducedTransparencyFallbackColor="white"
+            />
+          )}
         </View>
       </ScrollView>
+      <FloatingButton {...props} navigation={navigation} />
       <BottomNav {...props} navigation={navigation} />
     </View>
   );
@@ -733,12 +768,13 @@ const styles = StyleSheet.create({
     width: '100%',
     marginBottom: 40,
   },
+
   pillar: {
     display: 'flex',
     flexDirection: 'row',
     marginLeft: 10,
     marginRight: 10,
-    marginTop: Platform.OS === 'ios' ? 65 : 50,
+    marginTop: Platform.OS === 'ios' ? 65 : 20,
     justifyContent: 'space-between',
   },
 

@@ -19,7 +19,7 @@ import analytics from '@react-native-firebase/analytics';
 import {Button} from 'native-base';
 import {Linking} from 'react-native';
 import HTMLView from 'react-native-htmlview';
-import Footer from '../../../shared/footer';
+import FloatingButton from '../../../shared/floatingButton';
 
 import {CommonStyles, Colors, Typography} from '../../../theme';
 
@@ -68,7 +68,7 @@ const About = props => {
   }
 
   return (
-    <>
+    <View style={{flex: 1}}>
       <StatusBar
         barStyle="light-content"
         hidden={false}
@@ -161,7 +161,8 @@ const About = props => {
           </View>
         </View>
       </ScrollView>
-    </>
+      <FloatingButton {...props} navigation={navigation} />
+    </View>
   );
 };
 

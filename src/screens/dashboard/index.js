@@ -12,12 +12,12 @@ import {
   resetPillarSlider,
 } from '../home/slice/pillarSliderSlice';
 
-import {fetchAllPOEs, resetPOE} from './slice/pointOfEngagementSlice';
+import {fetchAllPOEs, resetPOE} from './slice/POE/pointOfEngagementSlice';
 
 import {
   fetchAllCommunityMembers,
   resetCommunityMember,
-} from './slice/communityMemberSlice';
+} from './slice/Community/communityMemberSlice';
 
 import {
   fetchAllLatestContent,
@@ -38,6 +38,7 @@ import {
 } from '../people/slice/deleteConnectionSlice';
 import {fetchProfileByID, resetProfile} from '../account/slice/profileSlice';
 import {fetchEventByRegion, resetRegionEvent} from './slice/eventByRegionSlice';
+import {fetchAllDailyQuote, resetDailyQuote} from './slice/dailyQuoteSlice';
 
 const DashboardScreen = props => {
   const dispatch = useDispatch();
@@ -64,15 +65,16 @@ const DashboardScreen = props => {
   const {memberConnections, memberConnectionLoading, memberConnectionError} =
     useSelector(state => state.memberConnections);
 
-  const {deleteConnections, deleteConnectionLoading, deleteConnectionError} =
-    useSelector(state => state.deleteConnections);
-
   const {profile, profileLoading, profileError} = useSelector(
     state => state.profile,
   );
 
   const {regionEvents, regionEventLoading, regionEventError} = useSelector(
     state => state.regionEvents,
+  );
+
+  const {dailyQuote, dailyQuoteLoading, dailyQuoteError} = useSelector(
+    state => state.dailyQuote,
   );
 
   useEffect(() => {
@@ -161,6 +163,16 @@ const DashboardScreen = props => {
   useEffect(() => {
     fetchProfileByID();
   }, []);
+
+  const fetchDailyQuote = () => {
+    dispatch(fetchAllDailyQuote());
+  };
+
+  const cleanDailyQuote = () => {
+    dispatch(resetDailyQuote());
+  };
+
+
   return (
     <Dashboard
       {...props}
@@ -210,11 +222,11 @@ const DashboardScreen = props => {
       regionEventError={regionEventError}
       fetchEventRegion={fetchEventRegion}
       cleanEventRegion={cleanEventRegion}
-      deleteConnections={deleteConnections}
-      deleteConnectionLoading={deleteConnectionLoading}
-      deleteConnectionError={deleteConnectionError}
-      deleteMemberByIdentifier={deleteMemberByIdentifier}
-      cleanDeleteMember={cleanDeleteMember}
+      //daily quote
+      dailyQuote={dailyQuote}
+	  dailyQuoteLoading={dailyQuoteLoading}
+      fetchDailyQuote={fetchDailyQuote}
+	  cleanDailyQuote={cleanDailyQuote}
     />
   );
 };
