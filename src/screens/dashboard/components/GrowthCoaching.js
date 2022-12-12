@@ -26,8 +26,8 @@ import {useFocusEffect, useIsFocused} from '@react-navigation/native';
 // import ReactNativeBlobUtil from 'react-native-blob-util';
 import RNFetchBlob from 'react-native-blob-util';
 import ToastMessage from '../../../shared/toast';
-import YoutubePlayer from '../../../shared/youtube';
-import Footer from '../../../shared/footer';
+import FloatingButton from '../../../shared/floatingButton';
+
 import BottomNav from '../../../layout/BottomLayout';
 import Player from './Player';
 
@@ -211,25 +211,25 @@ const GrowthCoaching = props => {
     return (
       <TouchableOpacity
         onPress={() => {
-          if (
-            item?.growth_council_persona_classifcation?.includes(persona) ===
-            true
-          ) {
-            navigation.navigate(navigationPath, {
-              poeId: item?.term_id,
-              // pillarId: item?.parent,
-              title: 'Growth Coaching',
-              image: require('../../../assets/img/Rectangle.png'),
-            });
-          } else {
-            if (!toast.isActive(id)) {
-              toast.show({
-                id,
-                title: 'You have no access to this content',
-              });
-            }
-            // ToastMessage.show('You have no access to this content');
-          }
+          //   if (
+          //     item?.growth_council_persona_classifcation?.includes(persona) ===
+          //     true
+          //   ) {
+          navigation.navigate(navigationPath, {
+            poeId: item?.term_id,
+            // pillarId: item?.parent,
+            title: 'Growth Coaching',
+            image: require('../../../assets/img/Rectangle.png'),
+          });
+          //   } else {
+          //     if (!toast.isActive(id)) {
+          //       toast.show({
+          //         id,
+          //         title: 'You have no access to this content',
+          //       });
+          //     }
+          // ToastMessage.show('You have no access to this content');
+          //   }
         }}>
         <View style={styles.middleWrapper}>
           <View style={[styles.middleW, styles.shadowProp]}>
@@ -598,6 +598,7 @@ const GrowthCoaching = props => {
           {/* <Footer /> */}
         </View>
       </ScrollView>
+      <FloatingButton {...props} navigation={navigation} />
       <BottomNav {...props} navigation={navigation} />
     </View>
   );

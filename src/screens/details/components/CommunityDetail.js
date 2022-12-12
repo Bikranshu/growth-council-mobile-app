@@ -13,6 +13,8 @@ import {
   PermissionsAndroid,
 } from 'react-native';
 import {Button, useToast} from 'native-base';
+import FloatingButton from '../../../shared/floatingButton';
+
 import FeatherIcon from 'react-native-vector-icons/Feather';
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome';
 import {useFocusEffect, useIsFocused} from '@react-navigation/native';
@@ -72,7 +74,7 @@ const CommunityDetail = props => {
     GetIdBySlug,
     cleanSlug,
 
-	sendEmail,
+    sendEmail,
     sendEmailLoading,
     sendEmailError,
     GDPButton,
@@ -472,7 +474,7 @@ const CommunityDetail = props => {
   }
 
   return (
-    <>
+    <View style={{flex: 1}}>
       <StatusBar
         barStyle="light-content"
         hidden={false}
@@ -774,7 +776,8 @@ const CommunityDetail = props => {
         </View>
         {poeDetailLoading && <Loading />}
       </ScrollView>
-    </>
+      <FloatingButton {...props} navigation={navigation} />
+    </View>
   );
 };
 

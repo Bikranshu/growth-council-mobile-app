@@ -27,7 +27,7 @@ import analytics from '@react-native-firebase/analytics';
 import {CommonStyles, Colors, Typography} from '../../../theme';
 import ToastMessage from '../../../shared/toast';
 import {PRIMARY_BACKGROUND_COLOR} from '../../../theme/colors';
-import Footer from '../../../shared/footer';
+import FloatingButton from '../../../shared/floatingButton';
 import {useSelector} from 'react-redux';
 import Loading from '../../../shared/loading';
 
@@ -240,7 +240,6 @@ const ManageAccount = props => {
   useEffect(() => {
     fetchAllExpertises();
   }, []);
-
 
   let memberExpertise = expertise?.data?.choices;
   if (typeof memberExpertise === 'undefined') {
@@ -592,6 +591,7 @@ const ManageAccount = props => {
         </View>
         {/* <Footer /> */}
       </ScrollView>
+      <FloatingButton {...props} navigation={navigation} />
     </KeyboardAvoidingView>
   );
 };

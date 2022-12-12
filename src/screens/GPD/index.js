@@ -12,14 +12,14 @@ import {
   Modal,
 } from 'react-native';
 import {Button} from 'native-base';
+import FloatingButton from '../../shared/floatingButton';
 import {useDispatch, useSelector} from 'react-redux';
 import HTMLView from 'react-native-htmlview';
 import {CommonStyles, Colors, Typography} from '../../theme';
 
 const GPDScreen = props => {
-
   return (
-    <>
+    <View style={{flex: 1}}>
       <StatusBar
         barStyle="light-content"
         hidden={false}
@@ -60,13 +60,11 @@ const GPDScreen = props => {
                 members.
               </Text>
             </View>
-
-       
           </View>
         </View>
-       
       </ScrollView>
-    </>
+      <FloatingButton {...props} />
+    </View>
   );
 };
 

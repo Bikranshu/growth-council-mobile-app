@@ -20,6 +20,7 @@ import ToastMessage from '../../../shared/toast';
 import analytics from '@react-native-firebase/analytics';
 import {useFormik} from 'formik';
 import Loading from '../../../shared/loading';
+import FloatingButton from '../../../shared/floatingButton';
 
 import {CommonStyles, Colors, Typography} from '../../../theme';
 import {PRIMARY_BACKGROUND_COLOR} from '../../../theme/colors';
@@ -195,7 +196,7 @@ const Setting = props => {
   }, [notificationOptions]);
 
   return (
-    <>
+    <View style={{flex: 1}}>
       <StatusBar
         barStyle="light-content"
         hidden={false}
@@ -677,9 +678,9 @@ const Setting = props => {
             </View>
           </View>
         </View>
-        {/* <Footer /> */}
+        <FloatingButton {...props} navigation={navigation} />
       </ScrollView>
-    </>
+    </View>
   );
 };
 

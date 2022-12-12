@@ -14,6 +14,7 @@ import Font from 'react-native-vector-icons/FontAwesome5';
 import Ionicon from 'react-native-vector-icons/Ionicons';
 import ButtonToggleGroup from 'react-native-button-toggle-group';
 import CountDown from 'react-native-countdown-component';
+import FloatingButton from '../../../shared/floatingButton';
 import moment from 'moment';
 import analytics from '@react-native-firebase/analytics';
 import {CommonStyles, Colors, Typography} from '../../../theme';
@@ -241,6 +242,8 @@ const Profile = props => {
           {/* <Footer /> */}
         </View>
       </ScrollView>
+	  <FloatingButton {...props} navigation={navigation} />
+
       <BottomNav {...props} navigation={navigation} />
     </View>
   );

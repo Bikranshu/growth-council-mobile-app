@@ -14,6 +14,8 @@ import {
   ActivityIndicator,
 } from 'react-native';
 import {Button, useToast} from 'native-base';
+import FloatingButton from '../../../shared/floatingButton';
+
 import moment from 'moment';
 import {COACHING_COLOR, COMMUNITY_COLOR} from '../../../theme/colors';
 import {useIsFocused} from '@react-navigation/native';
@@ -266,7 +268,7 @@ const GrowthDetail = props => {
   }
 
   return (
-    <>
+    <View style={{flex: 1}}>
       <StatusBar
         barStyle="light-content"
         hidden={false}
@@ -473,7 +475,8 @@ const GrowthDetail = props => {
         </View>
         {/* <Footer /> */}
       </ScrollView>
-    </>
+      <FloatingButton {...props} navigation={navigation} />
+    </View>
   );
 };
 

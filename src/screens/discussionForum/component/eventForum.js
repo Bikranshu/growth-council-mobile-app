@@ -12,23 +12,22 @@ import {
   TextInput,
   Platform,
 } from 'react-native';
-import {Button} from 'react-native-paper';
+import {BubblesLoader} from 'react-native-indicator';
 import Ionicon from 'react-native-vector-icons/Ionicons';
 import {
   GROWTH_COACHING_ID,
   GROWTH_COMMUNITY_ID,
   GROWTH_CONTENT_ID,
 } from '../../../constants';
-import ButtonToggleGroup from 'react-native-button-toggle-group';
 import moment from 'moment-timezone';
-import * as RNLocalize from 'react-native-localize';
-import {formatTimeByOffset} from '../../event/components/timezone';
 import {
   COACHING_COLOR,
   COMMUNITY_COLOR,
   PRACTICE_COLOR,
   PRIMARY_BACKGROUND_COLOR,
 } from '../../../theme/colors';
+import FloatingButton from '../../../shared/floatingButton';
+
 import {useFocusEffect, useIsFocused} from '@react-navigation/native';
 import Loading from '../../../shared/loading';
 import {CommonStyles, Colors, Typography} from '../../../theme';
@@ -91,15 +90,17 @@ const EventForum = props => {
     }
 
     return (
-      <View key={index}>
+      <View key={index} style={{paddingBottom: 10}}>
         <TouchableOpacity
           onPress={() =>
             navigation.navigate('Discussion', {
               eventID: item?.ID,
               title: item?.title,
               backgroundColor: backgroundColor,
-              organizer: organizer?.term_name,
+              organizer: item?.organizer?.term_name,
               image: backgroundImage,
+              eventDate: item?.event_start,
+              location: item?.location?.location_type,
             })
           }>
           <View style={[styles.middleWrapper, styles.shadowProp]}>
@@ -184,7 +185,7 @@ const EventForum = props => {
   };
 
   return (
-    <>
+    <View style={{flex: 1}}>
       <StatusBar
         barStyle="light-content"
         hidden={false}
@@ -194,8 +195,13 @@ const EventForum = props => {
       <ScrollView
         showsVerticalScrollIndicator={false}
         style={{backgroundColor: Colors.PRIMARY_BACKGROUND_COLOR}}>
-        {pastEventLoading && <Loading />}
         <View style={styles.container}>
+          {pastEventLoading && (
+            <View style={styles.loading1}>
+              <BubblesLoader color={Colors.SECONDARY_TEXT_COLOR} size={80} />
+            </View>
+          )}
+
           <FlatList
             Vertical
             showsVerticalScrollIndicator={false}
@@ -204,7 +210,9 @@ const EventForum = props => {
           />
         </View>
       </ScrollView>
-    </>
+	  <FloatingButton {...props} navigation={navigation} />
+
+</View>
   );
 };
 
@@ -294,5 +302,15 @@ const styles = StyleSheet.create({
     shadowRadius: 3.84,
 
     elevation: 5,
+  },
+  loading1: {
+    top: 10,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    justifyContent: 'center',
+    alignItems: 'center',
+    position: 'absolute',
+    zIndex: 1011,
   },
 });

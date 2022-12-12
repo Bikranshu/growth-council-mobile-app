@@ -13,6 +13,8 @@ import {
 } from 'react-native';
 import {Searchbar, Button} from 'react-native-paper';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import FloatingButton from '../../../shared/floatingButton';
+
 import Material from 'react-native-vector-icons/MaterialIcons';
 import {
   useFocusEffect,
@@ -331,7 +333,7 @@ const UserList = props => {
         style={{paddingBottom: 20, backgroundColor: 'white', marginTop: 10}}>
         <Footer />
       </View> */}
-
+	  <FloatingButton {...props} navigation={navigation} />
       <BottomNav {...props} navigation={navigation} />
     </SafeAreaView>
   );

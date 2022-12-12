@@ -27,6 +27,7 @@ import {
   COMMUNITY_COLOR,
   PRACTICE_COLOR,
 } from '../../theme/colors';
+import {useEffect} from 'react';
 
 const {width, height} = Dimensions.get('window');
 const {add, block, concat, cond, event, eq, set, Value} = Animated;
@@ -71,6 +72,7 @@ const FloatingButton = props => {
   const [R] = useState(new Value(0));
 
   const [modalVisible, setModalVisible] = useState(false);
+  const [isAlertVisible, setIsAlertVisible] = useState(true);
 
   const onPan = event([
     {
@@ -95,9 +97,31 @@ const FloatingButton = props => {
         ]),
     },
   ]);
+  useEffect(() => {
+    setTimeout(() => {
+      setIsAlertVisible(false);
+    }, 5000);
+  });
 
   return (
     <View style={styles.container}>
+      {isAlertVisible && (
+        <View
+          style={{
+            alignItems: 'center',
+            justifyContent: 'center',
+            position: 'absolute',
+            bottom: 100,
+            left: 120,
+            backgroundColor: PRACTICE_COLOR,
+            marginBottom: 10,
+            width: 190,
+            height: 40,
+            borderRadius: 10,
+          }}>
+          <Text style={{color: 'white'}}>Growth Pipeline Dialog </Text>
+        </View>
+      )}
       <PanGestureHandler
         minDist={10}
         ref={panRef}

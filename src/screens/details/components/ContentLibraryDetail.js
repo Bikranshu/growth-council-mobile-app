@@ -12,6 +12,8 @@ import {
   Dimensions,
 } from 'react-native';
 import {Button, useToast} from 'native-base';
+import FloatingButton from '../../../shared/floatingButton';
+
 import FeatherIcon from 'react-native-vector-icons/Feather';
 import Entypo from 'react-native-vector-icons/Entypo';
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome';
@@ -519,6 +521,7 @@ const ContentLibraryDetail = props => {
           </View>
         </ScrollView>
       </View>
+      <FloatingButton {...props} navigation={navigation} />
 
       {/* Bottom Navigation Section */}
       <BottomNav {...props} navigation={navigation} />
@@ -528,6 +531,7 @@ const ContentLibraryDetail = props => {
 const styles = StyleSheet.create({
   container: {
     ...CommonStyles.container,
+    flex: 1,
   },
   bodyContainer: {
     ...CommonStyles.container,

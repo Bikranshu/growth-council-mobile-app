@@ -21,6 +21,7 @@ import Comments from '../../../shared/comment';
 import Feather from 'react-native-vector-icons/Feather';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+import moment from 'moment-timezone';
 
 import {COMMUNITY_COLOR} from '../../../theme/colors';
 
@@ -140,14 +141,15 @@ const Discussion = props => {
     route?.params?.backgroundColor === undefined
       ? COMMUNITY_COLOR
       : route?.params?.backgroundColor;
-
+  const actualDate = moment(route?.params?.eventDate).format('D MMMM, dddd');
+  const actualTime = moment(route?.params?.eventDate).format('h:mma ');
   return (
     // <ScrollView contentContainerStyle={{flexGrow: 1}}>
     <View style={styles.container}>
       <ImageBackground
         source={require('../../../assets/img/event_main_image.png')}
         resizeMode="cover"
-        imageStyle={{opacity: 0.3}}>
+        imageStyle={{opacity: 0.8}}>
         <View style={{height: '40%'}}>
           <View
             style={{
@@ -179,7 +181,7 @@ const Discussion = props => {
                     paddingVertical: 5,
                   }}
                 />
-                <Text style={{fontSize: 10, color: 'white'}}>fhdgsd</Text>
+                <Text style={{fontSize: 10, color: 'white'}}>{actualDate}</Text>
               </View>
               <View
                 style={{
@@ -201,7 +203,7 @@ const Discussion = props => {
                     paddingVertical: 5,
                   }}
                 />
-                <Text style={{fontSize: 10, color: 'white'}}>fhdgsd</Text>
+                <Text style={{fontSize: 10, color: 'white'}}>{actualTime}</Text>
               </View>
               <View
                 style={{
@@ -223,7 +225,9 @@ const Discussion = props => {
                     paddingVertical: 5,
                   }}
                 />
-                <Text style={{fontSize: 10, color: 'white'}}>fhdgsd</Text>
+                <Text style={{fontSize: 10, color: 'white'}}>
+                  {route?.params?.location}
+                </Text>
               </View>
             </View>
           </View>
@@ -249,12 +253,14 @@ const Discussion = props => {
                 style={{
                   justifyContent: 'center',
                 }}>
-                <Text style={{fontSize: 14, fontWeight: '500', color: 'white'}}>
-                  {route?.params?.organizer}
-                </Text>
                 <Text
-                  style={{fontSize: 14, fontStyle: 'italic', color: 'white'}}>
-                  gdsdhsdh
+                  style={{
+                    fontSize: 14,
+                    fontWeight: '500',
+                    color: 'white',
+                    width: 250,
+                  }}>
+                  {route?.params?.organizer}
                 </Text>
               </View>
             </View>

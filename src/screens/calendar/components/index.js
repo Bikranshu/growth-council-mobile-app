@@ -12,6 +12,8 @@ import {
 } from 'react-native';
 import {Calendar} from 'react-native-calendars';
 import moment from 'moment-timezone';
+import FloatingButton from '../../../shared/floatingButton';
+
 import {
   useFocusEffect,
   NavigationContainer,
@@ -555,6 +557,7 @@ const EventCalendar = props => {
           </Modal>
         </View>
       </ScrollView>
+	  <FloatingButton {...props} navigation={navigation} />
       <BottomNav {...props} navigation={navigation} />
     </SafeAreaView>
   );

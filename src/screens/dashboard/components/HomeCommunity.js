@@ -25,7 +25,7 @@ import {Linking} from 'react-native';
 import {useFocusEffect, useIsFocused} from '@react-navigation/native';
 import BottomNav from '../../../layout/BottomLayout';
 import Player from './Player';
-import {getAsyncStorage} from '../../../utils/storageUtil';
+import FloatingButton from '../../../shared/floatingButton';
 import {GROWTH_COMMUNITY_ID, JWT_TOKEN} from '../../../constants';
 import {decodeUserID} from '../../../utils/jwtUtil';
 import RNFetchBlob from 'react-native-blob-util';
@@ -125,7 +125,6 @@ const HomeCommunity = props => {
   } else {
     regionUser = profile?.user_meta?.region[0];
   }
-
 
   //   region = region === 'AMERICAS' ? 'north-america' : region;
   const [userRegion, setUserRegion] = useState(region);
@@ -306,36 +305,34 @@ const HomeCommunity = props => {
   const _renderMiddleItem = ({item, index}, navigation) => {
     return (
       <TouchableOpacity
-        onPress={() => {
-          if (
-            item?.growth_council_persona_classifcation?.includes(persona) ===
-            true
-          ) {
-            if (item.slug === 'brainstorming-strategy-discussions') {
-              navigation.navigate('Growth Community');
-            } else {
-              navigation.navigate('CommunityDetail', {
-                poeId: item?.term_id,
-                pillarId: item?.parent,
+        onPress={
+          () => {
+            //   if (
+            //     item?.growth_council_persona_classifcation?.includes(persona) ===
+            //     true
+            //   ) {
+            //     if (item.slug === 'brainstorming-strategy-discussions') {
+            //       navigation.navigate('Growth Community');
+            //     } else {
+            navigation.navigate('CommunityDetail', {
+              poeId: item?.term_id,
+              pillarId: item?.parent,
 
-                title: 'Growth Community',
-                image: require('../../../assets/img/Rectangle2.png'),
-              });
-            }
-          } else {
-			if (!toast.isActive(id)) {
-				toast.show({
-				  id,
-				  title: 'You have no access to this content',
-				});
-			  }
-            // ToastMessage.show('You have no access to this content');
+              title: 'Growth Community',
+              image: require('../../../assets/img/Rectangle2.png'),
+            });
           }
-        }}>
-        {console.log(
-          'hlkfd',
-          item?.growth_council_persona_classifcation?.includes(persona),
-        )}
+          //   } else {
+          //     if (!toast.isActive(id)) {
+          //       toast.show({
+          //         id,
+          //         title: 'You have no access to this content',
+          //       });
+          //     }
+          //     // ToastMessage.show('You have no access to this content');
+        }
+        // }}
+      >
         <View style={styles.middleWrapper}>
           <View style={[styles.middleW, styles.shadowProp]}>
             <Image
@@ -717,6 +714,7 @@ const HomeCommunity = props => {
           {/* <Footer /> */}
         </View>
       </ScrollView>
+      <FloatingButton {...props} navigation={navigation} />
       <BottomNav {...props} navigation={navigation} />
     </View>
   );

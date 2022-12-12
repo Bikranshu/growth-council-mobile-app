@@ -16,6 +16,7 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import HTMLView from 'react-native-htmlview';
 import {Linking} from 'react-native';
+import FloatingButton from '../../../shared/floatingButton';
 
 import analytics from '@react-native-firebase/analytics';
 import {formatTimeByOffset} from './timezone';
@@ -273,60 +274,67 @@ const Event = props => {
   }
   const image = require('../../../assets/img/Rectangle2.png');
   return (
-    <ScrollView style={styles.scrollBox}>
-      <View style={styles.container}>
-        <ImageBackground
-          source={{
-            uri: typeof events?.image === 'boolean' ? null : events?.image,
-          }}
-          resizeMode="cover"
-          style={{height: '55%'}}>
-          {/* <TouchableOpacity onPress={() => navigation.goBack()}>
+    <View style={{flex: 1}}>
+      <StatusBar
+        barStyle="light-content"
+        hidden={false}
+        backgroundColor="#001D3F"
+        translucent={false}
+      />
+      <ScrollView style={styles.scrollBox}>
+        <View style={styles.container}>
+          <ImageBackground
+            source={{
+              uri: typeof events?.image === 'boolean' ? null : events?.image,
+            }}
+            resizeMode="cover"
+            style={{height: '55%'}}>
+            {/* <TouchableOpacity onPress={() => navigation.goBack()}>
             <View style={styles.arrow}>
               <Ionicons name={'arrow-back'} size={30} color="black" />
             </View>
           </TouchableOpacity> */}
-          <View
-            style={{
-              alignItems: 'center',
-            }}>
             <View
-              style={[styles.topbanner, {backgroundColor: backgroundColor}]}>
-              {!isEventLoaded && (
-                <Text style={styles.headingText1}>{events?.title}</Text>
-              )}
-              <View style={styles.poe}>
-                <Text style={{fontSize: 11}}>{title}</Text>
+              style={{
+                alignItems: 'center',
+              }}>
+              <View
+                style={[styles.topbanner, {backgroundColor: backgroundColor}]}>
+                {!isEventLoaded && (
+                  <Text style={styles.headingText1}>{events?.title}</Text>
+                )}
+                <View style={styles.poe}>
+                  <Text style={{fontSize: 11}}>{title}</Text>
+                </View>
               </View>
             </View>
-          </View>
 
-          <View>
-            <View style={styles.content}>
-              <View style={{flexDirection: 'column'}}>
-                <View
-                  style={{
-                    flex: 1,
-                    paddingTop: 5,
-                    flexDirection: 'row',
-                  }}>
-                  <View
-                    style={[
-                      styles.infoicon,
-                      {backgroundColor: backgroundColor},
-                    ]}>
-                    <MaterialIcons name={'event'} size={20} color={'black'} />
-                  </View>
-
+            <View>
+              <View style={styles.content}>
+                <View style={{flexDirection: 'column'}}>
                   <View
                     style={{
-                      flex: 5,
-                      paddingLeft: 5,
-                      justifyContent: 'center',
+                      flex: 1,
+                      paddingTop: 5,
+                      flexDirection: 'row',
                     }}>
-                    {/* <Text style={styles.eventDetails}>{GobalDate} /</Text> */}
-                    <Text style={styles.eventDetails}>
-                      {/* {GobalStartMonth === GobalEndMonth
+                    <View
+                      style={[
+                        styles.infoicon,
+                        {backgroundColor: backgroundColor},
+                      ]}>
+                      <MaterialIcons name={'event'} size={20} color={'black'} />
+                    </View>
+
+                    <View
+                      style={{
+                        flex: 5,
+                        paddingLeft: 5,
+                        justifyContent: 'center',
+                      }}>
+                      {/* <Text style={styles.eventDetails}>{GobalDate} /</Text> */}
+                      <Text style={styles.eventDetails}>
+                        {/* {GobalStartMonth === GobalEndMonth
                         ? GobalDate + GobalEndTime
                         : GobalStartMonth +
                           GobalDate.split(/(\s+)/)[7] +
@@ -338,63 +346,24 @@ const Event = props => {
                         comma +
                         deviceTimeZone.split('/')[0]}
                       ) /{' '} */}
-                      {eventStartMonth === eventEndMonth
-                        ? eventStartMonth
-                        : eventStartMonth +
-                          eventDate.split(/(\s+)/)[7] +
-                          eventDate.split(/(\s+)/)[8] +
-                          eventDate.split(/(\s+)/)[7] +
-                          eventEndMonth}
-                      {/* {eventDate.split(/(\s+)/)[5]}
+                        {eventStartMonth === eventEndMonth
+                          ? eventStartMonth
+                          : eventStartMonth +
+                            eventDate.split(/(\s+)/)[7] +
+                            eventDate.split(/(\s+)/)[8] +
+                            eventDate.split(/(\s+)/)[7] +
+                            eventEndMonth}
+                        {/* {eventDate.split(/(\s+)/)[5]}
                       {events?.event_meta?.evo_event_timezone !== undefined
                         ? events?.event_meta?.evo_event_timezone
                         : ''} */}
-                    </Text>
-                    {eventStartMonth === eventEndMonth ? (
-                      <View style={{flexDirection: 'row'}}>
-                        <Text style={{fontSize: 12, marginLeft: 5}}>
-                          {eventStartTime}
-                          {eventDate.split(/(\s+)/)[8]}
-                          {eventEndTime}
-                        </Text>
-                        <Text
-                          style={{
-                            fontSize: 12,
-                            marginLeft: 5,
-                            color: COMMUNITY_COLOR,
-                          }}>
-                          {/* {events?.event_meta?.evo_event_timezone !== undefined
-                            ? events?.event_meta?.evo_event_timezone
-                            : ''} */}
-                          {events?.time_zone !== undefined
-                            ? events?.time_zone
-                            : ''}
-                        </Text>
-                      </View>
-                    ) : null}
-                    {eventStartMonth === eventEndMonth ? (
-                      <View>
-                        {gobalDate && (
-                          <Text
-                            style={{
-                              fontSize: 12,
-                              marginLeft: 5,
-                              fontWeight: 'bold',
-                              color: 'black',
-                            }}>
-                            {eventDate.split(/(\s+)/)[0] +
-                              eventDate.split(/(\s+)/)[7] +
-                              gobalDate}
-                          </Text>
-                        )}
-
+                      </Text>
+                      {eventStartMonth === eventEndMonth ? (
                         <View style={{flexDirection: 'row'}}>
                           <Text style={{fontSize: 12, marginLeft: 5}}>
-                            {actualGobalStartTime +
-                              eventDate.split(/(\s+)/)[7] +
-                              eventDate.split(/(\s+)/)[8] +
-                              eventDate.split(/(\s+)/)[7] +
-                              actualGobalEndTime}
+                            {eventStartTime}
+                            {eventDate.split(/(\s+)/)[8]}
+                            {eventEndTime}
                           </Text>
                           <Text
                             style={{
@@ -402,225 +371,268 @@ const Event = props => {
                               marginLeft: 5,
                               color: COMMUNITY_COLOR,
                             }}>
-                            {/* {deviceTimeZone.split('/')[1] +
-                              comma +
-                              deviceTimeZone.split('/')[0]} */}
-                            {deviceTimeZone}
+                            {/* {events?.event_meta?.evo_event_timezone !== undefined
+                            ? events?.event_meta?.evo_event_timezone
+                            : ''} */}
+                            {events?.time_zone !== undefined
+                              ? events?.time_zone
+                              : ''}
                           </Text>
                         </View>
+                      ) : null}
+                      {eventStartMonth === eventEndMonth ? (
+                        <View>
+                          {gobalDate && (
+                            <Text
+                              style={{
+                                fontSize: 12,
+                                marginLeft: 5,
+                                fontWeight: 'bold',
+                                color: 'black',
+                              }}>
+                              {eventDate.split(/(\s+)/)[0] +
+                                eventDate.split(/(\s+)/)[7] +
+                                gobalDate}
+                            </Text>
+                          )}
+
+                          <View style={{flexDirection: 'row'}}>
+                            <Text style={{fontSize: 12, marginLeft: 5}}>
+                              {actualGobalStartTime +
+                                eventDate.split(/(\s+)/)[7] +
+                                eventDate.split(/(\s+)/)[8] +
+                                eventDate.split(/(\s+)/)[7] +
+                                actualGobalEndTime}
+                            </Text>
+                            <Text
+                              style={{
+                                fontSize: 12,
+                                marginLeft: 5,
+                                color: COMMUNITY_COLOR,
+                              }}>
+                              {/* {deviceTimeZone.split('/')[1] +
+                              comma +
+                              deviceTimeZone.split('/')[0]} */}
+                              {deviceTimeZone}
+                            </Text>
+                          </View>
+                        </View>
+                      ) : null}
+                    </View>
+                    {!eventStatus && (
+                      <View
+                        style={{
+                          flex: 1,
+                          justifyContent: 'center',
+                          alignItems: 'center',
+                        }}>
+                        <TouchableOpacity
+                          onPress={() =>
+                            registerEventByEventID(route?.params?.id)
+                          }>
+                          <Feather
+                            name={'plus-circle'}
+                            size={25}
+                            color={'rgba(54,147,172,1)'}
+                          />
+                        </TouchableOpacity>
                       </View>
-                    ) : null}
-                  </View>
-                  {!eventStatus && (
-                    <View
-                      style={{
-                        flex: 1,
-                        justifyContent: 'center',
-                        alignItems: 'center',
-                      }}>
-                      <TouchableOpacity
-                        onPress={() =>
-                          registerEventByEventID(route?.params?.id)
-                        }>
+                    )}
+                    {eventStatus && (
+                      <View
+                        style={{
+                          flex: 1,
+                          justifyContent: 'center',
+                          alignItems: 'center',
+                        }}>
                         <Feather
-                          name={'plus-circle'}
+                          name={'check-circle'}
                           size={25}
                           color={'rgba(54,147,172,1)'}
                         />
-                      </TouchableOpacity>
-                    </View>
-                  )}
-                  {eventStatus && (
-                    <View
-                      style={{
-                        flex: 1,
-                        justifyContent: 'center',
-                        alignItems: 'center',
-                      }}>
-                      <Feather
-                        name={'check-circle'}
-                        size={25}
-                        color={'rgba(54,147,172,1)'}
-                      />
-                    </View>
-                  )}
-                </View>
-                {eventLoading && <Loading />}
-                {events?.location?.location_city !== undefined &&
-                  events?.location?.location_address !== '' && (
-                    <View
-                      style={{
-                        flex: 1,
-                        paddingTop: 20,
-                        flexDirection: 'row',
-                      }}>
+                      </View>
+                    )}
+                  </View>
+                  {eventLoading && <Loading />}
+                  {events?.location?.location_city !== undefined &&
+                    events?.location?.location_address !== '' && (
                       <View
-                        style={[
-                          styles.infoicon,
-                          {backgroundColor: backgroundColor},
-                        ]}>
-                        <Ionicons
-                          name={'location-outline'}
-                          size={25}
-                          color={'white'}
-                        />
+                        style={{
+                          flex: 1,
+                          paddingTop: 20,
+                          flexDirection: 'row',
+                        }}>
+                        <View
+                          style={[
+                            styles.infoicon,
+                            {backgroundColor: backgroundColor},
+                          ]}>
+                          <Ionicons
+                            name={'location-outline'}
+                            size={25}
+                            color={'white'}
+                          />
+                        </View>
+
+                        {!isEventLoaded && (
+                          <View
+                            style={{
+                              flex: 5,
+                              paddingLeft: 10,
+                            }}>
+                            <Text style={styles.eventLocationDetails}>
+                              {events?.location?.location_city}{' '}
+                              {events?.location?.location_country}
+                            </Text>
+                            <Text>{events?.location?.location_address}</Text>
+                          </View>
+                        )}
+                      </View>
+                    )}
+                </View>
+                <View style={styles.seperationline} />
+
+                {events?.organizer?.term_name !== undefined &&
+                  events?.organizer?.term_name !== '' && (
+                    <View
+                      style={{
+                        borderBottomColor: '#F6F4F4',
+                        borderBottomWidth: 1,
+                      }}>
+                      <View>
+                        <Text style={styles.contentHeading}>Hosted By</Text>
                       </View>
 
-                      {!isEventLoaded && (
+                      <View style={styles.hostdetail}>
+                        {events?.organizer_image !== false &&
+                          events?.organizer_image !== null && (
+                            <View
+                              style={[
+                                styles.hostimage,
+                                {backgroundColor: backgroundColor},
+                              ]}>
+                              <Image
+                                source={{
+                                  uri:
+                                    typeof events?.organizer_image === 'boolean'
+                                      ? null
+                                      : events?.organizer_image,
+                                }}
+                                style={{
+                                  width: '100%',
+                                  height: '100%',
+                                }}
+                              />
+                            </View>
+                          )}
+
                         <View
                           style={{
-                            flex: 5,
-                            paddingLeft: 10,
+                            flex: 3,
+
+                            justifyContent: 'center',
                           }}>
-                          <Text style={styles.eventLocationDetails}>
-                            {events?.location?.location_city}{' '}
-                            {events?.location?.location_country}
+                          <Text style={styles.contentTitle}>
+                            {events?.organizer?.term_name}
                           </Text>
-                          <Text>{events?.location?.location_address}</Text>
+                          <Text style={{fontSize: 14, fontStyle: 'italic'}}>
+                            {events?.organizer?.description}
+                          </Text>
                         </View>
+                        <View style={styles.eventaddress}></View>
+                      </View>
+                    </View>
+                  )}
+                {events?.descirption !== undefined &&
+                  events?.descirption !== '' &&
+                  events?.descirption !== null && (
+                    <View>
+                      <Text style={[styles.contentHeading, {marginTop: 20}]}>
+                        Event Info
+                      </Text>
+                      {!isEventLoaded && (
+                        <HTMLView
+                          value={description}
+                          textComponentProps={{
+                            style: {
+                              fontSize: 12,
+                              lineHeight: 20,
+                              fontWeight: 'regular',
+                              color: '#666767',
+                              alignItems: 'center',
+                              textAlign: 'justify',
+                            },
+                          }}
+                        />
                       )}
                     </View>
                   )}
-              </View>
-              <View style={styles.seperationline} />
 
-              {events?.organizer?.term_name !== undefined &&
-                events?.organizer?.term_name !== '' && (
-                  <View
-                    style={{
-                      borderBottomColor: '#F6F4F4',
-                      borderBottomWidth: 1,
-                    }}>
-                    <View>
-                      <Text style={styles.contentHeading}>Hosted By</Text>
-                    </View>
-
-                    <View style={styles.hostdetail}>
-                      {events?.organizer_image !== false &&
-                        events?.organizer_image !== null && (
-                          <View
-                            style={[
-                              styles.hostimage,
-                              {backgroundColor: backgroundColor},
-                            ]}>
-                            <Image
-                              source={{
-                                uri:
-                                  typeof events?.organizer_image === 'boolean'
-                                    ? null
-                                    : events?.organizer_image,
-                              }}
-                              style={{
-                                width: '100%',
-                                height: '100%',
-                              }}
-                            />
-                          </View>
-                        )}
-
-                      <View
-                        style={{
-                          flex: 3,
-
-                          justifyContent: 'center',
-                        }}>
-                        <Text style={styles.contentTitle}>
-                          {events?.organizer?.term_name}
-                        </Text>
-                        <Text style={{fontSize: 14, fontStyle: 'italic'}}>
-                          {events?.organizer?.description}
-                        </Text>
-                      </View>
-                      <View style={styles.eventaddress}></View>
-                    </View>
-                  </View>
-                )}
-              {events?.descirption !== undefined &&
-                events?.descirption !== '' &&
-                events?.descirption !== null && (
-                  <View>
-                    <Text style={[styles.contentHeading, {marginTop: 20}]}>
-                      Event Info
-                    </Text>
-                    {!isEventLoaded && (
-                      <HTMLView
-                        value={description}
-                        textComponentProps={{
-                          style: {
-                            fontSize: 12,
-                            lineHeight: 20,
-                            fontWeight: 'regular',
-                            color: '#666767',
-                            alignItems: 'center',
-                            textAlign: 'justify',
-                          },
-                        }}
-                      />
-                    )}
-                  </View>
-                )}
-
-              <View>
-                <TouchableOpacity
-                  style={styles.forumButton}
-                  onPress={() =>
-                    navigation.navigate('Discussion', {
-                      eventID: events?.ID,
-                      title: events?.title,
-                      image: {image},
-                    })
-                  }>
-                  <Text style={styles.forumText}>Discussion Forum</Text>
-                </TouchableOpacity>
-              </View>
-              <View
-                style={{
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                  marginTop: 10,
-                }}></View>
-
-              <View
-                style={{
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                }}>
-                {eventRegisterLoading && <Loading />}
-                {!eventStatus && (
-                  <Button
-                    style={styles.acceptButton}
-                    onPress={async () => {
-                      registerEventByEventID(route?.params?.id);
-                      let eventName = events?.title;
-                      await analytics().logEvent(eventName, {
-                        item: events?.title,
-                        description: 'Event Register',
-                      });
-                    }}>
-                    <Text style={styles.acceptButtonText}>RSVP</Text>
-                  </Button>
-                )}
-                {eventStatus && (
-                  <TouchableOpacity style={styles.registeredButton}>
-                    <View style={{position: 'absolute', left: 20}}>
-                      <Image
-                        source={require('../../../assets/img/tick-icon.png')}
-                        style={{
-                          width: 25,
-                          height: 25,
-                        }}
-                      />
-                    </View>
-                    <Text style={styles.registeredButtonText}>RSVP'd</Text>
+                <View>
+                  <TouchableOpacity
+                    style={styles.forumButton}
+                    onPress={() =>
+                      navigation.navigate('Discussion', {
+                        eventID: events?.ID,
+                        title: events?.title,
+                        image: {image},
+                      })
+                    }>
+                    <Text style={styles.forumText}>Discussion Forum</Text>
                   </TouchableOpacity>
-                )}
+                </View>
+                <View
+                  style={{
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    marginTop: 10,
+                  }}></View>
+
+                <View
+                  style={{
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                  }}>
+                  {eventRegisterLoading && <Loading />}
+                  {!eventStatus && (
+                    <Button
+                      style={styles.acceptButton}
+                      onPress={async () => {
+                        registerEventByEventID(route?.params?.id);
+                        let eventName = events?.title;
+                        await analytics().logEvent(eventName, {
+                          item: events?.title,
+                          description: 'Event Register',
+                        });
+                      }}>
+                      <Text style={styles.acceptButtonText}>RSVP</Text>
+                    </Button>
+                  )}
+                  {eventStatus && (
+                    <TouchableOpacity style={styles.registeredButton}>
+                      <View style={{position: 'absolute', left: 20}}>
+                        <Image
+                          source={require('../../../assets/img/tick-icon.png')}
+                          style={{
+                            width: 25,
+                            height: 25,
+                          }}
+                        />
+                      </View>
+                      <Text style={styles.registeredButtonText}>RSVP'd</Text>
+                    </TouchableOpacity>
+                  )}
+                </View>
               </View>
             </View>
-          </View>
-        </ImageBackground>
-      </View>
-      {/* <Footer /> */}
-    </ScrollView>
+          </ImageBackground>
+        </View>
+
+        {/* <Footer /> */}
+      </ScrollView>
+	  <FloatingButton {...props} navigation={navigation} />
+
+    </View>
   );
 };
 
