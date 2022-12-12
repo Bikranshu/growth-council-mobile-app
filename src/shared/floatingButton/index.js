@@ -14,8 +14,9 @@ import {
   RotationGestureHandler,
   State,
 } from 'react-native-gesture-handler';
-import Ionicons from 'react-native-vector-icons/Ionicons';
 import {Button} from 'native-base';
+import ToastMessage from '../toast';
+
 import {useDispatch, useSelector} from 'react-redux';
 import {
   GrowthPipelineEmail,
@@ -50,10 +51,11 @@ const FloatingButton = props => {
 
   const GrowthPipelineDialogueButton = async () => {
     const response = await GDPButton({});
-    console.log('asfdfa', response);
+
     if (response?.payload?.code === 200) {
-      setEmailStatus(true);
-      ToastMessage.show(response.payload.data);
+      setModalVisible(false);
+      ToastMessage.show('Growth Pipeline Dialog Email send sucessfully');
+      console.log('Growth Pipeline Dialog Email send sucessfully');
     } else {
       toast.closeAll();
       ToastMessage.show(response?.payload?.message);
