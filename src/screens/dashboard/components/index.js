@@ -17,8 +17,7 @@ import {
 } from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
-import AntDesign from 'react-native-vector-icons/AntDesign';
-
+import {BlurView} from '@react-native-community/blur';
 import moment from 'moment';
 import {
   NavigationContainer,
@@ -32,16 +31,12 @@ import Material from 'react-native-vector-icons/MaterialIcons';
 import PillarList from './PillarList';
 import {CommonStyles, Colors, Typography} from '../../../theme';
 import {PRIMARY_TEXT_COLOR, SECONDARY_TEXT_COLOR} from '../../../theme/colors';
-import Footer from '../../../shared/footer';
 import ToastMessage from '../../../shared/toast';
 import BottomNav from '../../../layout/BottomLayout';
 import HTMLView from 'react-native-htmlview';
 import Loading from '../../../shared/loading';
 import FloatingButton from '../../../shared/floatingButton';
 import {useFocusEffect} from '@react-navigation/native';
-
-import {isTokenExpired} from '../../../utils/jwtUtil';
-
 import messaging from '@react-native-firebase/messaging';
 
 import {
@@ -131,6 +126,7 @@ const Dashboard = props => {
   const [memberConnection, setMemberConnection] = useState([]);
 
   const [hideCritical, setHideCritical] = useState(false);
+  const [modalVisible, setModalVisible] = useState(false);
 
   const [dataSourceCords, setDataSourceCords] = useState(criticalIssue);
   const [ref, setRef] = useState(null);
@@ -626,115 +622,137 @@ const Dashboard = props => {
           backgroundColor: Colors.PRIMARY_BACKGROUND_COLOR,
         }}>
         <View>
-          <ImageBackground
-            style={{
-              width: '100%',
-              height: (Dimensions.get('screen').height - 180) / 2,
-              paddingTop: Dimensions.get('screen').height / 10,
-            }}
-            source={require('../../../assets/img/appBG.png')}>
-            <View
+          <View>
+            <ImageBackground
               style={{
-                alignItems: 'center',
-              }}>
-              <Quote dailyQuote={dailyQuote} navigation={navigation} />
-            </View>
-            <View style={styles.pillar}>
-              <PillarList
-                pillarSliders={pillarSliders}
-                navigation={navigation}
-              />
-            </View>
-          </ImageBackground>
-        </View>
-        <View style={{height: 60}} />
-        {regionEvents?.length !== 0 &&
-          regionEvents !== null &&
-          regionEvents !== undefined && (
-            <View style={styles.top}>
-              <View style={styles.eventWrapper}>
-                <Text style={styles.title}>Upcoming Events</Text>
-              </View>
-
+                width: '100%',
+                height: (Dimensions.get('screen').height - 180) / 2,
+                paddingTop: Dimensions.get('screen').height / 10,
+              }}
+              source={require('../../../assets/img/appBG.png')}>
               <View
                 style={{
-                  display: 'flex',
-                  flexDirection: 'row',
-                  marginTop: 20,
+                  alignItems: 'center',
                 }}>
+                <Quote
+                  dailyQuote={dailyQuote}
+                  navigation={navigation}
+                  setModalVisible={setModalVisible}
+                  modalVisible={modalVisible}
+                />
+              </View>
+              <View style={styles.pillar}>
+                <PillarList
+                  pillarSliders={pillarSliders}
+                  navigation={navigation}
+                />
+              </View>
+            </ImageBackground>
+          </View>
+          <View style={{height: 60}} />
+          {regionEvents?.length !== 0 &&
+            regionEvents !== null &&
+            regionEvents !== undefined && (
+              <View style={styles.top}>
+                <View style={styles.eventWrapper}>
+                  <Text style={styles.title}>Upcoming Events</Text>
+                </View>
+
+                <View
+                  style={{
+                    display: 'flex',
+                    flexDirection: 'row',
+                    marginTop: 20,
+                  }}>
+                  <FlatList
+                    horizontal
+                    showsHorizontalScrollIndicator={false}
+                    data={regionEvents}
+                    renderItem={item => _renderTopItem(item, navigation)}
+                  />
+                </View>
+              </View>
+            )}
+          {regionEventLoading && <Loading />}
+
+          {memberConnectionLoading && (
+            <View style={{marginTop: 40}}>
+              <Loading />
+            </View>
+          )}
+
+          {latestContent?.length !== 0 &&
+            latestContent !== null &&
+            latestContent !== undefined && (
+              <View style={styles.middle}>
+                <Text style={[styles.title, {marginLeft: 15}]}>
+                  Latest Growth Content
+                </Text>
+
                 <FlatList
                   horizontal
                   showsHorizontalScrollIndicator={false}
-                  data={regionEvents}
-                  renderItem={item => _renderTopItem(item, navigation)}
+                  data={latestContent}
+                  renderItem={_renderContent}
                 />
               </View>
-            </View>
-          )}
-        {regionEventLoading && <Loading />}
-   
-        {memberConnectionLoading && (
-          <View style={{marginTop: 40}}>
-            <Loading />
-          </View>
-        )}
-
-        {latestContent?.length !== 0 &&
-          latestContent !== null &&
-          latestContent !== undefined && (
-            <View style={styles.middle}>
-              <Text style={[styles.title, {marginLeft: 15}]}>
-                Latest Growth Content
+            )}
+          {communityMembers?.length !== 0 &&
+            communityMembers !== null &&
+            communityMembers !== undefined && (
+              <View style={styles.bottom}>
+                <View
+                  style={{
+                    display: 'flex',
+                    flexDirection: 'row',
+                    marginLeft: 15,
+                    marginRight: 15,
+                  }}>
+                  <Text style={styles.title}>Welcome New Members</Text>
+                </View>
+                <View>
+                  <FlatList
+                    horizontal
+                    showsHorizontalScrollIndicator={false}
+                    data={communityMembers}
+                    renderItem={_renderItem}
+                  />
+                </View>
+              </View>
+            )}
+          <View style={styles.content}>
+            {hideCritical && (
+              <Text style={styles.title}>
+                {criticalIssue?.critical_issue_mobile_title}
               </Text>
-
+            )}
+            <View
+              ref={ref => {
+                setRef(ref);
+              }}>
               <FlatList
-                horizontal
+                numColumns={2}
                 showsHorizontalScrollIndicator={false}
-                data={latestContent}
-                renderItem={_renderContent}
+                data={criticalIssue?.critical_issue_mobile_lists}
+                renderItem={_renderCritical}
               />
             </View>
-          )}
-        {communityMembers?.length !== 0 &&
-          communityMembers !== null &&
-          communityMembers !== undefined && (
-            <View style={styles.bottom}>
-              <View
-                style={{
-                  display: 'flex',
-                  flexDirection: 'row',
-                  marginLeft: 15,
-                  marginRight: 15,
-                }}>
-                <Text style={styles.title}>Welcome New Members</Text>
-              </View>
-              <View>
-                <FlatList
-                  horizontal
-                  showsHorizontalScrollIndicator={false}
-                  data={communityMembers}
-                  renderItem={_renderItem}
-                />
-              </View>
-            </View>
-          )}
-        <View style={styles.content}>
-          {hideCritical && (
-            <Text style={styles.title}>
-              {criticalIssue?.critical_issue_mobile_title}
-            </Text>
-          )}
-          <View
-            ref={ref => {
-              setRef(ref);
-            }}>
-            <FlatList
-              numColumns={2}
-              showsHorizontalScrollIndicator={false}
-              data={criticalIssue?.critical_issue_mobile_lists}
-              renderItem={_renderCritical}
-            />
           </View>
+
+          {modalVisible && (
+            <BlurView
+              style={{
+                position: 'absolute',
+                top: 0,
+                left: 0,
+                bottom: 0,
+                right: 0,
+              }}
+              blurType="light"
+              blurAmount={10}
+              reducedTransparencyFallbackColor="white"
+            />
+          )}
         </View>
       </ScrollView>
       <FloatingButton {...props} navigation={navigation} />

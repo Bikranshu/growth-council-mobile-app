@@ -261,91 +261,86 @@ const Discussion = props => {
           </View>
         </View>
 
-        <View>
-          <View style={styles.forum}>
-            {/* <Text style={[styles.heading, {color: COMMUNITY_COLOR}]}>
+        <View style={styles.forum}>
+          {/* <Text style={[styles.heading, {color: COMMUNITY_COLOR}]}>
                 {route?.params?.title}
               </Text> */}
-            <Text
-              style={[
-                styles.heading,
-                {marginHorizontal: 10, marginVertical: 5},
-              ]}>
-              Welcome to the Discussion Forum
-            </Text>
+          <Text
+            style={[styles.heading, {marginHorizontal: 10, marginVertical: 5}]}>
+            Welcome to the Discussion Forum
+          </Text>
 
-            {postDiscussionLoading && <Loading />}
-            {discussionForumLoading && <Loading />}
-            {/* comment Data from backend */}
-            <ScrollView
-              showsVerticalScrollIndicator={false}
-              style={{
-                backgroundColor: Colors.PRIMARY_BACKGROUND_COLOR,
-              }}>
-              <View>
-                {rootComments?.map(rootComment => (
-                  <Comments
-                    key={rootComment?.comment_ID}
-                    comment={rootComment}
-                    replies={getReplies(rootComment?.comment_ID)}
-                    currentUserId={profile?.ID}
-                    deleteComment={deleteComment}
-                    activeComment={activeComment}
-                    setActiveComment={setActiveComment}
-                    profile={profile}
-                    eventID={eventID}
-                    deleteDiscusssionLoading={deleteDiscusssionLoading}
-                    postDiscussionLoading={postDiscussionLoading}
-                    postDiscussionByEvent={postDiscussionByEvent}
-                    discussionForumByIdentifier={discussionForumByIdentifier}
-                  />
-                ))}
-              </View>
-            </ScrollView>
+          {postDiscussionLoading && <Loading />}
+          {discussionForumLoading && <Loading />}
+          {/* comment Data from backend */}
+          <ScrollView
+            showsVerticalScrollIndicator={false}
+            style={{
+              backgroundColor: Colors.PRIMARY_BACKGROUND_COLOR,
+            }}>
+            <View>
+              {rootComments?.map(rootComment => (
+                <Comments
+                  key={rootComment?.comment_ID}
+                  comment={rootComment}
+                  replies={getReplies(rootComment?.comment_ID)}
+                  currentUserId={profile?.ID}
+                  deleteComment={deleteComment}
+                  activeComment={activeComment}
+                  setActiveComment={setActiveComment}
+                  profile={profile}
+                  eventID={eventID}
+                  deleteDiscusssionLoading={deleteDiscusssionLoading}
+                  postDiscussionLoading={postDiscussionLoading}
+                  postDiscussionByEvent={postDiscussionByEvent}
+                  discussionForumByIdentifier={discussionForumByIdentifier}
+                />
+              ))}
+            </View>
+          </ScrollView>
 
-            {/* //Comment Form */}
+          {/* //Comment Form */}
+          <View
+            style={{
+              height: 70,
+              justifyContent: 'center',
+              borderTopWidth: 0.2,
+            }}>
             <View
               style={{
-                height: 70,
+                flexDirection: 'row',
+                backgroundColor: 'white',
+                position: 'absolute',
+                bottom: 10,
+                marginTop: 10,
                 justifyContent: 'center',
-                borderTopWidth: 0.2,
               }}>
-              <View
+              <Image
+                style={{width: 50, height: 50, borderRadius: 100}}
+                source={{
+                  uri: profile?.avatar,
+                }}
+              />
+              <TextInput
+                multiline={true}
+                numberOfLines={2}
+                style={styles.textarea}
+                value={values?.content}
+                placeholder="Write comment"
+                onChangeText={handleChange('content')}
+                onFocus={handleBlur('content')}
+                error={errors.content}
+                touched={touched.content}
+              />
+              <TouchableOpacity
+                onPress={handleSubmit}
                 style={{
-                  flexDirection: 'row',
-                  backgroundColor: 'white',
-                  position: 'absolute',
-                  bottom: 10,
-                  marginTop: 10,
-                  justifyContent: 'center',
+                  padding: 10,
+                  backgroundColor: COMMUNITY_COLOR,
+                  borderRadius: 30,
                 }}>
-                <Image
-                  style={{width: 50, height: 50, borderRadius: 100}}
-                  source={{
-                    uri: profile?.avatar,
-                  }}
-                />
-                <TextInput
-                  multiline={true}
-                  numberOfLines={2}
-                  style={styles.textarea}
-                  value={values?.content}
-                  placeholder="Write comment"
-                  onChangeText={handleChange('content')}
-                  onFocus={handleBlur('content')}
-                  error={errors.content}
-                  touched={touched.content}
-                />
-                <TouchableOpacity
-                  onPress={handleSubmit}
-                  style={{
-                    padding: 10,
-                    backgroundColor: COMMUNITY_COLOR,
-                    borderRadius: 30,
-                  }}>
-                  <Ionicons name="send" color="white" size={30} />
-                </TouchableOpacity>
-              </View>
+                <Ionicons name="send" color="white" size={30} />
+              </TouchableOpacity>
             </View>
           </View>
         </View>
@@ -365,7 +360,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     padding: 10,
     borderTopRadius: 45,
-    height: 440,
+    height: '60%',
   },
   heading: {
     fontSize: 16,

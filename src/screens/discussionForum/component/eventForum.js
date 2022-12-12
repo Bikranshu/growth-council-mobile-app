@@ -158,7 +158,7 @@ const EventForum = props => {
             <View
               style={{
                 borderLeftWidth: 1,
-                borderLeftColor: '#D3D3D3',
+                borderLeftColor: '#EBECF0',
                 justifyContent: 'center',
                 padding: 10,
               }}>

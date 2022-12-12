@@ -195,20 +195,20 @@ const FloatingButton = props => {
                 </TouchableOpacity>
 
                 <View>
-                  {!emailStatus && (
-                    <Button
-                      style={[styles.emailButton]}
-                      onPress={async () => {
-                        GrowthPipelineDialogueButton();
-                      }}>
-                      <Text style={styles.acceptButtonText}>Proceed</Text>
-                    </Button>
-                  )}
-                  {emailStatus && (
+                  {/* {!emailStatus && ( */}
+                  <Button
+                    style={[styles.emailButton]}
+                    onPress={async () => {
+                      GrowthPipelineDialogueButton();
+                    }}>
+                    <Text style={styles.acceptButtonText}>Proceed</Text>
+                  </Button>
+                  {/* )} */}
+                  {/* {emailStatus && (
                     <TouchableOpacity style={styles.sendRegisterButton}>
                       <Text style={styles.emailButtonText}>Proceed</Text>
                     </TouchableOpacity>
-                  )}
+                  )} */}
                 </View>
               </View>
             </View>
