@@ -678,8 +678,8 @@ const Setting = props => {
             </View>
           </View>
         </View>
-        <FloatingButton {...props} navigation={navigation} />
       </ScrollView>
+      <FloatingButton {...props} navigation={navigation} />
     </View>
   );
 };

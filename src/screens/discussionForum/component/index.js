@@ -119,17 +119,21 @@ const Discussion = props => {
       return () => {
         cleanForum();
       };
-    }, []),
+    }, [isFocused]),
   );
 
   useEffect(() => {
     setInterval(() => {
-      rootComments;
-    }, 300000);
+      discussionForumByIdentifier({
+        event_id: eventID,
+      });
+    }, 10000);
+  }, []);
+
+  useEffect(() => {
     setBackendComments(discussionForum);
   }, [discussionForum]);
 
-  //   console.log({discussionForum});
   useEffect(() => {
     const fetchProfileAsync = async () => {
       await fetchProfile();

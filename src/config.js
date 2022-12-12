@@ -48,7 +48,7 @@ const PushNotificationsConfigs = {
             console.log(error);
           }
         }
-        notification.finish(PushNotificationIOS.FetchResult.NoData);
+        // notification.finish(PushNotificationIOS.FetchResult.NoData);
       },
       onAction: notification => {
         console.log('NOTIFICATION:', notification);
