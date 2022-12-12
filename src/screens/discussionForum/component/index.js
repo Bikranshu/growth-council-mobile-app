@@ -238,16 +238,22 @@ const Discussion = props => {
             </View>
 
             <View style={styles.hostdetail}>
-              <View
-                style={[styles.hostimage, {backgroundColor: backgroundColor}]}>
-                <Image
-                  source={{}}
-                  style={{
-                    width: '100%',
-                    height: '100%',
-                  }}
-                />
-              </View>
+              {route?.params?.organizer_image !== false &&
+                route?.params?.organizer_image !== null && (
+                  <View
+                    style={[
+                      styles.hostimage,
+                      {backgroundColor: backgroundColor},
+                    ]}>
+                    <Image
+                      source={{}}
+                      style={{
+                        width: '100%',
+                        height: '100%',
+                      }}
+                    />
+                  </View>
+                )}
 
               <View
                 style={{

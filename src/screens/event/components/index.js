@@ -568,7 +568,7 @@ const Event = props => {
                     </View>
                   )}
 
-                <View>
+                {/* <View>
                   <TouchableOpacity
                     style={styles.forumButton}
                     onPress={() =>
@@ -580,7 +580,7 @@ const Event = props => {
                     }>
                     <Text style={styles.forumText}>Discussion Forum</Text>
                   </TouchableOpacity>
-                </View>
+                </View> */}
                 <View
                   style={{
                     justifyContent: 'center',

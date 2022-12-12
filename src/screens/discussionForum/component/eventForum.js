@@ -101,6 +101,7 @@ const EventForum = props => {
               image: backgroundImage,
               eventDate: item?.event_start,
               location: item?.location?.location_type,
+              organizer_image: item?.organizer_image,
             })
           }>
           <View style={[styles.middleWrapper, styles.shadowProp]}>
@@ -210,9 +211,8 @@ const EventForum = props => {
           />
         </View>
       </ScrollView>
-	  <FloatingButton {...props} navigation={navigation} />
-
-</View>
+      <FloatingButton {...props} navigation={navigation} />
+    </View>
   );
 };
 
