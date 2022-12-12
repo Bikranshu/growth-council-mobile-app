@@ -197,7 +197,7 @@ const FloatingButton = props => {
             <View style={{marginTop: 20}}>
               <Text
                 style={{fontSize: 16, textAlign: 'center', fontWeight: 'bold'}}>
-                Would you like to initiate Growth Pipeline Dialogue ?
+                Would you like to initiate Growth Pipeline Dialog ?
               </Text>
               <View
                 style={{

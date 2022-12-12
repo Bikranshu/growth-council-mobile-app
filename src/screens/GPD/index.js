@@ -30,7 +30,7 @@ const GPDScreen = props => {
         <View style={styles.container}>
           <View style={styles.privacy}>
             <View style={styles.title}>
-              <Text style={styles.titleText}>Growth Pipeline Dialogue</Text>
+              <Text style={styles.titleText}>Growth Pipeline Dialog</Text>
               <View style={styles.titleBorder}></View>
             </View>
             <View>
