@@ -127,7 +127,10 @@ const Quote = props => {
               alignItems: 'center',
               marginTop: 22,
             }}>
-            <View
+            <LinearGradient
+              start={{x: 0.697, y: -0.943}}
+              end={{x: 0.413, y: 2.24}}
+              colors={['#58AFF6', '#002651']}
               style={{
                 margin: 20,
                 backgroundColor: 'white',
@@ -154,20 +157,28 @@ const Quote = props => {
                 }}>
                 <Text
                   style={{
-                    padding: 15,
+                    padding: 10,
                     fontSize: 18,
+                    color: 'white',
+                    textAlign: 'right',
                   }}>
                   X
                 </Text>
               </TouchableOpacity>
-              <Text style={{marginTop: 10}}>{data.daily_quote}</Text>
+              <Text style={{marginTop: 10, color: 'white'}}>
+                {data.daily_quote}
+              </Text>
               <Text
                 style={{
                   fontSize: 12,
-                  position: 'absolute',
-                  right: 10,
-                  bottom: 10,
+                  position: 'relative',
+                  left: 100,
+                  textAlign: 'right',
+                  bottom: -10,
+                  alignItems: 'flex-end',
                   fontWeight: 'bold',
+                  color: 'white',
+                  padding: 10,
                 }}>
                 {data?.quote_author}
               </Text>
@@ -184,7 +195,7 @@ const Quote = props => {
                   <Text>'Read less...' </Text>
                 </TouchableOpacity>
               ) : null} */}
-            </View>
+            </LinearGradient>
           </View>
         </Modal>
       </ScrollView>
@@ -205,6 +216,5 @@ const styles = StyleSheet.create({
     zIndex: 9,
     position: 'relative',
   },
-
 });
 export default Quote;
