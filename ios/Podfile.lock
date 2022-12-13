@@ -1096,6 +1096,8 @@ PODS:
     - glog
   - react-native-blob-util (0.13.18):
     - React-Core
+  - react-native-blur (4.3.0):
+    - React-Core
   - react-native-flipper (0.127.0):
     - React-Core
   - react-native-image-picker (4.7.3):
@@ -1318,6 +1320,7 @@ DEPENDENCIES:
   - React-jsinspector (from `../node_modules/react-native/ReactCommon/jsinspector`)
   - React-logger (from `../node_modules/react-native/ReactCommon/logger`)
   - react-native-blob-util (from `../node_modules/react-native-blob-util`)
+  - "react-native-blur (from `../node_modules/@react-native-community/blur`)"
   - react-native-flipper (from `../node_modules/react-native-flipper`)
   - react-native-image-picker (from `../node_modules/react-native-image-picker`)
   - "react-native-netinfo (from `../node_modules/@react-native-community/netinfo`)"
@@ -1442,6 +1445,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/ReactCommon/logger"
   react-native-blob-util:
     :path: "../node_modules/react-native-blob-util"
+  react-native-blur:
+    :path: "../node_modules/@react-native-community/blur"
   react-native-flipper:
     :path: "../node_modules/react-native-flipper"
   react-native-image-picker:
@@ -1585,6 +1590,7 @@ SPEC CHECKSUMS:
   React-jsinspector: 953260b8580780a6e81f2a6d319a8d42fd5028d8
   React-logger: fa4ff1e9c7e115648f7c5dafb7c20822ab4f7a7e
   react-native-blob-util: 600972b1782380a5a7d5db61a3817ea32349dae9
+  react-native-blur: 50c9feabacbc5f49b61337ebc32192c6be7ec3c3
   react-native-flipper: b9e2e817604af8da0d5a9ba20a8516e780e30f3c
   react-native-image-picker: 4e6008ad8c2321622affa2c85432a5ebd02d480c
   react-native-netinfo: 129bd99f607a2dc5bb096168f3e5c150fd1f1c95
