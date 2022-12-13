@@ -173,22 +173,21 @@ const Discussion = props => {
                   style={{
                     position: 'absolute',
                     top: 65,
-                    left: 10,
+                    left: 5,
                     justifyContent: 'center',
                     alignItems: 'center',
                   }}>
-                  <MaterialIcons
-                    name={'event'}
-                    size={25}
-                    color={'black'}
+                  <View
                     style={{
-                      padding: 10,
+                      padding: 5,
                       backgroundColor: 'white',
                       justifyContent: 'center',
                       borderRadius: 20,
-                      paddingVertical: 5,
-                    }}
-                  />
+                      alignItems: 'center',
+                    }}>
+                    <MaterialIcons name={'event'} size={25} color={'black'} />
+                  </View>
+
                   <Text style={{fontSize: 10, color: 'white'}}>
                     {actualDate}
                   </Text>
@@ -197,22 +196,21 @@ const Discussion = props => {
                   style={{
                     position: 'absolute',
                     top: 65,
-                    left: 140,
+                    left: 150,
                     justifyContent: 'center',
                     alignItems: 'center',
                   }}>
-                  <Ionicons
-                    name={'time-outline'}
-                    size={25}
-                    color={'black'}
+                  <View
                     style={{
-                      padding: 10,
+                      padding: 5,
                       backgroundColor: 'white',
                       justifyContent: 'center',
                       borderRadius: 20,
-                      paddingVertical: 5,
-                    }}
-                  />
+                      alignItems: 'center',
+                    }}>
+                    <Ionicons name={'time-outline'} size={25} color={'black'} />
+                  </View>
+
                   <Text style={{fontSize: 10, color: 'white'}}>
                     {actualTime}
                   </Text>
@@ -221,22 +219,25 @@ const Discussion = props => {
                   style={{
                     position: 'absolute',
                     top: 65,
-                    right: 10,
+                    right: 30,
                     justifyContent: 'center',
                     alignItems: 'center',
                   }}>
-                  <Ionicons
-                    name={'location-outline'}
-                    size={25}
-                    color={'black'}
+                  <View
                     style={{
-                      padding: 10,
+                      padding: 5,
                       backgroundColor: 'white',
                       justifyContent: 'center',
                       borderRadius: 20,
-                      paddingVertical: 5,
-                    }}
-                  />
+                      alignItems: 'center',
+                    }}>
+                    <Ionicons
+                      name={'location-outline'}
+                      size={25}
+                      color={'black'}
+                    />
+                  </View>
+
                   <Text style={{fontSize: 10, color: 'white'}}>
                     {route?.params?.location}
                   </Text>

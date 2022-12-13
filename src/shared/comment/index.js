@@ -132,14 +132,8 @@ const Comments = ({
 
   const ref = useRef();
 
- 
-
-
   return (
     <>
-      {deleteDiscusssionLoading && <Loading />}
-      {postDiscussionLoading && <Loading />}
-
       <TouchableWithoutFeedback
         onPress={() => {
           Keyboard.dismiss;
@@ -247,6 +241,8 @@ const Comments = ({
                 )}
               </View>
             </View>
+            {deleteDiscusssionLoading && <Loading />}
+            {postDiscussionLoading && <Loading />}
             {isReplying && (
               <View>
                 <View style={{flexDirection: 'row', margin: 10}}>
