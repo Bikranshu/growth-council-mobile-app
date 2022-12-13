@@ -107,7 +107,7 @@ const FloatingButton = props => {
 
   return (
     <View style={styles.container}>
-      {!isAlertVisible && (
+      {isAlertVisible && (
         <View
           style={{
             alignItems: 'center',
