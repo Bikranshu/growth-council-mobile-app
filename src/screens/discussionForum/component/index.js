@@ -142,8 +142,8 @@ const Discussion = props => {
   useEffect(() => {
     setTimeout(() => {
       setIsLoadingVisible(false);
-    }, 8000);
-  });
+    }, 5000);
+  }, []);
 
   const backgroundColor =
     route?.params?.backgroundColor === undefined
@@ -297,7 +297,7 @@ const Discussion = props => {
               Welcome to the Discussion Forum
             </Text>
 
-            {postDiscussionLoading && <Loading />}
+            {/* {postDiscussionLoading && <Loading />} */}
             {isLoadingVisible && discussionForumLoading && <Loading />}
             {/* comment Data from backend */}
             <ScrollView
