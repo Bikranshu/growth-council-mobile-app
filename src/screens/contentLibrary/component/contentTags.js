@@ -17,7 +17,8 @@ import {
 import {Searchbar} from 'react-native-paper';
 import {Colors, Typography} from '../../../theme';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import Footer from '../../../shared/footer';
+import FloatingButton from '../../../shared/floatingButton';
+
 import BottomNav from '../../../layout/BottomLayout';
 import HTMLView from 'react-native-htmlview';
 import {useFocusEffect, useIsFocused} from '@react-navigation/native';
@@ -216,6 +217,7 @@ const ContactTags = props => {
           </View> */}
         </ScrollView>
       </View>
+      <FloatingButton {...props} navigation={navigation} />
       <BottomNav {...props} navigation={navigation} />
     </SafeAreaView>
   );
@@ -298,7 +300,6 @@ const styles = StyleSheet.create({
   },
   eventParagraph: {
     fontSize: 8,
-    
   },
   eventDate: {
     flex: 1,
@@ -312,7 +313,6 @@ const styles = StyleSheet.create({
   eventDateText: {
     textAlign: 'center',
     fontSize: 14,
-  
   },
   shadowProp: {
     shadowColor: '#000',

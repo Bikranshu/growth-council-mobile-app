@@ -107,19 +107,20 @@ const FloatingButton = props => {
 
   return (
     <View style={styles.container}>
-      {isAlertVisible && (
+      {!isAlertVisible && (
         <View
           style={{
             alignItems: 'center',
             justifyContent: 'center',
             position: 'absolute',
-            bottom: 100,
+            bottom: 80,
             left: 120,
             backgroundColor: PRACTICE_COLOR,
             marginBottom: 10,
             width: 190,
             height: 40,
             borderRadius: 10,
+            opacity: 0.7,
           }}>
           <Text style={{color: 'white'}}>Growth Pipeline Dialog </Text>
         </View>
@@ -155,9 +156,10 @@ const FloatingButton = props => {
                 <Image
                   source={require('../../../src/assets/img/FloatingButton.png')}
                   style={{
-                    width: 80,
-                    height: 80,
+                    width: 60,
+                    height: 60,
                     marginLeft: 20,
+                    opacity: 0.6,
                   }}
                   resizeMode="contain"
                 />
@@ -254,20 +256,20 @@ const styles = StyleSheet.create({
     alignItems: 'flex-end',
   },
   circle: {
-    borderWidth: 1,
+    // borderWidth: 1,
     borderColor: 'rgba(0,0,0,0.2)',
     // alignItems: 'center',
     alignItems: 'flex-end',
     justifyContent: 'center',
-    // padding: 10,
+    opacity: 0.9,
     position: 'absolute',
     bottom: 50,
     right: -160,
     backgroundColor: 'white',
     borderRadius: 50,
     marginBottom: 10,
-    width: 80,
-    height: 80,
+    width: 60,
+    height: 60,
   },
   sendRegisterButton: {
     flexDirection: 'row',

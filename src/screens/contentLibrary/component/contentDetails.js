@@ -21,7 +21,8 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import Footer from '../../../shared/footer';
 import BottomNav from '../../../layout/BottomLayout';
 import HTMLView from 'react-native-htmlview';
-import {BubblesLoader} from 'react-native-indicator';
+import FloatingButton from '../../../shared/floatingButton';
+
 import {useFocusEffect, useIsFocused} from '@react-navigation/native';
 import Loading from '../../../shared/loading';
 import {GROWTH_CONTENT_FALLBACK_IMAGE} from '../../../constants';
@@ -199,6 +200,8 @@ const ContentLibrary = props => {
           </View> */}
         </ScrollView>
       </View>
+      <FloatingButton {...props} navigation={navigation} />
+
       <BottomNav {...props} navigation={navigation} />
     </SafeAreaView>
   );

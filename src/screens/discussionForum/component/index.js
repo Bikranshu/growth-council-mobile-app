@@ -11,6 +11,9 @@ import {
   FlatList,
   TextInput,
   ImageBackground,
+  Keyboard,
+  TouchableWithoutFeedback,
+  KeyboardAvoidingView,
 } from 'react-native';
 import {Button} from 'react-native-paper';
 import {useFormik} from 'formik';
@@ -57,6 +60,8 @@ const Discussion = props => {
   const isFocused = useIsFocused();
   const [backendComments, setBackendComments] = useState([]);
   const [activeComment, setActiveComment] = useState(null);
+  const [isLoadingVisible, setIsLoadingVisible] = useState(true);
+  const [hideInput, setHideInput] = useState(false);
 
   const rootComments = backendComments?.filter(
     backendComment => backendComment?.comment_parent === '0',
@@ -141,6 +146,12 @@ const Discussion = props => {
     fetchProfileAsync();
   }, [isFocused]);
 
+  useEffect(() => {
+    setTimeout(() => {
+      setIsLoadingVisible(false);
+    }, 8000);
+  });
+
   const backgroundColor =
     route?.params?.backgroundColor === undefined
       ? COMMUNITY_COLOR
@@ -148,221 +159,239 @@ const Discussion = props => {
   const actualDate = moment(route?.params?.eventDate).format('D MMMM, dddd');
   const actualTime = moment(route?.params?.eventDate).format('h:mma ');
   return (
-    // <ScrollView contentContainerStyle={{flexGrow: 1}}>
-    <View style={styles.container}>
-      <ImageBackground
-        source={require('../../../assets/img/event_main_image.png')}
-        resizeMode="cover"
-        imageStyle={{opacity: 0.8}}>
-        <View style={{height: '40%'}}>
-          <View
-            style={{
-              alignItems: 'center',
-            }}>
-            <View
-              style={[styles.topbanner, {backgroundColor: backgroundColor}]}>
-              <Text style={{fontSize: 14, color: 'white'}}>
-                {route?.params?.title}
-              </Text>
-
-              <View
-                style={{
-                  position: 'absolute',
-                  top: 65,
-                  left: 10,
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                }}>
-                <MaterialIcons
-                  name={'event'}
-                  size={25}
-                  color={'black'}
-                  style={{
-                    padding: 10,
-                    backgroundColor: 'white',
-                    justifyContent: 'center',
-                    borderRadius: 20,
-                    paddingVertical: 5,
-                  }}
-                />
-                <Text style={{fontSize: 10, color: 'white'}}>{actualDate}</Text>
-              </View>
-              <View
-                style={{
-                  position: 'absolute',
-                  top: 65,
-                  left: 140,
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                }}>
-                <Ionicons
-                  name={'time-outline'}
-                  size={25}
-                  color={'black'}
-                  style={{
-                    padding: 10,
-                    backgroundColor: 'white',
-                    justifyContent: 'center',
-                    borderRadius: 20,
-                    paddingVertical: 5,
-                  }}
-                />
-                <Text style={{fontSize: 10, color: 'white'}}>{actualTime}</Text>
-              </View>
-              <View
-                style={{
-                  position: 'absolute',
-                  top: 65,
-                  right: 10,
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                }}>
-                <Ionicons
-                  name={'location-outline'}
-                  size={25}
-                  color={'black'}
-                  style={{
-                    padding: 10,
-                    backgroundColor: 'white',
-                    justifyContent: 'center',
-                    borderRadius: 20,
-                    paddingVertical: 5,
-                  }}
-                />
-                <Text style={{fontSize: 10, color: 'white'}}>
-                  {route?.params?.location}
-                </Text>
-              </View>
-            </View>
-          </View>
-
-          <View>
-            <View>
-              <Text style={styles.contentHeading}>Growth Coach</Text>
-            </View>
-
-            <View style={styles.hostdetail}>
-              {route?.params?.organizer_image !== false &&
-                route?.params?.organizer_image !== null && (
-                  <View
-                    style={[
-                      styles.hostimage,
-                      {backgroundColor: backgroundColor},
-                    ]}>
-                    <Image
-                      source={{}}
-                      style={{
-                        width: '100%',
-                        height: '100%',
-                      }}
-                    />
-                  </View>
-                )}
-
-              <View
-                style={{
-                  justifyContent: 'center',
-                }}>
-                <Text
-                  style={{
-                    fontSize: 14,
-                    fontWeight: '500',
-                    color: 'white',
-                    width: 250,
-                  }}>
-                  {route?.params?.organizer}
-                </Text>
-              </View>
-            </View>
-          </View>
-        </View>
-
-        <View style={styles.forum}>
-          {/* <Text style={[styles.heading, {color: COMMUNITY_COLOR}]}>
-                {route?.params?.title}
-              </Text> */}
-          <Text
-            style={[styles.heading, {marginHorizontal: 10, marginVertical: 5}]}>
-            Welcome to the Discussion Forum
-          </Text>
-
-          {postDiscussionLoading && <Loading />}
-          {discussionForumLoading && <Loading />}
-          {/* comment Data from backend */}
-          <ScrollView
-            showsVerticalScrollIndicator={false}
-            style={{
-              backgroundColor: Colors.PRIMARY_BACKGROUND_COLOR,
-            }}>
-            <View>
-              {rootComments?.map(rootComment => (
-                <Comments
-                  key={rootComment?.comment_ID}
-                  comment={rootComment}
-                  replies={getReplies(rootComment?.comment_ID)}
-                  currentUserId={profile?.ID}
-                  deleteComment={deleteComment}
-                  activeComment={activeComment}
-                  setActiveComment={setActiveComment}
-                  profile={profile}
-                  eventID={eventID}
-                  deleteDiscusssionLoading={deleteDiscusssionLoading}
-                  postDiscussionLoading={postDiscussionLoading}
-                  postDiscussionByEvent={postDiscussionByEvent}
-                  discussionForumByIdentifier={discussionForumByIdentifier}
-                />
-              ))}
-            </View>
-          </ScrollView>
-
-          {/* //Comment Form */}
-          <View
-            style={{
-              height: 70,
-              justifyContent: 'center',
-              borderTopWidth: 0.2,
-            }}>
+    <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
+      <View style={styles.container}>
+        <ImageBackground
+          source={require('../../../assets/img/event_main_image.png')}
+          resizeMode="cover"
+          imageStyle={{opacity: 0.8}}>
+          <View style={{height: '40%'}}>
             <View
               style={{
-                flexDirection: 'row',
-                backgroundColor: 'white',
-                position: 'absolute',
-                bottom: 10,
-                marginTop: 10,
-                justifyContent: 'center',
+                alignItems: 'center',
               }}>
-              <Image
-                style={{width: 50, height: 50, borderRadius: 100}}
-                source={{
-                  uri: profile?.avatar,
-                }}
-              />
-              <TextInput
-                multiline={true}
-                numberOfLines={2}
-                style={styles.textarea}
-                value={values?.content}
-                placeholder="Write comment"
-                onChangeText={handleChange('content')}
-                onFocus={handleBlur('content')}
-                error={errors.content}
-                touched={touched.content}
-              />
-              <TouchableOpacity
-                onPress={handleSubmit}
-                style={{
-                  padding: 10,
-                  backgroundColor: COMMUNITY_COLOR,
-                  borderRadius: 30,
-                }}>
-                <Ionicons name="send" color="white" size={30} />
-              </TouchableOpacity>
+              <View
+                style={[styles.topbanner, {backgroundColor: backgroundColor}]}>
+                <Text style={{fontSize: 14, color: 'white'}}>
+                  {route?.params?.title}
+                </Text>
+
+                <View
+                  style={{
+                    position: 'absolute',
+                    top: 65,
+                    left: 10,
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                  }}>
+                  <MaterialIcons
+                    name={'event'}
+                    size={25}
+                    color={'black'}
+                    style={{
+                      padding: 10,
+                      backgroundColor: 'white',
+                      justifyContent: 'center',
+                      borderRadius: 20,
+                      paddingVertical: 5,
+                    }}
+                  />
+                  <Text style={{fontSize: 10, color: 'white'}}>
+                    {actualDate}
+                  </Text>
+                </View>
+                <View
+                  style={{
+                    position: 'absolute',
+                    top: 65,
+                    left: 140,
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                  }}>
+                  <Ionicons
+                    name={'time-outline'}
+                    size={25}
+                    color={'black'}
+                    style={{
+                      padding: 10,
+                      backgroundColor: 'white',
+                      justifyContent: 'center',
+                      borderRadius: 20,
+                      paddingVertical: 5,
+                    }}
+                  />
+                  <Text style={{fontSize: 10, color: 'white'}}>
+                    {actualTime}
+                  </Text>
+                </View>
+                <View
+                  style={{
+                    position: 'absolute',
+                    top: 65,
+                    right: 10,
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                  }}>
+                  <Ionicons
+                    name={'location-outline'}
+                    size={25}
+                    color={'black'}
+                    style={{
+                      padding: 10,
+                      backgroundColor: 'white',
+                      justifyContent: 'center',
+                      borderRadius: 20,
+                      paddingVertical: 5,
+                    }}
+                  />
+                  <Text style={{fontSize: 10, color: 'white'}}>
+                    {route?.params?.location}
+                  </Text>
+                </View>
+              </View>
+            </View>
+
+            <View>
+              <View>
+                <Text style={styles.contentHeading}>Growth Coach</Text>
+              </View>
+
+              <View style={styles.hostdetail}>
+                {route?.params?.organizer_image !== false &&
+                  route?.params?.organizer_image !== null && (
+                    <View
+                      style={[
+                        styles.hostimage,
+                        {backgroundColor: backgroundColor},
+                      ]}>
+                      <Image
+                        source={{}}
+                        style={{
+                          width: '100%',
+                          height: '100%',
+                        }}
+                      />
+                    </View>
+                  )}
+
+                <View
+                  style={{
+                    justifyContent: 'center',
+                  }}>
+                  <Text
+                    style={{
+                      fontSize: 14,
+                      fontWeight: '500',
+                      color: 'white',
+                      width: 250,
+                    }}>
+                    {route?.params?.organizer}
+                  </Text>
+                </View>
+              </View>
             </View>
           </View>
-        </View>
-      </ImageBackground>
-    </View>
-    // </ScrollView>
+
+          <View style={styles.forum}>
+            {/* <Text style={[styles.heading, {color: COMMUNITY_COLOR}]}>
+                {route?.params?.title}
+              </Text> */}
+            <Text
+              style={[
+                styles.heading,
+                {marginHorizontal: 10, marginVertical: 5},
+              ]}>
+              Welcome to the Discussion Forum
+            </Text>
+
+            {postDiscussionLoading && <Loading />}
+            {isLoadingVisible && discussionForumLoading && <Loading />}
+            {/* comment Data from backend */}
+            <ScrollView
+              showsVerticalScrollIndicator={false}
+              style={{
+                backgroundColor: Colors.PRIMARY_BACKGROUND_COLOR,
+                marginBottom: 60,
+              }}>
+              <View>
+                {rootComments?.map(rootComment => (
+                  <Comments
+                    key={rootComment?.comment_ID}
+                    comment={rootComment}
+                    replies={getReplies(rootComment?.comment_ID)}
+                    currentUserId={profile?.ID}
+                    deleteComment={deleteComment}
+                    activeComment={activeComment}
+                    setActiveComment={setActiveComment}
+                    profile={profile}
+                    eventID={eventID}
+                    deleteDiscusssionLoading={deleteDiscusssionLoading}
+                    backgroundColor={backgroundColor}
+                    postDiscussionLoading={postDiscussionLoading}
+                    postDiscussionByEvent={postDiscussionByEvent}
+                    setHideInput={setHideInput}
+                    hideInput={hideInput}
+                    discussionForumByIdentifier={discussionForumByIdentifier}
+                  />
+                ))}
+              </View>
+            </ScrollView>
+
+            {/* //Comment Form */}
+
+            <View
+              style={{
+                // height: 10,
+                justifyContent: 'center',
+                // borderTopWidth: 0.2,
+                backgroundColor: 'white',
+              }}>
+              <View>
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    backgroundColor: 'white',
+                    position: 'absolute',
+                    bottom: 10,
+                    marginTop: 10,
+                    justifyContent: 'center',
+                  }}>
+                  <Image
+                    style={{width: 50, height: 50, borderRadius: 100}}
+                    source={{
+                      uri: profile?.avatar,
+                    }}
+                  />
+                  <TextInput
+                    multiline={true}
+                    numberOfLines={2}
+                    style={styles.textarea}
+                    value={values?.content}
+                    placeholder="Write comment"
+                    onChangeText={handleChange('content')}
+                    onFocus={handleBlur('content')}
+                    error={errors.content}
+                    touched={touched.content}
+                  />
+                  <TouchableOpacity
+                    onPress={handleSubmit}
+                    style={{
+                      width: 50,
+                      height: 50,
+                      backgroundColor: backgroundColor,
+                      borderRadius: 30,
+                      justifyContent: 'center',
+                      alignItems: 'center',
+                    }}>
+                    <Ionicons name="send" color="white" size={25} />
+                  </TouchableOpacity>
+                </View>
+              </View>
+            </View>
+          </View>
+        </ImageBackground>
+      </View>
+    </TouchableWithoutFeedback>
   );
 };
 

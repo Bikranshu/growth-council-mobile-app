@@ -22,7 +22,8 @@ import Footer from '../../../shared/footer';
 import BottomNav from '../../../layout/BottomLayout';
 import HTMLView from 'react-native-htmlview';
 import {useFocusEffect, useIsFocused} from '@react-navigation/native';
-import {BubblesLoader} from 'react-native-indicator';
+import FloatingButton from '../../../shared/floatingButton';
+
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import Loading from '../../../shared/loading';
 
@@ -248,6 +249,7 @@ const LibraryDetail = props => {
           </View> */}
         </ScrollView>
       </View>
+      <FloatingButton {...props} navigation={navigation} />
       <BottomNav {...props} navigation={navigation} />
     </SafeAreaView>
   );
@@ -328,7 +330,6 @@ const styles = StyleSheet.create({
   },
   eventParagraph: {
     fontSize: 8,
-   
   },
   eventDate: {
     flex: 1,
@@ -342,7 +343,6 @@ const styles = StyleSheet.create({
   eventDateText: {
     textAlign: 'center',
     fontSize: 14,
-  
   },
   shadowProp: {
     shadowColor: '#000',

@@ -52,22 +52,22 @@ const Setting = props => {
   const handlePress = () => setExpanded(!expanded);
 
   const [contentEnabled, setContentEnabled] = useState(
-    notificationOptions?.content_notification === '1' ? true : false,
+    notificationOptions?.content_notification === '0' ? false : true,
   );
   const [eventEnabled, setEventEnabled] = useState(
-    notificationOptions?.event_notification === '1' ? true : false,
+    notificationOptions?.event_notification === '0' ? false : true,
   );
   const [memberEnabled, setMemberEnabled] = useState(
-    notificationOptions?.member_connection_add_delete_notification === '1'
-      ? true
-      : false,
+    notificationOptions?.member_connection_add_delete_notification === '0'
+      ? false
+      : true,
   );
   const [chatEnabled, setChatEnabled] = useState(
-    notificationOptions?.chat_notification === '1' ? true : false,
+    notificationOptions?.chat_notification === '0' ? false : true,
   );
 
   const [boardEnabled, setBoardEnabled] = useState(
-    notificationOptions?.discussion_board_notification === '1' ? true : false,
+    notificationOptions?.discussion_board_notification === '0' ? false : true,
   );
 
   console.log(
@@ -177,21 +177,21 @@ const Setting = props => {
 
   useEffect(() => {
     setContentEnabled(
-      notificationOptions?.content_notification === '1' ? true : false,
+      notificationOptions?.content_notification === '0' ? false : true,
     );
     setEventEnabled(
-      notificationOptions?.event_notification === '1' ? true : false,
+      notificationOptions?.event_notification === '0' ? false : true,
     );
     setChatEnabled(
-      notificationOptions?.chat_notification === '1' ? true : false,
+      notificationOptions?.chat_notification === '0' ? false : true,
     );
     setMemberEnabled(
-      notificationOptions?.member_connection_add_delete_notification === '1'
-        ? true
-        : false,
+      notificationOptions?.member_connection_add_delete_notification === '0'
+        ? false
+        : true,
     );
     setBoardEnabled(
-      notificationOptions?.discussion_board_notification === '1' ? true : false,
+      notificationOptions?.discussion_board_notification === '0' ? false : true,
     );
   }, [notificationOptions]);
 
