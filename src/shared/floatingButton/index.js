@@ -159,7 +159,7 @@ const FloatingButton = props => {
                     width: 60,
                     height: 60,
                     marginLeft: 20,
-                    opacity: 0.6,
+                 
                   }}
                   resizeMode="contain"
                 />
@@ -261,7 +261,7 @@ const styles = StyleSheet.create({
     // alignItems: 'center',
     alignItems: 'flex-end',
     justifyContent: 'center',
-    opacity: 0.9,
+    opacity: 0.5,
     position: 'absolute',
     bottom: 50,
     right: -160,

@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useState, useRef} from 'react';
 import {
   StyleSheet,
   Text,
@@ -17,6 +17,7 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import Entypo from 'react-native-vector-icons/Entypo';
 import {getFCMTOkenForUser} from '../../utils/httpUtil';
 import {sendNotification} from '../../utils/sendNotification';
+// import useOutsideClick from './useOutsideClick';
 import {COMMUNITY_COLOR} from '../../theme/colors';
 
 const Comments = ({
@@ -47,6 +48,11 @@ const Comments = ({
     activeComment.type === 'replying' &&
     activeComment.id === comment?.comment_ID;
 
+  const againReplying =
+    activeComment &&
+    activeComment.type === 'replying' &&
+    activeComment.parent === '0';
+
   const replyId = parentId ? parentId : comment?.comment_ID;
   const [friendToken, setFriendToken] = useState('');
   const [parentDetails, setParentDetails] = useState();
@@ -68,14 +74,12 @@ const Comments = ({
     );
   }, []);
   useEffect(() => {
-    console.log({parentUserId});
     getFCMTOkenForUser(parentUserId)
       .then(res => {
         const token = res.data.data;
         if (token == null) {
           console.log(res.data?.message);
         }
-        console.log('token', token);
         setFriendToken(typeof token == 'string' ? token : token?.[0]);
       })
 
@@ -106,6 +110,7 @@ const Comments = ({
           discussionForumByIdentifier({
             event_id: eventID,
           });
+          setHideInput(false);
         }
       });
       resetForm(values?.content);
@@ -125,13 +130,19 @@ const Comments = ({
     },
   });
 
+  const ref = useRef();
+
+ 
+
+
   return (
     <>
       {deleteDiscusssionLoading && <Loading />}
       {postDiscussionLoading && <Loading />}
+
       <TouchableWithoutFeedback
         onPress={() => {
-          Keyboard.dismiss, setHideInput(false);
+          Keyboard.dismiss;
         }}
         accessible={false}>
         <View style={{flexDirection: 'row'}}>
@@ -189,24 +200,27 @@ const Comments = ({
                       setActiveComment({
                         id: comment?.comment_ID,
                         type: 'replying',
+                        parent: comment?.comment_parent,
                       })
                     }>
-                    <View style={{flexDirection: 'row'}}>
-                      <Entypo
-                        name="reply"
-                        size={15}
-                        color="grey"
-                        style={{marginVertical: 10}}
-                      />
-                      <Text
-                        style={{
-                          color: 'grey',
-                          marginVertical: 10,
-                          fontSize: 10,
-                        }}>
-                        Reply
-                      </Text>
-                    </View>
+                    {comment?.comment_parent === '0' && (
+                      <View style={{flexDirection: 'row'}}>
+                        <Entypo
+                          name="reply"
+                          size={15}
+                          color="grey"
+                          style={{marginVertical: 10}}
+                        />
+                        <Text
+                          style={{
+                            color: 'grey',
+                            marginVertical: 10,
+                            fontSize: 10,
+                          }}>
+                          Reply
+                        </Text>
+                      </View>
+                    )}
                   </TouchableOpacity>
                 )}
                 {canDelete && (
@@ -242,19 +256,21 @@ const Comments = ({
                       uri: profile?.avatar,
                     }}
                   />
-
-                  <TextInput
-                    multiline={true}
-                    numberOfLines={2}
-                    value={values?.content}
-                    style={styles.textarea}
-                    placeholder="Write comment"
-                    onChangeText={handleChange('content')}
-                    onFocus={handleBlur('content')}
-                    error={errors.content}
-                    touched={touched.content}
-                  />
-
+                  <TouchableOpacity
+                    ref={ref}
+                    onPress={setHideInput(true)}
+                    style={styles.textarea}>
+                    <TextInput
+                      multiline={true}
+                      numberOfLines={2}
+                      value={values?.content}
+                      placeholder="Write comment"
+                      onChangeText={handleChange('content')}
+                      onFocus={handleBlur('content')}
+                      error={errors.content}
+                      touched={touched.content}
+                    />
+                  </TouchableOpacity>
                   <TouchableOpacity
                     onPress={handleSubmit}
                     style={{
@@ -310,7 +326,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     borderWidth: 0.2,
     borderRadius: 5,
-    marginLeft: 10,
+    marginLeft: 5,
     marginRight: 5,
   },
   commentSection: {

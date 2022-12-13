@@ -120,7 +120,6 @@ const Discussion = props => {
       discussionForumByIdentifier({
         event_id: eventID,
       });
-
       return () => {
         cleanForum();
       };
@@ -128,24 +127,18 @@ const Discussion = props => {
   );
 
   useEffect(() => {
-    setInterval(() => {
-      discussionForumByIdentifier({
-        event_id: eventID,
-      });
-    }, 10000);
-  }, []);
-
-  useEffect(() => {
     setBackendComments(discussionForum);
   }, [discussionForum]);
 
   useEffect(() => {
-    const fetchProfileAsync = async () => {
-      await fetchProfile();
-    };
-    fetchProfileAsync();
-  }, [isFocused]);
+    fetchProfile();
+  }, []);
 
+  //   setInterval(() => {
+  //     discussionForumByIdentifier({
+  //       event_id: eventID,
+  //     });
+  //   }, 10000);
   useEffect(() => {
     setTimeout(() => {
       setIsLoadingVisible(false);
