@@ -61,7 +61,7 @@ const Discussion = props => {
   const [backendComments, setBackendComments] = useState([]);
   const [activeComment, setActiveComment] = useState(null);
   const [isLoadingVisible, setIsLoadingVisible] = useState(true);
-  const [hideInput, setHideInput] = useState(false);
+  const [hideInput, setHideInput] = useState(true);
 
   const rootComments = backendComments?.filter(
     backendComment => backendComment?.comment_parent === '0',
@@ -152,7 +152,11 @@ const Discussion = props => {
   const actualDate = moment(route?.params?.eventDate).format('D MMMM, dddd');
   const actualTime = moment(route?.params?.eventDate).format('h:mma ');
   return (
-    <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
+    <TouchableWithoutFeedback
+      onPress={() => {
+        Keyboard.dismiss;
+      }}
+      accessible={false}>
       <View style={styles.container}>
         <ImageBackground
           source={require('../../../assets/img/event_main_image.png')}
@@ -297,7 +301,6 @@ const Discussion = props => {
               ]}>
               Welcome to the Discussion Forum
             </Text>
-
             {/* {postDiscussionLoading && <Loading />} */}
             {isLoadingVisible && discussionForumLoading && <Loading />}
             {/* comment Data from backend */}
@@ -330,9 +333,8 @@ const Discussion = props => {
                 ))}
               </View>
             </ScrollView>
-
             {/* //Comment Form */}
-
+            {/* {hideInput && ( */}
             <View
               style={{
                 // height: 10,
@@ -382,6 +384,7 @@ const Discussion = props => {
                 </View>
               </View>
             </View>
+            {/* // )} */}
           </View>
         </ImageBackground>
       </View>

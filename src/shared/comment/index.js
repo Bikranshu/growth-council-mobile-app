@@ -42,6 +42,7 @@ const Comments = ({
   const fiveMinutes = 300000;
   const timePassed = new Date() - new Date(comment?.comment_date) > fiveMinutes;
   const canReply = Boolean(currentUserId);
+  const [shouldShow, setShouldShow] = useState(true);
   const canDelete = currentUserId === comment?.user_id && !timePassed;
   const isReplying =
     activeComment &&
@@ -110,7 +111,8 @@ const Comments = ({
           discussionForumByIdentifier({
             event_id: eventID,
           });
-          setHideInput(false);
+          setShouldShow(false);
+          setHideInput(true);
         }
       });
       resetForm(values?.content);
@@ -129,11 +131,11 @@ const Comments = ({
       );
     },
   });
-
-  const ref = useRef();
-
+  console.log({hideInput});
   return (
     <>
+      {deleteDiscusssionLoading && <Loading />}
+      {postDiscussionLoading && <Loading />}
       <TouchableWithoutFeedback
         onPress={() => {
           Keyboard.dismiss;
@@ -190,13 +192,14 @@ const Comments = ({
                 {canReply && (
                   <TouchableOpacity
                     style={{marginLeft: '50%'}}
-                    onPress={() =>
+                    onPress={() => {
                       setActiveComment({
                         id: comment?.comment_ID,
                         type: 'replying',
                         parent: comment?.comment_parent,
-                      })
-                    }>
+                      });
+                      setShouldShow(true);
+                    }}>
                     {comment?.comment_parent === '0' && (
                       <View style={{flexDirection: 'row'}}>
                         <Entypo
@@ -241,9 +244,8 @@ const Comments = ({
                 )}
               </View>
             </View>
-            {deleteDiscusssionLoading && <Loading />}
-            {postDiscussionLoading && <Loading />}
-            {isReplying && (
+
+            {isReplying && shouldShow && (
               <View>
                 <View style={{flexDirection: 'row', margin: 10}}>
                   <Image
@@ -253,9 +255,8 @@ const Comments = ({
                     }}
                   />
                   <TouchableOpacity
-                    ref={ref}
-                    onPress={setHideInput(true)}
-                    style={styles.textarea}>
+                    style={styles.textarea}
+                    onPress={setHideInput(false)}>
                     <TextInput
                       multiline={true}
                       numberOfLines={2}
