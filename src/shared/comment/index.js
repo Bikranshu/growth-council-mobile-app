@@ -37,26 +37,22 @@ const Comments = ({
   discussionForumByIdentifier,
   backgroundColor,
   setHideInput,
-  hideInput,
+  shouldShow,
+  setShouldShow
 }) => {
   const fiveMinutes = 300000;
   const timePassed = new Date() - new Date(comment?.comment_date) > fiveMinutes;
   const canReply = Boolean(currentUserId);
-  const [shouldShow, setShouldShow] = useState(true);
+
   const canDelete = currentUserId === comment?.user_id && !timePassed;
   const isReplying =
     activeComment &&
     activeComment.type === 'replying' &&
     activeComment.id === comment?.comment_ID;
 
-  const againReplying =
-    activeComment &&
-    activeComment.type === 'replying' &&
-    activeComment.parent === '0';
-
   const replyId = parentId ? parentId : comment?.comment_ID;
   const [friendToken, setFriendToken] = useState('');
-  const [parentDetails, setParentDetails] = useState();
+
   const [parentUserId, setparentUserId] = useState(
     replyId === comment?.comment_ID
       ? comment?.comment_parent === '0'
@@ -88,6 +84,7 @@ const Comments = ({
         console.log(error);
       });
   }, []);
+
   const {
     handleChange,
     handleBlur,
@@ -131,7 +128,7 @@ const Comments = ({
       );
     },
   });
-  console.log({hideInput});
+
   return (
     <>
       {deleteDiscusssionLoading && <Loading />}
@@ -141,69 +138,100 @@ const Comments = ({
           Keyboard.dismiss;
         }}
         accessible={false}>
-        <View style={{flexDirection: 'row'}}>
-          <Image
-            style={{
-              width: 50,
-              height: 50,
-              borderRadius: 30,
-              marginVertical: 10,
-            }}
-            source={{
-              uri: comment?.avatar,
-            }}
-          />
-          <View style={{margin: 5, width: '100%', padding: 5}}>
-            <View style={[styles.commentSection, styles.shadowProp]}>
-              <View
-                style={{
-                  paddingBottom: 15,
-                  height: 'auto',
-                  minHeight: 50,
-                }}>
-                <View style={{flexDirection: 'row'}}>
-                  <Text style={{color: '#00008B', fontSize: 16}}>
-                    {comment?.comment_author}
-                  </Text>
-                  <Text
-                    style={{
-                      color: 'grey',
-                      fontSize: 8,
-                      position: 'absolute',
-                      right: 1,
-                    }}>
-                    {comment?.comment_date}
+        <TouchableOpacity
+          activeOpacity={1}
+          onPress={() => {
+            setHideInput(true);
+            setShouldShow(false);
+          }}>
+          <View style={{flexDirection: 'row'}}>
+            <Image
+              style={{
+                width: 50,
+                height: 50,
+                borderRadius: 30,
+                marginVertical: 10,
+              }}
+              source={{
+                uri: comment?.avatar,
+              }}
+            />
+
+            <View style={{margin: 5, width: '100%', padding: 5}}>
+              <View style={[styles.commentSection, styles.shadowProp]}>
+                <View
+                  style={{
+                    paddingBottom: 15,
+                    height: 'auto',
+                    minHeight: 50,
+                  }}>
+                  <View style={{flexDirection: 'row'}}>
+                    <Text style={{color: '#00008B', fontSize: 16}}>
+                      {comment?.comment_author}
+                    </Text>
+                    <Text
+                      style={{
+                        color: 'grey',
+                        fontSize: 8,
+                        position: 'absolute',
+                        right: 1,
+                      }}>
+                      {comment?.comment_date}
+                    </Text>
+                  </View>
+
+                  <Text style={{color: 'black', fontSize: 12}}>
+                    {comment?.comment_content}
                   </Text>
                 </View>
 
-                <Text style={{color: 'black', fontSize: 12}}>
-                  {comment?.comment_content}
-                </Text>
-              </View>
-
-              <View
-                style={{
-                  flexDirection: 'row',
-                  position: 'relative',
-                  right: 0,
-                  borderTopWidth: 1,
-                  borderTopColor: '#EDF1F7',
-                }}>
-                {canReply && (
-                  <TouchableOpacity
-                    style={{marginLeft: '50%'}}
-                    onPress={() => {
-                      setActiveComment({
-                        id: comment?.comment_ID,
-                        type: 'replying',
-                        parent: comment?.comment_parent,
-                      });
-                      setShouldShow(true);
-                    }}>
-                    {comment?.comment_parent === '0' && (
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    position: 'relative',
+                    right: 0,
+                    borderTopWidth: 1,
+                    borderTopColor: '#EDF1F7',
+                  }}>
+                  {canReply && (
+                    <TouchableOpacity
+                      style={{marginLeft: '50%'}}
+                      onPress={() => {
+                        setActiveComment({
+                          id: comment?.comment_ID,
+                          type: 'replying',
+                          parent: comment?.comment_parent,
+                        });
+                        setShouldShow(true);
+                        setHideInput(false);
+                      }}>
+                      {comment?.comment_parent === '0' && (
+                        <View style={{flexDirection: 'row'}}>
+                          <Entypo
+                            name="reply"
+                            size={15}
+                            color="grey"
+                            style={{marginVertical: 10}}
+                          />
+                          <Text
+                            style={{
+                              color: 'grey',
+                              marginVertical: 10,
+                              fontSize: 10,
+                            }}>
+                            Reply
+                          </Text>
+                        </View>
+                      )}
+                    </TouchableOpacity>
+                  )}
+                  {canDelete && (
+                    <TouchableOpacity
+                      style={{marginLeft: 10}}
+                      onPress={() => deleteComment(comment?.comment_ID)}>
                       <View style={{flexDirection: 'row'}}>
-                        <Entypo
-                          name="reply"
+                        <Ionicons
+                          name="trash-bin"
                           size={15}
                           color="grey"
                           style={{marginVertical: 10}}
@@ -214,102 +242,82 @@ const Comments = ({
                             marginVertical: 10,
                             fontSize: 10,
                           }}>
-                          Reply
+                          Delete
                         </Text>
                       </View>
-                    )}
-                  </TouchableOpacity>
-                )}
-                {canDelete && (
-                  <TouchableOpacity
-                    style={{marginLeft: 10}}
-                    onPress={() => deleteComment(comment?.comment_ID)}>
-                    <View style={{flexDirection: 'row'}}>
-                      <Ionicons
-                        name="trash-bin"
-                        size={15}
-                        color="grey"
-                        style={{marginVertical: 10}}
-                      />
-                      <Text
-                        style={{
-                          color: 'grey',
-                          marginVertical: 10,
-                          fontSize: 10,
-                        }}>
-                        Delete
-                      </Text>
-                    </View>
-                  </TouchableOpacity>
-                )}
-              </View>
-            </View>
-
-            {isReplying && shouldShow && (
-              <View>
-                <View style={{flexDirection: 'row', margin: 10}}>
-                  <Image
-                    style={{width: 50, height: 50, borderRadius: 30}}
-                    source={{
-                      uri: profile?.avatar,
-                    }}
-                  />
-                  <TouchableOpacity
-                    style={styles.textarea}
-                    onPress={setHideInput(false)}>
-                    <TextInput
-                      multiline={true}
-                      numberOfLines={2}
-                      value={values?.content}
-                      placeholder="Write comment"
-                      onChangeText={handleChange('content')}
-                      onFocus={handleBlur('content')}
-                      error={errors.content}
-                      touched={touched.content}
-                    />
-                  </TouchableOpacity>
-                  <TouchableOpacity
-                    onPress={handleSubmit}
-                    style={{
-                      width: 50,
-                      height: 50,
-                      backgroundColor: backgroundColor,
-                      borderRadius: 30,
-                      justifyContent: 'center',
-                      alignItems: 'center',
-                    }}>
-                    <Ionicons name="send" color="white" size={25} />
-                  </TouchableOpacity>
+                    </TouchableOpacity>
+                  )}
                 </View>
               </View>
-            )}
 
-            <View>
-              {replies?.length > 0 && (
+              {isReplying && shouldShow && (
                 <View>
-                  {replies?.map(reply => (
-                    <Comments
-                      comment={reply}
-                      key={reply.id}
-                      replies={[]}
-                      currentUserId={currentUserId}
-                      deleteComment={deleteComment}
-                      activeComment={activeComment}
-                      setActiveComment={setActiveComment}
-                      parentId={comment?.comment_ID}
-                      parentName={comment?.comment_author}
-                      profile={profile}
-                      eventID={eventID}
-                      // deleteDiscusssionLoading={deleteDiscusssionLoading}
-                      postDiscussionByEvent={postDiscussionByEvent}
-                      discussionForumByIdentifier={discussionForumByIdentifier}
+                  <View style={{flexDirection: 'row', margin: 10}}>
+                    <Image
+                      style={{width: 50, height: 50, borderRadius: 30}}
+                      source={{
+                        uri: profile?.avatar,
+                      }}
                     />
-                  ))}
+                    <TouchableOpacity
+                      style={styles.textarea}
+                      onPress={setHideInput(false)}>
+                      <TextInput
+                        multiline={true}
+                        numberOfLines={2}
+                        value={values?.content}
+                        placeholder="Write comment"
+                        onChangeText={handleChange('content')}
+                        onFocus={handleBlur('content')}
+                        error={errors.content}
+                        touched={touched.content}
+                      />
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                      onPress={handleSubmit}
+                      style={{
+                        width: 50,
+                        height: 50,
+                        backgroundColor: backgroundColor,
+                        borderRadius: 30,
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                      }}>
+                      <Ionicons name="send" color="white" size={25} />
+                    </TouchableOpacity>
+                  </View>
                 </View>
               )}
+
+              <View>
+                {replies?.length > 0 && (
+                  <View>
+                    {replies?.map(reply => (
+                      <Comments
+                        comment={reply}
+                        key={reply.id}
+                        replies={[]}
+                        currentUserId={currentUserId}
+                        deleteComment={deleteComment}
+                        activeComment={activeComment}
+                        setActiveComment={setActiveComment}
+                        parentId={comment?.comment_ID}
+                        parentName={comment?.comment_author}
+                        profile={profile}
+                        eventID={eventID}
+                        // deleteDiscusssionLoading={deleteDiscusssionLoading}
+                        postDiscussionByEvent={postDiscussionByEvent}
+                        discussionForumByIdentifier={
+                          discussionForumByIdentifier
+                        }
+                      />
+                    ))}
+                  </View>
+                )}
+              </View>
             </View>
           </View>
-        </View>
+        </TouchableOpacity>
       </TouchableWithoutFeedback>
     </>
   );
