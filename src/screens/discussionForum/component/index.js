@@ -18,6 +18,8 @@ import {
 import {Button} from 'react-native-paper';
 import {useFormik} from 'formik';
 import {useFocusEffect, useIsFocused} from '@react-navigation/native';
+import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
+
 import Loading from '../../../shared/loading';
 import {CommonStyles, Colors, Typography} from '../../../theme';
 import Comments from '../../../shared/comment';
@@ -411,7 +413,8 @@ const Discussion = props => {
 export default Discussion;
 
 const styles = StyleSheet.create({
-  container: {},
+  container: {
+  },
   forum: {
     width: Dimensions.get('window').width,
     borderRadius: 10,

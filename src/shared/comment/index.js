@@ -11,6 +11,7 @@ import {
   Keyboard,
 } from 'react-native';
 import {useFormik} from 'formik';
+import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import {Button} from 'react-native-paper';
 import Loading from '../loading';
 import Ionicons from 'react-native-vector-icons/Ionicons';
@@ -38,7 +39,7 @@ const Comments = ({
   backgroundColor,
   setHideInput,
   shouldShow,
-  setShouldShow
+  setShouldShow,
 }) => {
   const fiveMinutes = 300000;
   const timePassed = new Date() - new Date(comment?.comment_date) > fiveMinutes;
@@ -133,18 +134,19 @@ const Comments = ({
     <>
       {deleteDiscusssionLoading && <Loading />}
       {postDiscussionLoading && <Loading />}
-      <TouchableWithoutFeedback
+      <KeyboardAwareScrollView
         onPress={() => {
           Keyboard.dismiss;
         }}
         accessible={false}>
         <TouchableOpacity
           activeOpacity={1}
+          style={{flex: 1}}
           onPress={() => {
             setHideInput(true);
             setShouldShow(false);
           }}>
-          <View style={{flexDirection: 'row'}}>
+          <View style={{flexDirection: 'row', flex: 1}}>
             <Image
               style={{
                 width: 50,
@@ -318,7 +320,7 @@ const Comments = ({
             </View>
           </View>
         </TouchableOpacity>
-      </TouchableWithoutFeedback>
+      </KeyboardAwareScrollView>
     </>
   );
 };
@@ -327,7 +329,7 @@ export default Comments;
 const styles = StyleSheet.create({
   textarea: {
     width: '50%',
-    padding: 5,
+    height: 50,
     fontSize: 16,
     borderWidth: 0.2,
     borderRadius: 5,

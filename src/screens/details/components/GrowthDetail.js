@@ -70,11 +70,6 @@ const GrowthDetail = props => {
     fetchProfile,
     cleanProfile,
 
-    sendEmail,
-    sendEmailLoading,
-    sendEmailError,
-    GDPButton,
-    cleanGDPButton,
   } = props;
 
   const toast = useToast();
@@ -138,17 +133,6 @@ const GrowthDetail = props => {
     );
   }
 
-  const GrowthPipelineDialogueButton = async () => {
-    const response = await GDPButton({});
-    console.log('asfdfa', response);
-    if (response?.payload?.code === 200) {
-      // setStatus(true);
-      ToastMessage.show(response.payload.data);
-    } else {
-      toast.closeAll();
-      ToastMessage.show(response?.payload?.message);
-    }
-  };
 
   const GrowthCoachingSignup = async () => {
     const response = await signupCoachingSession({});
@@ -340,33 +324,7 @@ const GrowthDetail = props => {
                 </TouchableOpacity>
               </View>
 
-              <View
-                style={{
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                  marginBottom: 10,
-                  paddingHorizontal: 15,
-                }}>
-                {sendEmailLoading && <Loading />}
-                {!emailStatus && (
-                  <Button
-                    style={[styles.emailButton]}
-                    onPress={async () => {
-                      GrowthPipelineDialogueButton();
-                    }}>
-                    <Text style={styles.acceptButtonText}>
-                      Growth Pipeline Dialogue
-                    </Text>
-                  </Button>
-                )}
-                {emailStatus && (
-                  <TouchableOpacity style={styles.sendRegisterButton}>
-                    <Text style={styles.emailButtonText}>
-                      Growth Pipeline Dialogue
-                    </Text>
-                  </TouchableOpacity>
-                )}
-              </View>
+              
 
               {coachingSessionLoading && <Loading />}
 

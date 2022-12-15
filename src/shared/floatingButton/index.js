@@ -107,24 +107,6 @@ const FloatingButton = props => {
 
   return (
     <View style={styles.container}>
-      {isAlertVisible && (
-        <View
-          style={{
-            alignItems: 'center',
-            justifyContent: 'center',
-            position: 'absolute',
-            bottom: 80,
-            left: 120,
-            backgroundColor: PRACTICE_COLOR,
-            marginBottom: 10,
-            width: 190,
-            height: 40,
-            borderRadius: 10,
-            opacity: 0.7,
-          }}>
-          <Text style={{color: 'white'}}>Growth Pipeline Dialog </Text>
-        </View>
-      )}
       <PanGestureHandler
         minDist={10}
         ref={panRef}
@@ -148,6 +130,24 @@ const FloatingButton = props => {
                   ],
                 },
               ]}>
+              {isAlertVisible && (
+                <View
+                  style={{
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    position: 'absolute',
+                    bottom: 40,
+                    right: 50,
+                    backgroundColor: PRACTICE_COLOR,
+                    marginBottom: 10,
+                    width: 190,
+                    height: 40,
+                    borderRadius: 10,
+                    opacity: 0.7,
+                  }}>
+                  <Text style={{color: 'white'}}>Growth Pipeline Dialog </Text>
+                </View>
+              )}
               <TouchableOpacity
                 onPress={() => {
                   setModalVisible(true);
@@ -159,7 +159,7 @@ const FloatingButton = props => {
                     width: 60,
                     height: 60,
                     marginLeft: 20,
-                 
+                    opacity: 0.5,
                   }}
                   resizeMode="contain"
                 />
@@ -261,7 +261,7 @@ const styles = StyleSheet.create({
     // alignItems: 'center',
     alignItems: 'flex-end',
     justifyContent: 'center',
-    opacity: 0.5,
+
     position: 'absolute',
     bottom: 50,
     right: -160,

@@ -74,11 +74,7 @@ const CommunityDetail = props => {
     GetIdBySlug,
     cleanSlug,
 
-    sendEmail,
-    sendEmailLoading,
-    sendEmailError,
-    GDPButton,
-    cleanGDPButton,
+  
   } = props;
 
   const isFocused = useIsFocused();
@@ -132,17 +128,7 @@ const CommunityDetail = props => {
     }, [isFocused]),
   );
 
-  const GrowthPipelineDialogueButton = async () => {
-    const response = await GDPButton({});
-    console.log('asfdfa', response);
-    if (response?.payload?.code === 200) {
-      // setStatus(true);
-      ToastMessage.show(response.payload.data);
-    } else {
-      toast.closeAll();
-      ToastMessage.show(response?.payload?.message);
-    }
-  };
+
 
   //   useEffect(() => {
   //  GetIdBySlug({
@@ -534,33 +520,7 @@ const CommunityDetail = props => {
                   }}
                 />
               </View>
-              <View
-                style={{
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                  marginTop: 10,
-                  padding: 15,
-                }}>
-                {sendEmailLoading && <Loading />}
-                {!emailStatus && (
-                  <Button
-                    style={[styles.emailButton]}
-                    onPress={async () => {
-                      GrowthPipelineDialogueButton();
-                    }}>
-                    <Text style={styles.acceptButtonText}>
-                      Growth Pipeline Dialogue
-                    </Text>
-                  </Button>
-                )}
-                {emailStatus && (
-                  <TouchableOpacity style={styles.sendRegisterButton}>
-                    <Text style={styles.emailButtonText}>
-                      Growth Pipeline Dialogue
-                    </Text>
-                  </TouchableOpacity>
-                )}
-              </View>
+              
               {poeDetails !== null &&
                 pillarPOEs !== null &&
                 pillarPOEs !== false &&

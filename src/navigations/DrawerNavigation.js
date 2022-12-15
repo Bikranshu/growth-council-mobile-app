@@ -234,7 +234,7 @@ const DrawerNavigation = () => {
       />
 
       <Drawer.Screen
-        name="Growth Pipeline Dailog"
+        name="Growth Pipeline Dialog"
         component={GPDScreen}
         options={({navigation, route}) => ({
           drawerIcon: ({focused, size}) => (
@@ -246,7 +246,7 @@ const DrawerNavigation = () => {
           ),
           header: () => (
             <SubHeader
-              title="Growth Pipeline Dailog"
+              title="Growth Pipeline Dialog"
               image={require('../assets/img/Rectangle2.png')}
               navigation={navigation}
             />

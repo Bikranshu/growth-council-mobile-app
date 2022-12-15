@@ -45,11 +45,7 @@ const ContentLibraryDetail = props => {
     fetchContentLibraryDetail,
     cleanContentLibraryDetail,
 
-    sendEmail,
-    sendEmailLoading,
-    sendEmailError,
-    sendEmailThroughButtons,
-    cleanSendEmail,
+   
   } = props;
 
   const isFocused = useIsFocused();
@@ -63,16 +59,7 @@ const ContentLibraryDetail = props => {
   );
 
   const [emailStatus, setEmailStatus] = useState(false);
-  const GrowthPipelineDialogueButton = async () => {
-    const response = await sendEmailThroughButtons({});
-    if (response?.payload?.code === 200) {
-      setEmailStatus(true);
-      ToastMessage.show(response.payload.message);
-    } else {
-      toast.closeAll();
-      ToastMessage.show(response?.payload?.message);
-    }
-  };
+ 
 
   const [isTrue, setIsTrue] = useState(true);
 
@@ -485,33 +472,7 @@ const ContentLibraryDetail = props => {
                 />
               </View>
             )}
-          <View
-            style={{
-              justifyContent: 'center',
-              alignItems: 'center',
-              marginTop: 10,
-              paddingHorizontal: 5,
-            }}>
-            {sendEmailLoading && <Loading />}
-            {!emailStatus && (
-              <Button
-                style={[styles.emailButton]}
-                onPress={async () => {
-                  GrowthPipelineDialogueButton();
-                }}>
-                <Text style={styles.acceptButtonText}>
-                  Growth Pipeline Dialogue
-                </Text>
-              </Button>
-            )}
-            {emailStatus && (
-              <TouchableOpacity style={styles.sendRegisterButton}>
-                <Text style={styles.emailButtonText}>
-                  Growth Pipeline Dialogue
-                </Text>
-              </TouchableOpacity>
-            )}
-          </View>
+          
           {/* Article Feedback Section */}
           <View style={{marginTop: 20}}>
             <ArticleFeedbackCard
