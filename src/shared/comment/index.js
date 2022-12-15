@@ -28,6 +28,7 @@ const Comments = ({
   parentName,
   profile,
   eventID,
+  setParentDetails,
   deleteDiscusssionLoading,
   postDiscussionByEvent,
   postDiscussionLoading,
@@ -44,7 +45,7 @@ const Comments = ({
 
   const replyId = parentId ? parentId : comment?.comment_ID;
   const [friendToken, setFriendToken] = useState('');
-  const [parentDetails, setParentDetails] = useState();
+
   const [parentUserId, setparentUserId] = useState(
     replyId === comment?.comment_ID
       ? comment?.comment_parent === '0'
@@ -52,6 +53,7 @@ const Comments = ({
         : ''
       : '',
   );
+
 
   useEffect(() => {
     setparentUserId(
@@ -63,14 +65,13 @@ const Comments = ({
     );
   }, []);
   useEffect(() => {
-    console.log({parentUserId});
     getFCMTOkenForUser(parentUserId)
       .then(res => {
         const token = res.data.data;
         if (token == null) {
           console.log(res.data?.message);
         }
-        console.log('token', token);
+        // console.log('token', token);
         setFriendToken(typeof token == 'string' ? token : token?.[0]);
       })
 
@@ -78,6 +79,8 @@ const Comments = ({
         console.log(error);
       });
   }, []);
+
+  
   const {
     handleChange,
     handleBlur,
@@ -175,12 +178,19 @@ const Comments = ({
               {canReply && (
                 <TouchableOpacity
                   style={{marginLeft: '50%'}}
-                  onPress={() =>
+                  onPress={() => {
                     setActiveComment({
                       id: comment?.comment_ID,
                       type: 'replying',
-                    })
-                  }>
+                    });
+                    setParentDetails(
+                      activeComment?.id === comment?.comment_ID
+                        ? comment?.comment_parent === '0'
+                          ? comment
+                          : ''
+                        : '',
+                    );
+                  }}>
                   <View style={{flexDirection: 'row'}}>
                     <Entypo
                       name="reply"
@@ -223,7 +233,7 @@ const Comments = ({
               )}
             </View>
           </View>
-          {isReplying && (
+          {/* {isReplying && (
             <View>
               <View style={{flexDirection: 'row', margin: 10}}>
                 <Image
@@ -254,7 +264,7 @@ const Comments = ({
                 </TouchableOpacity>
               </View>
             </View>
-          )}
+          )} */}
 
           <View>
             {replies?.length > 0 && (

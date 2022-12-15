@@ -18,7 +18,9 @@ import {useFocusEffect, useIsFocused} from '@react-navigation/native';
 import Loading from '../../../shared/loading';
 import {CommonStyles, Colors, Typography} from '../../../theme';
 import Comments from '../../../shared/comment';
-import Feather from 'react-native-vector-icons/Feather';
+import Entypo from 'react-native-vector-icons/Entypo';
+import {getFCMTOkenForUser} from '../../../utils/httpUtil';
+import {sendNotification} from '../../../utils/sendNotification';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import moment from 'moment-timezone';
@@ -57,6 +59,7 @@ const Discussion = props => {
   const isFocused = useIsFocused();
   const [backendComments, setBackendComments] = useState([]);
   const [activeComment, setActiveComment] = useState(null);
+  const [parentDetails, setParentDetails] = useState({});
 
   const rootComments = backendComments?.filter(
     backendComment => backendComment?.comment_parent === '0',
@@ -66,7 +69,9 @@ const Discussion = props => {
       backendComments => backendComments?.comment_parent === replyID,
     );
   };
+  const replyid = parentDetails?.comment_ID;
 
+  console.log('parentDetails',  replyid);
   const {
     handleChange,
     handleBlur,
@@ -82,11 +87,11 @@ const Discussion = props => {
       author_email: profile?.user_email,
       content: '',
       author_id: profile?.ID,
-      parent_id: '0',
+      parent_id: replyid,
     },
     onSubmit: async values => {
+      console.log({values});
       await postDiscussionByEvent(values).then(response => {
-        console.log(response);
         if (response?.payload?.code === 200) {
           console.log(response);
           discussionForumByIdentifier({
@@ -95,6 +100,7 @@ const Discussion = props => {
         }
       });
       resetForm(values?.content);
+  
     },
   });
 
@@ -122,13 +128,13 @@ const Discussion = props => {
     }, [isFocused]),
   );
 
-  useEffect(() => {
-    setInterval(() => {
-      discussionForumByIdentifier({
-        event_id: eventID,
-      });
-    }, 10000);
-  }, []);
+  //   useEffect(() => {
+  //     setInterval(() => {
+  //       discussionForumByIdentifier({
+  //         event_id: eventID,
+  //       });
+  //     }, 10000);
+  //   }, []);
 
   useEffect(() => {
     setBackendComments(discussionForum);
@@ -139,7 +145,7 @@ const Discussion = props => {
       await fetchProfile();
     };
     fetchProfileAsync();
-  }, [isFocused]);
+  }, []);
 
   const backgroundColor =
     route?.params?.backgroundColor === undefined
@@ -147,8 +153,145 @@ const Discussion = props => {
       : route?.params?.backgroundColor;
   const actualDate = moment(route?.params?.eventDate).format('D MMMM, dddd');
   const actualTime = moment(route?.params?.eventDate).format('h:mma ');
+
+  const _renderItem = ({item, index}) => {
+    const fiveMinutes = 300000;
+    const timePassed = new Date() - new Date(item?.comment_date) > fiveMinutes;
+    const canReply = Boolean(profile?.ID);
+    const canDelete = profile?.ID === item?.user_id && !timePassed;
+
+    return (
+      <>
+        <View style={{flexDirection: 'row', margin: 10}}>
+          <Image
+            style={{
+              width: 50,
+              height: 50,
+              borderRadius: 30,
+              marginVertical: 10,
+            }}
+            source={{
+              uri: item?.avatar,
+            }}
+          />
+          <View style={{margin: 5, width: '100%', padding: 5}}>
+            <View style={[styles.commentSection, styles.shadowProp]}>
+              <View
+                style={{
+                  paddingBottom: 15,
+                  height: 'auto',
+                  minHeight: 50,
+                }}>
+                <View style={{flexDirection: 'row'}}>
+                  <Text style={{color: '#00008B', fontSize: 16}}>
+                    {item?.comment_author}
+                  </Text>
+                  <Text
+                    style={{
+                      color: 'grey',
+                      fontSize: 8,
+                      position: 'absolute',
+                      right: 1,
+                    }}>
+                    {item?.comment_date}
+                  </Text>
+                </View>
+
+                <Text style={{color: 'black', fontSize: 12}}>
+                  {item?.comment_content}
+                </Text>
+              </View>
+
+              <View
+                style={{
+                  flexDirection: 'row',
+                  position: 'relative',
+                  right: 0,
+                  borderTopWidth: 1,
+                  borderTopColor: '#EDF1F7',
+                }}>
+                {canReply && (
+                  <TouchableOpacity
+                    style={{marginLeft: '50%'}}
+                    onPress={() =>
+                      setActiveComment({
+                        id: item?.comment_ID,
+                        type: 'replying',
+                      })
+                    }>
+                    <View style={{flexDirection: 'row'}}>
+                      <Entypo
+                        name="reply"
+                        size={15}
+                        color="grey"
+                        style={{marginVertical: 10}}
+                      />
+                      <Text
+                        style={{
+                          color: 'grey',
+                          marginVertical: 10,
+                          fontSize: 10,
+                        }}>
+                        Reply
+                      </Text>
+                    </View>
+                  </TouchableOpacity>
+                )}
+                {canDelete && (
+                  <TouchableOpacity
+                    style={{marginLeft: 10}}
+                    onPress={() => deleteComment(item?.comment_ID)}>
+                    <View style={{flexDirection: 'row'}}>
+                      <Ionicons
+                        name="trash-bin"
+                        size={15}
+                        color="grey"
+                        style={{marginVertical: 10}}
+                      />
+                      <Text
+                        style={{
+                          color: 'grey',
+                          marginVertical: 10,
+                          fontSize: 10,
+                        }}>
+                        Delete
+                      </Text>
+                    </View>
+                  </TouchableOpacity>
+                )}
+              </View>
+            </View>
+
+            {/* <View>
+	  {replies?.length > 0 && (
+		<View>
+		  {replies?.map(reply => (
+			<Comments
+			  comment={reply}
+			  key={reply.id}
+			  replies={[]}
+			  currentUserId={currentUserId}
+			  deleteComment={deleteComment}
+			  activeComment={activeComment}
+			  setActiveComment={setActiveComment}
+			  parentId={comment?.comment_ID}
+			  parentName={comment?.comment_author}
+			  profile={profile}
+			  eventID={eventID}
+			  // deleteDiscusssionLoading={deleteDiscusssionLoading}
+			  postDiscussionByEvent={postDiscussionByEvent}
+			  discussionForumByIdentifier={discussionForumByIdentifier}
+			/>
+		  ))}
+		</View>
+	  )}
+	</View> */}
+          </View>
+        </View>
+      </>
+    );
+  };
   return (
-    // <ScrollView contentContainerStyle={{flexGrow: 1}}>
     <View style={styles.container}>
       <ImageBackground
         source={require('../../../assets/img/event_main_image.png')}
@@ -278,9 +421,6 @@ const Discussion = props => {
         </View>
 
         <View style={styles.forum}>
-          {/* <Text style={[styles.heading, {color: COMMUNITY_COLOR}]}>
-                {route?.params?.title}
-              </Text> */}
           <Text
             style={[styles.heading, {marginHorizontal: 10, marginVertical: 5}]}>
             Welcome to the Discussion Forum
@@ -295,6 +435,13 @@ const Discussion = props => {
               backgroundColor: Colors.PRIMARY_BACKGROUND_COLOR,
             }}>
             <View>
+              {/* <FlatList
+                vertical
+                showsVerticalScrollIndicator={false}
+                data={rootComments}
+                renderItem={_renderItem}
+              /> */}
+
               {rootComments?.map(rootComment => (
                 <Comments
                   key={rootComment?.comment_ID}
@@ -306,6 +453,7 @@ const Discussion = props => {
                   setActiveComment={setActiveComment}
                   profile={profile}
                   eventID={eventID}
+                  setParentDetails={setParentDetails}
                   deleteDiscusssionLoading={deleteDiscusssionLoading}
                   postDiscussionLoading={postDiscussionLoading}
                   postDiscussionByEvent={postDiscussionByEvent}
@@ -313,21 +461,42 @@ const Discussion = props => {
                 />
               ))}
             </View>
+
+            {/* {replies?.length > 0 && (
+              <View>
+                <FlatList
+                  vertical
+                  showsVerticalScrollIndicator={false}
+                  data={replies}
+                  renderItem={_renderItem}
+                />
+              </View>
+            )} */}
           </ScrollView>
 
           {/* //Comment Form */}
           <View
             style={{
-              height: 70,
-              justifyContent: 'center',
+              height: 100,
+              //   justifyContent: 'center',
               borderTopWidth: 0.2,
             }}>
+            {activeComment?.type === 'replying' && (
+              <View>
+                <Text style={{color: 'black'}}>
+                  {parentDetails?.comment_author}
+                </Text>
+                <Text style={{color: 'black'}}>
+                  {parentDetails?.comment_content}
+                </Text>
+              </View>
+            )}
             <View
               style={{
                 flexDirection: 'row',
                 backgroundColor: 'white',
                 position: 'absolute',
-                bottom: 10,
+                bottom: 0,
                 marginTop: 10,
                 justifyContent: 'center',
               }}>
@@ -362,7 +531,6 @@ const Discussion = props => {
         </View>
       </ImageBackground>
     </View>
-    // </ScrollView>
   );
 };
 
@@ -404,6 +572,24 @@ const styles = StyleSheet.create({
     borderRadius: 14,
     padding: 10,
     position: 'relative',
+  },
+  commentSection: {
+    width: '70%',
+    // borderWidth: 0.3,
+    padding: 10,
+    borderRadius: 10,
+
+    backgroundColor: 'white',
+  },
+  shadowProp: {
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
   },
 
   contentHeading: {
