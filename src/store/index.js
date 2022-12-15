@@ -101,6 +101,7 @@ import discussionForumReducer from '../screens/discussionForum/slice/discussionB
 import postDiscussionReducer from '../screens/discussionForum/slice/postDiscussionByEventIDSlice';
 import deleteDiscussionReducer from '../screens/discussionForum/slice/deleteDiscussionByEventIDSlice';
 import pastEventReducer from '../screens/discussionForum/slice/pastEventSlice';
+import GPPReducer from '../screens/GPD/GPDSlice';
 
 const persistConfig = {
   key: 'root',
@@ -185,6 +186,7 @@ const reducers = combineReducers({
   postDiscussion: postDiscussionReducer,
   deleteDiscussion: deleteDiscussionReducer,
   pastEvent: pastEventReducer,
+  GDP: GPPReducer,
 });
 
 const persistedReducer = persistReducer(persistConfig, reducers);

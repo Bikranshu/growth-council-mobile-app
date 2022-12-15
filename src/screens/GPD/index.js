@@ -1,4 +1,5 @@
-import React, {useCallback, useState} from 'react';
+import React, {useCallback, useState, useEffect} from 'react';
+import {useDispatch, useSelector} from 'react-redux';
 import {
   Platform,
   Text,
@@ -13,11 +14,29 @@ import {
 } from 'react-native';
 import {Button} from 'native-base';
 import FloatingButton from '../../shared/floatingButton';
-import {useDispatch, useSelector} from 'react-redux';
 import HTMLView from 'react-native-htmlview';
 import {CommonStyles, Colors, Typography} from '../../theme';
+import {fetchGrowthPipeline, resetGrowthPipeline} from './GPDSlice';
+import Loading from '../../shared/loading';
 
 const GPDScreen = props => {
+  const dispatch = useDispatch();
+
+  const {GDP, GDPLoading, GDPError} = useSelector(state => state.GDP);
+
+  // fetch about data
+  useEffect(() => {
+    dispatch(fetchGrowthPipeline());
+  }, []);
+
+  console.log({GDP});
+
+  let content1 = GDP?.content1;
+  if (content1 !== undefined) {
+    content1 = GDP?.content1;
+  } else {
+    content1 = '';
+  }
   return (
     <View style={{flex: 1}}>
       <StatusBar
@@ -33,13 +52,22 @@ const GPDScreen = props => {
               <Text style={styles.titleText}>Growth Pipeline Dialog</Text>
               <View style={styles.titleBorder}></View>
             </View>
+            {GDPLoading && <Loading />}
             <View>
-              <Text
+              <HTMLView
+                value={content1}
+                textComponentProps={{
+                  style: {
+                    fontSize: 14,
+                    paddingBottom: 30,
+                    textAlign: 'justify',
+                    whiteSpace: 'pre-wrap',
+                  },
+                }}
+              />
+              {/* <Text
                 style={{
-                  fontSize: 14,
-                  paddingBottom: 30,
-                  textAlign: 'justify',
-                  whiteSpace: 'pre-wrap',
+                  
                 }}>
                 The Growth Innovation Leadership Council`s mission is to enable
                 exacutive to achieve transformational growth fo themselves,
@@ -58,7 +86,7 @@ const GPDScreen = props => {
                 content on the portal. Setting the Critical Issues Agendais akey
                 role in ensuring the content for the Council is driven by its
                 members.
-              </Text>
+              </Text> */}
             </View>
           </View>
         </View>
