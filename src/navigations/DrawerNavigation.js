@@ -254,7 +254,7 @@ const DrawerNavigation = () => {
         })}
       />
 
-      <Drawer.Screen
+      {/* <Drawer.Screen
         name="Discussion Board"
         component={EventForumScreen}
         options={({navigation}) => ({
@@ -273,7 +273,7 @@ const DrawerNavigation = () => {
             />
           ),
         })}
-      />
+      /> */}
       <Drawer.Screen
         name="Calendar"
         component={CalendarScreen}

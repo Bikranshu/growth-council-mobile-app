@@ -146,6 +146,14 @@ const FloatingButton = props => {
                     opacity: 0.7,
                   }}>
                   <Text style={{color: 'white'}}>Growth Pipeline Dialog </Text>
+                  <TouchableOpacity
+                    onPress={() =>
+                      navigation.navigate('Growth Pipeline Dialog')
+                    }>
+                    <Text style={{color: 'white', fontSize: 10}}>
+                      Learn More
+                    </Text>
+                  </TouchableOpacity>
                 </View>
               )}
               <TouchableOpacity
