@@ -7,7 +7,7 @@ import {
   FlatList,
   TouchableOpacity,
   Dimensions,
-  Modal
+  Modal,
 } from 'react-native';
 import moment from 'moment';
 import LinearGradient from 'react-native-linear-gradient';
@@ -45,7 +45,7 @@ const Quote = props => {
             <LinearGradient
               start={{x: 0.697, y: -0.943}}
               end={{x: 0.413, y: 2.24}}
-              colors={['#58AFF6', '#002651']}
+              colors={['#E27741', '#3982C0']}
               style={styles.quote}>
               <View>
                 <Text
@@ -117,7 +117,6 @@ const Quote = props => {
               flex: 1,
               justifyContent: 'center',
               alignItems: 'center',
-
             }}>
             <LinearGradient
               start={{x: 0.697, y: -0.943}}
@@ -208,7 +207,5 @@ const styles = StyleSheet.create({
     zIndex: 9,
     position: 'relative',
   },
-
-
 });
 export default Quote;
