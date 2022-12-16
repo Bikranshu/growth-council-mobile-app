@@ -633,6 +633,7 @@ const Dashboard = props => {
               <View
                 style={{
                   alignItems: 'center',
+                  marginTop: 10,
                 }}>
                 <Quote
                   dailyQuote={dailyQuote}
@@ -774,7 +775,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     marginLeft: 10,
     marginRight: 10,
-    marginTop: 15,
+    marginTop: 5,
     marginBottom: 10,
     justifyContent: 'space-between',
   },
