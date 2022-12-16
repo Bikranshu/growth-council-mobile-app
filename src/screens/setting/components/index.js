@@ -249,13 +249,29 @@ const Setting = props => {
                 borderWidth: 1,
                 borderColor: '#707070',
               }}>
-              <View style={styles.icon}>
-                <Image
-                  source={{uri: profile.avatar}}
-                  style={{width: '100%', height: '100%'}}
-                  resizeMode="cover"
-                />
-              </View>
+              {profile?.um_member_directory_data?.profile_photo === true ? (
+                <View style={styles.icon}>
+                  <Image
+                    source={{
+                      uri:
+                        profile?.um_profile_image +
+                        profile?.user_meta?.profile_photo[0],
+                    }}
+                    style={{width: '100%', height: '100%'}}
+                    resizeMode="cover"
+                  />
+                </View>
+              ) : (
+                <View style={styles.icon}>
+                  <Image
+                    source={{
+                      uri: 'https://staging.gilcouncil.com/wp-content/plugins/ultimate-member/assets/img/default_avatar.jpg',
+                    }}
+                    style={{width: '100%', height: '100%'}}
+                    resizeMode="cover"
+                  />
+                </View>
+              )}
               <View style={styles.header}>
                 <Text style={styles.headingText1}>{profile?.user_login}</Text>
                 <Text style={{color: '#222B45'}}>
