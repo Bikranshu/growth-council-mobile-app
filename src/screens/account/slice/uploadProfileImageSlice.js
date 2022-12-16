@@ -5,7 +5,7 @@ import {uploadImage} from '../../../utils/httpUtil';
 export const uploadProfileImage = createAsyncThunk(
   'profile_image/upload',
   (formData, {rejectWithValue}) => {
-    return uploadImage(`wp/v2/media`, formData)
+    return uploadImage(`jwt-auth/v1/user/new_image_upload`, formData)
       .then(response => response.data)
       .catch(error => rejectWithValue(error?.response?.data || error));
   },

@@ -154,6 +154,7 @@ const ManageAccount = props => {
         uri: Platform.OS === 'ios' ? `file:///${image.path}` : image.path,
         name: 'profile_photo.jpg',
       };
+      console.log(image);
       fd.append('file', file);
       setImageDetail(fd);
 
@@ -181,7 +182,10 @@ const ManageAccount = props => {
         type: image.mime,
         uri: Platform.OS === 'ios' ? `file:///${image.path}` : image.path,
         name: 'profile_photo.jpg',
+        width: image?.cropRect?.width,
+        height: image?.cropRect?.height,
       };
+      console.log(image.cropRect);
       fd.append('file', file);
       setImageDetail(fd);
     });
@@ -214,16 +218,21 @@ const ManageAccount = props => {
       await updateUser(values).then(async response => {
         //image upload code
         await uploadImage(imageDetail).then(async response => {
-          await updateImage({attachment_id: response?.payload?.id}).then(
-            response => {
-              if (response?.payload?.code === 200) {
-                navigation.navigate('Account');
-                // ToastMessage.show(
-                //   'Your profile has been successfully updated.',
-                // );
-              }
-            },
-          );
+          console.log(response);
+          if (response?.payload?.success === true) {
+            navigation.navigate('Account');
+            console.log('Your image has been successfully updated.');
+          }
+          //   await updateImage({attachment_id: response?.payload?.id}).then(
+          //     response => {
+          //       if (response?.payload?.code === 200) {
+          //         navigation.navigate('Account');
+          //         // ToastMessage.show(
+          //         //   'Your profile has been successfully updated.',
+          //         // );
+          //       }
+          //     },
+          //   );
         });
         if (response?.payload?.code === 200) {
           navigation.navigate('Account');
@@ -351,7 +360,7 @@ const ManageAccount = props => {
                     </View>
                   </>
                 )}
-                {updateLoading && (
+                {/* {updateLoading && (
                   <>
                     <View style={styles.loading1}>
                       <BubblesLoader
@@ -360,7 +369,7 @@ const ManageAccount = props => {
                       />
                     </View>
                   </>
-                )}
+                )} */}
                 <Text style={styles.headingText1}>{profile?.user_login}</Text>
                 <Text style={{color: '#222B45'}}>
                   {profile?.user_meta?.title === undefined
