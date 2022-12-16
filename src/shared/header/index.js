@@ -17,26 +17,16 @@ const HeaderTitle = props => {
 
   return (
     <View style={{marginLeft: 10, width: '80%'}}>
-      {title === undefined ? (
+     
         <Text
           style={{
             color: 'white',
-            fontSize: Platform.OS === 'ios' ? 10 : 12,
+            fontSize: Platform.OS === 'ios' ? 14 : 16,
             fontFamily: Typography.FONT_SF_MEDIUM,
           }}>
-          Hello,
+          Hello, {title === undefined ? profile?.user_login : title}
         </Text>
-      ) : (
-        <></>
-      )}
-      <Text
-        style={{
-          fontFamily: Typography.FONT_SF_MEDIUM,
-          color: 'white',
-          fontSize: Platform.OS === 'ios' ? 16 : 18,
-        }}>
-        {title === undefined ? profile?.user_login : title}
-      </Text>
+      
     </View>
   );
 };
