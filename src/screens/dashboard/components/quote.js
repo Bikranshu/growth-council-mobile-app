@@ -2,29 +2,15 @@ import React, {useCallback, useState} from 'react';
 import {
   StyleSheet,
   View,
-  Image,
   Text,
-  ImageBackground,
   ScrollView,
   FlatList,
   TouchableOpacity,
-  SafeAreaView,
-  StatusBar,
   Dimensions,
-  Button,
-  Modal,
-  Pressable,
-  Alert,
+  Modal
 } from 'react-native';
 import moment from 'moment';
 import LinearGradient from 'react-native-linear-gradient';
-import {CommonStyles, Colors, Typography} from '../../../theme';
-import {
-  COACHING_COLOR,
-  COMMUNITY_COLOR,
-  PRACTICE_COLOR,
-  PRIMARY_BACKGROUND_COLOR,
-} from '../../../theme/colors';
 
 const win = Dimensions.get('window');
 

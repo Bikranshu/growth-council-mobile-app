@@ -8,11 +8,9 @@ import {
   ScrollView,
   FlatList,
   TouchableOpacity,
-  SafeAreaView,
   StatusBar,
   Dimensions,
   Platform,
-  Alert,
   BackHandler,
 } from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
@@ -20,10 +18,7 @@ import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import {BlurView} from '@react-native-community/blur';
 import moment from 'moment';
 import {
-  NavigationContainer,
-  useIsFocused,
   useNavigation,
-  useNavigationContainerRef,
 } from '@react-navigation/native';
 
 import analytics from '@react-native-firebase/analytics';
@@ -41,8 +36,7 @@ import messaging from '@react-native-firebase/messaging';
 
 import {
   GROWTH_COMMUNITY_ID,
-  GROWTH_CONTENT_ID,
-  USER_REGION,
+  GROWTH_CONTENT_ID
 } from '../../../constants';
 import Quote from './quote';
 
