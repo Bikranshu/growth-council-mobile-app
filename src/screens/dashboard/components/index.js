@@ -17,9 +17,7 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import {BlurView} from '@react-native-community/blur';
 import moment from 'moment';
-import {
-  useNavigation,
-} from '@react-navigation/native';
+import {useNavigation} from '@react-navigation/native';
 
 import analytics from '@react-native-firebase/analytics';
 import Material from 'react-native-vector-icons/MaterialIcons';
@@ -34,10 +32,7 @@ import FloatingButton from '../../../shared/floatingButton';
 import {useFocusEffect} from '@react-navigation/native';
 import messaging from '@react-native-firebase/messaging';
 
-import {
-  GROWTH_COMMUNITY_ID,
-  GROWTH_CONTENT_ID
-} from '../../../constants';
+import {GROWTH_COMMUNITY_ID, GROWTH_CONTENT_ID} from '../../../constants';
 import Quote from './quote';
 
 const win = Dimensions.get('window').width;
@@ -590,6 +585,7 @@ const Dashboard = props => {
       </>
     );
   };
+  console.log(Dimensions.get('screen').height / 10);
   return (
     <View style={{flex: 1}}>
       <StatusBar
@@ -612,14 +608,14 @@ const Dashboard = props => {
           }
         }}
         contentContainerStyle={{
-          flexGrow: 1,
+          //   flexGrow: 1,
           backgroundColor: Colors.PRIMARY_BACKGROUND_COLOR,
         }}>
         <View>
           <View>
             <ImageBackground
               style={{
-                width: '100%',
+                // width: '100%',
                 height: (Dimensions.get('screen').height - 180) / 2,
                 paddingTop: Dimensions.get('screen').height / 10,
               }}
@@ -758,9 +754,9 @@ const Dashboard = props => {
 
 const styles = StyleSheet.create({
   container: {
-    ...CommonStyles.container,
+    // ...CommonStyles.container,
     backgroundColor: Colors.PRIMARY_BACKGROUND_COLOR,
-    width: '100%',
+    // width: '100%',
     marginBottom: 40,
   },
 
@@ -769,7 +765,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     marginLeft: 10,
     marginRight: 10,
-    marginTop: 5,
+    marginTop: 10,
     marginBottom: 10,
     justifyContent: 'space-between',
   },
