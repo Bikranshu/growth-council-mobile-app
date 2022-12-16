@@ -167,7 +167,7 @@ const FloatingButton = props => {
                     width: 60,
                     height: 60,
                     marginLeft: 20,
-                    opacity: 0.5,
+                    opacity: 0.8,
                   }}
                   resizeMode="contain"
                 />
