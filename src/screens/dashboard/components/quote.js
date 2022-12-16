@@ -136,7 +136,7 @@ const Quote = props => {
             <LinearGradient
               start={{x: 0.697, y: -0.943}}
               end={{x: 0.413, y: 2.24}}
-              colors={['#58AFF6', '#002651']}
+              colors={['#E27741', '#3982C0']}
               style={{
                 margin: 20,
                 backgroundColor: 'white',
