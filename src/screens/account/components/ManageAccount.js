@@ -73,7 +73,7 @@ const ManageAccount = props => {
   const [open, setOpen] = useState(false);
   const [value, setValue] = useState([]);
   const [items, setItems] = useState([]);
-  const [image, setImage] = useState(profile.avatar);
+  const [image, setImage] = useState(profile?.avatar);
   const [imageDetail, setImageDetail] = useState();
 
   let title = profile?.user_meta?.title;
@@ -146,46 +146,32 @@ const ManageAccount = props => {
   const takePhotoFromCamera = () => {
     ImagePicker.openCamera({
       cropping: true,
+      cropperCircleOverlay: true,
     }).then(async image => {
       setImage(image.path);
       let fd = new FormData();
       const file = {
-        type: image.mime,
+        type: 'image/jpg',
         uri: Platform.OS === 'ios' ? `file:///${image.path}` : image.path,
         name: 'profile_photo.jpg',
       };
       console.log(image);
       fd.append('file', file);
       setImageDetail(fd);
-
-      //   await uploadImage(fd).then(async response => {
-      //     console.log('Upload response:::::::::::', response?.payload?.id);
-      //     await updateImage({attachment_id: response?.payload?.id}).then(
-      //       response => {
-      //         if (response?.payload?.code === 200) {
-      //           navigation.navigate('Account');
-      //           ToastMessage.show('Profile Image has been successfully updated.');
-      //           console.log('Update response::::::::::', response);
-      //         }
-      //       },
-      //     );
-      //   });
     });
   };
   const choosePhotoFromLibrary = () => {
     ImagePicker.openPicker({
       cropping: true,
+      cropperCircleOverlay: true,
     }).then(async image => {
       setImage(image.path);
       let fd = new FormData();
       const file = {
-        type: image.mime,
+        type: 'image/jpg',
         uri: Platform.OS === 'ios' ? `file:///${image.path}` : image.path,
         name: 'profile_photo.jpg',
-        width: image?.cropRect?.width,
-        height: image?.cropRect?.height,
       };
-      console.log(image.cropRect);
       fd.append('file', file);
       setImageDetail(fd);
     });
@@ -342,29 +328,15 @@ const ManageAccount = props => {
               </TouchableOpacity>
             </View>
             <View style={styles.profileWrapper}>
-              {profile?.um_member_directory_data?.profile_photo === true ? (
-                <View style={styles.icon}>
-                  <Image
-                    source={{
-                      uri:
-                        profile?.um_profile_image +
-                        profile?.user_meta?.profile_photo[0],
-                    }}
-                    style={{width: '100%', height: '100%'}}
-                    resizeMode="cover"
-                  />
-                </View>
-              ) : (
-                <View style={styles.icon}>
-                  <Image
-                    source={{
-                      uri: 'https://staging.gilcouncil.com/wp-content/plugins/ultimate-member/assets/img/default_avatar.jpg',
-                    }}
-                    style={{width: '100%', height: '100%'}}
-                    resizeMode="cover"
-                  />
-                </View>
-              )}
+              <View style={styles.icon}>
+                <Image
+                  source={{
+                    uri: image,
+                  }}
+                  style={{width: '100%', height: '100%'}}
+                  resizeMode="cover"
+                />
+              </View>
               <View style={styles.header}>
                 {uploadProfileImageLoading && (
                   <>

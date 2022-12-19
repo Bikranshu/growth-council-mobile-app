@@ -26,46 +26,18 @@ const HeaderRight = props => {
       <TouchableOpacity
         style={{height: 40, width: 40, borderRadius: 20}}
         onPress={() => navigation.navigate('Account')}>
-        {/* <Image
-          source={{
-            uri: profile?.avatar,
-          }}
-          style={{
-            height: 40,
-            width: 40,
-            borderRadius: 20,
-          }}
-        /> */}
-        {profile?.um_member_directory_data?.profile_photo === true ? (
-          <View>
-            <Image
-              source={{
-                uri:
-                  profile?.um_profile_image +
-                  profile?.user_meta?.profile_photo[0],
-              }}
-              style={{
-                height: 40,
-                width: 40,
-                borderRadius: 20,
-              }}
-          
-            />
-          </View>
-        ) : (
-          <View>
-            <Image
-              source={{
-                uri: 'https://staging.gilcouncil.com/wp-content/plugins/ultimate-member/assets/img/default_avatar.jpg',
-              }}
-              style={{
-                height: 40,
-                width: 40,
-                borderRadius: 20,
-              }}
-            />
-          </View>
-        )}
+        <View>
+          <Image
+            source={{
+              uri: profile?.avatar,
+            }}
+            style={{
+              height: 40,
+              width: 40,
+              borderRadius: 20,
+            }}
+          />
+        </View>
       </TouchableOpacity>
     </View>
   );

@@ -44,27 +44,27 @@ const Profile = props => {
 
   useEffect(() => {
     fetchProfileByIdentifier();
-  }, [isFocused]);
+  }, []);
 
-  useEffect(() => {
-    //We are showing the coundown timer for a given expiry date-time
-    //If you are making a quize type app then you need to make a simple timer
-    //which can be done by using the simple like given below
-    //that.setState({ totalDuration: 30 }); //which is 30 sec
-    var date = new Date();
-    //Getting the current date-time with required formate and UTC
-    var expirydate = '2022-12-23 04:00:45'; //You can set your own date-time
-    //Let suppose we have to show the countdown for above date-time
-    var diffr = moment.duration(moment(expirydate).diff(moment(date)));
-    //difference of the expiry date-time given and current date-time
-    var hours = parseInt(diffr.asHours());
-    var minutes = parseInt(diffr.minutes());
-    var seconds = parseInt(diffr.seconds());
-    var d = hours * 60 * 60 + minutes * 60 + seconds;
-    //converting in seconds
-    setTotalDuration(d);
-    //Settign up the duration of countdown in seconds to re-render
-  }, [profile]);
+  //   useEffect(() => {
+  //     //We are showing the coundown timer for a given expiry date-time
+  //     //If you are making a quize type app then you need to make a simple timer
+  //     //which can be done by using the simple like given below
+  //     //that.setState({ totalDuration: 30 }); //which is 30 sec
+  //     var date = new Date();
+  //     //Getting the current date-time with required formate and UTC
+  //     var expirydate = '2022-12-23 04:00:45'; //You can set your own date-time
+  //     //Let suppose we have to show the countdown for above date-time
+  //     var diffr = moment.duration(moment(expirydate).diff(moment(date)));
+  //     //difference of the expiry date-time given and current date-time
+  //     var hours = parseInt(diffr.asHours());
+  //     var minutes = parseInt(diffr.minutes());
+  //     var seconds = parseInt(diffr.seconds());
+  //     var d = hours * 60 * 60 + minutes * 60 + seconds;
+  //     //converting in seconds
+  //     setTotalDuration(d);
+  //     //Settign up the duration of countdown in seconds to re-render
+  //   }, [profile]);
 
   return (
     <View style={{flex: 1}}>
@@ -138,29 +138,13 @@ const Profile = props => {
               </TouchableOpacity>
             </View>
             <View style={styles.profileWrapper}>
-              {profile?.um_member_directory_data?.profile_photo === true ? (
-                <View style={styles.icon}>
-                  <Image
-                    source={{
-                      uri:
-                        profile?.um_profile_image +
-                        profile?.user_meta?.profile_photo[0],
-                    }}
-                    style={{width: '100%', height: '100%'}}
-                    resizeMode="cover"
-                  />
-                </View>
-              ) : (
-                <View style={styles.icon}>
-                  <Image
-                    source={{
-                      uri: 'https://staging.gilcouncil.com/wp-content/plugins/ultimate-member/assets/img/default_avatar.jpg',
-                    }}
-                    style={{width: '100%', height: '100%'}}
-                    resizeMode="cover"
-                  />
-                </View>
-              )}
+              <View style={styles.icon}>
+                <Image
+                  source={{uri: profile.avatar}}
+                  style={{width: '100%', height: '100%'}}
+                  resizeMode="cover"
+                />
+              </View>
               <View style={styles.header}>
                 <Text style={styles.headingText1}>{profile?.user_login}</Text>
                 <Text style={{color: '#222B45'}}>

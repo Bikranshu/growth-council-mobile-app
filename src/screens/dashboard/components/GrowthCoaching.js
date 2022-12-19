@@ -517,7 +517,7 @@ const GrowthCoaching = props => {
               </View>
             )}
 
-          {pillarEventLoading && (
+          {pillarPOELoading && (
             <View style={{marginTop: 40}}>
               <Loading />
             </View>
