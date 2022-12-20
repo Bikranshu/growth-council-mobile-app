@@ -585,7 +585,6 @@ const Dashboard = props => {
       </>
     );
   };
-  console.log(Dimensions.get('screen').height / 10);
   return (
     <View style={{flex: 1}}>
       <StatusBar
