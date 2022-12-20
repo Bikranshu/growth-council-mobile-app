@@ -70,14 +70,6 @@ const Setting = props => {
     notificationOptions?.discussion_board_notification === '0' ? false : true,
   );
 
-  console.log(
-    'contentEnabled',
-    contentEnabled,
-    'eventEnabled',
-    eventEnabled,
-    'memberEnabled',
-    memberEnabled,
-  );
   const {
     handleChange,
     handleBlur,
@@ -256,6 +248,7 @@ const Setting = props => {
                   resizeMode="cover"
                 />
               </View>
+
               <View style={styles.header}>
                 <Text style={styles.headingText1}>{profile?.user_login}</Text>
                 <Text style={{color: '#222B45'}}>
