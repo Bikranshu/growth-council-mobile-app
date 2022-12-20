@@ -2,24 +2,15 @@ import React, {useCallback, useState} from 'react';
 import {
   StyleSheet,
   View,
-  Image,
   Text,
-  ImageBackground,
   ScrollView,
   FlatList,
   TouchableOpacity,
-  SafeAreaView,
-  StatusBar,
   Dimensions,
-  Button,
   Modal,
-  Pressable,
-  Alert,
 } from 'react-native';
 import moment from 'moment';
 import LinearGradient from 'react-native-linear-gradient';
-import {CommonStyles, Colors, Typography} from '../../../theme';
-import {PRIMARY_TEXT_COLOR, SECONDARY_TEXT_COLOR} from '../../../theme/colors';
 
 const win = Dimensions.get('window');
 
@@ -86,7 +77,7 @@ const Quote = props => {
                   onPress={() => {
                     setModalVisible(true), setdata(item);
                   }}
-                  style={{marginTop: 15}}>
+                  style={{marginTop: 10}}>
                   <Text
                     style={{fontSize: 12, color: 'white', textAlign: 'center'}}>
                     'See More...'{' '}
@@ -101,6 +92,7 @@ const Quote = props => {
       </>
     );
   };
+
   return (
     <>
       <ScrollView>
@@ -125,12 +117,11 @@ const Quote = props => {
               flex: 1,
               justifyContent: 'center',
               alignItems: 'center',
-              marginTop: 22,
             }}>
             <LinearGradient
               start={{x: 0.697, y: -0.943}}
               end={{x: 0.413, y: 2.24}}
-              colors={['#58AFF6', '#002651']}
+			  colors={['#58AFF6', '#002651']}
               style={{
                 margin: 20,
                 backgroundColor: 'white',
@@ -206,7 +197,7 @@ const Quote = props => {
 const styles = StyleSheet.create({
   quote: {
     // backgroundColor: 'white',
-    height: 90,
+    height: 80,
     width: Dimensions.get('screen').width - 10,
     justifyContent: 'center',
     alignItems: 'center',

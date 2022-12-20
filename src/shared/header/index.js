@@ -1,12 +1,11 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect} from 'react';
+
 import {Text, View} from 'react-native';
-import {getAsyncStorage} from '../../utils/storageUtil';
-import {USER_NAME} from '../../constants';
+
 import {Typography} from '../../theme';
 import {useIsFocused} from '@react-navigation/native';
 
 const HeaderTitle = props => {
-  const [username, setUsername] = useState(null);
   const isFocused = useIsFocused();
 
   const {profile, profileLoading, title} = props;

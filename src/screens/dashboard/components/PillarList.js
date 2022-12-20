@@ -71,7 +71,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     borderWidth: 4,
     borderColor: PRIMARY_BACKGROUND_COLOR,
-    overflow: 'hidden',
+    // overflow: 'hidden',
   },
   ImageStyle: {
     width: '100%',
