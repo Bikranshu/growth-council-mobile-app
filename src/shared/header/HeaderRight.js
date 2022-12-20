@@ -4,12 +4,7 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import {useIsFocused} from '@react-navigation/native';
 
 const HeaderRight = props => {
-  const {navigation, profile, fetchProfileByIdentifier} = props;
-
-  useEffect(() => {
-    fetchProfileByIdentifier();
-  }, []);
-
+  const {navigation, profile} = props;
   return (
     <View style={{flexDirection: 'row', alignItems: 'center'}}>
       {/* <TouchableOpacity
