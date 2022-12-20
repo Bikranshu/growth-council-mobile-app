@@ -44,7 +44,7 @@ const Profile = props => {
 
   useEffect(() => {
     fetchProfileByIdentifier();
-  }, []);
+  }, [isFocused]);
 
   //   useEffect(() => {
   //     //We are showing the coundown timer for a given expiry date-time
