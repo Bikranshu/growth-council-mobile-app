@@ -13,27 +13,27 @@ import {
   Platform,
   BackHandler,
 } from 'react-native';
-import Ionicons from 'react-native-vector-icons/Ionicons';
-import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
-import {BlurView} from '@react-native-community/blur';
-import moment from 'moment';
-import {useNavigation} from '@react-navigation/native';
 
-import analytics from '@react-native-firebase/analytics';
-import Material from 'react-native-vector-icons/MaterialIcons';
-import PillarList from './PillarList';
-import {CommonStyles, Colors, Typography} from '../../../theme';
-import {PRIMARY_TEXT_COLOR, SECONDARY_TEXT_COLOR} from '../../../theme/colors';
-import ToastMessage from '../../../shared/toast';
-import BottomNav from '../../../layout/BottomLayout';
+import moment from 'moment';
 import HTMLView from 'react-native-htmlview';
-import Loading from '../../../shared/loading';
-import FloatingButton from '../../../shared/floatingButton';
+import {BlurView} from '@react-native-community/blur';
+import {useNavigation} from '@react-navigation/native';
 import {useFocusEffect} from '@react-navigation/native';
 import messaging from '@react-native-firebase/messaging';
+import analytics from '@react-native-firebase/analytics';
+import Ionicons from 'react-native-vector-icons/Ionicons';
+import Material from 'react-native-vector-icons/MaterialIcons';
+import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 
-import {GROWTH_COMMUNITY_ID, GROWTH_CONTENT_ID} from '../../../constants';
 import Quote from './quote';
+import PillarList from './PillarList';
+import Loading from '../../../shared/loading';
+import ToastMessage from '../../../shared/toast';
+import BottomNav from '../../../layout/BottomLayout';
+import FloatingButton from '../../../shared/floatingButton';
+import {CommonStyles, Colors, Typography} from '../../../theme';
+import {GROWTH_COMMUNITY_ID, GROWTH_CONTENT_ID} from '../../../constants';
+import {PRIMARY_TEXT_COLOR, SECONDARY_TEXT_COLOR} from '../../../theme/colors';
 
 const win = Dimensions.get('window').width;
 const contentContainerWidth = win / 2;
@@ -585,7 +585,7 @@ const Dashboard = props => {
       </>
     );
   };
-  console.log(Dimensions.get('screen').height / 10);
+  console.log();
   return (
     <View style={{flex: 1}}>
       <StatusBar
@@ -617,7 +617,10 @@ const Dashboard = props => {
               style={{
                 // width: '100%',
                 height: (Dimensions.get('screen').height - 180) / 2,
-                paddingTop: Dimensions.get('screen').height / 10,
+                paddingTop:
+                  Platform.OS === 'ios'
+                    ? Dimensions.get('screen').height / 8
+                    : Dimensions.get('screen').height / 10,
               }}
               source={require('../../../assets/img/appBG.png')}>
               <View

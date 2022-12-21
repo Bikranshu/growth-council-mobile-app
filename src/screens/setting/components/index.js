@@ -52,32 +52,37 @@ const Setting = props => {
   const handlePress = () => setExpanded(!expanded);
 
   const [contentEnabled, setContentEnabled] = useState(
-    notificationOptions?.content_notification === '0' ? false : true,
+    notificationOptions?.content_notification === '0' ||
+      notificationOptions?.content_notification === ''
+      ? false
+      : true,
   );
   const [eventEnabled, setEventEnabled] = useState(
-    notificationOptions?.event_notification === '0' ? false : true,
+    notificationOptions?.event_notification === '0' ||
+      notificationOptions?.event_notification === ''
+      ? false
+      : true,
   );
   const [memberEnabled, setMemberEnabled] = useState(
-    notificationOptions?.member_connection_add_delete_notification === '0'
+    notificationOptions?.member_connection_add_delete_notification === '0' ||
+      notificationOptions?.member_connection_add_delete_notification === ''
       ? false
       : true,
   );
   const [chatEnabled, setChatEnabled] = useState(
-    notificationOptions?.chat_notification === '0' ? false : true,
+    notificationOptions?.chat_notification === '0' ||
+      notificationOptions?.chat_notification === ''
+      ? false
+      : true,
   );
 
   const [boardEnabled, setBoardEnabled] = useState(
-    notificationOptions?.discussion_board_notification === '0' ? false : true,
+    notificationOptions?.discussion_board_notification === '0' ||
+      notificationOptions?.discussion_board_notification === ''
+      ? false
+      : true,
   );
 
-  console.log(
-    'contentEnabled',
-    contentEnabled,
-    'eventEnabled',
-    eventEnabled,
-    'memberEnabled',
-    memberEnabled,
-  );
   const {
     handleChange,
     handleBlur,
@@ -103,6 +108,14 @@ const Setting = props => {
       });
     },
   });
+  console.log(
+    'eventEnabled',
+    eventEnabled,
+    'memberEnabled',
+    memberEnabled,
+    'discussion_board_notification',
+    boardEnabled,
+  );
 
   const contentSwitch = () => {
     setFieldValue('content_notification', !contentEnabled);
@@ -177,21 +190,34 @@ const Setting = props => {
 
   useEffect(() => {
     setContentEnabled(
-      notificationOptions?.content_notification === '0' ? false : true,
+      notificationOptions?.content_notification === '0' ||
+        notificationOptions?.content_notification === ''
+        ? false
+        : true,
     );
     setEventEnabled(
-      notificationOptions?.event_notification === '0' ? false : true,
+      notificationOptions?.event_notification === '0' ||
+        notificationOptions?.event_notification === ''
+        ? false
+        : true,
     );
     setChatEnabled(
-      notificationOptions?.chat_notification === '0' ? false : true,
+      notificationOptions?.chat_notification === '0' ||
+        notificationOptions?.chat_notification === ''
+        ? false
+        : true,
     );
     setMemberEnabled(
-      notificationOptions?.member_connection_add_delete_notification === '0'
+      notificationOptions?.member_connection_add_delete_notification === '0' ||
+        notificationOptions?.member_connection_add_delete_notification === ''
         ? false
         : true,
     );
     setBoardEnabled(
-      notificationOptions?.discussion_board_notification === '0' ? false : true,
+      notificationOptions?.discussion_board_notification === '0' ||
+        notificationOptions?.discussion_board_notification === ''
+        ? false
+        : true,
     );
   }, [notificationOptions]);
 
@@ -256,6 +282,7 @@ const Setting = props => {
                   resizeMode="cover"
                 />
               </View>
+
               <View style={styles.header}>
                 <Text style={styles.headingText1}>{profile?.user_login}</Text>
                 <Text style={{color: '#222B45'}}>
@@ -296,6 +323,7 @@ const Setting = props => {
                       </View>
                     </View>
                   </TouchableOpacity>
+                  {updateNotificationLoading && <Loading />}
                   {/* <TouchableOpacity
                     onPress={async () => {
                       navigation.navigate('Notification');
@@ -355,120 +383,6 @@ const Setting = props => {
                           backgroundColor: 'white',
                           paddingBottom: 15,
                         }}>
-                        <List.Item
-                          title={
-                            <View>
-                              <Text
-                                style={{
-                                  fontSize: 14,
-                                  color: '#222B45',
-                                  fontWeight: '500',
-                                }}>
-                                Events
-                              </Text>
-                            </View>
-                          }
-                          left={props => (
-                            <View
-                              style={{
-                                width: 40,
-                                height: 40,
-                                backgroundColor: '#3A9BDC',
-                                justifyContent: 'center',
-                                alignItems: 'center',
-                                borderRadius: 10,
-                              }}>
-                              <Image
-                                source={require('../../../../src/assets/img/event.png')}
-                                style={{
-                                  width: 20,
-                                  height: 20,
-                                }}
-                                resizeMode="contain"
-                              />
-                            </View>
-                          )}
-                          right={props => (
-                            <Switch
-                              trackColor={{false: '#767577', true: '#32a32e'}}
-                              thumbColor={eventEnabled ? 'white' : 'white'}
-                              ios_backgroundColor="#3e3e3e"
-                              onValueChange={eventSwitch}
-                              value={eventEnabled}
-                              style={{
-                                right: 0,
-                                position: 'absolute',
-                              }}
-                            />
-                          )}
-                          style={{
-                            marginVertical: 5,
-                            borderBottomWidth: 1,
-                            alignItems: 'center',
-                            borderBottomColor: '#EDF1F7',
-                            paddingBottom: 15,
-                            paddingTop: 15,
-
-                            width: 300,
-                            marginLeft: 20,
-                          }}
-                        />
-                        <List.Item
-                          title={
-                            <View>
-                              <Text
-                                style={{
-                                  fontSize: 14,
-                                  color: '#222B45',
-                                  fontWeight: '500',
-                                }}>
-                                Member Connections
-                              </Text>
-                            </View>
-                          }
-                          left={props => (
-                            <View
-                              style={{
-                                width: 40,
-                                height: 40,
-                                backgroundColor: '#3A9BDC',
-                                justifyContent: 'center',
-                                alignItems: 'center',
-                                borderRadius: 10,
-                              }}>
-                              <Image
-                                source={require('../../../../src/assets/img/connection.png')}
-                                style={{
-                                  width: 25,
-                                  height: 25,
-                                }}
-                                resizeMode="contain"
-                              />
-                            </View>
-                          )}
-                          right={props => (
-                            <Switch
-                              trackColor={{false: '#767577', true: '#32a32e'}}
-                              thumbColor={memberEnabled ? 'white' : 'white'}
-                              ios_backgroundColor="#3e3e3e"
-                              onValueChange={memberSwitch}
-                              value={memberEnabled}
-                              style={{
-                                right: 0,
-                                position: 'absolute',
-                              }}
-                            />
-                          )}
-                          style={{
-                            marginVertical: 5,
-                            borderBottomWidth: 1,
-                            alignItems: 'center',
-                            borderBottomColor: '#EDF1F7',
-                            paddingBottom: 15,
-                            width: 300,
-                            marginLeft: 20,
-                          }}
-                        />
                         <List.Item
                           title={
                             <View>
@@ -634,6 +548,120 @@ const Setting = props => {
                             borderBottomColor: '#EDF1F7',
                             paddingBottom: 15,
                             // backgroundColor: 'red',
+                            width: 300,
+                            marginLeft: 20,
+                          }}
+                        />
+                        <List.Item
+                          title={
+                            <View>
+                              <Text
+                                style={{
+                                  fontSize: 14,
+                                  color: '#222B45',
+                                  fontWeight: '500',
+                                }}>
+                                Events
+                              </Text>
+                            </View>
+                          }
+                          left={props => (
+                            <View
+                              style={{
+                                width: 40,
+                                height: 40,
+                                backgroundColor: '#3A9BDC',
+                                justifyContent: 'center',
+                                alignItems: 'center',
+                                borderRadius: 10,
+                              }}>
+                              <Image
+                                source={require('../../../../src/assets/img/event.png')}
+                                style={{
+                                  width: 20,
+                                  height: 20,
+                                }}
+                                resizeMode="contain"
+                              />
+                            </View>
+                          )}
+                          right={props => (
+                            <Switch
+                              trackColor={{false: '#767577', true: '#32a32e'}}
+                              thumbColor={eventEnabled ? 'white' : 'white'}
+                              ios_backgroundColor="#3e3e3e"
+                              onValueChange={eventSwitch}
+                              value={eventEnabled}
+                              style={{
+                                right: 0,
+                                position: 'absolute',
+                              }}
+                            />
+                          )}
+                          style={{
+                            marginVertical: 5,
+                            borderBottomWidth: 1,
+                            alignItems: 'center',
+                            borderBottomColor: '#EDF1F7',
+                            paddingBottom: 15,
+                            paddingTop: 15,
+
+                            width: 300,
+                            marginLeft: 20,
+                          }}
+                        />
+                        <List.Item
+                          title={
+                            <View>
+                              <Text
+                                style={{
+                                  fontSize: 14,
+                                  color: '#222B45',
+                                  fontWeight: '500',
+                                }}>
+                                Member Connections
+                              </Text>
+                            </View>
+                          }
+                          left={props => (
+                            <View
+                              style={{
+                                width: 40,
+                                height: 40,
+                                backgroundColor: '#3A9BDC',
+                                justifyContent: 'center',
+                                alignItems: 'center',
+                                borderRadius: 10,
+                              }}>
+                              <Image
+                                source={require('../../../../src/assets/img/connection.png')}
+                                style={{
+                                  width: 25,
+                                  height: 25,
+                                }}
+                                resizeMode="contain"
+                              />
+                            </View>
+                          )}
+                          right={props => (
+                            <Switch
+                              trackColor={{false: '#767577', true: '#32a32e'}}
+                              thumbColor={memberEnabled ? 'white' : 'white'}
+                              ios_backgroundColor="#3e3e3e"
+                              onValueChange={memberSwitch}
+                              value={memberEnabled}
+                              style={{
+                                right: 0,
+                                position: 'absolute',
+                              }}
+                            />
+                          )}
+                          style={{
+                            marginVertical: 5,
+                            borderBottomWidth: 1,
+                            alignItems: 'center',
+                            borderBottomColor: '#EDF1F7',
+                            paddingBottom: 15,
                             width: 300,
                             marginLeft: 20,
                           }}

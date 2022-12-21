@@ -73,7 +73,7 @@ const ManageAccount = props => {
   const [open, setOpen] = useState(false);
   const [value, setValue] = useState([]);
   const [items, setItems] = useState([]);
-  const [image, setImage] = useState(profile.avatar);
+  const [image, setImage] = useState(profile?.avatar);
   const [imageDetail, setImageDetail] = useState();
 
   let title = profile?.user_meta?.title;
@@ -146,39 +146,29 @@ const ManageAccount = props => {
   const takePhotoFromCamera = () => {
     ImagePicker.openCamera({
       cropping: true,
+      cropperCircleOverlay: true,
     }).then(async image => {
       setImage(image.path);
       let fd = new FormData();
       const file = {
-        type: image.mime,
+        type: 'image/jpg',
         uri: Platform.OS === 'ios' ? `file:///${image.path}` : image.path,
         name: 'profile_photo.jpg',
       };
+      console.log(image);
       fd.append('file', file);
       setImageDetail(fd);
-
-      //   await uploadImage(fd).then(async response => {
-      //     console.log('Upload response:::::::::::', response?.payload?.id);
-      //     await updateImage({attachment_id: response?.payload?.id}).then(
-      //       response => {
-      //         if (response?.payload?.code === 200) {
-      //           navigation.navigate('Account');
-      //           ToastMessage.show('Profile Image has been successfully updated.');
-      //           console.log('Update response::::::::::', response);
-      //         }
-      //       },
-      //     );
-      //   });
     });
   };
   const choosePhotoFromLibrary = () => {
     ImagePicker.openPicker({
       cropping: true,
+      cropperCircleOverlay: true,
     }).then(async image => {
       setImage(image.path);
       let fd = new FormData();
       const file = {
-        type: image.mime,
+        type: 'image/jpg',
         uri: Platform.OS === 'ios' ? `file:///${image.path}` : image.path,
         name: 'profile_photo.jpg',
       };
@@ -214,16 +204,21 @@ const ManageAccount = props => {
       await updateUser(values).then(async response => {
         //image upload code
         await uploadImage(imageDetail).then(async response => {
-          await updateImage({attachment_id: response?.payload?.id}).then(
-            response => {
-              if (response?.payload?.code === 200) {
-                navigation.navigate('Account');
-                // ToastMessage.show(
-                //   'Your profile has been successfully updated.',
-                // );
-              }
-            },
-          );
+          console.log(response);
+          if (response?.payload?.success === true) {
+            navigation.navigate('Account');
+            console.log('Your image has been successfully updated.');
+          }
+          //   await updateImage({attachment_id: response?.payload?.id}).then(
+          //     response => {
+          //       if (response?.payload?.code === 200) {
+          //         navigation.navigate('Account');
+          //         // ToastMessage.show(
+          //         //   'Your profile has been successfully updated.',
+          //         // );
+          //       }
+          //     },
+          //   );
         });
         if (response?.payload?.code === 200) {
           navigation.navigate('Account');
@@ -335,7 +330,9 @@ const ManageAccount = props => {
             <View style={styles.profileWrapper}>
               <View style={styles.icon}>
                 <Image
-                  source={{uri: image}}
+                  source={{
+                    uri: image,
+                  }}
                   style={{width: '100%', height: '100%'}}
                   resizeMode="cover"
                 />
@@ -351,7 +348,7 @@ const ManageAccount = props => {
                     </View>
                   </>
                 )}
-                {updateLoading && (
+                {/* {updateLoading && (
                   <>
                     <View style={styles.loading1}>
                       <BubblesLoader
@@ -360,7 +357,7 @@ const ManageAccount = props => {
                       />
                     </View>
                   </>
-                )}
+                )} */}
                 <Text style={styles.headingText1}>{profile?.user_login}</Text>
                 <Text style={{color: '#222B45'}}>
                   {profile?.user_meta?.title === undefined

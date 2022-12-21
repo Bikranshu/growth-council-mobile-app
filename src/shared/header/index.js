@@ -8,11 +8,11 @@ import {useIsFocused} from '@react-navigation/native';
 const HeaderTitle = props => {
   const isFocused = useIsFocused();
 
-  const {profile, fetchProfileByIdentifier, profileLoading, title} = props;
+  const {profile, profileLoading, title} = props;
 
-  useEffect(() => {
-    fetchProfileByIdentifier();
-  }, [isFocused]);
+//   useEffect(() => {
+//     fetchProfileByIdentifier();
+//   }, [isFocused]);
 
   return (
     <View style={{marginLeft: 10, width: '80%'}}>
