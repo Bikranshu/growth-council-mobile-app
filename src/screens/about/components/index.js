@@ -15,12 +15,13 @@ import {
   NavigationContainer,
   useNavigationContainerRef,
 } from '@react-navigation/native';
-import analytics from '@react-native-firebase/analytics';
+
 import {Button} from 'native-base';
 import {Linking} from 'react-native';
 import HTMLView from 'react-native-htmlview';
-import FloatingButton from '../../../shared/floatingButton';
+import analytics from '@react-native-firebase/analytics';
 
+import FloatingButton from '../../../shared/floatingButton';
 import {CommonStyles, Colors, Typography} from '../../../theme';
 
 const About = props => {

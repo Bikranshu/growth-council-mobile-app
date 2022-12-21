@@ -10,17 +10,17 @@ import {
   Keyboard,
   Image,
 } from 'react-native';
-import {Button} from 'native-base';
-import {useFormik} from 'formik';
+
 import * as Yup from 'yup';
+import {useFormik} from 'formik';
+import {Button} from 'native-base';
 import {getAuth, deleteUser} from 'firebase/auth';
 
-import {CommonStyles, Colors, Typography} from '../../../theme';
 import Spinner from '../../../shared/spinner';
-import FlatTextInput from '../../../shared/form/FlatTextInput';
-import ToastMessage from '../../../shared/toast';
-import Footer from '../../../shared/footer';
 import auth from '../../../utils/firebaseUtil';
+import ToastMessage from '../../../shared/toast';
+import FlatTextInput from '../../../shared/form/FlatTextInput';
+import {CommonStyles, Colors, Typography} from '../../../theme';
 
 const screenHeight = Math.round(Dimensions.get('window').height);
 

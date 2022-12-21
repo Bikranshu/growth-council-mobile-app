@@ -11,25 +11,26 @@ import {
   SafeAreaView,
   Linking,
 } from 'react-native';
-import {Searchbar, Button} from 'react-native-paper';
-import Ionicons from 'react-native-vector-icons/Ionicons';
-import FloatingButton from '../../../shared/floatingButton';
-
-import Material from 'react-native-vector-icons/MaterialIcons';
 import {
   useFocusEffect,
   useIsFocused,
   useNavigation,
 } from '@react-navigation/native';
+
+import {Searchbar, Button} from 'react-native-paper';
+import firestore from '@react-native-firebase/firestore';
 import analytics from '@react-native-firebase/analytics';
-import {CommonStyles, Colors, Typography} from '../../../theme';
-import {getAsyncStorage} from '../../../utils/storageUtil';
-import {JWT_TOKEN, USER_NAME, USER_AVATAR} from '../../../constants';
+import Ionicons from 'react-native-vector-icons/Ionicons';
+import Material from 'react-native-vector-icons/MaterialIcons';
+
+import Loading from '../../../shared/loading';
+import ChatCount from '../../../shared/chatCount';
 import {decodeUserID} from '../../../utils/jwtUtil';
 import BottomNav from '../../../layout/BottomLayout';
-import ChatCount from '../../../shared/chatCount';
-import Loading from '../../../shared/loading';
-import firestore from '@react-native-firebase/firestore';
+import FloatingButton from '../../../shared/floatingButton';
+import {getAsyncStorage} from '../../../utils/storageUtil';
+import {CommonStyles, Colors, Typography} from '../../../theme';
+import {JWT_TOKEN, USER_NAME, USER_AVATAR} from '../../../constants';
 
 const UserList = props => {
   const {
@@ -333,7 +334,7 @@ const UserList = props => {
         style={{paddingBottom: 20, backgroundColor: 'white', marginTop: 10}}>
         <Footer />
       </View> */}
-	  <FloatingButton {...props} navigation={navigation} />
+      <FloatingButton {...props} navigation={navigation} />
       <BottomNav {...props} navigation={navigation} />
     </SafeAreaView>
   );

@@ -10,21 +10,21 @@ import {
   Dimensions,
   StatusBar,
 } from 'react-native';
-import Font from 'react-native-vector-icons/FontAwesome5';
-import Ionicon from 'react-native-vector-icons/Ionicons';
-import ButtonToggleGroup from 'react-native-button-toggle-group';
-import CountDown from 'react-native-countdown-component';
-import FloatingButton from '../../../shared/floatingButton';
+
 import moment from 'moment';
-import analytics from '@react-native-firebase/analytics';
-import {CommonStyles, Colors, Typography} from '../../../theme';
-import {PRIMARY_BACKGROUND_COLOR} from '../../../theme/colors';
-import Footer from '../../../shared/footer';
 import {useIsFocused} from '@react-navigation/native';
+import analytics from '@react-native-firebase/analytics';
+import CountDown from 'react-native-countdown-component';
+import Ionicon from 'react-native-vector-icons/Ionicons';
+import FloatingButton from '../../../shared/floatingButton';
+import ButtonToggleGroup from 'react-native-button-toggle-group';
+
 import MyEvent from './MyEvent';
 import AboutMe from './AboutMe';
-import BottomNav from '../../../layout/BottomLayout';
 import Loading from '../../../shared/loading';
+import BottomNav from '../../../layout/BottomLayout';
+import {CommonStyles, Colors, Typography} from '../../../theme';
+import {PRIMARY_BACKGROUND_COLOR} from '../../../theme/colors';
 
 const Profile = props => {
   const {

@@ -10,25 +10,26 @@ import {
   SafeAreaView,
   StatusBar,
 } from 'react-native';
-import {Calendar} from 'react-native-calendars';
-import moment from 'moment-timezone';
-import FloatingButton from '../../../shared/floatingButton';
-
 import {
   useFocusEffect,
   NavigationContainer,
   useNavigationContainerRef,
 } from '@react-navigation/native';
+
+import moment from 'moment-timezone';
+import {Calendar} from 'react-native-calendars';
+import {Picker} from '@react-native-picker/picker';
+import * as RNLocalize from 'react-native-localize';
 import analytics from '@react-native-firebase/analytics';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import * as RNLocalize from 'react-native-localize';
-import {Picker} from '@react-native-picker/picker';
+
+import Footer from '../../../shared/footer';
+import Loading from '../../../shared/loading';
+import ToastMessage from '../../../shared/toast';
 import {CommonStyles, Colors} from '../../../theme';
 import BottomNav from '../../../layout/BottomLayout';
-import Footer from '../../../shared/footer';
-import ToastMessage from '../../../shared/toast';
+import FloatingButton from '../../../shared/floatingButton';
 import {formatTimeByOffset} from '../../event/components/timezone';
-import Loading from '../../../shared/loading';
 import {GROWTH_COMMUNITY_ID, GROWTH_CONTENT_ID} from '../../../constants';
 
 const EventCalendar = props => {
@@ -557,7 +558,7 @@ const EventCalendar = props => {
           </Modal>
         </View>
       </ScrollView>
-	  <FloatingButton {...props} navigation={navigation} />
+      <FloatingButton {...props} navigation={navigation} />
       <BottomNav {...props} navigation={navigation} />
     </SafeAreaView>
   );

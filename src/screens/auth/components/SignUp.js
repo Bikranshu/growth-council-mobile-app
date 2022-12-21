@@ -10,21 +10,23 @@ import {
   Modal,
   Image,
 } from 'react-native';
-import {useFocusEffect} from '@react-navigation/native';
-import Ionicons from 'react-native-vector-icons/Ionicons';
-import {Button} from 'native-base';
-import {useFormik} from 'formik';
+
 import * as Yup from 'yup';
+import {useFormik} from 'formik';
+import {Button} from 'native-base';
+import uuid from 'react-native-uuid';
 import {Picker} from '@react-native-picker/picker';
 import {BubblesLoader} from 'react-native-indicator';
-import uuid from 'react-native-uuid';
-import analytics from '@react-native-firebase/analytics';
+import {useFocusEffect} from '@react-navigation/native';
 import PhoneInput from 'react-native-phone-number-input';
-import {CommonStyles, Colors, Typography} from '../../../theme';
-import FlatTextInput from '../../../shared/form/FlatTextInput';
-import CheckBox from '../../../shared/form/Checkbox';
-import ToastMessage from '../../../shared/toast';
+import analytics from '@react-native-firebase/analytics';
+import Ionicons from 'react-native-vector-icons/Ionicons';
+
 import auth from '@react-native-firebase/auth';
+import ToastMessage from '../../../shared/toast';
+import CheckBox from '../../../shared/form/Checkbox';
+import FlatTextInput from '../../../shared/form/FlatTextInput';
+import {CommonStyles, Colors, Typography} from '../../../theme';
 
 const phoneRegExp =
   /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/;

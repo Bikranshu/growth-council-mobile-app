@@ -14,22 +14,24 @@ import {
   Keyboard,
   Dimensions,
 } from 'react-native';
-import {Button} from 'native-base';
-import Ionicons from 'react-native-vector-icons/Ionicons';
-import AntDesign from 'react-native-vector-icons/AntDesign';
-import {useFormik} from 'formik';
+
 import * as Yup from 'yup';
+import {useFormik} from 'formik';
+import {Button} from 'native-base';
+import {useSelector} from 'react-redux';
 import {BubblesLoader} from 'react-native-indicator';
-import DropDownPicker from 'react-native-dropdown-picker';
-import ImagePicker from 'react-native-image-crop-picker';
 import {useIsFocused} from '@react-navigation/native';
 import analytics from '@react-native-firebase/analytics';
-import {CommonStyles, Colors, Typography} from '../../../theme';
-import ToastMessage from '../../../shared/toast';
-import {PRIMARY_BACKGROUND_COLOR} from '../../../theme/colors';
-import FloatingButton from '../../../shared/floatingButton';
-import {useSelector} from 'react-redux';
+import ImagePicker from 'react-native-image-crop-picker';
+import DropDownPicker from 'react-native-dropdown-picker';
+import Ionicons from 'react-native-vector-icons/Ionicons';
+import AntDesign from 'react-native-vector-icons/AntDesign';
+
 import Loading from '../../../shared/loading';
+import ToastMessage from '../../../shared/toast';
+import FloatingButton from '../../../shared/floatingButton';
+import {PRIMARY_BACKGROUND_COLOR} from '../../../theme/colors';
+import {CommonStyles, Colors, Typography} from '../../../theme';
 
 const profileUpdateSchema = Yup.object().shape({
   //   display_name: Yup.string().required('Name is required.'),
@@ -155,7 +157,8 @@ const ManageAccount = props => {
         uri: Platform.OS === 'ios' ? `file:///${image.path}` : image.path,
         name: 'profile_photo.jpg',
       };
-      console.log(image);
+      console.log({image});
+      console.log({file});
       fd.append('file', file);
       setImageDetail(fd);
     });
@@ -172,6 +175,8 @@ const ManageAccount = props => {
         uri: Platform.OS === 'ios' ? `file:///${image.path}` : image.path,
         name: 'profile_photo.jpg',
       };
+      console.log({image});
+      console.log({file});
       fd.append('file', file);
       setImageDetail(fd);
     });

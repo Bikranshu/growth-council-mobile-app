@@ -7,12 +7,10 @@ import {
   SafeAreaView,
   StatusBar,
 } from 'react-native';
+import firestore from '@react-native-firebase/firestore';
 import {GiftedChat, Send} from 'react-native-gifted-chat';
-
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import {TouchableOpacity} from 'react-native-gesture-handler';
-
-import firestore from '@react-native-firebase/firestore';
 
 import {CommonStyles, Colors} from '../../../theme';
 import {getFCMTOkenForUser} from '../../../utils/httpUtil';
@@ -41,7 +39,7 @@ const Chat = props => {
   const userID = route.params.userID;
   const userAvatar = route.params.userAvatar;
   const userName = route.params.userName;
-  const userChat = route?.params?.userChat
+  const userChat = route?.params?.userChat;
 
   const [userScreen, setUserScreen] = useState(false);
   const [friendScreen, setFriendScreen] = useState(false);
@@ -55,14 +53,12 @@ const Chat = props => {
     return chatIDPre.join('_');
   };
 
-
   const [messages, setMessages] = useState([]);
-
 
   console.log({userChat});
   useEffect(() => {
     {
-		userChat === "1" ? (
+      userChat === '1' ? (
         (console.log('The friend ID is ' + friendID),
         getFCMTOkenForUser(friendID)
           .then(res => {

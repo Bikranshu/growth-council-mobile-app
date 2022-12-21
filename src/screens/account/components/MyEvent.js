@@ -7,17 +7,18 @@ import {
   FlatList,
   Platform,
 } from 'react-native';
-import Ionicon from 'react-native-vector-icons/Ionicons';
+
 import {Button} from 'native-base';
 import moment from 'moment-timezone';
+import * as RNLocalize from 'react-native-localize';
 import {useIsFocused} from '@react-navigation/native';
+import Ionicon from 'react-native-vector-icons/Ionicons';
+
+import Loading from '../../../shared/loading';
+import * as Colors from '../../../theme/colors';
 import {CommonStyles, Typography} from '../../../theme';
 import {PRIMARY_BACKGROUND_COLOR} from '../../../theme/colors';
-import {BubblesLoader} from 'react-native-indicator';
-import * as Colors from '../../../theme/colors';
-import * as RNLocalize from 'react-native-localize';
 import {formatTimeByOffset} from '../../event/components/timezone';
-import Loading from '../../../shared/loading';
 import {GROWTH_COMMUNITY_ID, GROWTH_CONTENT_ID} from '../../../constants';
 
 const MyEvent = props => {
