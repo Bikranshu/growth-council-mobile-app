@@ -495,7 +495,7 @@ const Setting = props => {
                             marginLeft: 20,
                           }}
                         />
-                        <List.Item
+                        {/* <List.Item
                           title={
                             <View>
                               <Text
@@ -551,7 +551,7 @@ const Setting = props => {
                             width: 300,
                             marginLeft: 20,
                           }}
-                        />
+                        /> */}
                         <List.Item
                           title={
                             <View>

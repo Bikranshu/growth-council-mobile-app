@@ -24,6 +24,7 @@ import {BubblesLoader} from 'react-native-indicator';
 import Entypo from 'react-native-vector-icons/Entypo';
 import Loading from '../../../shared/loading';
 import {useFocusEffect} from '@react-navigation/native';
+import FloatingButton from '../../../shared/floatingButton';
 
 const CriticalIssue = props => {
   const {
@@ -315,7 +316,7 @@ const CriticalIssue = props => {
           </View>
         </View>
       </Modal>
-
+      <FloatingButton {...props} navigation={navigation} />
       <BottomNav {...props} navigation={navigation} />
     </SafeAreaView>
   );
