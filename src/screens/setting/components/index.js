@@ -12,6 +12,8 @@ import {
   StatusBar,
   Dimensions,
 } from 'react-native';
+
+import {Button} from 'native-base';
 import {List} from 'react-native-paper';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import AntDesign from 'react-native-vector-icons/AntDesign';
@@ -99,12 +101,13 @@ const Setting = props => {
       member_connection_add_delete_notification: memberEnabled,
       chat_notification: chatEnabled,
       content_notification: contentEnabled,
-      discussion_board_notification: boardEnabled,
+      //   discussion_board_notification: boardEnabled,
     },
     onSubmit: async values => {
       //   console.log({values});
       await updateUserNotification(values).then(response => {
         console.log(response);
+        ToastMessage.show('You have successfully updated your notification');
       });
     },
   });
@@ -113,8 +116,8 @@ const Setting = props => {
     eventEnabled,
     'memberEnabled',
     memberEnabled,
-    'discussion_board_notification',
-    boardEnabled,
+    'chat_notification',
+    chatEnabled,
   );
 
   const contentSwitch = () => {
@@ -126,7 +129,7 @@ const Setting = props => {
     setFieldValue('discussion_board_notification', boardEnabled);
 
     setContentEnabled(!contentEnabled);
-    handleSubmit();
+    // handleSubmit();
   };
 
   const eventSwitch = () => {
@@ -138,7 +141,7 @@ const Setting = props => {
     setFieldValue('discussion_board_notification', boardEnabled);
 
     setEventEnabled(!eventEnabled);
-    handleSubmit();
+    // handleSubmit();
   };
 
   const memberSwitch = () => {
@@ -150,7 +153,7 @@ const Setting = props => {
     setFieldValue('discussion_board_notification', boardEnabled);
 
     setMemberEnabled(!memberEnabled);
-    handleSubmit();
+    // handleSubmit();
   };
 
   const chatSwitch = () => {
@@ -162,7 +165,7 @@ const Setting = props => {
     setFieldValue('discussion_board_notification', boardEnabled);
 
     setChatEnabled(!chatEnabled);
-    handleSubmit();
+    // handleSubmit();
   };
 
   const boardSwitch = () => {
@@ -174,7 +177,7 @@ const Setting = props => {
     setFieldValue('member_connection_add_delete_notification', memberEnabled);
 
     setBoardEnabled(!boardEnabled);
-    handleSubmit();
+    // handleSubmit();
   };
 
   useEffect(() => {
@@ -666,6 +669,27 @@ const Setting = props => {
                             marginLeft: 20,
                           }}
                         />
+
+                        <List.Item
+                          right={props => (
+                            <View style={styles.loginButtonWrapper}>
+                              <Button
+                                style={[styles.loginButton]}
+                                onPress={handleSubmit}>
+                                <Text style={styles.loginButtonText}>Save</Text>
+                              </Button>
+                            </View>
+                          )}
+                          style={{
+                            marginVertical: 5,
+                            borderBottomWidth: 1,
+                            alignItems: 'center',
+                            borderBottomColor: '#EDF1F7',
+                            paddingBottom: 15,
+                            width: 300,
+                            marginLeft: 20,
+                          }}
+                        />
                       </List.Accordion>
                     </List.Section>
                   </View>
@@ -779,5 +803,25 @@ const styles = StyleSheet.create({
     fontWeight: '500',
     margin: 15,
     color: '#222B45',
+  },
+
+  loginButtonWrapper: {
+    ...CommonStyles.buttonWrapper,
+    alignItems: 'flex-start',
+    marginTop: 10,
+  },
+  loginButton: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: Colors.PRACTICE_COLOR,
+    height: 40,
+    marginLeft: 20,
+    marginBottom: 15,
+    borderRadius: 10,
+    width: '50%',
+  },
+
+  loginButtonText: {
+    ...CommonStyles.buttonText,
   },
 });
