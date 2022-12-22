@@ -25,6 +25,7 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import Loading from '../../../shared/loading';
 import {Colors, Typography} from '../../../theme';
 import BottomNav from '../../../layout/BottomLayout';
+import FloatingButton from '../../../shared/floatingButton';
 
 const CriticalIssue = props => {
   const {
@@ -316,7 +317,7 @@ const CriticalIssue = props => {
           </View>
         </View>
       </Modal>
-
+      <FloatingButton {...props} navigation={navigation} />
       <BottomNav {...props} navigation={navigation} />
     </SafeAreaView>
   );
