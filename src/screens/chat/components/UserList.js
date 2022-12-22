@@ -27,8 +27,8 @@ import Loading from '../../../shared/loading';
 import ChatCount from '../../../shared/chatCount';
 import {decodeUserID} from '../../../utils/jwtUtil';
 import BottomNav from '../../../layout/BottomLayout';
-import FloatingButton from '../../../shared/floatingButton';
 import {getAsyncStorage} from '../../../utils/storageUtil';
+import FloatingButton from '../../../shared/floatingButton';
 import {CommonStyles, Colors, Typography} from '../../../theme';
 import {JWT_TOKEN, USER_NAME, USER_AVATAR} from '../../../constants';
 

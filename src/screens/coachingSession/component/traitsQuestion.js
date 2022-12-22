@@ -1,8 +1,7 @@
 import React, {useState, useEffect} from 'react';
 import {StyleSheet, Text, View, TouchableOpacity} from 'react-native';
-import {RadioButton} from 'react-native-paper';
+
 import {Typography} from '../../../theme';
-import {ScrollView} from 'native-base';
 
 const TraitsQuestion = props => {
   const {
@@ -39,7 +38,7 @@ const TraitsQuestion = props => {
                   let newAnswers = answers;
                   if (traitIndex.traitIndex === 0) {
                     scrollRef.current?.scrollToEnd({animated: true});
-					
+
                     let newGrowthIndex = answers.questions.growthIndex;
                     newGrowthIndex[count] = option1.score;
                     setAnswers({

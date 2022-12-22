@@ -8,14 +8,16 @@ import {
   Dimensions,
   ImageBackground,
 } from 'react-native';
-import {Typography} from '../../../theme';
+
+import LinearGradient from 'react-native-linear-gradient';
+
 import {
   COACHING_COLOR,
   COMMUNITY_COLOR,
   PRACTICE_COLOR,
   PRIMARY_BACKGROUND_COLOR,
 } from '../../../theme/colors';
-import LinearGradient from 'react-native-linear-gradient';
+import {Typography} from '../../../theme';
 
 const PillarList = props => {
   const {navigation, pillarSliders} = props;

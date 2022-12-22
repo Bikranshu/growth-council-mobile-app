@@ -9,6 +9,7 @@ import {
   Dimensions,
   Modal,
 } from 'react-native';
+
 import moment from 'moment';
 import LinearGradient from 'react-native-linear-gradient';
 

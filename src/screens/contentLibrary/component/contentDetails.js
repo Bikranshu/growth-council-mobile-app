@@ -15,6 +15,7 @@ import {
   Keyboard,
   TouchableWithoutFeedback,
 } from 'react-native';
+
 import {Searchbar} from 'react-native-paper';
 import HTMLView from 'react-native-htmlview';
 import Ionicons from 'react-native-vector-icons/Ionicons';

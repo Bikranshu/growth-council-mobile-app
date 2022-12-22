@@ -16,7 +16,9 @@ import {
   Pressable,
   Alert,
 } from 'react-native';
+
 import {Thumbnail} from 'react-native-thumbnail-video';
+
 import YoutubePlayer from '../../../shared/youtube';
 import {CommonStyles, Colors, Typography} from '../../../theme';
 import {PRIMARY_TEXT_COLOR, SECONDARY_TEXT_COLOR} from '../../../theme/colors';

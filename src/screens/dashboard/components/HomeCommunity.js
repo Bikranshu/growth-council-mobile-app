@@ -13,26 +13,28 @@ import {
   StatusBar,
   PermissionsAndroid,
 } from 'react-native';
-import Ionicons from 'react-native-vector-icons/Ionicons';
-import Material from 'react-native-vector-icons/MaterialIcons';
-import FeatherIcon from 'react-native-vector-icons/Feather';
-import {Toast, useToast} from 'native-base';
-import AntDesign from 'react-native-vector-icons/AntDesign';
-import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome';
+
 import moment from 'moment';
-import analytics from '@react-native-firebase/analytics';
 import {Linking} from 'react-native';
-import {useFocusEffect, useIsFocused} from '@react-navigation/native';
-import BottomNav from '../../../layout/BottomLayout';
-import Player from './Player';
-import FloatingButton from '../../../shared/floatingButton';
-import {GROWTH_COMMUNITY_ID, JWT_TOKEN} from '../../../constants';
-import {decodeUserID} from '../../../utils/jwtUtil';
+import {Toast, useToast} from 'native-base';
 import RNFetchBlob from 'react-native-blob-util';
-// import ReactNativeBlobUtil from 'react-native-blob-util';
-import ToastMessage from '../../../shared/toast';
-import {CommonStyles, Colors, Typography} from '../../../theme';
+import analytics from '@react-native-firebase/analytics';
+import Ionicons from 'react-native-vector-icons/Ionicons';
+import AntDesign from 'react-native-vector-icons/AntDesign';
+import FeatherIcon from 'react-native-vector-icons/Feather';
+import Material from 'react-native-vector-icons/MaterialIcons';
+import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome';
+import {useFocusEffect, useIsFocused} from '@react-navigation/native';
+
+import Player from './Player';
 import Loading from '../../../shared/loading';
+import ToastMessage from '../../../shared/toast';
+import {decodeUserID} from '../../../utils/jwtUtil';
+import BottomNav from '../../../layout/BottomLayout';
+import FloatingButton from '../../../shared/floatingButton';
+// import ReactNativeBlobUtil from 'react-native-blob-util';
+import {CommonStyles, Colors, Typography} from '../../../theme';
+import {GROWTH_COMMUNITY_ID, JWT_TOKEN} from '../../../constants';
 
 const win = Dimensions.get('window');
 const contentContainerWidth = win.width - 30;

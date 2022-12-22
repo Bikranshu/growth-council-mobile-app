@@ -12,16 +12,17 @@ import {
   Dimensions,
   FlatList,
 } from 'react-native';
+
+import moment from 'moment';
+import HTMLView from 'react-native-htmlview';
+import {BubblesLoader} from 'react-native-indicator';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import ButtonToggleGroup from 'react-native-button-toggle-group';
 
-import SelfAssessment from './selfAssessment';
 import SessionAbout from './sessionAbout';
-import {CommonStyles, Colors, Typography} from '../../../theme';
-import {BubblesLoader} from 'react-native-indicator';
-import moment from 'moment';
+import SelfAssessment from './selfAssessment';
 import ToastMessage from '../../../shared/toast';
-import HTMLView from 'react-native-htmlview';
+import {CommonStyles, Colors, Typography} from '../../../theme';
 
 const CoachingSession = props => {
   const {

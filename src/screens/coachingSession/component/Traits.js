@@ -1,8 +1,9 @@
 import React, {useEffect} from 'react';
 import {ScrollView, StyleSheet, Text, View} from 'react-native';
-import HTMLView from 'react-native-htmlview';
-import {Typography} from '../../../theme';
 
+import HTMLView from 'react-native-htmlview';
+
+import {Typography} from '../../../theme';
 import TraitsQuestion from './traitsQuestion';
 
 const Traits = props => {

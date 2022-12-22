@@ -8,8 +8,8 @@ import {
   StatusBar,
 } from 'react-native';
 import firestore from '@react-native-firebase/firestore';
-import {GiftedChat, Send} from 'react-native-gifted-chat';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import {GiftedChat, Send} from 'react-native-gifted-chat';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 
 import {CommonStyles, Colors} from '../../../theme';

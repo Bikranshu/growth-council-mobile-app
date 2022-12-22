@@ -14,16 +14,17 @@ import {
   Dimensions,
   StatusBar,
 } from 'react-native';
-import {Colors, Typography} from '../../../theme';
-import Ionicons from 'react-native-vector-icons/Ionicons';
-import Footer from '../../../shared/footer';
-import {Picker} from '@react-native-picker/picker';
-import BottomNav from '../../../layout/BottomLayout';
+
 import HTMLView from 'react-native-htmlview';
+import {Picker} from '@react-native-picker/picker';
 import {BubblesLoader} from 'react-native-indicator';
 import Entypo from 'react-native-vector-icons/Entypo';
-import Loading from '../../../shared/loading';
 import {useFocusEffect} from '@react-navigation/native';
+import Ionicons from 'react-native-vector-icons/Ionicons';
+
+import Loading from '../../../shared/loading';
+import {Colors, Typography} from '../../../theme';
+import BottomNav from '../../../layout/BottomLayout';
 
 const CriticalIssue = props => {
   const {

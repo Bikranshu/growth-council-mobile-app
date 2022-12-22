@@ -8,6 +8,7 @@ import {
   Dimensions,
   FlatList,
 } from 'react-native';
+
 import moment from 'moment';
 
 import {CommonStyles, Colors, Typography} from '../../../theme';
