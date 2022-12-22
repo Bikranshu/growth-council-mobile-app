@@ -29,6 +29,7 @@ const About = props => {
   const {width} = useWindowDimensions();
 
   const win = Dimensions.get('window');
+  //setting image container width according to device width
   const imageContainerWidth = win.width - 40;
 
   const tagsStyles = {
@@ -36,10 +37,12 @@ const About = props => {
     color: 'white',
   };
 
+  //about data fetch using useeffect
   useEffect(() => {
     fetchAbout();
   }, []);
 
+  // giving about data a variable because if any data come undefined then app should not crash
   let heading1 = about?.heading1;
   if (heading1 !== undefined) {
     heading1 = about?.heading1;
