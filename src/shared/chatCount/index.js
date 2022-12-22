@@ -1,9 +1,9 @@
 import React, {useState, useEffect} from 'react';
-import {Badge} from 'react-native-paper';
-import {collection, query, onSnapshot, where} from 'firebase/firestore';
-import firestore from '@react-native-firebase/firestore';
 
+import {Badge} from 'react-native-paper';
 import {database} from '../../utils/firebaseUtil';
+import firestore from '@react-native-firebase/firestore';
+import {collection, query, onSnapshot, where} from 'firebase/firestore';
 
 const ChatCount = props => {
   const {item, userID} = props;

@@ -8,13 +8,14 @@ import {
   Dimensions,
   SafeAreaView,
 } from 'react-native';
-import {Button} from 'native-base';
-import Carousel, {Pagination} from 'react-native-snap-carousel';
-import FeatherIcon from 'react-native-vector-icons/Feather';
-import {BubblesLoader} from 'react-native-indicator';
 
-import {CommonStyles, Colors, Typography} from '../../../theme';
+import {Button} from 'native-base';
+import {BubblesLoader} from 'react-native-indicator';
+import FeatherIcon from 'react-native-vector-icons/Feather';
+import Carousel, {Pagination} from 'react-native-snap-carousel';
+
 import Loading from '../../../shared/loading';
+import {CommonStyles, Colors, Typography} from '../../../theme';
 
 const {width: viewportWidth, height: viewportHeight} = Dimensions.get('screen');
 

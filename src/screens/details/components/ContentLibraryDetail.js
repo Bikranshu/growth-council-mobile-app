@@ -11,29 +11,29 @@ import {
   StatusBar,
   Dimensions,
 } from 'react-native';
-import {Button, useToast} from 'native-base';
-import FloatingButton from '../../../shared/floatingButton';
 
-import FeatherIcon from 'react-native-vector-icons/Feather';
-import Entypo from 'react-native-vector-icons/Entypo';
-import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome';
-import ToastMessage from '../../../shared/toast';
-// import ReactNativeBlobUtil from 'react-native-blob-util';
-import RNFetchBlob from 'react-native-blob-util';
-import BottomNav from '../../../layout/BottomLayout';
-import ArticleFeedbackCard from '../../../shared/card/ArticleFeedbackCard';
-import Footer from '../../../shared/footer';
-import analytics from '@react-native-firebase/analytics';
-import SearchHeader from '../../../shared/header/SearchHeader';
-import {Colors, CommonStyles} from '../../../theme';
-import Ionicons from 'react-native-vector-icons/Ionicons';
-import {Searchbar} from 'react-native-paper';
-import {useFocusEffect, useIsFocused} from '@react-navigation/native';
 import {Linking} from 'react-native';
-import {COACHING_COLOR, COMMUNITY_COLOR} from '../../../theme/colors';
+import {Searchbar} from 'react-native-paper';
+import {Button, useToast} from 'native-base';
+import RNFetchBlob from 'react-native-blob-util';
 import WebView from 'react-native-autoheight-webview';
+import Entypo from 'react-native-vector-icons/Entypo';
+import analytics from '@react-native-firebase/analytics';
+import Ionicons from 'react-native-vector-icons/Ionicons';
+import FeatherIcon from 'react-native-vector-icons/Feather';
+// import ReactNativeBlobUtil from 'react-native-blob-util';
+import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome';
+import {useFocusEffect, useIsFocused} from '@react-navigation/native';
+
 import HTMLView from 'react-native-htmlview';
 import Loading from '../../../shared/loading';
+import ToastMessage from '../../../shared/toast';
+import {Colors, CommonStyles} from '../../../theme';
+import {COACHING_COLOR} from '../../../theme/colors';
+import BottomNav from '../../../layout/BottomLayout';
+import FloatingButton from '../../../shared/floatingButton';
+import SearchHeader from '../../../shared/header/SearchHeader';
+import ArticleFeedbackCard from '../../../shared/card/ArticleFeedbackCard';
 
 const ContentLibraryDetail = props => {
   const {
@@ -44,8 +44,6 @@ const ContentLibraryDetail = props => {
     contentLibraryDetailsError,
     fetchContentLibraryDetail,
     cleanContentLibraryDetail,
-
-   
   } = props;
 
   const isFocused = useIsFocused();
@@ -59,7 +57,6 @@ const ContentLibraryDetail = props => {
   );
 
   const [emailStatus, setEmailStatus] = useState(false);
- 
 
   const [isTrue, setIsTrue] = useState(true);
 
@@ -472,7 +469,7 @@ const ContentLibraryDetail = props => {
                 />
               </View>
             )}
-          
+
           {/* Article Feedback Section */}
           <View style={{marginTop: 20}}>
             <ArticleFeedbackCard

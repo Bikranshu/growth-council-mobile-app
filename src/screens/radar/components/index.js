@@ -8,11 +8,12 @@ import {
   TextInput,
   Image,
 } from 'react-native';
-import Ionicons from 'react-native-vector-icons/Ionicons';
-import {Button} from 'native-base';
 
-import {CommonStyles, Colors, Typography} from '../../../theme';
+import {Button} from 'native-base';
+import Ionicons from 'react-native-vector-icons/Ionicons';
+
 import BottomLayout from '../../../layout/BottomLayout';
+import {CommonStyles, Colors, Typography} from '../../../theme';
 
 const FrostRadar = props => {
   const {navigation} = props;
@@ -42,7 +43,6 @@ const FrostRadar = props => {
               style={{width: 300, height: 300}}
             />
           </View>
-         
 
           <View style={styles.detail}>
             {show ? (
@@ -123,7 +123,7 @@ const FrostRadar = props => {
             )}
           </View>
         </View>
-		<BottomLayout {...props} navigation={navigation} />
+        <BottomLayout {...props} navigation={navigation} />
       </View>
     </ScrollView>
   );

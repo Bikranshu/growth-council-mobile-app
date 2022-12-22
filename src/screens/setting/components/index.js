@@ -1,4 +1,4 @@
-import {position} from 'native-base/lib/typescript/theme/styled-system';
+
 import React, {useState, useEffect} from 'react';
 import {
   StyleSheet,
@@ -12,18 +12,19 @@ import {
   StatusBar,
   Dimensions,
 } from 'react-native';
+
+import {useFormik} from 'formik';
 import {List} from 'react-native-paper';
+import analytics from '@react-native-firebase/analytics';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import AntDesign from 'react-native-vector-icons/AntDesign';
-import Footer from '../../../shared/footer';
-import ToastMessage from '../../../shared/toast';
-import analytics from '@react-native-firebase/analytics';
-import {useFormik} from 'formik';
-import Loading from '../../../shared/loading';
-import FloatingButton from '../../../shared/floatingButton';
 
-import {CommonStyles, Colors, Typography} from '../../../theme';
+import Footer from '../../../shared/footer';
+import Loading from '../../../shared/loading';
+import ToastMessage from '../../../shared/toast';
+import FloatingButton from '../../../shared/floatingButton';
 import {PRIMARY_BACKGROUND_COLOR} from '../../../theme/colors';
+import {CommonStyles, Colors, Typography} from '../../../theme';
 
 const Setting = props => {
   const {

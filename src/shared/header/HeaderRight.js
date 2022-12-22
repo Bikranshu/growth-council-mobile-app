@@ -1,7 +1,8 @@
 import React, {useEffect, useState} from 'react';
 import {Image, TouchableOpacity, View} from 'react-native';
-import Ionicons from 'react-native-vector-icons/Ionicons';
+
 import {useIsFocused} from '@react-navigation/native';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 
 const HeaderRight = props => {
   const {navigation, profile} = props;

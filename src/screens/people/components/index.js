@@ -15,20 +15,21 @@ import {
   Pressable,
 } from 'react-native';
 
+import {Searchbar} from 'react-native-paper';
+import {Button, useToast} from 'native-base';
+import {Picker} from '@react-native-picker/picker';
+import analytics from '@react-native-firebase/analytics';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import Material from 'react-native-vector-icons/MaterialIcons';
-import {Picker} from '@react-native-picker/picker';
-import FloatingButton from '../../../shared/floatingButton';
-import {Button, useToast} from 'native-base';
-import analytics from '@react-native-firebase/analytics';
 import {useIsFocused, useFocusEffect} from '@react-navigation/native';
-import {Colors, Typography} from '../../../theme';
-import ToastMessage from '../../../shared/toast';
-import {Searchbar} from 'react-native-paper';
-import BottomNav from '../../../layout/BottomLayout';
+
 import Loading from '../../../shared/loading';
+import ToastMessage from '../../../shared/toast';
+import {Colors, Typography} from '../../../theme';
 import {PRACTICE_COLOR} from '../../../theme/colors';
+import BottomNav from '../../../layout/BottomLayout';
+import FloatingButton from '../../../shared/floatingButton';
 
 const win = Dimensions.get('window');
 const contentContainerWidth = win.width - 30;

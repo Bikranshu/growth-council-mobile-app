@@ -37,7 +37,7 @@ import CoachingSessionDetailScreen from '../screens/coachingSession';
 import SelfLearnDetailScreen from '../screens/selfLearn';
 import PDFDetailScreen from '../screens/selfLearn/pdf';
 import SelfAssessment from '../screens/coachingSession/component/selfAssessment';
-import NotificationScreen from '../screens/Notification';
+// import NotificationScreen from '../screens/Notification';
 import MainHeader from '../shared/header/MainHeader';
 import UserListScreen from '../screens/chat/UserList';
 import PeopleScreen from '../screens/people';
@@ -234,7 +234,7 @@ const AppStack = navigation => (
       })}
     />
 
-    <Screen
+    {/* <Screen
       name="Notification"
       component={NotificationScreen}
       options={() => ({
@@ -247,7 +247,7 @@ const AppStack = navigation => (
           />
         ),
       })}
-    />
+    /> */}
 
     <Screen
       name="NotificationList"

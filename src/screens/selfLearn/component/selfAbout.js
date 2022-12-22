@@ -9,12 +9,13 @@ import {
   Image,
   TouchableOpacity,
 } from 'react-native';
+
 import {Button} from 'native-base';
 import HTMLView from 'react-native-htmlview';
-
 import {BubblesLoader} from 'react-native-indicator';
-import {CommonStyles, Colors, Typography} from '../../../theme';
+
 import Loading from '../../../shared/loading';
+import {CommonStyles, Colors, Typography} from '../../../theme';
 
 const selfAbout = props => {
   const {

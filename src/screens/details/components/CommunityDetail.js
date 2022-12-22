@@ -12,27 +12,27 @@ import {
   StatusBar,
   PermissionsAndroid,
 } from 'react-native';
-import {Button, useToast} from 'native-base';
-import FloatingButton from '../../../shared/floatingButton';
 
+import moment from 'moment';
+import HTMLView from 'react-native-htmlview';
+import {Button, useToast} from 'native-base';
+import RNFetchBlob from 'react-native-blob-util';
+import LinearGradient from 'react-native-linear-gradient';
+import Ionicons from 'react-native-vector-icons/Ionicons';
+import FloatingButton from '../../../shared/floatingButton';
 import FeatherIcon from 'react-native-vector-icons/Feather';
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome';
 import {useFocusEffect, useIsFocused} from '@react-navigation/native';
-import Ionicons from 'react-native-vector-icons/Ionicons';
-import moment from 'moment';
-import HTMLView from 'react-native-htmlview';
-import {CommonStyles, Colors, Typography} from '../../../theme';
-import Loading from '../../../shared/loading';
-import RNFetchBlob from 'react-native-blob-util';
-import LinearGradient from 'react-native-linear-gradient';
-import {COACHING_COLOR, COMMUNITY_COLOR} from '../../../theme/colors';
 
-import ToastMessage from '../../../shared/toast';
 import {
   GROWTH_COACHING_ID,
   GROWTH_COMMUNITY_ID,
   GROWTH_CONTENT_ID,
 } from '../../../constants';
+import Loading from '../../../shared/loading';
+import ToastMessage from '../../../shared/toast';
+import {CommonStyles, Colors, Typography} from '../../../theme';
+import {COACHING_COLOR, COMMUNITY_COLOR} from '../../../theme/colors';
 
 const win = Dimensions.get('window');
 const contentContainerWidth = win.width - 30;
@@ -73,8 +73,6 @@ const CommunityDetail = props => {
     getSlugError,
     GetIdBySlug,
     cleanSlug,
-
-  
   } = props;
 
   const isFocused = useIsFocused();
@@ -127,8 +125,6 @@ const CommunityDetail = props => {
       };
     }, [isFocused]),
   );
-
-
 
   //   useEffect(() => {
   //  GetIdBySlug({
@@ -520,7 +516,7 @@ const CommunityDetail = props => {
                   }}
                 />
               </View>
-              
+
               {poeDetails !== null &&
                 pillarPOEs !== null &&
                 pillarPOEs !== false &&

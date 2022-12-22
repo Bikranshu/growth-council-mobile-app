@@ -10,6 +10,7 @@ import {
   Platform,
   ActivityIndicator,
 } from 'react-native';
+
 import Pdf from 'react-native-pdf';
 import ToastMessage from '../../../shared/toast';
 import RNFetchBlob from 'react-native-blob-util';

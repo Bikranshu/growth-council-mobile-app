@@ -9,13 +9,12 @@ import {
   StyleSheet,
   Dimensions,
 } from 'react-native';
+
 import {Button} from 'native-base';
 import {Linking} from 'react-native';
-
 import HTMLView from 'react-native-htmlview';
 
 import {CommonStyles, Colors, Typography} from '../../../theme';
-import Footer from '../../../shared/footer';
 
 const Terms = props => {
   const {

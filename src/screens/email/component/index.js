@@ -12,17 +12,19 @@ import {
   TextInput,
   SafeAreaView,
   Keyboard,
-  TouchableWithoutFeedback
+  TouchableWithoutFeedback,
 } from 'react-native';
-import Ionicons from 'react-native-vector-icons/Ionicons';
-import {useIsFocused} from '@react-navigation/native';
+
 import * as Yup from 'yup';
-import analytics from '@react-native-firebase/analytics';
 import {useFormik} from 'formik';
 import {Button} from 'native-base';
+import {useIsFocused} from '@react-navigation/native';
+import analytics from '@react-native-firebase/analytics';
+import Ionicons from 'react-native-vector-icons/Ionicons';
+
+import Loading from '../../../shared/loading';
 import ToastMessage from '../../../shared/toast';
 import {CommonStyles, Colors, Typography} from '../../../theme';
-import Loading from '../../../shared/loading';
 import autoMergeLevel1 from 'redux-persist/es/stateReconciler/autoMergeLevel1';
 
 const emailSchema = Yup.object().shape({
@@ -124,7 +126,6 @@ const Email = props => {
             </View>
           </SafeAreaView>
           <View style={{padding: 20, backgroundColor: 'white'}}>
-
             <View style={{flexDirection: 'row'}}>
               <Text style={{fontSize: 18, marginTop: 10}}>From:</Text>
 
@@ -141,44 +142,47 @@ const Email = props => {
 
             {sendMailLoading && <Loading />}
 
-			<TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
-            <View style={{marginTop: 10}}>
-              <Text style={{fontSize: 18}}>Subject:</Text>
-			  
-              <TextInput
-                multiline={true}
-                numberOfLines={2}
-                style={styles.textarea}
-                placeholder={defaultValue}
-                value={values.subject}
-                onChangeText={handleChange('subject')}
-                onFocus={handleBlur('subject')}
-                error={errors.subject}
-                touched={touched.subject}
-              />
-            </View>
-			</TouchableWithoutFeedback>
-			
-			<TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
-            <View style={{marginTop: 10}}>
-              <Text style={{fontSize: 18}}>Messages:</Text>
-              <TextInput
-                multiline={true}
-                numberOfLines={15}
-                style={styles.textarea1}
-                defaultValue={route?.params?.title}
-                value={values.message}
-                onChangeText={handleChange('message')}
-                onFocus={handleBlur('message')}
-                error={errors.message}
-                touched={touched.message}
-              />
-            </View>
-			</TouchableWithoutFeedback>
+            <TouchableWithoutFeedback
+              onPress={Keyboard.dismiss}
+              accessible={false}>
+              <View style={{marginTop: 10}}>
+                <Text style={{fontSize: 18}}>Subject:</Text>
+
+                <TextInput
+                  multiline={true}
+                  numberOfLines={2}
+                  style={styles.textarea}
+                  placeholder={defaultValue}
+                  value={values.subject}
+                  onChangeText={handleChange('subject')}
+                  onFocus={handleBlur('subject')}
+                  error={errors.subject}
+                  touched={touched.subject}
+                />
+              </View>
+            </TouchableWithoutFeedback>
+
+            <TouchableWithoutFeedback
+              onPress={Keyboard.dismiss}
+              accessible={false}>
+              <View style={{marginTop: 10}}>
+                <Text style={{fontSize: 18}}>Messages:</Text>
+                <TextInput
+                  multiline={true}
+                  numberOfLines={15}
+                  style={styles.textarea1}
+                  defaultValue={route?.params?.title}
+                  value={values.message}
+                  onChangeText={handleChange('message')}
+                  onFocus={handleBlur('message')}
+                  error={errors.message}
+                  touched={touched.message}
+                />
+              </View>
+            </TouchableWithoutFeedback>
 
             <View style={styles.buttonWrapper}>
-              <TouchableOpacity style={styles.button} 
-			  onPress={handleSubmit}>
+              <TouchableOpacity style={styles.button} onPress={handleSubmit}>
                 <Text style={styles.buttonText}>Send</Text>
               </TouchableOpacity>
             </View>
@@ -231,7 +235,7 @@ const styles = StyleSheet.create({
     borderWidth: 0.2,
     marginTop: 10,
     borderRadius: 5,
-	padding: 10
+    padding: 10,
   },
   buttonWrapper: {
     width: 200,

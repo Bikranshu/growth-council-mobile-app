@@ -11,21 +11,22 @@ import {
   StatusBar,
   Dimensions,
 } from 'react-native';
+
+import moment from 'moment';
 import {Button} from 'react-native-paper';
+import {BubblesLoader} from 'react-native-indicator';
+import analytics from '@react-native-firebase/analytics';
 import Font from 'react-native-vector-icons/FontAwesome5';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import moment from 'moment';
-import SearchBox from '../../../shared/form/SearchBar';
-import analytics from '@react-native-firebase/analytics';
-import {BubblesLoader} from 'react-native-indicator';
+
 import {
   GROWTH_COACHING_ID,
   GROWTH_COMMUNITY_ID,
   GROWTH_CONTENT_ID,
 } from '../../../constants';
-
-import {CommonStyles, Colors, Typography} from '../../../theme';
 import Loading from '../../../shared/loading';
+import SearchBox from '../../../shared/form/SearchBar';
+import {CommonStyles, Colors, Typography} from '../../../theme';
 
 const win = Dimensions.get('window');
 const contentContainerWidth = win.width - 30;
@@ -252,10 +253,7 @@ const Search = props => {
               justifyContent: 'center',
               width: '95%',
             }}>
-            <SearchBox
-              searchEventsByIdentifier={searchEventsByIdentifier}
-              
-            />
+            <SearchBox searchEventsByIdentifier={searchEventsByIdentifier} />
           </View>
         </ImageBackground>
         <ScrollView

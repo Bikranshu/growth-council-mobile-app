@@ -13,25 +13,25 @@ import {
   Dimensions,
 } from 'react-native';
 
-import FeatherIcon from 'react-native-vector-icons/Feather';
-import Entypo from 'react-native-vector-icons/Entypo';
-import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome';
+import {Linking} from 'react-native';
+import HTMLView from 'react-native-htmlview';
+import {Searchbar} from 'react-native-paper';
 import ToastMessage from '../../../shared/toast';
 import RNFetchBlob from 'react-native-blob-util';
-// import ReactNativeBlobUtil from 'react-native-blob-util';
-import BottomNav from '../../../layout/BottomLayout';
-import ArticleFeedbackCard from '../../../shared/card/ArticleFeedbackCard';
-import Footer from '../../../shared/footer';
-import SearchHeader from '../../../shared/header/SearchHeader';
-import {Colors, CommonStyles} from '../../../theme';
-import Ionicons from 'react-native-vector-icons/Ionicons';
-import {Searchbar} from 'react-native-paper';
-import {useFocusEffect, useIsFocused} from '@react-navigation/native';
-import {Linking} from 'react-native';
-import {BubblesLoader} from 'react-native-indicator';
 import WebView from 'react-native-autoheight-webview';
-import HTMLView from 'react-native-htmlview';
+import Entypo from 'react-native-vector-icons/Entypo';
+import Ionicons from 'react-native-vector-icons/Ionicons';
+import FeatherIcon from 'react-native-vector-icons/Feather';
+import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome';
+import {useFocusEffect, useIsFocused} from '@react-navigation/native';
+
+// import ReactNativeBlobUtil from 'react-native-blob-util';
+
 import Loading from '../../../shared/loading';
+import {Colors, CommonStyles} from '../../../theme';
+import BottomNav from '../../../layout/BottomLayout';
+import SearchHeader from '../../../shared/header/SearchHeader';
+import ArticleFeedbackCard from '../../../shared/card/ArticleFeedbackCard';
 
 const TabDetail = props => {
   const {

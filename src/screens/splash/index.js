@@ -9,12 +9,13 @@ import {
   Image,
   ImageBackground,
 } from 'react-native';
-import {QUATERNARY_TEXT_COLOR} from '../../theme/colors';
+
 import {
   FONT_EXTRA_BOLD,
   FONT_SF_MEDIUM,
   FONT_WEIGHT_HEAVY,
 } from '../../theme/typography';
+import {QUATERNARY_TEXT_COLOR} from '../../theme/colors';
 
 const screenWidth = Dimensions.get('screen').width;
 const screenHeight = Dimensions.get('screen').height;

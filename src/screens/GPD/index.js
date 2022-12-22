@@ -1,5 +1,4 @@
 import React, {useCallback, useState, useEffect} from 'react';
-import {useDispatch, useSelector} from 'react-redux';
 import {
   Platform,
   Text,
@@ -12,12 +11,15 @@ import {
   TouchableOpacity,
   Modal,
 } from 'react-native';
+
 import {Button} from 'native-base';
-import FloatingButton from '../../shared/floatingButton';
 import HTMLView from 'react-native-htmlview';
+import {useDispatch, useSelector} from 'react-redux';
+
+import Loading from '../../shared/loading';
+import FloatingButton from '../../shared/floatingButton';
 import {CommonStyles, Colors, Typography} from '../../theme';
 import {fetchGrowthPipeline, resetGrowthPipeline} from './GPDSlice';
-import Loading from '../../shared/loading';
 
 const GPDScreen = props => {
   const dispatch = useDispatch();
