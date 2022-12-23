@@ -107,7 +107,9 @@ const Setting = props => {
       //   console.log({values});
       await updateUserNotification(values).then(response => {
         console.log(response);
-        ToastMessage.show('You have successfully updated your notification');
+        ToastMessage.show(
+          'You have successfully updated your notification settings',
+        );
       });
     },
   });
@@ -355,7 +357,7 @@ const Setting = props => {
                                 color: '#222B45',
                                 fontWeight: '500',
                               }}>
-                              Notification
+                              Notifications
                             </Text>
                           </View>
                         }

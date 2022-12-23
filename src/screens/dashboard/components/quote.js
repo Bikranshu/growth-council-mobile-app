@@ -16,13 +16,13 @@ const win = Dimensions.get('window');
 
 const Quote = props => {
   const {dailyQuote, navigation, modalVisible, setModalVisible} = props;
-  //   const [textShown, setTextShown] = useState(false); //To show ur remaining Text
+
   const [lengthMore, setLengthMore] = useState(false); //to show the "Read more & Less Line"
   //   const [modalVisible, setModalVisible] = useState(false);
   const [data, setdata] = useState('');
 
   const onTextLayout = useCallback(e => {
-    setLengthMore(e.nativeEvent.lines.length >= 3); //to check the text is more than 4 lines or not
+    setLengthMore(e.nativeEvent.lines.length >= 3); //to check the text is more than 3 lines or not
     // console.log(e.nativeEvent);
   }, []);
 
@@ -91,7 +91,7 @@ const Quote = props => {
                         color: 'white',
                         textAlign: 'center',
                       }}>
-                      'See More...'{' '}
+                      See More
                     </Text>
                   </TouchableOpacity>
                 )}
