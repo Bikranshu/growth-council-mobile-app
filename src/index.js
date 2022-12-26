@@ -1,5 +1,5 @@
 import 'react-native-gesture-handler';
-import React, {useEffect, useRef} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import jwt_decode from 'jwt-decode';
 import {StyleSheet, View, Text} from 'react-native';
 import {Provider} from 'react-redux';
@@ -18,6 +18,7 @@ import SplashScreen from './screens/splash';
 import {Platform} from 'react-native';
 import Modal from 'react-native-modal';
 import {useAuthentication} from './context/auth';
+import {navigate} from './utils/navigationUtil';
 import {
   setAsyncStorage,
   clearAsyncStorage,
@@ -52,8 +53,10 @@ const App = () => {
   };
 
   const netInfo = useNetInfo();
-  const {loading, setLoading, message, setMessage, signOut} =
-    useAuthentication();
+  const [loading, setLoading] = useState(true);
+  const [initialRoute, setInitialRoute] = useState('Dashboard');
+
+  const {message, setMessage, signOut} = useAuthentication();
 
   useEffect(() => {
     getNotifications();
@@ -104,11 +107,30 @@ const App = () => {
   //   };
 
   const getNotifications = async () => {
-    await messaging().onNotificationOpenedApp(remoteMessage => {});
+    // Assume a message-notification contains a "type" property in the data payload of the screen to open
+    await messaging().onNotificationOpenedApp(remoteMessage => {
+      console.log(
+        'Notification caused app to open from background state:',
+        remoteMessage.notification,
+      );
+      navigate(remoteMessage.data.type);
+    });
+
+    // Check whether an initial notification is available
     await messaging()
       .getInitialNotification()
-      .then(remoteMessage => {});
+      .then(remoteMessage => {
+        if (remoteMessage) {
+          console.log(
+            'Notification caused app to open from quit state:',
+            remoteMessage.notification,
+          );
+          setInitialRoute(remoteMessage.data.type); // e.g. "chat"
+        }
+        setLoading(false);
+      });
   };
+
   const _createChannel = () => {
     PushNotification.createChannel(
       {
