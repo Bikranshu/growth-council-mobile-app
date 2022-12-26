@@ -234,7 +234,6 @@ const Dashboard = props => {
     }
   };
 
-
   const _renderDailyQuoteItem = ({item, index}) => {
     const date = new Date();
     let localTime = date.getTime();
@@ -627,8 +626,9 @@ const Dashboard = props => {
               <View
                 style={{
                   alignItems: 'center',
-                  marginTop: 10,
+                //   marginTop: 10,
                 }}>
+                <Text style={{color: 'white', fontSize: 8}}>DAILY QUOTE</Text>
                 <Quote
                   dailyQuote={dailyQuote}
                   navigation={navigation}
