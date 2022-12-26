@@ -24,7 +24,7 @@ const Quote = props => {
   const [data, setdata] = useState('');
 
   const onTextLayout = useCallback(e => {
-    setLengthMore(e.nativeEvent.lines.length >= 3); //to check the text is more than 4 lines or not
+    setLengthMore(e.nativeEvent.lines.length >= 3); //to check the text is more than 3 lines or not
     // console.log(e.nativeEvent);
   }, []);
 

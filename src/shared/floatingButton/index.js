@@ -54,8 +54,12 @@ const FloatingButton = props => {
 
     if (response?.payload?.code === 200) {
       setModalVisible(false);
-      ToastMessage.show('Growth Pipeline Dialog Email send sucessfully');
-      console.log('Growth Pipeline Dialog Email send sucessfully');
+      ToastMessage.show(
+        'Your request for Growth Pipeline Dialog has been sent successfully.',
+      );
+      console.log(
+        'Your request for Growth Pipeline Dialog has been sent successfully.',
+      );
     } else {
       toast.closeAll();
       ToastMessage.show(response?.payload?.message);
