@@ -16,16 +16,17 @@ const win = Dimensions.get('window');
 
 const Quote = props => {
   const {dailyQuote, navigation, modalVisible, setModalVisible} = props;
-  //   const [textShown, setTextShown] = useState(false); //To show ur remaining Text
+
   const [lengthMore, setLengthMore] = useState(false); //to show the "Read more & Less Line"
   //   const [modalVisible, setModalVisible] = useState(false);
   const [data, setdata] = useState('');
 
   const onTextLayout = useCallback(e => {
-    setLengthMore(e.nativeEvent.lines.length >= 2); //to check the text is more than 4 lines or not
+    setLengthMore(e.nativeEvent.lines.length >= 3); //to check the text is more than 3 lines or not
     // console.log(e.nativeEvent);
   }, []);
 
+  console.log({lengthMore});
   const _renderDailyQuoteItem = ({item, index}) => {
     const date = new Date();
     let localTime = date.getTime();
@@ -51,38 +52,49 @@ const Quote = props => {
                 <Text
                   onTextLayout={onTextLayout}
                   numberOfLines={2}
-                  style={{fontSize: 14, marginTop: 10, color: 'white'}}>
+                  style={{
+                    fontSize: 14,
+                    color: 'white',
+                    textAlign: 'center',
+                    marginBottom: 10,
+                    // alignItems: 'center',
+                  }}>
                   {item?.daily_quote}
                 </Text>
                 <View
                   style={{
                     alignItems: 'flex-end',
                     position: 'absolute',
-                    right: 10,
-                    bottom: 30,
+                    right: 5,
+                    bottom: 10,
                   }}>
                   <Text
                     style={{
                       fontSize: 12,
                       position: 'absolute',
-                      right: 10,
+                      right: 5,
                       fontWeight: 'bold',
                       color: 'white',
-                      marginTop: 5,
                     }}>
-                    {item?.quote_author}
+                    -{item?.quote_author}
                   </Text>
                 </View>
-                <TouchableOpacity
-                  onPress={() => {
-                    setModalVisible(true), setdata(item);
-                  }}
-                  style={{marginTop: 10}}>
-                  <Text
-                    style={{fontSize: 12, color: 'white', textAlign: 'center'}}>
-                    'See More...'{' '}
-                  </Text>
-                </TouchableOpacity>
+                {lengthMore && (
+                  <TouchableOpacity
+                    onPress={() => {
+                      setModalVisible(true), setdata(item);
+                    }}
+                    style={{}}>
+                    <Text
+                      style={{
+                        fontSize: 12,
+                        color: 'white',
+                        textAlign: 'center',
+                      }}>
+                      See More
+                    </Text>
+                  </TouchableOpacity>
+                )}
               </View>
             </LinearGradient>
           </View>
@@ -121,7 +133,7 @@ const Quote = props => {
             <LinearGradient
               start={{x: 0.697, y: -0.943}}
               end={{x: 0.413, y: 2.24}}
-			  colors={['#58AFF6', '#002651']}
+              colors={['#58AFF6', '#002651']}
               style={{
                 margin: 20,
                 backgroundColor: 'white',
@@ -200,7 +212,7 @@ const styles = StyleSheet.create({
     height: 80,
     width: Dimensions.get('screen').width - 10,
     justifyContent: 'center',
-    alignItems: 'center',
+
     marginBottom: 20,
     borderRadius: 14,
     padding: 10,
