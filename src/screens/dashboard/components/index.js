@@ -18,12 +18,12 @@ import moment from 'moment';
 import HTMLView from 'react-native-htmlview';
 import {BlurView} from '@react-native-community/blur';
 import {useNavigation} from '@react-navigation/native';
-import {useFocusEffect} from '@react-navigation/native';
 import messaging from '@react-native-firebase/messaging';
 import analytics from '@react-native-firebase/analytics';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import Material from 'react-native-vector-icons/MaterialIcons';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
+import {useFocusEffect, useIsFocused} from '@react-navigation/native';
 
 import Quote from './quote';
 import PillarList from './PillarList';
@@ -120,6 +120,7 @@ const Dashboard = props => {
   const [dataSourceCords, setDataSourceCords] = useState(criticalIssue);
   const [ref, setRef] = useState(null);
   const navigation = useNavigation();
+  const isFocused = useIsFocused();
 
   let string = region;
   if (string) string = string.toLowerCase();
@@ -184,7 +185,7 @@ const Dashboard = props => {
 
   useEffect(() => {
     fetchDailyQuote();
-  }, []);
+  }, [isFocused]);
 
   useEffect(() => {
     const fetchLatestContentAsync = async () => {
@@ -232,6 +233,7 @@ const Dashboard = props => {
       ToastMessage.show(response?.payload?.response);
     }
   };
+
 
   const _renderDailyQuoteItem = ({item, index}) => {
     const date = new Date();
@@ -495,7 +497,6 @@ const Dashboard = props => {
             {setHideCritical(
               item?.region?.includes(lowercaseRegion) === true ? true : false,
             )}
-            {/* {console.log("hello", index)} */}
 
             <View
               style={styles.ContentWrapper}
@@ -643,6 +644,7 @@ const Dashboard = props => {
               </View>
             </ImageBackground>
           </View>
+
           <View style={{height: 60}} />
           {regionEvents?.length !== 0 &&
             regionEvents !== null &&
