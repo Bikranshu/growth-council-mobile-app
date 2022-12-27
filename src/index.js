@@ -44,6 +44,7 @@ const NoInternetModel = () => (
 );
 
 const App = () => {
+	
   useEffect(() => {
     init();
   }, []);
