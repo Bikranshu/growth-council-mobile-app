@@ -643,7 +643,7 @@
 				CODE_SIGN_ENTITLEMENTS = GrowthCouncil/GrowthCouncil.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 67;
+				CURRENT_PROJECT_VERSION = 68;
 				DEVELOPMENT_TEAM = 3GB43PZ5Z7;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = GrowthCouncil/Info.plist;
@@ -682,7 +682,7 @@
 				CODE_SIGN_ENTITLEMENTS = GrowthCouncil/GrowthCouncil.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 67;
+				CURRENT_PROJECT_VERSION = 68;
 				DEVELOPMENT_TEAM = 3GB43PZ5Z7;
 				INFOPLIST_FILE = GrowthCouncil/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "Growth Council App";
