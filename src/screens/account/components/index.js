@@ -124,14 +124,16 @@ const Profile = props => {
               }}>
               <TouchableOpacity
                 onPress={async () => {
-                  navigation.navigate('Settings');
-                  await analytics().logEvent('ProfileSettings', {
-                    item: 'Profile Settings',
-                  });
+                  navigation.navigate('ManageAccount');
                 }}>
-                <Ionicon
+                {/* <Ionicon
                   name={'settings-outline'}
                   size={24}
+                  color="#A0A8B0"
+                  style={{marginTop: 10, marginLeft: 5}}/> */}
+                <Font
+                  name={'user-edit'}
+                  size={20}
                   color="#A0A8B0"
                   style={{marginTop: 10, marginLeft: 5}}
                 />

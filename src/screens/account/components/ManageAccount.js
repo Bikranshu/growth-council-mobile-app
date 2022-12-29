@@ -147,6 +147,8 @@ const ManageAccount = props => {
 
   const takePhotoFromCamera = () => {
     ImagePicker.openCamera({
+      width: 270,
+      height: 270,
       cropping: true,
       cropperCircleOverlay: true,
     }).then(async image => {
@@ -164,6 +166,8 @@ const ManageAccount = props => {
   };
   const choosePhotoFromLibrary = () => {
     ImagePicker.openPicker({
+      width: 270,
+      height: 270,
       cropping: true,
       cropperCircleOverlay: true,
     }).then(async image => {
