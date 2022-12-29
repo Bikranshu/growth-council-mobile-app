@@ -56,13 +56,14 @@ const ContentLibraryDetail = props => {
     }, [isFocused]),
   );
 
-  const [emailStatus, setEmailStatus] = useState(false);
+  //   const [emailStatus, setEmailStatus] = useState(false);
 
-  const [isTrue, setIsTrue] = useState(true);
+  const [isTrue, setIsTrue] = useState();
 
   const handleFeedbackChange = value => {
     setIsTrue(value);
   };
+  console.log('result', isTrue);
 
   const _renderItem = ({item, index}) => {
     const fileUrl = item?.file?.url;

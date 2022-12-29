@@ -109,35 +109,37 @@ const HomeCommunity = props => {
     region = profile?.user_meta?.region[0];
   }
 
-  let persona = profile?.user_meta?.user_persona;
-  if (typeof persona === 'undefined' || persona === null) {
-    persona = ' ';
-  } else {
-    persona = profile?.user_meta?.user_persona[0];
-  }
+  //   let persona = profile?.user_meta?.user_persona;
+  //   if (typeof persona === 'undefined' || persona === null) {
+  //     persona = ' ';
+  //   } else {
+  //     persona = profile?.user_meta?.user_persona[0];
+  //   }
 
-  console.log('user_persona', persona);
+  //   console.log('user_persona', persona);
 
-  let string = region;
-  if (string) string = string.toLowerCase();
+  //   let string = region;
+  //   if (string) string = string.toLowerCase();
 
-  let regionUser = profile?.user_meta?.region;
-  if (typeof regionUser === 'undefined' || regionUser === null) {
-    regionUser = ' ';
-  } else {
-    regionUser = profile?.user_meta?.region[0];
-  }
+  //   let regionUser = profile?.user_meta?.region;
+  //   if (typeof regionUser === 'undefined' || regionUser === null) {
+  //     regionUser = ' ';
+  //   } else {
+  //     regionUser = profile?.user_meta?.region[0];
+  //   }
 
-  //   region = region === 'AMERICAS' ? 'north-america' : region;
   const [userRegion, setUserRegion] = useState(region);
   const [memberConnection, setMemberConnection] = useState([]);
   const [deleteConnect, setDeleteConnect] = useState([]);
   const [hideEvents, setHideEvents] = useState();
 
-  useEffect(() => {
-    fetchProfile();
-  }, []);
+  //   useEffect(() => {
+  //     fetchProfile();
+  //   }, []);
 
+  console.log('1', profile);
+  console.log('2', userRegion);
+  
   useEffect(() => {
     setUserRegion(region);
   }, [profile]);
@@ -185,7 +187,7 @@ const HomeCommunity = props => {
         await fetchAllCommunityMember({
           s: '',
           sort: 'Desc',
-          region: regionUser,
+          region: userRegion,
         });
       };
       fetchAllCommunityMemberAsync();
@@ -198,7 +200,7 @@ const HomeCommunity = props => {
 
   useEffect(() => {
     setMemberConnection(communityMembers);
-    setDeleteConnect(communityMembers);
+    // setDeleteConnect(communityMembers);
   }, [communityMembers]);
 
   const connectMemberByMemberID = async (memberID, index) => {

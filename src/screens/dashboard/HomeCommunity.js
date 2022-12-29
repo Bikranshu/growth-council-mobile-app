@@ -131,13 +131,17 @@ const HomeCommunityScreen = props => {
     dispatch(resetRegionEvent());
   };
 
-  const fetchProfile = () => {
-    dispatch(fetchProfileByID());
-  };
+//   const fetchProfile = () => {
+//     dispatch(fetchProfileByID());
+//   };
 
   const cleanProfile = () => {
     dispatch(resetProfile());
   };
+
+  useEffect(() => {
+    fetchProfileByID();
+  }, []);
   return (
     <HomeCommunity
       {...props}
@@ -179,7 +183,7 @@ const HomeCommunityScreen = props => {
       profile={profile}
       profileLoading={profileLoading}
       profileError={profileError}
-      fetchProfile={fetchProfile}
+    //   fetchProfile={fetchProfile}
       cleanProfile={cleanProfile}
       deleteConnections={deleteConnections}
       deleteConnectionLoading={deleteConnectionLoading}

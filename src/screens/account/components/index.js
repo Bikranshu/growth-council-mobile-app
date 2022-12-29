@@ -16,6 +16,7 @@ import {useIsFocused} from '@react-navigation/native';
 import analytics from '@react-native-firebase/analytics';
 import CountDown from 'react-native-countdown-component';
 import Ionicon from 'react-native-vector-icons/Ionicons';
+import Font from 'react-native-vector-icons/FontAwesome5';
 import FloatingButton from '../../../shared/floatingButton';
 import ButtonToggleGroup from 'react-native-button-toggle-group';
 
@@ -23,7 +24,7 @@ import MyEvent from './MyEvent';
 import AboutMe from './AboutMe';
 import Loading from '../../../shared/loading';
 import BottomNav from '../../../layout/BottomLayout';
-import {CommonStyles, Colors, Typography} from '../../../theme';
+import {CommonStyles, Typography} from '../../../theme';
 import {PRIMARY_BACKGROUND_COLOR} from '../../../theme/colors';
 
 const Profile = props => {
