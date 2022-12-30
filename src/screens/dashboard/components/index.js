@@ -42,23 +42,6 @@ const contentContainerWidth = win / 2;
 
 const Dashboard = props => {
   const {
-    // upcomingEvents,
-    // upcomingEventLoading,
-    // upcomingEventError,
-    // fetchAllUpcomingEvent,
-    // cleanUpcomingEvent,
-    // poes,
-    // poeLoading,
-    // poeError,
-    // fetchAllPOE,
-    // cleanPOE,
-
-    // pillarEventLists,
-    // pillarEventLoading,
-    // pillarEventError,
-    // fetchAllPillarEvent,
-    // cleanPillarEvent,
-    // contentSlider,
 
     communityMembers,
     communityMemberLoading,
