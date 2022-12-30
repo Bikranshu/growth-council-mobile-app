@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   View,
   Text,
@@ -11,13 +11,105 @@ import {
 } from 'react-native';
 
 import {Colors} from '../../theme';
+import {useFormik} from 'formik';
 import FeatherIcon from 'react-native-vector-icons/Feather';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import ToastMessage from '../toast';
+import Loading from '../loading';
+import * as Yup from 'yup';
+
+const contentLibraryDetailSchema = Yup.object().shape({
+  //   display_name: Yup.string().required('Name is required.'),
+  //   first_name: Yup.string().required('First name is required.'),
+  //   last_name: Yup.string().required('Last Name is required.'),
+  email: Yup.string()
+    .email('Please enter a valid email.')
+    .required('Email is required.'),
+});
 
 const ArticleFeedbackCard = props => {
-  //   const {isTrue, handleValue} = props;
-  const [likeCount, setLikeCount] = useState(0);
-  const [dislikeCount, setDislikeCount] = useState(0);
+  const {
+    // isTrue,
+    // handleValue,
+    article,
+    articleLoading,
+    articleError,
+    ContentLibraryArticle,
+    contentLibraryDetails,
+    fetchContentLibraryDetail,
+  } = props;
+
+  const likes = Number(contentLibraryDetails?.likes);
+  const dislikes = Number(contentLibraryDetails?.dislikes);
+
+  const [likeCount, setLikeCount] = useState(likes === NaN ? 0 : likes);
+  const [dislikeCount, setDislikeCount] = useState(dislikes);
+
+  //   const [articleAction, setArticleAction] = useState('like');
+  const [likeEnabled, setLikeEnabled] = useState(false);
+  const [dislikeEnabled, setDislikeEnabled] = useState(false);
+
+  useEffect(() => {
+    setLikeCount(likes === NaN ? 0 : likes);
+    setDislikeCount(dislikes);
+  }, [contentLibraryDetails]);
+
+  const {
+    handleChange,
+    handleBlur,
+    handleSubmit,
+    values,
+    errors,
+    touched,
+    isValid,
+    setFieldValue,
+    resetForm,
+  } = useFormik({
+    initialValues: {
+      id: contentLibraryDetails?.ID,
+      action: '',
+      email: '',
+      content: '',
+    },
+    onSubmit: async values => {
+      console.log({values});
+      await ContentLibraryArticle(values).then(response => {
+        console.log(response);
+        if (response?.payload?.code === 200) {
+          ToastMessage.show(response?.payload?.data);
+          fetchContentLibraryDetail(contentLibraryDetails?.ID);
+        }
+      });
+      resetForm();
+      setLikeEnabled(false);
+
+    },
+  });
+  const articlelikeSwitch = () => {
+    setLikeCount(likeCount + 1);
+
+    setFieldValue('id', contentLibraryDetails?.ID);
+    setFieldValue('action', 'like');
+
+    handleSubmit();
+
+    setLikeEnabled(true);
+    setDislikeEnabled(false);
+  };
+
+  const articledislikeSwitch = () => {
+    setFieldValue('id', contentLibraryDetails?.ID);
+    setDislikeCount(dislikeCount + 1);
+    setFieldValue('action', 'dislike');
+
+    handleSubmit();
+
+    setDislikeEnabled(true);
+    setLikeEnabled(false);
+  };
+
+  console.log(contentLibraryDetails?.ID);
+
   return (
     <>
       <View style={styles.articleContainer}>
@@ -25,23 +117,23 @@ const ArticleFeedbackCard = props => {
         <View style={styles.articleContainerDivider} />
         <View style={styles.articleButtonsContainer}>
           <View style={styles.singleButtonContainer}>
-            <Pressable
+            <TouchableOpacity
               style={[
-                likeCount === 0 ? styles.checkButton : styles.checkButton1,
+                likeEnabled === false
+                  ? styles.checkButton
+                  : styles.checkButton1,
               ]}
-              onPress={() => {
-                // handleValue(true),
-                setLikeCount(likeCount + 1), setDislikeCount(0);
-              }}>
+              onPress={articlelikeSwitch}>
+              {/* // onPressIn={articlelikeSwitch}> */}
               {/* {isTrue && <FeatherIcon name="check" color="#62C1EB" />} */}
               <Ionicons
                 name="happy"
-                color={likeCount === 0 ? '#899499' : 'white'}
+                color={likeEnabled === false ? '#899499' : 'white'}
                 size={18}
               />
               <Text
                 style={[
-                  likeCount === 0
+                  likeEnabled === false
                     ? styles.checkButtonText
                     : styles.checkButtonText1,
                 ]}>
@@ -49,34 +141,32 @@ const ArticleFeedbackCard = props => {
               </Text>
               <Text
                 style={[
-                  likeCount === 0
+                  likeEnabled === false
                     ? styles.checkButtonText
                     : styles.checkButtonText1,
                 ]}>
                 {likeCount}
               </Text>
-            </Pressable>
+            </TouchableOpacity>
           </View>
+          {articleLoading && <Loading />}
           <View style={styles.singleButtonContainer}>
             <Pressable
               style={[
-                dislikeCount === 0
+                dislikeEnabled === false
                   ? styles.checkButton
                   : styles.dislikeCheckButton,
               ]}
-              onPress={() => {
-                // handleValue(true),
-                setDislikeCount(dislikeCount + 1), setLikeCount(0);
-              }}>
+              onPress={articledislikeSwitch}>
               {/* {!isTrue && <FeatherIcon name="check" color="#62C1EB" />} */}
               <Ionicons
                 name="sad"
-                color={dislikeCount === 0 ? '#899499' : 'white'}
+                color={dislikeEnabled === false ? '#899499' : 'white'}
                 size={18}
               />
               <Text
                 style={[
-                  dislikeCount === 0
+                  dislikeEnabled === false
                     ? styles.checkButtonText
                     : styles.checkButtonText1,
                 ]}>
@@ -84,26 +174,37 @@ const ArticleFeedbackCard = props => {
               </Text>
               <Text
                 style={[
-                  dislikeCount === 0
+                  dislikeEnabled === false
                     ? styles.checkButtonText
                     : styles.checkButtonText1,
                 ]}>
-                {dislikeCount}
+                {dislikeCount === NaN ? '' : dislikeCount}
               </Text>
             </Pressable>
           </View>
         </View>
-        {dislikeCount !== 0 && (
+        <Text style={{color: 'white', marginTop: 10}}>
+          View: {contentLibraryDetails?.views}
+        </Text>
+        {dislikeEnabled === true && (
           <View style={{marginTop: 20}}>
             <TouchableWithoutFeedback
               onPress={Keyboard.dismiss}
               accessible={false}>
               <View>
                 <Text style={{color: 'white'}}>Your email (optional) :</Text>
-                <TextInput multiline={true} style={[styles.textarea]} />
+                <TextInput
+                  multiline={true}
+                  style={[styles.textarea]}
+                  value={values.email}
+                  onChangeText={handleChange('email')}
+                  onFocus={handleBlur('email')}
+                  error={errors.email}
+                  touched={touched.email}
+                />
               </View>
             </TouchableWithoutFeedback>
-
+            {/* {articleLoading && <Loading />} */}
             <TouchableWithoutFeedback
               onPress={Keyboard.dismiss}
               accessible={false}>
@@ -111,7 +212,15 @@ const ArticleFeedbackCard = props => {
                 <Text style={{color: 'white', marginTop: 10}}>
                   Your can leave feedback :
                 </Text>
-                <TextInput multiline={true} style={styles.textarea1} />
+                <TextInput
+                  multiline={true}
+                  style={styles.textarea1}
+                  value={values.content}
+                  onChangeText={handleChange('content')}
+                  onFocus={handleBlur('content')}
+                  error={errors.content}
+                  touched={touched.content}
+                />
               </View>
             </TouchableWithoutFeedback>
 
@@ -120,7 +229,14 @@ const ArticleFeedbackCard = props => {
             </Text>
 
             <View style={styles.buttonWrapper}>
-              <TouchableOpacity style={styles.button}>
+              <TouchableOpacity
+                style={styles.button}
+                onPress={() => {
+                  setFieldValue('id', contentLibraryDetails?.ID);
+                  setFieldValue('action', 'dislike');
+                  handleSubmit();
+                  setDislikeEnabled(false);
+                }}>
                 <Text style={styles.buttonText}>Send Feedback</Text>
               </TouchableOpacity>
             </View>

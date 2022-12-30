@@ -44,6 +44,11 @@ const ContentLibraryDetail = props => {
     contentLibraryDetailsError,
     fetchContentLibraryDetail,
     cleanContentLibraryDetail,
+
+    article,
+    articleLoading,
+    articleError,
+    ContentLibraryArticle,
   } = props;
 
   const isFocused = useIsFocused();
@@ -60,10 +65,10 @@ const ContentLibraryDetail = props => {
 
   const [isTrue, setIsTrue] = useState();
 
-//   const handleFeedbackChange = value => {
-//     setIsTrue(value);
-//   };
-//   console.log('result', isTrue);
+  //   const handleFeedbackChange = value => {
+  //     setIsTrue(value);
+  //   };
+  //   console.log('result', isTrue);
 
   const _renderItem = ({item, index}) => {
     const fileUrl = item?.file?.url;
@@ -474,8 +479,14 @@ const ContentLibraryDetail = props => {
           {/* Article Feedback Section */}
           <View style={{marginTop: 20}}>
             <ArticleFeedbackCard
-            //   isTrue={isTrue}
-            //   handleValue={handleFeedbackChange}
+              contentLibraryDetails={contentLibraryDetails}
+              article={article}
+              articleLoading={articleLoading}
+              articleError={articleError}
+              ContentLibraryArticle={ContentLibraryArticle}
+			  fetchContentLibraryDetail={fetchContentLibraryDetail}
+              //   isTrue={isTrue}
+              //   handleValue={handleFeedbackChange}
             />
           </View>
         </ScrollView>

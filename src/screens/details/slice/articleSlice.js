@@ -5,7 +5,7 @@ import {store} from '../../../utils/httpUtil';
 export const ContentArticle = createAsyncThunk(
   'article/ContentArticle',
   (formData, {rejectWithValue}) => {
-    return store(`jwt-auth/v1/`, formData)
+    return store(`jwt-auth/v1/content-library/feedback`, formData)
       .then(response => response.data)
       .catch(error => rejectWithValue(error?.response?.data || error));
   },
