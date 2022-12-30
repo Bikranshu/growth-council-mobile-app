@@ -4,231 +4,230 @@ import {useDispatch, useSelector} from 'react-redux';
 import Dashboard from './components';
 
 import {
-  fetchAllUpcomingEvents,
-  resetUpcomingEvent,
+	fetchAllUpcomingEvents,
+	resetUpcomingEvent,
 } from '../home/slice/upcomingEventSlice';
 import {
-  fetchAllPillarSliders,
-  resetPillarSlider,
+	fetchAllPillarSliders,
+	resetPillarSlider,
 } from '../home/slice/pillarSliderSlice';
 
 import {fetchAllPOEs, resetPOE} from './slice/POE/pointOfEngagementSlice';
 
 import {
-  fetchAllCommunityMembers,
-  resetCommunityMember,
+	fetchAllCommunityMembers,
+	resetCommunityMember,
 } from './slice/Community/communityMemberSlice';
 
 import {
-  fetchAllLatestContent,
-  resetLatestContent,
+	fetchAllLatestContent,
+	resetLatestContent,
 } from './slice/latestContentSlice';
 import {
-  fetchAllCriticalIssue,
-  resetCriticalIssue,
+	fetchAllCriticalIssue,
+	resetCriticalIssue,
 } from '../criticalIssue/slice/criticalIssueSlice';
 
 import {
-  connectMemberByID,
-  resetConnectMember,
+	connectMemberByID,
+	resetConnectMember,
 } from '../people/slice/memberConnectionSlice';
 import {
-  deleteMemberByID,
-  resetConnectdelete,
+	deleteMemberByID,
+	resetConnectdelete,
 } from '../people/slice/deleteConnectionSlice';
 import {fetchProfileByID, resetProfile} from '../account/slice/profileSlice';
 import {fetchEventByRegion, resetRegionEvent} from './slice/eventByRegionSlice';
 import {fetchAllDailyQuote, resetDailyQuote} from './slice/dailyQuoteSlice';
 
-const DashboardScreen = props => {
-  const dispatch = useDispatch();
-  const [contentSlider, setContentSlider] = useState([]);
-  const {pillarSliders, pillarSliderLoading, pillarSliderError} = useSelector(
-    state => state.pillarSliders,
-  );
+const DashboardScreen = (props) => {
+	const dispatch = useDispatch();
+	const [contentSlider, setContentSlider] = useState([]);
+	const {pillarSliders, pillarSliderLoading, pillarSliderError} = useSelector(
+		(state) => state.pillarSliders
+	);
 
-  const {upcomingEvents, upcomingEventLoading, upcomingEventError} =
-    useSelector(state => state.upcomingEvents);
+	const {upcomingEvents, upcomingEventLoading, upcomingEventError} =
+		useSelector((state) => state.upcomingEvents);
 
-  //   const {poes, poeLoading, poeError} = useSelector(state => state.poes);
+	//   const {poes, poeLoading, poeError} = useSelector(state => state.poes);
 
-  const {communityMembers, communityMemberLoading, communityMemberError} =
-    useSelector(state => state.communityMembers);
+	const {communityMembers, communityMemberLoading, communityMemberError} =
+		useSelector((state) => state.communityMembers);
 
-  const {latestContent, latestContentLoading, latestContentError} = useSelector(
-    state => state.latestContent,
-  );
-  const {criticalIssue, criticalIssueLoading, criticalIssueError} = useSelector(
-    state => state.criticalIssue,
-  );
+	const {latestContent, latestContentLoading, latestContentError} = useSelector(
+		(state) => state.latestContent
+	);
+	const {criticalIssue, criticalIssueLoading, criticalIssueError} = useSelector(
+		(state) => state.criticalIssue
+	);
 
-  const {memberConnections, memberConnectionLoading, memberConnectionError} =
-    useSelector(state => state.memberConnections);
+	const {memberConnections, memberConnectionLoading, memberConnectionError} =
+		useSelector((state) => state.memberConnections);
 
-  const {profile, profileLoading, profileError} = useSelector(
-    state => state.profile,
-  );
+	const {profile, profileLoading, profileError} = useSelector(
+		(state) => state.profile
+	);
 
-  const {regionEvents, regionEventLoading, regionEventError} = useSelector(
-    state => state.regionEvents,
-  );
+	const {regionEvents, regionEventLoading, regionEventError} = useSelector(
+		(state) => state.regionEvents
+	);
 
-  const {dailyQuote, dailyQuoteLoading, dailyQuoteError} = useSelector(
-    state => state.dailyQuote,
-  );
+	const {dailyQuote, dailyQuoteLoading, dailyQuoteError} = useSelector(
+		(state) => state.dailyQuote
+	);
 
-  useEffect(() => {
-    let content = pillarSliders?.flatMap((value, key) => {
-      return value?.pillar_contents;
-    });
-    setContentSlider(content);
-  }, [pillarSliders]);
+	useEffect(() => {
+		let content = pillarSliders?.flatMap((value, key) => {
+			return value?.pillar_contents;
+		});
+		setContentSlider(content);
+	}, [pillarSliders]);
 
-  const fetchAllUpcomingEvent = () => {
-    dispatch(fetchAllUpcomingEvents());
-  };
+	const fetchAllUpcomingEvent = () => {
+		dispatch(fetchAllUpcomingEvents());
+	};
 
-  //   const fetchAllPOE = () => {
-  //     dispatch(fetchAllPOEs());
-  //   };
+	//   const fetchAllPOE = () => {
+	//     dispatch(fetchAllPOEs());
+	//   };
 
-  const fetchAllCommunityMember = formData => {
-    dispatch(fetchAllCommunityMembers(formData));
-  };
+	const fetchAllCommunityMember = (formData) => {
+		dispatch(fetchAllCommunityMembers(formData));
+	};
 
-  const fetchAllPillarSlider = () => {
-    dispatch(fetchAllPillarSliders());
-  };
+	const fetchAllPillarSlider = () => {
+		dispatch(fetchAllPillarSliders());
+	};
 
-  const cleanUpcomingEvent = () => {
-    dispatch(resetUpcomingEvent());
-  };
+	const cleanUpcomingEvent = () => {
+		dispatch(resetUpcomingEvent());
+	};
 
-  //   const cleanPOE = () => {
-  //     dispatch(resetPOE());
-  //   };
+	//   const cleanPOE = () => {
+	//     dispatch(resetPOE());
+	//   };
 
-  const cleanCommunityMember = () => {
-    dispatch(resetCommunityMember());
-  };
-  const cleanPillarSlider = () => {
-    dispatch(resetPillarSlider());
-  };
-  const fetchLatestContent = () => {
-    dispatch(fetchAllLatestContent());
-  };
+	const cleanCommunityMember = () => {
+		dispatch(resetCommunityMember());
+	};
+	const cleanPillarSlider = () => {
+		dispatch(resetPillarSlider());
+	};
+	const fetchLatestContent = () => {
+		dispatch(fetchAllLatestContent());
+	};
 
-  const cleanLatestContent = () => {
-    dispatch(resetLatestContent());
-  };
+	const cleanLatestContent = () => {
+		dispatch(resetLatestContent());
+	};
 
-  const fetchCritcalIssue = () => {
-    dispatch(fetchAllCriticalIssue());
-  };
+	const fetchCritcalIssue = () => {
+		dispatch(fetchAllCriticalIssue());
+	};
 
-  const cleanCriticalIssue = () => {
-    dispatch(resetCriticalIssue());
-  };
+	const cleanCriticalIssue = () => {
+		dispatch(resetCriticalIssue());
+	};
 
-  const connectMemberByIdentifier = formData => {
-    return dispatch(connectMemberByID(formData));
-  };
-  const cleanConnectMember = () => {
-    dispatch(resetConnectMember());
-  };
-  const deleteMemberByIdentifier = formData => {
-    return dispatch(deleteMemberByID(formData));
-  };
+	const connectMemberByIdentifier = (formData) => {
+		return dispatch(connectMemberByID(formData));
+	};
+	const cleanConnectMember = () => {
+		dispatch(resetConnectMember());
+	};
+	const deleteMemberByIdentifier = (formData) => {
+		return dispatch(deleteMemberByID(formData));
+	};
 
-  const cleanDeleteMember = () => {
-    dispatch(resetConnectdelete());
-  };
+	const cleanDeleteMember = () => {
+		dispatch(resetConnectdelete());
+	};
 
-  //   const fetchProfile = () => {
-  //     dispatch(fetchProfileByID());
-  //   };
+	//   const fetchProfile = () => {
+	//     dispatch(fetchProfileByID());
+	//   };
 
-  const cleanProfile = () => {
-    dispatch(resetProfile());
-  };
+	const cleanProfile = () => {
+		dispatch(resetProfile());
+	};
 
-  const fetchEventRegion = formData => {
-    dispatch(fetchEventByRegion(formData));
-  };
+	const fetchEventRegion = (formData) => {
+		dispatch(fetchEventByRegion(formData));
+	};
 
-  const cleanEventRegion = () => {
-    dispatch(resetRegionEvent());
-  };
+	const cleanEventRegion = () => {
+		dispatch(resetRegionEvent());
+	};
 
-  useEffect(() => {
-    fetchProfileByID();
-  }, []);
+	useEffect(() => {
+		fetchProfileByID();
+	}, []);
 
-  const fetchDailyQuote = () => {
-    dispatch(fetchAllDailyQuote());
-  };
+	const fetchDailyQuote = () => {
+		dispatch(fetchAllDailyQuote());
+	};
 
-  const cleanDailyQuote = () => {
-    dispatch(resetDailyQuote());
-  };
+	const cleanDailyQuote = () => {
+		dispatch(resetDailyQuote());
+	};
 
-
-  return (
-    <Dashboard
-      {...props}
-      upcomingEvents={upcomingEvents}
-      upcomingEventLoading={upcomingEventLoading}
-      upcomingEventError={upcomingEventError}
-      fetchAllUpcomingEvent={fetchAllUpcomingEvent}
-      cleanUpcomingEvent={cleanUpcomingEvent}
-      //   poes={poes}
-      //   poeLoading={poeLoading}
-      //   poeError={poeError}
-      //   fetchAllPOE={fetchAllPOE}
-      //   cleanPOE={cleanPOE}
-      communityMembers={communityMembers}
-      communityMemberLoading={communityMemberLoading}
-      communityMemberError={communityMemberError}
-      fetchAllCommunityMember={fetchAllCommunityMember}
-      cleanCommunityMember={cleanCommunityMember}
-      pillarSliders={pillarSliders}
-      pillarSliderLoading={pillarSliderLoading}
-      pillarSliderError={pillarSliderError}
-      fetchAllPillarSlider={fetchAllPillarSlider}
-      cleanPillarSlider={cleanPillarSlider}
-      contentSlider={contentSlider}
-      latestContent={latestContent}
-      latestContentLoading={latestContentLoading}
-      latestContentError={latestContentError}
-      fetchLatestContent={fetchLatestContent}
-      cleanLatestContent={cleanLatestContent}
-      criticalIssue={criticalIssue}
-      criticalIssueLoading={criticalIssueLoading}
-      criticalIssueError={criticalIssueError}
-      fetchCritcalIssue={fetchCritcalIssue}
-      cleanCriticalIssue={cleanCriticalIssue}
-      memberConnections={memberConnections}
-      memberConnectionLoading={memberConnectionLoading}
-      memberConnectionError={memberConnectionError}
-      connectMemberByIdentifier={connectMemberByIdentifier}
-      cleanConnectMember={cleanConnectMember}
-      profile={profile}
-      profileLoading={profileLoading}
-      profileError={profileError}
-      //   fetchProfile={fetchProfile}
-      //   cleanProfile={cleanProfile}
-      regionEvents={regionEvents}
-      regionEventLoading={regionEventLoading}
-      regionEventError={regionEventError}
-      fetchEventRegion={fetchEventRegion}
-      cleanEventRegion={cleanEventRegion}
-      //daily quote
-      dailyQuote={dailyQuote}
-	  dailyQuoteLoading={dailyQuoteLoading}
-      fetchDailyQuote={fetchDailyQuote}
-	  cleanDailyQuote={cleanDailyQuote}
-    />
-  );
+	return (
+		<Dashboard
+			{...props}
+			upcomingEvents={upcomingEvents}
+			upcomingEventLoading={upcomingEventLoading}
+			upcomingEventError={upcomingEventError}
+			fetchAllUpcomingEvent={fetchAllUpcomingEvent}
+			cleanUpcomingEvent={cleanUpcomingEvent}
+			//   poes={poes}
+			//   poeLoading={poeLoading}
+			//   poeError={poeError}
+			//   fetchAllPOE={fetchAllPOE}
+			//   cleanPOE={cleanPOE}
+			communityMembers={communityMembers}
+			communityMemberLoading={communityMemberLoading}
+			communityMemberError={communityMemberError}
+			fetchAllCommunityMember={fetchAllCommunityMember}
+			cleanCommunityMember={cleanCommunityMember}
+			pillarSliders={pillarSliders}
+			pillarSliderLoading={pillarSliderLoading}
+			pillarSliderError={pillarSliderError}
+			fetchAllPillarSlider={fetchAllPillarSlider}
+			cleanPillarSlider={cleanPillarSlider}
+			contentSlider={contentSlider}
+			latestContent={latestContent}
+			latestContentLoading={latestContentLoading}
+			latestContentError={latestContentError}
+			fetchLatestContent={fetchLatestContent}
+			cleanLatestContent={cleanLatestContent}
+			criticalIssue={criticalIssue}
+			criticalIssueLoading={criticalIssueLoading}
+			criticalIssueError={criticalIssueError}
+			fetchCritcalIssue={fetchCritcalIssue}
+			cleanCriticalIssue={cleanCriticalIssue}
+			memberConnections={memberConnections}
+			memberConnectionLoading={memberConnectionLoading}
+			memberConnectionError={memberConnectionError}
+			connectMemberByIdentifier={connectMemberByIdentifier}
+			cleanConnectMember={cleanConnectMember}
+			profile={profile}
+			profileLoading={profileLoading}
+			profileError={profileError}
+			//   fetchProfile={fetchProfile}
+			//   cleanProfile={cleanProfile}
+			regionEvents={regionEvents}
+			regionEventLoading={regionEventLoading}
+			regionEventError={regionEventError}
+			fetchEventRegion={fetchEventRegion}
+			cleanEventRegion={cleanEventRegion}
+			//daily quote
+			dailyQuote={dailyQuote}
+			dailyQuoteLoading={dailyQuoteLoading}
+			fetchDailyQuote={fetchDailyQuote}
+			cleanDailyQuote={cleanDailyQuote}
+		/>
+	);
 };
 
 export default DashboardScreen;

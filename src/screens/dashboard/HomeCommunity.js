@@ -35,7 +35,9 @@ import {fetchEventByRegion, resetRegionEvent} from './slice/eventByRegionSlice';
 
 const HomeCommunityScreen = props => {
   const dispatch = useDispatch();
-  
+  const {pillarEvents, pillarEventLoading, pillarEventError} = useSelector(
+    state => state.pillarEvents,
+  );
 
   const {communityMembers, communityMemberLoading, communityMemberError} =
     useSelector(state => state.communityMembers);
@@ -46,7 +48,10 @@ const HomeCommunityScreen = props => {
 
   const {memberConnections, memberConnectionLoading, memberConnectionError} =
     useSelector(state => state.memberConnections);
+  const {deleteConnections, deleteConnectionLoading, deleteConnectionError} =
+    useSelector(state => state.deleteConnections);
 
+  const {users, userLoading, userError} = useSelector(state => state.users);
 
   const {profile, profileLoading, profileError} = useSelector(
     state => state.profile,
@@ -56,6 +61,15 @@ const HomeCommunityScreen = props => {
     state => state.regionEvents,
   );
 
+  const {
+    pillarMemberContents,
+    pillarMemberContentLoading,
+    pillarMemberContentError,
+  } = useSelector(state => state.pillarMemberContents);
+
+  const fetchAllPillarEvent = pillarId => {
+    dispatch(fetchAllPillarEvents(pillarId));
+  };
 
   const fetchAllPillarPOE = pillarId => {
     dispatch(fetchAllPillarPOEs(pillarId));
@@ -65,7 +79,9 @@ const HomeCommunityScreen = props => {
     dispatch(resetPillarPOE());
   };
 
-
+  const cleanPillarEvent = () => {
+    dispatch(resetPillarEvent());
+  };
 
   const fetchAllCommunityMember = formData => {
     dispatch(fetchAllCommunityMembers(formData));
@@ -75,6 +91,21 @@ const HomeCommunityScreen = props => {
     dispatch(resetCommunityMember());
   };
 
+  const fetchAllUsers = formData => {
+    dispatch(fetchUsersByKey(formData));
+  };
+
+  const cleanUser = () => {
+    dispatch(resetUser());
+  };
+
+  const fetchAllPillarMemberContent = pillarId => {
+    dispatch(fetchAllPillarMemberContents(pillarId));
+  };
+
+  const cleanPillarMemberContent = () => {
+    dispatch(resetPillarMemberContent());
+  };
 
   const connectMemberByIdentifier = formData => {
     return dispatch(connectMemberByID(formData));
@@ -84,7 +115,13 @@ const HomeCommunityScreen = props => {
     dispatch(resetConnectMember());
   };
 
+  const deleteMemberByIdentifier = formData => {
+    return dispatch(deleteMemberByID(formData));
+  };
 
+  const cleanDeleteMember = () => {
+    dispatch(resetConnectdelete());
+  };
 
   const fetchEventRegion = formData => {
     dispatch(fetchEventByRegion(formData));
@@ -94,7 +131,9 @@ const HomeCommunityScreen = props => {
     dispatch(resetRegionEvent());
   };
 
-
+//   const fetchProfile = () => {
+//     dispatch(fetchProfileByID());
+//   };
 
   const cleanProfile = () => {
     dispatch(resetProfile());
@@ -106,7 +145,11 @@ const HomeCommunityScreen = props => {
   return (
     <HomeCommunity
       {...props}
-
+      pillarEvents={pillarEvents}
+      pillarEventLoading={pillarEventLoading}
+      pillarEventError={pillarEventError}
+      fetchAllPillarEvent={fetchAllPillarEvent}
+      cleanPillarEvent={cleanPillarEvent}
       communityMembers={communityMembers}
       communityMemberLoading={communityMemberLoading}
       communityMemberError={communityMemberError}
@@ -117,13 +160,21 @@ const HomeCommunityScreen = props => {
       pillarPOEError={pillarPOEError}
       fetchAllPillarPOE={fetchAllPillarPOE}
       cleanPillarPOE={cleanPillarPOE}
-
+      users={users}
+      userLoading={userLoading}
+      userError={userError}
+      fetchAllUsers={fetchAllUsers}
+      cleanUser={cleanUser}
       memberConnections={memberConnections}
       memberConnectionLoading={memberConnectionLoading}
       memberConnectionError={memberConnectionError}
       connectMemberByIdentifier={connectMemberByIdentifier}
       cleanConnectMember={cleanConnectMember}
-
+      pillarMemberContents={pillarMemberContents}
+      pillarMemberContentLoading={pillarMemberContentLoading}
+      pillarMemberContentError={pillarMemberContentError}
+      fetchAllPillarMemberContent={fetchAllPillarMemberContent}
+      cleanPillarMemberContent={cleanPillarMemberContent}
       regionEvents={regionEvents}
       regionEventLoading={regionEventLoading}
       regionEventError={regionEventError}
@@ -132,9 +183,13 @@ const HomeCommunityScreen = props => {
       profile={profile}
       profileLoading={profileLoading}
       profileError={profileError}
-
+    //   fetchProfile={fetchProfile}
       cleanProfile={cleanProfile}
- 
+      deleteConnections={deleteConnections}
+      deleteConnectionLoading={deleteConnectionLoading}
+      deleteConnectionError={deleteConnectionError}
+      deleteMemberByIdentifier={deleteMemberByIdentifier}
+      cleanDeleteMember={cleanDeleteMember}
     />
   );
 };
