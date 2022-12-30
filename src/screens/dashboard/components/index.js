@@ -117,7 +117,6 @@ const Dashboard = props => {
   const [memberConnection, setMemberConnection] = useState([]);
 
   const [hideCritical, setHideCritical] = useState(false);
-  const [modalVisible, setModalVisible] = useState(false);
 
   const [dataSourceCords, setDataSourceCords] = useState(criticalIssue);
   const [ref, setRef] = useState(null);
@@ -589,7 +588,7 @@ const Dashboard = props => {
   };
 
   const [lengthMore, setLengthMore] = useState(false); //to show the "Read more & Less Line"
-
+  const [modalVisible, setModalVisible] = useState(false);
   const [data, setdata] = useState('');
 
   const onTextLayout = useCallback(e => {
@@ -606,7 +605,7 @@ const Dashboard = props => {
   const nd = new Date(los_angles);
   const PSTTime = nd.toLocaleString();
   const ActualPSTTime = moment(PSTTime).format('DD/MM/yyyy');
-//   console.log(ActualPSTTime);
+  //   console.log(ActualPSTTime);
 
   return (
     <View style={{flex: 1}}>
@@ -650,7 +649,7 @@ const Dashboard = props => {
                   alignItems: 'center',
                   //   marginTop: 10,
                 }}>
-                <Text style={{color: 'white', fontSize: 8}}>DAILY QUOTE</Text>
+                {/* <Text style={{color: 'white', fontSize: 8}}>DAILY QUOTE</Text> */}
                 {/* <Quote
                   dailyQuote={dailyQuote}
                   navigation={navigation}
@@ -661,11 +660,11 @@ const Dashboard = props => {
                   {dailyQuote?.map((item, index) => {
                     // console.log(item?.quote_date);
                     return (
-                      <View>
+                      <>
                         {item?.quote_date === ActualPSTTime ? (
                           <LinearGradient
-                            start={{x: 0.697, y: -0.943}}
-                            end={{x: 0.413, y: 2.24}}
+                            // start={{x: 0.697, y: -0.943}}
+                            // end={{x: 0.413, y: 2.24}}
                             colors={['#58AFF6', '#002651']}
                             style={styles.quote}>
                             <View>
@@ -677,28 +676,22 @@ const Dashboard = props => {
                                   color: 'white',
                                   textAlign: 'center',
                                   marginBottom: 10,
-                                  // alignItems: 'center',
+                                  alignItems: 'center',
                                 }}>
                                 {item?.daily_quote}
                               </Text>
-                              <View
+                              <Text
                                 style={{
-                                  alignItems: 'flex-end',
                                   position: 'absolute',
-                                  right: 5,
-                                  bottom: 10,
+                                  right: 0,
+                                  bottom: -3,
+                                  fontWeight: 'bold',
+                                  color: 'white',
+                                  fontSize: 12,
                                 }}>
-                                <Text
-                                  style={{
-                                    fontSize: 12,
-                                    position: 'absolute',
-                                    right: 5,
-                                    fontWeight: 'bold',
-                                    color: 'white',
-                                  }}>
-                                  -{item?.quote_author}
-                                </Text>
-                              </View>
+                                - {item?.quote_author}
+                              </Text>
+
                               {lengthMore && (
                                 <TouchableOpacity
                                   onPress={() => {
@@ -720,10 +713,9 @@ const Dashboard = props => {
                         ) : (
                           <></>
                         )}
-                      </View>
+                      </>
                     );
                   })}
-                 
                 </View>
               </View>
               <View style={styles.pillar}>
@@ -909,11 +901,11 @@ const Dashboard = props => {
                 {data?.quote_author}
               </Text>
               {/* {lengthMore ? (
-                // <Text
-                //   onPress={toggleNumberOfLines}
-                //   style={{lineHeight: 21, marginTop: 10}}>
-                //   {textShown ? 'Read less...' : 'Read more...'}
-                // </Text>
+                 <Text
+                   onPress={toggleNumberOfLines}
+                   style={{lineHeight: 21, marginTop: 10}}>
+                   {textShown ? 'Read less...' : 'Read more...'}
+                 </Text>
                 <TouchableOpacity
                   onPress={() => {
                     setModalVisible(!modalVisible);

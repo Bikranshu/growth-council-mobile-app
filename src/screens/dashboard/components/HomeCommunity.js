@@ -43,11 +43,11 @@ const HomeCommunity = props => {
   const {
     route,
     navigation,
-    pillarEvents,
-    pillarEventLoading,
-    pillarEventError,
-    fetchAllPillarEvent,
-    cleanPillarEvent,
+    // pillarEvents,
+    // pillarEventLoading,
+    // pillarEventError,
+    // fetchAllPillarEvent,
+    // cleanPillarEvent,
 
     communityMembers,
     communityMemberLoading,
@@ -55,11 +55,11 @@ const HomeCommunity = props => {
     fetchAllCommunityMember,
     cleanCommunityMember,
 
-    pillarMemberContents,
-    pillarMemberContentLoading,
-    pillarMemberContentError,
-    fetchAllPillarMemberContent,
-    cleanPillarMemberContent,
+    // pillarMemberContents,
+    // pillarMemberContentLoading,
+    // pillarMemberContentError,
+    // fetchAllPillarMemberContent,
+    // cleanPillarMemberContent,
 
     pillarPOEs,
     pillarPOELoading,
@@ -67,23 +67,17 @@ const HomeCommunity = props => {
     fetchAllPillarPOE,
     cleanPillarPOE,
 
-    users,
-    userLoading,
-    userError,
-    fetchAllUsers,
-    cleanUser,
+    // users,
+    // userLoading,
+    // userError,
+    // fetchAllUsers,
+    // cleanUser,
 
     memberConnections,
     memberConnectionLoading,
     memberConnectionError,
     connectMemberByIdentifier,
     cleanConnectMember,
-
-    deleteConnections,
-    deleteConnectionLoading,
-    deleteConnectionError,
-    deleteMemberByIdentifier,
-    cleanDeleteMember,
 
     regionEvents,
     regionEventLoading,
@@ -94,7 +88,7 @@ const HomeCommunity = props => {
     profile,
     profileLoading,
     profileError,
-    fetchProfile,
+    // fetchProfile,
     cleanProfile,
   } = props;
 
@@ -168,18 +162,18 @@ const HomeCommunity = props => {
     }, []),
   );
 
-  useFocusEffect(
-    useCallback(() => {
-      const fetchAllPillarEventAsync = async () => {
-        await fetchAllPillarEvent(pillarId);
-      };
-      fetchAllPillarEventAsync();
+//   useFocusEffect(
+//     useCallback(() => {
+//       const fetchAllPillarEventAsync = async () => {
+//         await fetchAllPillarEvent(pillarId);
+//       };
+//       fetchAllPillarEventAsync();
 
-      return () => {
-        cleanPillarEvent();
-      };
-    }, []),
-  );
+//       return () => {
+//         cleanPillarEvent();
+//       };
+//     }, []),
+//   );
 
   useFocusEffect(
     useCallback(() => {
@@ -217,26 +211,6 @@ const HomeCommunity = props => {
       ToastMessage.show(response?.payload?.response);
     }
   };
-
-  //   const deleteMemberByMemberID = async (memberID, index) => {
-  //     const response = await deleteMemberByIdentifier({member_id: memberID});
-  //     if (response?.payload?.code === 200) {
-  //       let items = [...deleteConnect];
-  //       let item = {...items[index]};
-  //       item.connection = true;
-  //       items[index] = item;
-  //       setDeleteConnect(items);
-  //       fetchAllCommunityMember({
-  //         s: '',
-  //         sort: 'Desc',
-  //         region: regionUser,
-  //       });
-  //       ToastMessage.show('You have successfully deleted.');
-  //     } else {
-  //       toast.closeAll();
-  //       ToastMessage.show(response?.payload?.response);
-  //     }
-  //   };
 
   const _renderItem = ({item, index}) => {
     let user = item?.user_meta?.region;
@@ -441,12 +415,6 @@ const HomeCommunity = props => {
     );
   };
 
-  const _renderContentItem = ({item, index}) => {
-    const file = item?.file;
-    const link = file?.split('=', 2);
-    let videoLink = link[1].split('&', 2);
-    return <Player {...props} item={item} file={file} videoLink={videoLink} />;
-  };
 
   const _renderContent = ({item, index}) => {
     const fileUrl = item?.file?.url;
@@ -629,11 +597,6 @@ const HomeCommunity = props => {
               <Loading />
             </View>
           )}
-          {deleteConnectionLoading && (
-            <View style={{marginTop: 40}}>
-              <Loading />
-            </View>
-          )}
           {pillarPOEs?.length !== 0 && (
             <View style={styles.middle}>
               <Text style={styles.title}>Points of Engagement</Text>
@@ -651,7 +614,7 @@ const HomeCommunity = props => {
               />
             </View>
           )}
-          {pillarMemberContents?.attachments !== undefined &&
+          {/* {pillarMemberContents?.attachments !== undefined &&
             pillarMemberContents?.attachments !== null &&
             pillarMemberContents?.attachments !== false && (
               <View style={styles.sectionContainer}>
@@ -662,8 +625,8 @@ const HomeCommunity = props => {
                   renderItem={_renderContent}
                 />
               </View>
-            )}
-          {pillarMemberContents?.external_link !== undefined &&
+            )} */}
+          {/* {pillarMemberContents?.external_link !== undefined &&
             pillarMemberContents?.external_link !== false &&
             pillarMemberContents?.external_link !== null && (
               <View style={styles.content}>
@@ -675,7 +638,7 @@ const HomeCommunity = props => {
                   renderItem={_renderExternal}
                 />
               </View>
-            )}
+            )} */}
           {communityMembers !== undefined &&
             communityMembers?.length !== 0 &&
             communityMembers !== null &&
@@ -695,25 +658,7 @@ const HomeCommunity = props => {
 
           {/* external_links */}
 
-          {pillarMemberContents?.pillar_contents !== undefined &&
-            pillarMemberContents?.pillar_contents !== null &&
-            pillarMemberContents?.pillar_contents !== false && (
-              <View style={styles.content}>
-                <Text style={styles.title}>Growth Community Content</Text>
-                <View
-                  style={{
-                    display: 'flex',
-                    flexDirection: 'row',
-                  }}>
-                  <FlatList
-                    horizontal
-                    showsHorizontalScrollIndicator={false}
-                    data={pillarMemberContents?.pillar_contents}
-                    renderItem={_renderContentItem}
-                  />
-                </View>
-              </View>
-            )}
+         
 
           {/* <Footer /> */}
         </View>
