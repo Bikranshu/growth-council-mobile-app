@@ -15,7 +15,7 @@ import FeatherIcon from 'react-native-vector-icons/Feather';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
 const ArticleFeedbackCard = props => {
-  const {isTrue, handleValue} = props;
+  //   const {isTrue, handleValue} = props;
   const [likeCount, setLikeCount] = useState(0);
   const [dislikeCount, setDislikeCount] = useState(0);
   return (
@@ -30,9 +30,8 @@ const ArticleFeedbackCard = props => {
                 likeCount === 0 ? styles.checkButton : styles.checkButton1,
               ]}
               onPress={() => {
-                handleValue(true),
-                  setLikeCount(likeCount + 1),
-                  setDislikeCount(0);
+                // handleValue(true),
+                setLikeCount(likeCount + 1), setDislikeCount(0);
               }}>
               {/* {isTrue && <FeatherIcon name="check" color="#62C1EB" />} */}
               <Ionicons
@@ -66,9 +65,8 @@ const ArticleFeedbackCard = props => {
                   : styles.dislikeCheckButton,
               ]}
               onPress={() => {
-                handleValue(true),
-                  setDislikeCount(dislikeCount + 1),
-                  setLikeCount(0);
+                // handleValue(true),
+                setDislikeCount(dislikeCount + 1), setLikeCount(0);
               }}>
               {/* {!isTrue && <FeatherIcon name="check" color="#62C1EB" />} */}
               <Ionicons

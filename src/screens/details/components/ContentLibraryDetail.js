@@ -60,9 +60,9 @@ const ContentLibraryDetail = props => {
 
   const [isTrue, setIsTrue] = useState();
 
-  const handleFeedbackChange = value => {
-    setIsTrue(value);
-  };
+//   const handleFeedbackChange = value => {
+//     setIsTrue(value);
+//   };
 //   console.log('result', isTrue);
 
   const _renderItem = ({item, index}) => {
@@ -474,8 +474,8 @@ const ContentLibraryDetail = props => {
           {/* Article Feedback Section */}
           <View style={{marginTop: 20}}>
             <ArticleFeedbackCard
-              isTrue={isTrue}
-              handleValue={handleFeedbackChange}
+            //   isTrue={isTrue}
+            //   handleValue={handleFeedbackChange}
             />
           </View>
         </ScrollView>
