@@ -649,7 +649,6 @@ const Dashboard = props => {
                   alignItems: 'center',
                   //   marginTop: 10,
                 }}>
-                {/* <Text style={{color: 'white', fontSize: 8}}>DAILY QUOTE</Text> */}
                 {/* <Quote
                   dailyQuote={dailyQuote}
                   navigation={navigation}

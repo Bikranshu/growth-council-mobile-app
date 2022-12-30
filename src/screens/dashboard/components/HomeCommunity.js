@@ -43,11 +43,6 @@ const HomeCommunity = props => {
   const {
     route,
     navigation,
-    // pillarEvents,
-    // pillarEventLoading,
-    // pillarEventError,
-    // fetchAllPillarEvent,
-    // cleanPillarEvent,
 
     communityMembers,
     communityMemberLoading,
@@ -55,11 +50,6 @@ const HomeCommunity = props => {
     fetchAllCommunityMember,
     cleanCommunityMember,
 
-    // pillarMemberContents,
-    // pillarMemberContentLoading,
-    // pillarMemberContentError,
-    // fetchAllPillarMemberContent,
-    // cleanPillarMemberContent,
 
     pillarPOEs,
     pillarPOELoading,
@@ -67,11 +57,6 @@ const HomeCommunity = props => {
     fetchAllPillarPOE,
     cleanPillarPOE,
 
-    // users,
-    // userLoading,
-    // userError,
-    // fetchAllUsers,
-    // cleanUser,
 
     memberConnections,
     memberConnectionLoading,
@@ -86,10 +71,10 @@ const HomeCommunity = props => {
     cleanEventRegion,
 
     profile,
-    profileLoading,
-    profileError,
+    // profileLoading,
+    // profileError,
     // fetchProfile,
-    cleanProfile,
+    // cleanProfile,
   } = props;
 
   const pillarId = GROWTH_COMMUNITY_ID;
@@ -103,33 +88,13 @@ const HomeCommunity = props => {
     region = profile?.user_meta?.region[0];
   }
 
-  //   let persona = profile?.user_meta?.user_persona;
-  //   if (typeof persona === 'undefined' || persona === null) {
-  //     persona = ' ';
-  //   } else {
-  //     persona = profile?.user_meta?.user_persona[0];
-  //   }
 
-  //   console.log('user_persona', persona);
-
-  //   let string = region;
-  //   if (string) string = string.toLowerCase();
-
-  //   let regionUser = profile?.user_meta?.region;
-  //   if (typeof regionUser === 'undefined' || regionUser === null) {
-  //     regionUser = ' ';
-  //   } else {
-  //     regionUser = profile?.user_meta?.region[0];
-  //   }
 
   const [userRegion, setUserRegion] = useState(region);
   const [memberConnection, setMemberConnection] = useState([]);
   const [deleteConnect, setDeleteConnect] = useState([]);
   const [hideEvents, setHideEvents] = useState();
 
-  //   useEffect(() => {
-  //     fetchProfile();
-  //   }, []);
 
   console.log('1', profile);
   console.log('2', userRegion);
@@ -162,18 +127,7 @@ const HomeCommunity = props => {
     }, []),
   );
 
-//   useFocusEffect(
-//     useCallback(() => {
-//       const fetchAllPillarEventAsync = async () => {
-//         await fetchAllPillarEvent(pillarId);
-//       };
-//       fetchAllPillarEventAsync();
 
-//       return () => {
-//         cleanPillarEvent();
-//       };
-//     }, []),
-//   );
 
   useFocusEffect(
     useCallback(() => {
@@ -194,7 +148,6 @@ const HomeCommunity = props => {
 
   useEffect(() => {
     setMemberConnection(communityMembers);
-    // setDeleteConnect(communityMembers);
   }, [communityMembers]);
 
   const connectMemberByMemberID = async (memberID, index) => {
@@ -246,10 +199,7 @@ const HomeCommunity = props => {
                 {item?.registered_date}
                 {'\n'}
                 {'\n'}
-                {/* {item?.user_meta?.Title === undefined
-                  ? item?.user_meta?.title
-                  : item?.user_meta?.Title} */}
-                {/* {item?.user_meta?.Title} */}
+          
               </Text>
             </View>
           </TouchableOpacity>
@@ -415,144 +365,6 @@ const HomeCommunity = props => {
     );
   };
 
-
-  const _renderContent = ({item, index}) => {
-    const fileUrl = item?.file?.url;
-
-    const checkPermission = async () => {
-      if (Platform.OS === 'ios') {
-        downloadFile();
-      } else {
-        try {
-          const granted = await PermissionsAndroid.request(
-            PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
-            {
-              title: 'Storage Permission Required',
-              message:
-                'Application needs access to your storage to download File',
-            },
-          );
-          if (granted === PermissionsAndroid.RESULTS.GRANTED) {
-            downloadFile();
-          } else {
-            Alert.alert('Error', 'Storage Permission Not Granted');
-          }
-        } catch (err) {
-          ToastMessage.show(err);
-        }
-      }
-    };
-
-    const downloadFile = () => {
-      const {config, fs} = RNFetchBlob;
-      const {
-        dirs: {DownloadDir, DocumentDir},
-      } = RNFetchBlob.fs;
-      const isIOS = Platform.OS === 'ios';
-      const aPath =
-        Platform.OS === 'ios' ? fs.dirs.DocumentDir : fs.dirs.PictureDir;
-      // Platform.select({ios: DocumentDir, android: DocumentDir});
-
-      let date = new Date();
-      let FILE_URL = fileUrl;
-
-      let file_ext = getFileExtention(FILE_URL);
-
-      file_ext = '.' + file_ext[0];
-
-      const configOptions = Platform.select({
-        ios: {
-          fileCache: true,
-          path:
-            aPath +
-            '/file_' +
-            Math.floor(date.getTime() + date.getSeconds() / 2) +
-            file_ext,
-          description: 'downloading file...',
-        },
-        android: {
-          fileCache: false,
-          addAndroidDownloads: {
-            path:
-              aPath +
-              '/file_' +
-              Math.floor(date.getTime() + date.getSeconds() / 2) +
-              file_ext,
-            description: 'downloading file...',
-            notification: true,
-            useDownloadManager: true,
-          },
-        },
-      });
-
-      if (isIOS) {
-        RNFetchBlob.config(configOptions)
-          .fetch('GET', FILE_URL)
-          .then(res => {
-            console.log('file', res);
-            RNFetchBlob.ios.previewDocument('file://' + res.path());
-          });
-        return;
-      } else {
-        config(configOptions)
-          .fetch('GET', FILE_URL)
-          .progress((received, total) => {
-            console.log('progress', received / total);
-          })
-
-          .then(res => {
-            console.log('file download', res);
-            RNFetchBlob.android.actionViewIntent(res.path());
-          })
-          .catch((errorMessage, statusCode) => {
-            console.log('error with downloading file', errorMessage);
-          });
-      }
-    };
-
-    const getFileExtention = fileUrl => {
-      return /[.]/.exec(fileUrl) ? /[^.]+$/.exec(fileUrl) : undefined;
-    };
-    return (
-      <TouchableOpacity
-        onPress={() =>
-          navigation.navigate('pdf', {
-            paramsFile: item?.file?.url,
-            title: item?.file?.title,
-          })
-        }>
-        <View style={styles.attachmentContainer}>
-          <View style={{flex: 1, flexDirection: 'row'}}>
-            <FontAwesomeIcon name="file-pdf-o" size={35} color="#9B9CA0" />
-            <Text style={styles.attachmentTitle}>{item?.file?.title}</Text>
-          </View>
-
-          <TouchableOpacity
-            style={styles.attachmentDownloadButton}
-            onPress={checkPermission}>
-            <FeatherIcon name="arrow-down" size={20} color="#9B9CA0" />
-          </TouchableOpacity>
-        </View>
-      </TouchableOpacity>
-    );
-  };
-  const _renderExternal = ({item, index}) => {
-    return (
-      <TouchableOpacity onPress={() => Linking.openURL(item?.link)}>
-        <View
-          style={{
-            marginBottom: 10,
-            flexDirection: 'row',
-            marginLeft: 20,
-            marginTop: 10,
-          }}>
-          <Text style={{fontSize: 14, fontWeight: '600', color: 'blue'}}>
-            {item?.link}
-          </Text>
-        </View>
-      </TouchableOpacity>
-    );
-  };
   return (
     <View style={{flex: 1}}>
       <StatusBar
@@ -614,31 +426,7 @@ const HomeCommunity = props => {
               />
             </View>
           )}
-          {/* {pillarMemberContents?.attachments !== undefined &&
-            pillarMemberContents?.attachments !== null &&
-            pillarMemberContents?.attachments !== false && (
-              <View style={styles.sectionContainer}>
-                <FlatList
-                  vertical
-                  showsHorizontalScrollIndicator={false}
-                  data={pillarMemberContents?.attachments}
-                  renderItem={_renderContent}
-                />
-              </View>
-            )} */}
-          {/* {pillarMemberContents?.external_link !== undefined &&
-            pillarMemberContents?.external_link !== false &&
-            pillarMemberContents?.external_link !== null && (
-              <View style={styles.content}>
-                <Text style={styles.title}>External Links</Text>
-                <FlatList
-                  showsHorizontalScrollIndicator={false}
-                  showsVerticalScrollIndicator={false}
-                  data={pillarMemberContents?.external_link}
-                  renderItem={_renderExternal}
-                />
-              </View>
-            )} */}
+         
           {communityMembers !== undefined &&
             communityMembers?.length !== 0 &&
             communityMembers !== null &&
@@ -656,7 +444,7 @@ const HomeCommunity = props => {
               </View>
             )}
 
-          {/* external_links */}
+         
 
          
 
