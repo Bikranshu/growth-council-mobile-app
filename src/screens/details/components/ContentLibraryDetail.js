@@ -63,7 +63,7 @@ const ContentLibraryDetail = props => {
   const handleFeedbackChange = value => {
     setIsTrue(value);
   };
-  console.log('result', isTrue);
+//   console.log('result', isTrue);
 
   const _renderItem = ({item, index}) => {
     const fileUrl = item?.file?.url;
