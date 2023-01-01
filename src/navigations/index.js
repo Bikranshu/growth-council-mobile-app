@@ -1,16 +1,16 @@
-import React, {useEffect, useState, useRef} from 'react';
-import {NavigationContainer} from '@react-navigation/native';
-import {ActivityIndicator} from 'react-native-paper';
-import {Alert, View} from 'react-native';
 import AppStack from './AppStack';
 import AuthStack from './AuthStack';
+import {Alert, View, Text} from 'react-native';
+import {ActivityIndicator} from 'react-native-paper';
+import React, {useEffect, useState, useRef} from 'react';
+import {NavigationContainer} from '@react-navigation/native';
 
-import {navigationRef} from '../utils/navigationUtil';
-import {getAsyncStorage} from '../utils/storageUtil';
 import {JWT_TOKEN} from '../constants';
 import auth from '@react-native-firebase/auth';
-import analytics from '@react-native-firebase/analytics';
 import {useAuthentication} from '../context/auth';
+import {getAsyncStorage} from '../utils/storageUtil';
+import {navigationRef} from '../utils/navigationUtil';
+import analytics from '@react-native-firebase/analytics';
 
 const MainNavigation = () => {
 	const {loggedIn} = useAuthentication();
