@@ -47,7 +47,9 @@ const ArticleFeedbackCard = props => {
 
   //   const [articleAction, setArticleAction] = useState('like');
   const [likeEnabled, setLikeEnabled] = useState(false);
+  const [likeDisable, setLikeDisable] = useState(false);
   const [dislikeEnabled, setDislikeEnabled] = useState(false);
+  const [dislikeDisable, setDislikeDisable] = useState(false);
 
   useEffect(() => {
     setLikeCount(likes === NaN ? 0 : likes);
@@ -81,8 +83,7 @@ const ArticleFeedbackCard = props => {
         }
       });
       resetForm();
-      setLikeEnabled(false);
-
+      //   setLikeEnabled(false);
     },
   });
   const articlelikeSwitch = () => {
@@ -90,7 +91,7 @@ const ArticleFeedbackCard = props => {
 
     setFieldValue('id', contentLibraryDetails?.ID);
     setFieldValue('action', 'like');
-
+    setDislikeDisable(true);
     handleSubmit();
 
     setLikeEnabled(true);
@@ -101,6 +102,7 @@ const ArticleFeedbackCard = props => {
     setFieldValue('id', contentLibraryDetails?.ID);
     setDislikeCount(dislikeCount + 1);
     setFieldValue('action', 'dislike');
+    setLikeDisable(true);
 
     handleSubmit();
 
@@ -120,15 +122,24 @@ const ArticleFeedbackCard = props => {
             <TouchableOpacity
               style={[
                 likeEnabled === false
-                  ? styles.checkButton
+                  ? likeDisable === true
+                    ? styles.disabledButton
+                    : styles.checkButton
                   : styles.checkButton1,
               ]}
+              disabled={likeDisable}
               onPress={articlelikeSwitch}>
               {/* // onPressIn={articlelikeSwitch}> */}
               {/* {isTrue && <FeatherIcon name="check" color="#62C1EB" />} */}
               <Ionicons
                 name="happy"
-                color={likeEnabled === false ? '#899499' : 'white'}
+                color={
+                  likeEnabled === false
+                    ? likeDisable === true
+                      ? 'white'
+                      : '#899499'
+                    : 'white'
+                }
                 size={18}
               />
               <Text
@@ -154,14 +165,23 @@ const ArticleFeedbackCard = props => {
             <Pressable
               style={[
                 dislikeEnabled === false
-                  ? styles.checkButton
+                  ? dislikeDisable === true
+                    ? styles.disabledButton
+                    : styles.checkButton
                   : styles.dislikeCheckButton,
               ]}
-              onPress={articledislikeSwitch}>
+              onPress={articledislikeSwitch}
+              disabled={dislikeDisable}>
               {/* {!isTrue && <FeatherIcon name="check" color="#62C1EB" />} */}
               <Ionicons
                 name="sad"
-                color={dislikeEnabled === false ? '#899499' : 'white'}
+                color={
+                  dislikeEnabled === false
+                    ? dislikeDisable === true
+                      ? 'white'
+                      : '#899499'
+                    : 'white'
+                }
                 size={18}
               />
               <Text
@@ -287,6 +307,17 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     borderRadius: 18,
     backgroundColor: Colors.PRIMARY_BACKGROUND_COLOR,
+  },
+  disabledButton: {
+    width: 100,
+    height: 40,
+    marginRight: 15,
+    flexDirection: 'row',
+    justifyContent: 'space-evenly',
+    alignItems: 'center',
+    borderRadius: 18,
+    backgroundColor: '#B2BEB5',
+    color: 'white',
   },
   checkButton: {
     width: 100,
