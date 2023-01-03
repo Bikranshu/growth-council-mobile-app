@@ -17,6 +17,9 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import ToastMessage from '../toast';
 import Loading from '../loading';
 import * as Yup from 'yup';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import {getAsyncStorage} from '../../utils/storageUtil';
+import {ARTICLE_LIKE, USER_NAME} from '../../constants';
 
 const contentLibraryDetailSchema = Yup.object().shape({
   //   display_name: Yup.string().required('Name is required.'),
@@ -42,17 +45,17 @@ const ArticleFeedbackCard = props => {
   const likes = Number(contentLibraryDetails?.likes);
   const dislikes = Number(contentLibraryDetails?.dislikes);
 
-  const [likeCount, setLikeCount] = useState(likes === NaN ? 0 : likes);
+  const [likeCount, setLikeCount] = useState(likes);
   const [dislikeCount, setDislikeCount] = useState(dislikes);
-
-  //   const [articleAction, setArticleAction] = useState('like');
+  const [ARTICLE, setARTICLE] = useState();
   const [likeEnabled, setLikeEnabled] = useState(false);
   const [likeDisable, setLikeDisable] = useState(false);
   const [dislikeEnabled, setDislikeEnabled] = useState(false);
   const [dislikeDisable, setDislikeDisable] = useState(false);
+  const [hideShow, setHideShow] = useState(false);
 
   useEffect(() => {
-    setLikeCount(likes === NaN ? 0 : likes);
+    setLikeCount(likes);
     setDislikeCount(dislikes);
   }, [contentLibraryDetails]);
 
@@ -75,15 +78,14 @@ const ArticleFeedbackCard = props => {
     },
     onSubmit: async values => {
       console.log({values});
-      await ContentLibraryArticle(values).then(response => {
-        console.log(response);
+      await ContentLibraryArticle(values).then(async response => {
         if (response?.payload?.code === 200) {
           ToastMessage.show(response?.payload?.data);
           fetchContentLibraryDetail(contentLibraryDetails?.ID);
         }
+        await AsyncStorage.setItem('ARTICLE', JSON.stringify(hideShow));
       });
       resetForm();
-      //   setLikeEnabled(false);
     },
   });
   const articlelikeSwitch = () => {
@@ -94,8 +96,14 @@ const ArticleFeedbackCard = props => {
     setDislikeDisable(true);
     handleSubmit();
 
+    setHideShow(true);
     setLikeEnabled(true);
     setDislikeEnabled(false);
+  };
+  const hideFunction = () => {
+    setInterval(() => {
+      setHideShow(true);
+    }, 20000);
   };
 
   const articledislikeSwitch = () => {
@@ -103,166 +111,196 @@ const ArticleFeedbackCard = props => {
     setDislikeCount(dislikeCount + 1);
     setFieldValue('action', 'dislike');
     setLikeDisable(true);
-
     handleSubmit();
-
+    setHideShow(false);
     setDislikeEnabled(true);
     setLikeEnabled(false);
+    hideFunction();
   };
 
-  console.log(contentLibraryDetails?.ID);
+  useEffect(() => {
+    const ARTICLE_LIKEAsync = async () => {
+      setARTICLE(await AsyncStorage.getItem('ARTICLE'));
+    };
+    ARTICLE_LIKEAsync();
+  }, []);
+
+  console.log('ARTICLELIKE', ARTICLE);
 
   return (
     <>
-      <View style={styles.articleContainer}>
-        <Text style={styles.articleTitle}>Was this article helpful?</Text>
-        <View style={styles.articleContainerDivider} />
-        <View style={styles.articleButtonsContainer}>
-          <View style={styles.singleButtonContainer}>
-            <TouchableOpacity
-              style={[
-                likeEnabled === false
-                  ? likeDisable === true
-                    ? styles.disabledButton
-                    : styles.checkButton
-                  : styles.checkButton1,
-              ]}
-              disabled={likeDisable}
-              onPress={articlelikeSwitch}>
-              {/* // onPressIn={articlelikeSwitch}> */}
-              {/* {isTrue && <FeatherIcon name="check" color="#62C1EB" />} */}
-              <Ionicons
-                name="happy"
-                color={
+      {!hideShow && (
+        <View style={styles.articleContainer}>
+          <Text style={styles.articleTitle}>Was this article helpful?</Text>
+          <View style={styles.articleContainerDivider} />
+          <View style={styles.articleButtonsContainer}>
+            <View style={styles.singleButtonContainer}>
+              <TouchableOpacity
+                style={[
                   likeEnabled === false
                     ? likeDisable === true
-                      ? 'white'
-                      : '#899499'
-                    : 'white'
-                }
-                size={18}
-              />
-              <Text
-                style={[
-                  likeEnabled === false
-                    ? styles.checkButtonText
-                    : styles.checkButtonText1,
-                ]}>
-                Like
-              </Text>
-              <Text
-                style={[
-                  likeEnabled === false
-                    ? styles.checkButtonText
-                    : styles.checkButtonText1,
-                ]}>
-                {likeCount}
-              </Text>
-            </TouchableOpacity>
-          </View>
-          {articleLoading && <Loading />}
-          <View style={styles.singleButtonContainer}>
-            <Pressable
-              style={[
-                dislikeEnabled === false
-                  ? dislikeDisable === true
-                    ? styles.disabledButton
-                    : styles.checkButton
-                  : styles.dislikeCheckButton,
-              ]}
-              onPress={articledislikeSwitch}
-              disabled={dislikeDisable}>
-              {/* {!isTrue && <FeatherIcon name="check" color="#62C1EB" />} */}
-              <Ionicons
-                name="sad"
-                color={
-                  dislikeEnabled === false
-                    ? dislikeDisable === true
-                      ? 'white'
-                      : '#899499'
-                    : 'white'
-                }
-                size={18}
-              />
-              <Text
-                style={[
-                  dislikeEnabled === false
-                    ? styles.checkButtonText
-                    : styles.checkButtonText1,
-                ]}>
-                Dislike
-              </Text>
-              <Text
-                style={[
-                  dislikeEnabled === false
-                    ? styles.checkButtonText
-                    : styles.checkButtonText1,
-                ]}>
-                {dislikeCount === NaN ? '' : dislikeCount}
-              </Text>
-            </Pressable>
-          </View>
-        </View>
-        <Text style={{color: 'white', marginTop: 10}}>
-          View: {contentLibraryDetails?.views}
-        </Text>
-        {dislikeEnabled === true && (
-          <View style={{marginTop: 20}}>
-            <TouchableWithoutFeedback
-              onPress={Keyboard.dismiss}
-              accessible={false}>
-              <View>
-                <Text style={{color: 'white'}}>Your email (optional) :</Text>
-                <TextInput
-                  multiline={true}
-                  style={[styles.textarea]}
-                  value={values.email}
-                  onChangeText={handleChange('email')}
-                  onFocus={handleBlur('email')}
-                  error={errors.email}
-                  touched={touched.email}
+                      ? styles.disabledButton
+                      : styles.checkButton
+                    : styles.checkButton1,
+                ]}
+                disabled={likeDisable}
+                onPress={articlelikeSwitch}>
+                <Ionicons
+                  name="happy"
+                  color={
+                    likeEnabled === false
+                      ? likeDisable === true
+                        ? '#666666'
+                        : '#899499'
+                      : 'white'
+                  }
+                  size={18}
                 />
-              </View>
-            </TouchableWithoutFeedback>
-            {/* {articleLoading && <Loading />} */}
-            <TouchableWithoutFeedback
-              onPress={Keyboard.dismiss}
-              accessible={false}>
-              <View>
-                <Text style={{color: 'white', marginTop: 10}}>
-                  Your can leave feedback :
+                <Text
+                  style={[
+                    likeEnabled === false
+                      ? likeDisable === true
+                        ? styles.disableButtonText
+                        : styles.checkButtonText
+                      : styles.checkButtonText1,
+                  ]}>
+                  Like
                 </Text>
-                <TextInput
-                  multiline={true}
-                  style={styles.textarea1}
-                  value={values.content}
-                  onChangeText={handleChange('content')}
-                  onFocus={handleBlur('content')}
-                  error={errors.content}
-                  touched={touched.content}
-                />
-              </View>
-            </TouchableWithoutFeedback>
-
-            <Text style={{color: 'white', marginTop: 20}}>
-              We will use your feedback to improve this article
-            </Text>
-
-            <View style={styles.buttonWrapper}>
-              <TouchableOpacity
-                style={styles.button}
-                onPress={() => {
-                  setFieldValue('id', contentLibraryDetails?.ID);
-                  setFieldValue('action', 'dislike');
-                  handleSubmit();
-                  setDislikeEnabled(false);
-                }}>
-                <Text style={styles.buttonText}>Send Feedback</Text>
+                <Text
+                  style={[
+                    likeEnabled === false
+                      ? likeDisable === true
+                        ? styles.disableButtonText
+                        : styles.checkButtonText
+                      : styles.checkButtonText1,
+                  ]}>
+                  {likeCount}
+                </Text>
               </TouchableOpacity>
             </View>
+            {articleLoading && <Loading />}
+            <View style={styles.singleButtonContainer}>
+              <Pressable
+                style={[
+                  dislikeEnabled === false
+                    ? dislikeDisable === true
+                      ? styles.disabledButton
+                      : styles.checkButton
+                    : styles.dislikeCheckButton,
+                ]}
+                onPress={articledislikeSwitch}
+                disabled={dislikeDisable}>
+                <Ionicons
+                  name="sad"
+                  color={
+                    dislikeEnabled === false
+                      ? dislikeDisable === true
+                        ? '#666666'
+                        : '#899499'
+                      : 'white'
+                  }
+                  size={18}
+                />
+                <Text
+                  style={[
+                    dislikeEnabled === false
+                      ? dislikeDisable === true
+                        ? styles.disableButtonText
+                        : styles.checkButtonText
+                      : styles.checkButtonText1,
+                  ]}>
+                  Dislike
+                </Text>
+                <Text
+                  style={[
+                    dislikeEnabled === false
+                      ? dislikeDisable === true
+                        ? styles.disableButtonText
+                        : styles.checkButtonText
+                      : styles.checkButtonText1,
+                  ]}>
+                  {dislikeCount === NaN ? '' : dislikeCount}
+                </Text>
+              </Pressable>
+            </View>
           </View>
-        )}
-      </View>
+          <Text style={{color: 'white', marginTop: 10}}>
+            View: {contentLibraryDetails?.views}
+          </Text>
+          {dislikeEnabled === true && (
+            <View style={{marginTop: 20}}>
+              <TouchableWithoutFeedback
+                onPress={Keyboard.dismiss}
+                accessible={false}>
+                <View>
+                  <Text style={{color: 'white'}}>Your email (optional) :</Text>
+                  <TextInput
+                    multiline={true}
+                    style={[styles.textarea]}
+                    value={values.email}
+                    onChangeText={handleChange('email')}
+                    onFocus={handleBlur('email')}
+                    error={errors.email}
+                    touched={touched.email}
+                  />
+                </View>
+              </TouchableWithoutFeedback>
+              <TouchableWithoutFeedback
+                onPress={Keyboard.dismiss}
+                accessible={false}>
+                <View>
+                  <Text style={{color: 'white', marginTop: 10}}>
+                    Your can leave feedback :
+                  </Text>
+                  <TextInput
+                    multiline={true}
+                    style={styles.textarea1}
+                    value={values.content}
+                    onChangeText={handleChange('content')}
+                    onFocus={handleBlur('content')}
+                    error={errors.content}
+                    touched={touched.content}
+                  />
+                </View>
+              </TouchableWithoutFeedback>
+
+              <Text style={{color: 'white', marginTop: 20}}>
+                We will use your feedback to improve this article
+              </Text>
+
+              <View style={styles.buttonWrapper}>
+                <TouchableOpacity
+                  style={styles.button}
+                  onPress={() => {
+                    setFieldValue('id', contentLibraryDetails?.ID);
+                    setFieldValue('action', 'dislike');
+                    handleSubmit();
+                    setHideShow(true);
+                    setDislikeEnabled(false);
+                  }}>
+                  <Text style={styles.buttonText}>Send Feedback</Text>
+                </TouchableOpacity>
+              </View>
+            </View>
+          )}
+        </View>
+      )}
+
+      {hideShow && (
+        <View
+          style={{
+            paddingVertical: 20,
+            marginBottom: 10,
+            paddingHorizontal: 15,
+            justifyContent: 'center',
+            borderRadius: 18,
+            backgroundColor: '#B2BEB5',
+          }}>
+          <Text style={{textAlign: 'center', color: 'white'}}>
+            You have already rated this article
+          </Text>
+        </View>
+      )}
     </>
   );
 };
@@ -276,6 +314,7 @@ const styles = StyleSheet.create({
     borderRadius: 18,
     backgroundColor: '#62C1EB',
   },
+
   articleTitle: {
     marginLeft: 15,
     fontFamily: 'SFProText-SemiBold',
@@ -318,6 +357,7 @@ const styles = StyleSheet.create({
     borderRadius: 18,
     backgroundColor: '#B2BEB5',
     color: 'white',
+    opacity: 0.6,
   },
   checkButton: {
     width: 100,
@@ -347,12 +387,18 @@ const styles = StyleSheet.create({
     justifyContent: 'space-evenly',
     alignItems: 'center',
     borderRadius: 18,
-    backgroundColor: '#7B1818',
+    backgroundColor: '#AA4A44',
   },
   checkButtonText: {
     fontFamily: 'SFProText-Regular',
     fontSize: 13,
     color: 'black',
+  },
+  disableButtonText: {
+    fontFamily: 'SFProText-Regular',
+    fontSize: 13,
+    color: '#FFFFFF',
+    opacity: 0.6,
   },
   checkButtonText1: {
     fontFamily: 'SFProText-Regular',
