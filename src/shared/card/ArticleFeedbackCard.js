@@ -297,7 +297,7 @@ const ArticleFeedbackCard = props => {
             backgroundColor: '#B2BEB5',
           }}>
           <Text style={{textAlign: 'center', color: 'white'}}>
-            You have already rated this article
+            You gave this article a rating.
           </Text>
         </View>
       )}
