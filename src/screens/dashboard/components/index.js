@@ -469,7 +469,7 @@ const Dashboard = props => {
   //   console.log({los_angles});
   const nd = new Date(los_angles);
   const ActualPSTTime = moment(nd).format('DD/MM/yyyy');
-  // console.log(nd);
+  console.log({ActualPSTTime});
 
   //   const ActualPSTTime = moment(pst).format('DD/MM/yyyy');
   //   console.log(pst);
@@ -478,7 +478,7 @@ const Dashboard = props => {
   // const quote = dailyQuote?.filter(
   //   item => item?.quote_date === ActualPSTTime,
   // )[0];
-//   console.log(' quote', dailyQuote);
+  //   console.log(' quote', dailyQuote);
 
   return (
     <View style={{flex: 1}}>
