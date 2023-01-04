@@ -523,7 +523,6 @@ const Dashboard = props => {
                   <View
                     style={{
                       alignItems: 'center',
-                      //   marginTop: 10,
                     }}>
                     {/* Daily Quote View Component */}
                     <View>
@@ -542,7 +541,7 @@ const Dashboard = props => {
                               numberOfLines={2}
                               style={{
                                 fontSize: 14,
-                                color: 'white',
+                                color: 'red',
                                 textAlign: 'center',
                                 marginBottom: 10,
                                 // alignItems: 'center',
@@ -562,7 +561,7 @@ const Dashboard = props => {
                                   position: 'absolute',
                                   right: 5,
                                   fontWeight: 'bold',
-                                  color: 'white',
+                                  color: 'red',
                                 }}>
                                 -{quote?.quote_author}
                               </Text>
