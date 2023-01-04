@@ -370,7 +370,7 @@ const HomeCommunity = props => {
                       display: 'flex',
                       flexDirection: 'row',
                     }}>
-                    <Text>Render top item flat</Text>
+                    {/* <Text>Render top item flat</Text> */}
                     <FlatList
                       horizontal
                       data={regionEvents}
