@@ -792,7 +792,7 @@ const Dashboard = props => {
                       }}>
                       -{data?.quote_author}
                     </Text>
-                    {lengthMore ? (
+                    {/* {lengthMore ? (
                       // <Text
                       //   onPress={toggleNumberOfLines}
                       //   style={{lineHeight: 21, marginTop: 10}}>
@@ -804,7 +804,7 @@ const Dashboard = props => {
                         }}>
                         <Text>'Read less...' </Text>
                       </TouchableOpacity>
-                    ) : null}
+                    ) : null} */}
                   </LinearGradient>
                 </View>
               </Modal>
