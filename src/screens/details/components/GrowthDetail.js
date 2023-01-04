@@ -135,7 +135,6 @@ const GrowthDetail = props => {
 
   const GrowthCoachingSignup = async () => {
     const response = await signupCoachingSession({});
-    console.log('abcd', response);
     if (response?.payload?.code === 200) {
       // setStatus(true);
       ToastMessage.show(response.payload.message);

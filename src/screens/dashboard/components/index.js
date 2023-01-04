@@ -237,22 +237,6 @@ const Dashboard = props => {
     }
   };
 
-  const _renderDailyQuoteItem = ({item, index}) => {
-    const date = new Date();
-    let localTime = date.getTime();
-    let localOffset = date.getTimezoneOffset() * 60000;
-    let utc = localTime + localOffset;
-    let target_offset = -8; //PST from UTC 7 hours behind right now, will need to fix for daylight
-    let los_angles = utc + 3600000 * target_offset;
-    const nd = new Date(los_angles);
-    const PSTTime = nd.toLocaleString();
-    const ActualPSTTime = moment(PSTTime).format('D/MM/yyyy');
-
-    console.log('psttime', PSTTime);
-    console.log('actual psttime', ActualPSTTime);
-    console.log('item', item?.quote_date);
-    return <></>;
-  };
 
   const _renderItem = ({item, index}) => {
     let user = item?.user_meta?.region;
@@ -474,7 +458,7 @@ const Dashboard = props => {
 
   const onTextLayout = useCallback(e => {
     setLengthMore(e.nativeEvent.lines.length >= 3); //to check the text is more than 3 lines or not
-    // console.log(e.nativeEvent);
+
   }, []);
 
   const date = new Date();
@@ -486,7 +470,6 @@ const Dashboard = props => {
   const nd = new Date(los_angles);
   const PSTTime = nd.toLocaleString();
   const ActualPSTTime = moment(PSTTime).format('DD/MM/yyyy');
-  //   console.log(ActualPSTTime);
 
   const quote = dailyQuote?.filter(
     item => item?.quote_date === ActualPSTTime,
@@ -1102,10 +1085,6 @@ const RenderCriticalComponent = ({
               dataSourceCords[index] = layout.y;
               setDataSourceCords(dataSourceCords);
 
-              // console.log('height:', layout.height);
-              // console.log('width:', (dataSourceCords[index] = layout.y));
-
-              // console.log('y:', layout.y);
             }}>
             <View
               style={{

@@ -89,8 +89,6 @@ const GrowthCoaching = props => {
     persona = profile?.user_meta?.user_persona[0];
   }
 
-  console.log('user_persona1', persona);
-
   const [userRegion, setUserRegion] = useState(region);
   const [hideEvents, setHideEvents] = useState();
   useEffect(() => {
@@ -517,7 +515,7 @@ const GrowthCoaching = props => {
             )}
 
           {pillarPOELoading && (
-            <View style={{marginTop: 40}}>
+            <View style={{marginTop: 70}}>
               <Loading />
             </View>
           )}

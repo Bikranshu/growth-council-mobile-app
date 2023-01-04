@@ -31,8 +31,6 @@ const GPDScreen = props => {
     dispatch(fetchGrowthPipeline());
   }, []);
 
-  console.log({GDP});
-
   let content1 = GDP?.content1;
   if (content1 !== undefined) {
     content1 = GDP?.content1;

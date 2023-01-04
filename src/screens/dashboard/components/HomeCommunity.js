@@ -58,23 +58,11 @@ const HomeCommunity = props => {
     fetchAllCommunityMember,
     cleanCommunityMember,
 
-    pillarMemberContents,
-    pillarMemberContentLoading,
-    pillarMemberContentError,
-    fetchAllPillarMemberContent,
-    cleanPillarMemberContent,
-
     pillarPOEs,
     pillarPOELoading,
     pillarPOEError,
     fetchAllPillarPOE,
     cleanPillarPOE,
-
-    users,
-    userLoading,
-    userError,
-    fetchAllUsers,
-    cleanUser,
 
     memberConnections,
     memberConnectionLoading,
@@ -109,8 +97,6 @@ const HomeCommunity = props => {
     persona = profile?.user_meta?.user_persona[0];
   }
 
-  console.log('user_persona', persona);
-
   let string = region;
   if (string) string = string.toLowerCase();
 
@@ -128,9 +114,6 @@ const HomeCommunity = props => {
   // useEffect(() => {
   //   fetchProfile();
   // }, []);
-
-  console.log('1', profile);
-  console.log('2', userRegion);
 
   useEffect(() => {
     setUserRegion(region);
@@ -205,36 +188,36 @@ const HomeCommunity = props => {
   }, []);
 
   useFocusEffect(
-  	useCallback(() => {
-  		const fetchAllCommunityMemberAsync = async () => {
-  			await fetchAllCommunityMember({
-  				s: '',
-  				sort: 'Desc',
-  				region: userRegion,
-  			});
-  		};
-  		fetchAllCommunityMemberAsync();
+    useCallback(() => {
+      const fetchAllCommunityMemberAsync = async () => {
+        await fetchAllCommunityMember({
+          s: '',
+          sort: 'Desc',
+          region: userRegion,
+        });
+      };
+      fetchAllCommunityMemberAsync();
 
-  		return () => {
-  			cleanCommunityMember();
-  		};
-  	}, [])
+      return () => {
+        cleanCommunityMember();
+      };
+    }, []),
   );
 
-//   useEffect(() => {
-//     const fetchAllCommunityMemberAsync = async () => {
-//       await fetchAllCommunityMember({
-//         s: '',
-//         sort: 'Desc',
-//         region: userRegion,
-//       });
-//     };
-//     fetchAllCommunityMemberAsync();
+  //   useEffect(() => {
+  //     const fetchAllCommunityMemberAsync = async () => {
+  //       await fetchAllCommunityMember({
+  //         s: '',
+  //         sort: 'Desc',
+  //         region: userRegion,
+  //       });
+  //     };
+  //     fetchAllCommunityMemberAsync();
 
-//     return () => {
-//       cleanCommunityMember();
-//     };
-//   }, []);
+  //     return () => {
+  //       cleanCommunityMember();
+  //     };
+  //   }, []);
 
   useEffect(() => {
     setMemberConnection(communityMembers);

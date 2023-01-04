@@ -24,7 +24,6 @@ const PushNotificationsConfigs = {
 
             if (data) {
               if (data?.type == 'chat') {
-                console.log(notification.data);
                 navigate('Chat', {
                   friendID: data?.friendID,
                   friendName: data?.friendName,
@@ -48,7 +47,6 @@ const PushNotificationsConfigs = {
             console.log(error);
           }
         }
-        console.log('isIOS', isIOS);
         {
           isIOS && notification.finish(PushNotificationIOS.FetchResult.NoData);
         }
