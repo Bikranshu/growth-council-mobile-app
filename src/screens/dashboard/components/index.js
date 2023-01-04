@@ -472,7 +472,7 @@ const Dashboard = props => {
   const quote = dailyQuote?.filter(
     item => item?.quote_date === ActualPSTTime,
   )[0];
-  console.log('quote', quote);
+  console.log('quote', dailyQuote);
 
   return (
     <View style={{flex: 1}}>
@@ -525,76 +525,67 @@ const Dashboard = props => {
                       alignItems: 'center',
                     }}>
                     {/* Daily Quote View Component */}
-                    {dailyQuote?.map(item => {
-                      return (
-                        <View>
-                          {item?.quote_date === ActualPSTTime ? (
-                            <>
-                              {!modalVisible && (
-                                <LinearGradient
-                                  start={{
-                                    x: 0.697,
-                                    y: -0.943,
-                                  }}
-                                  end={{x: 0.413, y: 2.24}}
-                                  colors={['#58AFF6', '#002651']}
-                                  style={styles.quote}>
-                                  <View>
-                                    <Text
-                                      onTextLayout={onTextLayout}
-                                      numberOfLines={2}
-                                      style={{
-                                        fontSize: 14,
-                                        color: 'red',
-                                        textAlign: 'center',
-                                        marginBottom: 10,
-                                        // alignItems: 'center',
-                                      }}>
-                                      {item?.daily_quote}
-                                    </Text>
-                                    <View
-                                      style={{
-                                        alignItems: 'flex-end',
-                                        position: 'absolute',
-                                        right: 5,
-                                        bottom: 10,
-                                      }}>
-                                      <Text
-                                        style={{
-                                          fontSize: 12,
-                                          position: 'absolute',
-                                          right: 5,
-                                          fontWeight: 'bold',
-                                          color: 'red',
-                                        }}>
-                                        - {item?.quote_author}
-                                      </Text>
-                                    </View>
-                                    {lengthMore && (
-                                      <TouchableOpacity
-                                        onPress={() => {
-                                          setModalVisible(true), setdata(quote);
-                                        }}>
-                                        <Text
-                                          style={{
-                                            fontSize: 12,
-                                            color: 'white',
-                                            textAlign: 'center',
-                                          }}>
-                                          'See More...'{' '}
-                                        </Text>
-                                      </TouchableOpacity>
-                                    )}
-                                  </View>
-                                </LinearGradient>
-                              )}
-                            </>
-                          ) : (
-                            <></>
-                          )}
-                        </View>
-                      );
-                    })}
+
+                    <View>
+                      {!modalVisible && (
+                        <LinearGradient
+                          start={{
+                            x: 0.697,
+                            y: -0.943,
+                          }}
+                          end={{x: 0.413, y: 2.24}}
+                          colors={['#58AFF6', '#002651']}
+                          style={styles.quote}>
+                          <View>
+                            <Text
+                              onTextLayout={onTextLayout}
+                              numberOfLines={2}
+                              style={{
+                                fontSize: 14,
+                                color: 'white',
+                                textAlign: 'center',
+                                marginBottom: 10,
+                                // alignItems: 'center',
+                              }}>
+                              {quote?.daily_quote}
+                            </Text>
+                            <View
+                              style={{
+                                alignItems: 'flex-end',
+                                position: 'absolute',
+                                right: 5,
+                                bottom: 10,
+                              }}>
+                              <Text
+                                style={{
+                                  fontSize: 12,
+                                  position: 'absolute',
+                                  right: 5,
+                                  fontWeight: 'bold',
+                                  color: 'white',
+                                }}>
+                                - {quote?.quote_author}
+                              </Text>
+                            </View>
+                            {lengthMore && (
+                              <TouchableOpacity
+                                onPress={() => {
+                                  setModalVisible(true), setdata(quote);
+                                }}>
+                                <Text
+                                  style={{
+                                    fontSize: 12,
+                                    color: 'white',
+                                    textAlign: 'center',
+                                  }}>
+                                  'See More...'{' '}
+                                </Text>
+                              </TouchableOpacity>
+                            )}
+                          </View>
+                        </LinearGradient>
+                      )}
+                    </View>
                   </View>
                   <View style={styles.pillar}>
                     <PillarList
