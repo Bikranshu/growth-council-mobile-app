@@ -14,7 +14,7 @@ import analytics from '@react-native-firebase/analytics';
 
 const MainNavigation = () => {
 	const {loggedIn} = useAuthentication();
-	console.log('loggedin bool', loggedIn);
+	// console.log('loggedin bool', loggedIn);
 	const navigationRef = useRef();
 	const routeNameRef = useRef();
 
