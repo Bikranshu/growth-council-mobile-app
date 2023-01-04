@@ -469,10 +469,11 @@ const Dashboard = props => {
   const PSTTime = nd.toLocaleString();
   const ActualPSTTime = moment(PSTTime).format('DD/MM/yyyy');
 
-  const quote = dailyQuote?.filter(
-    item => item?.quote_date === ActualPSTTime,
-  )[0];
-  console.log('quote', dailyQuote);
+  const quote = dailyQuote[0];
+  // const quote = dailyQuote?.filter(
+  //   item => item?.quote_date === ActualPSTTime,
+  // )[0];
+  console.log(' quote', dailyQuote);
 
   return (
     <View style={{flex: 1}}>
