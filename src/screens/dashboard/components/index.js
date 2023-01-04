@@ -474,10 +474,11 @@ const Dashboard = props => {
   //   const ActualPSTTime = moment(pst).format('DD/MM/yyyy');
   //   console.log(pst);
 
-  const quote = dailyQuote?.filter(
-    item => item?.quote_date === ActualPSTTime,
-  )[0];
-  //   console.log('quote', ActualPSTTime, quote);
+  const quote = dailyQuote[0];
+  // const quote = dailyQuote?.filter(
+  //   item => item?.quote_date === ActualPSTTime,
+  // )[0];
+//   console.log(' quote', dailyQuote);
 
   return (
     <View style={{flex: 1}}>
