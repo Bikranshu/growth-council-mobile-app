@@ -237,7 +237,6 @@ const Dashboard = props => {
     }
   };
 
-
   const _renderItem = ({item, index}) => {
     let user = item?.user_meta?.region;
     if (typeof user === 'undefined' || user === 'null') {
@@ -458,7 +457,6 @@ const Dashboard = props => {
 
   const onTextLayout = useCallback(e => {
     setLengthMore(e.nativeEvent.lines.length >= 3); //to check the text is more than 3 lines or not
-
   }, []);
 
   const date = new Date();
@@ -522,20 +520,6 @@ const Dashboard = props => {
                         : Dimensions.get('screen').height / 10,
                   }}
                   source={require('../../../assets/img/appBG.png')}>
-                  {modalVisible && (
-                    <BlurView
-                      style={{
-                        position: 'absolute',
-                        top: 0,
-                        left: 0,
-                        bottom: 0,
-                        right: 0,
-                      }}
-                      blurType="light"
-                      blurAmount={10}
-                      reducedTransparencyFallbackColor="white"
-                    />
-                  )}
                   <View
                     style={{
                       alignItems: 'center',
@@ -1084,7 +1068,6 @@ const RenderCriticalComponent = ({
 
               dataSourceCords[index] = layout.y;
               setDataSourceCords(dataSourceCords);
-
             }}>
             <View
               style={{
