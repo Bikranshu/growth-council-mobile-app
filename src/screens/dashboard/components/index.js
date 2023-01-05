@@ -13,6 +13,7 @@ import {
   ImageBackground,
   TouchableOpacity,
   SafeAreaView,
+  Pressable,
 } from 'react-native';
 
 import moment from 'moment';
@@ -119,7 +120,7 @@ const Dashboard = props => {
 
   const [hideCritical, setHideCritical] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
-  
+
   const [lengthMore, setLengthMore] = useState(false); //to show the "Read more & Less Line"
 
   const [data, setdata] = useState('');
@@ -455,10 +456,9 @@ const Dashboard = props => {
     );
   };
 
-
-  const onTextLayout = useCallback(e => {
-    setLengthMore(e.nativeEvent.lines.length >= 3); //to check the text is more than 3 lines or not
-  }, []);
+  const onTextLayout = e => {
+    setLengthMore(e.nativeEvent.lines.length > 2); //to check the text is more than 2 lines or not
+  };
 
   const date = new Date();
   let localTime = date.getTime();
@@ -580,7 +580,7 @@ const Dashboard = props => {
                                         </Text>
                                       </View>
                                       {lengthMore && (
-                                        <TouchableOpacity
+                                        <Pressable
                                           onPress={() => {
                                             setModalVisible(true),
                                               setdata(item);
@@ -591,9 +591,9 @@ const Dashboard = props => {
                                               color: 'white',
                                               textAlign: 'center',
                                             }}>
-                                            'See More...'{' '}
+                                            'See More...'
                                           </Text>
-                                        </TouchableOpacity>
+                                        </Pressable>
                                       )}
                                     </View>
                                   </LinearGradient>
@@ -837,7 +837,7 @@ const styles = StyleSheet.create({
 
   quote: {
     // backgroundColor: 'white',
-    height: 80,
+    height: 100,
     width: Dimensions.get('screen').width - 10,
     justifyContent: 'center',
 
@@ -852,7 +852,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     marginLeft: 10,
     marginRight: 10,
-    marginTop: 10,
+    // marginTop: 10,
     marginBottom: 10,
     justifyContent: 'space-between',
   },
