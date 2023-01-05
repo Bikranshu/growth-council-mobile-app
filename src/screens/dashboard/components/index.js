@@ -119,6 +119,10 @@ const Dashboard = props => {
 
   const [hideCritical, setHideCritical] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
+  
+  const [lengthMore, setLengthMore] = useState(false); //to show the "Read more & Less Line"
+
+  const [data, setdata] = useState('');
 
   const [dataSourceCords, setDataSourceCords] = useState(criticalIssue);
   // const [ref, setRef] = useState(null);
@@ -451,9 +455,6 @@ const Dashboard = props => {
     );
   };
 
-  const [lengthMore, setLengthMore] = useState(false); //to show the "Read more & Less Line"
-
-  const [data, setdata] = useState('');
 
   const onTextLayout = useCallback(e => {
     setLengthMore(e.nativeEvent.lines.length >= 3); //to check the text is more than 3 lines or not
