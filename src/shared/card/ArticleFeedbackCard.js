@@ -42,8 +42,10 @@ const ArticleFeedbackCard = props => {
     fetchContentLibraryDetail,
   } = props;
 
-  const likes = Number(contentLibraryDetails?.likes);
-  const dislikes = Number(contentLibraryDetails?.dislikes);
+  let likes = Number(contentLibraryDetails?.likes);
+  let dislikes = Number(contentLibraryDetails?.dislikes);
+  if (isNaN(likes)) likes = 0.0;
+  if (isNaN(dislikes)) dislikes = 0.0;
 
   const [likeCount, setLikeCount] = useState(likes);
   const [dislikeCount, setDislikeCount] = useState(dislikes);
