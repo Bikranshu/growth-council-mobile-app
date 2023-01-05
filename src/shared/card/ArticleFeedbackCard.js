@@ -299,7 +299,7 @@ const ArticleFeedbackCard = props => {
             backgroundColor: '#B2BEB5',
           }}>
           <Text style={{textAlign: 'center', color: 'white'}}>
-            You gave this article a rating.
+            Your's reponse have been saved.
           </Text>
         </View>
       )}

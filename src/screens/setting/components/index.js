@@ -632,62 +632,6 @@ const Setting = props => {
                                   color: '#222B45',
                                   fontWeight: '500',
                                 }}>
-                                Member Connections
-                              </Text>
-                            </View>
-                          }
-                          left={props => (
-                            <View
-                              style={{
-                                width: 40,
-                                height: 40,
-                                backgroundColor: '#3A9BDC',
-                                justifyContent: 'center',
-                                alignItems: 'center',
-                                borderRadius: 10,
-                              }}>
-                              <Image
-                                source={require('../../../../src/assets/img/connection.png')}
-                                style={{
-                                  width: 25,
-                                  height: 25,
-                                }}
-                                resizeMode="contain"
-                              />
-                            </View>
-                          )}
-                          right={props => (
-                            <Switch
-                              trackColor={{false: '#767577', true: '#32a32e'}}
-                              thumbColor={memberEnabled ? 'white' : 'white'}
-                              ios_backgroundColor="#3e3e3e"
-                              onValueChange={memberSwitch}
-                              value={memberEnabled}
-                              style={{
-                                right: 0,
-                                position: 'absolute',
-                              }}
-                            />
-                          )}
-                          style={{
-                            marginVertical: 5,
-                            borderBottomWidth: 1,
-                            alignItems: 'center',
-                            borderBottomColor: '#EDF1F7',
-                            paddingBottom: 15,
-                            width: 300,
-                            marginLeft: 20,
-                          }}
-                        />
-                        <List.Item
-                          title={
-                            <View>
-                              <Text
-                                style={{
-                                  fontSize: 14,
-                                  color: '#222B45',
-                                  fontWeight: '500',
-                                }}>
                                 Registered Events
                               </Text>
                             </View>
@@ -719,6 +663,62 @@ const Setting = props => {
                               ios_backgroundColor="#3e3e3e"
                               onValueChange={regEventSwitch}
                               value={regEvents}
+                              style={{
+                                right: 0,
+                                position: 'absolute',
+                              }}
+                            />
+                          )}
+                          style={{
+                            marginVertical: 5,
+                            borderBottomWidth: 1,
+                            alignItems: 'center',
+                            borderBottomColor: '#EDF1F7',
+                            paddingBottom: 15,
+                            width: 300,
+                            marginLeft: 20,
+                          }}
+                        />
+                        <List.Item
+                          title={
+                            <View>
+                              <Text
+                                style={{
+                                  fontSize: 14,
+                                  color: '#222B45',
+                                  fontWeight: '500',
+                                }}>
+                                Member Connections
+                              </Text>
+                            </View>
+                          }
+                          left={props => (
+                            <View
+                              style={{
+                                width: 40,
+                                height: 40,
+                                backgroundColor: '#3A9BDC',
+                                justifyContent: 'center',
+                                alignItems: 'center',
+                                borderRadius: 10,
+                              }}>
+                              <Image
+                                source={require('../../../../src/assets/img/connection.png')}
+                                style={{
+                                  width: 25,
+                                  height: 25,
+                                }}
+                                resizeMode="contain"
+                              />
+                            </View>
+                          )}
+                          right={props => (
+                            <Switch
+                              trackColor={{false: '#767577', true: '#32a32e'}}
+                              thumbColor={memberEnabled ? 'white' : 'white'}
+                              ios_backgroundColor="#3e3e3e"
+                              onValueChange={memberSwitch}
+                              value={memberEnabled}
                               style={{
                                 right: 0,
                                 position: 'absolute',
