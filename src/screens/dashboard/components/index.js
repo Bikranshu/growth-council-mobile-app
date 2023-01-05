@@ -458,7 +458,7 @@ const Dashboard = props => {
   };
 
   const onTextLayout = e => {
-    setLengthMore(numberofLines >= 2); //to check the text is more than 2 lines or not
+    setLengthMore(numberofLines > 2); //to check the text is more than 2 lines or not
   };
 
   useEffect(() => {
