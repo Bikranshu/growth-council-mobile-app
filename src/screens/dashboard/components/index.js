@@ -1,18 +1,19 @@
 import React, {useEffect, useState, useCallback} from 'react';
 import {
-  StyleSheet,
   View,
-  Image,
   Text,
-  ImageBackground,
-  ScrollView,
+  Image,
+  Modal,
   FlatList,
-  TouchableOpacity,
+  Platform,
   StatusBar,
   Dimensions,
-  Platform,
+  StyleSheet,
   BackHandler,
-  Modal,
+  ImageBackground,
+  TouchableOpacity,
+  SafeAreaView,
+  Pressable,
 } from 'react-native';
 
 import moment from 'moment';
@@ -36,6 +37,7 @@ import FloatingButton from '../../../shared/floatingButton';
 import {CommonStyles, Colors, Typography} from '../../../theme';
 import {GROWTH_COMMUNITY_ID, GROWTH_CONTENT_ID} from '../../../constants';
 import {PRIMARY_TEXT_COLOR, SECONDARY_TEXT_COLOR} from '../../../theme/colors';
+import {emptyContainerRenderData} from '../../../utils/flatlistRenderData';
 
 const win = Dimensions.get('window').width;
 const contentContainerWidth = win / 2;
@@ -119,20 +121,25 @@ const Dashboard = props => {
   const [hideCritical, setHideCritical] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
 
+  const [lengthMore, setLengthMore] = useState(false); //to show the "Read more & Less Line"
+  const [numberofLines, setNumberofLines] = useState(2);
+
+  const [data, setdata] = useState('');
+
   const [dataSourceCords, setDataSourceCords] = useState(criticalIssue);
-  const [ref, setRef] = useState(null);
+  // const [ref, setRef] = useState(null);
   const navigation = useNavigation();
   const isFocused = useIsFocused();
 
   let string = region;
   if (string) string = string.toLowerCase();
 
-  let regionUser = profile?.user_meta?.region;
-  if (typeof regionUser === 'undefined' || regionUser === null) {
-    regionUser = '';
-  } else {
-    regionUser = profile?.user_meta?.region[0];
-  }
+  //   let regionUser = profile?.user_meta?.region;
+  //   if (typeof regionUser === 'undefined' || regionUser === null) {
+  //     regionUser = '';
+  //   } else {
+  //     regionUser = profile?.user_meta?.region[0];
+  //   }
 
   const [userRegion, setUserRegion] = useState(region);
 
@@ -214,7 +221,7 @@ const Dashboard = props => {
       backAction,
     );
 
-    return () => backHandler.remove();
+    return () => backHandler?.remove();
   }, []);
 
   useEffect(() => {
@@ -234,50 +241,6 @@ const Dashboard = props => {
       //   toast.closeAll();
       ToastMessage.show(response?.payload?.response);
     }
-  };
-
-  const _renderDailyQuoteItem = ({item, index}) => {
-    const date = new Date();
-    let localTime = date.getTime();
-    let localOffset = date.getTimezoneOffset() * 60000;
-    let utc = localTime + localOffset;
-    let target_offset = -8; //PST from UTC 7 hours behind right now, will need to fix for daylight
-    let los_angles = utc + 3600000 * target_offset;
-    const nd = new Date(los_angles);
-    const PSTTime = nd.toLocaleString();
-    const ActualPSTTime = moment(PSTTime).format('D/MM/yyyy');
-
-    // console.log(PSTTime);
-    return (
-      <>
-        {ActualPSTTime === item?.quote_date ? (
-          <View
-            style={{
-              padding: 20,
-              borderRadius: 10,
-              borderWidth: 0.5,
-              borderColor: 'black',
-            }}>
-            <Text style={{color: 'black', width: 250}}>
-              {item?.daily_quote}
-            </Text>
-            <Text
-              style={{
-                color: 'black',
-                position: 'absolute',
-                right: 5,
-                bottom: 10,
-                fontWeight: 'bold',
-                marginTop: 20,
-              }}>
-              {item?.quote_author}
-            </Text>
-          </View>
-        ) : (
-          <></>
-        )}
-      </>
-    );
   };
 
   const _renderItem = ({item, index}) => {
@@ -349,7 +312,7 @@ const Dashboard = props => {
   const _renderContent = ({item, index}) => {
     const date = moment(item?.post_modified).format('MM/D/yyyy');
     return (
-      <View style={[styles.middleWrapper, styles.shadowContent]}>
+      <View key={index} style={[styles.middleWrapper, styles.shadowContent]}>
         <View style={{flexDirection: 'row'}}>
           <View style={{width: '70%', margin: 10}}>
             <Text style={{fontSize: 12, color: '#041C3E', fontWeight: '600'}}>
@@ -482,131 +445,47 @@ const Dashboard = props => {
   };
 
   const _renderCritical = ({item, index}) => {
-    let lowercaseRegion = '';
-    if (userRegion) lowercaseRegion = userRegion.toLowerCase();
-
     return (
-      <>
-        {item?.region?.includes(lowercaseRegion) === true ? (
-          <TouchableOpacity
-            onPress={() => {
-              navigation.navigate('CriticalIssue', {
-                index,
-                Userregion: lowercaseRegion,
-              });
-            }}>
-            {setHideCritical(
-              item?.region?.includes(lowercaseRegion) === true ? true : false,
-            )}
-
-            <View
-              style={styles.ContentWrapper}
-              key={index}
-              onLayout={items => {
-                const layout = items.nativeEvent.layout;
-
-                dataSourceCords[index] = layout.y;
-                setDataSourceCords(dataSourceCords);
-
-                // console.log('height:', layout.height);
-                // console.log('width:', (dataSourceCords[index] = layout.y));
-
-                // console.log('y:', layout.y);
-              }}
-              onScroll={e => setPos(e.nativeEvent.contentOffset.y)}>
-              <View
-                style={{
-                  flexDirection: 'row',
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                }}>
-                <View style={[styles.criticalW, styles.shadowCritical]}>
-                  <Image
-                    source={{uri: item?.icon}}
-                    style={{width: 36, height: 36}}
-                  />
-                </View>
-                <Text
-                  style={{
-                    fontSize: 10,
-                    width: '60%',
-                    paddingLeft: 5,
-                    // paddingRight: 10,
-                  }}>
-                  {item?.heading}
-                </Text>
-              </View>
-            </View>
-          </TouchableOpacity>
-        ) : lowercaseRegion === null ||
-          lowercaseRegion === undefined ||
-          lowercaseRegion === '' ? (
-          <TouchableOpacity
-            onPress={() => {
-              navigation.navigate('CriticalIssue', {
-                index,
-                Userregion: lowercaseRegion,
-              });
-            }}>
-            <View
-              style={styles.ContentWrapper}
-              key={index}
-              onLayout={items => {
-                const layout = items.nativeEvent.layout;
-                dataSourceCords[index] = layout.y;
-                setDataSourceCords(dataSourceCords);
-              }}
-              onScroll={e => setPos(e.nativeEvent.contentOffset.y)}>
-              <View
-                style={{
-                  flexDirection: 'row',
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                }}>
-                <View style={[styles.criticalW, styles.shadowCritical]}>
-                  <Image
-                    source={{uri: item?.icon}}
-                    style={{width: 36, height: 36}}
-                  />
-                </View>
-                <Text
-                  style={{
-                    fontSize: 10,
-                    width: '60%',
-                    paddingLeft: 5,
-                    // paddingRight: 10,
-                  }}>
-                  {item?.heading}
-                </Text>
-              </View>
-            </View>
-          </TouchableOpacity>
-        ) : (
-          <></>
-        )}
-      </>
+      <RenderCriticalComponent
+        item={item}
+        dataSourceCords={dataSourceCords}
+        setDataSourceCords={setDataSourceCords}
+        index={index}
+        userRegion={userRegion}
+        setHideCritical={setHideCritical}
+      />
     );
   };
 
-  const [lengthMore, setLengthMore] = useState(false); //to show the "Read more & Less Line"
+  const onTextLayout = e => {
+    setLengthMore(numberofLines > 2); //to check the text is more than 2 lines or not
+  };
 
-  const [data, setdata] = useState('');
-
-  const onTextLayout = useCallback(e => {
-    setLengthMore(e.nativeEvent.lines.length >= 3); //to check the text is more than 3 lines or not
-    // console.log(e.nativeEvent);
+  useEffect(() => {
+    setNumberofLines(2);
   }, []);
+
 
   const date = new Date();
   let localTime = date.getTime();
   let localOffset = date.getTimezoneOffset() * 60000;
   let utc = localTime + localOffset;
+  //   console.log(localTime, ',', localOffset);
   let target_offset = -8; //PST from UTC 7 hours behind right now, will need to fix for daylight
   let los_angles = utc + 3600000 * target_offset;
+  //   console.log({los_angles});
   const nd = new Date(los_angles);
-  const PSTTime = nd.toLocaleString();
-  const ActualPSTTime = moment(PSTTime).format('DD/MM/yyyy');
-//   console.log(ActualPSTTime);
+  const ActualPSTTime = moment(nd).format('DD/MM/yyyy');
+  //   console.log({ActualPSTTime});
+
+  //   const ActualPSTTime = moment(pst).format('DD/MM/yyyy');
+  //   console.log(pst);
+
+  const quote = dailyQuote[0];
+  // const quote = dailyQuote?.filter(
+  //   item => item?.quote_date === ActualPSTTime,
+  // )[0];
+  //   console.log(' quote', dailyQuote);
 
   return (
     <View style={{flex: 1}}>
@@ -616,7 +495,13 @@ const Dashboard = props => {
         backgroundColor="#001D3F"
         translucent={false}
       />
-      <ScrollView
+
+      {/*
+       * NOTE: Workaround fix for console warning: 'VirtualizedLists should never be nested inside plain ScrollViews ...'
+       */}
+      <FlatList
+        data={emptyContainerRenderData}
+        scrollEventThrottle={16}
         onScroll={e => {
           const offset = e.nativeEvent.contentOffset.y;
           if (offset >= 70) {
@@ -632,299 +517,316 @@ const Dashboard = props => {
         contentContainerStyle={{
           //   flexGrow: 1,
           backgroundColor: Colors.PRIMARY_BACKGROUND_COLOR,
-        }}>
-        <View>
-          <View>
-            <ImageBackground
-              style={{
-                // width: '100%',
-                height: (Dimensions.get('screen').height - 180) / 2,
-                paddingTop:
-                  Platform.OS === 'ios'
-                    ? Dimensions.get('screen').height / 8
-                    : Dimensions.get('screen').height / 10,
-              }}
-              source={require('../../../assets/img/appBG.png')}>
-              <View
-                style={{
-                  alignItems: 'center',
-                  //   marginTop: 10,
-                }}>
-                <Text style={{color: 'white', fontSize: 8}}>DAILY QUOTE</Text>
-                {/* <Quote
-                  dailyQuote={dailyQuote}
-                  navigation={navigation}
-                  setModalVisible={setModalVisible}
-                  modalVisible={modalVisible}
-                /> */}
-                <View>
-                  {dailyQuote?.map((item, index) => {
-                    // console.log(item?.quote_date);
-                    return (
-                      <View>
-                        {item?.quote_date === ActualPSTTime ? (
-                          <LinearGradient
-                            start={{x: 0.697, y: -0.943}}
-                            end={{x: 0.413, y: 2.24}}
-                            colors={['#58AFF6', '#002651']}
-                            style={styles.quote}>
-                            <View>
-                              <Text
-                                onTextLayout={onTextLayout}
-                                numberOfLines={2}
-                                style={{
-                                  fontSize: 14,
-                                  color: 'white',
-                                  textAlign: 'center',
-                                  marginBottom: 10,
-                                  // alignItems: 'center',
-                                }}>
-                                {item?.daily_quote}
-                              </Text>
-                              <View
-                                style={{
-                                  alignItems: 'flex-end',
-                                  position: 'absolute',
-                                  right: 5,
-                                  bottom: 10,
-                                }}>
-                                <Text
-                                  style={{
-                                    fontSize: 12,
-                                    position: 'absolute',
-                                    right: 5,
-                                    fontWeight: 'bold',
-                                    color: 'white',
-                                  }}>
-                                  -{item?.quote_author}
-                                </Text>
-                              </View>
-                              {lengthMore && (
-                                <TouchableOpacity
-                                  onPress={() => {
-                                    setModalVisible(true), setdata(item);
-                                  }}
-                                  style={{}}>
-                                  <Text
-                                    style={{
-                                      fontSize: 12,
-                                      color: 'white',
-                                      textAlign: 'center',
-                                    }}>
-                                    'See More...'{' '}
-                                  </Text>
-                                </TouchableOpacity>
-                              )}
-                            </View>
-                          </LinearGradient>
-                        ) : (
-                          <></>
-                        )}
-                      </View>
-                    );
-                  })}
-                 
-                </View>
-              </View>
-              <View style={styles.pillar}>
-                <PillarList
-                  pillarSliders={pillarSliders}
-                  navigation={navigation}
-                />
-              </View>
-            </ImageBackground>
-          </View>
-
-          <View style={{height: 60}} />
-          {regionEvents?.length !== 0 &&
-            regionEvents !== null &&
-            regionEvents !== undefined && (
-              <View style={styles.top}>
-                <View style={styles.eventWrapper}>
-                  <Text style={styles.title}>Upcoming Events</Text>
-                </View>
-
-                <View
+        }}
+        ListHeaderComponent={() => {
+          return (
+            <View>
+              {/* View Component 1 */}
+              <View>
+                <ImageBackground
                   style={{
-                    display: 'flex',
-                    flexDirection: 'row',
-                    marginTop: 20,
-                  }}>
+                    // width: '100%',
+                    height: (Dimensions.get('screen').height - 180) / 2,
+                    paddingTop:
+                      Platform.OS === 'ios'
+                        ? Dimensions.get('screen').height / 8
+                        : Dimensions.get('screen').height / 10,
+                  }}
+                  source={require('../../../assets/img/appBG.png')}>
+                  <View
+                    style={{
+                      alignItems: 'center',
+                    }}>
+                    {/* Daily Quote View Component */}
+
+                    <View>
+                      {dailyQuote?.map((item, index) => {
+                        return (
+                          <View>
+                            {item?.quote_date === ActualPSTTime ? (
+                              <>
+                                {!modalVisible && (
+                                  <LinearGradient
+                                    start={{
+                                      x: 0.697,
+                                      y: -0.943,
+                                    }}
+                                    end={{x: 0.413, y: 2.24}}
+                                    colors={['#58AFF6', '#002651']}
+                                    style={styles.quote}>
+                                    <View>
+                                      <Text
+                                        onTextLayout={onTextLayout}
+                                        numberOfLines={numberofLines}
+                                        style={{
+                                          fontSize: 14,
+                                          color: 'white',
+                                          textAlign: 'center',
+                                          marginBottom: 10,
+                                          // alignItems: 'center',
+                                        }}>
+                                        {item?.daily_quote}
+                                      </Text>
+                                      <View
+                                        style={{
+                                          alignItems: 'flex-end',
+                                          position: 'absolute',
+                                          right: 5,
+                                          bottom: 10,
+                                        }}>
+                                        <Text
+                                          style={{
+                                            fontSize: 12,
+                                            position: 'absolute',
+                                            right: 5,
+                                            fontWeight: 'bold',
+                                            color: 'white',
+                                          }}>
+                                          - {item?.quote_author}
+                                        </Text>
+                                      </View>
+                                      {lengthMore && (
+                                        <Pressable
+                                          onPress={() => {
+                                            setModalVisible(true),
+                                              setdata(item);
+                                          }}>
+                                          <Text
+                                            style={{
+                                              fontSize: 12,
+                                              color: 'white',
+                                              textAlign: 'center',
+                                            }}>
+                                            'See More...'
+                                          </Text>
+                                        </Pressable>
+                                      )}
+                                    </View>
+                                  </LinearGradient>
+                                )}
+                              </>
+                            ) : (
+                              <></>
+                            )}
+                          </View>
+                        );
+                      })}
+                    </View>
+                  </View>
+                  <View style={styles.pillar}>
+                    <PillarList
+                      pillarSliders={pillarSliders}
+                      navigation={navigation}
+                    />
+                  </View>
+                </ImageBackground>
+              </View>
+
+              <View style={{height: 60}} />
+
+              {/* Region event */}
+              {regionEvents?.length !== 0 &&
+                regionEvents !== null &&
+                regionEvents !== undefined && (
+                  <View style={styles.top}>
+                    <View style={styles.eventWrapper}>
+                      <Text style={styles.title}>Upcoming Events</Text>
+                    </View>
+                    <View
+                      style={{
+                        display: 'flex',
+                        flexDirection: 'row',
+                        marginTop: 20,
+                      }}>
+                      <FlatList
+                        horizontal
+                        showsHorizontalScrollIndicator={false}
+                        data={regionEvents}
+                        listKey={'regionEvents'}
+                        renderItem={item => _renderTopItem(item, navigation)}
+                      />
+                    </View>
+                  </View>
+                )}
+
+              {regionEventLoading && <Loading />}
+
+              {memberConnectionLoading && (
+                <View style={{marginTop: 40}}>
+                  <Loading />
+                </View>
+              )}
+
+              {latestContent?.length !== 0 &&
+                latestContent !== null &&
+                latestContent !== undefined && (
+                  <View style={styles.middle}>
+                    <Text style={[styles.title, {marginLeft: 15}]}>
+                      Latest Growth Content
+                    </Text>
+
+                    <FlatList
+                      horizontal
+                      showsHorizontalScrollIndicator={false}
+                      data={latestContent}
+                      listKey={'latestContent'}
+                      renderItem={_renderContent}
+                    />
+                  </View>
+                )}
+
+              {communityMembers?.length !== 0 &&
+                communityMembers !== null &&
+                communityMembers !== undefined && (
+                  <View style={styles.bottom}>
+                    <View
+                      style={{
+                        display: 'flex',
+                        flexDirection: 'row',
+                        marginLeft: 15,
+                        marginRight: 15,
+                      }}>
+                      <Text style={styles.title}>Welcome New Members</Text>
+                    </View>
+                    <View>
+                      <FlatList
+                        horizontal
+                        showsHorizontalScrollIndicator={false}
+                        data={communityMembers}
+                        listKey={'communityMembers'}
+                        renderItem={_renderItem}
+                      />
+                    </View>
+                  </View>
+                )}
+
+              {/* View component 2 */}
+              <View style={styles.content}>
+                {hideCritical && (
+                  <Text style={styles.title}>
+                    {criticalIssue?.critical_issue_mobile_title}
+                  </Text>
+                )}
+                <View>
                   <FlatList
-                    horizontal
+                    numColumns={2}
                     showsHorizontalScrollIndicator={false}
-                    data={regionEvents}
-                    renderItem={item => _renderTopItem(item, navigation)}
+                    data={criticalIssue?.critical_issue_mobile_lists}
+                    listKey={'criticalIssue'}
+                    renderItem={_renderCritical}
                   />
                 </View>
               </View>
-            )}
-          {regionEventLoading && <Loading />}
 
-          {memberConnectionLoading && (
-            <View style={{marginTop: 40}}>
-              <Loading />
-            </View>
-          )}
-
-          {latestContent?.length !== 0 &&
-            latestContent !== null &&
-            latestContent !== undefined && (
-              <View style={styles.middle}>
-                <Text style={[styles.title, {marginLeft: 15}]}>
-                  Latest Growth Content
-                </Text>
-
-                <FlatList
-                  horizontal
-                  showsHorizontalScrollIndicator={false}
-                  data={latestContent}
-                  renderItem={_renderContent}
+              {modalVisible && (
+                <BlurView
+                  style={{
+                    position: 'absolute',
+                    top: 0,
+                    left: 0,
+                    bottom: 0,
+                    right: 0,
+                  }}
+                  blurType="light"
+                  blurAmount={10}
+                  reducedTransparencyFallbackColor="white"
                 />
-              </View>
-            )}
-          {communityMembers?.length !== 0 &&
-            communityMembers !== null &&
-            communityMembers !== undefined && (
-              <View style={styles.bottom}>
+              )}
+
+              <Modal
+                animationType="slide"
+                transparent={true}
+                visible={modalVisible}
+                onRequestClose={() => {
+                  setModalVisible(!modalVisible);
+                }}>
                 <View
                   style={{
-                    display: 'flex',
-                    flexDirection: 'row',
-                    marginLeft: 15,
-                    marginRight: 15,
+                    flex: 1,
+                    justifyContent: 'center',
+                    alignItems: 'center',
                   }}>
-                  <Text style={styles.title}>Welcome New Members</Text>
+                  <LinearGradient
+                    start={{x: 0.697, y: -0.943}}
+                    end={{x: 0.413, y: 2.24}}
+                    colors={['#58AFF6', '#002651']}
+                    style={{
+                      width: Dimensions.get('screen').width - 50,
+                      margin: 20,
+                      backgroundColor: 'white',
+                      borderRadius: 20,
+                      padding: 35,
+                      alignItems: 'center',
+                      shadowColor: '#000',
+                      shadowOffset: {
+                        width: 0,
+                        height: 2,
+                      },
+                      shadowOpacity: 0.25,
+                      shadowRadius: 4,
+                      elevation: 5,
+                    }}>
+                    <TouchableOpacity
+                      activeOpacity={0.7}
+                      onPress={() => setModalVisible(false)}
+                      style={{
+                        alignItems: 'flex-end',
+                        position: 'absolute',
+                        right: 0,
+                        margin: 5,
+                      }}>
+                      <Text
+                        style={{
+                          padding: 10,
+                          fontSize: 18,
+                          color: 'white',
+                          textAlign: 'right',
+                        }}>
+                        X
+                      </Text>
+                    </TouchableOpacity>
+                    <Text style={{marginTop: 10, color: 'white'}}>
+                      {data?.daily_quote}
+                    </Text>
+                    <Text
+                      style={{
+                        fontSize: 12,
+                        position: 'relative',
+                        left: 90,
+                        textAlign: 'right',
+                        bottom: -10,
+                        alignItems: 'flex-end',
+                        fontWeight: 'bold',
+                        color: 'white',
+                        padding: 10,
+                      }}>
+                      -{data?.quote_author}
+                    </Text>
+                    {/* {lengthMore ? (
+                      // <Text
+                      //   onPress={toggleNumberOfLines}
+                      //   style={{lineHeight: 21, marginTop: 10}}>
+                      //   {textShown ? 'Read less...' : 'Read more...'}
+                      // </Text>
+                      <TouchableOpacity
+                        onPress={() => {
+                          setModalVisible(!modalVisible);
+                        }}>
+                        <Text>'Read less...' </Text>
+                      </TouchableOpacity>
+                    ) : null} */}
+                  </LinearGradient>
                 </View>
-                <View>
-                  <FlatList
-                    horizontal
-                    showsHorizontalScrollIndicator={false}
-                    data={communityMembers}
-                    renderItem={_renderItem}
-                  />
-                </View>
-              </View>
-            )}
-          <View style={styles.content}>
-            {hideCritical && (
-              <Text style={styles.title}>
-                {criticalIssue?.critical_issue_mobile_title}
-              </Text>
-            )}
-            <View
-              ref={ref => {
-                setRef(ref);
-              }}>
-              <FlatList
-                numColumns={2}
-                showsHorizontalScrollIndicator={false}
-                data={criticalIssue?.critical_issue_mobile_lists}
-                renderItem={_renderCritical}
-              />
+              </Modal>
             </View>
-          </View>
+          );
+        }}
+        renderItem={() => {
+          return null;
+        }}
+        keyExtractor={index => index.toString()}
+      />
 
-          {modalVisible && (
-            <BlurView
-              style={{
-                position: 'absolute',
-                top: 0,
-                left: 0,
-                bottom: 0,
-                right: 0,
-              }}
-              blurType="light"
-              blurAmount={10}
-              reducedTransparencyFallbackColor="white"
-            />
-          )}
-        </View>
-        <Modal
-          animationType="slide"
-          transparent={true}
-          visible={modalVisible}
-          onRequestClose={() => {
-            setModalVisible(!modalVisible);
-          }}>
-          <View
-            style={{
-              flex: 1,
-              justifyContent: 'center',
-              alignItems: 'center',
-            }}>
-            <LinearGradient
-              start={{x: 0.697, y: -0.943}}
-              end={{x: 0.413, y: 2.24}}
-              colors={['#58AFF6', '#002651']}
-              style={{
-                margin: 20,
-                backgroundColor: 'white',
-                borderRadius: 20,
-                padding: 35,
-                alignItems: 'center',
-                shadowColor: '#000',
-                shadowOffset: {
-                  width: 0,
-                  height: 2,
-                },
-                shadowOpacity: 0.25,
-                shadowRadius: 4,
-                elevation: 5,
-              }}>
-              <TouchableOpacity
-                activeOpacity={0.7}
-                onPress={() => setModalVisible(false)}
-                style={{
-                  alignItems: 'flex-end',
-                  position: 'absolute',
-                  right: 0,
-                  margin: 5,
-                }}>
-                <Text
-                  style={{
-                    padding: 10,
-                    fontSize: 18,
-                    color: 'white',
-                    textAlign: 'right',
-                  }}>
-                  X
-                </Text>
-              </TouchableOpacity>
-              <Text style={{marginTop: 10, color: 'white'}}>
-                {data.daily_quote}
-              </Text>
-              <Text
-                style={{
-                  fontSize: 12,
-                  position: 'relative',
-                  left: 100,
-                  textAlign: 'right',
-                  bottom: -10,
-                  alignItems: 'flex-end',
-                  fontWeight: 'bold',
-                  color: 'white',
-                  padding: 10,
-                }}>
-                {data?.quote_author}
-              </Text>
-              {/* {lengthMore ? (
-                // <Text
-                //   onPress={toggleNumberOfLines}
-                //   style={{lineHeight: 21, marginTop: 10}}>
-                //   {textShown ? 'Read less...' : 'Read more...'}
-                // </Text>
-                <TouchableOpacity
-                  onPress={() => {
-                    setModalVisible(!modalVisible);
-                  }}>
-                  <Text>'Read less...' </Text>
-                </TouchableOpacity>
-              ) : null} */}
-            </LinearGradient>
-          </View>
-        </Modal>
-      </ScrollView>
       <FloatingButton {...props} navigation={navigation} />
       <BottomNav {...props} navigation={navigation} />
     </View>
@@ -941,7 +843,7 @@ const styles = StyleSheet.create({
 
   quote: {
     // backgroundColor: 'white',
-    height: 80,
+    height: 100,
     width: Dimensions.get('screen').width - 10,
     justifyContent: 'center',
 
@@ -956,7 +858,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     marginLeft: 10,
     marginRight: 10,
-    marginTop: 10,
+    // marginTop: 10,
     marginBottom: 10,
     justifyContent: 'space-between',
   },
@@ -1151,3 +1053,117 @@ const webViewStyle = StyleSheet.create({
   p: {fontSize: 8, color: 'black', marginTop: 5},
 });
 export default Dashboard;
+
+/*
+ * NOTE: _renderCritical component
+ */
+const RenderCriticalComponent = ({
+  item,
+  index,
+  userRegion,
+  dataSourceCords,
+  setHideCritical,
+  setDataSourceCords,
+}) => {
+  useEffect(() => {
+    if (item?.region?.includes(lowercaseRegion)) {
+      setHideCritical(item?.region?.includes(lowercaseRegion));
+    }
+  }, []);
+
+  const navigation = useNavigation();
+
+  let lowercaseRegion = '';
+  if (userRegion) lowercaseRegion = userRegion.toLowerCase();
+
+  return (
+    <>
+      {item?.region?.includes(lowercaseRegion) === true ? (
+        <TouchableOpacity
+          onPress={() => {
+            navigation.navigate('CriticalIssue', {
+              index,
+              Userregion: lowercaseRegion,
+            });
+          }}>
+          <View
+            style={styles.ContentWrapper}
+            key={index}
+            onLayout={items => {
+              const layout = items.nativeEvent.layout;
+
+              dataSourceCords[index] = layout.y;
+              setDataSourceCords(dataSourceCords);
+            }}>
+            <View
+              style={{
+                flexDirection: 'row',
+                justifyContent: 'center',
+                alignItems: 'center',
+              }}>
+              <View style={[styles.criticalW, styles.shadowCritical]}>
+                <Image
+                  source={{uri: item?.icon}}
+                  style={{width: 36, height: 36}}
+                />
+              </View>
+              <Text
+                style={{
+                  fontSize: 10,
+                  width: '60%',
+                  paddingLeft: 5,
+                  // paddingRight: 10,
+                }}>
+                {item?.heading}
+              </Text>
+            </View>
+          </View>
+        </TouchableOpacity>
+      ) : lowercaseRegion === null ||
+        lowercaseRegion === undefined ||
+        lowercaseRegion === '' ? (
+        <TouchableOpacity
+          onPress={() => {
+            navigation.navigate('CriticalIssue', {
+              index,
+              Userregion: lowercaseRegion,
+            });
+          }}>
+          <View
+            style={styles.ContentWrapper}
+            key={index}
+            onLayout={items => {
+              const layout = items.nativeEvent.layout;
+              dataSourceCords[index] = layout.y;
+              setDataSourceCords(dataSourceCords);
+            }}>
+            <View
+              style={{
+                flexDirection: 'row',
+                justifyContent: 'center',
+                alignItems: 'center',
+              }}>
+              <View style={[styles.criticalW, styles.shadowCritical]}>
+                <Image
+                  source={{uri: item?.icon}}
+                  style={{width: 36, height: 36}}
+                />
+              </View>
+              <Text
+                style={{
+                  fontSize: 10,
+                  width: '60%',
+                  paddingLeft: 5,
+                  // paddingRight: 10,
+                }}>
+                {item?.heading}
+              </Text>
+            </View>
+          </View>
+        </TouchableOpacity>
+      ) : (
+        <></>
+      )}
+    </>
+  );
+};

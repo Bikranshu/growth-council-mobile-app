@@ -57,9 +57,6 @@ const FloatingButton = props => {
       ToastMessage.show(
         'Your request for Growth Pipeline Dialog has been sent successfully.',
       );
-      console.log(
-        'Your request for Growth Pipeline Dialog has been sent successfully.',
-      );
     } else {
       toast.closeAll();
       ToastMessage.show(response?.payload?.message);

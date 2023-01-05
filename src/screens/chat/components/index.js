@@ -55,7 +55,7 @@ const Chat = props => {
 
   const [messages, setMessages] = useState([]);
 
-  console.log({userChat});
+
   useEffect(() => {
     {
       userChat === '1' ? (
@@ -66,7 +66,7 @@ const Chat = props => {
             if (token == null) {
               console.log(res.data?.message);
             }
-            console.log(token);
+          
             setFriendToken(typeof token == 'string' ? token : token?.[0]);
           })
           .catch(error => {

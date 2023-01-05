@@ -94,9 +94,7 @@ const Discussion = props => {
     },
     onSubmit: async values => {
       await postDiscussionByEvent(values).then(response => {
-        console.log(response);
         if (response?.payload?.code === 200) {
-          console.log(response);
           discussionForumByIdentifier({
             event_id: eventID,
           });

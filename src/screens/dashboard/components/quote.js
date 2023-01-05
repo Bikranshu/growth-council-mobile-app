@@ -25,7 +25,7 @@ const Quote = props => {
 
   const onTextLayout = useCallback(e => {
     setLengthMore(e.nativeEvent.lines.length >= 3); //to check the text is more than 3 lines or not
-    // console.log(e.nativeEvent);
+  
   }, []);
 
   const date = new Date();
@@ -37,13 +37,13 @@ const Quote = props => {
   const nd = new Date(los_angles);
   const PSTTime = nd.toLocaleString();
   const ActualPSTTime = moment(PSTTime).format('DD/MM/yyyy');
-  console.log(ActualPSTTime);
+ 
   return (
     <>
       <ScrollView>
         <View>
           {dailyQuote?.map((item, index) => {
-            console.log(item?.quote_date);
+          
             return (
               <View>
                 {item?.quote_date === ActualPSTTime ? (

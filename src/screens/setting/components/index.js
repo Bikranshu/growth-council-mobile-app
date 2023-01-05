@@ -109,9 +109,7 @@ const Setting = props => {
       registered_event_notification: regEvents,
     },
     onSubmit: async values => {
-      //   console.log({values});
       await updateUserNotification(values).then(response => {
-        console.log(response);
         ToastMessage.show(
           'You have successfully updated your notification settings',
         );

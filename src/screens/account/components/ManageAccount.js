@@ -159,7 +159,6 @@ const ManageAccount = props => {
         uri: Platform.OS === 'ios' ? `file:///${image.path}` : image.path,
         name: 'profile_photo.jpg',
       };
-      console.log({image});
       fd.append('file', file);
       setImageDetail(fd);
     });
@@ -178,7 +177,6 @@ const ManageAccount = props => {
         uri: Platform.OS === 'ios' ? `file:///${image.path}` : image.path,
         name: 'profile_photo.jpg',
       };
-      console.log({image});
       fd.append('file', file);
       setImageDetail(fd);
     });
@@ -211,10 +209,8 @@ const ManageAccount = props => {
       await updateUser(values).then(async response => {
         //image upload code
         await uploadImage(imageDetail).then(async response => {
-          console.log({response});
           if (response?.payload?.success === true) {
             navigation.navigate('Account');
-            console.log('Your image has been successfully updated.');
           }
           //   await updateImage({attachment_id: response?.payload?.id}).then(
           //     response => {

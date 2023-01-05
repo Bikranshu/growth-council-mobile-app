@@ -139,8 +139,6 @@ const Event = props => {
   const deviceTimeZone = RNLocalize.getTimeZone();
 
   const today = moment().tz(deviceTimeZone);
-  //   const dei = 'PST';
-  //   console.log('sdaf', moment().tz(dei));
   const deviceOffset = today?.utcOffset();
 
   let Today = moment().tz(actualtimeZone);

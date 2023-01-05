@@ -38,17 +38,14 @@ const ChatCount = props => {
       chatID(item),
       'messages',
     );
-    console.log({chatsCol});
 
     const q = await query(
       chatsCol,
       where('status', '==', 'unread'),
       where('user._id', '!=', userID),
     );
-    console.log({q});
 
     onSnapshot(q, querySnapshot => {
-      console.log('snapshot', querySnapshot.size);
       item = {...item, ...{count: querySnapshot.size}};
       setFriend(item);
     });
