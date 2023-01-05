@@ -122,6 +122,7 @@ const Dashboard = props => {
   const [modalVisible, setModalVisible] = useState(false);
 
   const [lengthMore, setLengthMore] = useState(false); //to show the "Read more & Less Line"
+  const [numberofLines, setNumberofLines] = useState(2);
 
   const [data, setdata] = useState('');
 
@@ -457,8 +458,13 @@ const Dashboard = props => {
   };
 
   const onTextLayout = e => {
-    setLengthMore(e.nativeEvent.lines.length > 2); //to check the text is more than 2 lines or not
+    setLengthMore(numberofLines >= 2); //to check the text is more than 2 lines or not
   };
+
+  useEffect(() => {
+    setNumberofLines(2);
+  }, []);
+
 
   const date = new Date();
   let localTime = date.getTime();
@@ -470,7 +476,7 @@ const Dashboard = props => {
   //   console.log({los_angles});
   const nd = new Date(los_angles);
   const ActualPSTTime = moment(nd).format('DD/MM/yyyy');
-  console.log({ActualPSTTime});
+  //   console.log({ActualPSTTime});
 
   //   const ActualPSTTime = moment(pst).format('DD/MM/yyyy');
   //   console.log(pst);
@@ -551,7 +557,7 @@ const Dashboard = props => {
                                     <View>
                                       <Text
                                         onTextLayout={onTextLayout}
-                                        numberOfLines={2}
+                                        numberOfLines={numberofLines}
                                         style={{
                                           fontSize: 14,
                                           color: 'white',
