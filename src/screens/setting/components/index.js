@@ -1,4 +1,3 @@
-import {position} from 'native-base/lib/typescript/theme/styled-system';
 import React, {useState, useEffect} from 'react';
 import {
   StyleSheet,
@@ -13,19 +12,19 @@ import {
   Dimensions,
 } from 'react-native';
 
+import {useFormik} from 'formik';
 import {Button} from 'native-base';
 import {List} from 'react-native-paper';
+import analytics from '@react-native-firebase/analytics';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import AntDesign from 'react-native-vector-icons/AntDesign';
-import Footer from '../../../shared/footer';
-import ToastMessage from '../../../shared/toast';
-import analytics from '@react-native-firebase/analytics';
-import {useFormik} from 'formik';
-import Loading from '../../../shared/loading';
-import FloatingButton from '../../../shared/floatingButton';
 
-import {CommonStyles, Colors, Typography} from '../../../theme';
+import Footer from '../../../shared/footer';
+import Loading from '../../../shared/loading';
+import ToastMessage from '../../../shared/toast';
+import FloatingButton from '../../../shared/floatingButton';
 import {PRIMARY_BACKGROUND_COLOR} from '../../../theme/colors';
+import {CommonStyles, Colors, Typography} from '../../../theme';
 
 const Setting = props => {
   const {
@@ -84,6 +83,12 @@ const Setting = props => {
       ? false
       : true,
   );
+  const [regEvents, setRegEvents] = useState(
+    notificationOptions?.registered_event_notification === '0' ||
+      notificationOptions?.registered_event_notification === ''
+      ? false
+      : true,
+  );
 
   const {
     handleChange,
@@ -101,26 +106,16 @@ const Setting = props => {
       member_connection_add_delete_notification: memberEnabled,
       chat_notification: chatEnabled,
       content_notification: contentEnabled,
-      //   discussion_board_notification: boardEnabled,
+      registered_event_notification: regEvents,
     },
     onSubmit: async values => {
-      //   console.log({values});
       await updateUserNotification(values).then(response => {
-        console.log(response);
         ToastMessage.show(
           'You have successfully updated your notification settings',
         );
       });
     },
   });
-  console.log(
-    'eventEnabled',
-    eventEnabled,
-    'memberEnabled',
-    memberEnabled,
-    'chat_notification',
-    chatEnabled,
-  );
 
   const contentSwitch = () => {
     setFieldValue('content_notification', !contentEnabled);
@@ -128,7 +123,7 @@ const Setting = props => {
     setFieldValue('event_notification', eventEnabled);
     setFieldValue('member_connection_add_delete_notification', memberEnabled);
     setFieldValue('chat_notification', chatEnabled);
-    setFieldValue('discussion_board_notification', boardEnabled);
+    setFieldValue('registered_event_notification', regEvents);
 
     setContentEnabled(!contentEnabled);
     // handleSubmit();
@@ -140,7 +135,7 @@ const Setting = props => {
     setFieldValue('member_connection_add_delete_notification', memberEnabled);
     setFieldValue('chat_notification', chatEnabled);
     setFieldValue('content_notification', contentEnabled);
-    setFieldValue('discussion_board_notification', boardEnabled);
+    setFieldValue('registered_event_notification', regEvents);
 
     setEventEnabled(!eventEnabled);
     // handleSubmit();
@@ -152,7 +147,7 @@ const Setting = props => {
     setFieldValue('content_notification', contentEnabled);
     setFieldValue('chat_notification', chatEnabled);
     setFieldValue('event_notification', eventEnabled);
-    setFieldValue('discussion_board_notification', boardEnabled);
+    setFieldValue('registered_event_notification', regEvents);
 
     setMemberEnabled(!memberEnabled);
     // handleSubmit();
@@ -164,7 +159,7 @@ const Setting = props => {
     setFieldValue('event_notification', eventEnabled);
     setFieldValue('content_notification', contentEnabled);
     setFieldValue('member_connection_add_delete_notification', memberEnabled);
-    setFieldValue('discussion_board_notification', boardEnabled);
+    setFieldValue('registered_event_notification', regEvents);
 
     setChatEnabled(!chatEnabled);
     // handleSubmit();
@@ -182,6 +177,17 @@ const Setting = props => {
     // handleSubmit();
   };
 
+  const regEventSwitch = () => {
+    setFieldValue('registered_event_notification', !regEvents);
+
+    setFieldValue('chat_notification', chatEnabled);
+    setFieldValue('event_notification', eventEnabled);
+    setFieldValue('content_notification', contentEnabled);
+    setFieldValue('member_connection_add_delete_notification', memberEnabled);
+
+    setRegEvents(!regEvents);
+    // handleSubmit();
+  };
   useEffect(() => {
     const fetchProfileAsync = async () => {
       await fetchProfile();
@@ -218,9 +224,9 @@ const Setting = props => {
         ? false
         : true,
     );
-    setBoardEnabled(
-      notificationOptions?.discussion_board_notification === '0' ||
-        notificationOptions?.discussion_board_notification === ''
+    setRegEvents(
+      notificationOptions?.registered_event_notification === '0' ||
+        notificationOptions?.registered_event_notification === ''
         ? false
         : true,
     );
@@ -655,6 +661,62 @@ const Setting = props => {
                               ios_backgroundColor="#3e3e3e"
                               onValueChange={memberSwitch}
                               value={memberEnabled}
+                              style={{
+                                right: 0,
+                                position: 'absolute',
+                              }}
+                            />
+                          )}
+                          style={{
+                            marginVertical: 5,
+                            borderBottomWidth: 1,
+                            alignItems: 'center',
+                            borderBottomColor: '#EDF1F7',
+                            paddingBottom: 15,
+                            width: 300,
+                            marginLeft: 20,
+                          }}
+                        />
+                        <List.Item
+                          title={
+                            <View>
+                              <Text
+                                style={{
+                                  fontSize: 14,
+                                  color: '#222B45',
+                                  fontWeight: '500',
+                                }}>
+                                Registered Events
+                              </Text>
+                            </View>
+                          }
+                          left={props => (
+                            <View
+                              style={{
+                                width: 40,
+                                height: 40,
+                                backgroundColor: '#3A9BDC',
+                                justifyContent: 'center',
+                                alignItems: 'center',
+                                borderRadius: 10,
+                              }}>
+                              <Image
+                                source={require('../../../../src/assets/img/regEvents.png')}
+                                style={{
+                                  width: 25,
+                                  height: 25,
+                                }}
+                                resizeMode="contain"
+                              />
+                            </View>
+                          )}
+                          right={props => (
+                            <Switch
+                              trackColor={{false: '#767577', true: '#32a32e'}}
+                              thumbColor={regEvents ? 'white' : 'white'}
+                              ios_backgroundColor="#3e3e3e"
+                              onValueChange={regEventSwitch}
+                              value={regEvents}
                               style={{
                                 right: 0,
                                 position: 'absolute',

@@ -8,7 +8,8 @@
 		"start": "react-native start",
 		"test": "jest",
 		"lint": "eslint .",
-		"bundle": "react-native bundle --platform android --dev false --entry-file index.js --bundle-output android/app/src/main/assets/index.android.bundle --assets-dest android/app/src/main/res"
+		"bundle": "react-native bundle --platform android --dev false --entry-file index.js --bundle-output android/app/src/main/assets/index.android.bundle --assets-dest android/app/src/main/res",
+		"build:ios": "react-native bundle --entry-file='index.js' --bundle-output='./ios/GrowthCouncil/main.jsbundle' --dev=false --platform='ios'"
 	},
 	"dependencies": {
 		"@emotion/react": "^11.7.1",
@@ -52,7 +53,7 @@
 		"native-base": "^3.3.1",
 		"react": "17.0.2",
 		"react-multi-select-component": "^4.2.1",
-		"react-native": "^0.66.4",
+		"react-native": "0.66.4",
 		"react-native-autoheight-webview": "^1.6.1",
 		"react-native-blob-util": "^0.13.18",
 		"react-native-bootsplash": "^4.0.2",

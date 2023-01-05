@@ -1,8 +1,9 @@
 import React, {useState, useEffect} from 'react';
 import {StyleSheet, Text, View, TouchableOpacity, Image} from 'react-native';
-import {RadioButton} from 'react-native-paper';
-import {Typography} from '../../../theme';
+
 import {ScrollView} from 'native-base';
+import {RadioButton} from 'react-native-paper';
+
 
 const SessionCompleted = props => {
   const {navigation} = props;

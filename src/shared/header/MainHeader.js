@@ -1,5 +1,4 @@
-import {DrawerActions, useNavigation} from '@react-navigation/native';
-import React,{useEffect} from 'react';
+import React, {useEffect} from 'react';
 import {
   View,
   Platform,
@@ -10,12 +9,13 @@ import {
   SafeAreaView,
 } from 'react-native';
 
-import IonIcon from 'react-native-vector-icons/Ionicons';
 import {useDispatch, useSelector} from 'react-redux';
 import {useIsFocused} from '@react-navigation/native';
+import IonIcon from 'react-native-vector-icons/Ionicons';
+
 import HeaderTitle from '.';
-import {fetchProfileByID} from '../../screens/account/slice/profileSlice';
 import HeaderRight from './HeaderRight';
+import {fetchProfileByID} from '../../screens/account/slice/profileSlice';
 
 const MainHeader = props => {
   const dispatch = useDispatch();
@@ -28,7 +28,7 @@ const MainHeader = props => {
   useEffect(() => {
     dispatch(fetchProfileByID());
   }, []);
-  
+
   return (
     <View
       style={{

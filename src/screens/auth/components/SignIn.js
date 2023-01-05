@@ -11,21 +11,22 @@ import {
   Modal,
 } from 'react-native';
 
-import {Button} from 'native-base';
-import Ionicons from 'react-native-vector-icons/Ionicons';
-import {useFormik} from 'formik';
 import * as Yup from 'yup';
-import {BubblesLoader} from 'react-native-indicator';
-import {Picker} from '@react-native-picker/picker';
+import {useFormik} from 'formik';
 import {
   useFocusEffect,
   NavigationContainer,
   useNavigationContainerRef,
 } from '@react-navigation/native';
+import {Button} from 'native-base';
+import {Picker} from '@react-native-picker/picker';
+import {BubblesLoader} from 'react-native-indicator';
 import analytics from '@react-native-firebase/analytics';
-import {CommonStyles, Colors, Typography} from '../../../theme';
+import Ionicons from 'react-native-vector-icons/Ionicons';
+
 import {useAuthentication} from '../../../context/auth';
 import FlatTextInput from '../../../shared/form/FlatTextInput';
+import {CommonStyles, Colors, Typography} from '../../../theme';
 
 const screenHeight = Math.round(Dimensions.get('window').height);
 
@@ -72,10 +73,8 @@ const SignInForm = props => {
     initialValues: {username: '', password: ''},
     onSubmit: async values => {
       await signIn(values);
-    
     },
   });
-
 
   const areAllFieldsFilled = values.username != '' && values.password != '';
 

@@ -15,20 +15,20 @@ import {
   TouchableWithoutFeedback,
   KeyboardAvoidingView,
 } from 'react-native';
-import {Button} from 'react-native-paper';
+
 import {useFormik} from 'formik';
+import moment from 'moment-timezone';
+import {Button} from 'react-native-paper';
+import Feather from 'react-native-vector-icons/Feather';
+import Ionicons from 'react-native-vector-icons/Ionicons';
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import {useFocusEffect, useIsFocused} from '@react-navigation/native';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 
 import Loading from '../../../shared/loading';
-import {CommonStyles, Colors, Typography} from '../../../theme';
 import Comments from '../../../shared/comment';
-import Feather from 'react-native-vector-icons/Feather';
-import Ionicons from 'react-native-vector-icons/Ionicons';
-import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
-import moment from 'moment-timezone';
-
 import {COMMUNITY_COLOR} from '../../../theme/colors';
+import {CommonStyles, Colors, Typography} from '../../../theme';
 
 const screenHeight = Math.round(Dimensions.get('window').height);
 
@@ -94,9 +94,7 @@ const Discussion = props => {
     },
     onSubmit: async values => {
       await postDiscussionByEvent(values).then(response => {
-        console.log(response);
         if (response?.payload?.code === 200) {
-          console.log(response);
           discussionForumByIdentifier({
             event_id: eventID,
           });
@@ -413,8 +411,7 @@ const Discussion = props => {
 export default Discussion;
 
 const styles = StyleSheet.create({
-  container: {
-  },
+  container: {},
   forum: {
     width: Dimensions.get('window').width,
     borderRadius: 10,

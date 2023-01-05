@@ -12,13 +12,13 @@ import {
 } from 'react-native';
 import {useIsFocused} from '@react-navigation/native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import {getAsyncStorage} from '../../../utils/storageUtil';
-import {JWT_TOKEN, USER_NAME, USER_AVATAR} from '../../../constants';
-import {decodeUserID} from '../../../utils/jwtUtil';
-import {CommonStyles, Colors, Typography} from '../../../theme';
-import {PRIMARY_BACKGROUND_COLOR} from '../../../theme/colors';
 
 import Loading from '../../../shared/loading';
+import {decodeUserID} from '../../../utils/jwtUtil';
+import {getAsyncStorage} from '../../../utils/storageUtil';
+import {PRIMARY_BACKGROUND_COLOR} from '../../../theme/colors';
+import {CommonStyles, Colors, Typography} from '../../../theme';
+import {JWT_TOKEN, USER_NAME, USER_AVATAR} from '../../../constants';
 
 const OthersAccount = props => {
   const {
@@ -167,9 +167,9 @@ const OthersAccount = props => {
                   style={styles.input}
                   keyboardType="default"
                   value={
-					otherProfiles?.user_meta?.Title === undefined
-					? otherProfiles?.user_meta?.title[0]
-					: otherProfiles?.user_meta?.Title[0]
+                    otherProfiles?.user_meta?.Title === undefined
+                      ? otherProfiles?.user_meta?.title[0]
+                      : otherProfiles?.user_meta?.Title[0]
                   }
                   editable={false}
                 />
@@ -183,7 +183,7 @@ const OthersAccount = props => {
                   value={
                     typeof company === 'undefined'
                       ? ''
-					  : otherProfiles?.user_meta?.company[0]
+                      : otherProfiles?.user_meta?.company[0]
                   }
                   editable={false}
                 />

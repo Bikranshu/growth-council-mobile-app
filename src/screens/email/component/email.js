@@ -15,14 +15,15 @@ import {
   TouchableWithoutFeedback,
 } from 'react-native';
 
-import Ionicons from 'react-native-vector-icons/Ionicons';
-import {useIsFocused} from '@react-navigation/native';
 import * as Yup from 'yup';
 import {useFormik} from 'formik';
 import {Button} from 'native-base';
+import {useIsFocused} from '@react-navigation/native';
+import Ionicons from 'react-native-vector-icons/Ionicons';
+
+import Loading from '../../../shared/loading';
 import ToastMessage from '../../../shared/toast';
 import {CommonStyles, Colors, Typography} from '../../../theme';
-import Loading from '../../../shared/loading';
 
 const emailSchema = Yup.object().shape({
   subject: Yup.string().required('Subject is required.'),

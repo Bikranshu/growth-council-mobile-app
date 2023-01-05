@@ -9,11 +9,12 @@ import {
   StyleSheet,
   Dimensions,
 } from 'react-native';
+
 import {Button} from 'native-base';
 import {Linking} from 'react-native';
-import Footer from '../../../shared/footer';
 import HTMLView from 'react-native-htmlview';
 
+import Footer from '../../../shared/footer';
 import {CommonStyles, Colors, Typography} from '../../../theme';
 
 const privacy = props => {

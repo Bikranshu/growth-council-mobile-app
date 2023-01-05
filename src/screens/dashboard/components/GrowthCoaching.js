@@ -13,28 +13,27 @@ import {
   PermissionsAndroid,
   StatusBar,
 } from 'react-native';
+
+import moment from 'moment';
+import {isEmptyArray} from 'formik';
+import {Linking} from 'react-native';
+import {Toast, useToast} from 'native-base';
+import RNFetchBlob from 'react-native-blob-util';
+import analytics from '@react-native-firebase/analytics';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import Material from 'react-native-vector-icons/MaterialIcons';
 import FeatherIcon from 'react-native-vector-icons/Feather';
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome';
-import moment from 'moment';
-import {Toast, useToast} from 'native-base';
-import analytics from '@react-native-firebase/analytics';
-import {Linking} from 'react-native';
-import {BubblesLoader} from 'react-native-indicator';
 import {useFocusEffect, useIsFocused} from '@react-navigation/native';
 // import ReactNativeBlobUtil from 'react-native-blob-util';
-import RNFetchBlob from 'react-native-blob-util';
-import ToastMessage from '../../../shared/toast';
-import FloatingButton from '../../../shared/floatingButton';
 
-import BottomNav from '../../../layout/BottomLayout';
 import Player from './Player';
-
-import {CommonStyles, Colors, Typography} from '../../../theme';
-import {isEmptyArray} from 'formik';
 import Loading from '../../../shared/loading';
+import ToastMessage from '../../../shared/toast';
+import BottomNav from '../../../layout/BottomLayout';
 import {GROWTH_COACHING_ID} from '../../../constants';
+import FloatingButton from '../../../shared/floatingButton';
+import {CommonStyles, Colors, Typography} from '../../../theme';
 
 const win = Dimensions.get('window');
 const contentContainerWidth = win.width - 30;
@@ -89,8 +88,6 @@ const GrowthCoaching = props => {
   } else {
     persona = profile?.user_meta?.user_persona[0];
   }
-
-  console.log('user_persona1', persona);
 
   const [userRegion, setUserRegion] = useState(region);
   const [hideEvents, setHideEvents] = useState();
@@ -518,7 +515,7 @@ const GrowthCoaching = props => {
             )}
 
           {pillarPOELoading && (
-            <View style={{marginTop: 40}}>
+            <View style={{marginTop: 70}}>
               <Loading />
             </View>
           )}

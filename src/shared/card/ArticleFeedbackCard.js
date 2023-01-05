@@ -1,8 +1,8 @@
 import React, {useState} from 'react';
 import {View, Text, Pressable, StyleSheet} from 'react-native';
 
-import FeatherIcon from 'react-native-vector-icons/Feather';
 import {Colors} from '../../theme';
+import FeatherIcon from 'react-native-vector-icons/Feather';
 
 const ArticleFeedbackCard = props => {
   const {isTrue, handleValue} = props;

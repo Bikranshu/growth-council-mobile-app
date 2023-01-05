@@ -1,9 +1,9 @@
 import React, {useState, useEffect} from 'react';
-import {Badge} from 'react-native-paper';
-import {collection, query, onSnapshot, where} from 'firebase/firestore';
-import firestore from '@react-native-firebase/firestore';
 
+import {Badge} from 'react-native-paper';
 import {database} from '../../utils/firebaseUtil';
+import firestore from '@react-native-firebase/firestore';
+import {collection, query, onSnapshot, where} from 'firebase/firestore';
 
 const ChatCount = props => {
   const {item, userID} = props;
@@ -38,17 +38,14 @@ const ChatCount = props => {
       chatID(item),
       'messages',
     );
-    console.log({chatsCol});
 
     const q = await query(
       chatsCol,
       where('status', '==', 'unread'),
       where('user._id', '!=', userID),
     );
-    console.log({q});
 
     onSnapshot(q, querySnapshot => {
-      console.log('snapshot', querySnapshot.size);
       item = {...item, ...{count: querySnapshot.size}};
       setFriend(item);
     });

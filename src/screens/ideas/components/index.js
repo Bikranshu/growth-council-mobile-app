@@ -10,14 +10,14 @@ import {
   Dimensions,
   FlatList,
 } from 'react-native';
+
 import {Button} from 'native-base';
 import {Linking} from 'react-native';
-import analytics from '@react-native-firebase/analytics';
-import FloatingButton from '../../../shared/floatingButton';
-
 import HTMLView from 'react-native-htmlview';
-import Footer from '../../../shared/footer';
+import analytics from '@react-native-firebase/analytics';
 
+import Footer from '../../../shared/footer';
+import FloatingButton from '../../../shared/floatingButton';
 import {CommonStyles, Colors, Typography} from '../../../theme';
 
 const Ideas = props => {

@@ -8,17 +8,16 @@ import {
   ScrollView,
   Image,
 } from 'react-native';
-import {Button} from 'native-base';
-import {useFormik} from 'formik';
+
 import * as Yup from 'yup';
-import {BubblesLoader} from 'react-native-indicator';
+import {useFormik} from 'formik';
+import {Button} from 'native-base';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import analytics from '@react-native-firebase/analytics';
-import {CommonStyles, Colors, Typography} from '../../../theme';
-import FlatTextInput from '../../../shared/form/FlatTextInput';
-import ToastMessage from '../../../shared/toast';
-import Footer from '../../../shared/footer';
+
 import Loading from '../../../shared/loading';
+import ToastMessage from '../../../shared/toast';
+import FlatTextInput from '../../../shared/form/FlatTextInput';
+import {CommonStyles, Colors, Typography} from '../../../theme';
 
 const passwordSchema = Yup.object().shape({
   oldPassword: Yup.string()

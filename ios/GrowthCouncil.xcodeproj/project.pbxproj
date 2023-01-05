@@ -39,6 +39,7 @@
 		C546B03F27C4047500CFDC24 /* SFProText-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 94B34DD127A303760086A4B0 /* SFProText-Regular.ttf */; };
 		C546B04027C4047500CFDC24 /* SFProText-Semibold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 94B34DD027A303760086A4B0 /* SFProText-Semibold.ttf */; };
 		C5B06A0A27C5491B00DB41C3 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = C5B06A0927C5491B00DB41C3 /* GoogleService-Info.plist */; };
+		D1DDB71D29600C0C002A4224 /* assets in Resources */ = {isa = PBXBuildFile; fileRef = D1DDB71C29600C0C002A4224 /* assets */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -99,6 +100,7 @@
 		B374B5390ABC4A6AB247844A /* FontAwesome5_Brands.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = FontAwesome5_Brands.ttf; path = "../node_modules/react-native-vector-icons/Fonts/FontAwesome5_Brands.ttf"; sourceTree = "<group>"; };
 		C51E3A4527C6A35D001F6F53 /* GrowthCouncil.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = GrowthCouncil.entitlements; path = GrowthCouncil/GrowthCouncil.entitlements; sourceTree = "<group>"; };
 		C5B06A0927C5491B00DB41C3 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		D1DDB71C29600C0C002A4224 /* assets */ = {isa = PBXFileReference; lastKnownFileType = folder; path = assets; sourceTree = "<group>"; };
 		D1F59D9FE44F9D5E9F2929B3 /* Pods-GrowthCouncil.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-GrowthCouncil.release.xcconfig"; path = "Target Support Files/Pods-GrowthCouncil/Pods-GrowthCouncil.release.xcconfig"; sourceTree = "<group>"; };
 		D6E812BF9B8941FDA1F5A042 /* Entypo.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Entypo.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Entypo.ttf"; sourceTree = "<group>"; };
 		EBD4B08452134294B450E888 /* Octicons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Octicons.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Octicons.ttf"; sourceTree = "<group>"; };
@@ -177,6 +179,7 @@
 		83CBB9F61A601CBA00E9B192 = {
 			isa = PBXGroup;
 			children = (
+				D1DDB71C29600C0C002A4224 /* assets */,
 				C5B06A0927C5491B00DB41C3 /* GoogleService-Info.plist */,
 				13B07FAE1A68108700A75B9A /* GrowthCouncil */,
 				832341AE1AAA6A7D00B99B32 /* Libraries */,
@@ -354,6 +357,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D1DDB71D29600C0C002A4224 /* assets in Resources */,
 				C546B03027C4047500CFDC24 /* Mulish-Bold.ttf in Resources */,
 				C546B03127C4047500CFDC24 /* Mulish-Medium.ttf in Resources */,
 				C546B03227C4047500CFDC24 /* Mulish-Regular.ttf in Resources */,
@@ -643,7 +647,7 @@
 				CODE_SIGN_ENTITLEMENTS = GrowthCouncil/GrowthCouncil.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 66;
+				CURRENT_PROJECT_VERSION = 77;
 				DEVELOPMENT_TEAM = 3GB43PZ5Z7;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = GrowthCouncil/Info.plist;
@@ -682,7 +686,7 @@
 				CODE_SIGN_ENTITLEMENTS = GrowthCouncil/GrowthCouncil.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 66;
+				CURRENT_PROJECT_VERSION = 77;
 				DEVELOPMENT_TEAM = 3GB43PZ5Z7;
 				INFOPLIST_FILE = GrowthCouncil/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "Growth Council App";
@@ -743,7 +747,7 @@
 				COPY_PHASE_STRIP = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
-				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = "";
+				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = i386;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_NO_COMMON_BLOCKS = YES;
@@ -809,7 +813,7 @@
 				COPY_PHASE_STRIP = YES;
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
-				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = "";
+				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = i386;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;

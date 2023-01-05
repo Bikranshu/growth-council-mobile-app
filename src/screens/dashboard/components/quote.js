@@ -9,6 +9,7 @@ import {
   Dimensions,
   Modal,
 } from 'react-native';
+
 import moment from 'moment';
 import LinearGradient from 'react-native-linear-gradient';
 
@@ -16,105 +17,102 @@ const win = Dimensions.get('window');
 
 const Quote = props => {
   const {dailyQuote, navigation, modalVisible, setModalVisible} = props;
+  //   const [textShown, setTextShown] = useState(false); //To show ur remaining Text
 
   const [lengthMore, setLengthMore] = useState(false); //to show the "Read more & Less Line"
-  //   const [modalVisible, setModalVisible] = useState(false);
+
   const [data, setdata] = useState('');
 
   const onTextLayout = useCallback(e => {
     setLengthMore(e.nativeEvent.lines.length >= 3); //to check the text is more than 3 lines or not
-    // console.log(e.nativeEvent);
+  
   }, []);
 
-  console.log({lengthMore});
-  const _renderDailyQuoteItem = ({item, index}) => {
-    const date = new Date();
-    let localTime = date.getTime();
-    let localOffset = date.getTimezoneOffset() * 60000;
-    let utc = localTime + localOffset;
-    let target_offset = -8; //PST from UTC 7 hours behind right now, will need to fix for daylight
-    let los_angles = utc + 3600000 * target_offset;
-    const nd = new Date(los_angles);
-    const PSTTime = nd.toLocaleString();
-    const ActualPSTTime = moment(PSTTime).format('DD/MM/yyyy');
-
-    // console.log(ActualPSTTime);
-    return (
-      <>
-        {ActualPSTTime === item?.quote_date ? (
-          <View>
-            <LinearGradient
-              start={{x: 0.697, y: -0.943}}
-              end={{x: 0.413, y: 2.24}}
-              colors={['#58AFF6', '#002651']}
-              style={styles.quote}>
-              <View>
-                <Text
-                  onTextLayout={onTextLayout}
-                  numberOfLines={2}
-                  style={{
-                    fontSize: 14,
-                    color: 'white',
-                    textAlign: 'center',
-                    marginBottom: 10,
-                    // alignItems: 'center',
-                  }}>
-                  {item?.daily_quote}
-                </Text>
-                <View
-                  style={{
-                    alignItems: 'flex-end',
-                    position: 'absolute',
-                    right: 5,
-                    bottom: 10,
-                  }}>
-                  <Text
-                    style={{
-                      fontSize: 12,
-                      position: 'absolute',
-                      right: 5,
-                      fontWeight: 'bold',
-                      color: 'white',
-                    }}>
-                    -{item?.quote_author}
-                  </Text>
-                </View>
-                {lengthMore && (
-                  <TouchableOpacity
-                    onPress={() => {
-                      setModalVisible(true), setdata(item);
-                    }}
-                    style={{}}>
-                    <Text
-                      style={{
-                        fontSize: 12,
-                        color: 'white',
-                        textAlign: 'center',
-                      }}>
-                      See More
-                    </Text>
-                  </TouchableOpacity>
-                )}
-              </View>
-            </LinearGradient>
-          </View>
-        ) : (
-          <></>
-        )}
-      </>
-    );
-  };
-
+  const date = new Date();
+  let localTime = date.getTime();
+  let localOffset = date.getTimezoneOffset() * 60000;
+  let utc = localTime + localOffset;
+  let target_offset = -8; //PST from UTC 7 hours behind right now, will need to fix for daylight
+  let los_angles = utc + 3600000 * target_offset;
+  const nd = new Date(los_angles);
+  const PSTTime = nd.toLocaleString();
+  const ActualPSTTime = moment(PSTTime).format('DD/MM/yyyy');
+ 
   return (
     <>
       <ScrollView>
         <View>
-          <FlatList
+          {dailyQuote?.map((item, index) => {
+          
+            return (
+              <View>
+                {item?.quote_date === ActualPSTTime ? (
+                  <LinearGradient
+                    start={{x: 0.697, y: -0.943}}
+                    end={{x: 0.413, y: 2.24}}
+                    colors={['#58AFF6', '#002651']}
+                    style={styles.quote}>
+                    <View>
+                      <Text
+                        onTextLayout={onTextLayout}
+                        numberOfLines={2}
+                        style={{
+                          fontSize: 14,
+                          color: 'white',
+                          textAlign: 'center',
+                          marginBottom: 10,
+                          // alignItems: 'center',
+                        }}>
+                        {item?.daily_quote}
+                      </Text>
+                      <View
+                        style={{
+                          alignItems: 'flex-end',
+                          position: 'absolute',
+                          right: 5,
+                          bottom: 10,
+                        }}>
+                        <Text
+                          style={{
+                            fontSize: 12,
+                            position: 'absolute',
+                            right: 5,
+                            fontWeight: 'bold',
+                            color: 'white',
+                          }}>
+                          -{item?.quote_author}
+                        </Text>
+                      </View>
+                      {lengthMore && (
+                        <TouchableOpacity
+                          onPress={() => {
+                            setModalVisible(true), setdata(item);
+                          }}
+                          style={{}}>
+                          <Text
+                            style={{
+                              fontSize: 12,
+                              color: 'white',
+                              textAlign: 'center',
+                            }}>
+                            'See More...'{' '}
+                          </Text>
+                        </TouchableOpacity>
+                      )}
+                    </View>
+                  </LinearGradient>
+                ) : (
+                  <></>
+                )}
+              </View>
+            );
+          })}
+          {/* <FlatList
             horizontal
             showsHorizontalScrollIndicator={false}
             data={dailyQuote}
             renderItem={_renderDailyQuoteItem}
-          />
+          /> */}
         </View>
 
         <Modal

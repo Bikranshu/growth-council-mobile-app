@@ -9,11 +9,13 @@ import {
   ImageBackground,
   SafeAreaView,
 } from 'react-native';
+
 import {Button} from 'native-base';
 import HTMLView from 'react-native-htmlview';
 import Loading from '../../../shared/loading';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import {CommonStyles, Colors, Typography} from '../../../theme';
+
 const screenHeight = Math.round(Dimensions.get('window').height);
 
 const Detail = props => {
@@ -64,7 +66,7 @@ const Detail = props => {
                   },
                 }}
               />
-			   {detailLoading && <Loading />}
+              {detailLoading && <Loading />}
               <Button
                 style={styles.acceptButton}
                 onPress={() => navigation.navigate('SignUp')}>

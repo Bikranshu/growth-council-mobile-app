@@ -10,28 +10,28 @@ import {
   Modal,
   TouchableOpacity,
 } from 'react-native';
+
+import moment from 'moment-timezone';
+import {Linking} from 'react-native';
+import HTMLView from 'react-native-htmlview';
 import {Button, useToast} from 'native-base';
+import * as RNLocalize from 'react-native-localize';
 import Feather from 'react-native-vector-icons/Feather';
+import analytics from '@react-native-firebase/analytics';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
-import HTMLView from 'react-native-htmlview';
-import {Linking} from 'react-native';
-import FloatingButton from '../../../shared/floatingButton';
 
-import analytics from '@react-native-firebase/analytics';
-import {formatTimeByOffset} from './timezone';
-import * as RNLocalize from 'react-native-localize';
-import moment from 'moment-timezone';
-
-import {CommonStyles, Colors, Typography} from '../../../theme';
-import ToastMessage from '../../../shared/toast';
-import Footer from '../../../shared/footer';
-import Loading from '../../../shared/loading';
 import {
   GROWTH_COACHING_ID,
   GROWTH_COMMUNITY_ID,
   GROWTH_CONTENT_ID,
 } from '../../../constants';
+import Footer from '../../../shared/footer';
+import {formatTimeByOffset} from './timezone';
+import Loading from '../../../shared/loading';
+import ToastMessage from '../../../shared/toast';
+import FloatingButton from '../../../shared/floatingButton';
+import {CommonStyles, Colors, Typography} from '../../../theme';
 import {COACHING_COLOR, COMMUNITY_COLOR} from '../../../theme/colors';
 
 const Event = props => {
@@ -139,8 +139,6 @@ const Event = props => {
   const deviceTimeZone = RNLocalize.getTimeZone();
 
   const today = moment().tz(deviceTimeZone);
-  //   const dei = 'PST';
-  //   console.log('sdaf', moment().tz(dei));
   const deviceOffset = today?.utcOffset();
 
   let Today = moment().tz(actualtimeZone);
@@ -630,8 +628,7 @@ const Event = props => {
 
         {/* <Footer /> */}
       </ScrollView>
-	  <FloatingButton {...props} navigation={navigation} />
-
+      <FloatingButton {...props} navigation={navigation} />
     </View>
   );
 };

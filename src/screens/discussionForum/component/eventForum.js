@@ -12,14 +12,17 @@ import {
   TextInput,
   Platform,
 } from 'react-native';
+
+import moment from 'moment-timezone';
 import {BubblesLoader} from 'react-native-indicator';
 import Ionicon from 'react-native-vector-icons/Ionicons';
+import {useFocusEffect, useIsFocused} from '@react-navigation/native';
+
 import {
   GROWTH_COACHING_ID,
   GROWTH_COMMUNITY_ID,
   GROWTH_CONTENT_ID,
 } from '../../../constants';
-import moment from 'moment-timezone';
 import {
   COACHING_COLOR,
   COMMUNITY_COLOR,
@@ -27,9 +30,6 @@ import {
   PRIMARY_BACKGROUND_COLOR,
 } from '../../../theme/colors';
 import FloatingButton from '../../../shared/floatingButton';
-
-import {useFocusEffect, useIsFocused} from '@react-navigation/native';
-import Loading from '../../../shared/loading';
 import {CommonStyles, Colors, Typography} from '../../../theme';
 import {PRIMARY_TEXT_COLOR, SECONDARY_TEXT_COLOR} from '../../../theme/colors';
 

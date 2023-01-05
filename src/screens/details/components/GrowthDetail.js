@@ -13,16 +13,17 @@ import {
   StatusBar,
   ActivityIndicator,
 } from 'react-native';
-import {Button, useToast} from 'native-base';
-import FloatingButton from '../../../shared/floatingButton';
 
 import moment from 'moment';
-import {COACHING_COLOR, COMMUNITY_COLOR} from '../../../theme/colors';
-import {useIsFocused} from '@react-navigation/native';
 import HTMLView from 'react-native-htmlview';
-import {CommonStyles, Colors, Typography} from '../../../theme';
 import {WebView} from 'react-native-webview';
+import {Button, useToast} from 'native-base';
+import {useIsFocused} from '@react-navigation/native';
+
 import Loading from '../../../shared/loading';
+import FloatingButton from '../../../shared/floatingButton';
+import {CommonStyles, Colors, Typography} from '../../../theme';
+import {COACHING_COLOR, COMMUNITY_COLOR} from '../../../theme/colors';
 
 const screenHeight = Math.round(Dimensions.get('window').height);
 const win = Dimensions.get('window');
@@ -69,7 +70,6 @@ const GrowthDetail = props => {
     profileError,
     fetchProfile,
     cleanProfile,
-
   } = props;
 
   const toast = useToast();
@@ -133,10 +133,8 @@ const GrowthDetail = props => {
     );
   }
 
-
   const GrowthCoachingSignup = async () => {
     const response = await signupCoachingSession({});
-    console.log('abcd', response);
     if (response?.payload?.code === 200) {
       // setStatus(true);
       ToastMessage.show(response.payload.message);
@@ -323,8 +321,6 @@ const GrowthDetail = props => {
                   </View>
                 </TouchableOpacity>
               </View>
-
-              
 
               {coachingSessionLoading && <Loading />}
 

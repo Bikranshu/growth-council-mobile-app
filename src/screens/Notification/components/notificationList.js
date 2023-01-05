@@ -12,6 +12,7 @@ import {
   Dimensions,
   FlatList,
 } from 'react-native';
+
 import {CommonStyles, Colors, Typography} from '../../../theme';
 import {PRIMARY_TEXT_COLOR, SECONDARY_TEXT_COLOR} from '../../../theme/colors';
 

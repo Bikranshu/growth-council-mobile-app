@@ -10,16 +10,18 @@ import {
   TouchableWithoutFeedback,
   Keyboard,
 } from 'react-native';
+
 import {useFormik} from 'formik';
-import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import {Button} from 'react-native-paper';
-import Loading from '../loading';
-import Ionicons from 'react-native-vector-icons/Ionicons';
 import Entypo from 'react-native-vector-icons/Entypo';
-import {getFCMTOkenForUser} from '../../utils/httpUtil';
-import {sendNotification} from '../../utils/sendNotification';
+import Ionicons from 'react-native-vector-icons/Ionicons';
+import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
+
+import Loading from '../loading';
 // import useOutsideClick from './useOutsideClick';
 import {COMMUNITY_COLOR} from '../../theme/colors';
+import {getFCMTOkenForUser} from '../../utils/httpUtil';
+import {sendNotification} from '../../utils/sendNotification';
 
 const Comments = ({
   comment,

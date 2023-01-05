@@ -1,4 +1,4 @@
-import React, {useState, useRef} from 'react';
+import React, {useState, useRef, useEffect} from 'react';
 import {
   StyleSheet,
   Text,
@@ -8,27 +8,27 @@ import {
   Modal,
   Image,
 } from 'react-native';
-import Animated from 'react-native-reanimated';
+
 import {
   PanGestureHandler,
   RotationGestureHandler,
   State,
 } from 'react-native-gesture-handler';
 import {Button} from 'native-base';
-import ToastMessage from '../toast';
-
+import Animated from 'react-native-reanimated';
 import {useDispatch, useSelector} from 'react-redux';
-import {
-  GrowthPipelineEmail,
-  resetSendEmail,
-} from '../../screens/event/slice/emailButtonSlice';
-import Loading from '../loading';
+
 import {
   COACHING_COLOR,
   COMMUNITY_COLOR,
   PRACTICE_COLOR,
 } from '../../theme/colors';
-import {useEffect} from 'react';
+import Loading from '../loading';
+import ToastMessage from '../toast';
+import {
+  GrowthPipelineEmail,
+  resetSendEmail,
+} from '../../screens/event/slice/emailButtonSlice';
 
 const {width, height} = Dimensions.get('window');
 const {add, block, concat, cond, event, eq, set, Value} = Animated;
@@ -55,9 +55,6 @@ const FloatingButton = props => {
     if (response?.payload?.code === 200) {
       setModalVisible(false);
       ToastMessage.show(
-        'Your request for Growth Pipeline Dialog has been sent successfully.',
-      );
-      console.log(
         'Your request for Growth Pipeline Dialog has been sent successfully.',
       );
     } else {

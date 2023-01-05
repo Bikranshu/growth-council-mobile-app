@@ -14,17 +14,18 @@ import {
   Keyboard,
   TouchableWithoutFeedback,
 } from 'react-native';
-import {Searchbar} from 'react-native-paper';
-import {Colors, Typography} from '../../../theme';
-import Ionicons from 'react-native-vector-icons/Ionicons';
-import FloatingButton from '../../../shared/floatingButton';
 
-import BottomNav from '../../../layout/BottomLayout';
+import {Searchbar} from 'react-native-paper';
 import HTMLView from 'react-native-htmlview';
-import {useFocusEffect, useIsFocused} from '@react-navigation/native';
 import {BubblesLoader} from 'react-native-indicator';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
+import {useFocusEffect, useIsFocused} from '@react-navigation/native';
+
 import Loading from '../../../shared/loading';
+import {Colors, Typography} from '../../../theme';
+import BottomNav from '../../../layout/BottomLayout';
+import FloatingButton from '../../../shared/floatingButton';
 
 const ContactTags = props => {
   const {

@@ -1,4 +1,3 @@
-import {DrawerActions, useNavigation} from '@react-navigation/native';
 import React from 'react';
 import {
   View,
@@ -10,13 +9,13 @@ import {
   Dimensions,
 } from 'react-native';
 
-import IonIcon from 'react-native-vector-icons/Ionicons';
 import {useDispatch, useSelector} from 'react-redux';
+import IonIcon from 'react-native-vector-icons/Ionicons';
 
-import {fetchProfileByID} from '../../screens/account/slice/profileSlice';
-import {navigationRef, toggleDrawer} from '../../utils/navigationUtil';
-import HeaderRight from './HeaderRight';
 import HeaderTitle from './index';
+import HeaderRight from './HeaderRight';
+import {navigationRef, toggleDrawer} from '../../utils/navigationUtil';
+import {fetchProfileByID} from '../../screens/account/slice/profileSlice';
 
 const Header = props => {
   const dispatch = useDispatch();
