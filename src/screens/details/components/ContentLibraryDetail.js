@@ -24,13 +24,16 @@ import FeatherIcon from 'react-native-vector-icons/Feather';
 // import ReactNativeBlobUtil from 'react-native-blob-util';
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome';
 import {useFocusEffect, useIsFocused} from '@react-navigation/native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import HTMLView from 'react-native-htmlview';
 import Loading from '../../../shared/loading';
+import {ARTICLE_LIKE} from '../../../constants';
 import ToastMessage from '../../../shared/toast';
 import {Colors, CommonStyles} from '../../../theme';
 import {COACHING_COLOR} from '../../../theme/colors';
 import BottomNav from '../../../layout/BottomLayout';
+import {setAsyncStorage} from '../../../utils/storageUtil';
 import FloatingButton from '../../../shared/floatingButton';
 import SearchHeader from '../../../shared/header/SearchHeader';
 import ArticleFeedbackCard from '../../../shared/card/ArticleFeedbackCard';
@@ -44,26 +47,45 @@ const ContentLibraryDetail = props => {
     contentLibraryDetailsError,
     fetchContentLibraryDetail,
     cleanContentLibraryDetail,
+
+    article,
+    articleLoading,
+    articleError,
+    ContentLibraryArticle,
   } = props;
 
   const isFocused = useIsFocused();
   useFocusEffect(
-    useCallback(() => {
-      fetchContentLibraryDetail(route?.params?.id);
-      return () => {
-        cleanContentLibraryDetail();
-      };
-    }, [isFocused]),
+    useCallback(
+      async => {
+        fetchContentLibraryDetail(route?.params?.id);
+        return () => {
+          cleanContentLibraryDetail();
+        };
+      },
+      [isFocused],
+    ),
   );
+
+  useEffect(() => {
+    const ARTICLE_LIKEAsync = async () => {
+      await AsyncStorage.setItem('ARTICLE_LIKE', contentLibraryDetails.likes);
+      await AsyncStorage.setItem(
+        'ARTICLE_DISLIKE',
+        contentLibraryDetails.dislikes,
+      );
+    };
+    ARTICLE_LIKEAsync();
+  }, [isFocused, contentLibraryDetails]);
 
   //   const [emailStatus, setEmailStatus] = useState(false);
 
   const [isTrue, setIsTrue] = useState();
 
-  const handleFeedbackChange = value => {
-    setIsTrue(value);
-  };
-
+  //   const handleFeedbackChange = value => {
+  //     setIsTrue(value);
+  //   };
+  //   console.log('result', isTrue);
 
   const _renderItem = ({item, index}) => {
     const fileUrl = item?.file?.url;
@@ -474,8 +496,14 @@ const ContentLibraryDetail = props => {
           {/* Article Feedback Section */}
           <View style={{marginTop: 20}}>
             <ArticleFeedbackCard
-              isTrue={isTrue}
-              handleValue={handleFeedbackChange}
+              contentLibraryDetails={contentLibraryDetails}
+              article={article}
+              articleLoading={articleLoading}
+              articleError={articleError}
+              ContentLibraryArticle={ContentLibraryArticle}
+              fetchContentLibraryDetail={fetchContentLibraryDetail}
+              //   isTrue={isTrue}
+              //   handleValue={handleFeedbackChange}
             />
           </View>
         </ScrollView>

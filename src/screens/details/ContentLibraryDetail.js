@@ -10,6 +10,7 @@ import {
   sendEmailThroughButton,
   resetsendEmail,
 } from '../event/slice/emailButtonSlice';
+import {ContentArticle, resetArticle} from './slice/articleSlice';
 
 const ContentLibraryDetailScreen = props => {
   const dispatch = useDispatch();
@@ -21,6 +22,10 @@ const ContentLibraryDetailScreen = props => {
   } = useSelector(state => state.contentLibraryDetails);
   const {sendEmail, sendEmailLoading, sendEmailError} = useSelector(
     state => state.sendEmail,
+  );
+
+  const {article, articleLoading, articleError} = useSelector(
+    state => state.article,
   );
 
   const fetchContentLibraryDetail = id => {
@@ -44,6 +49,10 @@ const ContentLibraryDetailScreen = props => {
     dispatch(resetsendEmail());
   };
 
+  const ContentLibraryArticle = formData => {
+    return dispatch(ContentArticle(formData));
+  };
+
   return (
     <ContentLibraryDetail
       {...props}
@@ -58,6 +67,10 @@ const ContentLibraryDetailScreen = props => {
       sendEmailError={sendEmailError}
       sendEmailThroughButtons={sendEmailThroughButtons}
       cleanSendEmail={cleanSendEmail}
+      article={article}
+      articleLoading={articleLoading}
+      articleError={articleError}
+      ContentLibraryArticle={ContentLibraryArticle}
     />
   );
 };
