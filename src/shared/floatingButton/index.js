@@ -54,9 +54,7 @@ const FloatingButton = props => {
 
     if (response?.payload?.code === 200) {
       setModalVisible(false);
-      ToastMessage.show(
-        'Your request for Growth Pipeline Dialog has been sent successfully.',
-      );
+      ToastMessage.show('Growth Pipeline Dialog initiated!');
     } else {
       toast.closeAll();
       ToastMessage.show(response?.payload?.message);
@@ -210,7 +208,7 @@ const FloatingButton = props => {
             <View style={{marginTop: 20}}>
               <Text
                 style={{fontSize: 16, textAlign: 'center', fontWeight: 'bold'}}>
-                Would you like to initiate Growth Pipeline Dialog ?
+                Schedule my complimentary Growth Pipeline Dialog.
               </Text>
               <View
                 style={{
@@ -228,7 +226,7 @@ const FloatingButton = props => {
                 <TouchableOpacity
                   style={styles.sendRegisterButton}
                   onPress={() => setModalVisible(false)}>
-                  <Text style={styles.emailButtonText}>Cancel</Text>
+                  <Text style={styles.emailButtonText}>Not Now</Text>
                 </TouchableOpacity>
 
                 <View>
@@ -238,7 +236,7 @@ const FloatingButton = props => {
                     onPress={async () => {
                       GrowthPipelineDialogueButton();
                     }}>
-                    <Text style={styles.acceptButtonText}>Proceed</Text>
+                    <Text style={styles.acceptButtonText}>Yes</Text>
                   </Button>
                   {/* )} */}
                   {/* {emailStatus && (
