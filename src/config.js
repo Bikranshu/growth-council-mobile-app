@@ -11,17 +11,18 @@ const PushNotificationsConfigs = {
   congigurations: () => {
     PushNotification.configure({
       onNotification: notification => {
-        if (notification.foreground && !isIOS) {
+        if (notification.foreground && isIOS) {
           PushNotification.localNotification(notification);
         }
 
-        const clicked = notification.userInteraction && !notification.foreground;
+        const clicked = notification.userInteraction && notification.foreground;
 
         if (clicked) {
           try {
             // handle the navigation here
             const data = notification?.data;
-            console.log({data});
+
+            console.log({notification});
             if (data) {
               if (data?.type == 'chat') {
                 navigate('Chat', {
@@ -33,11 +34,12 @@ const PushNotificationsConfigs = {
                   userAvatar: data?.userAvatar,
                 });
               } else if (data?.type == 'event') {
-                navigate('EventDetail', {id: data?.post_id});
-              } else if (data?.type == 'New Content') {
+                navigate('EventDetail', {
+                  id: data.post_id,
+                });
+              } else if (data?.notification_type == 'content') {
                 navigate('ContentLibraryDetail', {
-                  id: 8855,
-                  title: 'saafhjf',
+                  id: data.content_id,
                 });
               }
             }
