@@ -21,7 +21,8 @@ const PushNotificationsConfigs = {
           try {
             // handle the navigation here
             const data = notification?.data;
-            console.log({data});
+
+            console.log({notification});
             if (data) {
               if (data?.type == 'chat') {
                 navigate('Chat', {
@@ -33,13 +34,11 @@ const PushNotificationsConfigs = {
                   userAvatar: data?.userAvatar,
                 });
               } else if (data?.type == 'event') {
-                navigate('EventDetail', {id: data?.post_id});
-              } else if (data?.type == 'New Content') {
-                navigate('ContentLibraryDetail', {
-                  id: 8855,
-                  title: 'saafhjf',
+                navigate('EventDetail', {
+                  id: data.post_id,
                 });
-              }
+              } 
+             
             }
           } catch (error) {
             console.log(error);
