@@ -11,11 +11,11 @@ const PushNotificationsConfigs = {
   congigurations: () => {
     PushNotification.configure({
       onNotification: notification => {
-        if (notification.foreground && isIOS) {
+        if (notification.foreground && !isIOS) {
           PushNotification.localNotification(notification);
         }
 
-        const clicked = notification.userInteraction && notification.foreground;
+        const clicked = notification.userInteraction && !notification.foreground;
 
         if (clicked) {
           try {
@@ -37,11 +37,8 @@ const PushNotificationsConfigs = {
                 navigate('EventDetail', {
                   id: data.post_id,
                 });
-              } else if (data?.notification_type == 'content') {
-                navigate('ContentLibraryDetail', {
-                  id: data.content_id,
-                });
-              }
+              } 
+             
             }
           } catch (error) {
             console.log(error);
