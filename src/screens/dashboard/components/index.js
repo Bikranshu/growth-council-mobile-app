@@ -123,7 +123,6 @@ const Dashboard = props => {
 
   const [lengthMore, setLengthMore] = useState(false); //to show the "Read more & Less Line"
 
-
   const [data, setdata] = useState('');
 
   const [dataSourceCords, setDataSourceCords] = useState(criticalIssue);
@@ -458,9 +457,8 @@ const Dashboard = props => {
   };
 
   const onTextLayout = useCallback(e => {
-    setLengthMore(e.nativeEvent.lines.length >= 3);
+    setLengthMore(e.nativeEvent.lines.length > 3);
   }, []);
-
 
   const date = new Date();
   let localTime = date.getTime();
@@ -472,13 +470,11 @@ const Dashboard = props => {
 
   const nd = new Date(los_angles);
   const ActualPSTTime = moment(nd).format('DD/MM/yyyy');
- 
 
   //   const quote = dailyQuote[0];
   // const quote = dailyQuote?.filter(
   //   item => item?.quote_date === ActualPSTTime,
   // )[0];
-
 
   return (
     <View style={{flex: 1}}>
@@ -550,7 +546,7 @@ const Dashboard = props => {
                                     <View>
                                       <Text
                                         onTextLayout={onTextLayout}
-                                        numberOfLines={2}
+                                        numberOfLines={3}
                                         style={{
                                           fontSize: 14,
                                           color: 'white',
