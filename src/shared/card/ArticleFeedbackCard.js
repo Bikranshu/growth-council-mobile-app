@@ -252,7 +252,7 @@ const ArticleFeedbackCard = props => {
                 accessible={false}>
                 <View>
                   <Text style={{color: 'white', marginTop: 10}}>
-                    Your can leave feedback :
+                    You can leave feedback :
                   </Text>
                   <TextInput
                     multiline={true}
@@ -289,19 +289,20 @@ const ArticleFeedbackCard = props => {
       )}
 
       {hideShow && (
-        <View
-          style={{
-            paddingVertical: 20,
-            marginBottom: 10,
-            paddingHorizontal: 15,
-            justifyContent: 'center',
-            borderRadius: 18,
-            backgroundColor: '#B2BEB5',
-          }}>
-          <Text style={{textAlign: 'center', color: 'white'}}>
-            Your's reponse have been saved.
-          </Text>
-        </View>
+        // <View
+        //   style={{
+        //     paddingVertical: 20,
+        //     marginBottom: 10,
+        //     paddingHorizontal: 15,
+        //     justifyContent: 'center',
+        //     borderRadius: 18,
+        //     backgroundColor: '#B2BEB5',
+        //   }}>
+        //   <Text style={{textAlign: 'center', color: 'white'}}>
+        //     Your's reponse have been saved.
+        //   </Text>
+        // </View>
+        <></>
       )}
     </>
   );

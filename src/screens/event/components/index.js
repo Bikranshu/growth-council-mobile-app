@@ -79,7 +79,7 @@ const Event = props => {
     });
     if (response?.payload?.code === 200) {
       setEventStatus(true);
-      ToastMessage.show('You have successfully RSVP’d for this event.');
+      ToastMessage.show('You have registered for this Frost & Sullivan Think Tank.');
     } else {
       toast.closeAll();
       ToastMessage.show(response?.payload?.response);

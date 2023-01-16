@@ -122,7 +122,6 @@ const Dashboard = props => {
   const [modalVisible, setModalVisible] = useState(false);
 
   const [lengthMore, setLengthMore] = useState(false); //to show the "Read more & Less Line"
-  const [numberofLines, setNumberofLines] = useState(2);
 
   const [data, setdata] = useState('');
 
@@ -457,35 +456,25 @@ const Dashboard = props => {
     );
   };
 
-  const onTextLayout = e => {
-    setLengthMore(numberofLines > 2); //to check the text is more than 2 lines or not
-  };
-
-  useEffect(() => {
-    setNumberofLines(2);
+  const onTextLayout = useCallback(e => {
+    setLengthMore(e.nativeEvent.lines.length > 3);
   }, []);
-
 
   const date = new Date();
   let localTime = date.getTime();
   let localOffset = date.getTimezoneOffset() * 60000;
   let utc = localTime + localOffset;
-  //   console.log(localTime, ',', localOffset);
+
   let target_offset = -8; //PST from UTC 7 hours behind right now, will need to fix for daylight
   let los_angles = utc + 3600000 * target_offset;
-  //   console.log({los_angles});
+
   const nd = new Date(los_angles);
   const ActualPSTTime = moment(nd).format('DD/MM/yyyy');
-  //   console.log({ActualPSTTime});
 
-  //   const ActualPSTTime = moment(pst).format('DD/MM/yyyy');
-  //   console.log(pst);
-
-  const quote = dailyQuote[0];
+  //   const quote = dailyQuote[0];
   // const quote = dailyQuote?.filter(
   //   item => item?.quote_date === ActualPSTTime,
   // )[0];
-  //   console.log(' quote', dailyQuote);
 
   return (
     <View style={{flex: 1}}>
@@ -557,7 +546,7 @@ const Dashboard = props => {
                                     <View>
                                       <Text
                                         onTextLayout={onTextLayout}
-                                        numberOfLines={numberofLines}
+                                        numberOfLines={3}
                                         style={{
                                           fontSize: 14,
                                           color: 'white',
