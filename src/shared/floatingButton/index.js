@@ -129,7 +129,7 @@ const FloatingButton = props => {
                   ],
                 },
               ]}>
-              {isAlertVisible && (
+              {!isAlertVisible && (
                 <View
                   style={{
                     alignItems: 'center',
@@ -144,7 +144,16 @@ const FloatingButton = props => {
                     borderRadius: 10,
                     opacity: 0.7,
                   }}>
-                  <Text style={{color: 'white'}}>Growth Pipeline Dialog </Text>
+                  <View
+                    style={{flexDirection: 'row', alignItems: 'flex-start'}}>
+                    <Text style={{color: 'white'}}>
+                      Growth Pipeline Dialog.
+                    </Text>
+                    <Text style={{fontSize: 7, lineHeight: 18, color: 'white'}}>
+                      TM
+                    </Text>
+                  </View>
+
                   <TouchableOpacity
                     onPress={() =>
                       navigation.navigate('Growth Pipeline Dialog')
@@ -206,10 +215,37 @@ const FloatingButton = props => {
               </Text>
             </TouchableOpacity> */}
             <View style={{marginTop: 20}}>
-              <Text
-                style={{fontSize: 16, textAlign: 'center', fontWeight: 'bold'}}>
-                Schedule my complimentary Growth Pipeline Dialog.
-              </Text>
+              <View style={{flexDirection: 'row'}}>
+                <Text
+                  style={{
+                    fontSize: 14,
+                    textAlign: 'center',
+                    fontWeight: 'bold',
+                    lineHeight: 30,
+                  }}>
+                  Schedule my complimentary Growth Pipeline Dialog
+                </Text>
+                <Text
+                  style={{
+                    fontSize: 8,
+                    lineHeight: 30,
+                    textAlignVertical: 'top',
+                    fontWeight: 'bold',
+                    //   backgroundColor: 'red',
+                  }}>
+                  TM
+                </Text>
+                <Text
+                  style={{
+                    fontSize: 14,
+                    textAlign: 'center',
+                    fontWeight: 'bold',
+                    lineHeight: 30,
+                  }}>
+                  ?
+                </Text>
+              </View>
+
               <View
                 style={{
                   height: 1,
@@ -284,7 +320,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     borderRadius: 20,
     width: 150,
-    height: 50,
+    height: 40,
     backgroundColor: '#EBECF0',
     marginTop: 25,
     borderColor: PRACTICE_COLOR,
@@ -295,7 +331,7 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     marginRight: 5,
     width: 150,
-    height: 50,
+    height: 40,
     backgroundColor: PRACTICE_COLOR,
     marginTop: 25,
     justifyContent: 'center',
