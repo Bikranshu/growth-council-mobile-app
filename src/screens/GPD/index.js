@@ -10,18 +10,26 @@ import {
   Dimensions,
   TouchableOpacity,
   Modal,
+  ImageBackground,
+  FlatList,
 } from 'react-native';
 
 import {Button} from 'native-base';
 import HTMLView from 'react-native-htmlview';
 import {useDispatch, useSelector} from 'react-redux';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 
 import Loading from '../../shared/loading';
 import FloatingButton from '../../shared/floatingButton';
 import {CommonStyles, Colors, Typography} from '../../theme';
 import {fetchGrowthPipeline, resetGrowthPipeline} from './GPDSlice';
+import {emptyContainerRenderData} from '../../utils/flatlistRenderData';
+
+const win = Dimensions.get('window');
+const contentContainerWidth = win.width / 2;
 
 const GPDScreen = props => {
+  const {navigation} = props;
   const dispatch = useDispatch();
 
   const {GDP, GDPLoading, GDPError} = useSelector(state => state.GDP);
@@ -37,6 +45,8 @@ const GPDScreen = props => {
   } else {
     content1 = '';
   }
+
+  console.log(Dimensions.get('screen').height / 9);
   return (
     <View style={{flex: 1}}>
       <StatusBar
@@ -45,167 +55,201 @@ const GPDScreen = props => {
         backgroundColor="#001D3F"
         translucent={false}
       />
-      <ScrollView style={{backgroundColor: 'white'}}>
-        <View style={styles.container}>
-          <View style={styles.privacy}>
-            <View style={styles.title}>
-              <View style={{flexDirection: 'row'}}>
-                <Text style={styles.titleText}>Growth Pipeline Dialog</Text>
-                <Text
-                  style={{
-                    fontSize: 10,
-                    lineHeight: 18,
-                    textAlignVertical: 'top',
-                    fontWeight: 'bold',
-                    //   backgroundColor: 'red',
-                  }}>
-                  TM
-                </Text>
-              </View>
-              <View style={styles.titleBorder}></View>
-            </View>
-            {GDPLoading && <Loading />}
+
+      <FlatList
+        data={emptyContainerRenderData}
+        scrollEventThrottle={16}
+        onScroll={e => {
+          const offset = e.nativeEvent.contentOffset.y;
+          if (offset >= 70) {
+            navigation.setOptions({
+              headerShown: false,
+            });
+          } else {
+            navigation.setOptions({
+              headerShown: true,
+            });
+          }
+        }}
+        contentContainerStyle={{
+          backgroundColor: Colors.PRIMARY_BACKGROUND_COLOR,
+        }}
+        ListHeaderComponent={() => {
+          return (
             <View>
-              <HTMLView
-                value={content1}
-                textComponentProps={{
-                  style: {
-                    fontSize: 14,
-                    paddingBottom: 30,
-                    textAlign: 'justify',
-                    whiteSpace: 'pre-wrap',
-                  },
-                }}
-              />
-              {/* <Text
+              <ImageBackground
+                source={require('../../assets/img/appBG.png')}
                 style={{
-                  
+                  height: (Dimensions.get('screen').height - 200) / 2,
+                  paddingTop:
+                    Platform.OS === 'ios'
+                      ? Dimensions.get('screen').height / 7
+                      : Dimensions.get('screen').height / 9,
+                  width: win.width,
                 }}>
-                The Growth Innovation Leadership Council`s mission is to enable
-                exacutive to achieve transformational growth fo themselves,
-                their companies and for industry and society at large through
-                enlightened leadership.
-                {'\n'}
-                {'\n'}
-                The Council delivers thought leader and year-round networking
-                around a member-defined set of Critical Issues shaping our
-                futures
-                {'\n'}
-                {'\n'}
-                Each year, Council Members work together to set the Critical
-                Issues Agenda for the year ahead. These issues then guide the
-                development of our live events, virtual events and curated
-                content on the portal. Setting the Critical Issues Agendais akey
-                role in ensuring the content for the Council is driven by its
-                members.
-              </Text> */}
+                <View
+                  style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    textAlign: 'center',
+                  }}>
+                  <Text
+                    style={{
+                      color: 'white',
+                      fontSize: 28,
+                      textAlign: 'center',
+                      fontWeight: 'bold',
+                      lineHeight: 40,
+                    }}>
+                    Growth is a Journey.{`\n`} We are your guide.
+                  </Text>
+                  <Text
+                    style={{
+                      color: 'white',
+                      fontSize: 16,
+                      textAlign: 'center',
+                      marginTop: 20,
+                      lineHeight: 20,
+                      // textAlign: 'justify',
+                      width: '80%',
+                    }}>
+                    {content1}
+                  </Text>
+                </View>
+              </ImageBackground>
+              <View>
+                <Image
+                  source={require('../../assets/img/onDemat.jpg')}
+                  style={{
+                    width: '100%',
+                    height: 250,
+                  }}
+                  resizeMode={'cover'}
+                />
+                <View style={{padding: 25}}>
+                  <Text
+                    style={{
+                      fontSize: 22,
+                      color: 'darkblue',
+                      fontWeight: 'bold',
+                    }}>
+                    What is a Growth Pipeline Dialog and how will it help you?
+                  </Text>
+
+                  <Text
+                    style={{
+                      fontSize: 14,
+                      color: 'black',
+                      marginTop: 20,
+                      lineHeight: 20,
+                    }}>
+                    Frost & Sullivan’s Growth Pipeline™ Dialog leverages 60
+                    years of cross – industry experience, to empower you and
+                    your team with:
+                  </Text>
+
+                  <View style={[styles.wrapper, styles.shadowProp]}>
+                    <Ionicons name="arrow-forward" size={30} color="blue" />
+                    <Text style={{marginLeft: 20, lineHeight: 20}}>
+                      Actionable intelligence and innovative go-to-market
+                      strategies
+                    </Text>
+                  </View>
+
+                  <View style={[styles.wrapper, styles.shadowProp]}>
+                    <Ionicons name="arrow-forward" size={30} color="blue" />
+                    <Text style={{marginLeft: 20, lineHeight: 20}}>
+                      Actionable intelligence and innovative go-to-market
+                      strategies
+                    </Text>
+                  </View>
+
+                  <View style={[styles.wrapper, styles.shadowProp]}>
+                    <Ionicons name="arrow-forward" size={30} color="blue" />
+                    <Text style={{marginLeft: 20, lineHeight: 20}}>
+                      Actionable intelligence and innovative go-to-market
+                      strategies
+                    </Text>
+                  </View>
+                </View>
+              </View>
             </View>
-          </View>
-        </View>
-      </ScrollView>
+          );
+        }}
+        renderItem={() => {
+          return null;
+        }}
+        keyExtractor={index => index.toString()}
+      />
       <FloatingButton {...props} />
     </View>
   );
 };
 
 export default GPDScreen;
+
 const styles = StyleSheet.create({
   container: {
-    ...CommonStyles.container,
-    paddingBottom: 20,
+    backgroundColor: Colors.PRIMARY_BACKGROUND_COLOR,
+    justifyContent: 'center',
+    alignContent: 'center',
   },
   header: {
-    ...CommonStyles.header,
-    marginTop: Platform.OS === 'ios' ? 120 : 62,
-    width: '100%',
-    marginLeft: 32,
-    marginRight: 32,
-  },
-  privacy: {
-    padding: 30,
-  },
-  title: {
-    marginBottom: 30,
-  },
-  titleText: {
-    color: '#000',
-    fontSize: 24,
-    paddingBottom: 20,
-    fontWeight: '600',
-  },
-  titleBorder: {
-    height: 5,
-    width: 50,
-    backgroundColor: 'rgba(24,56,99,1)',
-  },
-  aboutImage: {
-    marginBottom: 50,
-    paddingLeft: 30,
-    paddingRight: 30,
-  },
-  backgroundText: {
-    padding: 30,
-    flex: 1,
-    backgroundColor: '#1f71cc',
-  },
-  backgroundTitle: {
-    paddingBottom: 30,
-  },
-  backgroundTitleText: {
-    color: '#fff',
-    fontSize: 24,
-    fontWeight: '600',
-    paddingBottom: 30,
-  },
-  backgroundTitleBorder: {
-    height: 5,
-    width: 50,
-    backgroundColor: '#fff',
-  },
-  backgroundParagraph: {
-    color: '#fff',
-  },
-  cta: {
-    marginTop: 30,
-    display: 'flex',
     alignItems: 'center',
   },
-  button: {
-    ...CommonStyles.button,
-    height: 60,
-    width: 380,
-    backgroundColor: Colors.SECONDARY_BUTTON_COLOR,
-  },
-  buttonText: {
-    ...CommonStyles.buttonText,
-    fontFamily: Typography.FONT_BOLD,
-    fontSize: 15,
-  },
-  iconImage: {
-    width: 300,
-    height: 350,
-    borderRadius: 15,
+  icon: {
+    width: 110,
+    height: 110,
+    borderColor: Colors.PRIMARY_BACKGROUND_COLOR,
+    borderRadius: 16,
+    borderWidth: 3,
     overflow: 'hidden',
+    position: 'absolute',
+    top: -35,
   },
-  paragraph: {
-    fontSize: 14,
-  },
-  plainButton: {
-    width: '70%',
-    borderRadius: 25,
-    height: 56,
-    alignItems: 'center',
-    justifyContent: 'center',
+  text: {
+    color: '#343537',
     marginLeft: 5,
+    fontFamily: Typography.FONT_SF_REGULAR,
   },
-  plainButtonText: {
-    color: Colors.PRIMARY_BUTTON_TEXT_COLOR,
-    fontFamily: Typography.FONT_BOLD,
+  headingText1: {
+    ...CommonStyles.headingText1,
+    fontFamily: Typography.FONT_NORMAL,
+    fontSize: 22,
+    fontWeight: '600',
+    color: '#222B45',
   },
-  poweredBy: {
-    display: 'flex',
+  profileWrapper: {
+    padding: 20,
     alignItems: 'center',
-    marginTop: 15,
-    marginBottom: 30,
+    width: 328,
+    backgroundColor: Colors.PRIMARY_BACKGROUND_COLOR,
+    borderRadius: 12,
+    position: 'relative',
+    paddingTop: 100,
+    borderWidth: 1,
+    borderColor: '#707070',
+  },
+  middle: {
+    justifyContent: 'center',
+    alignContent: 'center',
+  },
+  wrapper: {
+    flexDirection: 'row',
+    padding: contentContainerWidth / 4 - 30,
+    marginTop: 20,
+    backgroundColor: 'white',
+  },
+
+  shadowProp: {
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+
+    elevation: 5,
   },
 });

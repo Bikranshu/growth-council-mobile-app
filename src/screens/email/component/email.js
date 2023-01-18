@@ -287,7 +287,7 @@ const styles = StyleSheet.create({
     fontSize: 20,
     color: '#0000cd',
   },
-  formText: {fontSize: 16, color: 'darkblue', fontWeight: 'bold'},
+  formText: {fontSize: 16, color: 'c', fontWeight: 'bold'},
   loginButtonWrapper: {
     alignItems: 'center',
     justifyContent: 'center',

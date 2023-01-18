@@ -29,6 +29,7 @@ import {
   GrowthPipelineEmail,
   resetSendEmail,
 } from '../../screens/event/slice/emailButtonSlice';
+import {fetchGrowthPipeline} from '../../screens/GPD/GPDSlice';
 
 const {width, height} = Dimensions.get('window');
 const {add, block, concat, cond, event, eq, set, Value} = Animated;
@@ -40,6 +41,7 @@ const FloatingButton = props => {
   const {sendEmail, sendEmailLoading, sendEmailError} = useSelector(
     state => state.sendEmail,
   );
+  const {GDP, GDPLoading, GDPError} = useSelector(state => state.GDP);
 
   const GDPButton = formData => {
     return dispatch(GrowthPipelineEmail(formData));
@@ -48,6 +50,10 @@ const FloatingButton = props => {
   const cleanGDPButton = () => {
     dispatch(resetSendEmail());
   };
+
+  useEffect(() => {
+    dispatch(fetchGrowthPipeline());
+  }, []);
 
   const GrowthPipelineDialogueButton = async () => {
     const response = await GDPButton({});
@@ -223,8 +229,8 @@ const FloatingButton = props => {
                     fontWeight: 'bold',
                     lineHeight: 30,
                   }}>
-                  Schedule my complimentary Growth Pipeline Dialog
-                  <Text
+                  {GDP.heading2}
+                  {/* <Text
                     style={{
                       fontSize: 8,
                       lineHeight: 25,
@@ -233,8 +239,7 @@ const FloatingButton = props => {
                       //   backgroundColor: 'red',
                     }}>
                     TM
-                  </Text>
-                  ?
+                  </Text> */}
                 </Text>
               </View>
 

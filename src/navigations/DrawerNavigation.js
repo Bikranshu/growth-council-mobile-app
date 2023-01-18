@@ -263,12 +263,9 @@ const DrawerNavigation = () => {
             </View>
           ),
           header: () => (
-            <SubHeader
-              title="Growth Pipeline Dialog"
-              image={require('../assets/img/Rectangle2.png')}
-              navigation={navigation}
-            />
+            <Header title="Growth Pipeline Dialog" navigation={navigation} />
           ),
+          
         })}
       />
 
