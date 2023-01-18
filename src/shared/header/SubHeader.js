@@ -71,17 +71,31 @@ const SubHeader = props => {
               <IonIcon name="menu-outline" color={'white'} size={30} />
             </TouchableOpacity>
           )}
-
-          <Text
-            style={{
-              marginLeft: 10,
-              fontFamily: 'SFProText-Medium',
-              fontSize: 18,
-              color: 'white',
-              width: '90%',
-            }}>
-            {props.title}
-          </Text>
+          <View style={{flexDirection: 'row'}}>
+            <Text
+              style={{
+                marginLeft: 10,
+                fontFamily: 'SFProText-Medium',
+                fontSize: 18,
+                color: 'white',
+                // width: '90%',
+              }}>
+              {props.title}
+            </Text>
+            {props.title === 'Growth Pipeline Dialog' && (
+              <Text
+                style={{
+                  fontSize: 8,
+                  lineHeight: 18,
+                  textAlignVertical: 'top',
+                  fontWeight: 'bold',
+                  color: 'white',
+                  //   backgroundColor: 'red',
+                }}>
+                TM
+              </Text>
+            )}
+          </View>
         </View>
 
         <HeaderRight

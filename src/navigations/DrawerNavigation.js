@@ -217,11 +217,13 @@ const DrawerNavigation = () => {
         options={({navigation, route}) => ({
           pillarId: route?.params?.pillarId,
           drawerIcon: ({focused, size}) => (
-            <Image
-              source={require('../../src/assets/img/CoachingIcon_Green.png')}
-              style={{width: 20, height: 20}}
-              resizeMode="cover"
-            />
+            <View>
+              <Image
+                source={require('../../src/assets/img/CoachingIcon_Green.png')}
+                style={{width: 20, height: 20}}
+                resizeMode="cover"
+              />
+            </View>
           ),
           header: () => (
             <SubHeader
@@ -238,11 +240,27 @@ const DrawerNavigation = () => {
         component={GPDScreen}
         options={({navigation, route}) => ({
           drawerIcon: ({focused, size}) => (
-            <Image
-              source={require('../../src/assets/img/gpd.png')}
-              style={{width: 20, height: 25}}
-              resizeMode="contain"
-            />
+            <View style={{flexDirection: 'row'}}>
+              <Image
+                source={require('../../src/assets/img/gpd.png')}
+                style={{width: 20, height: 25}}
+                resizeMode="contain"
+              />
+              <View style={{flexDirection: 'row', marginLeft: 30}}>
+                <Text style={{fontSize: 14, fontWeight: '500'}}>
+                  Growth Pipeline Dialog
+                </Text>
+                <Text
+                  style={{
+                    fontSize: 9,
+                    lineHeight: 18,
+                    textAlignVertical: 'top',
+                    fontWeight: '500',
+                  }}>
+                  TM
+                </Text>
+              </View>
+            </View>
           ),
           header: () => (
             <SubHeader

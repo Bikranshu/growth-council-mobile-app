@@ -129,7 +129,7 @@ const FloatingButton = props => {
                   ],
                 },
               ]}>
-              {!isAlertVisible && (
+              {isAlertVisible && (
                 <View
                   style={{
                     alignItems: 'center',
@@ -215,33 +215,25 @@ const FloatingButton = props => {
               </Text>
             </TouchableOpacity> */}
             <View style={{marginTop: 20}}>
-              <View style={{flexDirection: 'row'}}>
+              <View style={{flexDirection: 'row', alignItems: 'center'}}>
                 <Text
                   style={{
-                    fontSize: 14,
+                    fontSize: 16,
                     textAlign: 'center',
                     fontWeight: 'bold',
                     lineHeight: 30,
                   }}>
                   Schedule my complimentary Growth Pipeline Dialog
-                </Text>
-                <Text
-                  style={{
-                    fontSize: 8,
-                    lineHeight: 30,
-                    textAlignVertical: 'top',
-                    fontWeight: 'bold',
-                    //   backgroundColor: 'red',
-                  }}>
-                  TM
-                </Text>
-                <Text
-                  style={{
-                    fontSize: 14,
-                    textAlign: 'center',
-                    fontWeight: 'bold',
-                    lineHeight: 30,
-                  }}>
+                  <Text
+                    style={{
+                      fontSize: 8,
+                      lineHeight: 25,
+                      textAlign: 'center',
+                      fontWeight: 'bold',
+                      //   backgroundColor: 'red',
+                    }}>
+                    TM
+                  </Text>
                   ?
                 </Text>
               </View>

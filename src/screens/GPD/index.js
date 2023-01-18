@@ -49,7 +49,19 @@ const GPDScreen = props => {
         <View style={styles.container}>
           <View style={styles.privacy}>
             <View style={styles.title}>
-              <Text style={styles.titleText}>Growth Pipeline Dialog</Text>
+              <View style={{flexDirection: 'row'}}>
+                <Text style={styles.titleText}>Growth Pipeline Dialog</Text>
+                <Text
+                  style={{
+                    fontSize: 10,
+                    lineHeight: 18,
+                    textAlignVertical: 'top',
+                    fontWeight: 'bold',
+                    //   backgroundColor: 'red',
+                  }}>
+                  TM
+                </Text>
+              </View>
               <View style={styles.titleBorder}></View>
             </View>
             {GDPLoading && <Loading />}

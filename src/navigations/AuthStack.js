@@ -168,7 +168,24 @@ const AuthStack = () => {
       <Screen
         name="Email"
         component={EmailScreen}
-        options={{headerShown: false}}
+        options={({route, navigation}) => ({
+          headerTitle: '',
+          headerStyle: {height: 70},
+          headerTransparent: true,
+          headerLeft: props => (
+            <Ionicons
+              name={'arrow-back'}
+              size={70}
+              color={'white'}
+              style={{
+                position: Platform.OS === 'ios' ? 'absolute' : 'relative',
+              }}
+              onPress={() => navigation.goBack()}
+            />
+          ),
+          ...TransitionPresets.RevealFromBottomAndroid,
+          gestureDirection: 'horizontal-inverted',
+        })}
       />
     </Navigator>
   );
