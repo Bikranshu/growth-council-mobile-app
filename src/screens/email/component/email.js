@@ -75,100 +75,7 @@ const Email = props => {
         backgroundColor="#001D3F"
         translucent={false}
       />
-      {/* <ScrollView style={{backgroundColor: 'white'}}>
-        <View style={styles.container}>
-          <SafeAreaView style={{backgroundColor: '#02B0F0', top: -15}}>
-            <View style={styles.wrapper}>
-              <TouchableOpacity onPress={() => navigation.goBack()}>
-                <Ionicons
-                  name="chevron-back-outline"
-                  size={40}
-                  color="white"
-                  style={{marginTop: 15}}
-                />
-              </TouchableOpacity>
-              <View style={{flexDirection: 'row', marginTop: 10}}>
-                <View
-                  style={{
-                    justifyContent: 'center',
-                    width: '90%',
-                    marginLeft: 10,
-                  }}>
-                  <Text style={{color: 'white', fontSize: 20}}>
-                    New Messages
-                  </Text>
-                </View>
-              </View>
 
-   
-            </View>
-          </SafeAreaView>
-          <View style={{padding: 20, backgroundColor: 'white'}}>
-            <TouchableWithoutFeedback
-              onPress={Keyboard.dismiss}
-              accessible={false}>
-              <View style={{flexDirection: 'row'}}>
-                <Text style={{fontSize: 18, marginTop: 10}}>From:</Text>
-
-                <TextInput
-                  multiline={true}
-                  style={[styles.input, {color: 'blue'}]}
-                  value={values.sender}
-                  onChangeText={handleChange('sender')}
-                  onFocus={handleBlur('sender')}
-                  error={errors.sender}
-                  touched={touched.sender}
-                />
-              </View>
-            </TouchableWithoutFeedback>
-
-            {sendMailLoading && <Loading />}
-
-            <TouchableWithoutFeedback
-              onPress={Keyboard.dismiss}
-              accessible={false}>
-              <View style={{marginTop: 10}}>
-                <Text style={{fontSize: 18}}>Subject:</Text>
-                <TextInput
-                  multiline={true}
-                  numberOfLines={2}
-                  style={styles.textarea}
-                  value={values.subject}
-                  placeholder="Account Assistance"
-                  onChangeText={handleChange('subject')}
-                  onFocus={handleBlur('subject')}
-                  error={errors.subject}
-                  touched={touched.subject}
-                />
-              </View>
-            </TouchableWithoutFeedback>
-
-            <TouchableWithoutFeedback
-              onPress={Keyboard.dismiss}
-              accessible={false}>
-              <View style={{marginTop: 10}}>
-                <Text style={{fontSize: 18}}>Messages:</Text>
-                <TextInput
-                  multiline={true}
-                  numberOfLines={15}
-                  style={styles.textarea1}
-                  value={values.message}
-                  onChangeText={handleChange('message')}
-                  onFocus={handleBlur('message')}
-                  error={errors.message}
-                  touched={touched.message}
-                />
-              </View>
-            </TouchableWithoutFeedback>
-
-            <View style={styles.buttonWrapper}>
-              <TouchableOpacity style={styles.button} onPress={handleSubmit}>
-                <Text style={styles.buttonText}>Send</Text>
-              </TouchableOpacity>
-            </View>
-          </View>
-        </View>
-      </ScrollView> */}
       <ScrollView
         contentContainerStyle={{flexGrow: 1, height: screenHeight + 100}}>
         <View style={styles.container}>
@@ -193,7 +100,7 @@ const Email = props => {
                   </Button>
                   {/* </View> */}
                 </View>
-
+                {sendMailLoading && <Loading />}
                 <View style={styles.body}>
                   <View style={{marginTop: 10}}>
                     <Text style={styles.formText}>From:</Text>
@@ -287,7 +194,7 @@ const styles = StyleSheet.create({
     fontSize: 20,
     color: '#0000cd',
   },
-  formText: {fontSize: 16, color: 'c', fontWeight: 'bold'},
+  formText: {fontSize: 16, color: 'black', fontWeight: '600'},
   loginButtonWrapper: {
     alignItems: 'center',
     justifyContent: 'center',

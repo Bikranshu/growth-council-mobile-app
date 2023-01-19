@@ -93,33 +93,61 @@ const GPDScreen = props => {
                     alignItems: 'center',
                     textAlign: 'center',
                   }}>
-                  <Text
+                  {/* <Text
                     style={{
                       color: 'white',
-                      fontSize: 28,
+                      fontSize: 32,
                       textAlign: 'center',
                       fontWeight: 'bold',
                       lineHeight: 40,
                     }}>
                     Growth is a Journey.{`\n`} We are your guide.
-                  </Text>
-                  <Text
-                    style={{
-                      color: 'white',
-                      fontSize: 16,
-                      textAlign: 'center',
-                      marginTop: 20,
-                      lineHeight: 20,
-                      // textAlign: 'justify',
-                      width: '80%',
-                    }}>
-                    {content1}
-                  </Text>
+                  </Text> */}
+
+                  <HTMLView
+                    value={GDP?.top_heading_first}
+                    textComponentProps={{
+                      style: {
+                        color: 'white',
+                        fontSize: 32,
+                        textAlign: 'center',
+                        fontWeight: 'bold',
+                        lineHeight: 40,
+                      },
+                    }}
+                  />
+                  <HTMLView
+                    value={GDP?.top_heading_second}
+                    textComponentProps={{
+                      style: {
+                        color: 'white',
+                        fontSize: 32,
+                        textAlign: 'center',
+                        fontWeight: 'bold',
+                        lineHeight: 40,
+                      },
+                    }}
+                  />
+
+                  <HTMLView
+                    value={GDP?.top_content}
+                    textComponentProps={{
+                      style: {
+                        color: 'white',
+                        fontSize: 14,
+                        // textAlign: 'center',
+                        marginTop: 20,
+                        lineHeight: 20,
+                        width: 300,
+                        textAlign: 'justify',
+                      },
+                    }}
+                  />
                 </View>
               </ImageBackground>
               <View>
                 <Image
-                  source={require('../../assets/img/onDemat.jpg')}
+                  source={{uri: GDP?.image}}
                   style={{
                     width: '100%',
                     height: 250,
@@ -127,50 +155,46 @@ const GPDScreen = props => {
                   resizeMode={'cover'}
                 />
                 <View style={{padding: 25}}>
-                  <Text
-                    style={{
-                      fontSize: 22,
-                      color: 'darkblue',
-                      fontWeight: 'bold',
-                    }}>
-                    What is a Growth Pipeline Dialog and how will it help you?
-                  </Text>
+                  <HTMLView
+                    value={GDP?.botton_heading}
+                    textComponentProps={{
+                      style: {
+                        fontSize: 20,
+                        color: 'darkblue',
+                        marginBottom: 20,
+                        fontWeight: 'bold',
+                      },
+                    }}
+                  />
 
-                  <Text
-                    style={{
-                      fontSize: 14,
-                      color: 'black',
-                      marginTop: 20,
-                      lineHeight: 20,
-                    }}>
-                    Frost & Sullivan’s Growth Pipeline™ Dialog leverages 60
-                    years of cross – industry experience, to empower you and
-                    your team with:
-                  </Text>
+                  <HTMLView
+                    value={GDP?.bottom_content}
+                    textComponentProps={{
+                      style: {
+                        color: 'black',
+                        fontSize: 14,
+                        textAlign: 'center',
 
-                  <View style={[styles.wrapper, styles.shadowProp]}>
-                    <Ionicons name="arrow-forward" size={30} color="blue" />
-                    <Text style={{marginLeft: 20, lineHeight: 20}}>
-                      Actionable intelligence and innovative go-to-market
-                      strategies
-                    </Text>
-                  </View>
-
-                  <View style={[styles.wrapper, styles.shadowProp]}>
-                    <Ionicons name="arrow-forward" size={30} color="blue" />
-                    <Text style={{marginLeft: 20, lineHeight: 20}}>
-                      Actionable intelligence and innovative go-to-market
-                      strategies
-                    </Text>
-                  </View>
-
-                  <View style={[styles.wrapper, styles.shadowProp]}>
-                    <Ionicons name="arrow-forward" size={30} color="blue" />
-                    <Text style={{marginLeft: 20, lineHeight: 20}}>
-                      Actionable intelligence and innovative go-to-market
-                      strategies
-                    </Text>
-                  </View>
+                      },
+                    }}
+                  />
+                  {GDP?.gpd_features?.map(item => {
+                    console.log({item});
+                    return (
+					
+                      <View style={[styles.wrapper, styles.shadowProp]}>
+                        <Ionicons name="arrow-forward" size={30} color="blue" />
+                        <Text
+                          style={{
+                            marginLeft: 20,
+                            lineHeight: 20,
+                            width: '80%',
+                          }}>
+                          {item?.feature}
+                        </Text>
+                      </View>
+                    );
+                  })}
                 </View>
               </View>
             </View>
