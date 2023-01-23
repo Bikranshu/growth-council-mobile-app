@@ -136,20 +136,30 @@ const ArticleFeedbackCard = props => {
               <TouchableOpacity
                 style={[
                   likeEnabled === false
-                    ? styles.checkButton
+                    ? likeDisable === true
+                      ? styles.disabledButton
+                      : styles.checkButton
                     : styles.checkButton1,
                 ]}
                 disabled={likeDisable}
                 onPress={articlelikeSwitch}>
                 <Ionicons
                   name="happy"
-                  color={likeEnabled === false ? '#899499' : 'white'}
+                  color={
+                    likeEnabled === false
+                      ? likeDisable === true
+                        ? '#FFFFFF'
+                        : '#899499'
+                      : 'white'
+                  }
                   size={18}
                 />
                 <Text
                   style={[
                     likeEnabled === false
-                      ? styles.checkButtonText
+                      ? likeDisable === true
+                        ? styles.disableButtonText
+                        : styles.checkButtonText
                       : styles.checkButtonText1,
                   ]}>
                   Like
@@ -157,7 +167,9 @@ const ArticleFeedbackCard = props => {
                 <Text
                   style={[
                     likeEnabled === false
-                      ? styles.checkButtonText
+                      ? likeDisable === true
+                        ? styles.disableButtonText
+                        : styles.checkButtonText
                       : styles.checkButtonText1,
                   ]}>
                   {likeCount}
@@ -169,20 +181,30 @@ const ArticleFeedbackCard = props => {
               <Pressable
                 style={[
                   dislikeEnabled === false
-                    ? styles.checkButton
+                    ? dislikeDisable === true
+                      ? styles.disabledButton
+                      : styles.checkButton
                     : styles.dislikeCheckButton,
                 ]}
                 onPress={articledislikeSwitch}
                 disabled={dislikeDisable}>
                 <Ionicons
                   name="sad"
-                  color={dislikeEnabled === false ? '#899499' : 'white'}
+                  color={
+                    dislikeEnabled === false
+                      ? dislikeDisable === true
+                        ? '#FFFFFF'
+                        : '#899499'
+                      : 'white'
+                  }
                   size={18}
                 />
                 <Text
                   style={[
                     dislikeEnabled === false
-                      ? styles.checkButtonText
+                      ? dislikeDisable === true
+                        ? styles.disableButtonText
+                        : styles.checkButtonText
                       : styles.checkButtonText1,
                   ]}>
                   Dislike
@@ -190,7 +212,9 @@ const ArticleFeedbackCard = props => {
                 <Text
                   style={[
                     dislikeEnabled === false
-                      ? styles.checkButtonText
+                      ? dislikeDisable === true
+                        ? styles.disableButtonText
+                        : styles.checkButtonText
                       : styles.checkButtonText1,
                   ]}>
                   {dislikeCount === NaN ? '' : dislikeCount}
@@ -198,33 +222,7 @@ const ArticleFeedbackCard = props => {
               </Pressable>
             </View>
           </View>
-          <View
-            style={{
-              marginTop: 20,
-              alignItems: 'center',
-              justifyContent: 'center',
-            }}>
-            <TouchableOpacity
-              onPress={() => {
-                handleSubmit();
-                setHideShow(true);
-              }}
-              style={{
-                borderRadius: 10,
-                alignItems: 'center',
-                justifyContent: 'center',
-                backgroundColor: 'white',
-                paddingHorizontal: 20,
-                paddingVertical: 10,
-                borderWidth: 0.5,
-                borderColor: 'black',
-              }}>
-              <Text style={{color: 'black', fontSize: 14}}>Submit</Text>
-            </TouchableOpacity>
-          </View>
-          <Text style={{color: 'white', marginTop: 10}}>
-            View: {contentLibraryDetails?.views}
-          </Text>
+
           {dislikeEnabled === true && (
             <View style={{marginTop: 20}}>
               <TouchableWithoutFeedback
@@ -281,6 +279,33 @@ const ArticleFeedbackCard = props => {
               </View> */}
             </View>
           )}
+          <View
+            style={{
+              marginTop: 20,
+              alignItems: 'center',
+              justifyContent: 'center',
+            }}>
+            <TouchableOpacity
+              onPress={() => {
+                handleSubmit();
+                setHideShow(true);
+              }}
+              style={{
+                borderRadius: 10,
+                alignItems: 'center',
+                justifyContent: 'center',
+                backgroundColor: 'white',
+                paddingHorizontal: 20,
+                paddingVertical: 10,
+                borderWidth: 0.5,
+                borderColor: 'black',
+              }}>
+              <Text style={{color: 'black', fontSize: 14}}>Submit</Text>
+            </TouchableOpacity>
+          </View>
+          <Text style={{color: 'white', marginTop: 10}}>
+            View: {contentLibraryDetails?.views}
+          </Text>
         </View>
       )}
 
@@ -354,7 +379,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-evenly',
     alignItems: 'center',
     borderRadius: 18,
-    backgroundColor: '#B2BEB5',
+    backgroundColor: 'grey',
     color: 'white',
     opacity: 0.6,
   },
