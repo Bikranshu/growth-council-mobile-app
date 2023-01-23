@@ -91,43 +91,39 @@ const ArticleFeedbackCard = props => {
     },
   });
   const articlelikeSwitch = () => {
-    setLikeCount(likeCount + 1);
+    setLikeCount(likeEnabled === false ? likeCount + 1 : likeCount - 1);
 
     setFieldValue('id', contentLibraryDetails?.ID);
     setFieldValue('action', 'like');
-    setDislikeDisable(true);
-    handleSubmit();
 
-    setHideShow(true);
-    setLikeEnabled(true);
+    setLikeEnabled(!likeEnabled);
+    setDislikeDisable(!dislikeDisable);
+
     setDislikeEnabled(false);
   };
-  const hideFunction = () => {
-    setInterval(() => {
-      setHideShow(true);
-    }, 20000);
-  };
+  //   const hideFunction = () => {
+  //     setInterval(() => {
+  //       setHideShow(true);
+  //     }, 20000);
+  //   };
 
   const articledislikeSwitch = () => {
     setFieldValue('id', contentLibraryDetails?.ID);
-    setDislikeCount(dislikeCount + 1);
+    setDislikeCount(
+      dislikeEnabled === false ? dislikeCount + 1 : dislikeCount - 1,
+    );
     setFieldValue('action', 'dislike');
-    setLikeDisable(true);
-    handleSubmit();
-    setHideShow(false);
-    setDislikeEnabled(true);
+    setDislikeEnabled(!dislikeEnabled);
+    setLikeDisable(!likeDisable);
     setLikeEnabled(false);
-    hideFunction();
   };
 
-  useEffect(() => {
-    const ARTICLE_LIKEAsync = async () => {
-      setARTICLE(await AsyncStorage.getItem('ARTICLE'));
-    };
-    ARTICLE_LIKEAsync();
-  }, []);
-
-  console.log('ARTICLELIKE', ARTICLE);
+  //   useEffect(() => {
+  //     const ARTICLE_LIKEAsync = async () => {
+  //       setARTICLE(await AsyncStorage.getItem('ARTICLE'));
+  //     };
+  //     ARTICLE_LIKEAsync();
+  //   }, []);
 
   return (
     <>
@@ -152,7 +148,7 @@ const ArticleFeedbackCard = props => {
                   color={
                     likeEnabled === false
                       ? likeDisable === true
-                        ? '#666666'
+                        ? '#FFFFFF'
                         : '#899499'
                       : 'white'
                   }
@@ -197,7 +193,7 @@ const ArticleFeedbackCard = props => {
                   color={
                     dislikeEnabled === false
                       ? dislikeDisable === true
-                        ? '#666666'
+                        ? '#FFFFFF'
                         : '#899499'
                       : 'white'
                   }
@@ -226,9 +222,7 @@ const ArticleFeedbackCard = props => {
               </Pressable>
             </View>
           </View>
-          <Text style={{color: 'white', marginTop: 10}}>
-            View: {contentLibraryDetails?.views}
-          </Text>
+
           {dislikeEnabled === true && (
             <View style={{marginTop: 20}}>
               <TouchableWithoutFeedback
@@ -270,7 +264,7 @@ const ArticleFeedbackCard = props => {
                 We will use your feedback to improve this article
               </Text>
 
-              <View style={styles.buttonWrapper}>
+              {/* <View style={styles.buttonWrapper}>
                 <TouchableOpacity
                   style={styles.button}
                   onPress={() => {
@@ -282,9 +276,36 @@ const ArticleFeedbackCard = props => {
                   }}>
                   <Text style={styles.buttonText}>Send Feedback</Text>
                 </TouchableOpacity>
-              </View>
+              </View> */}
             </View>
           )}
+          <View
+            style={{
+              marginTop: 20,
+              alignItems: 'center',
+              justifyContent: 'center',
+            }}>
+            <TouchableOpacity
+              onPress={() => {
+                handleSubmit();
+                setHideShow(true);
+              }}
+              style={{
+                borderRadius: 10,
+                alignItems: 'center',
+                justifyContent: 'center',
+                backgroundColor: 'white',
+                paddingHorizontal: 20,
+                paddingVertical: 10,
+                borderWidth: 0.5,
+                borderColor: 'black',
+              }}>
+              <Text style={{color: 'black', fontSize: 14}}>Submit</Text>
+            </TouchableOpacity>
+          </View>
+          <Text style={{color: 'white', marginTop: 10}}>
+            View: {contentLibraryDetails?.views}
+          </Text>
         </View>
       )}
 
@@ -311,7 +332,7 @@ const ArticleFeedbackCard = props => {
 const styles = StyleSheet.create({
   articleContainer: {
     paddingVertical: 20,
-    marginBottom: 10,
+    marginBottom: 30,
     paddingHorizontal: 15,
     justifyContent: 'center',
     borderRadius: 18,
@@ -358,7 +379,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-evenly',
     alignItems: 'center',
     borderRadius: 18,
-    backgroundColor: '#B2BEB5',
+    backgroundColor: 'grey',
     color: 'white',
     opacity: 0.6,
   },
