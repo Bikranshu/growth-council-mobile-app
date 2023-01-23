@@ -66,6 +66,7 @@ const FloatingButton = props => {
       ToastMessage.show(response?.payload?.message);
     }
   };
+
   const rotationRef = useRef();
   const panRef = useRef();
   const pinchRef = useRef();
@@ -221,7 +222,12 @@ const FloatingButton = props => {
               </Text>
             </TouchableOpacity> */}
             <View style={{marginTop: 20}}>
-              <View style={{flexDirection: 'row', alignItems: 'center'}}>
+              <View
+                style={{
+                  flexDirection: 'row',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                }}>
                 <Text
                   style={{
                     fontSize: 16,
@@ -229,7 +235,7 @@ const FloatingButton = props => {
                     fontWeight: 'bold',
                     lineHeight: 30,
                   }}>
-                  {GDP.heading2}
+                  {GDP.gpd_popup_title}
                   {/* <Text
                     style={{
                       fontSize: 8,
