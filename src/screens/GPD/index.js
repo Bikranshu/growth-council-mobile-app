@@ -261,7 +261,7 @@ const styles = StyleSheet.create({
   wrapper: {
     flexDirection: 'row',
     padding: contentContainerWidth / 4 - 30,
-    marginTop: 20,
+    marginBottom: 20,
     backgroundColor: 'white',
   },
 
