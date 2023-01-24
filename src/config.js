@@ -1,12 +1,10 @@
 import PushNotification from 'react-native-push-notification';
 import PushNotificationIOS from '@react-native-community/push-notification-ios';
 import {navigate} from './utils/navigationUtil';
-
 import {Platform} from 'react-native';
 
 const isIOS = Platform.OS == 'ios';
 
-// import moment from 'moment';
 const PushNotificationsConfigs = {
   congigurations: () => {
     PushNotification.configure({
@@ -15,42 +13,39 @@ const PushNotificationsConfigs = {
           PushNotification.localNotification(notification);
         }
 
-        const clicked = notification.userInteraction && !notification.foreground;
+        const clicked =
+          notification.userInteraction && !notification.foreground;
 
         if (clicked) {
-          try {
-            // handle the navigation here
-            const data = notification?.data;
-
-            console.log({notification});
-            if (data) {
-              if (data?.type == 'chat') {
-                navigate('Chat', {
-                  friendID: data?.friendID,
-                  friendName: data?.friendName,
-                  friendAvatar: data?.friendAvatar,
-                  userID: data?.userID,
-                  userName: data?.userName,
-                  userAvatar: data?.userAvatar,
-                });
-              } else if (data?.type == 'event') {
-                navigate('EventDetail', {
-                  id: data.post_id,
-                });
-              } 
-             
+          //   try {
+          // handle the navigation here
+          const data = notification?.data;
+          if (data) {
+            if (data?.type == 'chat') {
+              navigate('Chat', {
+                friendID: data?.friendID,
+                friendName: data?.friendName,
+                friendAvatar: data?.friendAvatar,
+                userID: data?.userID,
+                userName: data?.userName,
+                userAvatar: data?.userAvatar,
+              });
+            } else if (data?.type == 'event') {
+              navigate('EventDetail', {
+                id: data.post_id,
+              });
             }
-          } catch (error) {
-            console.log(error);
           }
+          //   } catch (error) {
+          //   }
         }
         {
           isIOS && notification.finish(PushNotificationIOS.FetchResult.NoData);
         }
       },
-      onAction: notification => {
-        console.log('NOTIFICATION:', notification);
-      },
+    //   onAction: notification => {
+    //     console.log('NOTIFICATION:', notification);
+    //   },
       onRegistrationError: err => {},
       // IOS ONLY (optional): default: all - Permissions to register.
       permissions: {

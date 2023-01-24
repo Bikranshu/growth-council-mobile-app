@@ -10,7 +10,7 @@ import {
   TouchableOpacity,
 } from 'react-native';
 
-import {Colors} from '../../theme';
+import {Colors, Typography} from '../../theme';
 import {useFormik} from 'formik';
 import FeatherIcon from 'react-native-vector-icons/Feather';
 import Ionicons from 'react-native-vector-icons/Ionicons';
@@ -55,6 +55,7 @@ const ArticleFeedbackCard = props => {
   const [dislikeEnabled, setDislikeEnabled] = useState(false);
   const [dislikeDisable, setDislikeDisable] = useState(false);
   const [hideShow, setHideShow] = useState(false);
+  const [submitBtn, setSubmitBtn] = useState(false);
 
   useEffect(() => {
     setLikeCount(likes);
@@ -85,27 +86,19 @@ const ArticleFeedbackCard = props => {
           ToastMessage.show(response?.payload?.data);
           fetchContentLibraryDetail(contentLibraryDetails?.ID);
         }
-        await AsyncStorage.setItem('ARTICLE', JSON.stringify(hideShow));
       });
       resetForm();
     },
   });
   const articlelikeSwitch = () => {
     setLikeCount(likeEnabled === false ? likeCount + 1 : likeCount - 1);
-
     setFieldValue('id', contentLibraryDetails?.ID);
     setFieldValue('action', 'like');
-
     setLikeEnabled(!likeEnabled);
     setDislikeDisable(!dislikeDisable);
-
+    setSubmitBtn(!submitBtn);
     setDislikeEnabled(false);
   };
-  //   const hideFunction = () => {
-  //     setInterval(() => {
-  //       setHideShow(true);
-  //     }, 20000);
-  //   };
 
   const articledislikeSwitch = () => {
     setFieldValue('id', contentLibraryDetails?.ID);
@@ -116,14 +109,8 @@ const ArticleFeedbackCard = props => {
     setDislikeEnabled(!dislikeEnabled);
     setLikeDisable(!likeDisable);
     setLikeEnabled(false);
+    setSubmitBtn(!submitBtn);
   };
-
-  //   useEffect(() => {
-  //     const ARTICLE_LIKEAsync = async () => {
-  //       setARTICLE(await AsyncStorage.getItem('ARTICLE'));
-  //     };
-  //     ARTICLE_LIKEAsync();
-  //   }, []);
 
   return (
     <>
@@ -148,9 +135,9 @@ const ArticleFeedbackCard = props => {
                   color={
                     likeEnabled === false
                       ? likeDisable === true
-                        ? '#FFFFFF'
-                        : '#899499'
-                      : 'white'
+                        ? Colors.LIGHTGREY
+                        : Colors.SILVERGREY
+                      : Colors.PRIMARY_BACKGROUND_COLOR
                   }
                   size={18}
                 />
@@ -193,9 +180,9 @@ const ArticleFeedbackCard = props => {
                   color={
                     dislikeEnabled === false
                       ? dislikeDisable === true
-                        ? '#FFFFFF'
-                        : '#899499'
-                      : 'white'
+                        ? Colors.LIGHTGREY
+                        : Colors.SILVERGREY
+                      : Colors.PRIMARY_BACKGROUND_COLOR
                   }
                   size={18}
                 />
@@ -229,7 +216,9 @@ const ArticleFeedbackCard = props => {
                 onPress={Keyboard.dismiss}
                 accessible={false}>
                 <View>
-                  <Text style={{color: 'white'}}>Your email (optional) :</Text>
+                  <Text style={{color: Colors.PRIMARY_BACKGROUND_COLOR}}>
+                    Your email (optional) :
+                  </Text>
                   <TextInput
                     multiline={true}
                     style={[styles.textarea]}
@@ -245,7 +234,11 @@ const ArticleFeedbackCard = props => {
                 onPress={Keyboard.dismiss}
                 accessible={false}>
                 <View>
-                  <Text style={{color: 'white', marginTop: 10}}>
+                  <Text
+                    style={{
+                      color: Colors.PRIMARY_BACKGROUND_COLOR,
+                      marginTop: 10,
+                    }}>
                     You can leave feedback :
                   </Text>
                   <TextInput
@@ -260,23 +253,10 @@ const ArticleFeedbackCard = props => {
                 </View>
               </TouchableWithoutFeedback>
 
-              <Text style={{color: 'white', marginTop: 20}}>
+              <Text
+                style={{color: Colors.PRIMARY_BACKGROUND_COLOR, marginTop: 20}}>
                 We will use your feedback to improve this article
               </Text>
-
-              {/* <View style={styles.buttonWrapper}>
-                <TouchableOpacity
-                  style={styles.button}
-                  onPress={() => {
-                    setFieldValue('id', contentLibraryDetails?.ID);
-                    setFieldValue('action', 'dislike');
-                    handleSubmit();
-                    setHideShow(true);
-                    setDislikeEnabled(false);
-                  }}>
-                  <Text style={styles.buttonText}>Send Feedback</Text>
-                </TouchableOpacity>
-              </View> */}
             </View>
           )}
           <View
@@ -285,46 +265,34 @@ const ArticleFeedbackCard = props => {
               alignItems: 'center',
               justifyContent: 'center',
             }}>
-            <TouchableOpacity
+            <Pressable
               onPress={() => {
                 handleSubmit();
                 setHideShow(true);
               }}
-              style={{
-                borderRadius: 10,
-                alignItems: 'center',
-                justifyContent: 'center',
-                backgroundColor: 'white',
-                paddingHorizontal: 20,
-                paddingVertical: 10,
-                borderWidth: 0.5,
-                borderColor: 'black',
-              }}>
-              <Text style={{color: 'black', fontSize: 14}}>Submit</Text>
-            </TouchableOpacity>
+              disabled={!submitBtn}
+              style={[
+                dislikeEnabled === true || likeEnabled === true
+                  ? styles.button1
+                  : styles.button,
+              ]}>
+              <Text
+                style={[
+                  dislikeEnabled === true || likeEnabled === true
+                    ? styles.buttonText1
+                    : styles.buttonText,
+                ]}>
+                Submit
+              </Text>
+            </Pressable>
           </View>
-          <Text style={{color: 'white', marginTop: 10}}>
+          <Text style={{color: Colors.PRIMARY_BACKGROUND_COLOR, marginTop: 10}}>
             View: {contentLibraryDetails?.views}
           </Text>
         </View>
       )}
 
-      {hideShow && (
-        // <View
-        //   style={{
-        //     paddingVertical: 20,
-        //     marginBottom: 10,
-        //     paddingHorizontal: 15,
-        //     justifyContent: 'center',
-        //     borderRadius: 18,
-        //     backgroundColor: '#B2BEB5',
-        //   }}>
-        //   <Text style={{textAlign: 'center', color: 'white'}}>
-        //     Your's reponse have been saved.
-        //   </Text>
-        // </View>
-        <></>
-      )}
+      {hideShow && <></>}
     </>
   );
 };
@@ -336,7 +304,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 15,
     justifyContent: 'center',
     borderRadius: 18,
-    backgroundColor: '#62C1EB',
+    backgroundColor: Colors.TERTIARY_BLUE,
   },
 
   articleTitle: {
@@ -378,10 +346,9 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-evenly',
     alignItems: 'center',
-    borderRadius: 18,
-    backgroundColor: 'grey',
-    color: 'white',
-    opacity: 0.6,
+    borderRadius: 10,
+    borderColor: Colors.PRIMARY_BACKGROUND_COLOR,
+    borderWidth: 2,
   },
   checkButton: {
     width: 100,
@@ -390,7 +357,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-evenly',
     alignItems: 'center',
-    borderRadius: 18,
+    borderRadius: 10,
     backgroundColor: Colors.PRIMARY_BACKGROUND_COLOR,
   },
   checkButton1: {
@@ -400,8 +367,8 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-evenly',
     alignItems: 'center',
-    borderRadius: 18,
-    backgroundColor: '#3BB143',
+    borderRadius: 10,
+    backgroundColor: Colors.GREEN,
   },
   dislikeCheckButton: {
     width: 100,
@@ -410,24 +377,24 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-evenly',
     alignItems: 'center',
-    borderRadius: 18,
-    backgroundColor: '#AA4A44',
+    borderRadius: 10,
+    backgroundColor: Colors.RED,
   },
   checkButtonText: {
-    fontFamily: 'SFProText-Regular',
+    fontFamily: Typography.FONT_SF_REGULAR,
     fontSize: 13,
     color: 'black',
   },
   disableButtonText: {
-    fontFamily: 'SFProText-Regular',
+    fontFamily: Typography.FONT_SF_REGULAR,
     fontSize: 13,
-    color: '#FFFFFF',
+    color: Colors.PRIMARY_BACKGROUND_COLOR,
     opacity: 0.6,
   },
   checkButtonText1: {
-    fontFamily: 'SFProText-Regular',
+    fontFamily: Typography.FONT_SF_REGULAR,
     fontSize: 13,
-    color: 'white',
+    color: Colors.PRIMARY_BACKGROUND_COLOR,
   },
 
   feedbackContainer: {
@@ -436,7 +403,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 15,
     justifyContent: 'center',
     borderRadius: 18,
-    backgroundColor: '#62C1EB',
+    backgroundColor: Colors.TERTIARY_BLUE,
   },
 
   textarea: {
@@ -445,8 +412,8 @@ const styles = StyleSheet.create({
     borderWidth: 0.5,
     marginTop: 10,
     borderRadius: 5,
-    borderColor: 'white',
-    color: 'white',
+    borderColor: Colors.PRIMARY_BACKGROUND_COLOR,
+    color: Colors.PRIMARY_BACKGROUND_COLOR,
   },
   textarea1: {
     minHeight: 100,
@@ -459,25 +426,39 @@ const styles = StyleSheet.create({
     marginTop: 10,
     borderRadius: 5,
     padding: 10,
-    borderColor: 'white',
-    color: 'white',
+    borderColor: Colors.PRIMARY_BACKGROUND_COLOR,
+    color: Colors.PRIMARY_BACKGROUND_COLOR,
   },
   buttonWrapper: {
     width: 200,
     marginTop: 20,
   },
   button: {
-    width: '60%',
     borderRadius: 10,
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: '#02B0F0',
-    height: 56,
-    borderWidth: 0.5,
-    borderColor: 'white',
+    paddingHorizontal: 20,
+    paddingVertical: 10,
+    borderWidth: 2,
+    borderColor: Colors.PRIMARY_BACKGROUND_COLOR,
+  },
+
+  button1: {
+    borderRadius: 10,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: Colors.PRIMARY_BACKGROUND_COLOR,
+    paddingHorizontal: 20,
+    paddingVertical: 10,
+    borderWidth: 2,
+    borderColor: Colors.PRIMARY_BACKGROUND_COLOR,
   },
   buttonText: {
-    color: 'white',
+    color: Colors.PRIMARY_BACKGROUND_COLOR,
+    fontSize: 14,
+  },
+  buttonText1: {
+    color: 'black',
     fontSize: 14,
   },
 });
