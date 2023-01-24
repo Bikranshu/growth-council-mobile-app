@@ -10,7 +10,7 @@ import {
   TouchableOpacity,
 } from 'react-native';
 
-import {Colors} from '../../theme';
+import {Colors, Typography} from '../../theme';
 import {useFormik} from 'formik';
 import FeatherIcon from 'react-native-vector-icons/Feather';
 import Ionicons from 'react-native-vector-icons/Ionicons';
@@ -393,21 +393,21 @@ const styles = StyleSheet.create({
     justifyContent: 'space-evenly',
     alignItems: 'center',
     borderRadius: 10,
-	backgroundColor: '#F45A56',
+    backgroundColor: '#F45A56',
   },
   checkButtonText: {
-    fontFamily: 'SFProText-Regular',
+    fontFamily: Typography.FONT_SF_REGULAR,
     fontSize: 13,
     color: 'black',
   },
   disableButtonText: {
-    fontFamily: 'SFProText-Regular',
+    fontFamily: Typography.FONT_SF_REGULAR,
     fontSize: 13,
     color: '#FFFFFF',
     opacity: 0.6,
   },
   checkButtonText1: {
-    fontFamily: 'SFProText-Regular',
+    fontFamily: Typography.FONT_SF_REGULAR,
     fontSize: 13,
     color: 'white',
   },

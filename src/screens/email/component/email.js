@@ -72,7 +72,7 @@ const Email = props => {
       <StatusBar
         barStyle="light-content"
         hidden={false}
-        backgroundColor="#001D3F"
+        backgroundColor={Colors.DARKBULE}
         translucent={false}
       />
 

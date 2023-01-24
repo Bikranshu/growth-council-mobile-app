@@ -91,13 +91,12 @@ const Email = props => {
 
   return (
     <>
-      <StatusBar
+    <StatusBar
         barStyle="light-content"
         hidden={false}
-        backgroundColor="#001D3F"
+        backgroundColor={Colors.DARKBULE}
         translucent={false}
       />
-
       <ScrollView
         // height = screenHeight + 50 because if we put more than 50 then it is hiding backarrow button at top when we scroll.
         contentContainerStyle={{flexGrow: 1, height: screenHeight + 50}}>

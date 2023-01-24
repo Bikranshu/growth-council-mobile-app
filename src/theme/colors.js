@@ -18,6 +18,7 @@ export const OCTODENARY_BACKGROUND_COLOR = '#F7F8F9';
 export const COMMUNITY_COLOR = '#00b0f0';
 export const PRACTICE_COLOR = '#f26722';
 export const COACHING_COLOR = '#80BA74';
+export const DARKBULE = '#001D3F';
 export const COMMUNITY_EVENT_COLOR = 'rgba(54,147,172,1)';
 
 export const PRIMARY_TEXT_COLOR = '#1E2022';
