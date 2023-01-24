@@ -263,8 +263,8 @@ const ArticleFeedbackCard = props => {
             style={{
               marginTop: 20,
               alignItems: 'center',
-              justifyContent: 'center',
-            }}>
+              justifyContent: 'center', 
+            }}> 
             <Pressable
               onPress={() => {
                 handleSubmit();
