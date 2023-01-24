@@ -99,7 +99,7 @@ const ArticleFeedbackCard = props => {
 
     setLikeEnabled(!likeEnabled);
     setDislikeDisable(!dislikeDisable);
-    setSubmitBtn(true);
+    setSubmitBtn(!submitBtn);
     setDislikeEnabled(false);
   };
   //   const hideFunction = () => {
@@ -117,7 +117,7 @@ const ArticleFeedbackCard = props => {
     setDislikeEnabled(!dislikeEnabled);
     setLikeDisable(!likeDisable);
     setLikeEnabled(false);
-    setSubmitBtn(true);
+    setSubmitBtn(!submitBtn);
   };
 
   //   useEffect(() => {

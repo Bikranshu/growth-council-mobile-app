@@ -77,7 +77,7 @@ const Email = props => {
       />
 
       <ScrollView
-        contentContainerStyle={{flexGrow: 1, height: screenHeight + 100}}>
+        contentContainerStyle={{flexGrow: 1, height: screenHeight + 50}}>
         <View style={styles.container}>
           <ImageBackground
             source={require('../../../assets/img/splash-screen.png')}
