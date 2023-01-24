@@ -566,7 +566,12 @@ const ManageAccount = props => {
                     <View style={styles.loginButtonWrapper}>
                       <TouchableOpacity
                         style={styles.loginButton}
-                        onPress={handleSubmit}>
+                        onPress={async () => {
+                          handleSubmit;
+                          await analytics().logEvent('UpdateProfilePage', {
+                            item: 'click update button to update the profile',
+                          });
+                        }}>
                         <Text style={styles.loginButtonText}>Update</Text>
                       </TouchableOpacity>
                     </View>

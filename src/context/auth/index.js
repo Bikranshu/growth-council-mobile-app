@@ -7,6 +7,7 @@ import auth from '@react-native-firebase/auth';
 import messaging from '@react-native-firebase/messaging';
 import {HOME_URL} from '../../constants';
 
+
 import {
   setAsyncStorage,
   clearAsyncStorage,
@@ -137,6 +138,8 @@ export const AuthProvider = props => {
             );
 
             setUserCountry(response?.data?.region);
+            console.log({response});
+
 
             const messageToken = await messaging().getToken();
             await postToAPI(response.data.user_email, messageToken);

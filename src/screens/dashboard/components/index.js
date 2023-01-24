@@ -21,7 +21,8 @@ import HTMLView from 'react-native-htmlview';
 import {BlurView} from '@react-native-community/blur';
 import {useNavigation} from '@react-navigation/native';
 import messaging from '@react-native-firebase/messaging';
-import analytics from '@react-native-firebase/analytics';
+import firebase from '@react-native-firebase/analytics';
+
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import LinearGradient from 'react-native-linear-gradient';
 import Material from 'react-native-vector-icons/MaterialIcons';
@@ -141,6 +142,20 @@ const Dashboard = props => {
   //   }
 
   const [userRegion, setUserRegion] = useState(region);
+
+  // Start tracking the duration of the user's stay on the page
+  let startTime = new Date().getTime();
+
+  // Call this method when the user navigates away from the page
+  let endTime = new Date().getTime();
+  let duration = endTime - startTime;
+
+  useEffect(() => {
+    firebase.analytics().logEvent('dashboard_duration', {
+      page_name: 'dashboard', // name of the page
+      duration: duration, // duration in milliseconds
+    });
+  }, []);
 
   useEffect(() => {
     setUserRegion(region);
@@ -289,7 +304,7 @@ const Dashboard = props => {
                 onPress={async () => {
                   connectMemberByMemberID(item.ID, index);
 
-                  await analytics().logEvent('dashboard', {
+                  firebase.analytics().logEvent('dashboard', {
                     item: item?.user_meta?.first_name,
                     description: 'Dashboard Member Connection',
                   });
@@ -340,12 +355,15 @@ const Dashboard = props => {
           </View>
         </View>
         <TouchableOpacity
-          onPress={() =>
+          onPress={() => {
             navigation.navigate('ContentLibraryDetail', {
               id: item?.ID,
               title: item?.post_title,
-            })
-          }>
+            });
+            firebase.analytics().logEvent(item.post_title, {
+              button_name: 'LatestContent',
+            });
+          }}>
           <View style={styles.middleWrap}>
             <Text style={{color: 'white', fontSize: 10}}>View</Text>
           </View>
@@ -408,9 +426,8 @@ const Dashboard = props => {
               image: backgroundImage,
             });
 
-            await analytics().logEvent(item?.title, {
-              id: item.ID,
-              item: item.title,
+            firebase.analytics().logEvent(item.title, {
+              button_name: 'event',
             });
           }}>
           <ImageBackground

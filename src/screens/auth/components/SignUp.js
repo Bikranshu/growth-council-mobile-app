@@ -608,7 +608,12 @@ const SignUpForm = props => {
                     : styles.loginButton,
                   loading && {backgroundColor: 'grey'},
                 ]}
-                onPress={handleSubmit}
+                onPress={async () => {
+                  handleSubmit;
+                  await analytics().logEvent('Register page', {
+                    item: 'User Registeration',
+                  });
+                }}
                 disabled={!areAllFieldsFilled || loading}>
                 <Text style={styles.loginButtonText}>Join Now</Text>
               </Button>

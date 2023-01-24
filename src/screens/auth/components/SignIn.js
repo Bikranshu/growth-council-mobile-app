@@ -21,9 +21,10 @@ import {
 import {Button} from 'native-base';
 import {Picker} from '@react-native-picker/picker';
 import {BubblesLoader} from 'react-native-indicator';
-import analytics from '@react-native-firebase/analytics';
+import firebase from '@react-native-firebase/analytics';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
+import googleAnalytics from '../../../shared/analytics/googleAnalytics';
 import {useAuthentication} from '../../../context/auth';
 import FlatTextInput from '../../../shared/form/FlatTextInput';
 import {CommonStyles, Colors, Typography} from '../../../theme';
@@ -73,6 +74,7 @@ const SignInForm = props => {
     initialValues: {username: '', password: ''},
     onSubmit: async values => {
       await signIn(values);
+      firebase.analytics().setUserId(profile.ID);
     },
   });
 
@@ -229,7 +231,7 @@ const SignInForm = props => {
                     navigation.navigate('Email', {
                       title: 'Account Assistance',
                     });
-                    await analytics().logEvent('signinEmail', {
+                    await analytics().logEvent('Login Page', {
                       item: 'click email button from login page',
                     });
                   }}>

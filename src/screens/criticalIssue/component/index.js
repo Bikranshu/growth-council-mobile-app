@@ -21,6 +21,7 @@ import {BubblesLoader} from 'react-native-indicator';
 import Entypo from 'react-native-vector-icons/Entypo';
 import {useFocusEffect} from '@react-navigation/native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import firebase from '@react-native-firebase/analytics';
 
 import Loading from '../../../shared/loading';
 import {Colors, Typography} from '../../../theme';
@@ -107,6 +108,19 @@ const CriticalIssue = props => {
   const scrollToIndex = () => {
     listRef.current.scrollToIndex({animated: true, index});
   };
+
+  let startTime = new Date().getTime();
+
+  // Call this method when the user navigates away from the page
+  let endTime = new Date().getTime();
+  let duration = endTime - startTime;
+
+  useEffect(() => {
+    firebase.analytics().logEvent('dashboard_duration', {
+      page_name: 'dashboard', // name of the page
+      duration: duration, // duration in milliseconds
+    });
+  }, []);
 
   const _renderCritical = ({item, index}) => {
     let lowercaseRegion = '';

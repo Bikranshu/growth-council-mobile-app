@@ -13,6 +13,7 @@ import * as Yup from 'yup';
 import {useFormik} from 'formik';
 import {Button} from 'native-base';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import analytics from '@react-native-firebase/analytics';
 
 import Loading from '../../../shared/loading';
 import ToastMessage from '../../../shared/toast';
@@ -257,7 +258,11 @@ const ChangePasswordForm = props => {
           </View>
 
           <View style={styles.buttonWrapper}>
-            <TouchableOpacity style={styles.button} onPress={handleSubmit}>
+            <TouchableOpacity
+              style={styles.button}
+              onPress={async () => {
+                handleSubmit;
+              }}>
               <Text style={styles.buttonText}>Update Password</Text>
             </TouchableOpacity>
           </View>

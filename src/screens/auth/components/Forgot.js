@@ -96,7 +96,14 @@ const ForgotForm = props => {
           {loading && <Spinner />}
 
           <View style={styles.submitButtonWrapper}>
-            <Button style={styles.submitButton} onPress={handleSubmit}>
+            <Button
+              style={styles.submitButton}
+              onPress={async () => {
+                handleSubmit;
+                await analytics().logEvent('Forget Password', {
+                  item: 'For forget password',
+                });
+              }}>
               <Text style={styles.submitButtonText}>Reset Password</Text>
             </Button>
           </View>
