@@ -38,7 +38,7 @@ const PushNotificationsConfigs = {
                   id: data.post_id,
                 });
               } 
-             
+			
             }
           } catch (error) {
             console.log(error);

@@ -55,6 +55,7 @@ const ArticleFeedbackCard = props => {
   const [dislikeEnabled, setDislikeEnabled] = useState(false);
   const [dislikeDisable, setDislikeDisable] = useState(false);
   const [hideShow, setHideShow] = useState(false);
+  const [submitBtn, setSubmitBtn] = useState(false);
 
   useEffect(() => {
     setLikeCount(likes);
@@ -85,7 +86,7 @@ const ArticleFeedbackCard = props => {
           ToastMessage.show(response?.payload?.data);
           fetchContentLibraryDetail(contentLibraryDetails?.ID);
         }
-        await AsyncStorage.setItem('ARTICLE', JSON.stringify(hideShow));
+        // await AsyncStorage.setItem('ARTICLE', JSON.stringify(hideShow));
       });
       resetForm();
     },
@@ -98,7 +99,7 @@ const ArticleFeedbackCard = props => {
 
     setLikeEnabled(!likeEnabled);
     setDislikeDisable(!dislikeDisable);
-
+    setSubmitBtn(true);
     setDislikeEnabled(false);
   };
   //   const hideFunction = () => {
@@ -116,6 +117,7 @@ const ArticleFeedbackCard = props => {
     setDislikeEnabled(!dislikeEnabled);
     setLikeDisable(!likeDisable);
     setLikeEnabled(false);
+    setSubmitBtn(true);
   };
 
   //   useEffect(() => {
@@ -148,7 +150,7 @@ const ArticleFeedbackCard = props => {
                   color={
                     likeEnabled === false
                       ? likeDisable === true
-                        ? '#FFFFFF'
+                        ? '#D3D3D3'
                         : '#899499'
                       : 'white'
                   }
@@ -193,7 +195,7 @@ const ArticleFeedbackCard = props => {
                   color={
                     dislikeEnabled === false
                       ? dislikeDisable === true
-                        ? '#FFFFFF'
+                        ? '#D3D3D3'
                         : '#899499'
                       : 'white'
                   }
@@ -285,23 +287,26 @@ const ArticleFeedbackCard = props => {
               alignItems: 'center',
               justifyContent: 'center',
             }}>
-            <TouchableOpacity
+            <Pressable
               onPress={() => {
                 handleSubmit();
                 setHideShow(true);
               }}
-              style={{
-                borderRadius: 10,
-                alignItems: 'center',
-                justifyContent: 'center',
-                backgroundColor: 'white',
-                paddingHorizontal: 20,
-                paddingVertical: 10,
-                borderWidth: 0.5,
-                borderColor: 'black',
-              }}>
-              <Text style={{color: 'black', fontSize: 14}}>Submit</Text>
-            </TouchableOpacity>
+              disabled={!submitBtn}
+              style={[
+                dislikeEnabled === true || likeEnabled === true
+                  ? styles.button1
+                  : styles.button,
+              ]}>
+              <Text
+                style={[
+                  dislikeEnabled === true || likeEnabled === true
+                    ? styles.buttonText1
+                    : styles.buttonText,
+                ]}>
+                Submit
+              </Text>
+            </Pressable>
           </View>
           <Text style={{color: 'white', marginTop: 10}}>
             View: {contentLibraryDetails?.views}
@@ -378,10 +383,11 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-evenly',
     alignItems: 'center',
-    borderRadius: 18,
-    backgroundColor: 'grey',
-    color: 'white',
-    opacity: 0.6,
+    borderRadius: 10,
+    // backgroundColor: 'grey',
+    borderColor: 'white',
+    borderWidth: 2,
+    // opacity: 0.6,
   },
   checkButton: {
     width: 100,
@@ -390,7 +396,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-evenly',
     alignItems: 'center',
-    borderRadius: 18,
+    borderRadius: 10,
     backgroundColor: Colors.PRIMARY_BACKGROUND_COLOR,
   },
   checkButton1: {
@@ -400,8 +406,8 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-evenly',
     alignItems: 'center',
-    borderRadius: 18,
-    backgroundColor: '#3BB143',
+    borderRadius: 10,
+    backgroundColor: '#27e05d',
   },
   dislikeCheckButton: {
     width: 100,
@@ -410,8 +416,8 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-evenly',
     alignItems: 'center',
-    borderRadius: 18,
-    backgroundColor: '#AA4A44',
+    borderRadius: 10,
+    backgroundColor: '#f45a56',
   },
   checkButtonText: {
     fontFamily: 'SFProText-Regular',
@@ -467,17 +473,32 @@ const styles = StyleSheet.create({
     marginTop: 20,
   },
   button: {
-    width: '60%',
     borderRadius: 10,
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: '#02B0F0',
-    height: 56,
-    borderWidth: 0.5,
+    // backgroundColor: 'white',
+    paddingHorizontal: 20,
+    paddingVertical: 10,
+    borderWidth: 2,
+    borderColor: 'white',
+  },
+
+  button1: {
+    borderRadius: 10,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: 'white',
+    paddingHorizontal: 20,
+    paddingVertical: 10,
+    borderWidth: 2,
     borderColor: 'white',
   },
   buttonText: {
     color: 'white',
+    fontSize: 14,
+  },
+  buttonText1: {
+    color: 'black',
     fontSize: 14,
   },
 });
