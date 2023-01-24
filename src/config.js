@@ -1,7 +1,6 @@
 import PushNotification from 'react-native-push-notification';
 import PushNotificationIOS from '@react-native-community/push-notification-ios';
 import {navigate} from './utils/navigationUtil';
-
 import {Platform} from 'react-native';
 
 const isIOS = Platform.OS == 'ios';
@@ -15,7 +14,8 @@ const PushNotificationsConfigs = {
           PushNotification.localNotification(notification);
         }
 
-        const clicked = notification.userInteraction && !notification.foreground;
+        const clicked =
+          notification.userInteraction && !notification.foreground;
 
         if (clicked) {
           try {
@@ -37,11 +37,9 @@ const PushNotificationsConfigs = {
                 navigate('EventDetail', {
                   id: data.post_id,
                 });
-              } 
-			
+              }
             }
           } catch (error) {
-            console.log(error);
           }
         }
         {

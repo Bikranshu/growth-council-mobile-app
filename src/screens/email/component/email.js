@@ -77,6 +77,7 @@ const Email = props => {
       />
 
       <ScrollView
+        // height = screenHeight + 50 because if we put more than 50 then it is hiding backarrow button at top when we scroll.
         contentContainerStyle={{flexGrow: 1, height: screenHeight + 50}}>
         <View style={styles.container}>
           <ImageBackground

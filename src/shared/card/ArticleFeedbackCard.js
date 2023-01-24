@@ -86,7 +86,6 @@ const ArticleFeedbackCard = props => {
           ToastMessage.show(response?.payload?.data);
           fetchContentLibraryDetail(contentLibraryDetails?.ID);
         }
-        // await AsyncStorage.setItem('ARTICLE', JSON.stringify(hideShow));
       });
       resetForm();
     },
@@ -119,13 +118,6 @@ const ArticleFeedbackCard = props => {
     setLikeEnabled(false);
     setSubmitBtn(!submitBtn);
   };
-
-  //   useEffect(() => {
-  //     const ARTICLE_LIKEAsync = async () => {
-  //       setARTICLE(await AsyncStorage.getItem('ARTICLE'));
-  //     };
-  //     ARTICLE_LIKEAsync();
-  //   }, []);
 
   return (
     <>
@@ -265,20 +257,6 @@ const ArticleFeedbackCard = props => {
               <Text style={{color: 'white', marginTop: 20}}>
                 We will use your feedback to improve this article
               </Text>
-
-              {/* <View style={styles.buttonWrapper}>
-                <TouchableOpacity
-                  style={styles.button}
-                  onPress={() => {
-                    setFieldValue('id', contentLibraryDetails?.ID);
-                    setFieldValue('action', 'dislike');
-                    handleSubmit();
-                    setHideShow(true);
-                    setDislikeEnabled(false);
-                  }}>
-                  <Text style={styles.buttonText}>Send Feedback</Text>
-                </TouchableOpacity>
-              </View> */}
             </View>
           )}
           <View
@@ -384,10 +362,8 @@ const styles = StyleSheet.create({
     justifyContent: 'space-evenly',
     alignItems: 'center',
     borderRadius: 10,
-    // backgroundColor: 'grey',
     borderColor: 'white',
     borderWidth: 2,
-    // opacity: 0.6,
   },
   checkButton: {
     width: 100,
@@ -407,7 +383,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-evenly',
     alignItems: 'center',
     borderRadius: 10,
-    backgroundColor: '#27e05d',
+    backgroundColor: '#27E05D',
   },
   dislikeCheckButton: {
     width: 100,
@@ -417,7 +393,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-evenly',
     alignItems: 'center',
     borderRadius: 10,
-    backgroundColor: '#f45a56',
+	backgroundColor: '#F45A56',
   },
   checkButtonText: {
     fontFamily: 'SFProText-Regular',
@@ -476,7 +452,6 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     alignItems: 'center',
     justifyContent: 'center',
-    // backgroundColor: 'white',
     paddingHorizontal: 20,
     paddingVertical: 10,
     borderWidth: 2,
