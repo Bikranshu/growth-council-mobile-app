@@ -40,6 +40,7 @@ const PushNotificationsConfigs = {
               }
             }
           } catch (error) {
+            reject(error);
           }
         }
         {

@@ -15,10 +15,17 @@ export const QUADENARY_BACKGROUND_COLOR = '#0D0D0F';
 export const QUIDENARY_BACKGROUND_COLOR = '#313234';
 export const SENDENARY_BACKGROUND_COLOR = '#1E1E1E';
 export const OCTODENARY_BACKGROUND_COLOR = '#F7F8F9';
-export const COMMUNITY_COLOR = '#00b0f0';
-export const PRACTICE_COLOR = '#f26722';
+export const COMMUNITY_COLOR = '#00B0F0';
+export const PRACTICE_COLOR = '#F26722';
 export const COACHING_COLOR = '#80BA74';
 export const DARKBULE = '#001D3F';
+export const TERTIARY_BLUE = '#62C1EB';
+
+export const LIGHTGREY = '#D3D3D3';
+export const SILVERGREY = '#899499';
+export const GREEN = '#27E05D';
+export const RED = '#F45A56';
+
 export const COMMUNITY_EVENT_COLOR = 'rgba(54,147,172,1)';
 
 export const PRIMARY_TEXT_COLOR = '#1E2022';
@@ -43,7 +50,7 @@ export const NONDENARY_TEXT_COLOR = '#3E4958';
 
 export const PRIMARY_HEADING_COLOR = '#626262';
 export const SECONDARY_HEADING_COLOR = '#666977';
-export const PRIMARY_BACKGROUND_ICON_COLOR = '#2f49c4';
+export const PRIMARY_BACKGROUND_ICON_COLOR = '#2F49C4';
 
 export const PRIMARY_BUTTON_COLOR = '#183863';
 export const SECONDARY_BUTTON_COLOR = '#F26722';

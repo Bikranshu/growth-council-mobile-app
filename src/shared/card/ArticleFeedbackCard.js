@@ -92,20 +92,13 @@ const ArticleFeedbackCard = props => {
   });
   const articlelikeSwitch = () => {
     setLikeCount(likeEnabled === false ? likeCount + 1 : likeCount - 1);
-
     setFieldValue('id', contentLibraryDetails?.ID);
     setFieldValue('action', 'like');
-
     setLikeEnabled(!likeEnabled);
     setDislikeDisable(!dislikeDisable);
     setSubmitBtn(!submitBtn);
     setDislikeEnabled(false);
   };
-  //   const hideFunction = () => {
-  //     setInterval(() => {
-  //       setHideShow(true);
-  //     }, 20000);
-  //   };
 
   const articledislikeSwitch = () => {
     setFieldValue('id', contentLibraryDetails?.ID);
@@ -142,9 +135,9 @@ const ArticleFeedbackCard = props => {
                   color={
                     likeEnabled === false
                       ? likeDisable === true
-                        ? '#D3D3D3'
-                        : '#899499'
-                      : 'white'
+                        ? Colors.LIGHTGREY
+                        : Colors.SILVERGREY
+                      : Colors.PRIMARY_BACKGROUND_COLOR
                   }
                   size={18}
                 />
@@ -187,9 +180,9 @@ const ArticleFeedbackCard = props => {
                   color={
                     dislikeEnabled === false
                       ? dislikeDisable === true
-                        ? '#D3D3D3'
-                        : '#899499'
-                      : 'white'
+                        ? Colors.LIGHTGREY
+                        : Colors.SILVERGREY
+                      : Colors.PRIMARY_BACKGROUND_COLOR
                   }
                   size={18}
                 />
@@ -223,7 +216,9 @@ const ArticleFeedbackCard = props => {
                 onPress={Keyboard.dismiss}
                 accessible={false}>
                 <View>
-                  <Text style={{color: 'white'}}>Your email (optional) :</Text>
+                  <Text style={{color: Colors.PRIMARY_BACKGROUND_COLOR}}>
+                    Your email (optional) :
+                  </Text>
                   <TextInput
                     multiline={true}
                     style={[styles.textarea]}
@@ -239,7 +234,11 @@ const ArticleFeedbackCard = props => {
                 onPress={Keyboard.dismiss}
                 accessible={false}>
                 <View>
-                  <Text style={{color: 'white', marginTop: 10}}>
+                  <Text
+                    style={{
+                      color: Colors.PRIMARY_BACKGROUND_COLOR,
+                      marginTop: 10,
+                    }}>
                     You can leave feedback :
                   </Text>
                   <TextInput
@@ -254,7 +253,8 @@ const ArticleFeedbackCard = props => {
                 </View>
               </TouchableWithoutFeedback>
 
-              <Text style={{color: 'white', marginTop: 20}}>
+              <Text
+                style={{color: Colors.PRIMARY_BACKGROUND_COLOR, marginTop: 20}}>
                 We will use your feedback to improve this article
               </Text>
             </View>
@@ -263,8 +263,8 @@ const ArticleFeedbackCard = props => {
             style={{
               marginTop: 20,
               alignItems: 'center',
-              justifyContent: 'center', 
-            }}> 
+              justifyContent: 'center',
+            }}>
             <Pressable
               onPress={() => {
                 handleSubmit();
@@ -286,28 +286,13 @@ const ArticleFeedbackCard = props => {
               </Text>
             </Pressable>
           </View>
-          <Text style={{color: 'white', marginTop: 10}}>
+          <Text style={{color: Colors.PRIMARY_BACKGROUND_COLOR, marginTop: 10}}>
             View: {contentLibraryDetails?.views}
           </Text>
         </View>
       )}
 
-      {hideShow && (
-        // <View
-        //   style={{
-        //     paddingVertical: 20,
-        //     marginBottom: 10,
-        //     paddingHorizontal: 15,
-        //     justifyContent: 'center',
-        //     borderRadius: 18,
-        //     backgroundColor: '#B2BEB5',
-        //   }}>
-        //   <Text style={{textAlign: 'center', color: 'white'}}>
-        //     Your's reponse have been saved.
-        //   </Text>
-        // </View>
-        <></>
-      )}
+      {hideShow && <></>}
     </>
   );
 };
@@ -319,7 +304,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 15,
     justifyContent: 'center',
     borderRadius: 18,
-    backgroundColor: '#62C1EB',
+    backgroundColor: Colors.TERTIARY_BLUE,
   },
 
   articleTitle: {
@@ -362,7 +347,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-evenly',
     alignItems: 'center',
     borderRadius: 10,
-    borderColor: 'white',
+    borderColor: Colors.PRIMARY_BACKGROUND_COLOR,
     borderWidth: 2,
   },
   checkButton: {
@@ -383,7 +368,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-evenly',
     alignItems: 'center',
     borderRadius: 10,
-    backgroundColor: '#27E05D',
+    backgroundColor: Colors.GREEN,
   },
   dislikeCheckButton: {
     width: 100,
@@ -393,7 +378,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-evenly',
     alignItems: 'center',
     borderRadius: 10,
-    backgroundColor: '#F45A56',
+    backgroundColor: Colors.RED,
   },
   checkButtonText: {
     fontFamily: Typography.FONT_SF_REGULAR,
@@ -403,13 +388,13 @@ const styles = StyleSheet.create({
   disableButtonText: {
     fontFamily: Typography.FONT_SF_REGULAR,
     fontSize: 13,
-    color: '#FFFFFF',
+    color: Colors.PRIMARY_BACKGROUND_COLOR,
     opacity: 0.6,
   },
   checkButtonText1: {
     fontFamily: Typography.FONT_SF_REGULAR,
     fontSize: 13,
-    color: 'white',
+    color: Colors.PRIMARY_BACKGROUND_COLOR,
   },
 
   feedbackContainer: {
@@ -418,7 +403,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 15,
     justifyContent: 'center',
     borderRadius: 18,
-    backgroundColor: '#62C1EB',
+    backgroundColor: Colors.TERTIARY_BLUE,
   },
 
   textarea: {
@@ -427,8 +412,8 @@ const styles = StyleSheet.create({
     borderWidth: 0.5,
     marginTop: 10,
     borderRadius: 5,
-    borderColor: 'white',
-    color: 'white',
+    borderColor: Colors.PRIMARY_BACKGROUND_COLOR,
+    color: Colors.PRIMARY_BACKGROUND_COLOR,
   },
   textarea1: {
     minHeight: 100,
@@ -441,8 +426,8 @@ const styles = StyleSheet.create({
     marginTop: 10,
     borderRadius: 5,
     padding: 10,
-    borderColor: 'white',
-    color: 'white',
+    borderColor: Colors.PRIMARY_BACKGROUND_COLOR,
+    color: Colors.PRIMARY_BACKGROUND_COLOR,
   },
   buttonWrapper: {
     width: 200,
@@ -455,21 +440,21 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     paddingVertical: 10,
     borderWidth: 2,
-    borderColor: 'white',
+    borderColor: Colors.PRIMARY_BACKGROUND_COLOR,
   },
 
   button1: {
     borderRadius: 10,
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: 'white',
+    backgroundColor: Colors.PRIMARY_BACKGROUND_COLOR,
     paddingHorizontal: 20,
     paddingVertical: 10,
     borderWidth: 2,
-    borderColor: 'white',
+    borderColor: Colors.PRIMARY_BACKGROUND_COLOR,
   },
   buttonText: {
-    color: 'white',
+    color: Colors.PRIMARY_BACKGROUND_COLOR,
     fontSize: 14,
   },
   buttonText1: {

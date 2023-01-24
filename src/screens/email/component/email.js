@@ -24,6 +24,7 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 
 import Loading from '../../../shared/loading';
 import ToastMessage from '../../../shared/toast';
+import {SCREENHEIGHTVALUE} from '../../../constants';
 import {CommonStyles, Colors, Typography} from '../../../theme';
 
 const emailSchema = Yup.object().shape({
@@ -79,7 +80,7 @@ const Email = props => {
       <ScrollView
         contentContainerStyle={{
           flexGrow: 1,
-          height: screenHeight + 50, // height = screenHeight + 50 because if we put more than 50 then it is hiding backarrow button at top when we scroll.
+          height: screenHeight + SCREENHEIGHTVALUE, // height = screenHeight + 50 because if we put more than 50 then it is hiding backarrow button at top when we scroll.
         }}>
         <View style={styles.container}>
           <ImageBackground
