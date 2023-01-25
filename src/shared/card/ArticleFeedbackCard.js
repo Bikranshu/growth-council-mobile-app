@@ -266,9 +266,14 @@ const ArticleFeedbackCard = props => {
               justifyContent: 'center',
             }}>
             <Pressable
-              onPress={() => {
+              onPress={async () => {
                 handleSubmit();
                 setHideShow(true);
+                await analytics().logEvent('article_button_clicked', {
+                  button_name: 'Submit',
+                  article_value: values.action,
+                  page_name: 'Content library details',
+                });
               }}
               disabled={!submitBtn}
               style={[
