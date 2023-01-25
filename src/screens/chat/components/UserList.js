@@ -30,7 +30,7 @@ import BottomNav from '../../../layout/BottomLayout';
 import {getAsyncStorage} from '../../../utils/storageUtil';
 import FloatingButton from '../../../shared/floatingButton';
 import {CommonStyles, Colors, Typography} from '../../../theme';
-import {pageDuration} from '../../../shared/analytics/pageDuration';
+
 import {JWT_TOKEN, USER_NAME, USER_AVATAR} from '../../../constants';
 
 const UserList = props => {
@@ -104,10 +104,6 @@ const UserList = props => {
       getFirebaseUsers();
     }
   }, [userID, users, reload]);
-
-  useEffect(() => {
-    pageDuration('UserList', 'userlistforChat_duration');
-  }, []);
 
   useEffect(() => {
     const setLoggedInUserInfoAsync = async () => {
@@ -295,7 +291,7 @@ const UserList = props => {
               onPress={async () => {
                 navigation.navigate('Gmail');
                 await analytics().logEvent('userlistGmail', {
-                  item: 'userlist',
+                  page_name: 'userlist',
                 });
               }}>
               <Text style={styles.buttonText}>Contact us</Text>
