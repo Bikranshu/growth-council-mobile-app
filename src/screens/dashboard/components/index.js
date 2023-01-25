@@ -256,7 +256,7 @@ const Dashboard = props => {
           <TouchableOpacity
             onPress={() => navigation.navigate('OthersAccount', {id: item.ID})}>
             <Image
-              source={{uri: item.avatar}}
+              source={{uri: item?.profile_image}}
               style={{
                 width: '100%',
                 height: 83,

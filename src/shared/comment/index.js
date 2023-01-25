@@ -260,7 +260,7 @@ const Comments = ({
                     <Image
                       style={{width: 50, height: 50, borderRadius: 30}}
                       source={{
-                        uri: profile?.avatar,
+                        uri: profile?.profile_image,
                       }}
                     />
                     <TouchableOpacity

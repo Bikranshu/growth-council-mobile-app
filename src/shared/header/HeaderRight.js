@@ -25,7 +25,7 @@ const HeaderRight = props => {
         <View>
           <Image
             source={{
-              uri: profile?.avatar,
+              uri: profile?.profile_image,
             }}
             style={{
               height: 40,

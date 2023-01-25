@@ -288,7 +288,7 @@ const Setting = props => {
               }}>
               <View style={styles.icon}>
                 <Image
-                  source={{uri: profile.avatar}}
+                  source={{uri: profile.profile_image}}
                   style={{width: '100%', height: '100%'}}
                   resizeMode="cover"
                 />

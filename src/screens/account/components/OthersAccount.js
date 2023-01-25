@@ -120,7 +120,7 @@ const OthersAccount = props => {
           <View style={styles.profileWrapper}>
             <View style={styles.icon}>
               <Image
-                source={{uri: otherProfiles?.avatar}}
+                source={{uri: otherProfiles?.profile_image}}
                 style={{width: '100%', height: '100%'}}
                 resizeMode="cover"
               />
@@ -291,7 +291,7 @@ const OthersAccount = props => {
                       navigation.navigate('Chat', {
                         friendID: otherProfiles?.ID,
                         friendName: otherProfiles?.display_name,
-                        friendAvatar: otherProfiles?.avatar,
+                        friendAvatar: otherProfiles?.profile_image,
                         userID: userID,
                         userName: userName,
                         userAvatar: avatarImg,

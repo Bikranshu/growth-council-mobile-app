@@ -75,7 +75,7 @@ const ManageAccount = props => {
   const [open, setOpen] = useState(false);
   const [value, setValue] = useState([]);
   const [items, setItems] = useState([]);
-  const [image, setImage] = useState(profile?.avatar);
+  const [image, setImage] = useState(profile?.profile_image);
   const [imageDetail, setImageDetail] = useState();
 
   let title = profile?.user_meta?.title;
