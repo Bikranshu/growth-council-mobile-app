@@ -312,7 +312,15 @@ const ManageAccount = props => {
                 marginTop: 10,
                 marginRight: 10,
               }}>
-              <TouchableOpacity onPress={takePhotoFromCamera}>
+              <TouchableOpacity
+                onPress={async () => {
+                  takePhotoFromCamera();
+                  await analytics().logEvent('camera_clicked', {
+                    button_name: 'takePhotoFromCamera',
+                    page_name: 'Update Profile',
+                    username: profile?.user_login,
+                  });
+                }}>
                 <Ionicons
                   name={'camera'}
                   size={20}
@@ -321,7 +329,15 @@ const ManageAccount = props => {
                 />
               </TouchableOpacity>
 
-              <TouchableOpacity onPress={choosePhotoFromLibrary}>
+              <TouchableOpacity
+                onPress={async () => {
+                  choosePhotoFromLibrary();
+                  await analytics().logEvent('camera_clicked', {
+                    button_name: 'choosePhotoFromLibrary',
+                    page_name: 'Update Profile',
+                    username: profile?.user_login,
+                  });
+                }}>
                 <AntDesign
                   name={'upload'}
                   size={20}
@@ -434,24 +450,6 @@ const ManageAccount = props => {
                       touched={touched.company}
                     />
 
-                    {/* <Text
-                    style={{
-                      size: 7,
-                      marginLeft: 10,
-                      fontSize: 10,
-                      color: '#8F9BB3',
-                    }}>
-                    Last Name
-                  </Text>
-                  <TextInput
-                    style={styles.input}
-                    value={values.last_name}
-                    onChangeText={handleChange('last_name')}
-                    onBlur={handleBlur('last_name')}
-                    error={errors.last_name}
-                    touched={touched.last_name}
-                  /> */}
-
                     <Text
                       style={{marginLeft: 10, fontSize: 10, color: '#8F9BB3'}}>
                       Email Address
@@ -465,19 +463,6 @@ const ManageAccount = props => {
                       touched={touched.email}
                       editable={false}
                     />
-
-                    {/* <Text
-                      style={{marginLeft: 10, fontSize: 10, color: '#8F9BB3'}}>
-                      Region
-                    </Text>
-                    <TextInput
-                      style={styles.input}
-                      value={values.Location}
-                      onChangeText={handleChange('Location')}
-                      onBlur={handleBlur('Location')}
-                      error={errors.Location}
-                      touched={touched.Location}
-                    /> */}
 
                     <Text
                       style={{marginLeft: 10, fontSize: 10, color: '#8F9BB3'}}>
@@ -532,36 +517,6 @@ const ManageAccount = props => {
                         marginLeft: 10,
                       }}
                     />
-
-                    {/* <Text
-                    style={{marginLeft: 10, fontSize: 10, color: '#8F9BB3'}}>
-                    Most Recent Growth/Innovation Initative
-                  </Text>
-                  <TextInput
-                    multiline={true}
-                    numberOfLines={4}
-                    style={styles.textarea}
-                    value={values.initatives}
-                    onChangeText={handleChange('initatives')}
-                    onBlur={handleBlur('initatives')}
-                    error={errors.initatives}
-                    touched={touched.initatives}
-                  /> */}
-
-                    {/* <Text
-                    style={{marginLeft: 10, fontSize: 10, color: '#8F9BB3'}}>
-                    I'm Seeking Insights On
-                  </Text>
-                  <TextInput
-                    multiline={true}
-                    numberOfLines={4}
-                    style={styles.textarea}
-                    value={values.insights}
-                    onChangeText={handleChange('insights')}
-                    onBlur={handleBlur('insights')}
-                    error={errors.insights}
-                    touched={touched.insights}
-                  /> */}
                     {userLoading && <Loading />}
                     <View style={styles.loginButtonWrapper}>
                       <TouchableOpacity

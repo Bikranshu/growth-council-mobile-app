@@ -95,7 +95,15 @@ const Email = props => {
                   <Text style={styles.headingText1}>New Message</Text>
 
                   {/* <View style={styles.loginButtonWrapper}> */}
-                  <Button style={[styles.loginButton]} onPress={handleSubmit}>
+                  <Button
+                    style={[styles.loginButton]}
+                    onPress={async () => {
+                      handleSubmit();
+                      await analytics().logEvent('button_clicked', {
+                        button_name: 'send',
+                        page_name: 'Email form',
+                      });
+                    }}>
                     <Text style={styles.loginButtonText}>Send</Text>
                   </Button>
                   {/* </View> */}

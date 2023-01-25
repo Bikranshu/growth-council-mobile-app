@@ -311,10 +311,11 @@ const Setting = props => {
                 <View style={styles.wrapper}>
                   <TouchableOpacity
                     onPress={async () => {
-                      await analytics().logEvent('SettingAccount', {
-                        item: 'Button to manage account',
-                      });
                       navigation.navigate('ManageAccount');
+                      await analytics().logEvent('manageAccount_duration', {
+                        page_name: 'Setting',
+                        button_name: 'Account',
+                      });
                     }}>
                     <View style={styles.middleWrapper}>
                       <View style={styles.middleImage}>
@@ -739,7 +740,16 @@ const Setting = props => {
                             <View style={styles.loginButtonWrapper}>
                               <Button
                                 style={[styles.loginButton]}
-                                onPress={handleSubmit}>
+                                onPress={async () => {
+                                  handleSubmit();
+                                  await analytics().logEvent(
+                                    'notification_clicked',
+                                    {
+                                      button_name: 'Save',
+                                      page_name: 'Settings',
+                                    },
+                                  );
+                                }}>
                                 <Text style={styles.loginButtonText}>Save</Text>
                               </Button>
                             </View>
@@ -764,8 +774,9 @@ const Setting = props => {
                       navigation.navigate('Gmail', {
                         title: 'Account Assistance',
                       });
-                      await analytics().logEvent('settingGmail', {
-                        item: 'setting',
+                      await analytics().logEvent('setting_duration', {
+                        page_name: 'setting',
+                        button_name: 'Help',
                       });
                     }}>
                     <View style={styles.middleWrapper}>

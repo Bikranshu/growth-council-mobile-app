@@ -222,9 +222,9 @@ const People = props => {
               <TouchableOpacity
                 onPress={async () => {
                   connectMemberByMemberID(item.ID, index);
-                  await analytics().logEvent('Member', {
-                    item: item?.user_meta?.first_name,
-                    description: 'Member Connection',
+                  await analytics().logEvent('add_button_clicked', {
+                    member_ID: item?.ID,
+                    page_name: 'Member Connection',
                   });
                 }}>
                 <Ionicons
@@ -611,6 +611,10 @@ const People = props => {
                 onPress={async () => {
                   deleteMemberByMemberID(deleteId),
                     setModalVisible(!modalVisible);
+                  await analytics().logEvent('delete_button_clicked', {
+                    member_ID: deleteId,
+                    page_name: 'Member Connection',
+                  });
                 }}
                 style={{marginLeft: 10, backgroundColor: '#FF5733'}}>
                 Confirm

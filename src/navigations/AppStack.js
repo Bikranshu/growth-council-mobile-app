@@ -152,7 +152,7 @@ const AppStack = navigation => (
       options={() => ({
         header: ({navigation, route}) => (
           <SubHeader
-            title={route?.params?.title}
+            title="PDF Viewer"
             image={require('../assets/img/appBG.png')}
             navigation={navigation}
             noDrawer={true}

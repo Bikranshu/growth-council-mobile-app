@@ -155,7 +155,7 @@ const About = props => {
                   title: 'Account Assistance',
                 });
                 await analytics().logEvent('About', {
-                  item: 'Contact us button',
+                  button_name: 'Contact us',
                 });
               }}>
               <Text style={[styles.buttonText, styles.plainButtonText]}>

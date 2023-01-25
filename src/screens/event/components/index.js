@@ -272,7 +272,23 @@ const Event = props => {
         events?.pillar_categories[0]?.name;
       break;
   }
-  const image = require('../../../assets/img/Rectangle2.png');
+
+  // Start tracking the duration of the user's stay on the page
+  let startTime = new Date().getTime();
+
+  // Call this method when the user navigates away from the page
+  let endTime = new Date().getTime();
+  let duration = endTime - startTime;
+
+  useEffect(() => {
+    const GoogleA = async () => {
+      await analytics().logEvent('eventDetail_duration', {
+        page_name: 'Event Detail', // name of the page
+        duration: duration, // duration in milliseconds
+      });
+    };
+    GoogleA();
+  }, []);
   return (
     <View style={{flex: 1}}>
       <StatusBar

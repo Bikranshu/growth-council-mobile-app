@@ -75,8 +75,8 @@ const Ideas = props => {
                 navigation.navigate('Gmail', {
                   title: 'Contribute Ideas',
                 });
-                await analytics().logEvent('IdeasGmail', {
-                  item: 'Contribute Ideas',
+                await analytics().logEvent('Contribute Ideas', {
+                  button_name: 'Contact us',
                 });
               }}>
               <Text style={[styles.buttonText, styles.plainButtonText]}>
