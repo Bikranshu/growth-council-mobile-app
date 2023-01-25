@@ -190,7 +190,7 @@ const People = props => {
         onPress={() => navigation.navigate('OthersAccount', {id: item.ID})}>
         <View style={[styles.wrapper, styles.shadowProp]} key={index}>
           <Image
-            source={{uri: item.avatar}}
+            source={{uri: item.profile_image}}
             style={{
               width: 66,
               height: 66,

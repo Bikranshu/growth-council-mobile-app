@@ -370,7 +370,7 @@ const Discussion = props => {
                       <Image
                         style={{width: 50, height: 50, borderRadius: 100}}
                         source={{
-                          uri: profile?.avatar,
+                          uri: profile?.profile_image,
                         }}
                       />
                       <TextInput
