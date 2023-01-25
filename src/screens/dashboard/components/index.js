@@ -469,12 +469,7 @@ const Dashboard = props => {
   let los_angles = utc + 3600000 * target_offset;
 
   const nd = new Date(los_angles);
-  const ActualPSTTime = moment(nd).format('DD/MM/yyyy');
-
-  //   const quote = dailyQuote[0];
-  // const quote = dailyQuote?.filter(
-  //   item => item?.quote_date === ActualPSTTime,
-  // )[0];
+  const ActualPSTTime = moment(nd).format('MM/DD/yyyy');
 
   return (
     <View style={{flex: 1}}>
