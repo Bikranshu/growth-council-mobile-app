@@ -100,9 +100,11 @@ const ForgotForm = props => {
               style={styles.submitButton}
               onPress={async () => {
                 handleSubmit;
-                await analytics().logEvent('Forget Password', {
-                  item: 'For forget password',
-                });
+                await analytics()
+                  .setUserId(values?.email)
+                  .logEvent('Forget Password', {
+                    item: 'For forget password',
+                  });
               }}>
               <Text style={styles.submitButtonText}>Reset Password</Text>
             </Button>

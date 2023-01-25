@@ -75,16 +75,24 @@ const EventCalendar = props => {
     profileRegion = profile?.user_meta?.region[0];
   }
 
-  //   let UserRegion =
-  //     profileRegion === 'AMERICAS' ? 'NORTH-AMERICA' : profileRegion;
   const [mobileRegion, setMobileRegion] = useState(profileRegion);
 
-  //   const countries = {
-  //     Region: 'Region',
-  //     'NORTH-AMERICA': 'NORTH-AMERICA',
-  //     APAC: 'APAC',
-  //     MEASA: 'MEASA',
-  //   };
+  // Start tracking the duration of the user's stay on the page
+  let startTime = new Date().getTime();
+
+  // Call this method when the user navigates away from the page
+  let endTime = new Date().getTime();
+  let duration = endTime - startTime;
+
+  useEffect(() => {
+    const GoogleA = async () => {
+      await analytics().logEvent('calendar_duration', {
+        page_name: 'Calendar', // name of the page
+        duration: duration, // duration in milliseconds
+      });
+    };
+    GoogleA();
+  }, []);
 
   useEffect(() => {
     fetchProfile();
@@ -93,6 +101,7 @@ const EventCalendar = props => {
   useEffect(() => {
     fetchAllRegions();
   }, []);
+
 
   useEffect(() => {
     const fetchAllCalendarEventAsync = async () => {

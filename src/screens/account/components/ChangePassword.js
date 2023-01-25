@@ -261,7 +261,11 @@ const ChangePasswordForm = props => {
             <TouchableOpacity
               style={styles.button}
               onPress={async () => {
-                handleSubmit;
+                handleSubmit();
+                await analytics().logEvent('button_clicked', {
+                  button_name: 'update',
+                  page_name: 'Change Password',
+                });
               }}>
               <Text style={styles.buttonText}>Update Password</Text>
             </TouchableOpacity>

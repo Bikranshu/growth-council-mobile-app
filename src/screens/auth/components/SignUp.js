@@ -115,13 +115,16 @@ const SignUpForm = props => {
         const token = await response.user.getIdToken();
         // const response = await registerCustomer(values);
         if (token) {
-          await registerCustomer(values).then(response => {
+          await registerCustomer(values).then(async response => {
             if (response?.payload?.code === 200) {
               console.log('response', response);
               navigation.navigate('SignIn');
               ToastMessage.show(
                 'You have successfully registered. Please wait for admin approval.',
               );
+              await analytics()
+                .setUserId(values?.username)
+                .logEvent('Register Page');
             } else {
               ToastMessage.show(
                 'This email address or username is already in use',

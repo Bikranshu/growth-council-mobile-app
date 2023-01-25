@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {
   StyleSheet,
   Dimensions,
@@ -14,108 +14,124 @@ import {
 import Pdf from 'react-native-pdf';
 import ToastMessage from '../../../shared/toast';
 import RNFetchBlob from 'react-native-blob-util';
+import analytics from '@react-native-firebase/analytics';
 
 const pdf = props => {
   const {navigation, route} = props;
 
+  // Start tracking the duration of the user's stay on the page
+  let startTime = new Date().getTime();
+
+  // Call this method when the user navigates away from the page
+  let endTime = new Date().getTime();
+  let duration = endTime - startTime;
+
+  useEffect(() => {
+    const GoogleA = async () => {
+      await analytics().logEvent('pdf_duration', {
+        page_name: 'PDF', // name of the page
+        duration: duration, // duration in milliseconds
+      });
+    };
+    GoogleA();
+  }, []);
+
   const source = {uri: route.params.paramsFile, cache: true};
 
-    const fileUrl = route.params.paramsFile;
+  const fileUrl = route.params.paramsFile;
 
-    const checkPermission = async () => {
-      if (Platform.OS === 'ios') {
-        downloadFile();
-      } else {
-        try {
-          const granted = await PermissionsAndroid.request(
-            PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
-            {
-              title: 'Storage Permission Required',
-              message:
-                'Application needs access to your storage to download File',
-            },
-          );
-          if (granted === PermissionsAndroid.RESULTS.GRANTED) {
-            downloadFile();
-          } else {
-            Alert.alert('Error', 'Storage Permission Not Granted');
-          }
-        } catch (err) {
-          ToastMessage.show(err);
+  const checkPermission = async () => {
+    if (Platform.OS === 'ios') {
+      downloadFile();
+    } else {
+      try {
+        const granted = await PermissionsAndroid.request(
+          PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
+          {
+            title: 'Storage Permission Required',
+            message:
+              'Application needs access to your storage to download File',
+          },
+        );
+        if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+          downloadFile();
+        } else {
+          Alert.alert('Error', 'Storage Permission Not Granted');
         }
+      } catch (err) {
+        ToastMessage.show(err);
       }
-    };
+    }
+  };
 
-    const downloadFile = () => {
-      const {config, fs} = RNFetchBlob;
-      const {
-        dirs: {DownloadDir, DocumentDir},
-      } = RNFetchBlob.fs;
-      const isIOS = Platform.OS === 'ios';
-      const aPath =
-        Platform.OS === 'ios' ? fs.dirs.DocumentDir : fs.dirs.PictureDir;
+  const downloadFile = () => {
+    const {config, fs} = RNFetchBlob;
+    const {
+      dirs: {DownloadDir, DocumentDir},
+    } = RNFetchBlob.fs;
+    const isIOS = Platform.OS === 'ios';
+    const aPath =
+      Platform.OS === 'ios' ? fs.dirs.DocumentDir : fs.dirs.PictureDir;
 
-      let date = new Date();
-      let FILE_URL = fileUrl;
+    let date = new Date();
+    let FILE_URL = fileUrl;
 
-      let file_ext = getFileExtention(FILE_URL);
+    let file_ext = getFileExtention(FILE_URL);
 
-      file_ext = '.' + file_ext[0];
+    file_ext = '.' + file_ext[0];
 
-      const configOptions = Platform.select({
-        ios: {
-          fileCache: true,
+    const configOptions = Platform.select({
+      ios: {
+        fileCache: true,
+        path:
+          aPath +
+          '/file_' +
+          Math.floor(date.getTime() + date.getSeconds() / 2) +
+          file_ext,
+        description: 'downloading file...',
+      },
+      android: {
+        fileCache: false,
+        addAndroidDownloads: {
           path:
             aPath +
             '/file_' +
             Math.floor(date.getTime() + date.getSeconds() / 2) +
             file_ext,
-          description: 'downloading file...',
-        },
-        android: {
-          fileCache: false,
-          addAndroidDownloads: {
-            path:
-              aPath +
-              '/file_'+
-              Math.floor(date.getTime() + date.getSeconds() / 2) +
-              file_ext,
-			
-            description: 'downloading file...',
-            notification: true,
-            useDownloadManager: true,
-          },
-        },
-      });
 
-      if (isIOS) {
-        RNFetchBlob.config(configOptions)
-          .fetch('GET', FILE_URL)
-          .then(res => {
-            
-            RNFetchBlob.ios.previewDocument('file://' + res.path());
-          });
-        return;
-      } else {
-        config(configOptions)
-          .fetch('GET', FILE_URL)
+          description: 'downloading file...',
+          notification: true,
+          useDownloadManager: true,
+        },
+      },
+    });
+
+    if (isIOS) {
+      RNFetchBlob.config(configOptions)
+        .fetch('GET', FILE_URL)
+        .then(res => {
+          RNFetchBlob.ios.previewDocument('file://' + res.path());
+        });
+      return;
+    } else {
+      config(configOptions)
+        .fetch('GET', FILE_URL)
         //   .progress((received, total) => {
         //     console.log('progress', received / total);
         //   })
 
-          .then(res => {
-           
-            RNFetchBlob.android.actionViewIntent(res.path());
-          })
-          .catch((errorMessage, statusCode) => {
-            console.log('error with downloading file', errorMessage);
-          });
-      }
-    };
+        .then(res => {
+          RNFetchBlob.android.actionViewIntent(res.path());
+        })
+        .catch((errorMessage, statusCode) => {
+          console.log('error with downloading file', errorMessage);
+        });
+    }
+  };
 
-    const getFileExtention = fileUrl => {
-      return /[.]/.exec(fileUrl) ? /[^.]+$/.exec(fileUrl) : undefined;
-    };
+  const getFileExtention = fileUrl => {
+    return /[.]/.exec(fileUrl) ? /[^.]+$/.exec(fileUrl) : undefined;
+  };
 
   return (
     <View style={styles.container}>
@@ -124,8 +140,17 @@ const pdf = props => {
         style={styles.pdf}
         renderActivityIndicator={() => <ActivityIndicator size={40} />}
       />
-      
-      <TouchableOpacity style={styles.buttonWrapper} onPress={checkPermission}>
+
+      <TouchableOpacity
+        style={styles.buttonWrapper}
+        onPress={async () => {
+          checkPermission();
+          await analytics().logEvent('button_click', {
+            pdf_title: route?.params?.title,
+            button_name: 'download',
+            page_name: 'PDF Viewer',
+          });
+        }}>
         <Text style={styles.text}>Download File</Text>
       </TouchableOpacity>
     </View>

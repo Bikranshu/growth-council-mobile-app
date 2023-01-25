@@ -79,7 +79,9 @@ const Event = props => {
     });
     if (response?.payload?.code === 200) {
       setEventStatus(true);
-      ToastMessage.show('You have registered for this Frost & Sullivan Think Tank.');
+      ToastMessage.show(
+        'You have registered for this Frost & Sullivan Think Tank.',
+      );
     } else {
       toast.closeAll();
       ToastMessage.show(response?.payload?.response);
@@ -597,10 +599,10 @@ const Event = props => {
                       style={styles.acceptButton}
                       onPress={async () => {
                         registerEventByEventID(route?.params?.id);
-                        let eventName = events?.title;
-                        await analytics().logEvent(eventName, {
-                          item: events?.title,
-                          description: 'Event Register',
+                        await analytics().logEvent('button_click', {
+                          events_title: events?.title,
+                          button_name: 'rsvp',
+                          page_name: 'Event Detail',
                         });
                       }}>
                       <Text style={styles.acceptButtonText}>RSVP</Text>

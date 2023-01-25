@@ -30,6 +30,7 @@ import BottomNav from '../../../layout/BottomLayout';
 import {getAsyncStorage} from '../../../utils/storageUtil';
 import FloatingButton from '../../../shared/floatingButton';
 import {CommonStyles, Colors, Typography} from '../../../theme';
+import {pageDuration} from '../../../shared/analytics/pageDuration';
 import {JWT_TOKEN, USER_NAME, USER_AVATAR} from '../../../constants';
 
 const UserList = props => {
@@ -71,7 +72,7 @@ const UserList = props => {
       if (!userID) console.log('USER ID NOT FOUND');
 
       const fbUsers = await firestore().collection('rooms').get();
-  
+
       const docs = fbUsers.docs.filter(doc => doc.id.includes(userID));
 
       const data = docs.map(doc => ({id: doc.id, ...doc.data()}));
@@ -84,7 +85,6 @@ const UserList = props => {
         const user = users.find(usr => usr.ID == user_id);
         __users.push({...user, ...data[i]});
       }
-
 
       setUsers(__users);
     } catch (error) {
@@ -104,6 +104,10 @@ const UserList = props => {
       getFirebaseUsers();
     }
   }, [userID, users, reload]);
+
+  useEffect(() => {
+    pageDuration('UserList', 'userlistforChat_duration');
+  }, []);
 
   useEffect(() => {
     const setLoggedInUserInfoAsync = async () => {

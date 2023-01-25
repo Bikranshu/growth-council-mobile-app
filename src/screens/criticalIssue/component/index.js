@@ -1,4 +1,4 @@
-import React, {useEffect, useRef, useState, useCallback} from 'react';
+import React, {useRef, useEffect, useState, useCallback} from 'react';
 import {
   Platform,
   Text,
@@ -21,9 +21,9 @@ import {BubblesLoader} from 'react-native-indicator';
 import Entypo from 'react-native-vector-icons/Entypo';
 import {useFocusEffect} from '@react-navigation/native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import firebase from '@react-native-firebase/analytics';
 
 import Loading from '../../../shared/loading';
+import {pageDuration} from '../../../shared/analytics/pageDuration';
 import {Colors, Typography} from '../../../theme';
 import BottomNav from '../../../layout/BottomLayout';
 import FloatingButton from '../../../shared/floatingButton';
@@ -59,39 +59,41 @@ const CriticalIssue = props => {
   } else {
     profileRegion = profile?.user_meta?.region[0];
   }
-  //   let profileRegion = profile?.user_meta?.region[0]
-  //     ? profile?.user_meta?.region[0]
-  //     : 'NORTH-AMERICA';
-  //   let UserRegion = profileRegion
-  //     ? profileRegion === 'AMERICAS'
-  //       ? 'NORTH-AMERICA'
-  //       : profileRegion
-  //     : profileRegion;
 
   const listRef = useRef(null);
   const [regionVisible, setRegionVisible] = useState(false);
   const [mobileRegion, setMobileRegion] = useState(profileRegion);
 
   useEffect(() => {
-    fetchAllRegions();
-  }, []);
-  //   const countries = {
-  //     APAC: 'APAC',
-  //     AMERICAS: 'NORTH-AMERICA',
-  //     // MEASA: 'MEASA',
-  //   };
-  useEffect(() => {
-    setMobileRegion(profileRegion);
+    return () => {
+      setMobileRegion(profileRegion);
+    };
   }, [profile]);
 
-  useEffect(() => {
-    fetchProfile();
-  }, []);
+  useFocusEffect(
+    useCallback(() => {
+      fetchCritcalIssue();
+      fetchProfile();
+      fetchAllRegions();
+    }, []),
+  );
+
+  // Start tracking the duration of the user's stay on the page
+  let startTime = new Date().getTime();
+
+  // Call this method when the user navigates away from the page
+  let endTime = new Date().getTime();
+  let duration = endTime - startTime;
 
   useEffect(() => {
-    fetchCritcalIssue();
+    const GoogleA = async () => {
+      await analytics().logEvent('critical_duration', {
+        page_name: 'Critical Issue', // name of the page
+        duration: duration, // duration in milliseconds
+      });
+    };
+    GoogleA();
   }, []);
-
   useFocusEffect(
     useCallback(() => {
       wait(500).then(() => scrollToIndex());
@@ -108,19 +110,6 @@ const CriticalIssue = props => {
   const scrollToIndex = () => {
     listRef.current.scrollToIndex({animated: true, index});
   };
-
-  let startTime = new Date().getTime();
-
-  // Call this method when the user navigates away from the page
-  let endTime = new Date().getTime();
-  let duration = endTime - startTime;
-
-  useEffect(() => {
-    firebase.analytics().logEvent('dashboard_duration', {
-      page_name: 'dashboard', // name of the page
-      duration: duration, // duration in milliseconds
-    });
-  }, []);
 
   const _renderCritical = ({item, index}) => {
     let lowercaseRegion = '';

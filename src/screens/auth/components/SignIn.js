@@ -24,7 +24,6 @@ import {BubblesLoader} from 'react-native-indicator';
 import firebase from '@react-native-firebase/analytics';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
-import googleAnalytics from '../../../shared/analytics/googleAnalytics';
 import {useAuthentication} from '../../../context/auth';
 import FlatTextInput from '../../../shared/form/FlatTextInput';
 import {CommonStyles, Colors, Typography} from '../../../theme';
@@ -61,6 +60,7 @@ const SignInForm = props => {
     fetchProfileAsync();
   }, []);
 
+  //   console.log({profile});
   const {
     handleChange,
     handleBlur,
@@ -74,7 +74,7 @@ const SignInForm = props => {
     initialValues: {username: '', password: ''},
     onSubmit: async values => {
       await signIn(values);
-      firebase.analytics().setUserId(profile.ID);
+      await analytics().setUserId(values.username).logEvent('App');
     },
   });
 

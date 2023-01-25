@@ -67,25 +67,20 @@ const ContentLibraryDetail = props => {
     ),
   );
 
-  useEffect(() => {
-    const ARTICLE_LIKEAsync = async () => {
-      await AsyncStorage.setItem('ARTICLE_LIKE', contentLibraryDetails.likes);
-      await AsyncStorage.setItem(
-        'ARTICLE_DISLIKE',
-        contentLibraryDetails.dislikes,
-      );
-    };
-    ARTICLE_LIKEAsync();
-  }, [isFocused, contentLibraryDetails]);
+//   useEffect(() => {
+//     const ARTICLE_LIKEAsync = async () => {
+//       await AsyncStorage.setItem('ARTICLE_LIKE', contentLibraryDetails.likes);
+//       await AsyncStorage.setItem(
+//         'ARTICLE_DISLIKE',
+//         contentLibraryDetails.dislikes,
+//       );
+//     };
+//     ARTICLE_LIKEAsync();
+//   }, [isFocused, contentLibraryDetails]);
 
   //   const [emailStatus, setEmailStatus] = useState(false);
 
-  const [isTrue, setIsTrue] = useState();
 
-  //   const handleFeedbackChange = value => {
-  //     setIsTrue(value);
-  //   };
-  //   console.log('result', isTrue);
 
   const _renderItem = ({item, index}) => {
     const fileUrl = item?.file?.url;
@@ -187,10 +182,6 @@ const ContentLibraryDetail = props => {
     return (
       <TouchableOpacity
         onPress={async () => {
-          await analytics().logEvent('ContentLibraryPDF', {
-            item: item?.file?.title,
-            description: 'pdf open from content library details page',
-          });
           navigation.navigate('pdf', {
             paramsFile: item?.file?.url,
             title: item?.file?.title,
@@ -204,7 +195,14 @@ const ContentLibraryDetail = props => {
 
           <TouchableOpacity
             style={styles.attachmentDownloadButton}
-            onPress={checkPermission}>
+            onPress={async () => {
+              checkPermission();
+              await analytics().logEvent('button_click', {
+                pdf_title: item?.file?.title,
+                button_name: 'download',
+                page_name: 'contentLibraryDetails',
+              });
+            }}>
             <FeatherIcon name="arrow-down" size={20} color="#9B9CA0" />
           </TouchableOpacity>
         </View>
@@ -215,13 +213,17 @@ const ContentLibraryDetail = props => {
   const _renderTagItem = ({item, index}) => {
     return (
       <TouchableOpacity
-        onPress={() =>
+        onPress={async () => {
           navigation.navigate('ContentTags', {
             itemname: item?.name,
             title: route?.params?.title,
             id: item?.term_id,
-          })
-        }>
+          });
+          await analytics().logEvent('tag_click', {
+            tag_title: item?.name,
+            page_name: 'contentLibraryDetails',
+          });
+        }}>
         <View style={styles.tagsContainer}>
           <View style={styles.singleTagContainer}>
             <FeatherIcon

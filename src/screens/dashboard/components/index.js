@@ -21,7 +21,7 @@ import HTMLView from 'react-native-htmlview';
 import {BlurView} from '@react-native-community/blur';
 import {useNavigation} from '@react-navigation/native';
 import messaging from '@react-native-firebase/messaging';
-import firebase from '@react-native-firebase/analytics';
+import analytics from '@react-native-firebase/analytics';
 
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import LinearGradient from 'react-native-linear-gradient';
@@ -151,10 +151,13 @@ const Dashboard = props => {
   let duration = endTime - startTime;
 
   useEffect(() => {
-    firebase.analytics().logEvent('dashboard_duration', {
-      page_name: 'dashboard', // name of the page
-      duration: duration, // duration in milliseconds
-    });
+    const GoogleA = async () => {
+      await analytics().logEvent('dashboard_duration', {
+        page_name: 'dashboard', // name of the page
+        duration: duration, // duration in milliseconds
+      });
+    };
+    GoogleA();
   }, []);
 
   useEffect(() => {
@@ -304,9 +307,9 @@ const Dashboard = props => {
                 onPress={async () => {
                   connectMemberByMemberID(item.ID, index);
 
-                  firebase.analytics().logEvent('dashboard', {
-                    item: item?.user_meta?.first_name,
-                    description: 'Dashboard Member Connection',
+                  await analytics().logEvent('dashboard_New_Member', {
+                    add_member: item?.user_meta?.first_name,
+                    user: profile?.user_login,
                   });
                 }}>
                 <Ionicons name="add-circle" size={20} color="#B2B3B9" />
@@ -355,13 +358,13 @@ const Dashboard = props => {
           </View>
         </View>
         <TouchableOpacity
-          onPress={() => {
+          onPress={async () => {
             navigation.navigate('ContentLibraryDetail', {
               id: item?.ID,
               title: item?.post_title,
             });
-            firebase.analytics().logEvent(item.post_title, {
-              button_name: 'LatestContent',
+            await analytics().logEvent('LatestContent', {
+              content_post_title: item.post_title,
             });
           }}>
           <View style={styles.middleWrap}>
@@ -426,8 +429,9 @@ const Dashboard = props => {
               image: backgroundImage,
             });
 
-            firebase.analytics().logEvent(item.title, {
-              button_name: 'event',
+            await analytics().logEvent('upcoming_event', {
+              event_title: item?.title,
+              event_id: item?.id,
             });
           }}>
           <ImageBackground
@@ -486,12 +490,7 @@ const Dashboard = props => {
   let los_angles = utc + 3600000 * target_offset;
 
   const nd = new Date(los_angles);
-  const ActualPSTTime = moment(nd).format('DD/MM/yyyy');
-
-  //   const quote = dailyQuote[0];
-  // const quote = dailyQuote?.filter(
-  //   item => item?.quote_date === ActualPSTTime,
-  // )[0];
+  const ActualPSTTime = moment(nd).format('MM/DD/yyyy');
 
   return (
     <View style={{flex: 1}}>

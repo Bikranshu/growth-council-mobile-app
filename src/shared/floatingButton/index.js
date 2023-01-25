@@ -29,6 +29,7 @@ import {
   GrowthPipelineEmail,
   resetSendEmail,
 } from '../../screens/event/slice/emailButtonSlice';
+import analytics from '@react-native-firebase/analytics';
 import {fetchGrowthPipeline} from '../../screens/GPD/GPDSlice';
 
 const {width, height} = Dimensions.get('window');
@@ -37,7 +38,6 @@ const {add, block, concat, cond, event, eq, set, Value} = Animated;
 const FloatingButton = props => {
   const {navigation} = props;
   const dispatch = useDispatch();
-  const [emailStatus, setEmailStatus] = useState(false);
   const {sendEmail, sendEmailLoading, sendEmailError} = useSelector(
     state => state.sendEmail,
   );
@@ -235,7 +235,7 @@ const FloatingButton = props => {
                     fontWeight: 'bold',
                     lineHeight: 30,
                   }}>
-                  {GDP.gpd_popup_title}
+                  {GDP?.gpd_popup_title}
                   {/* <Text
                     style={{
                       fontSize: 8,
@@ -274,6 +274,10 @@ const FloatingButton = props => {
                     style={[styles.emailButton]}
                     onPress={async () => {
                       GrowthPipelineDialogueButton();
+                      await analytics().logEvent('button_click', {
+                        button_name: 'Submit',
+                        page_name: 'GPD Floating button',
+                      });
                     }}>
                     <Text style={styles.acceptButtonText}>Yes</Text>
                   </Button>
