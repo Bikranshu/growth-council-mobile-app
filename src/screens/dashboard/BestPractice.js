@@ -10,7 +10,7 @@ import {
     fetchAllPillarMemberContents,
     resetPillarMemberContent,
 } from '../details/slice/pillarMembersContentsSlice';
-import {fetchAllPillarPOEs, resetPillarPOE} from './slice/pillarPOESlice';
+import {fetchAllPillarPOEs, resetPillarPOE} from './slice/POE/pillarPOESlice';
 
 import {
 	connectMemberByID,

@@ -1,23 +1,24 @@
 import React, {useState, useEffect, useRef} from 'react';
-import {useDispatch, useSelector} from 'react-redux';
 import {StyleSheet, Text, View, Dimensions, StatusBar} from 'react-native';
+
 import {Button} from 'native-base';
+import {useDispatch, useSelector} from 'react-redux';
+import {BubblesLoader} from 'react-native-indicator';
 import ButtonToggleGroup from 'react-native-button-toggle-group';
 
-import {Colors} from '../../../theme';
 import Trait from './Traits';
 import Question from './Question';
-import {fetchAllSubTraits, resetSubTraits} from '../slice/subTraitsSlice';
-import {submitSessionScores} from '../slice/sessionScoreSlice';
+import {Colors} from '../../../theme';
 import {
   fetchTraitsAnswerByUserId,
   updateTraitsAnswerByUserId,
   resetTraitsAnswer,
 } from '../slice/traitAnswerbyUserId';
-import {BubblesLoader} from 'react-native-indicator';
-import ToastMessage from '../../../shared/toast';
 import {store} from '../../../utils/httpUtil';
+import ToastMessage from '../../../shared/toast';
 import SessionCompleted from './sessionCompleted';
+import {submitSessionScores} from '../slice/sessionScoreSlice';
+import {fetchAllSubTraits, resetSubTraits} from '../slice/subTraitsSlice';
 
 const win = Dimensions.get('window');
 const SelfAssessment = props => {

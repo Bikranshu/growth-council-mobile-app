@@ -6,6 +6,11 @@ import {
   fetchAllContentLibraryDetails,
   resetContentLibraryDetails,
 } from './slice/contentLibraryDetailSlice';
+import {
+  sendEmailThroughButton,
+  resetsendEmail,
+} from '../event/slice/emailButtonSlice';
+import {ContentArticle, resetArticle} from './slice/articleSlice';
 
 const ContentLibraryDetailScreen = props => {
   const dispatch = useDispatch();
@@ -15,6 +20,13 @@ const ContentLibraryDetailScreen = props => {
     contentLibraryDetailsLoading,
     contentLibraryDetailsError,
   } = useSelector(state => state.contentLibraryDetails);
+  const {sendEmail, sendEmailLoading, sendEmailError} = useSelector(
+    state => state.sendEmail,
+  );
+
+  const {article, articleLoading, articleError} = useSelector(
+    state => state.article,
+  );
 
   const fetchContentLibraryDetail = id => {
     dispatch(fetchAllContentLibraryDetails(id));
@@ -22,6 +34,23 @@ const ContentLibraryDetailScreen = props => {
 
   const cleanContentLibraryDetail = () => {
     dispatch(resetContentLibraryDetails());
+  };
+
+  /**
+   * Send email through button.
+   * @param {object} formData
+   *
+   */
+  const sendEmailThroughButtons = formData => {
+    return dispatch(sendEmailThroughButton(formData));
+  };
+
+  const cleanSendEmail = () => {
+    dispatch(resetsendEmail());
+  };
+
+  const ContentLibraryArticle = formData => {
+    return dispatch(ContentArticle(formData));
   };
 
   return (
@@ -32,6 +61,16 @@ const ContentLibraryDetailScreen = props => {
       contentLibraryDetailsError={contentLibraryDetailsError}
       fetchContentLibraryDetail={fetchContentLibraryDetail}
       cleanContentLibraryDetail={cleanContentLibraryDetail}
+      // Send Email
+      sendEmail={sendEmail}
+      sendEmailLoading={sendEmailLoading}
+      sendEmailError={sendEmailError}
+      sendEmailThroughButtons={sendEmailThroughButtons}
+      cleanSendEmail={cleanSendEmail}
+      article={article}
+      articleLoading={articleLoading}
+      articleError={articleError}
+      ContentLibraryArticle={ContentLibraryArticle}
     />
   );
 };

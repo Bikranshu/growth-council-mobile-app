@@ -10,14 +10,15 @@ import {
   TouchableOpacity,
   SafeAreaView,
 } from 'react-native';
+
 import {Button} from 'native-base';
-import Ionicons from 'react-native-vector-icons/Ionicons';
 import HTMLView from 'react-native-htmlview';
 import {BubblesLoader} from 'react-native-indicator';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 
-import {CommonStyles, Colors, Typography} from '../../../theme';
 import LoadMore from './LoadMore';
 import Loading from '../../../shared/loading';
+import {CommonStyles, Colors, Typography} from '../../../theme';
 
 const CouncilDetail = props => {
   const {
@@ -113,7 +114,7 @@ const CouncilDetail = props => {
               textComponentProps={{
                 style: {
                   fontSize: 14,
-                  fontWeight: 'regular',
+
                   color: '#666767',
                   alignItems: 'center',
                   textAlign: 'justify',
@@ -163,7 +164,7 @@ const styles = StyleSheet.create({
     fontFamily: Typography.FONT_NORMAL,
     fontSize: 14,
     lineHeight: 10,
-    fontWeight: 'regular',
+
     color: '#666767',
     textAlign: 'left',
   },
@@ -180,7 +181,6 @@ const styles = StyleSheet.create({
   moreButtonText: {
     color: Colors.PRIMARY_BUTTON_TEXT_COLOR,
     fontSize: 12,
-    fontWeight: 'normal',
   },
   loading1: {
     top: 10,

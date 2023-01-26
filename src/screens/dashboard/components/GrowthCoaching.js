@@ -13,27 +13,27 @@ import {
   PermissionsAndroid,
   StatusBar,
 } from 'react-native';
+
+import moment from 'moment';
+import {isEmptyArray} from 'formik';
+import {Linking} from 'react-native';
+import {Toast, useToast} from 'native-base';
+import RNFetchBlob from 'react-native-blob-util';
+import analytics from '@react-native-firebase/analytics';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import Material from 'react-native-vector-icons/MaterialIcons';
 import FeatherIcon from 'react-native-vector-icons/Feather';
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome';
-import moment from 'moment';
-import analytics from '@react-native-firebase/analytics';
-import {Linking} from 'react-native';
-import {BubblesLoader} from 'react-native-indicator';
 import {useFocusEffect, useIsFocused} from '@react-navigation/native';
 // import ReactNativeBlobUtil from 'react-native-blob-util';
-import RNFetchBlob from 'react-native-blob-util';
-import ToastMessage from '../../../shared/toast';
-import YoutubePlayer from '../../../shared/youtube';
-import Footer from '../../../shared/footer';
-import BottomNav from '../../../layout/BottomLayout';
-import Player from './Player';
 
-import {CommonStyles, Colors, Typography} from '../../../theme';
-import {isEmptyArray} from 'formik';
+import Player from './Player';
 import Loading from '../../../shared/loading';
+import ToastMessage from '../../../shared/toast';
+import BottomNav from '../../../layout/BottomLayout';
 import {GROWTH_COACHING_ID} from '../../../constants';
+import FloatingButton from '../../../shared/floatingButton';
+import {CommonStyles, Colors, Typography} from '../../../theme';
 
 const win = Dimensions.get('window');
 const contentContainerWidth = win.width - 30;
@@ -80,6 +80,13 @@ const GrowthCoaching = props => {
     region = ' ';
   } else {
     region = profile?.user_meta?.region[0];
+  }
+
+  let persona = profile?.user_meta?.user_persona;
+  if (typeof persona === 'undefined' || persona === null) {
+    persona = ' ';
+  } else {
+    persona = profile?.user_meta?.user_persona[0];
   }
 
   const [userRegion, setUserRegion] = useState(region);
@@ -188,6 +195,8 @@ const GrowthCoaching = props => {
     );
   };
 
+  const toast = useToast();
+  const id = 'test-toast';
   const _renderMiddleItem = ({item, index}) => {
     let navigationPath = ' ';
     if (item?.slug === 'growth-leadership-coaching') {
@@ -198,14 +207,27 @@ const GrowthCoaching = props => {
 
     return (
       <TouchableOpacity
-        onPress={() =>
+        onPress={() => {
+          //   if (
+          //     item?.growth_council_persona_classifcation?.includes(persona) ===
+          //     true
+          //   ) {
           navigation.navigate(navigationPath, {
             poeId: item?.term_id,
             // pillarId: item?.parent,
             title: 'Growth Coaching',
             image: require('../../../assets/img/Rectangle.png'),
-          })
-        }>
+          });
+          //   } else {
+          //     if (!toast.isActive(id)) {
+          //       toast.show({
+          //         id,
+          //         title: 'You have no access to this content',
+          //       });
+          //     }
+          // ToastMessage.show('You have no access to this content');
+          //   }
+        }}>
         <View style={styles.middleWrapper}>
           <View style={[styles.middleW, styles.shadowProp]}>
             <Image
@@ -492,8 +514,8 @@ const GrowthCoaching = props => {
               </View>
             )}
 
-          {pillarEventLoading && (
-            <View style={{marginTop: 40}}>
+          {pillarPOELoading && (
+            <View style={{marginTop: 70}}>
               <Loading />
             </View>
           )}
@@ -573,6 +595,7 @@ const GrowthCoaching = props => {
           {/* <Footer /> */}
         </View>
       </ScrollView>
+      <FloatingButton {...props} navigation={navigation} />
       <BottomNav {...props} navigation={navigation} />
     </View>
   );

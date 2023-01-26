@@ -10,13 +10,14 @@ import {
   Dimensions,
   FlatList,
 } from 'react-native';
+
 import {Button} from 'native-base';
 import {Linking} from 'react-native';
+import HTMLView from 'react-native-htmlview';
 import analytics from '@react-native-firebase/analytics';
 
-import HTMLView from 'react-native-htmlview';
 import Footer from '../../../shared/footer';
-
+import FloatingButton from '../../../shared/floatingButton';
 import {CommonStyles, Colors, Typography} from '../../../theme';
 
 const Ideas = props => {
@@ -40,7 +41,7 @@ const Ideas = props => {
   }
 
   return (
-    <>
+    <View style={{flex: 1}}>
       <StatusBar
         barStyle="light-content"
         hidden={false}
@@ -70,16 +71,14 @@ const Ideas = props => {
                 styles.plainButton,
                 {backgroundColor: Colors.SECONDARY_BUTTON_COLOR},
               ]}
-              onPress={async() =>
-				{
+              onPress={async () => {
                 navigation.navigate('Gmail', {
                   title: 'Contribute Ideas',
-                })
-				await analytics().logEvent('IdeasGmail', {
-					item: 'Contribute Ideas',
-				  });
-				}
-              }>
+                });
+                await analytics().logEvent('IdeasGmail', {
+                  item: 'Contribute Ideas',
+                });
+              }}>
               <Text style={[styles.buttonText, styles.plainButtonText]}>
                 Email Us
               </Text>
@@ -88,7 +87,8 @@ const Ideas = props => {
           {/* <Footer /> */}
         </View>
       </ScrollView>
-    </>
+      <FloatingButton {...props} navigation={navigation} />
+    </View>
   );
 };
 

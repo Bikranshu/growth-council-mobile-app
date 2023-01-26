@@ -1,7 +1,8 @@
 import React from 'react';
 import {StyleSheet, View, Image, Text} from 'react-native';
-import {BubblesLoader} from 'react-native-indicator';
+
 import {Colors} from '../../theme';
+import {BubblesLoader} from 'react-native-indicator';
 
 const Loading = props => {
   return (

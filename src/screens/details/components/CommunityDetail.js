@@ -12,26 +12,27 @@ import {
   StatusBar,
   PermissionsAndroid,
 } from 'react-native';
+
+import moment from 'moment';
+import HTMLView from 'react-native-htmlview';
+import {Button, useToast} from 'native-base';
+import RNFetchBlob from 'react-native-blob-util';
+import LinearGradient from 'react-native-linear-gradient';
+import Ionicons from 'react-native-vector-icons/Ionicons';
+import FloatingButton from '../../../shared/floatingButton';
 import FeatherIcon from 'react-native-vector-icons/Feather';
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome';
 import {useFocusEffect, useIsFocused} from '@react-navigation/native';
-import Ionicons from 'react-native-vector-icons/Ionicons';
-import moment from 'moment';
-import {BubblesLoader} from 'react-native-indicator';
-import YoutubePlayer from '../../../shared/youtube';
-import HTMLView from 'react-native-htmlview';
-import Player from '../../dashboard/components/Player';
-import {CommonStyles, Colors, Typography} from '../../../theme';
-import Loading from '../../../shared/loading';
-import RNFetchBlob from 'react-native-blob-util';
-import LinearGradient from 'react-native-linear-gradient';
-// import ReactNativeBlobUtil from 'react-native-blob-util';
-import ToastMessage from '../../../shared/toast';
+
 import {
   GROWTH_COACHING_ID,
   GROWTH_COMMUNITY_ID,
   GROWTH_CONTENT_ID,
 } from '../../../constants';
+import Loading from '../../../shared/loading';
+import ToastMessage from '../../../shared/toast';
+import {CommonStyles, Colors, Typography} from '../../../theme';
+import {COACHING_COLOR, COMMUNITY_COLOR} from '../../../theme/colors';
 
 const win = Dimensions.get('window');
 const contentContainerWidth = win.width - 30;
@@ -75,6 +76,8 @@ const CommunityDetail = props => {
   } = props;
 
   const isFocused = useIsFocused();
+  const [emailStatus, setEmailStatus] = useState(false);
+
   const [memberConnection, setMemberConnection] = useState([]);
   const [slugName, setSlugName] = useState('');
 
@@ -127,7 +130,7 @@ const CommunityDetail = props => {
   //  GetIdBySlug({
   //       slug: poeDetails?.slug,
   //     }).then(response => {
-  //       console.log('a', response);
+
   //     });
   //   }, [poeDetails]);
 
@@ -371,7 +374,7 @@ const CommunityDetail = props => {
         RNFetchBlob.config(configOptions)
           .fetch('GET', FILE_URL)
           .then(res => {
-            console.log('file', res);
+
             RNFetchBlob.ios.previewDocument('file://' + res.path());
           });
         return;
@@ -379,15 +382,14 @@ const CommunityDetail = props => {
         config(configOptions)
           .fetch('GET', FILE_URL)
           .progress((received, total) => {
-            console.log('progress', received / total);
+        
           })
 
           .then(res => {
-            console.log('file download', res);
+       
             RNFetchBlob.android.actionViewIntent(res.path());
           })
           .catch((errorMessage, statusCode) => {
-            console.log('error with downloading file', errorMessage);
           });
       }
     };
@@ -453,7 +455,7 @@ const CommunityDetail = props => {
   }
 
   return (
-    <>
+    <View style={{flex: 1}}>
       <StatusBar
         barStyle="light-content"
         hidden={false}
@@ -485,7 +487,7 @@ const CommunityDetail = props => {
           <ScrollView
             style={[styles.content, {backgroundColor: backgroundColor}]}>
             <View style={styles.contentWrapper}>
-              <View style={{padding: 15}}>
+              <View style={{paddingHorizontal: 15}}>
                 <Text
                   style={{
                     fontSize: 16,
@@ -513,6 +515,7 @@ const CommunityDetail = props => {
                   }}
                 />
               </View>
+
               {poeDetails !== null &&
                 pillarPOEs !== null &&
                 pillarPOEs !== false &&
@@ -728,7 +731,8 @@ const CommunityDetail = props => {
         </View>
         {poeDetailLoading && <Loading />}
       </ScrollView>
-    </>
+      <FloatingButton {...props} navigation={navigation} />
+    </View>
   );
 };
 
@@ -972,6 +976,39 @@ const styles = StyleSheet.create({
     overflow: 'hidden',
     marginRight: 5,
     marginBottom: 15,
+  },
+  emailButton: {
+    borderRadius: 10,
+    marginLeft: 15,
+    marginRight: 15,
+    width: '100%',
+    height: 50,
+    backgroundColor: COACHING_COLOR,
+    marginTop: 5,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  sendRegisterButton: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: 10,
+    width: '100%',
+    height: 50,
+    backgroundColor: '#ffffff',
+    marginTop: 25,
+    borderColor: COACHING_COLOR,
+    borderWidth: 2,
+    position: 'relative',
+  },
+  acceptButtonText: {
+    width: '100%',
+    height: 20,
+    fontSize: 14,
+    color: '#ffffff',
+  },
+  emailButtonText: {
+    color: COACHING_COLOR,
   },
 });
 

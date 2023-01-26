@@ -11,23 +11,26 @@ import {
   SafeAreaView,
   Linking,
 } from 'react-native';
-import {Searchbar, Button} from 'react-native-paper';
-import Ionicons from 'react-native-vector-icons/Ionicons';
-import Material from 'react-native-vector-icons/MaterialIcons';
 import {
   useFocusEffect,
   useIsFocused,
   useNavigation,
 } from '@react-navigation/native';
+
+import {Searchbar, Button} from 'react-native-paper';
+import firestore from '@react-native-firebase/firestore';
 import analytics from '@react-native-firebase/analytics';
-import {CommonStyles, Colors, Typography} from '../../../theme';
-import {getAsyncStorage} from '../../../utils/storageUtil';
-import {JWT_TOKEN, USER_NAME, USER_AVATAR} from '../../../constants';
+import Ionicons from 'react-native-vector-icons/Ionicons';
+import Material from 'react-native-vector-icons/MaterialIcons';
+
+import Loading from '../../../shared/loading';
+import ChatCount from '../../../shared/chatCount';
 import {decodeUserID} from '../../../utils/jwtUtil';
 import BottomNav from '../../../layout/BottomLayout';
-import ChatCount from '../../../shared/chatCount';
-import Loading from '../../../shared/loading';
-import firestore from '@react-native-firebase/firestore';
+import {getAsyncStorage} from '../../../utils/storageUtil';
+import FloatingButton from '../../../shared/floatingButton';
+import {CommonStyles, Colors, Typography} from '../../../theme';
+import {JWT_TOKEN, USER_NAME, USER_AVATAR} from '../../../constants';
 
 const UserList = props => {
   const {
@@ -68,19 +71,10 @@ const UserList = props => {
       if (!userID) console.log('USER ID NOT FOUND');
 
       const fbUsers = await firestore().collection('rooms').get();
-      //   console.log('FB USERS');
-      //   console.log(fbUsers);
-      //   console.log('*****************');
-
+  
       const docs = fbUsers.docs.filter(doc => doc.id.includes(userID));
-      //   console.log('DOC USERS');
-      //   console.log(docs);
-      //   console.log('*****************');
 
       const data = docs.map(doc => ({id: doc.id, ...doc.data()}));
-      //   console.log('MAP USERS');
-      //   console.log(data);
-      //   console.log('*****************');
 
       let __users = [];
       for (let i = 0; i < data.length; i++) {
@@ -91,9 +85,6 @@ const UserList = props => {
         __users.push({...user, ...data[i]});
       }
 
-      //   console.log('ACTUAL USERS');
-      //   console.log(__users);
-      //   console.log('*****************');
 
       setUsers(__users);
     } catch (error) {
@@ -158,6 +149,13 @@ const UserList = props => {
   }, [text]);
 
   const _renderItems = ({item, index}) => {
+    let chat = item?.user_meta?.chat_notification;
+    if (typeof chat === 'undefined') {
+      chat = '';
+    } else {
+      chat = item?.user_meta?.chat_notification[0];
+    }
+
     return (
       <View>
         <TouchableOpacity
@@ -173,6 +171,7 @@ const UserList = props => {
               userID: userID,
               userName: userName,
               userAvatar: avatarImg,
+              userChat: chat,
             });
           }}>
           <View style={[styles.wrapper, styles.shadowProp]} key={index}>
@@ -323,7 +322,7 @@ const UserList = props => {
         style={{paddingBottom: 20, backgroundColor: 'white', marginTop: 10}}>
         <Footer />
       </View> */}
-
+      <FloatingButton {...props} navigation={navigation} />
       <BottomNav {...props} navigation={navigation} />
     </SafeAreaView>
   );

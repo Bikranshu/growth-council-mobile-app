@@ -12,20 +12,19 @@ import {
   StatusBar,
   PermissionsAndroid,
 } from 'react-native';
+
 import {Button} from 'native-base';
-import {useFocusEffect, useIsFocused} from '@react-navigation/native';
+import HTMLView from 'react-native-htmlview';
+import RNFetchBlob from 'react-native-blob-util';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import FeatherIcon from 'react-native-vector-icons/Feather';
-import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
+import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome';
+import {useFocusEffect, useIsFocused} from '@react-navigation/native';
 
-import Player from '../../dashboard/components/Player';
-import HTMLView from 'react-native-htmlview';
-import {CommonStyles, Colors, Typography} from '../../../theme';
 import Loading from '../../../shared/loading';
-import RNFetchBlob from 'react-native-blob-util';
-
 import ToastMessage from '../../../shared/toast';
+import {CommonStyles, Colors, Typography} from '../../../theme';
 
 const win = Dimensions.get('window');
 const contentContainerWidth = win.width - 30;
@@ -257,7 +256,7 @@ const ToolkitDetails = props => {
                 alignItems: 'center',
                 justifyContent: 'center',
               }}
-			  resizeMode="contain"
+              resizeMode="contain"
             />
           </View>
 
@@ -288,7 +287,7 @@ const ToolkitDetails = props => {
                   },
                 }}
               />
-{/* 
+              {/* 
               {poeDetails !== null &&
                 pillarPOEs !== null &&
                 pillarPOEs !== false &&
@@ -318,7 +317,6 @@ const ToolkitDetails = props => {
                     />
                   </View>
                 )}
-             
 
               {/* <Footer /> */}
             </View>

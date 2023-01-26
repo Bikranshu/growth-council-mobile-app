@@ -13,16 +13,17 @@ import {
   Modal,
   Pressable,
 } from 'react-native';
-import {CommonStyles, Colors, Typography} from '../../../theme';
-import FlatTextInput from '../../../shared/form/FlatTextInput';
-import {WebView} from 'react-native-webview';
-import {getAsyncStorage} from '../../../utils/storageUtil';
-import {decodeUserID} from '../../../utils/jwtUtil';
-import {HOME_URL, JWT_TOKEN} from '../../../constants';
-import {SafeAreaView} from 'react-native-safe-area-context';
-import Ionicons from 'react-native-vector-icons/Ionicons';
+
 import {Column} from 'native-base';
 import {padding} from '@mui/system';
+import {WebView} from 'react-native-webview';
+import Ionicons from 'react-native-vector-icons/Ionicons';
+import {SafeAreaView} from 'react-native-safe-area-context';
+
+import {decodeUserID} from '../../../utils/jwtUtil';
+import {HOME_URL, JWT_TOKEN} from '../../../constants';
+import {getAsyncStorage} from '../../../utils/storageUtil';
+import {CommonStyles, Colors, Typography} from '../../../theme';
 
 const screenHeight = Math.round(Dimensions.get('window').height);
 
@@ -72,8 +73,6 @@ const Radar = props => {
     profile?.session_score !== false
       ? profile?.session_score?.map(item => item?.session)
       : [0];
-
-  console.log(previousSession);
 
   function LoadingIndicatorView() {
     return (

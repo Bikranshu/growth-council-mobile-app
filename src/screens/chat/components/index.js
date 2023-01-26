@@ -1,11 +1,16 @@
 import React, {useState, useCallback, useLayoutEffect, useEffect} from 'react';
-import {StyleSheet, View, Text, Image, SafeAreaView, StatusBar} from 'react-native';
-import {GiftedChat, Send} from 'react-native-gifted-chat';
-
-import Ionicons from 'react-native-vector-icons/Ionicons';
-import {TouchableOpacity} from 'react-native-gesture-handler';
-
+import {
+  StyleSheet,
+  View,
+  Text,
+  Image,
+  SafeAreaView,
+  StatusBar,
+} from 'react-native';
 import firestore from '@react-native-firebase/firestore';
+import Ionicons from 'react-native-vector-icons/Ionicons';
+import {GiftedChat, Send} from 'react-native-gifted-chat';
+import {TouchableOpacity} from 'react-native-gesture-handler';
 
 import {CommonStyles, Colors} from '../../../theme';
 import {getFCMTOkenForUser} from '../../../utils/httpUtil';
@@ -20,6 +25,12 @@ const Chat = props => {
     notificationError,
     sendNotificationByIdentifier,
     cleanNotification,
+
+    profile,
+    profileLoading,
+    profileError,
+    fetchProfileByIdentifier,
+    cleanProfile,
   } = props;
 
   const friendID = route.params.friendID;
@@ -28,6 +39,7 @@ const Chat = props => {
   const userID = route.params.userID;
   const userAvatar = route.params.userAvatar;
   const userName = route.params.userName;
+  const userChat = route?.params?.userChat;
 
   const [userScreen, setUserScreen] = useState(false);
   const [friendScreen, setFriendScreen] = useState(false);
@@ -43,20 +55,27 @@ const Chat = props => {
 
   const [messages, setMessages] = useState([]);
 
+
   useEffect(() => {
-    console.log('The friend ID is ' + friendID);
-    getFCMTOkenForUser(friendID)
-      .then(res => {
-        const token = res?.data?.data;
-        if (token == null) {
-          console.log(res.data?.message);
-        }
-        console.log(token);
-        setFriendToken(typeof token == 'string' ? token : token?.[0]);
-      })
-      .catch(error => {
-        console.log(error);
-      });
+    {
+      userChat === '1' ? (
+        (console.log('The friend ID is ' + friendID),
+        getFCMTOkenForUser(friendID)
+          .then(res => {
+            const token = res?.data?.data;
+            if (token == null) {
+              console.log(res.data?.message);
+            }
+          
+            setFriendToken(typeof token == 'string' ? token : token?.[0]);
+          })
+          .catch(error => {
+            console.log(error);
+          }))
+      ) : (
+        <></>
+      );
+    }
   }, []);
 
   useLayoutEffect(() => {
@@ -195,7 +214,6 @@ const Chat = props => {
     } else {
     }
 
-
     if (friendIDSnap.exists) {
       if (friendIDSnap.data().is_active) {
         setFriendScreen(true);
@@ -211,7 +229,7 @@ const Chat = props => {
     } else {
       await firestore()
         .collection(`rooms/${chatID()}/messages`)
-        .add({_id, createdAt, text, user, status: 'read'});
+        .add({_id, createdAt, text, user, status: 'unread'});
       // await addDoc(chatsCol, {_id, createdAt, text, user, status: 'unread'});
     }
 
@@ -236,77 +254,79 @@ const Chat = props => {
   });
 
   return (
-	<SafeAreaView style={{flex: 1, backgroundColor: 'white'}}>
+    <SafeAreaView style={{flex: 1, backgroundColor: 'white'}}>
       <StatusBar
         barStyle="light-content"
         hidden={false}
         backgroundColor="#001D3F"
         translucent={false}
       />
-    <View style={styles.container}>
-      <SafeAreaView style={{top: -20, backgroundColor: 'white'}}>
-        <View style={styles.wrapper}>
-          <TouchableOpacity onPress={() => navigation.goBack()}>
-            <Ionicons
-              name="chevron-back-outline"
-              size={40}
-              color="#02B0F0"
-              style={{marginTop: 15}}
-            />
-          </TouchableOpacity>
-          <View style={{flexDirection: 'row', marginTop: 10}}>
-            <Image
-              source={{
-                uri: friendAvatar,
-              }}
-              style={{
-                height: 50,
-                width: 50,
-                borderRadius: 50,
-                marginLeft: 10,
-              }}
-            />
-            <View
-              style={{
-                width: '60%',
-                justifyContent: 'center',
-                marginLeft: 20,
-              }}>
-              <Text style={{color: '#323232', fontSize: 16}}>{friendName}</Text>
-            </View>
-          </View>
-
-          {/**/}
-        </View>
-      </SafeAreaView>
-      <GiftedChat
-        messages={messages}
-        onSend={messages => onSend(messages)}
-        placeholder={'Write a message'}
-        user={{
-          _id: userID,
-          name: userName,
-          avatar: userAvatar,
-          // name: auth?.currentUser?.displayName,
-          // avatar: auth?.currentUser?.photoURL
-        }}
-        renderSend={props => {
-          return (
-            <Send {...props} containerStyle={styles.sendContainer}>
+      <View style={styles.container}>
+        <SafeAreaView style={{top: -20, backgroundColor: 'white'}}>
+          <View style={styles.wrapper}>
+            <TouchableOpacity onPress={() => navigation.goBack()}>
               <Ionicons
-                name={'send-sharp'}
-                size={20}
-                color={'white'}
-                style={{marginLeft: 4}}
+                name="chevron-back-outline"
+                size={40}
+                color="#02B0F0"
+                style={{marginTop: 15}}
               />
-            </Send>
-          );
-        }}
-        image={friendAvatar}
-        alwaysShowSend={true}
-      />
-    </View>
-	</SafeAreaView>
+            </TouchableOpacity>
+            <View style={{flexDirection: 'row', marginTop: 10}}>
+              <Image
+                source={{
+                  uri: friendAvatar,
+                }}
+                style={{
+                  height: 50,
+                  width: 50,
+                  borderRadius: 50,
+                  marginLeft: 10,
+                }}
+              />
+              <View
+                style={{
+                  width: '60%',
+                  justifyContent: 'center',
+                  marginLeft: 20,
+                }}>
+                <Text style={{color: '#323232', fontSize: 16}}>
+                  {friendName}
+                </Text>
+              </View>
+            </View>
+
+            {/**/}
+          </View>
+        </SafeAreaView>
+        <GiftedChat
+          messages={messages}
+          onSend={messages => onSend(messages)}
+          placeholder={'Write a message'}
+          user={{
+            _id: userID,
+            name: userName,
+            avatar: userAvatar,
+            // name: auth?.currentUser?.displayName,
+            // avatar: auth?.currentUser?.photoURL
+          }}
+          renderSend={props => {
+            return (
+              <Send {...props} containerStyle={styles.sendContainer}>
+                <Ionicons
+                  name={'send-sharp'}
+                  size={20}
+                  color={'white'}
+                  style={{marginLeft: 4}}
+                />
+              </Send>
+            );
+          }}
+          image={friendAvatar}
+          alwaysShowSend={true}
+        />
+      </View>
+    </SafeAreaView>
   );
 };
 

@@ -14,16 +14,18 @@ import {
   Dimensions,
   StatusBar,
 } from 'react-native';
-import {Colors, Typography} from '../../../theme';
-import Ionicons from 'react-native-vector-icons/Ionicons';
-import Footer from '../../../shared/footer';
-import {Picker} from '@react-native-picker/picker';
-import BottomNav from '../../../layout/BottomLayout';
+
 import HTMLView from 'react-native-htmlview';
+import {Picker} from '@react-native-picker/picker';
 import {BubblesLoader} from 'react-native-indicator';
 import Entypo from 'react-native-vector-icons/Entypo';
-import Loading from '../../../shared/loading';
 import {useFocusEffect} from '@react-navigation/native';
+import Ionicons from 'react-native-vector-icons/Ionicons';
+
+import Loading from '../../../shared/loading';
+import {Colors, Typography} from '../../../theme';
+import BottomNav from '../../../layout/BottomLayout';
+import FloatingButton from '../../../shared/floatingButton';
 
 const CriticalIssue = props => {
   const {
@@ -42,7 +44,6 @@ const CriticalIssue = props => {
     fetchProfile,
     cleanProfile,
 
-
     region,
     regionLoading,
     regionError,
@@ -53,18 +54,18 @@ const CriticalIssue = props => {
   let profileRegion = profile?.user_meta?.region;
 
   if (typeof profileRegion === 'undefined' || profileRegion === null) {
-    profileRegion = 'ALL REGION';
+    profileRegion = 'ALL REGIONS';
   } else {
     profileRegion = profile?.user_meta?.region[0];
   }
   //   let profileRegion = profile?.user_meta?.region[0]
   //     ? profile?.user_meta?.region[0]
   //     : 'NORTH-AMERICA';
-//   let UserRegion = profileRegion
-//     ? profileRegion === 'AMERICAS'
-//       ? 'NORTH-AMERICA'
-//       : profileRegion
-//     : profileRegion;
+  //   let UserRegion = profileRegion
+  //     ? profileRegion === 'AMERICAS'
+  //       ? 'NORTH-AMERICA'
+  //       : profileRegion
+  //     : profileRegion;
 
   const listRef = useRef(null);
   const [regionVisible, setRegionVisible] = useState(false);
@@ -113,7 +114,7 @@ const CriticalIssue = props => {
     else console.log("lowercaseRegion doesn't exist, look into it");
     return (
       <>
-        {lowercaseRegion === item?.region ? (
+        {item?.region?.includes(lowercaseRegion) === true ? (
           <View style={styles.content}>
             <Image
               style={{
@@ -150,7 +151,7 @@ const CriticalIssue = props => {
               ))}
             </View>
           </View>
-        ) : lowercaseRegion === 'all region' ? (
+        ) : lowercaseRegion === 'all regions' ? (
           <View style={styles.content}>
             <Image
               style={{
@@ -316,8 +317,7 @@ const CriticalIssue = props => {
           </View>
         </View>
       </Modal>
-      
-
+      <FloatingButton {...props} navigation={navigation} />
       <BottomNav {...props} navigation={navigation} />
     </SafeAreaView>
   );

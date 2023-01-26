@@ -8,20 +8,21 @@ import {
   FlatList,
   StatusBar,
 } from 'react-native';
+
+import 'moment-timezone';
+import moment from 'moment-timezone';
 import {Button, useToast} from 'native-base';
+import HTMLView from 'react-native-htmlview';
+import * as RNLocalize from 'react-native-localize';
+import {BubblesLoader} from 'react-native-indicator';
 import Feather from 'react-native-vector-icons/Feather';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
-import HTMLView from 'react-native-htmlview';
-import {formatTimeByOffset} from '../../event/components/timezone';
-import moment from 'moment-timezone';
-import 'moment-timezone';
-import * as RNLocalize from 'react-native-localize';
-import {BubblesLoader} from 'react-native-indicator';
 
+import Loading from '../../../shared/loading';
 import ToastMessage from '../../../shared/toast';
 import {CommonStyles, Colors, Typography} from '../../../theme';
-import Loading from '../../../shared/loading';
+import {formatTimeByOffset} from '../../event/components/timezone';
 
 const sessionAbout = props => {
   const {
@@ -124,8 +125,6 @@ const sessionAbout = props => {
     );
     setTimeToEnd(convertedToLocalTimeEnd);
   }, [sessions]);
-
-  console.log('show', sessions.show_date_in_app);
 
   return (
     <View>
@@ -314,21 +313,20 @@ const sessionAbout = props => {
       {sessions?.descirption !== undefined && sessions?.descirption !== '' && (
         <View style={{marginTop: 20}}>
           <Text style={styles.contentHeading}>Session Brief</Text>
-          
-            <HTMLView
-              value={description}
-              textComponentProps={{
-                style: {
-                  fontSize: 12,
-                  lineHeight: 20,
-                  fontWeight: 'regular',
-                  color: '#666767',
-                  alignItems: 'center',
-                  textAlign: 'justify',
-                },
-              }}
-            />
-          
+
+          <HTMLView
+            value={description}
+            textComponentProps={{
+              style: {
+                fontSize: 12,
+                lineHeight: 20,
+
+                color: '#666767',
+                alignItems: 'center',
+                textAlign: 'justify',
+              },
+            }}
+          />
         </View>
       )}
       <View style={{justifyContent: 'center', alignItems: 'center'}}>

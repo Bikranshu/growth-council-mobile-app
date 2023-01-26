@@ -14,22 +14,24 @@ import {
   Keyboard,
   Dimensions,
 } from 'react-native';
-import {Button} from 'native-base';
-import Ionicons from 'react-native-vector-icons/Ionicons';
-import AntDesign from 'react-native-vector-icons/AntDesign';
-import {useFormik} from 'formik';
+
 import * as Yup from 'yup';
+import {useFormik} from 'formik';
+import {Button} from 'native-base';
+import {useSelector} from 'react-redux';
 import {BubblesLoader} from 'react-native-indicator';
-import DropDownPicker from 'react-native-dropdown-picker';
-import ImagePicker from 'react-native-image-crop-picker';
 import {useIsFocused} from '@react-navigation/native';
 import analytics from '@react-native-firebase/analytics';
-import {CommonStyles, Colors, Typography} from '../../../theme';
-import ToastMessage from '../../../shared/toast';
-import {PRIMARY_BACKGROUND_COLOR} from '../../../theme/colors';
-import Footer from '../../../shared/footer';
-import {useSelector} from 'react-redux';
+import ImagePicker from 'react-native-image-crop-picker';
+import DropDownPicker from 'react-native-dropdown-picker';
+import Ionicons from 'react-native-vector-icons/Ionicons';
+import AntDesign from 'react-native-vector-icons/AntDesign';
+
 import Loading from '../../../shared/loading';
+import ToastMessage from '../../../shared/toast';
+import FloatingButton from '../../../shared/floatingButton';
+import {PRIMARY_BACKGROUND_COLOR} from '../../../theme/colors';
+import {CommonStyles, Colors, Typography} from '../../../theme';
 
 const profileUpdateSchema = Yup.object().shape({
   //   display_name: Yup.string().required('Name is required.'),
@@ -73,7 +75,7 @@ const ManageAccount = props => {
   const [open, setOpen] = useState(false);
   const [value, setValue] = useState([]);
   const [items, setItems] = useState([]);
-  const [image, setImage] = useState(profile.avatar);
+  const [image, setImage] = useState(profile?.profile_image);
   const [imageDetail, setImageDetail] = useState();
 
   let title = profile?.user_meta?.title;
@@ -145,40 +147,33 @@ const ManageAccount = props => {
 
   const takePhotoFromCamera = () => {
     ImagePicker.openCamera({
+      width: 270,
+      height: 270,
       cropping: true,
+      cropperCircleOverlay: true,
     }).then(async image => {
       setImage(image.path);
       let fd = new FormData();
       const file = {
-        type: image.mime,
+        type: 'image/jpg',
         uri: Platform.OS === 'ios' ? `file:///${image.path}` : image.path,
         name: 'profile_photo.jpg',
       };
       fd.append('file', file);
       setImageDetail(fd);
-
-      //   await uploadImage(fd).then(async response => {
-      //     console.log('Upload response:::::::::::', response?.payload?.id);
-      //     await updateImage({attachment_id: response?.payload?.id}).then(
-      //       response => {
-      //         if (response?.payload?.code === 200) {
-      //           navigation.navigate('Account');
-      //           ToastMessage.show('Profile Image has been successfully updated.');
-      //           console.log('Update response::::::::::', response);
-      //         }
-      //       },
-      //     );
-      //   });
     });
   };
   const choosePhotoFromLibrary = () => {
     ImagePicker.openPicker({
+      width: 270,
+      height: 270,
       cropping: true,
+      cropperCircleOverlay: true,
     }).then(async image => {
       setImage(image.path);
       let fd = new FormData();
       const file = {
-        type: image.mime,
+        type: 'image/jpg',
         uri: Platform.OS === 'ios' ? `file:///${image.path}` : image.path,
         name: 'profile_photo.jpg',
       };
@@ -214,16 +209,19 @@ const ManageAccount = props => {
       await updateUser(values).then(async response => {
         //image upload code
         await uploadImage(imageDetail).then(async response => {
-          await updateImage({attachment_id: response?.payload?.id}).then(
-            response => {
-              if (response?.payload?.code === 200) {
-                navigation.navigate('Account');
-                // ToastMessage.show(
-                //   'Your profile has been successfully updated.',
-                // );
-              }
-            },
-          );
+          if (response?.payload?.success === true) {
+            navigation.navigate('Account');
+          }
+          //   await updateImage({attachment_id: response?.payload?.id}).then(
+          //     response => {
+          //       if (response?.payload?.code === 200) {
+          //         navigation.navigate('Account');
+          //         // ToastMessage.show(
+          //         //   'Your profile has been successfully updated.',
+          //         // );
+          //       }
+          //     },
+          //   );
         });
         if (response?.payload?.code === 200) {
           navigation.navigate('Account');
@@ -240,7 +238,6 @@ const ManageAccount = props => {
   useEffect(() => {
     fetchAllExpertises();
   }, []);
-
 
   let memberExpertise = expertise?.data?.choices;
   if (typeof memberExpertise === 'undefined') {
@@ -336,7 +333,9 @@ const ManageAccount = props => {
             <View style={styles.profileWrapper}>
               <View style={styles.icon}>
                 <Image
-                  source={{uri: image}}
+                  source={{
+                    uri: image,
+                  }}
                   style={{width: '100%', height: '100%'}}
                   resizeMode="cover"
                 />
@@ -352,7 +351,7 @@ const ManageAccount = props => {
                     </View>
                   </>
                 )}
-                {updateLoading && (
+                {/* {updateLoading && (
                   <>
                     <View style={styles.loading1}>
                       <BubblesLoader
@@ -361,7 +360,7 @@ const ManageAccount = props => {
                       />
                     </View>
                   </>
-                )}
+                )} */}
                 <Text style={styles.headingText1}>{profile?.user_login}</Text>
                 <Text style={{color: '#222B45'}}>
                   {profile?.user_meta?.title === undefined
@@ -592,6 +591,7 @@ const ManageAccount = props => {
         </View>
         {/* <Footer /> */}
       </ScrollView>
+      <FloatingButton {...props} navigation={navigation} />
     </KeyboardAvoidingView>
   );
 };

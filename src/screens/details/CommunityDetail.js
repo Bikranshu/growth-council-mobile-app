@@ -20,9 +20,13 @@ import {
 import {
   fetchAllPillarPOEs,
   resetPillarPOE,
-} from '../dashboard/slice/pillarPOESlice';
+} from '../dashboard/slice/POE/pillarPOESlice';
 
 import {getIdBySlug, resetGetSlug} from './slice/getIdBySlug';
+import {
+  GrowthPipelineEmail,
+  resetSendEmail,
+} from '../event/slice/emailButtonSlice';
 
 const CommunityDetailScreen = props => {
   const dispatch = useDispatch();
@@ -50,6 +54,10 @@ const CommunityDetailScreen = props => {
 
   const {getSlug, getSlugLoading, getSlugError} = useSelector(
     state => state.getSlug,
+  );
+
+  const {sendEmail, sendEmailLoading, sendEmailError} = useSelector(
+    state => state.sendEmail,
   );
 
   /**
@@ -119,6 +127,18 @@ const CommunityDetailScreen = props => {
     dispatch(resetGetSlug());
   };
 
+  /**
+   * Send email through button.
+   * @param {object} formData
+   *
+   */
+  const GDPButton = formData => {
+    return dispatch(GrowthPipelineEmail(formData));
+  };
+
+  const cleanGDPButton = () => {
+    dispatch(resetSendEmail());
+  };
   return (
     <CommunityDetail
       {...props}
@@ -147,13 +167,17 @@ const CommunityDetailScreen = props => {
       pillarPOEError={pillarPOEError}
       fetchAllPillarPOE={fetchAllPillarPOE}
       cleanPillarPOE={cleanPillarPOE}
-
-
-	  getSlug={getSlug}
-	  getSlugLoading={getSlugLoading}
-	  getSlugError={getSlugError}
-	  GetIdBySlug={GetIdBySlug}
-	  cleanSlug={cleanSlug}
+      getSlug={getSlug}
+      getSlugLoading={getSlugLoading}
+      getSlugError={getSlugError}
+      GetIdBySlug={GetIdBySlug}
+      cleanSlug={cleanSlug}
+      // Send Email
+      sendEmail={sendEmail}
+      sendEmailLoading={sendEmailLoading}
+      sendEmailError={sendEmailError}
+      GDPButton={GDPButton}
+      cleanGDPButton={cleanGDPButton}
     />
   );
 };

@@ -13,17 +13,17 @@ import {
   StatusBar,
   ActivityIndicator,
 } from 'react-native';
-import {Button, useToast} from 'native-base';
-import Ionicons from 'react-native-vector-icons/Ionicons';
-import moment from 'moment';
 
-import {useIsFocused} from '@react-navigation/native';
+import moment from 'moment';
 import HTMLView from 'react-native-htmlview';
-import {CommonStyles, Colors, Typography} from '../../../theme';
 import {WebView} from 'react-native-webview';
-import ToastMessage from '../../../shared/toast';
+import {Button, useToast} from 'native-base';
+import {useIsFocused} from '@react-navigation/native';
+
 import Loading from '../../../shared/loading';
-import {HOME_URL} from '../../../constants';
+import FloatingButton from '../../../shared/floatingButton';
+import {CommonStyles, Colors, Typography} from '../../../theme';
+import {COACHING_COLOR, COMMUNITY_COLOR} from '../../../theme/colors';
 
 const screenHeight = Math.round(Dimensions.get('window').height);
 const win = Dimensions.get('window');
@@ -75,6 +75,8 @@ const GrowthDetail = props => {
   const toast = useToast();
   const isFocused = useIsFocused();
   const [status, setStatus] = useState(false);
+  const [emailStatus, setEmailStatus] = useState(false);
+
   const [showChartButton, setShowChartButton] = useState(true);
   const webviewRef = React.useRef(null);
   const [userId, setUserId] = useState(0);
@@ -155,7 +157,6 @@ const GrowthDetail = props => {
   //   let check = SessionID.filter(item => previousSession.includes(item));
 
   let check = SessionID.filter(el => previousSession.indexOf(el) === -1);
-   console.log('check', check);
 
   //   const index = previousSession.findIndex(array1Item => {
   //     // This will return the index if found, otherwise -1
@@ -249,7 +250,7 @@ const GrowthDetail = props => {
   }
 
   return (
-    <>
+    <View style={{flex: 1}}>
       <StatusBar
         barStyle="light-content"
         hidden={false}
@@ -324,27 +325,27 @@ const GrowthDetail = props => {
               {coachingSessionLoading && <Loading />}
 
               {/* {check[0] && ( */}
-                <View>
-                  {coachingSession?.length !== 0 &&
-                    coachingSession !== null &&
-                    coachingSession !== false && (
-                      <View style={styles.middle}>
-                        <Text style={styles.title}>Sessions</Text>
-                        <View
-                          style={{
-                            display: 'flex',
-                            flexDirection: 'row',
-                          }}>
-                          <FlatList
-                            horizontal
-                            showsHorizontalScrollIndicator={false}
-                            data={coachingSession}
-                            renderItem={_renderMiddleItem}
-                          />
-                        </View>
+              <View>
+                {coachingSession?.length !== 0 &&
+                  coachingSession !== null &&
+                  coachingSession !== false && (
+                    <View style={styles.middle}>
+                      <Text style={styles.title}>Sessions</Text>
+                      <View
+                        style={{
+                          display: 'flex',
+                          flexDirection: 'row',
+                        }}>
+                        <FlatList
+                          horizontal
+                          showsHorizontalScrollIndicator={false}
+                          data={coachingSession}
+                          renderItem={_renderMiddleItem}
+                        />
                       </View>
-                    )}
-                </View>
+                    </View>
+                  )}
+              </View>
               {/* )} */}
 
               {/* 
@@ -428,7 +429,8 @@ const GrowthDetail = props => {
         </View>
         {/* <Footer /> */}
       </ScrollView>
-    </>
+      <FloatingButton {...props} navigation={navigation} />
+    </View>
   );
 };
 
@@ -622,5 +624,38 @@ const styles = StyleSheet.create({
   ActivityIndicatorStyle: {
     flex: 1,
     justifyContent: 'center',
+  },
+  emailButton: {
+    borderRadius: 10,
+    marginLeft: 15,
+    marginRight: 15,
+    width: '100%',
+    height: 50,
+    backgroundColor: COACHING_COLOR,
+
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  sendRegisterButton: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: 10,
+    width: '100%',
+    height: 50,
+    backgroundColor: '#ffffff',
+    marginTop: 25,
+    borderColor: COACHING_COLOR,
+    borderWidth: 2,
+    position: 'relative',
+  },
+  acceptButtonText: {
+    width: '100%',
+    height: 20,
+    fontSize: 14,
+    color: '#ffffff',
+  },
+  emailButtonText: {
+    color: COACHING_COLOR,
   },
 });

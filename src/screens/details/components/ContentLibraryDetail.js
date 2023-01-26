@@ -8,31 +8,35 @@ import {
   StyleSheet,
   FlatList,
   PermissionsAndroid,
-  Button,
   StatusBar,
   Dimensions,
 } from 'react-native';
 
-import FeatherIcon from 'react-native-vector-icons/Feather';
-import Entypo from 'react-native-vector-icons/Entypo';
-import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome';
-import ToastMessage from '../../../shared/toast';
-// import ReactNativeBlobUtil from 'react-native-blob-util';
-import RNFetchBlob from 'react-native-blob-util';
-import BottomNav from '../../../layout/BottomLayout';
-import ArticleFeedbackCard from '../../../shared/card/ArticleFeedbackCard';
-import Footer from '../../../shared/footer';
-import analytics from '@react-native-firebase/analytics';
-import SearchHeader from '../../../shared/header/SearchHeader';
-import {Colors, CommonStyles} from '../../../theme';
-import Ionicons from 'react-native-vector-icons/Ionicons';
-import {Searchbar} from 'react-native-paper';
-import {useFocusEffect, useIsFocused} from '@react-navigation/native';
 import {Linking} from 'react-native';
-import {BubblesLoader} from 'react-native-indicator';
+import {Searchbar} from 'react-native-paper';
+import {Button, useToast} from 'native-base';
+import RNFetchBlob from 'react-native-blob-util';
 import WebView from 'react-native-autoheight-webview';
+import Entypo from 'react-native-vector-icons/Entypo';
+import analytics from '@react-native-firebase/analytics';
+import Ionicons from 'react-native-vector-icons/Ionicons';
+import FeatherIcon from 'react-native-vector-icons/Feather';
+// import ReactNativeBlobUtil from 'react-native-blob-util';
+import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome';
+import {useFocusEffect, useIsFocused} from '@react-navigation/native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
 import HTMLView from 'react-native-htmlview';
 import Loading from '../../../shared/loading';
+import {ARTICLE_LIKE} from '../../../constants';
+import ToastMessage from '../../../shared/toast';
+import {Colors, CommonStyles} from '../../../theme';
+import {COACHING_COLOR} from '../../../theme/colors';
+import BottomNav from '../../../layout/BottomLayout';
+import {setAsyncStorage} from '../../../utils/storageUtil';
+import FloatingButton from '../../../shared/floatingButton';
+import SearchHeader from '../../../shared/header/SearchHeader';
+import ArticleFeedbackCard from '../../../shared/card/ArticleFeedbackCard';
 
 const ContentLibraryDetail = props => {
   const {
@@ -43,23 +47,45 @@ const ContentLibraryDetail = props => {
     contentLibraryDetailsError,
     fetchContentLibraryDetail,
     cleanContentLibraryDetail,
+
+    article,
+    articleLoading,
+    articleError,
+    ContentLibraryArticle,
   } = props;
 
   const isFocused = useIsFocused();
   useFocusEffect(
-    useCallback(() => {
-      fetchContentLibraryDetail(route?.params?.id);
-      return () => {
-        cleanContentLibraryDetail();
-      };
-    }, [isFocused]),
+    useCallback(
+      async => {
+        fetchContentLibraryDetail(route?.params?.id);
+        return () => {
+          cleanContentLibraryDetail();
+        };
+      },
+      [isFocused],
+    ),
   );
 
-  const [isTrue, setIsTrue] = useState(true);
+  useEffect(() => {
+    const ARTICLE_LIKEAsync = async () => {
+      await AsyncStorage.setItem('ARTICLE_LIKE', contentLibraryDetails.likes);
+      await AsyncStorage.setItem(
+        'ARTICLE_DISLIKE',
+        contentLibraryDetails.dislikes,
+      );
+    };
+    ARTICLE_LIKEAsync();
+  }, [isFocused, contentLibraryDetails]);
 
-  const handleFeedbackChange = value => {
-    setIsTrue(value);
-  };
+  //   const [emailStatus, setEmailStatus] = useState(false);
+
+  const [isTrue, setIsTrue] = useState();
+
+  //   const handleFeedbackChange = value => {
+  //     setIsTrue(value);
+  //   };
+  //   console.log('result', isTrue);
 
   const _renderItem = ({item, index}) => {
     const fileUrl = item?.file?.url;
@@ -470,12 +496,19 @@ const ContentLibraryDetail = props => {
           {/* Article Feedback Section */}
           <View style={{marginTop: 20}}>
             <ArticleFeedbackCard
-              isTrue={isTrue}
-              handleValue={handleFeedbackChange}
+              contentLibraryDetails={contentLibraryDetails}
+              article={article}
+              articleLoading={articleLoading}
+              articleError={articleError}
+              ContentLibraryArticle={ContentLibraryArticle}
+              fetchContentLibraryDetail={fetchContentLibraryDetail}
+              //   isTrue={isTrue}
+              //   handleValue={handleFeedbackChange}
             />
           </View>
         </ScrollView>
       </View>
+      <FloatingButton {...props} navigation={navigation} />
 
       {/* Bottom Navigation Section */}
       <BottomNav {...props} navigation={navigation} />
@@ -485,6 +518,7 @@ const ContentLibraryDetail = props => {
 const styles = StyleSheet.create({
   container: {
     ...CommonStyles.container,
+    flex: 1,
   },
   bodyContainer: {
     ...CommonStyles.container,
@@ -629,6 +663,40 @@ const styles = StyleSheet.create({
     marginLeft: 10,
     borderRadius: 20,
     backgroundColor: '#F5F5F5',
+  },
+
+  emailButton: {
+    borderRadius: 10,
+    marginLeft: 15,
+    marginRight: 15,
+    width: '100%',
+    height: 50,
+    backgroundColor: COACHING_COLOR,
+
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  sendRegisterButton: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: 10,
+    width: '100%',
+    height: 50,
+    backgroundColor: '#ffffff',
+    marginTop: 25,
+    borderColor: COACHING_COLOR,
+    borderWidth: 2,
+    position: 'relative',
+  },
+  acceptButtonText: {
+    width: '100%',
+    height: 20,
+    fontSize: 14,
+    color: '#ffffff',
+  },
+  emailButtonText: {
+    color: COACHING_COLOR,
   },
   loading1: {
     top: 0,

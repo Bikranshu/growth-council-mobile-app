@@ -10,6 +10,7 @@ import {
   Platform,
   ActivityIndicator,
 } from 'react-native';
+
 import Pdf from 'react-native-pdf';
 import ToastMessage from '../../../shared/toast';
 import RNFetchBlob from 'react-native-blob-util';
@@ -91,7 +92,7 @@ const pdf = props => {
         RNFetchBlob.config(configOptions)
           .fetch('GET', FILE_URL)
           .then(res => {
-            console.log('file', res);
+            
             RNFetchBlob.ios.previewDocument('file://' + res.path());
           });
         return;
@@ -103,7 +104,7 @@ const pdf = props => {
         //   })
 
           .then(res => {
-            console.log('file download', res);
+           
             RNFetchBlob.android.actionViewIntent(res.path());
           })
           .catch((errorMessage, statusCode) => {

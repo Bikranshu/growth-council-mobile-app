@@ -12,13 +12,13 @@ import {
 } from 'react-native';
 import {useIsFocused} from '@react-navigation/native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import {getAsyncStorage} from '../../../utils/storageUtil';
-import {JWT_TOKEN, USER_NAME, USER_AVATAR} from '../../../constants';
-import {decodeUserID} from '../../../utils/jwtUtil';
-import {CommonStyles, Colors, Typography} from '../../../theme';
-import {PRIMARY_BACKGROUND_COLOR} from '../../../theme/colors';
 
 import Loading from '../../../shared/loading';
+import {decodeUserID} from '../../../utils/jwtUtil';
+import {getAsyncStorage} from '../../../utils/storageUtil';
+import {PRIMARY_BACKGROUND_COLOR} from '../../../theme/colors';
+import {CommonStyles, Colors, Typography} from '../../../theme';
+import {JWT_TOKEN, USER_NAME, USER_AVATAR} from '../../../constants';
 
 const OthersAccount = props => {
   const {
@@ -81,7 +81,6 @@ const OthersAccount = props => {
   //     setLoggedInUserInfoAsync();
   //   }, [isFocused]);
 
-  console.log('afdh', otherProfiles);
   return (
     <ScrollView
       onScroll={e => {
@@ -121,7 +120,7 @@ const OthersAccount = props => {
           <View style={styles.profileWrapper}>
             <View style={styles.icon}>
               <Image
-                source={{uri: otherProfiles?.avatar}}
+                source={{uri: otherProfiles?.profile_image}}
                 style={{width: '100%', height: '100%'}}
                 resizeMode="cover"
               />
@@ -168,9 +167,9 @@ const OthersAccount = props => {
                   style={styles.input}
                   keyboardType="default"
                   value={
-					otherProfiles?.user_meta?.Title === undefined
-					? otherProfiles?.user_meta?.title[0]
-					: otherProfiles?.user_meta?.Title[0]
+                    otherProfiles?.user_meta?.Title === undefined
+                      ? otherProfiles?.user_meta?.title[0]
+                      : otherProfiles?.user_meta?.Title[0]
                   }
                   editable={false}
                 />
@@ -184,7 +183,7 @@ const OthersAccount = props => {
                   value={
                     typeof company === 'undefined'
                       ? ''
-					  : otherProfiles?.user_meta?.company[0]
+                      : otherProfiles?.user_meta?.company[0]
                   }
                   editable={false}
                 />
@@ -292,7 +291,7 @@ const OthersAccount = props => {
                       navigation.navigate('Chat', {
                         friendID: otherProfiles?.ID,
                         friendName: otherProfiles?.display_name,
-                        friendAvatar: otherProfiles?.avatar,
+                        friendAvatar: otherProfiles?.profile_image,
                         userID: userID,
                         userName: userName,
                         userAvatar: avatarImg,

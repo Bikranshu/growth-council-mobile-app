@@ -15,16 +15,18 @@ import {
   Keyboard,
   TouchableWithoutFeedback,
 } from 'react-native';
+
 import {Searchbar} from 'react-native-paper';
-import {Colors, Typography} from '../../../theme';
-import Ionicons from 'react-native-vector-icons/Ionicons';
-import Footer from '../../../shared/footer';
-import BottomNav from '../../../layout/BottomLayout';
 import HTMLView from 'react-native-htmlview';
-import {BubblesLoader} from 'react-native-indicator';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 import {useFocusEffect, useIsFocused} from '@react-navigation/native';
+
 import Loading from '../../../shared/loading';
-import {GROWTH_CONTENT_FALLBACK_IMAGE} from '../../../constants';
+import {Colors, Typography} from '../../../theme';
+import BottomNav from '../../../layout/BottomLayout';
+import FloatingButton from '../../../shared/floatingButton';
+
+
 
 const ContentLibrary = props => {
   const {
@@ -199,6 +201,8 @@ const ContentLibrary = props => {
           </View> */}
         </ScrollView>
       </View>
+      <FloatingButton {...props} navigation={navigation} />
+
       <BottomNav {...props} navigation={navigation} />
     </SafeAreaView>
   );

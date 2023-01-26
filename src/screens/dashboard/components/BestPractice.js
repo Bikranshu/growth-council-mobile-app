@@ -14,24 +14,24 @@ import {
   Pressable,
   PermissionsAndroid,
 } from 'react-native';
-import Ionicons from 'react-native-vector-icons/Ionicons';
-import Material from 'react-native-vector-icons/MaterialIcons';
-import FeatherIcon from 'react-native-vector-icons/Feather';
-import {Linking} from 'react-native';
-import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome';
+
 import moment from 'moment';
-import {BubblesLoader} from 'react-native-indicator';
-import {useFocusEffect, useIsFocused} from '@react-navigation/native';
-// import ReactNativeBlobUtil from 'react-native-blob-util';
+import {Linking} from 'react-native';
 import RNFetchBlob from 'react-native-blob-util';
+import {BubblesLoader} from 'react-native-indicator';
+import Ionicons from 'react-native-vector-icons/Ionicons';
+import FeatherIcon from 'react-native-vector-icons/Feather';
+import Material from 'react-native-vector-icons/MaterialIcons';
+import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome';
+import {useFocusEffect, useIsFocused} from '@react-navigation/native';
+
+import Player from './Player';
+import Loading from '../../../shared/loading';
 import ToastMessage from '../../../shared/toast';
 import YoutubePlayer from '../../../shared/youtube';
-import Footer from '../../../shared/footer';
-import Player from './Player';
-import {CommonStyles, Colors, Typography} from '../../../theme';
 import BottomNav from '../../../layout/BottomLayout';
-import Loading from '../../../shared/loading';
-import { GROWTH_CONTENT_ID } from '../../../constants';
+import {GROWTH_CONTENT_ID} from '../../../constants';
+import {CommonStyles, Colors, Typography} from '../../../theme';
 
 const win = Dimensions.get('window');
 const contentContainerWidth = win.width - 30;
@@ -320,7 +320,7 @@ const BestPractice = props => {
         RNFetchBlob.config(configOptions)
           .fetch('GET', FILE_URL)
           .then(res => {
-            console.log('file', res);
+         
             RNFetchBlob.ios.previewDocument('file://' + res.path());
           });
         return;
@@ -328,15 +328,15 @@ const BestPractice = props => {
         config(configOptions)
           .fetch('GET', FILE_URL)
           .progress((received, total) => {
-            console.log('progress', received / total);
+         
           })
 
           .then(res => {
-            console.log('file download', res);
+            
             RNFetchBlob.android.actionViewIntent(res.path());
           })
           .catch((errorMessage, statusCode) => {
-            console.log('error with downloading file', errorMessage);
+    
           });
       }
     };

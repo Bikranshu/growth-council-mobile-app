@@ -12,18 +12,19 @@ import {
   StatusBar,
   PermissionsAndroid,
 } from 'react-native';
-import {useFocusEffect, useIsFocused} from '@react-navigation/native';
+
+import HTMLView from 'react-native-htmlview';
+import RNFetchBlob from 'react-native-blob-util';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import FeatherIcon from 'react-native-vector-icons/Feather';
-import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
-import Player from '../../dashboard/components/Player';
-import HTMLView from 'react-native-htmlview';
-import {CommonStyles, Colors, Typography} from '../../../theme';
+import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome';
+import {useFocusEffect, useIsFocused} from '@react-navigation/native';
+
 import Loading from '../../../shared/loading';
-import RNFetchBlob from 'react-native-blob-util';
-// import ReactNativeBlobUtil from 'react-native-blob-util';
 import ToastMessage from '../../../shared/toast';
+import Player from '../../dashboard/components/Player';
+import {CommonStyles, Colors, Typography} from '../../../theme';
 
 const win = Dimensions.get('window');
 const contentContainerWidth = win.width - 30;
@@ -148,7 +149,7 @@ const SubPOEListDetails = props => {
         RNFetchBlob.config(configOptions)
           .fetch('GET', FILE_URL)
           .then(res => {
-            console.log('file', res);
+    
             RNFetchBlob.ios.previewDocument('file://' + res.path());
           });
         return;
@@ -156,15 +157,15 @@ const SubPOEListDetails = props => {
         config(configOptions)
           .fetch('GET', FILE_URL)
           .progress((received, total) => {
-            console.log('progress', received / total);
+          
           })
 
           .then(res => {
-            console.log('file download', res);
+         
             RNFetchBlob.android.actionViewIntent(res.path());
           })
           .catch((errorMessage, statusCode) => {
-            console.log('error with downloading file', errorMessage);
+           
           });
       }
     };
@@ -200,7 +201,7 @@ const SubPOEListDetails = props => {
     return (
       <TouchableOpacity
         onPress={() =>
-          navigation.navigate('ToolKit', { 
+          navigation.navigate('ToolKit', {
             poeId: item?.term_id,
             id: route?.params?.poeId,
           })

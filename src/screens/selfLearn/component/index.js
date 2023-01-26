@@ -9,27 +9,30 @@ import {
   Image,
   TouchableOpacity,
 } from 'react-native';
+
 import {useDispatch, useSelector} from 'react-redux';
-import SelfAbout from './selfAbout';
-import SelfAssessment from '../../coachingSession/component/selfAssessment';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import ButtonToggleGroup from 'react-native-button-toggle-group';
-import {CommonStyles, Colors, Typography} from '../../../theme';
+
+import SelfAbout from './selfAbout';
 import {
   fetchSelfLearnById,
   resetSelfLearnById,
 } from '../slice/selfLearnByIdSlice';
+import {CommonStyles, Colors, Typography} from '../../../theme';
+import SelfAssessment from '../../coachingSession/component/selfAssessment';
 
 const SelfLearn = props => {
-  const {navigation, route,
-	traits,
+  const {
+    navigation,
+    route,
+    traits,
     traitsLoading,
     traitsError,
     fetchAllTraits,
     fetchAllTraitBySession,
-    cleanTraits,} = props;
-
-
+    cleanTraits,
+  } = props;
 
   const [value, setValue] = useState('About');
   const [modalVisible, setModalVisible] = useState(false);
@@ -47,22 +50,16 @@ const SelfLearn = props => {
   return (
     <ScrollView style={styles.scrollBox}>
       <View style={styles.container}>
-        <StatusBar
-          barStyle="dark-content"
-          backgroundColor={"#001D3F"}
-        />
+        <StatusBar barStyle="dark-content" backgroundColor={'#001D3F'} />
 
         <View>
           <View style={[styles.content, {height: 'auto'}]}>
-
             <View style={{marginTop: 15}}>
               <SelfAbout {...props} />
-            
             </View>
           </View>
         </View>
       </View>
-     
     </ScrollView>
   );
 };

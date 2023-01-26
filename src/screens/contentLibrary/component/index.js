@@ -15,15 +15,17 @@ import {
   Keyboard,
   TouchableWithoutFeedback,
 } from 'react-native';
+
 import {Searchbar} from 'react-native-paper';
-import {Colors} from '../../../theme';
-import analytics from '@react-native-firebase/analytics';
-import Ionicons from 'react-native-vector-icons/Ionicons';
-import Footer from '../../../shared/footer';
-import BottomNav from '../../../layout/BottomLayout';
 import HTMLView from 'react-native-htmlview';
 import {BubblesLoader} from 'react-native-indicator';
+import analytics from '@react-native-firebase/analytics';
+import Ionicons from 'react-native-vector-icons/Ionicons';
+import FloatingButton from '../../../shared/floatingButton';
+
+import {Colors} from '../../../theme';
 import Loading from '../../../shared/loading';
+import BottomNav from '../../../layout/BottomLayout';
 
 const Content = props => {
   const {
@@ -219,6 +221,8 @@ const Content = props => {
           </View> */}
         </ScrollView>
       </View>
+      <FloatingButton {...props} navigation={navigation} />
+
       <BottomNav {...props} navigation={navigation} />
     </SafeAreaView>
   );

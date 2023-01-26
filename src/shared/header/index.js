@@ -1,19 +1,17 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect} from 'react';
 import {Text, View} from 'react-native';
-import {getAsyncStorage} from '../../utils/storageUtil';
-import {USER_NAME} from '../../constants';
+
 import {Typography} from '../../theme';
 import {useIsFocused} from '@react-navigation/native';
 
 const HeaderTitle = props => {
-  const [username, setUsername] = useState(null);
   const isFocused = useIsFocused();
 
-  const {profile, fetchProfileByIdentifier, profileLoading, title} = props;
+  const {profile, profileLoading, title} = props;
 
-  useEffect(() => {
-    fetchProfileByIdentifier();
-  }, [isFocused]);
+  //   useEffect(() => {
+  //     fetchProfileByIdentifier();
+  //   }, [isFocused]);
 
   return (
     <View style={{marginLeft: 10, width: '80%'}}>
@@ -29,15 +27,31 @@ const HeaderTitle = props => {
       ) : (
         <></>
       )}
-      <Text
-        style={{
-          fontFamily: Typography.FONT_SF_MEDIUM,
-          color: 'white',
-          fontSize: Platform.OS === 'ios' ? 16 : 18,
-          fontWeight: 'normal',
-        }}>
-        {title === undefined ? profile?.user_login : title}
-      </Text>
+      <View style={{flexDirection: 'row'}}>
+        <Text
+          style={{
+            marginLeft: 10,
+            fontFamily: 'SFProText-Medium',
+            fontSize: 18,
+            color: 'white',
+            // width: '90%',
+          }}>
+          {title === undefined ? profile?.user_login : title}
+        </Text>
+        {props.title === 'Growth Pipeline Dialog' && (
+          <Text
+            style={{
+              fontSize: 8,
+              lineHeight: 18,
+              textAlignVertical: 'top',
+              fontWeight: 'bold',
+              color: 'white',
+              //   backgroundColor: 'red',
+            }}>
+            TM
+          </Text>
+        )}
+      </View>
     </View>
   );
 };

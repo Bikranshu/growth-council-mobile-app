@@ -15,12 +15,13 @@ import {
   NavigationContainer,
   useNavigationContainerRef,
 } from '@react-navigation/native';
-import analytics from '@react-native-firebase/analytics';
+
 import {Button} from 'native-base';
 import {Linking} from 'react-native';
 import HTMLView from 'react-native-htmlview';
-import Footer from '../../../shared/footer';
+import analytics from '@react-native-firebase/analytics';
 
+import FloatingButton from '../../../shared/floatingButton';
 import {CommonStyles, Colors, Typography} from '../../../theme';
 
 const About = props => {
@@ -28,6 +29,7 @@ const About = props => {
   const {width} = useWindowDimensions();
 
   const win = Dimensions.get('window');
+  //setting image container width according to device width
   const imageContainerWidth = win.width - 40;
 
   const tagsStyles = {
@@ -35,10 +37,12 @@ const About = props => {
     color: 'white',
   };
 
+  //about data fetch using useeffect
   useEffect(() => {
     fetchAbout();
   }, []);
 
+  // giving about data a variable because if any data come undefined then app should not crash
   let heading1 = about?.heading1;
   if (heading1 !== undefined) {
     heading1 = about?.heading1;
@@ -68,7 +72,7 @@ const About = props => {
   }
 
   return (
-    <>
+    <View style={{flex: 1}}>
       <StatusBar
         barStyle="light-content"
         hidden={false}
@@ -161,7 +165,8 @@ const About = props => {
           </View>
         </View>
       </ScrollView>
-    </>
+      <FloatingButton {...props} navigation={navigation} />
+    </View>
   );
 };
 

@@ -76,7 +76,6 @@ export const AuthProvider = props => {
         });
         resolve(true);
       } catch (error) {
-        console.log(error);
         reject(error);
       }
     });
@@ -136,7 +135,7 @@ export const AuthProvider = props => {
                 responseType: 'json',
               },
             );
-            console.log('userCountry', response?.data?.region);
+
             setUserCountry(response?.data?.region);
 
             const messageToken = await messaging().getToken();

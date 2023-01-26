@@ -8,19 +8,20 @@ import {
   Image,
   TouchableOpacity,
 } from 'react-native';
+
+import moment from 'moment-timezone';
+import HTMLView from 'react-native-htmlview';
 import {Button, useToast} from 'native-base';
+import * as RNLocalize from 'react-native-localize';
+import {BubblesLoader} from 'react-native-indicator';
 import Feather from 'react-native-vector-icons/Feather';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
-import HTMLView from 'react-native-htmlview';
-import {formatTimeByOffset} from '../../event/components/timezone';
-import moment from 'moment-timezone';
-import * as RNLocalize from 'react-native-localize';
-import {BubblesLoader} from 'react-native-indicator';
 
-import {CommonStyles, Colors, Typography} from '../../../theme';
-import ToastMessage from '../../../shared/toast';
 import Footer from '../../../shared/footer';
+import ToastMessage from '../../../shared/toast';
+import {CommonStyles, Colors, Typography} from '../../../theme';
+import {formatTimeByOffset} from '../../event/components/timezone';
 
 const Session = props => {
   const {
@@ -67,7 +68,7 @@ const Session = props => {
   const date = actualDate[1].split(' ', 3);
 
   let backgroundColor = Colors.COACHING_COLOR;
- 
+
   let description = sessions?.descirption;
   if (description !== undefined) {
     description = sessions?.descirption;
@@ -158,7 +159,7 @@ const Session = props => {
                     }}>
                     {/* <Text style={styles.eventDetails}>{GobalDate} /</Text> */}
                     <Text style={styles.eventDetails}>
-					{GobalStartMonth === GobalEndMonth
+                      {GobalStartMonth === GobalEndMonth
                         ? GobalDate +
                           GobalDateEnd.split(/(\s+)/)[6] +
                           GobalDateEnd.split(/(\s+)/)[8]

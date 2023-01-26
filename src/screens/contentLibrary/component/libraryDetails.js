@@ -16,15 +16,16 @@ import {
   TouchableWithoutFeedback,
 } from 'react-native';
 import {Searchbar} from 'react-native-paper';
-import {Colors, Typography} from '../../../theme';
-import Ionicons from 'react-native-vector-icons/Ionicons';
-import Footer from '../../../shared/footer';
-import BottomNav from '../../../layout/BottomLayout';
 import HTMLView from 'react-native-htmlview';
-import {useFocusEffect, useIsFocused} from '@react-navigation/native';
-import {BubblesLoader} from 'react-native-indicator';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
+import {useFocusEffect, useIsFocused} from '@react-navigation/native';
+
+import Footer from '../../../shared/footer';
 import Loading from '../../../shared/loading';
+import {Colors, Typography} from '../../../theme';
+import BottomNav from '../../../layout/BottomLayout';
+import FloatingButton from '../../../shared/floatingButton';
 
 const LibraryDetail = props => {
   const {
@@ -248,6 +249,7 @@ const LibraryDetail = props => {
           </View> */}
         </ScrollView>
       </View>
+      <FloatingButton {...props} navigation={navigation} />
       <BottomNav {...props} navigation={navigation} />
     </SafeAreaView>
   );
@@ -322,13 +324,12 @@ const styles = StyleSheet.create({
   eventTitle: {
     marginBottom: 5,
     fontSize: 14,
-    fontWeight: 'normal',
+
     fontWeight: '600',
     color: 'black',
   },
   eventParagraph: {
     fontSize: 8,
-    fontWeight: 'regular',
   },
   eventDate: {
     flex: 1,
@@ -342,7 +343,6 @@ const styles = StyleSheet.create({
   eventDateText: {
     textAlign: 'center',
     fontSize: 14,
-    fontWeight: 'normal',
   },
   shadowProp: {
     shadowColor: '#000',

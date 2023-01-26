@@ -10,28 +10,29 @@ import {
   Modal,
   TouchableOpacity,
 } from 'react-native';
+
+import moment from 'moment-timezone';
+import {Linking} from 'react-native';
+import HTMLView from 'react-native-htmlview';
 import {Button, useToast} from 'native-base';
+import * as RNLocalize from 'react-native-localize';
 import Feather from 'react-native-vector-icons/Feather';
+import analytics from '@react-native-firebase/analytics';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
-import HTMLView from 'react-native-htmlview';
-import {Linking} from 'react-native';
 
-import analytics from '@react-native-firebase/analytics';
-import {formatTimeByOffset} from './timezone';
-import * as RNLocalize from 'react-native-localize';
-import moment from 'moment-timezone';
-
-import {CommonStyles, Colors, Typography} from '../../../theme';
-import ToastMessage from '../../../shared/toast';
-import Footer from '../../../shared/footer';
-import Loading from '../../../shared/loading';
 import {
   GROWTH_COACHING_ID,
   GROWTH_COMMUNITY_ID,
   GROWTH_CONTENT_ID,
 } from '../../../constants';
-import {COMMUNITY_COLOR} from '../../../theme/colors';
+import Footer from '../../../shared/footer';
+import {formatTimeByOffset} from './timezone';
+import Loading from '../../../shared/loading';
+import ToastMessage from '../../../shared/toast';
+import FloatingButton from '../../../shared/floatingButton';
+import {CommonStyles, Colors, Typography} from '../../../theme';
+import {COACHING_COLOR, COMMUNITY_COLOR} from '../../../theme/colors';
 
 const Event = props => {
   const {
@@ -51,6 +52,7 @@ const Event = props => {
 
   const toast = useToast();
   const [eventStatus, setEventStatus] = useState(events?.register_status);
+  const [emailStatus, setEmailStatus] = useState(false);
   const [actualtimeZone, setactualtimeZone] = useState(events?.time_zone);
   const [timeToDisplay, setTimeToDisplay] = useState('');
   const [timeToEnd, setTimeToEnd] = useState('');
@@ -77,7 +79,7 @@ const Event = props => {
     });
     if (response?.payload?.code === 200) {
       setEventStatus(true);
-      ToastMessage.show('You have successfully RSVP’d for this event.');
+      ToastMessage.show('You have registered for this Frost & Sullivan Think Tank.');
     } else {
       toast.closeAll();
       ToastMessage.show(response?.payload?.response);
@@ -140,12 +142,11 @@ const Event = props => {
   const deviceOffset = today?.utcOffset();
 
   let Today = moment().tz(actualtimeZone);
- 
+
   let eventOffset = Today?.utcOffset();
 
   const com = ':';
 
-  console.log('ad', deviceOffset);
   //calculating gobal timezone of event.start
 
   const startHours = Number(backStartTimeStamp.split(/(\s+)/)[0]);
@@ -181,26 +182,30 @@ const Event = props => {
         day[previousDay]
       : null;
 
-  const first =
+  //Calculation part for start date of local time
+  const startCal1 =
     gobalStart?.split('.')[0] === '0' ? '12' : gobalStart?.split('.')[0];
-  const second = gobalStart?.split('.')[1];
+  const startCal2 = gobalStart?.split('.')[1];
 
-  const third = '0.' + second?.split('')[0] + second?.split('')[1];
+  const startCal3 = '0.' + startCal2?.split('')[0] + startCal2?.split('')[1];
 
-  const fourth =
-    third !== '0.undefinedundefined'
-      ? com + Math.round(Number(third) * 60)
+  const startCal4 =
+    startCal3 !== '0.undefinedundefined'
+      ? com + Math.round(Number(startCal3) * 60)
       : '';
-	  
-  const fifth =
-    gobalStart.split(' ')[1] === undefined ? '' : gobalStart.split(' ')[1];
-  const six = first?.indexOf(fifth) > -1 !== false ? '' : fifth;
 
-  const GobalStartTime = first + fourth + six;
+  const startCal5 =
+    gobalStart.split(' ')[1] === undefined ? '' : gobalStart.split(' ')[1];
+  const startCal6 =
+    startCal1?.indexOf(startCal5) > -1 !== false ? '' : startCal5;
+
+  const GobalStartTime = startCal1 + startCal4 + startCal6;
   const actualGobalStartTime =
     GobalStartTime === 'NaNam:' ? '' : GobalStartTime;
 
-  console.log('GobalStartTime', first?.indexOf(fifth) > -1 !== false,"ad", gobalStart.split(' '));
+  //Calculation part for start date
+
+  //End of calculating gobal timezone of event.start
 
   //calculating gobal timezone of event.end
   const endHours = Number(backEndTimeStamp.split(/(\s+)/)[0]);
@@ -220,19 +225,25 @@ const Event = props => {
       ? endDateCal - 24 + '' + ' am'
       : endDateCal + eventDate.split(/(\s+)/)[7] + 'am';
 
-  const a = gobalEnd.split('.')[0] === '0' ? '12' : gobalEnd.split('.')[0];
-  const b = gobalEnd.split('.')[1];
-  const c = '0.' + b?.split('')[0] + b?.split('')[1];
-  const c1 = Number(c) * 60;
-  const d =
-    c !== '0.undefinedundefined' ? com + Math.round(Number(c) * 60) : '';
-  const e = gobalEnd.split(' ')[1] === undefined ? '' : gobalEnd.split(' ')[1];
-  const f = a?.indexOf(e) > -1 !== false ? '' : e;
+  //Calculation part for end date of local time
 
-  const GobalEndTime = a + d + f;
+  const endCal1 =
+    gobalEnd.split('.')[0] === '0' ? '12' : gobalEnd.split('.')[0];
+  const endCal2 = gobalEnd.split('.')[1];
+  const endCal3 = '0.' + endCal2?.split('')[0] + endCal2?.split('')[1];
+  const endCal4 =
+    endCal3 !== '0.undefinedundefined'
+      ? com + Math.round(Number(endCal3) * 60)
+      : '';
+  const endCal5 =
+    gobalEnd.split(' ')[1] === undefined ? '' : gobalEnd.split(' ')[1];
+  const endCal6 = endCal1?.indexOf(endCal5) > -1 !== false ? '' : endCal5;
+
+  const GobalEndTime = endCal1 + endCal4 + endCal6;
   const actualGobalEndTime = GobalEndTime === 'NaNam:' ? '' : GobalEndTime;
 
-  console.log('GobalEndTime', d);
+  // End of Calculation part for end date
+  //  End of calculating gobal timezone of event.end
 
   let title = '';
   const pillarname = events?.pillar_categories
@@ -259,62 +270,69 @@ const Event = props => {
         events?.pillar_categories[0]?.name;
       break;
   }
-
+  const image = require('../../../assets/img/Rectangle2.png');
   return (
-    <ScrollView style={styles.scrollBox}>
-      <View style={styles.container}>
-        <ImageBackground
-          source={{
-            uri: typeof events?.image === 'boolean' ? null : events?.image,
-          }}
-          resizeMode="cover"
-          style={{height: '55%'}}>
-          {/* <TouchableOpacity onPress={() => navigation.goBack()}>
+    <View style={{flex: 1}}>
+      <StatusBar
+        barStyle="light-content"
+        hidden={false}
+        backgroundColor="#001D3F"
+        translucent={false}
+      />
+      <ScrollView style={styles.scrollBox}>
+        <View style={styles.container}>
+          <ImageBackground
+            source={{
+              uri: typeof events?.image === 'boolean' ? null : events?.image,
+            }}
+            resizeMode="cover"
+            style={{height: '55%'}}>
+            {/* <TouchableOpacity onPress={() => navigation.goBack()}>
             <View style={styles.arrow}>
               <Ionicons name={'arrow-back'} size={30} color="black" />
             </View>
           </TouchableOpacity> */}
-          <View
-            style={{
-              alignItems: 'center',
-            }}>
             <View
-              style={[styles.topbanner, {backgroundColor: backgroundColor}]}>
-              {!isEventLoaded && (
-                <Text style={styles.headingText1}>{events?.title}</Text>
-              )}
-              <View style={styles.poe}>
-                <Text style={{fontSize: 11}}>{title}</Text>
+              style={{
+                alignItems: 'center',
+              }}>
+              <View
+                style={[styles.topbanner, {backgroundColor: backgroundColor}]}>
+                {!isEventLoaded && (
+                  <Text style={styles.headingText1}>{events?.title}</Text>
+                )}
+                <View style={styles.poe}>
+                  <Text style={{fontSize: 11}}>{title}</Text>
+                </View>
               </View>
             </View>
-          </View>
 
-          <View>
-            <View style={styles.content}>
-              <View style={{flexDirection: 'column'}}>
-                <View
-                  style={{
-                    flex: 1,
-                    paddingTop: 5,
-                    flexDirection: 'row',
-                  }}>
-                  <View
-                    style={[
-                      styles.infoicon,
-                      {backgroundColor: backgroundColor},
-                    ]}>
-                    <MaterialIcons name={'event'} size={25} color={'white'} />
-                  </View>
-
+            <View>
+              <View style={styles.content}>
+                <View style={{flexDirection: 'column'}}>
                   <View
                     style={{
-                      flex: 5,
-                      paddingLeft: 5,
-                      justifyContent: 'center',
+                      flex: 1,
+                      paddingTop: 5,
+                      flexDirection: 'row',
                     }}>
-                    {/* <Text style={styles.eventDetails}>{GobalDate} /</Text> */}
-                    <Text style={styles.eventDetails}>
-                      {/* {GobalStartMonth === GobalEndMonth
+                    <View
+                      style={[
+                        styles.infoicon,
+                        {backgroundColor: backgroundColor},
+                      ]}>
+                      <MaterialIcons name={'event'} size={20} color={'black'} />
+                    </View>
+
+                    <View
+                      style={{
+                        flex: 5,
+                        paddingLeft: 5,
+                        justifyContent: 'center',
+                      }}>
+                      {/* <Text style={styles.eventDetails}>{GobalDate} /</Text> */}
+                      <Text style={styles.eventDetails}>
+                        {/* {GobalStartMonth === GobalEndMonth
                         ? GobalDate + GobalEndTime
                         : GobalStartMonth +
                           GobalDate.split(/(\s+)/)[7] +
@@ -326,63 +344,24 @@ const Event = props => {
                         comma +
                         deviceTimeZone.split('/')[0]}
                       ) /{' '} */}
-                      {eventStartMonth === eventEndMonth
-                        ? eventStartMonth
-                        : eventStartMonth +
-                          eventDate.split(/(\s+)/)[7] +
-                          eventDate.split(/(\s+)/)[8] +
-                          eventDate.split(/(\s+)/)[7] +
-                          eventEndMonth}
-                      {/* {eventDate.split(/(\s+)/)[5]}
+                        {eventStartMonth === eventEndMonth
+                          ? eventStartMonth
+                          : eventStartMonth +
+                            eventDate.split(/(\s+)/)[7] +
+                            eventDate.split(/(\s+)/)[8] +
+                            eventDate.split(/(\s+)/)[7] +
+                            eventEndMonth}
+                        {/* {eventDate.split(/(\s+)/)[5]}
                       {events?.event_meta?.evo_event_timezone !== undefined
                         ? events?.event_meta?.evo_event_timezone
                         : ''} */}
-                    </Text>
-                    {eventStartMonth === eventEndMonth ? (
-                      <View style={{flexDirection: 'row'}}>
-                        <Text style={{fontSize: 12, marginLeft: 5}}>
-                          {eventStartTime}
-                          {eventDate.split(/(\s+)/)[8]}
-                          {eventEndTime}
-                        </Text>
-                        <Text
-                          style={{
-                            fontSize: 12,
-                            marginLeft: 5,
-                            color: COMMUNITY_COLOR,
-                          }}>
-                          {/* {events?.event_meta?.evo_event_timezone !== undefined
-                            ? events?.event_meta?.evo_event_timezone
-                            : ''} */}
-                          {events?.time_zone !== undefined
-                            ? events?.time_zone
-                            : ''}
-                        </Text>
-                      </View>
-                    ) : null}
-                    {eventStartMonth === eventEndMonth ? (
-                      <View>
-                        {gobalDate && (
-                          <Text
-                            style={{
-                              fontSize: 12,
-                              marginLeft: 5,
-                              fontWeight: 'bold',
-                              color: 'black',
-                            }}>
-                            {eventDate.split(/(\s+)/)[0] +
-                              eventDate.split(/(\s+)/)[7] +
-                              gobalDate}
-                          </Text>
-                        )}
-
+                      </Text>
+                      {eventStartMonth === eventEndMonth ? (
                         <View style={{flexDirection: 'row'}}>
                           <Text style={{fontSize: 12, marginLeft: 5}}>
-                            {actualGobalStartTime +
-                              eventDate.split(/(\s+)/)[7] +
-                              eventDate.split(/(\s+)/)[8] +
-                              eventDate.split(/(\s+)/)[7] +
-                              actualGobalEndTime}
+                            {eventStartTime}
+                            {eventDate.split(/(\s+)/)[8]}
+                            {eventEndTime}
                           </Text>
                           <Text
                             style={{
@@ -390,424 +369,267 @@ const Event = props => {
                               marginLeft: 5,
                               color: COMMUNITY_COLOR,
                             }}>
-                            {/* {deviceTimeZone.split('/')[1] +
-                              comma +
-                              deviceTimeZone.split('/')[0]} */}
-                            {deviceTimeZone}
+                            {/* {events?.event_meta?.evo_event_timezone !== undefined
+                            ? events?.event_meta?.evo_event_timezone
+                            : ''} */}
+                            {events?.time_zone !== undefined
+                              ? events?.time_zone
+                              : ''}
                           </Text>
                         </View>
+                      ) : null}
+                      {eventStartMonth === eventEndMonth ? (
+                        <View>
+                          {gobalDate && (
+                            <Text
+                              style={{
+                                fontSize: 12,
+                                marginLeft: 5,
+                                fontWeight: 'bold',
+                                color: 'black',
+                              }}>
+                              {eventDate.split(/(\s+)/)[0] +
+                                eventDate.split(/(\s+)/)[7] +
+                                gobalDate}
+                            </Text>
+                          )}
+
+                          <View style={{flexDirection: 'row'}}>
+                            <Text style={{fontSize: 12, marginLeft: 5}}>
+                              {actualGobalStartTime +
+                                eventDate.split(/(\s+)/)[7] +
+                                eventDate.split(/(\s+)/)[8] +
+                                eventDate.split(/(\s+)/)[7] +
+                                actualGobalEndTime}
+                            </Text>
+                            <Text
+                              style={{
+                                fontSize: 12,
+                                marginLeft: 5,
+                                color: COMMUNITY_COLOR,
+                              }}>
+                              {/* {deviceTimeZone.split('/')[1] +
+                              comma +
+                              deviceTimeZone.split('/')[0]} */}
+                              {deviceTimeZone}
+                            </Text>
+                          </View>
+                        </View>
+                      ) : null}
+                    </View>
+                    {!eventStatus && (
+                      <View
+                        style={{
+                          flex: 1,
+                          justifyContent: 'center',
+                          alignItems: 'center',
+                        }}>
+                        <TouchableOpacity
+                          onPress={() =>
+                            registerEventByEventID(route?.params?.id)
+                          }>
+                          <Feather
+                            name={'plus-circle'}
+                            size={25}
+                            color={'rgba(54,147,172,1)'}
+                          />
+                        </TouchableOpacity>
                       </View>
-                    ) : null}
-                  </View>
-                  {!eventStatus && (
-                    <View
-                      style={{
-                        flex: 1,
-                        justifyContent: 'center',
-                        alignItems: 'center',
-                      }}>
-                      <TouchableOpacity
-                        onPress={() =>
-                          registerEventByEventID(route?.params?.id)
-                        }>
+                    )}
+                    {eventStatus && (
+                      <View
+                        style={{
+                          flex: 1,
+                          justifyContent: 'center',
+                          alignItems: 'center',
+                        }}>
                         <Feather
-                          name={'plus-circle'}
+                          name={'check-circle'}
                           size={25}
                           color={'rgba(54,147,172,1)'}
                         />
-                      </TouchableOpacity>
-                    </View>
-                  )}
-                  {eventStatus && (
-                    <View
-                      style={{
-                        flex: 1,
-                        justifyContent: 'center',
-                        alignItems: 'center',
-                      }}>
-                      <Feather
-                        name={'check-circle'}
-                        size={25}
-                        color={'rgba(54,147,172,1)'}
-                      />
-                    </View>
-                  )}
-                </View>
-                {eventLoading && <Loading />}
-                {events?.location?.location_city !== undefined &&
-                  events?.location?.location_address !== '' && (
-                    <View
-                      style={{
-                        flex: 1,
-                        paddingTop: 20,
-                        flexDirection: 'row',
-                      }}>
+                      </View>
+                    )}
+                  </View>
+                  {eventLoading && <Loading />}
+                  {events?.location?.location_city !== undefined &&
+                    events?.location?.location_address !== '' && (
                       <View
-                        style={[
-                          styles.infoicon,
-                          {backgroundColor: backgroundColor},
-                        ]}>
-                        <Ionicons
-                          name={'location-outline'}
-                          size={25}
-                          color={'white'}
-                        />
+                        style={{
+                          flex: 1,
+                          paddingTop: 20,
+                          flexDirection: 'row',
+                        }}>
+                        <View
+                          style={[
+                            styles.infoicon,
+                            {backgroundColor: backgroundColor},
+                          ]}>
+                          <Ionicons
+                            name={'location-outline'}
+                            size={25}
+                            color={'white'}
+                          />
+                        </View>
+
+                        {!isEventLoaded && (
+                          <View
+                            style={{
+                              flex: 5,
+                              paddingLeft: 10,
+                            }}>
+                            <Text style={styles.eventLocationDetails}>
+                              {events?.location?.location_city}{' '}
+                              {events?.location?.location_country}
+                            </Text>
+                            <Text>{events?.location?.location_address}</Text>
+                          </View>
+                        )}
+                      </View>
+                    )}
+                </View>
+                <View style={styles.seperationline} />
+
+                {events?.organizer?.term_name !== undefined &&
+                  events?.organizer?.term_name !== '' && (
+                    <View
+                      style={{
+                        borderBottomColor: '#F6F4F4',
+                        borderBottomWidth: 1,
+                      }}>
+                      <View>
+                        <Text style={styles.contentHeading}>Hosted By</Text>
                       </View>
 
-                      {!isEventLoaded && (
+                      <View style={styles.hostdetail}>
+                        {events?.organizer_image !== false &&
+                          events?.organizer_image !== null && (
+                            <View
+                              style={[
+                                styles.hostimage,
+                                {backgroundColor: backgroundColor},
+                              ]}>
+                              <Image
+                                source={{
+                                  uri:
+                                    typeof events?.organizer_image === 'boolean'
+                                      ? null
+                                      : events?.organizer_image,
+                                }}
+                                style={{
+                                  width: '100%',
+                                  height: '100%',
+                                }}
+                              />
+                            </View>
+                          )}
+
                         <View
                           style={{
-                            flex: 5,
-                            paddingLeft: 10,
+                            flex: 3,
+
+                            justifyContent: 'center',
                           }}>
-                          <Text style={styles.eventLocationDetails}>
-                            {events?.location?.location_city}{' '}
-                            {events?.location?.location_country}
+                          <Text style={styles.contentTitle}>
+                            {events?.organizer?.term_name}
                           </Text>
-                          <Text>{events?.location?.location_address}</Text>
+                          <Text style={{fontSize: 14, fontStyle: 'italic'}}>
+                            {events?.organizer?.description}
+                          </Text>
                         </View>
+                        <View style={styles.eventaddress}></View>
+                      </View>
+                    </View>
+                  )}
+                {events?.descirption !== undefined &&
+                  events?.descirption !== '' &&
+                  events?.descirption !== null && (
+                    <View>
+                      <Text style={[styles.contentHeading, {marginTop: 20}]}>
+                        Event Info
+                      </Text>
+                      {!isEventLoaded && (
+                        <HTMLView
+                          value={description}
+                          textComponentProps={{
+                            style: {
+                              fontSize: 12,
+                              lineHeight: 20,
+                              fontWeight: 'regular',
+                              color: '#666767',
+                              alignItems: 'center',
+                              textAlign: 'justify',
+                            },
+                          }}
+                        />
                       )}
                     </View>
                   )}
-              </View>
-              <View style={styles.seperationline} />
 
-              {events?.organizer?.term_name !== undefined &&
-                events?.organizer?.term_name !== '' && (
-                  <View
-                    style={{
-                      borderBottomColor: '#F6F4F4',
-                      borderBottomWidth: 1,
-                    }}>
-                    <View>
-                      <Text style={styles.contentHeading}>Hosted By</Text>
-                    </View>
-
-                    <View style={styles.hostdetail}>
-                      {events?.organizer_image !== false &&
-                        events?.organizer_image !== null && (
-                          <View
-                            style={[
-                              styles.hostimage,
-                              {backgroundColor: backgroundColor},
-                            ]}>
-                            <Image
-                              source={{
-                                uri:
-                                  typeof events?.organizer_image === 'boolean'
-                                    ? null
-                                    : events?.organizer_image,
-                              }}
-                              style={{
-                                width: '100%',
-                                height: '100%',
-                              }}
-                            />
-                          </View>
-                        )}
-
-                      <View
-                        style={{
-                          flex: 3,
-
-                          justifyContent: 'center',
-                        }}>
-                        <Text style={styles.contentTitle}>
-                          {events?.organizer?.term_name}
-                        </Text>
-                        <Text style={{fontSize: 14, fontStyle: 'italic'}}>
-                          {events?.organizer?.description}
-                        </Text>
-                      </View>
-                      <View style={styles.eventaddress}></View>
-                    </View>
-                  </View>
-                )}
-              {events?.descirption !== undefined &&
-                events?.descirption !== '' &&
-                events?.descirption !== null && (
-                  <View>
-                    <Text style={[styles.contentHeading, {marginTop: 20}]}>
-                      Event Info
-                    </Text>
-                    {!isEventLoaded && (
-                      <HTMLView
-                        value={description}
-                        textComponentProps={{
-                          style: {
-                            fontSize: 12,
-                            lineHeight: 20,
-                            fontWeight: 'regular',
-                            color: '#666767',
-                            alignItems: 'center',
-                            textAlign: 'justify',
-                          },
-                        }}
-                      />
-                    )}
-                  </View>
-                )}
-              {/* {events?.title ===
-                '16TH ANNUAL GROWTH, INNOVATION AND LEADERSHIP' &&
-                eventStatus && (
-                  <View>
-                    <Text
-                      style={[
-                        styles.contentHeading,
-                        {marginTop: 20, alignItems: 'center'},
-                      ]}>
-                      Downloading the Mobile App {'\n'}
-                      Your Full Event Guide!
-                    </Text>
-
-                    <View style={{flexDirection: 'row', marginTop: 10}}>
-                      <MaterialIcons
-                        name={'circle'}
-                        size={10}
-                        style={{color: 'black', marginTop: 5}}
-                      />
-                      <Text
-                        style={{
-                          marginLeft: 5,
-                          textAlign: 'justify',
-                          marginRight: 5,
-                        }}>
-                        Search for{' '}
-                        <Text
-                          style={{
-                            marginLeft: 5,
-                            textAlign: 'justify',
-                            marginRight: 5,
-                            fontWeight: 'bold',
-                            color: 'black',
-                          }}>
-                          "CrowdCompass Attendee Hub"
-                        </Text>{' '}
-                        in your phone's app store/ (Blackberry and Windows users
-                        can access the event app using this URL:
-                      </Text>
-                    </View>
-                    <TouchableOpacity
-                      onPress={() =>
-                        Linking.openURL(
-                          'https://event.crowdcompass.com/gil2022',
-                        )
-                      }>
-                      <Text style={{color: 'blue', marginLeft: 15}}>
-                        https://event.crowdcompass.com/gil2022
-                      </Text>
-                    </TouchableOpacity>
-                    <View style={{flexDirection: 'row', marginTop: 10}}>
-                      <MaterialIcons
-                        name={'circle'}
-                        size={10}
-                        style={{color: 'black', marginTop: 5}}
-                      />
-                      <Text
-                        style={{
-                          marginLeft: 5,
-                          textAlign: 'justify',
-                          marginRight: 5,
-                        }}>
-                        Open the app and search for{' '}
-                        <Text
-                          style={{
-                            marginLeft: 5,
-                            textAlign: 'justify',
-                            marginRight: 5,
-                            fontWeight: 'bold',
-                            color: 'black',
-                          }}>
-                          "16 Annual Growth, Innovation and leadership"{' '}
-                        </Text>
-                        Tap on "Download" adn enter the password "gil22sj" to
-                        gain access
-                      </Text>
-                    </View>
-                    <View style={{flexDirection: 'row', marginTop: 10}}>
-                      <MaterialIcons
-                        name={'circle'}
-                        size={10}
-                        style={{color: 'black', marginTop: 5}}
-                      />
-                      <Text
-                        style={{
-                          marginLeft: 5,
-                          textAlign: 'justify',
-                          marginRight: 5,
-                        }}>
-                        Tap on the{' '}
-                        <Text
-                          style={{
-                            marginLeft: 5,
-                            textAlign: 'justify',
-                            marginRight: 5,
-                            fontWeight: 'bold',
-                            color: 'black',
-                          }}>
-                          "Profile"
-                        </Text>{' '}
-                        icon on the bottom and click on{' '}
-                        <Text
-                          style={{
-                            marginLeft: 5,
-                            textAlign: 'justify',
-                            marginRight: 5,
-                            fontWeight: 'bold',
-                            color: 'black',
-                          }}>
-                          "Log in" .
-                        </Text>
-                        Enter you first and last name, followed by your email
-                        address.
-                        {'\n'}
-                        <Text
-                          style={{
-                            marginLeft: 5,
-                            textAlign: 'justify',
-                            marginRight: 5,
-                            fontWeight: 'bold',
-                            color: 'black',
-                          }}>
-                          If you do not login, you won't have access to full
-                          participant list.
-                        </Text>
-                      </Text>
-                    </View>
-
-                    <View style={{flexDirection: 'row', marginTop: 10}}>
-                      <MaterialIcons
-                        name={'circle'}
-                        size={10}
-                        style={{color: 'black', marginTop: 5}}
-                      />
-                      <Text
-                        style={{
-                          marginLeft: 5,
-                          textAlign: 'justify',
-                          marginRight: 5,
-                        }}>
-                        You will be sent a verificaton email with 6 digit
-                        codethat will need to be entered in to app. (this may
-                        take a few minute. If you have any issues please see us
-                        at the registeryion desk!
-                      </Text>
-                    </View>
-                    <View style={{flexDirection: 'row', marginTop: 10}}>
-                      <MaterialIcons
-                        name={'circle'}
-                        size={10}
-                        style={{color: 'black', marginTop: 5}}
-                      />
-                      <Text
-                        style={{
-                          marginLeft: 5,
-                          textAlign: 'justify',
-                          marginRight: 5,
-                        }}>
-                        Then click back in{' '}
-                        <Text
-                          style={{
-                            marginLeft: 5,
-                            textAlign: 'justify',
-                            marginRight: 5,
-                            fontWeight: 'bold',
-                            color: 'black',
-                          }}>
-                          {' '}
-                          "Profile"
-                        </Text>{' '}
-                        and tap on{' '}
-                        <Text
-                          style={{
-                            marginLeft: 5,
-                            textAlign: 'justify',
-                            marginRight: 5,
-                            fontWeight: 'bold',
-                            color: 'black',
-                          }}>
-                          {' '}
-                          "Edit"{' '}
-                        </Text>
-                        to edit your profile.
-                      </Text>
-                    </View>
-
-                    <View style={{flexDirection: 'row', marginTop: 10}}>
-                      <MaterialIcons
-                        name={'circle'}
-                        size={10}
-                        style={{color: 'black', marginTop: 5}}
-                      />
-                      <Text
-                        style={{
-                          marginLeft: 5,
-                          textAlign: 'justify',
-                          marginRight: 5,
-                        }}>
-                        You can either manually enter your information/photo or
-                        scroll to the bottom and{' '}
-                        <Text
-                          style={{
-                            marginLeft: 5,
-                            textAlign: 'justify',
-                            marginRight: 5,
-                            fontWeight: 'bold',
-                            color: 'black',
-                          }}>
-                          {' '}
-                          "Connect"
-                        </Text>{' '}
-                        with LinkedIn to have it automatically entered. Now you
-                        are visible on the participant list and can interact
-                        with peers!
-                      </Text>
-                    </View>
-                  </View>
-                )} */}
-
-              <View
-                style={{
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                  marginTop: 10,
-                }}>
-                {eventRegisterLoading && <Loading />}
-                {!eventStatus && (
-                  <Button
-                    style={styles.acceptButton}
-                    onPress={async () => {
-                      registerEventByEventID(route?.params?.id);
-                      let eventName = events?.title;
-                      await analytics().logEvent(eventName, {
-                        item: events?.title,
-                        description: 'Event Register',
-                      });
-                    }}>
-                    <Text style={styles.acceptButtonText}>RSVP</Text>
-                  </Button>
-                )}
-                {eventStatus && (
-                  <TouchableOpacity style={styles.registeredButton}>
-                    <View style={{position: 'absolute', left: 20}}>
-                      <Image
-                        source={require('../../../assets/img/tick-icon.png')}
-                        style={{
-                          width: 25,
-                          height: 25,
-                        }}
-                      />
-                    </View>
-                    <Text style={styles.registeredButtonText}>RSVP'd</Text>
+                {/* <View>
+                  <TouchableOpacity
+                    style={styles.forumButton}
+                    onPress={() =>
+                      navigation.navigate('Discussion', {
+                        eventID: events?.ID,
+                        title: events?.title,
+                        image: {image},
+                      })
+                    }>
+                    <Text style={styles.forumText}>Discussion Forum</Text>
                   </TouchableOpacity>
-                )}
+                </View> */}
+                <View
+                  style={{
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    marginTop: 10,
+                  }}></View>
+
+                <View
+                  style={{
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                  }}>
+                  {eventRegisterLoading && <Loading />}
+                  {!eventStatus && (
+                    <Button
+                      style={styles.acceptButton}
+                      onPress={async () => {
+                        registerEventByEventID(route?.params?.id);
+                        let eventName = events?.title;
+                        await analytics().logEvent(eventName, {
+                          item: events?.title,
+                          description: 'Event Register',
+                        });
+                      }}>
+                      <Text style={styles.acceptButtonText}>RSVP</Text>
+                    </Button>
+                  )}
+                  {eventStatus && (
+                    <TouchableOpacity style={styles.registeredButton}>
+                      <View style={{position: 'absolute', left: 20}}>
+                        <Image
+                          source={require('../../../assets/img/tick-icon.png')}
+                          style={{
+                            width: 25,
+                            height: 25,
+                          }}
+                        />
+                      </View>
+                      <Text style={styles.registeredButtonText}>RSVP'd</Text>
+                    </TouchableOpacity>
+                  )}
+                </View>
               </View>
             </View>
-          </View>
-        </ImageBackground>
-      </View>
-      {/* <Footer /> */}
-    </ScrollView>
+          </ImageBackground>
+        </View>
+
+        {/* <Footer /> */}
+      </ScrollView>
+      <FloatingButton {...props} navigation={navigation} />
+    </View>
   );
 };
 
@@ -881,7 +703,6 @@ const styles = StyleSheet.create({
     marginBottom: 25,
     color: Colors.TERTIARY_TEXT_COLOR,
     textAlign: 'left',
-    fontWeight: 'regular',
   },
   acceptButton: {
     borderRadius: 10,
@@ -893,6 +714,46 @@ const styles = StyleSheet.create({
     marginTop: 25,
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  emailButton: {
+    borderRadius: 10,
+    marginLeft: 15,
+    marginRight: 15,
+    width: '100%',
+    height: 50,
+    backgroundColor: COACHING_COLOR,
+    marginTop: 25,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  forumButton: {
+    borderRadius: 10,
+    width: '100%',
+    height: 50,
+    backgroundColor: '#B9B7BD',
+    marginTop: 15,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  forumText: {
+    width: '100%',
+    height: 20,
+    fontSize: 14,
+    color: 'black',
+    textAlign: 'center',
+  },
+  sendRegisterButton: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: 10,
+    width: '100%',
+    height: 50,
+    backgroundColor: '#ffffff',
+    marginTop: 25,
+    borderColor: COACHING_COLOR,
+    borderWidth: 2,
+    position: 'relative',
   },
   registeredButton: {
     flexDirection: 'row',
@@ -915,6 +776,9 @@ const styles = StyleSheet.create({
   },
   registeredButtonText: {
     color: '#F26722',
+  },
+  emailButtonText: {
+    color: COACHING_COLOR,
   },
   topbanner: {
     backgroundColor: 'rgba(54,147,172,1)',

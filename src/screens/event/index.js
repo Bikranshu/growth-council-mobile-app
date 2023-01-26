@@ -58,11 +58,13 @@ const EventDetailScreen = props => {
       eventError={eventError}
       fetchEventByIdentifier={fetchEventByIdentifier}
       cleanEvent={cleanEvent}
+      // event Register
       eventRegisters={eventRegisters}
       eventRegisterLoading={eventRegisterLoading}
       eventRegisterError={eventRegisterError}
       registerEventByIdentifier={registerEventByIdentifier}
       cleanEventRegister={cleanEventRegister}
+      // Send Email
     />
   );
 };

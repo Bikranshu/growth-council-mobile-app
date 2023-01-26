@@ -12,20 +12,20 @@ import {
   StatusBar,
   PermissionsAndroid,
 } from 'react-native';
+
 import {Button} from 'native-base';
-import {useFocusEffect, useIsFocused} from '@react-navigation/native';
+import HTMLView from 'react-native-htmlview';
+import RNFetchBlob from 'react-native-blob-util';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import FeatherIcon from 'react-native-vector-icons/Feather';
-import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
+import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome';
+import {useFocusEffect, useIsFocused} from '@react-navigation/native';
 
-import Player from '../../dashboard/components/Player';
-import HTMLView from 'react-native-htmlview';
-import {CommonStyles, Colors, Typography} from '../../../theme';
 import Loading from '../../../shared/loading';
-import RNFetchBlob from 'react-native-blob-util';
-
 import ToastMessage from '../../../shared/toast';
+import Player from '../../dashboard/components/Player';
+import {CommonStyles, Colors, Typography} from '../../../theme';
 
 const win = Dimensions.get('window');
 const contentContainerWidth = win.width - 30;
@@ -137,24 +137,18 @@ const SubPOEDetails = props => {
         RNFetchBlob.config(configOptions)
           .fetch('GET', FILE_URL)
           .then(res => {
-            console.log('file', res);
             RNFetchBlob.ios.previewDocument('file://' + res.path());
           });
         return;
       } else {
         config(configOptions)
           .fetch('GET', FILE_URL)
-          .progress((received, total) => {
-            console.log('progress', received / total);
-          })
+          .progress((received, total) => {})
 
           .then(res => {
-            console.log('file download', res);
             RNFetchBlob.android.actionViewIntent(res.path());
           })
-          .catch((errorMessage, statusCode) => {
-            console.log('error with downloading file', errorMessage);
-          });
+          .catch((errorMessage, statusCode) => {});
       }
     };
 
@@ -341,7 +335,8 @@ const SubPOEDetails = props => {
                           style={{paddingLeft: 40}}
                         />
                         <Text style={styles.signinbuttonText}>
-                          Read Growth Process Toolkits, {'\n'}access via one click
+                          Read Growth Process Toolkits, {'\n'}access via one
+                          click
                         </Text>
                       </View>
                     </TouchableOpacity>
@@ -354,7 +349,7 @@ const SubPOEDetails = props => {
                           color="#f26722"
                           style={{paddingRight: 40}}
                         />
-						
+
                         <Text style={styles.guidebuttonText}>GuideBook</Text>
                       </View>
                     </TouchableOpacity>

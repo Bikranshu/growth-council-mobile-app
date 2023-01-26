@@ -10,10 +10,11 @@ import {
   Image,
   TouchableOpacity,
 } from 'react-native';
+
 import moment from 'moment';
-import ToastMessage from '../../../shared/toast';
 import {Toast, useToast} from 'native-base';
 
+import ToastMessage from '../../../shared/toast';
 import {CommonStyles, Colors, Typography} from '../../../theme';
 import {GROWTH_COMMUNITY_ID, GROWTH_CONTENT_ID} from '../../../constants';
 
@@ -309,11 +310,9 @@ const styles = StyleSheet.create({
   eventTitle: {
     marginBottom: 8,
     fontSize: 14,
-    fontWeight: 'normal',
   },
   eventParagraph: {
     fontSize: 8,
-    fontWeight: 'regular',
   },
   eventDate: {
     flex: 1,
@@ -327,7 +326,6 @@ const styles = StyleSheet.create({
   eventDateText: {
     textAlign: 'center',
     fontSize: 14,
-    fontWeight: 'normal',
   },
 });
 export default CouncilAllDetail;
