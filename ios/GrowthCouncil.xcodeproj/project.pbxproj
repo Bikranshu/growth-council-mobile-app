@@ -647,7 +647,9 @@
 				CODE_SIGN_ENTITLEMENTS = GrowthCouncil/GrowthCouncil.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
+
 				CURRENT_PROJECT_VERSION = 77;
+
 				DEVELOPMENT_TEAM = 3GB43PZ5Z7;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = GrowthCouncil/Info.plist;
@@ -658,7 +660,9 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
+
 				MARKETING_VERSION = 1.3.2;
+
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
@@ -686,7 +690,8 @@
 				CODE_SIGN_ENTITLEMENTS = GrowthCouncil/GrowthCouncil.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 77;
+      	CURRENT_PROJECT_VERSION = 77;
+
 				DEVELOPMENT_TEAM = 3GB43PZ5Z7;
 				INFOPLIST_FILE = GrowthCouncil/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "Growth Council App";
@@ -696,7 +701,9 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
+
 				MARKETING_VERSION = 1.3.2;
+
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",

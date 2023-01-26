@@ -139,8 +139,8 @@ android {
         applicationId "com.growthcouncil"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 19
-        versionName "1.0.7"
+        versionCode 20
+        versionName "1.0.8"
 
 		vectorDrawables.useSupportLibrary = true
     }
