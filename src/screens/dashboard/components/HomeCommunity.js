@@ -100,44 +100,24 @@ const HomeCommunity = props => {
   let string = region;
   if (string) string = string.toLowerCase();
 
-  let regionUser = profile?.user_meta?.region;
-  if (typeof regionUser === 'undefined' || regionUser === null) {
-    regionUser = ' ';
-  } else {
-    regionUser = profile?.user_meta?.region[0];
-  }
-
   const [userRegion, setUserRegion] = useState(region);
-  const [memberConnection, setMemberConnection] = useState([]);
+  const [memberConnection, setMemberConnection] = useState(communityMembers);
   const [hideEvents, setHideEvents] = useState(false);
-
-  // useEffect(() => {
-  //   fetchProfile();
-  // }, []);
 
   useEffect(() => {
     setUserRegion(region);
   }, [profile]);
 
-  // useFocusEffect(
-  // 	useCallback(() => {
-  // 		fetchEventRegion({
-  // 			region: userRegion,
-  // 		});
-  // 		return () => {
-  // 			cleanEventRegion();
-  // 		};
-  // 	}, [])
-  // );
-
   useEffect(() => {
     fetchEventRegion({
-      region: userRegion,
+      region: region,
     });
     return () => {
       cleanEventRegion();
     };
   }, []);
+
+  //   console.log('AFD', regionEvents);
 
   useFocusEffect(
     useCallback(() => {
@@ -152,48 +132,13 @@ const HomeCommunity = props => {
     }, []),
   );
 
-  // useEffect(() => {
-  // 	const fetchAllPillarPOEAsync = async () => {
-  // 		await fetchAllPillarPOE(pillarId);
-  // 	};
-  // 	fetchAllPillarPOEAsync();
-
-  // 	return () => {
-  // 		cleanPillarPOE();
-  // 	};
-  // }, []);
-
-  // useFocusEffect(
-  // 	useCallback(() => {
-  // 		const fetchAllPillarEventAsync = async () => {
-  // 			await fetchAllPillarEvent(pillarId);
-  // 		};
-  // 		fetchAllPillarEventAsync();
-
-  // 		return () => {
-  // 			cleanPillarPOE();
-  // 		};
-  // 	}, [])
-  // );
-
-  useEffect(() => {
-    const fetchAllPillarEventAsync = async () => {
-      await fetchAllPillarEvent(pillarId);
-    };
-    fetchAllPillarEventAsync();
-
-    return () => {
-      cleanPillarPOE();
-    };
-  }, []);
-
   useFocusEffect(
     useCallback(() => {
       const fetchAllCommunityMemberAsync = async () => {
         await fetchAllCommunityMember({
           s: '',
           sort: 'Desc',
-          region: userRegion,
+          region: region,
         });
       };
       fetchAllCommunityMemberAsync();
@@ -203,21 +148,6 @@ const HomeCommunity = props => {
       };
     }, []),
   );
-
-  //   useEffect(() => {
-  //     const fetchAllCommunityMemberAsync = async () => {
-  //       await fetchAllCommunityMember({
-  //         s: '',
-  //         sort: 'Desc',
-  //         region: userRegion,
-  //       });
-  //     };
-  //     fetchAllCommunityMemberAsync();
-
-  //     return () => {
-  //       cleanCommunityMember();
-  //     };
-  //   }, []);
 
   useEffect(() => {
     setMemberConnection(communityMembers);
@@ -659,57 +589,59 @@ const RenderTopItemComponent = ({item, index, setHideEvents}) => {
       setHideEvents(false);
     }
   }, []);
+  console.log(item?.pillar_categories[0]?.parent);
+  return (
+    <>
+      {item?.pillar_categories[0]?.parent === 0 || item?.pillar_categories[0]?.parent === GROWTH_COMMUNITY_ID? (
+        <View style={styles.topWrapper} key={index}>
+          <TouchableOpacity
+            onPress={async () => {
+              navigation.navigate('EventDetail', {
+                id: item.ID,
+                title: pillarname,
+                image: image,
+              });
 
-  if (
-    item?.pillar_categories[0]?.parent === 0 ||
-    item?.pillar_categories[0]?.parent === GROWTH_COMMUNITY_ID
-  ) {
-    <View style={styles.topWrapper} key={index}>
-      <TouchableOpacity
-        onPress={async () => {
-          navigation.navigate('EventDetail', {
-            id: item.ID,
-            title: pillarname,
-            image: image,
-          });
-
-          await analytics().logEvent(item?.title, {
-            id: item.ID,
-            item: item.title,
-          });
-        }}>
-        <ImageBackground
-          style={{
-            width: '100%',
-            height: '100%',
-            borderRadius: 20,
-          }}
-          source={require('../../../assets/img/Rectangle2.png')}>
-          <View
-            style={{
-              width: 50,
-              height: 50,
-              marginTop: 10,
-              marginLeft: 200,
-              backgroundColor: '#EBECF0',
-              borderRadius: 10,
-              padding: 5,
-              alignItems: 'center',
+              await analytics().logEvent(item?.title, {
+                id: item.ID,
+                item: item.title,
+              });
             }}>
-            <Text style={{color: '#030303'}}>{date[0]}</Text>
-            <Text style={{color: '#030303'}}>{date[1]}</Text>
-          </View>
+            <ImageBackground
+              style={{
+                width: '100%',
+                height: '100%',
+                borderRadius: 20,
+              }}
+              source={require('../../../assets/img/Rectangle2.png')}>
+              <View
+                style={{
+                  width: 50,
+                  height: 50,
+                  marginTop: 10,
+                  marginLeft: 200,
+                  backgroundColor: '#EBECF0',
+                  borderRadius: 10,
+                  padding: 5,
+                  alignItems: 'center',
+                }}>
+                <Text style={{color: '#030303'}}>{date[0]}</Text>
+                <Text style={{color: '#030303'}}>{date[1]}</Text>
+              </View>
 
-          <View style={styles.header}>
-            <Text style={styles.headingText1}>{item.title}</Text>
-            <Text style={styles.headingText2}>
-              {organizer} {description}
-            </Text>
-          </View>
-        </ImageBackground>
-      </TouchableOpacity>
-    </View>;
-  }
-
-  return null;
+              <View style={styles.header}>
+                <Text style={styles.headingText1}>{item.title}</Text>
+                <Text style={styles.headingText2}>
+                  {organizer} {description}
+                </Text>
+              </View>
+            </ImageBackground>
+          </TouchableOpacity>
+        </View>
+      ) : (
+        <></>
+      )}
+    </>
+  );
+  //   return null;
 };

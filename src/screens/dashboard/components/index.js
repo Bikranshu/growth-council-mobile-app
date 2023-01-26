@@ -133,18 +133,12 @@ const Dashboard = props => {
   let string = region;
   if (string) string = string.toLowerCase();
 
-  //   let regionUser = profile?.user_meta?.region;
-  //   if (typeof regionUser === 'undefined' || regionUser === null) {
-  //     regionUser = '';
-  //   } else {
-  //     regionUser = profile?.user_meta?.region[0];
-  //   }
-
   const [userRegion, setUserRegion] = useState(region);
 
   useEffect(() => {
     setUserRegion(region);
-  }, [profile]);
+  }, []);
+  console.log({region});
 
   useEffect(() => {
     messaging()
@@ -166,9 +160,13 @@ const Dashboard = props => {
 
   useEffect(() => {
     fetchEventRegion({
-      region: userRegion,
+      region: region,
     });
-  }, [profile]);
+    return () => {
+      cleanEventRegion();
+    };
+  }, []);
+
 
   useFocusEffect(
     useCallback(() => {
@@ -358,7 +356,7 @@ const Dashboard = props => {
     );
   };
 
-  const _renderTopItem = ({item, index}, navigation) => {
+  const _renderTopItem = ({item, index}) => {
     const actualDate = moment(item.event_start).format('ll').split(',', 3);
     const date = actualDate[0].split(' ', 3);
 
@@ -609,29 +607,27 @@ const Dashboard = props => {
               <View style={{height: 60}} />
 
               {/* Region event */}
-              {regionEvents?.length !== 0 &&
-                regionEvents !== null &&
-                regionEvents !== undefined && (
-                  <View style={styles.top}>
-                    <View style={styles.eventWrapper}>
-                      <Text style={styles.title}>Upcoming Events</Text>
-                    </View>
-                    <View
-                      style={{
-                        display: 'flex',
-                        flexDirection: 'row',
-                        marginTop: 20,
-                      }}>
-                      <FlatList
-                        horizontal
-                        showsHorizontalScrollIndicator={false}
-                        data={regionEvents}
-                        listKey={'regionEvents'}
-                        renderItem={item => _renderTopItem(item, navigation)}
-                      />
-                    </View>
+              {regionEvents?.length !== 0 && regionEvents !== undefined && (
+                <View style={styles.top}>
+                  <View style={styles.eventWrapper}>
+                    <Text style={styles.title}>Upcoming Events</Text>
                   </View>
-                )}
+                  <View
+                    style={{
+                      display: 'flex',
+                      flexDirection: 'row',
+                      marginTop: 20,
+                    }}>
+                    <FlatList
+                      horizontal
+                      showsHorizontalScrollIndicator={false}
+                      data={regionEvents}
+                      listKey={'regionEvents'}
+                      renderItem={_renderTopItem}
+                    />
+                  </View>
+                </View>
+              )}
 
               {regionEventLoading && <Loading />}
 
