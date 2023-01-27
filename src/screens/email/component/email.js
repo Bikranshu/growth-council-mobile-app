@@ -114,6 +114,8 @@ const Email = props => {
                         borderWidth: 0.5,
                         borderColor: '#D3D3D3',
                         marginTop: 10,
+                        height: 50,
+                        padding: 10,
                       }}
                       value={values.sender}
                       onChangeText={handleChange('sender')}
@@ -132,6 +134,8 @@ const Email = props => {
                         borderWidth: 0.5,
                         borderColor: '#D3D3D3',
                         marginTop: 10,
+                        height: 60,
+                        padding: 10,
                       }}
                       multiline={true}
                       numberOfLines={2}
@@ -152,6 +156,8 @@ const Email = props => {
                         borderColor: '#D3D3D3',
                         marginTop: 10,
                         textAlignVertical: 'top',
+                        height: 200,
+                        padding: 10,
                       }}
                       multiline={true}
                       numberOfLines={15}

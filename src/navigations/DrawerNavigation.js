@@ -247,7 +247,8 @@ const DrawerNavigation = () => {
                 resizeMode="contain"
               />
               <View style={{flexDirection: 'row', marginLeft: 30}}>
-                <Text style={{fontSize: 14, fontWeight: '500'}}>
+                <Text
+                  style={{fontSize: 14, fontWeight: '500', color: '#808080'}}>
                   Growth Pipeline Dialog
                 </Text>
                 <Text
@@ -256,6 +257,7 @@ const DrawerNavigation = () => {
                     lineHeight: 18,
                     textAlignVertical: 'top',
                     fontWeight: '500',
+                    color: '#808080',
                   }}>
                   TM
                 </Text>
@@ -265,7 +267,6 @@ const DrawerNavigation = () => {
           header: () => (
             <Header title="Growth Pipeline Dialog" navigation={navigation} />
           ),
-          
         })}
       />
 

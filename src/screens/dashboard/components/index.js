@@ -540,8 +540,13 @@ const Dashboard = props => {
                                     style={styles.quote}>
                                     <View>
                                       <Text
-                                        onTextLayout={onTextLayout}
-                                        numberOfLines={3}
+                                        onTextLayout={event =>
+                                          setLengthMore(
+                                            event.nativeEvent.lines[0].width >
+                                              2,
+                                          )
+                                        }
+                                        numberOfLines={2}
                                         style={{
                                           fontSize: 14,
                                           color: 'white',

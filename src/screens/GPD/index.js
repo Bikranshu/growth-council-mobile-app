@@ -46,7 +46,6 @@ const GPDScreen = props => {
     content1 = '';
   }
 
-  console.log(Dimensions.get('screen').height / 9);
   return (
     <View style={{flex: 1}}>
       <StatusBar
@@ -80,7 +79,10 @@ const GPDScreen = props => {
               <ImageBackground
                 source={require('../../assets/img/appBG.png')}
                 style={{
-                  height: (Dimensions.get('screen').height - 200) / 2,
+                  height:
+                    Platform.OS === 'ios'
+                      ? (Dimensions.get('screen').height - 200) / 2 + 70
+                      : (Dimensions.get('screen').height - 200) / 2 + 20,
                   paddingTop:
                     Platform.OS === 'ios'
                       ? Dimensions.get('screen').height / 7
@@ -173,15 +175,13 @@ const GPDScreen = props => {
                       style: {
                         color: 'black',
                         fontSize: 14,
-                        textAlign: 'center',
-
+                        // textAlign: 'center',
                       },
                     }}
                   />
                   {GDP?.gpd_features?.map(item => {
                     console.log({item});
                     return (
-					
                       <View style={[styles.wrapper, styles.shadowProp]}>
                         <Ionicons name="arrow-forward" size={30} color="blue" />
                         <Text
