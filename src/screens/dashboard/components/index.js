@@ -456,9 +456,14 @@ const Dashboard = props => {
     );
   };
 
-  const onTextLayout = useCallback(e => {
-    setLengthMore(e.nativeEvent.lines.length > 3);
-  }, []);
+  const [textLength, setTextLength] = useState(0);
+  console.log({textLength});
+  useFocusEffect(
+    useCallback(() => {
+      setLengthMore(textLength > 3);
+    }, [isFocused]),
+  );
+  console.log(lengthMore);
 
   const date = new Date();
   let localTime = date.getTime();
@@ -540,13 +545,12 @@ const Dashboard = props => {
                                     style={styles.quote}>
                                     <View>
                                       <Text
-                                        onTextLayout={event =>
-                                          setLengthMore(
-                                            event.nativeEvent.lines[0].width >
-                                              2,
+                                        onTextLayout={e =>
+                                          setTextLength(
+                                            e.nativeEvent.lines.length,
                                           )
                                         }
-                                        numberOfLines={2}
+                                        numberOfLines={3}
                                         style={{
                                           fontSize: 14,
                                           color: 'white',

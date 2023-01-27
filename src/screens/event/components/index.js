@@ -79,7 +79,9 @@ const Event = props => {
     });
     if (response?.payload?.code === 200) {
       setEventStatus(true);
-      ToastMessage.show('You have registered for this Frost & Sullivan Think Tank.');
+      ToastMessage.show(
+        'You have registered for this Frost & Sullivan Think Tank.',
+      );
     } else {
       toast.closeAll();
       ToastMessage.show(response?.payload?.response);
@@ -149,7 +151,15 @@ const Event = props => {
 
   //calculating gobal timezone of event.start
 
-  const startHours = Number(backStartTimeStamp.split(/(\s+)/)[0]);
+  // if startHours value is 12 change into 0 because to avoid confusion and ensure consistency in the 24-hour time format.
+  // This is done because 12:00 AM is the beginning of a new day,
+  // and using 0 hours instead of 12 hours clearly indicates the start of a new day in the 24-hour format.
+
+  const startHours =
+    Number(backStartTimeStamp.split(/(\s+)/)[0]) === 12
+      ? 0
+      : Number(backStartTimeStamp.split(/(\s+)/)[0]);
+
   const min =
     Number(backStartTimeStamp.split(/(\s+)/)[3]) +
     Number(backStartTimeStamp.split(/(\s+)/)[4]);
@@ -166,7 +176,10 @@ const Event = props => {
       ? startDateCal - 24 + ' am'
       : startDateCal + eventDate.split(/(\s+)/)[7] + 'am';
 
-  let nextDay = day?.indexOf(eventDate.split(/(\s+)/)[4]) + 1;
+  let nextDay =
+    day?.indexOf(eventDate.split(/(\s+)/)[4]) + 1 === 7
+      ? 0
+      : day?.indexOf(eventDate.split(/(\s+)/)[4]) + 1;
   let previousDay = day?.indexOf(eventDate.split(/(\s+)/)[4]) - 1;
 
   const gobalDate =
@@ -330,20 +343,7 @@ const Event = props => {
                         paddingLeft: 5,
                         justifyContent: 'center',
                       }}>
-                      {/* <Text style={styles.eventDetails}>{GobalDate} /</Text> */}
                       <Text style={styles.eventDetails}>
-                        {/* {GobalStartMonth === GobalEndMonth
-                        ? GobalDate + GobalEndTime
-                        : GobalStartMonth +
-                          GobalDate.split(/(\s+)/)[7] +
-                          GobalDate.split(/(\s+)/)[6] +
-                          GobalDate.split(/(\s+)/)[7] +
-                          GobalEndMonth}{' '}
-                      (
-                      {deviceTimeZone.split('/')[1] +
-                        comma +
-                        deviceTimeZone.split('/')[0]}
-                      ) /{' '} */}
                         {eventStartMonth === eventEndMonth
                           ? eventStartMonth
                           : eventStartMonth +
@@ -351,10 +351,6 @@ const Event = props => {
                             eventDate.split(/(\s+)/)[8] +
                             eventDate.split(/(\s+)/)[7] +
                             eventEndMonth}
-                        {/* {eventDate.split(/(\s+)/)[5]}
-                      {events?.event_meta?.evo_event_timezone !== undefined
-                        ? events?.event_meta?.evo_event_timezone
-                        : ''} */}
                       </Text>
                       {eventStartMonth === eventEndMonth ? (
                         <View style={{flexDirection: 'row'}}>
@@ -369,9 +365,6 @@ const Event = props => {
                               marginLeft: 5,
                               color: COMMUNITY_COLOR,
                             }}>
-                            {/* {events?.event_meta?.evo_event_timezone !== undefined
-                            ? events?.event_meta?.evo_event_timezone
-                            : ''} */}
                             {events?.time_zone !== undefined
                               ? events?.time_zone
                               : ''}
@@ -408,9 +401,6 @@ const Event = props => {
                                 marginLeft: 5,
                                 color: COMMUNITY_COLOR,
                               }}>
-                              {/* {deviceTimeZone.split('/')[1] +
-                              comma +
-                              deviceTimeZone.split('/')[0]} */}
                               {deviceTimeZone}
                             </Text>
                           </View>
