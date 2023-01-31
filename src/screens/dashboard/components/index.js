@@ -457,13 +457,13 @@ const Dashboard = props => {
   };
 
   const [textLength, setTextLength] = useState(0);
-  console.log({textLength});
+
   useFocusEffect(
     useCallback(() => {
       setLengthMore(textLength > 3);
     }, [isFocused]),
   );
-  console.log(lengthMore);
+
 
   const date = new Date();
   let localTime = date.getTime();

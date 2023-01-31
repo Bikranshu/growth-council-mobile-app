@@ -221,7 +221,10 @@ const Event = props => {
   //End of calculating gobal timezone of event.start
 
   //calculating gobal timezone of event.end
-  const endHours = Number(backEndTimeStamp.split(/(\s+)/)[0]);
+  const endHours =
+    Number(backEndTimeStamp.split(/(\s+)/)[0]) === 12
+      ? 0
+      : Number(backEndTimeStamp.split(/(\s+)/)[0]);
   const min1 =
     Number(backEndTimeStamp.split(/(\s+)/)[3]) +
     Number(backEndTimeStamp.split(/(\s+)/)[4]);
@@ -231,6 +234,7 @@ const Event = props => {
       : (endHours + 12) * 60 + min1;
 
   const endDateCal = (hourCal1 - eventOffset + deviceOffset) / 60;
+  console.log({endDateCal});
   const gobalEnd =
     endDateCal > 12 && endDateCal < 24
       ? endDateCal - 12 + eventDate.split(/(\s+)/)[7] + 'pm'

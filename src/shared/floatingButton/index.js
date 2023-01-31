@@ -153,9 +153,7 @@ const FloatingButton = props => {
                   }}>
                   <View
                     style={{flexDirection: 'row', alignItems: 'flex-start'}}>
-                    <Text style={{color: 'white'}}>
-                      Growth Pipeline Dialog.
-                    </Text>
+                    <Text style={{color: 'white'}}>Growth Pipeline Dialog</Text>
                     <Text style={{fontSize: 7, lineHeight: 18, color: 'white'}}>
                       TM
                     </Text>
