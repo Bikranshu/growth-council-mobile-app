@@ -494,7 +494,7 @@ const ContentLibraryDetail = props => {
             )}
 
           {/* Article Feedback Section */}
-          <View style={{marginTop: 20}}>
+          {/* <View style={{marginTop: 20}}>
             <ArticleFeedbackCard
               contentLibraryDetails={contentLibraryDetails}
               article={article}
@@ -505,7 +505,7 @@ const ContentLibraryDetail = props => {
               //   isTrue={isTrue}
               //   handleValue={handleFeedbackChange}
             />
-          </View>
+          </View> */}
         </ScrollView>
       </View>
       <FloatingButton {...props} navigation={navigation} />
