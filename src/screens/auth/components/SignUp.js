@@ -21,6 +21,7 @@ import {useFocusEffect} from '@react-navigation/native';
 import PhoneInput from 'react-native-phone-number-input';
 import analytics from '@react-native-firebase/analytics';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import {GoogleAnalyticsTracker} from 'react-native-google-analytics-bridge';
 
 import auth from '@react-native-firebase/auth';
 import ToastMessage from '../../../shared/toast';
@@ -395,6 +396,11 @@ const SignUpForm = props => {
     values.phone != '' &&
     values.country != '';
 
+  const handleSectionClick = username => {
+    let tracker = new GoogleAnalyticsTracker('G-BJ7ZHW9DQT');
+    tracker.setUser(username);
+  };
+
   return (
     <View style={styles.container}>
       <ImageBackground
@@ -613,9 +619,9 @@ const SignUpForm = props => {
                 ]}
                 onPress={async () => {
                   handleSubmit;
-                  await analytics().logEvent('Register page', {
-                    item: 'User Registeration',
-                  });
+                  handleSectionClick(
+                    values?.first_name + ' ' + values?.last_name,
+                  );
                 }}
                 disabled={!areAllFieldsFilled || loading}>
                 <Text style={styles.loginButtonText}>Join Now</Text>

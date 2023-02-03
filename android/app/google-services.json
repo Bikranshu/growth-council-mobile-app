@@ -1,47 +1,47 @@
 {
-  "project_info": {
-    "project_number": "377923277535",
-    "firebase_url": "https://growth-council-69a81-default-rtdb.firebaseio.com",
-    "project_id": "growth-council-69a81",
-    "storage_bucket": "growth-council-69a81.appspot.com"
-  },
-  "client": [
-    {
-      "client_info": {
-        "mobilesdk_app_id": "1:377923277535:android:d100b41f6342692a9f4f6a",
-        "android_client_info": {
-          "package_name": "com.growthcouncil"
-        }
-      },
-      "oauth_client": [
-        {
-          "client_id": "377923277535-nl27jjuj76ve5b30ecaj9gmnbq55n254.apps.googleusercontent.com",
-          "client_type": 3
-        }
-      ],
-      "api_key": [
-        {
-          "current_key": "AIzaSyCXZMG9L-wJ2sStEZ3KleU2H3T63QC4RpY"
-        }
-      ],
-      "services": {
-        "appinvite_service": {
-          "other_platform_oauth_client": [
-            {
-              "client_id": "377923277535-nl27jjuj76ve5b30ecaj9gmnbq55n254.apps.googleusercontent.com",
-              "client_type": 3
-            },
-            {
-              "client_id": "377923277535-qc1an7qhen6tnjdk7ar7vrn9dlakckct.apps.googleusercontent.com",
-              "client_type": 2,
-              "ios_info": {
-                "bundle_id": "com.growthcouncil"
-              }
-            }
-          ]
-        }
-      }
-    }
-  ],
-  "configuration_version": "1"
-}
+	"project_info": {
+	  "project_number": "377923277535",
+	  "firebase_url": "https://growth-council-69a81-default-rtdb.firebaseio.com",
+	  "project_id": "growth-council-69a81",
+	  "storage_bucket": "growth-council-69a81.appspot.com"
+	},
+	"client": [
+	  {
+		"client_info": {
+		  "mobilesdk_app_id": "1:377923277535:android:d100b41f6342692a9f4f6a",
+		  "android_client_info": {
+			"package_name": "com.growthcouncil"
+		  }
+		},
+		"oauth_client": [
+		  {
+			"client_id": "377923277535-nl27jjuj76ve5b30ecaj9gmnbq55n254.apps.googleusercontent.com",
+			"client_type": 3
+		  }
+		],
+		"api_key": [
+		  {
+			"current_key": "AIzaSyCXZMG9L-wJ2sStEZ3KleU2H3T63QC4RpY"
+		  }
+		],
+		"services": {
+		  "appinvite_service": {
+			"other_platform_oauth_client": [
+			  {
+				"client_id": "377923277535-nl27jjuj76ve5b30ecaj9gmnbq55n254.apps.googleusercontent.com",
+				"client_type": 3
+			  },
+			  {
+				"client_id": "377923277535-qc1an7qhen6tnjdk7ar7vrn9dlakckct.apps.googleusercontent.com",
+				"client_type": 2,
+				"ios_info": {
+				  "bundle_id": "com.growthcouncil"
+				}
+			  }
+			]
+		  }
+		}
+	  }
+	],
+	"configuration_version": "1"
+  }

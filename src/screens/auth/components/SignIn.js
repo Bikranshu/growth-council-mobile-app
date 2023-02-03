@@ -9,6 +9,7 @@ import {
   ImageBackground,
   Image,
   Modal,
+  LogBox,
 } from 'react-native';
 
 import * as Yup from 'yup';
@@ -18,11 +19,12 @@ import {
   NavigationContainer,
   useNavigationContainerRef,
 } from '@react-navigation/native';
-import {Button} from 'native-base';
+// import {Button} from 'native-base';
 import {Picker} from '@react-native-picker/picker';
 import {BubblesLoader} from 'react-native-indicator';
 import firebase from '@react-native-firebase/analytics';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import {GoogleAnalyticsTracker} from 'react-native-google-analytics-bridge';
 
 import {useAuthentication} from '../../../context/auth';
 import FlatTextInput from '../../../shared/form/FlatTextInput';
@@ -38,11 +40,11 @@ const signInSchema = Yup.object().shape({
 const SignInForm = props => {
   const {
     navigation,
-    profile,
-    profileLoading,
-    profileError,
-    fetchProfile,
-    cleanProfile,
+    // profile,
+    // profileLoading,
+    // profileError,
+    // fetchProfile,
+    // cleanProfile,
     userLoading,
     updateUser,
   } = props;
@@ -53,14 +55,17 @@ const SignInForm = props => {
   const {loading, setLoading, message, setMessage, signIn, userCountry} =
     useAuthentication();
 
-  useEffect(() => {
-    const fetchProfileAsync = async () => {
-      await fetchProfile();
-    };
-    fetchProfileAsync();
-  }, []);
+  //   useEffect(() => {
+  //     const fetchProfileAsync = async () => {
+  //       await fetchProfile();
+  //     };
+  //     fetchProfileAsync();
+  //   }, []);
 
   //   console.log({profile});
+
+  LogBox.ignoreLogs(['new NativeEventEmitter']); // Ignore log notification by message
+  LogBox.ignoreAllLogs(); //Ignore all log notifications
   const {
     handleChange,
     handleBlur,
@@ -86,14 +91,18 @@ const SignInForm = props => {
   //   );
   // };
 
-  useFocusEffect(
-    useCallback(() => {
-      setMessage(null);
-      ``;
-      setLoading(false);
-    }, []),
-  );
+//   useFocusEffect(
+//     useCallback(() => {
+//       setMessage(null);
+//       ``;
+//       setLoading(false);
+//     }, []),
+//   );
 
+  const handleSectionClick = username => {
+    let tracker = new GoogleAnalyticsTracker('G-BJ7ZHW9DQT');
+    tracker.setUser(username);
+  };
   return (
     <ScrollView
       contentContainerStyle={{flexGrow: 1, height: screenHeight + 100}}>
@@ -188,17 +197,20 @@ const SignInForm = props => {
               )}
 
               <View style={styles.loginButtonWrapper}>
-                <Button
+                <TouchableOpacity
                   style={[
                     !areAllFieldsFilled
                       ? styles.loginButton1
                       : styles.loginButton,
                     loading && {backgroundColor: 'grey'},
                   ]}
-                  onPress={handleSubmit}
+                  onPress={() => {
+                    handleSubmit;
+                    handleSectionClick(values?.username);
+                  }}
                   disabled={!areAllFieldsFilled || loading}>
                   <Text style={styles.loginButtonText}>Sign In</Text>
-                </Button>
+                </TouchableOpacity>
               </View>
               <View style={styles.forgotButtonWrapper}>
                 <TouchableOpacity>

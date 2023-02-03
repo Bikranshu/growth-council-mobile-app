@@ -24,6 +24,8 @@ target 'GrowthCouncil' do
   pod 'FirebaseCoreInternal', :modular_headers => true
   pod 'GoogleUtilities', :modular_headers => true
 
+  pod 'react-native-google-analytics-bridge', :path => '../node_modules/react-native-google-analytics-bridge'
+
   target 'GrowthCouncilTests' do
     inherit! :complete
     # Pods for testing

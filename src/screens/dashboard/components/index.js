@@ -22,6 +22,7 @@ import {BlurView} from '@react-native-community/blur';
 import {useNavigation} from '@react-navigation/native';
 import messaging from '@react-native-firebase/messaging';
 import analytics from '@react-native-firebase/analytics';
+import {GoogleAnalyticsTracker} from 'react-native-google-analytics-bridge';
 
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import LinearGradient from 'react-native-linear-gradient';
@@ -143,19 +144,26 @@ const Dashboard = props => {
 
   const [userRegion, setUserRegion] = useState(region);
 
-  // Start tracking the duration of the user's stay on the page
-  let startTime = new Date().getTime();
-
-  // Call this method when the user navigates away from the page
-  let endTime = new Date().getTime();
-  let duration = endTime - startTime;
-
+  let tracker = new GoogleAnalyticsTracker('G-BJ7ZHW9DQT');
   useEffect(() => {
     const GoogleA = async () => {
-      await analytics().logEvent('dashboard_duration', {
-        page_name: 'dashboard', // name of the page
-        duration: duration, // duration in milliseconds
-      });
+      //   await analytics().logEvent('dashboard_duration', {
+      //     page_name: 'dashboard', // name of the page
+      //     duration: duration, // duration in milliseconds
+      //   });
+
+      // Start tracking the duration of the user's stay on the page
+      let startTime = Date.now();
+      // Call this method when the user navigates away from the page
+      let endTime = Date.now();
+      let duration = endTime - startTime;
+
+      tracker.trackTiming(
+        'Dashboard',
+        duration,
+        'Dashboard Duration',
+        'Dashboard',
+      );
     };
     GoogleA();
   }, []);
@@ -260,6 +268,10 @@ const Dashboard = props => {
     }
   };
 
+  const handleSectionClick = sectionName => {
+    tracker.trackEvent('Dashboard', 'Section Click', sectionName);
+  };
+
   const _renderItem = ({item, index}) => {
     let user = item?.user_meta?.region;
     if (typeof user === 'undefined' || user === 'null') {
@@ -306,11 +318,7 @@ const Dashboard = props => {
               <TouchableOpacity
                 onPress={async () => {
                   connectMemberByMemberID(item.ID, index);
-
-                  await analytics().logEvent('dashboard_New_Member', {
-                    add_member: item?.user_meta?.first_name,
-                    user: profile?.user_login,
-                  });
+                  handleSectionClick(item?.display_name);
                 }}>
                 <Ionicons name="add-circle" size={20} color="#B2B3B9" />
               </TouchableOpacity>
@@ -363,9 +371,7 @@ const Dashboard = props => {
               id: item?.ID,
               title: item?.post_title,
             });
-            await analytics().logEvent('LatestContent', {
-              content_post_title: item.post_title,
-            });
+            handleSectionClick(item?.post_title);
           }}>
           <View style={styles.middleWrap}>
             <Text style={{color: 'white', fontSize: 10}}>View</Text>
@@ -429,10 +435,7 @@ const Dashboard = props => {
               image: backgroundImage,
             });
 
-            await analytics().logEvent('upcoming_event', {
-              event_title: item?.title,
-              event_id: item?.id,
-            });
+            handleSectionClick(item.title);
           }}>
           <ImageBackground
             style={{width: '100%', height: 190, borderRadius: 20}}
