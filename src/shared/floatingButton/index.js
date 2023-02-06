@@ -108,7 +108,7 @@ const FloatingButton = props => {
   useEffect(() => {
     setTimeout(() => {
       setIsAlertVisible(false);
-    }, 5000);
+    }, 8000);
   });
 
   return (
