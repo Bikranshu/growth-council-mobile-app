@@ -1,6 +1,6 @@
 import {GestureHandlerRootView} from 'react-native-gesture-handler';
 import React, {useEffect, useRef, useState} from 'react';
-import jwt_decode from 'jwt-decode';
+// import jwt_decode from 'jwt-decode';
 import {StyleSheet, View, Text} from 'react-native';
 import {Provider} from 'react-redux';
 import {PersistGate} from 'redux-persist/integration/react';
@@ -19,11 +19,11 @@ import {Platform} from 'react-native';
 import Modal from 'react-native-modal';
 import {useAuthentication} from './context/auth';
 import {navigate} from './utils/navigationUtil';
-import {
-	setAsyncStorage,
-	clearAsyncStorage,
-	getAsyncStorage,
-} from './utils/storageUtil';
+// import {
+// 	setAsyncStorage,
+// 	clearAsyncStorage,
+// 	getAsyncStorage,
+// } from './utils/storageUtil';
 
 XMLHttpRequest = GLOBAL.originalXMLHttpRequest
 	? GLOBAL.originalXMLHttpRequest
