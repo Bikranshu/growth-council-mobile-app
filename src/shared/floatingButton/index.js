@@ -234,7 +234,7 @@ const FloatingButton = props => {
                     fontWeight: 'bold',
                     lineHeight: 30,
                   }}>
-                  {GDP.gpd_popup_title}
+                  {GDP?.gpd_popup_title}
                   {/* <Text
                     style={{
                       fontSize: 8,

@@ -374,23 +374,18 @@ const CommunityDetail = props => {
         RNFetchBlob.config(configOptions)
           .fetch('GET', FILE_URL)
           .then(res => {
-
             RNFetchBlob.ios.previewDocument('file://' + res.path());
           });
         return;
       } else {
         config(configOptions)
           .fetch('GET', FILE_URL)
-          .progress((received, total) => {
-        
-          })
+          .progress((received, total) => {})
 
           .then(res => {
-       
             RNFetchBlob.android.actionViewIntent(res.path());
           })
-          .catch((errorMessage, statusCode) => {
-          });
+          .catch((errorMessage, statusCode) => {});
       }
     };
 
@@ -667,7 +662,7 @@ const CommunityDetail = props => {
                         ) {
                           // live= 205 and stgaing= 206
                           navigation.navigate('LibraryDetail', {
-                            resources: 206,
+                            resources: 205,
                             itemname: poeDetails?.name,
                           });
                         } else {
