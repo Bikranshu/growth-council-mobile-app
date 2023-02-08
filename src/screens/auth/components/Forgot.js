@@ -48,11 +48,12 @@ const ForgotForm = props => {
       await forgotPassword(values).then(response => {
         if (response?.payload?.code === 200) {
           navigation.navigate('SignIn');
-          ToastMessage.show(
-            'Email to reset password has been sent successfully.',
-          );
+          //   ToastMessage.show(
+          //     'Email to reset password has been sent successfully.',
+          //   );
+          ToastMessage.show(response?.payload?.message);
         } else {
-          ToastMessage.show(response?.payload?.response);
+          ToastMessage.show(response?.payload?.message);
         }
       });
     },

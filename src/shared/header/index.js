@@ -30,7 +30,7 @@ const HeaderTitle = props => {
       <View style={{flexDirection: 'row'}}>
         <Text
           style={{
-            marginLeft: 10,
+            // marginLeft: 10,
             fontFamily: 'SFProText-Medium',
             fontSize: 18,
             color: 'white',
