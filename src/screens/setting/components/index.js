@@ -739,7 +739,16 @@ const Setting = props => {
                             <View style={styles.loginButtonWrapper}>
                               <Button
                                 style={[styles.loginButton]}
-                                onPress={handleSubmit}>
+                                onPress={async () => {
+                                  handleSubmit();
+                                  const username = profile?.user_login;
+                                  await analytics().logEvent(
+                                    'Settings_NotificationUpdate',
+                                    {
+                                      username: username,
+                                    },
+                                  );
+                                }}>
                                 <Text style={styles.loginButtonText}>Save</Text>
                               </Button>
                             </View>
@@ -764,8 +773,10 @@ const Setting = props => {
                       navigation.navigate('Gmail', {
                         title: 'Account Assistance',
                       });
-                      await analytics().logEvent('settingGmail', {
+                      const username = profile?.user_login;
+                      await analytics().logEvent('setting_ContactUsForm', {
                         item: 'setting',
+                        username: username,
                       });
                     }}>
                     <View style={styles.middleWrapper}>

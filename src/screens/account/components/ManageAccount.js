@@ -145,6 +145,8 @@ const ManageAccount = props => {
     ? profile?.expertise_areas1
     : [];
 
+  const username = profile?.display_name;
+
   const takePhotoFromCamera = () => {
     ImagePicker.openCamera({
       width: 270,
@@ -161,6 +163,10 @@ const ManageAccount = props => {
       };
       fd.append('file', file);
       setImageDetail(fd);
+      await analytics().logEvent('takePhotoFromCamera', {
+        username: username,
+        userImage: imageDetail,
+      });
     });
   };
   const choosePhotoFromLibrary = () => {
@@ -179,6 +185,10 @@ const ManageAccount = props => {
       };
       fd.append('file', file);
       setImageDetail(fd);
+      await analytics().logEvent('choosePhotoFromLibrary', {
+        username: username,
+        userImage: imageDetail,
+      });
     });
   };
 
@@ -566,7 +576,12 @@ const ManageAccount = props => {
                     <View style={styles.loginButtonWrapper}>
                       <TouchableOpacity
                         style={styles.loginButton}
-                        onPress={handleSubmit}>
+                        onPress={async () => {
+                          handleSubmit();
+                          await analytics().logEvent('ProfileUpdate', {
+                            username: username,
+                          });
+                        }}>
                         <Text style={styles.loginButtonText}>Update</Text>
                       </TouchableOpacity>
                     </View>

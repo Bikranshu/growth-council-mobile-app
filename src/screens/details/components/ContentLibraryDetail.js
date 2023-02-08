@@ -67,16 +67,16 @@ const ContentLibraryDetail = props => {
     ),
   );
 
-  useEffect(() => {
-    const ARTICLE_LIKEAsync = async () => {
-      await AsyncStorage.setItem('ARTICLE_LIKE', contentLibraryDetails.likes);
-      await AsyncStorage.setItem(
-        'ARTICLE_DISLIKE',
-        contentLibraryDetails.dislikes,
-      );
-    };
-    ARTICLE_LIKEAsync();
-  }, [isFocused, contentLibraryDetails]);
+//   useEffect(() => {
+//     const ARTICLE_LIKEAsync = async () => {
+//       await AsyncStorage.setItem('ARTICLE_LIKE', contentLibraryDetails.likes);
+//       await AsyncStorage.setItem(
+//         'ARTICLE_DISLIKE',
+//         contentLibraryDetails.dislikes,
+//       );
+//     };
+//     ARTICLE_LIKEAsync();
+//   }, [isFocused, contentLibraryDetails]);
 
   //   const [emailStatus, setEmailStatus] = useState(false);
 
@@ -187,13 +187,15 @@ const ContentLibraryDetail = props => {
     return (
       <TouchableOpacity
         onPress={async () => {
-          await analytics().logEvent('ContentLibraryPDF', {
-            item: item?.file?.title,
-            description: 'pdf open from content library details page',
-          });
           navigation.navigate('pdf', {
             paramsFile: item?.file?.url,
             title: item?.file?.title,
+          });
+          const pdfName = item?.file?.title;
+
+          await analytics().logEvent('pdf_open', {
+            description: 'pdf open from content library details page',
+            pdfName: pdfName,
           });
         }}>
         <View style={styles.attachmentContainer}>
@@ -204,7 +206,15 @@ const ContentLibraryDetail = props => {
 
           <TouchableOpacity
             style={styles.attachmentDownloadButton}
-            onPress={checkPermission}>
+            // onPress={checkPermission}>
+            onPress={async () => {
+              checkPermission();
+              const pdfName = item?.file?.title;
+
+              await analytics().logEvent('pdf_Download', {
+                pdfName: pdfName,
+              });
+            }}>
             <FeatherIcon name="arrow-down" size={20} color="#9B9CA0" />
           </TouchableOpacity>
         </View>

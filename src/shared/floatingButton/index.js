@@ -17,6 +17,7 @@ import {
 import {Button} from 'native-base';
 import Animated from 'react-native-reanimated';
 import {useDispatch, useSelector} from 'react-redux';
+import analytics from '@react-native-firebase/analytics';
 
 import {
   COACHING_COLOR,
@@ -272,6 +273,9 @@ const FloatingButton = props => {
                     style={[styles.emailButton]}
                     onPress={async () => {
                       GrowthPipelineDialogueButton();
+                      await analytics().logEvent('FloatingButton', {
+                        description: 'Growth Pipeline Dialog initiated!',
+                      });
                     }}>
                     <Text style={styles.acceptButtonText}>Yes</Text>
                   </Button>

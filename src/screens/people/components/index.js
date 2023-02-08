@@ -222,8 +222,9 @@ const People = props => {
               <TouchableOpacity
                 onPress={async () => {
                   connectMemberByMemberID(item.ID, index);
-                  await analytics().logEvent('Member', {
-                    item: item?.user_meta?.first_name,
+                  const memberName = item?.display_name;
+                  await analytics().logEvent('Add_Member', {
+                    memberName: memberName,
                     description: 'Member Connection',
                   });
                 }}>

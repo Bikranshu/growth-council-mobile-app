@@ -87,7 +87,7 @@ const SignUpForm = props => {
       name: '',
       first_name: '',
       last_name: '',
-      username: ``,
+      username: '',
       password: uuid.v4(),
       title: '',
       company: '',
@@ -608,7 +608,12 @@ const SignUpForm = props => {
                     : styles.loginButton,
                   loading && {backgroundColor: 'grey'},
                 ]}
-                onPress={handleSubmit}
+                onPress={async () => {
+                  handleSubmit();
+                  await analytics().logEvent('Register', {
+                    username: values.username,
+                  });
+                }}
                 disabled={!areAllFieldsFilled || loading}>
                 <Text style={styles.loginButtonText}>Join Now</Text>
               </Button>

@@ -21,6 +21,7 @@ import {useFormik} from 'formik';
 import {Button} from 'native-base';
 import {useIsFocused} from '@react-navigation/native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import analytics from '@react-native-firebase/analytics';
 
 import Loading from '../../../shared/loading';
 import ToastMessage from '../../../shared/toast';
@@ -99,7 +100,14 @@ const Email = props => {
                   <Text style={styles.headingText1}>New Message</Text>
 
                   {/* <View style={styles.loginButtonWrapper}> */}
-                  <Button style={[styles.loginButton]} onPress={handleSubmit}>
+                  <Button
+                    style={[styles.loginButton]}
+                    onPress={async () => {
+                      handleSubmit();
+                      await analytics().logEvent('ContactUsForm', {
+                        email: values.sender,
+                      });
+                    }}>
                     <Text style={styles.loginButtonText}>Send</Text>
                   </Button>
                   {/* </View> */}

@@ -64,7 +64,7 @@ const Question = props => {
                   key={key}
                 />
               ),
-            )}{' '}
+            )}
           </View>
         )}
     </View>

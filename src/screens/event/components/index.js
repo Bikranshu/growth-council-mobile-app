@@ -234,7 +234,6 @@ const Event = props => {
       : (endHours + 12) * 60 + min1;
 
   const endDateCal = (hourCal1 - eventOffset + deviceOffset) / 60;
-  console.log({endDateCal});
   const gobalEnd =
     endDateCal > 12 && endDateCal < 24
       ? endDateCal - 12 + eventDate.split(/(\s+)/)[7] + 'pm'
@@ -549,7 +548,7 @@ const Event = props => {
                             style: {
                               fontSize: 12,
                               lineHeight: 20,
-                              fontWeight: 'regular',
+                              fontWeight: '500',
                               color: '#666767',
                               alignItems: 'center',
                               textAlign: 'justify',
@@ -592,9 +591,10 @@ const Event = props => {
                       onPress={async () => {
                         registerEventByEventID(route?.params?.id);
                         let eventName = events?.title;
-                        await analytics().logEvent(eventName, {
-                          item: events?.title,
+                        await analytics().logEvent('Event_Detail', {
                           description: 'Event Register',
+                          eventID: eventID,
+                          eventName: eventName,
                         });
                       }}>
                       <Text style={styles.acceptButtonText}>RSVP</Text>
