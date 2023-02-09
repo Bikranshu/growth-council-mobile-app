@@ -157,7 +157,7 @@ const Event = props => {
 
   const startHours =
     Number(backStartTimeStamp.split(/(\s+)/)[0]) === 12
-      ? 0
+      ? Number(backStartTimeStamp.split(/(\s+)/)[0]) - 12
       : Number(backStartTimeStamp.split(/(\s+)/)[0]);
 
   const min =
@@ -223,7 +223,7 @@ const Event = props => {
   //calculating gobal timezone of event.end
   const endHours =
     Number(backEndTimeStamp.split(/(\s+)/)[0]) === 12
-      ? 0
+      ? Number(backEndTimeStamp.split(/(\s+)/)[0]) - 12
       : Number(backEndTimeStamp.split(/(\s+)/)[0]);
   const min1 =
     Number(backEndTimeStamp.split(/(\s+)/)[3]) +
