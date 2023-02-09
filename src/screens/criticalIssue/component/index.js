@@ -54,7 +54,7 @@ const CriticalIssue = props => {
   let profileRegion = profile?.user_meta?.region;
 
   if (typeof profileRegion === 'undefined' || profileRegion === null) {
-    profileRegion = 'ALL REGIONS';
+    profileRegion = 'ALL REGION';
   } else {
     profileRegion = profile?.user_meta?.region[0];
   }
@@ -151,7 +151,7 @@ const CriticalIssue = props => {
               ))}
             </View>
           </View>
-        ) : lowercaseRegion === 'all regions' ? (
+        ) : lowercaseRegion === 'all region' ? (
           <View style={styles.content}>
             <Image
               style={{
