@@ -17,7 +17,16 @@ import {CommonStyles, Colors, Typography} from '../../../theme';
 import {PRIMARY_TEXT_COLOR, SECONDARY_TEXT_COLOR} from '../../../theme/colors';
 
 const NotificationList = props => {
-  const {navigation, route} = props;
+  const {
+    navigation,
+    route,
+    profile,
+    profileLoading,
+    notificationList,
+    notificationListLoading,
+    getNotificationLists,
+    cleanNotificationLists,
+  } = props;
 
   const data = [
     {
@@ -31,6 +40,14 @@ const NotificationList = props => {
       des: ' Lorem ipsum, or lipsum as it is sometimes known, is dummy text used in laying out print, graphic or web designs. The passage is attributed to an unknown',
     },
   ];
+
+  useEffect(() => {
+    getNotificationLists({
+      id: profile?.ID,
+    });
+  }, []);
+
+  console.log({notificationList});
   const _renderItem = ({item, index}) => {
     return (
       <View>
@@ -51,21 +68,40 @@ const NotificationList = props => {
               paddingLeft: 15,
               width: Dimensions.get('window').width / 2 + 60,
             }}>
-            <Text
+            {/* <Text
               style={{
-                fontSize: 18,
+                fontSize: 12,
                 fontFamily: 'bold',
                 color: 'black',
               }}>
-              {item?.title}
-            </Text>
+              {item?.notification_type}
+            </Text> */}
             <Text
               style={{
-                fontSize: 8,
+                fontSize: 12,
                 color: '#030303',
                 marginTop: 3,
               }}>
-              {item?.des}
+              {item?.notification_title}
+            </Text>
+            <Text
+              style={{
+                fontSize: 14,
+                color: '#030303',
+                marginTop: 3,
+              }}>
+              {item?.notification_content}
+            </Text>
+            <Text
+              style={{
+                fontSize: 10,
+                color: '#030303',
+                marginTop: 3,
+                position: 'absolute',
+                right: 0,
+                bottom: 0,
+              }}>
+              {item?.triggered_date}
             </Text>
           </View>
         </View>
@@ -91,7 +127,7 @@ const NotificationList = props => {
           }}>
           Recent Notification
         </Text>
-        <FlatList data={data} renderItem={_renderItem} />
+        <FlatList data={notificationList} renderItem={_renderItem} />
       </View>
     </>
   );
