@@ -1,4 +1,5 @@
 import {position} from 'native-base/lib/typescript/theme/styled-system';
+import {Badge} from 'react-native-paper';
 import React, {useState, useEffect} from 'react';
 import {
   StyleSheet,
@@ -14,7 +15,11 @@ import {
 } from 'react-native';
 
 import {CommonStyles, Colors, Typography} from '../../../theme';
-import {PRIMARY_TEXT_COLOR, SECONDARY_TEXT_COLOR} from '../../../theme/colors';
+import {
+  COMMUNITY_COLOR,
+  PRIMARY_TEXT_COLOR,
+  SECONDARY_TEXT_COLOR,
+} from '../../../theme/colors';
 
 const NotificationList = props => {
   const {
@@ -27,19 +32,6 @@ const NotificationList = props => {
     getNotificationLists,
     cleanNotificationLists,
   } = props;
-
-  const data = [
-    {
-      image: 'https://reactnative.dev/img/tiny_logo.png',
-      title: 'Event Notification',
-      des: ' Lorem ipsum, or lipsum as it is sometimes known, is dummy text used in laying out print, graphic or web designs. The passage is attributed to an unknown',
-    },
-    {
-      image: 'https://reactnative.dev/img/tiny_logo.png',
-      title: 'Event Notification',
-      des: ' Lorem ipsum, or lipsum as it is sometimes known, is dummy text used in laying out print, graphic or web designs. The passage is attributed to an unknown',
-    },
-  ];
 
   useEffect(() => {
     getNotificationLists({
@@ -54,31 +46,24 @@ const NotificationList = props => {
         <View style={[styles.bottomWrapper, styles.shadowProp]}>
           <Image
             source={{
-              uri: item?.image,
+              uri: 'https://reactnative.dev/img/tiny_logo.png',
             }}
             style={{
-              width: 80,
-              height: 80,
+              width: 60,
+              height: 60,
               borderRadius: 50,
+              marginTop: 10,
             }}
           />
           <View
             style={{
               padding: 5,
               paddingLeft: 15,
-              width: Dimensions.get('window').width / 2 + 60,
+              width: Dimensions.get('window').width / 2 + 80,
             }}>
-            {/* <Text
-              style={{
-                fontSize: 12,
-                fontFamily: 'bold',
-                color: 'black',
-              }}>
-              {item?.notification_type}
-            </Text> */}
             <Text
               style={{
-                fontSize: 12,
+                fontSize: 14,
                 color: '#030303',
                 marginTop: 3,
               }}>
@@ -86,24 +71,34 @@ const NotificationList = props => {
             </Text>
             <Text
               style={{
-                fontSize: 14,
-                color: '#030303',
+                fontSize: 12,
+                color: '#A9A9A9',
                 marginTop: 3,
               }}>
               {item?.notification_content}
             </Text>
             <Text
               style={{
-                fontSize: 10,
-                color: '#030303',
+                fontSize: 8,
+                color: '#A9A9A9',
                 marginTop: 3,
-                position: 'absolute',
-                right: 0,
-                bottom: 0,
+                // position: 'absolute',
+                // right: 0,
+                // bottom: 0,
               }}>
               {item?.triggered_date}
             </Text>
           </View>
+          {item?.status === '0' && (
+            <View
+              style={{
+                position: 'absolute',
+                right: 3,
+                top: 3,
+              }}>
+              <Badge style={{backgroundColor: COMMUNITY_COLOR}} size={15} />
+            </View>
+          )}
         </View>
       </View>
     );
