@@ -36,29 +36,12 @@ const signInSchema = Yup.object().shape({
 });
 
 const SignInForm = props => {
-  const {
-    navigation,
-    profile,
-    profileLoading,
-    profileError,
-    fetchProfile,
-    cleanProfile,
-    userLoading,
-    updateUser,
-  } = props;
+  const {navigation} = props;
 
   const [hidePass, setHidePass] = useState(true);
-  const [userProfile, setUserProfile] = useState(false);
 
   const {loading, setLoading, message, setMessage, signIn, userCountry} =
     useAuthentication();
-
-  useEffect(() => {
-    const fetchProfileAsync = async () => {
-      await fetchProfile();
-    };
-    fetchProfileAsync();
-  }, []);
 
   const {
     handleChange,

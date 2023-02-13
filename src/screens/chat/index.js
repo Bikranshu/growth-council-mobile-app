@@ -7,6 +7,10 @@ import {
   resetNotification,
 } from './slice/notificationSlice';
 import {fetchProfileByID, resetProfile} from '../account/slice/profileSlice';
+import {
+  insertNotificationToDB,
+  resetInsertNotification,
+} from '../Notification/slice/insertNotificationSlice';
 
 const ChatScreen = props => {
   const dispatch = useDispatch();
@@ -18,6 +22,11 @@ const ChatScreen = props => {
   const {profile, profileLoading, profileError} = useSelector(
     state => state.profile,
   );
+  const {
+    insertNotification,
+    insertNotificationLoading,
+    insertNotificationError,
+  } = useSelector(state => state.insertNotification);
   /**
    * Send notification connected member.
    * @param {object} formData
@@ -42,6 +51,14 @@ const ChatScreen = props => {
   const cleanProfile = () => {
     dispatch(resetProfile());
   };
+
+  const sendNotificationToDB = formData => {
+    return dispatch(insertNotificationToDB(formData));
+  };
+  const cleanInsertNotification = () => {
+    dispatch(resetInsertNotification());
+  };
+
   return (
     <Chat
       {...props}
@@ -55,6 +72,11 @@ const ChatScreen = props => {
       profileError={profileError}
       fetchProfileByIdentifier={fetchProfileByIdentifier}
       cleanProfile={cleanProfile}
+      insertNotification={insertNotification}
+      insertNotificationLoading={insertNotificationLoading}
+      insertNotificationError={insertNotificationError}
+      sendNotificationToDB={sendNotificationToDB}
+      cleanInsertNotification={cleanInsertNotification}
     />
   );
 };

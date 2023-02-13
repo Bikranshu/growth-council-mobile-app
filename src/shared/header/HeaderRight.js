@@ -18,19 +18,27 @@ const HeaderRight = props => {
     dispatch(getNotificationList({id: profile?.ID}));
   }, []);
 
-  //getting the length of notification whose status is 0
-  const unreadNotifications1 = notificationList?.filter(
-    notification => notification?.status === '0',
-  );
-  const unreadCount = unreadNotifications1?.length;
+  //   //getting the length of notification whose status is 0
+  //   const unreadNotifications1 = notificationList?.filter(
+  //     notification => notification?.status === "0",
+  //   );
 
-  const [unreadNotifications, setUnreadNotifications] = useState(unreadCount);
+  let notificationListArray = Object.values(notificationList);
+  let filteredNotifications = notificationListArray?.filter(function (
+    notification,
+  ) {
+    return (notification == null ? void 0 : notification?.status) === "0";
+  });
+
+  const [unreadNotifications, setUnreadNotifications] = useState(
+    filteredNotifications?.length,
+  );
 
   useEffect(() => {
     // Code to retrieve the number of unread notifications from the database or local storage goes here
     // Example value
-    setUnreadNotifications(unreadCount);
-  }, [isFocused]);
+    setUnreadNotifications(filteredNotifications?.length);
+  }, [isFocused, notificationList]);
 
   return (
     <View style={{flexDirection: 'row', alignItems: 'center'}}>

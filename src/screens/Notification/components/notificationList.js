@@ -65,11 +65,8 @@ const NotificationList = props => {
       //   getNotificationLists({
       //     id: profile?.ID,
       //   });
-
-      console.log(response?.payload?.message);
-      ToastMessage.show('You have successfully connected.');
+      ToastMessage.show(response?.payload?.message);
     } else {
-      console.log(response?.payload?.message);
       ToastMessage.show(response?.payload?.message);
     }
   };
@@ -82,10 +79,17 @@ const NotificationList = props => {
       <TouchableOpacity
         onPress={() => {
           notificationStatusUpdateButton(item?.id, index);
-          navigation.navigate('ContentLibraryDetail', {
-            id: item?.event_id,
-            // title: item?.post_title,
-          });
+          if (item?.notification_type === 'event_notification') {
+            navigation.navigate('EventDetail', {
+              id: item.ID,
+              title: pillarname,
+              image: backgroundImage,
+            });
+          } else if (item?.notification_type === 'Content_notification') {
+            navigation.navigate('ContentLibraryDetail', {
+              id: item?.event_id,
+            });
+          }
         }}>
         <View style={[styles.bottomWrapper, styles.shadowProp]}>
           <Image

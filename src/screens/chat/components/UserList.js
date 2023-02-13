@@ -71,7 +71,7 @@ const UserList = props => {
       if (!userID) console.log('USER ID NOT FOUND');
 
       const fbUsers = await firestore().collection('rooms').get();
-  
+
       const docs = fbUsers.docs.filter(doc => doc.id.includes(userID));
 
       const data = docs.map(doc => ({id: doc.id, ...doc.data()}));
@@ -84,7 +84,6 @@ const UserList = props => {
         const user = users.find(usr => usr.ID == user_id);
         __users.push({...user, ...data[i]});
       }
-
 
       setUsers(__users);
     } catch (error) {
@@ -168,6 +167,7 @@ const UserList = props => {
               friendID: item?.ID,
               friendName: item?.display_name,
               friendAvatar: item?.avatar,
+              friendEmail: item?.user_email,
               userID: userID,
               userName: userName,
               userAvatar: avatarImg,
