@@ -71,16 +71,20 @@ const NotificationList = props => {
 
     // get the device's timezone
     const deviceTimezone = moment?.tz?.guess();
-    const londonTimezone = 'Europe/London'; //dublin is london so we set notification triggered date timezone as 'Europe/london'
+    const londonTimezone = 'America/New_York'; //dublin is london so we set notification triggered date timezone as 'Europe/london'
 
     const triggeredDate = moment?.tz(item?.triggered_date, londonTimezone);
-    console.log({triggeredDate});
+    // console.log({triggeredDate});
 
     const deviceDate = triggeredDate
       .tz(deviceTimezone)
       .format('YYYY-MM-DD ddd HH:mm:ss');
 
-    console.log({deviceDate});
+    // console.log({deviceDate});
+    let content = require('../../../assets/img/Content_Icon.png');
+    let chat = require('../../../assets/img/Chat_Message_Icon.png');
+    let event = require('../../../assets/img/Event_Calendar_Icon.png');
+    let member = require('../../../assets/img/Member_Connection_icon.png');
 
     return (
       <TouchableOpacity
@@ -100,17 +104,30 @@ const NotificationList = props => {
           notificationStatusUpdateButton(item?.id, index);
         }}>
         <View style={[styles.bottomWrapper, styles.shadowProp]}>
-          <Image
-            source={{
-              uri: 'https://reactnative.dev/img/tiny_logo.png',
-            }}
+          <View
             style={{
-              width: 60,
-              height: 60,
+              width: 70,
+              height: 70,
               borderRadius: 50,
-              marginTop: 10,
-            }}
-          />
+              backgroundColor: '#f1f1f1',
+              justifyContent: 'center',
+              alignItems: 'center',
+            }}>
+            <Image
+              source={
+                item?.notification_type === 'Content_notification'
+                  ? content
+                  : item?.notification_type === 'event_notification'
+                  ? event
+                  : item?.notification_type === 'chat_notification'
+                  ? chat
+                  : member
+              }
+              style={{width: 40, height: 40}}
+              resizeMode="center"
+            />
+          </View>
+
           <View
             style={{
               padding: 5,
@@ -149,7 +166,7 @@ const NotificationList = props => {
             <View
               style={{
                 position: 'absolute',
-                right: 3,
+                left: 3,
                 top: 3,
               }}>
               <Badge style={{backgroundColor: COMMUNITY_COLOR}} size={15} />
