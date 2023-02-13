@@ -31,6 +31,7 @@ import ContributeIdeasScreen from '../screens/ideas';
 import HomeCommunityScreen from '../screens/dashboard/HomeCommunity';
 import BestPracticeScreen from '../screens/dashboard/BestPractice';
 import GrowthCoachingScreen from '../screens/dashboard/GrowthCoaching';
+import QRScanner from '../screens/QRcode';
 import SettingScreen from '../screens/setting/index';
 import SubHeader from '../shared/header/SubHeader';
 import ContentLibraryScreen from '../screens/contentLibrary/contentLibrary';
@@ -346,6 +347,22 @@ const DrawerNavigation = () => {
           header: () => (
             <SubHeader
               title="Contribute Ideas"
+              image={require('../assets/img/appBG.png')}
+              navigation={navigation}
+            />
+          ),
+        })}
+      />
+      <Drawer.Screen
+        name="QR Code"
+        component={QRScanner}
+        options={({navigation}) => ({
+          drawerIcon: ({focused, size}) => (
+            <Ionicons name="bulb-outline" color={'#00008B'} size={20} />
+          ),
+          header: () => (
+            <SubHeader
+              title="QR Code"
               image={require('../assets/img/appBG.png')}
               navigation={navigation}
             />
