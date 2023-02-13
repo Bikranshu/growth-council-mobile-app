@@ -16,10 +16,12 @@ const HeaderRight = props => {
     useSelector(state => state.notificationList);
 
   useEffect(() => {
-    dispatch(getNotificationList({id: profile?.ID}));
-  }, [isFocused]);
+    setTimeout(function () {
+      dispatch(getNotificationList({id: profile?.ID}));
+    }, 1000);
+  }, [isFocused, profile]);
 
-  let notificationListArray = Object.values(notificationList);
+  let notificationListArray = Object?.values(notificationList);
   let filteredNotifications = notificationListArray?.filter(function (
     notification,
   ) {
