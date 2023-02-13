@@ -13,6 +13,8 @@ import {
   Dimensions,
   FlatList,
 } from 'react-native';
+import moment from 'moment-timezone';
+import * as RNLocalize from 'react-native-localize';
 
 import {CommonStyles, Colors, Typography} from '../../../theme';
 import {
@@ -56,32 +58,36 @@ const NotificationList = props => {
       notification_id: notificationId,
     });
 
-    if (response?.payload?.code === 200) {
-      //   let items = [...status];
-      //   let item = {...items[index]};
-      //   item.connection = true;
-      //   items[index] = item;
-      //   setstatus(items);
-      //   getNotificationLists({
-      //     id: profile?.ID,
-      //   });
-      ToastMessage.show(response?.payload?.message);
-    } else {
-      ToastMessage.show(response?.payload?.message);
-    }
+    // if (response?.payload?.code === 200) {
+    //   ToastMessage.show(response?.payload?.message);
+    // } else {
+    //   ToastMessage.show(response?.payload?.message);
+    // }
   };
 
-  //   console.log({notificationList});
   const _renderItem = ({item, index}) => {
     const backgroundImage = require('../../../assets/img/Rectangle2.png');
     const pillarname = 'Growth Community';
+
+    // get the device's timezone
+    const deviceTimezone = moment?.tz?.guess();
+    const londonTimezone = 'Europe/London'; //dublin is london so we set notification triggered date timezone as 'Europe/london'
+
+    const triggeredDate = moment?.tz(item?.triggered_date, londonTimezone);
+    console.log({triggeredDate});
+
+    const deviceDate = triggeredDate
+      .tz(deviceTimezone)
+      .format('YYYY-MM-DD ddd HH:mm:ss');
+
+    console.log({deviceDate});
+
     return (
       <TouchableOpacity
         onPress={() => {
-          notificationStatusUpdateButton(item?.id, index);
           if (item?.notification_type === 'event_notification') {
             navigation.navigate('EventDetail', {
-              id: item.ID,
+              id: item?.event_id,
               title: pillarname,
               image: backgroundImage,
             });
@@ -90,6 +96,8 @@ const NotificationList = props => {
               id: item?.event_id,
             });
           }
+
+          notificationStatusUpdateButton(item?.id, index);
         }}>
         <View style={[styles.bottomWrapper, styles.shadowProp]}>
           <Image
@@ -134,7 +142,7 @@ const NotificationList = props => {
                 // right: 0,
                 // bottom: 0,
               }}>
-              {item?.triggered_date}
+              {deviceDate}
             </Text>
           </View>
           {item?.status === '0' && (
