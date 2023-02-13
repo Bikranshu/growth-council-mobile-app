@@ -20,6 +20,7 @@ import {
   PRIMARY_TEXT_COLOR,
   SECONDARY_TEXT_COLOR,
 } from '../../../theme/colors';
+import ToastMessage from '../../../shared/toast';
 
 const NotificationList = props => {
   const {
@@ -31,7 +32,14 @@ const NotificationList = props => {
     notificationListLoading,
     getNotificationLists,
     cleanNotificationLists,
+
+    notificationStatus,
+    notificationStatusLoading,
+    notificationStatusUpdate,
+    cleanNotificationStatus,
   } = props;
+
+  const [status, setstatus] = useState([]);
 
   useEffect(() => {
     getNotificationLists({
@@ -39,10 +47,46 @@ const NotificationList = props => {
     });
   }, []);
 
-  console.log({notificationList});
+  useEffect(() => {
+    setstatus(notificationList);
+  }, [notificationList]);
+
+  const notificationStatusUpdateButton = async (notificationId, index) => {
+    const response = await notificationStatusUpdate({
+      notification_id: notificationId,
+    });
+
+    if (response?.payload?.code === 200) {
+      //   let items = [...status];
+      //   let item = {...items[index]};
+      //   item.connection = true;
+      //   items[index] = item;
+      //   setstatus(items);
+      //   getNotificationLists({
+      //     id: profile?.ID,
+      //   });
+
+      console.log(response?.payload?.message);
+      ToastMessage.show('You have successfully connected.');
+    } else {
+      console.log(response?.payload?.message);
+      ToastMessage.show(response?.payload?.message);
+    }
+  };
+
+  //   console.log({notificationList});
   const _renderItem = ({item, index}) => {
+    const backgroundImage = require('../../../assets/img/Rectangle2.png');
+    const pillarname = 'Growth Community';
     return (
-      <View>
+      <TouchableOpacity
+        onPress={() => {
+          notificationStatusUpdateButton(item?.id, index);
+          navigation.navigate('ContentLibraryDetail', {
+            id: item?.event_id,
+            // title: item?.post_title,
+          });
+        }}>
         <View style={[styles.bottomWrapper, styles.shadowProp]}>
           <Image
             source={{
@@ -100,7 +144,7 @@ const NotificationList = props => {
             </View>
           )}
         </View>
-      </View>
+      </TouchableOpacity>
     );
   };
   return (

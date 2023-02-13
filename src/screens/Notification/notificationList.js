@@ -7,6 +7,10 @@ import {
   getNotificationList,
   resetnotificationList,
 } from './slice/notificationListSlice';
+import {
+  updateNotificationStatus,
+  resetnotificationStatus,
+} from './slice/notificationStatusUpdateSlice';
 
 const NotificationListScreen = props => {
   const dispatch = useDispatch();
@@ -15,6 +19,11 @@ const NotificationListScreen = props => {
   );
   const {notificationList, notificationListLoading, notificationListError} =
     useSelector(state => state.notificationList);
+  const {
+    notificationStatus,
+    notificationStatusLoading,
+    notificationStatusError,
+  } = useSelector(state => state.notificationStatus);
 
   useEffect(() => {
     dispatch(fetchProfileByID());
@@ -27,6 +36,14 @@ const NotificationListScreen = props => {
   const cleanNotificationLists = () => {
     dispatch(resetnotificationList());
   };
+
+  const notificationStatusUpdate = formData => {
+    return dispatch(updateNotificationStatus(formData));
+  };
+
+  const cleanNotificationStatus = () => {
+    dispatch(resetnotificationStatus());
+  };
   return (
     <NotificationList
       {...props}
@@ -36,6 +53,10 @@ const NotificationListScreen = props => {
       notificationListLoading={notificationListLoading}
       getNotificationLists={getNotificationLists}
       cleanNotificationLists={cleanNotificationLists}
+      notificationStatus={notificationStatus}
+      notificationStatusLoading={notificationStatusLoading}
+      notificationStatusUpdate={notificationStatusUpdate}
+      cleanNotificationStatus={cleanNotificationStatus}
     />
   );
 };
