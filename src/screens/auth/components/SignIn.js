@@ -176,10 +176,14 @@ const SignInForm = props => {
                       : styles.loginButton,
                     loading && {backgroundColor: 'grey'},
                   ]}
-                  onPress={async () => {
+                  onPress={() => {
                     handleSubmit();
-                    await analytics().logEvent('Login', {
+                    analytics().logEvent('Login', {
                       username: values.username,
+                      address: '12345678',
+                      test: 'movies',
+                      eventName: 'hello event 2/14/2023',
+                      sessionName: 'R S',
                     });
                   }}
                   disabled={!areAllFieldsFilled || loading}>
