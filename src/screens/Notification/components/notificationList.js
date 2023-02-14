@@ -66,9 +66,6 @@ const NotificationList = props => {
   };
 
   const _renderItem = ({item, index}) => {
-    const backgroundImage = require('../../../assets/img/Rectangle2.png');
-    const pillarname = 'Growth Community';
-
     // get the device's timezone
     const deviceTimezone = moment?.tz?.guess();
     const londonTimezone = 'America/New_York'; //dublin is london so we set notification triggered date timezone as 'Europe/london'
@@ -85,6 +82,21 @@ const NotificationList = props => {
     let chat = require('../../../assets/img/Chat_Message_Icon.png');
     let event = require('../../../assets/img/Event_Calendar_Icon.png');
     let member = require('../../../assets/img/Member_Connection_icon.png');
+
+    let backgroundImage = '';
+    let pillarname = '';
+
+    if (
+      'Growth Coaching'?.indexOf(item?.event_categories) > -1 === false ||
+      'Executive Coaching Clinic'?.indexOf(item?.event_categories) > -1 ===
+        false
+    ) {
+      backgroundImage = require('../../../assets/img/Rectangle2.png');
+      pillarname = 'Growth Community';
+    } else {
+      backgroundImage = require('../../../assets/img/Rectangle.png');
+      pillarname = 'Growth Coaching';
+    }
 
     return (
       <TouchableOpacity
@@ -109,7 +121,7 @@ const NotificationList = props => {
               width: 70,
               height: 70,
               borderRadius: 50,
-              backgroundColor: '#f1f1f1',
+              backgroundColor: '#f0f0f8',
               justifyContent: 'center',
               alignItems: 'center',
             }}>
@@ -169,7 +181,7 @@ const NotificationList = props => {
                 left: 3,
                 top: 3,
               }}>
-              <Badge style={{backgroundColor: COMMUNITY_COLOR}} size={15} />
+              <Badge style={{backgroundColor: '#14a2e2'}} size={15} />
             </View>
           )}
         </View>

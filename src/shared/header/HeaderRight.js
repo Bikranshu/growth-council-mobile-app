@@ -38,6 +38,7 @@ const HeaderRight = props => {
     setUnreadNotifications(filteredNotifications?.length);
   }, [notificationList]);
 
+
   return (
     <View style={{flexDirection: 'row', alignItems: 'center'}}>
       <TouchableOpacity
