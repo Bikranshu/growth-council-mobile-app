@@ -87,15 +87,16 @@ const NotificationList = props => {
     let pillarname = '';
 
     if (
-      'Growth Coaching'?.indexOf(item?.event_categories) > -1 === false ||
+      'Growth Coaching'?.indexOf(item?.event_categories) > -1 === true ||
       'Executive Coaching Clinic'?.indexOf(item?.event_categories) > -1 ===
-        false
+        true ||
+      item?.event_categories === '[]'
     ) {
-      backgroundImage = require('../../../assets/img/Rectangle2.png');
-      pillarname = 'Growth Community';
-    } else {
       backgroundImage = require('../../../assets/img/Rectangle.png');
       pillarname = 'Growth Coaching';
+    } else {
+      backgroundImage = require('../../../assets/img/Rectangle2.png');
+      pillarname = 'Growth Community';
     }
 
     return (
