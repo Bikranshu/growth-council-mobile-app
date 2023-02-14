@@ -23,6 +23,7 @@ import {Picker} from '@react-native-picker/picker';
 import {BubblesLoader} from 'react-native-indicator';
 import analytics from '@react-native-firebase/analytics';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import {GoogleAnalyticsTracker} from 'react-native-google-analytics-bridge';
 
 import {useAuthentication} from '../../../context/auth';
 import FlatTextInput from '../../../shared/form/FlatTextInput';
@@ -56,9 +57,22 @@ const SignInForm = props => {
     initialValues: {username: '', password: ''},
     onSubmit: async values => {
       await signIn(values);
+      analytics()
+        .logEvent('Login', {
+          username: values?.username,
+          eventName: 'hello event 2/14/2023',
+          sessionName: 'R S',
+        })
+        .setUserProperty('user_name', values?.username);
     },
   });
 
+  const tracker = new GoogleAnalyticsTracker('G-4HWSG71L39');
+
+  function setUserName(username) {
+    tracker.setUser(username);
+    tracker.trackScreenView('Login-App');
+  }
   const areAllFieldsFilled = values.username != '' && values.password != '';
 
   // const postToAPI = async data => {
@@ -178,13 +192,7 @@ const SignInForm = props => {
                   ]}
                   onPress={() => {
                     handleSubmit();
-                    analytics().logEvent('Login', {
-                      username: values.username,
-                      address: '12345678',
-                      test: 'movies',
-                      eventName: 'hello event 2/14/2023',
-                      sessionName: 'R S',
-                    });
+                    setUserName(values?.username);
                   }}
                   disabled={!areAllFieldsFilled || loading}>
                   <Text style={styles.loginButtonText}>Sign In</Text>

@@ -18,6 +18,7 @@ import {List} from 'react-native-paper';
 import analytics from '@react-native-firebase/analytics';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import AntDesign from 'react-native-vector-icons/AntDesign';
+import {GoogleAnalyticsTracker} from 'react-native-google-analytics-bridge';
 
 import Footer from '../../../shared/footer';
 import Loading from '../../../shared/loading';
@@ -89,6 +90,23 @@ const Setting = props => {
       ? false
       : true,
   );
+
+  function handleButtonClick() {
+    const username = profile?.user_login;
+    analytics().logEvent('Settings_NotificationUpdate', {
+      username: username,
+    });
+    // handle the button click action here
+  }
+
+  const tracker = new GoogleAnalyticsTracker('G-4HWSG71L39');
+
+  function trackButtonClick(buttonName, itemName) {
+    tracker.trackEvent('Button', 'Click', {
+      label: buttonName,
+      itemName: itemName,
+    });
+  }
 
   const {
     handleChange,
@@ -739,14 +757,12 @@ const Setting = props => {
                             <View style={styles.loginButtonWrapper}>
                               <Button
                                 style={[styles.loginButton]}
-                                onPress={async () => {
+                                onPress={() => {
                                   handleSubmit();
-                                  const username = profile?.user_login;
-                                  await analytics().logEvent(
+                                  handleButtonClick();
+                                  trackButtonClick(
                                     'Settings_NotificationUpdate',
-                                    {
-                                      username: username,
-                                    },
+                                    profile?.user_login,
                                   );
                                 }}>
                                 <Text style={styles.loginButtonText}>Save</Text>
