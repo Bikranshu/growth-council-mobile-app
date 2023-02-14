@@ -112,6 +112,17 @@ const NotificationList = props => {
             navigation.navigate('ContentLibraryDetail', {
               id: item?.event_id,
             });
+          } else if (item?.notification_type === 'chat_notification') {
+            navigation.navigate('Chat', {
+              friendID: item?.receiver_user_id,
+              friendName: item?.receiver_user_email,
+              friendAvatar: item?.avatar,
+              userID: item?.sender_user_id,
+              userName: profile?.user_login,
+              userAvatar: profile?.profile_image,
+            });
+          } else {
+            navigation.navigate('People');
           }
 
           notificationStatusUpdateButton(item?.id, index);
