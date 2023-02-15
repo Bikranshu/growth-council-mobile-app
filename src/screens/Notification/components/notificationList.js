@@ -1,20 +1,24 @@
-import {position} from 'native-base/lib/typescript/theme/styled-system';
-import {Badge} from 'react-native-paper';
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useCallback} from 'react';
 import {
   StyleSheet,
   Text,
   View,
   ScrollView,
+  SafeAreaView,
   ImageBackground,
   Image,
   TouchableOpacity,
   StatusBar,
   Dimensions,
+  RefreshControl,
   FlatList,
 } from 'react-native';
+import {useDispatch, useSelector} from 'react-redux';
+
+import {Badge} from 'react-native-paper';
 import moment from 'moment-timezone';
 import * as RNLocalize from 'react-native-localize';
+import {useIsFocused} from '@react-navigation/native';
 
 import {CommonStyles, Colors, Typography} from '../../../theme';
 import {
@@ -30,6 +34,7 @@ const NotificationList = props => {
     route,
     profile,
     profileLoading,
+    fetchProfileByID,
     notificationList,
     notificationListLoading,
     getNotificationLists,
@@ -41,43 +46,46 @@ const NotificationList = props => {
     cleanNotificationStatus,
   } = props;
 
-  const [status, setstatus] = useState([]);
+  const isFocused = useIsFocused();
+  const dispatch = useDispatch();
+  const [refreshing, setRefreshing] = useState(false);
+
+  const onRefresh = useCallback(() => {
+    setRefreshing(true);
+    getNotificationLists({
+      id: profile?.ID,
+    });
+    dispatch(fetchProfileByID());
+    setTimeout(() => {
+      setRefreshing(false);
+    }, 2000);
+  }, [refreshing]);
+
+  useEffect(() => {
+    dispatch(fetchProfileByID());
+  }, [isFocused]);
 
   useEffect(() => {
     getNotificationLists({
       id: profile?.ID,
     });
-  }, []);
-
-  useEffect(() => {
-    setstatus(notificationList);
-  }, [notificationList]);
+  }, [profile, isFocused]);
 
   const notificationStatusUpdateButton = async (notificationId, index) => {
     const response = await notificationStatusUpdate({
       notification_id: notificationId,
     });
-
-    // if (response?.payload?.code === 200) {
-    //   ToastMessage.show(response?.payload?.message);
-    // } else {
-    //   ToastMessage.show(response?.payload?.message);
-    // }
   };
 
   const _renderItem = ({item, index}) => {
     // get the device's timezone
     const deviceTimezone = moment?.tz?.guess();
-    const londonTimezone = 'America/New_York'; //dublin is london so we set notification triggered date timezone as 'Europe/london'
+    const Timezone = 'America/New_York'; //dublin is london so we set notification triggered date timezone as 'Europe/london'
 
-    const triggeredDate = moment?.tz(item?.triggered_date, londonTimezone);
-    // console.log({triggeredDate});
+    const triggeredDate = moment?.tz(item?.triggered_date, Timezone);
 
-    const deviceDate = triggeredDate
-      .tz(deviceTimezone)
-      .format('YYYY-MM-DD ddd HH:mm:ss');
+    const deviceDate = triggeredDate.tz(deviceTimezone).format('ddd HH:mm:ss');
 
-    // console.log({deviceDate});
     let content = require('../../../assets/img/Content_Icon.png');
     let chat = require('../../../assets/img/Chat_Message_Icon.png');
     let event = require('../../../assets/img/Event_Calendar_Icon.png');
@@ -85,11 +93,12 @@ const NotificationList = props => {
 
     let backgroundImage = '';
     let pillarname = '';
+    let GrowthCoaching = 'Growth Coaching';
+    let Executive = 'Executive Coaching Clinic';
 
     if (
-      'Growth Coaching'?.indexOf(item?.event_categories) > -1 === true ||
-      'Executive Coaching Clinic'?.indexOf(item?.event_categories) > -1 ===
-        true ||
+      item?.event_categories?.indexOf(GrowthCoaching) > -1 !== false ||
+      item?.event_categories?.indexOf(Executive) > -1 !== false ||
       item?.event_categories === '[]'
     ) {
       backgroundImage = require('../../../assets/img/Rectangle.png');
@@ -99,6 +108,7 @@ const NotificationList = props => {
       pillarname = 'Growth Community';
     }
 
+    // console.log(item?.event_categories);
     return (
       <TouchableOpacity
         onPress={() => {
@@ -202,25 +212,26 @@ const NotificationList = props => {
   };
   return (
     <>
-      <StatusBar
-        barStyle="light-content"
-        hidden={false}
-        backgroundColor="#001D3F"
-        translucent={false}
-      />
-      <View style={{marginTop: 5, padding: 5}}>
-        <Text
-          style={{
-            fontSize: 18,
-            fontWeight: '600',
-            margin: 5,
-            marginVertical: 10,
-            color: '#222B45',
-          }}>
-          Recent Notification
-        </Text>
-        <FlatList data={notificationList} renderItem={_renderItem} />
-      </View>
+      <SafeAreaView style={{flex: 1}}>
+        <ScrollView
+          style={{marginTop: 5, padding: 5, flex: 1}}
+          showsVerticalScrollIndicator={false}
+          refreshControl={
+            <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+          }>
+          <Text
+            style={{
+              fontSize: 18,
+              fontWeight: '600',
+              margin: 5,
+              marginVertical: 10,
+              color: '#222B45',
+            }}>
+            Recent Notification
+          </Text>
+          <FlatList data={notificationList} renderItem={_renderItem} />
+        </ScrollView>
+      </SafeAreaView>
     </>
   );
 };
@@ -236,6 +247,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     padding: 10,
     height: 100,
+    marginBottom: 20,
   },
   shadowProp: {
     shadowColor: '#000',

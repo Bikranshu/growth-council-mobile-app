@@ -25,10 +25,6 @@ const NotificationListScreen = props => {
     notificationStatusError,
   } = useSelector(state => state.notificationStatus);
 
-  useEffect(() => {
-    dispatch(fetchProfileByID());
-  }, []);
-
   const getNotificationLists = formData => {
     dispatch(getNotificationList(formData));
   };
@@ -49,6 +45,7 @@ const NotificationListScreen = props => {
       {...props}
       profile={profile}
       profileLoading={profileLoading}
+      fetchProfileByID={fetchProfileByID}
       notificationList={notificationList}
       notificationListLoading={notificationListLoading}
       getNotificationLists={getNotificationLists}
