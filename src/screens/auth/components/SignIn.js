@@ -178,9 +178,7 @@ const SignInForm = props => {
                   ]}
                   onPress={async () => {
                     handleSubmit();
-                    await analytics().logEvent('Login', {
-                      username: values.username,
-                    });
+                    await analytics().logEvent('Login', values.username);
                   }}
                   disabled={!areAllFieldsFilled || loading}>
                   <Text style={styles.loginButtonText}>Sign In</Text>

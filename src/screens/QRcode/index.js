@@ -11,11 +11,11 @@ import {RNCamera} from 'react-native-camera';
 const screenHeight = Math.round(Dimensions.get('window').height);
 const QRScanner = props => {
   const {navigation} = props;
-  const [scannedData, setScannedData] = useState('');
+  const [scannedData, setScannedData] = useState('7284');
 
   const onSuccess = e => {
     setScannedData(e.data);
-    navigation.navigate('selfAssessment', {id: scannedData});
+    navigation.navigate('coachingSession', {id: '6682', count: 0});
   };
 
   return (
@@ -24,11 +24,11 @@ const QRScanner = props => {
         <QRCodeScanner
           onRead={onSuccess}
           topContent={<Text style={styles.centerText}>Scan QR code</Text>}
-          //   bottomContent={
-          //     <TouchableOpacity style={styles.buttonTouchable}>
-          //       <Text style={styles.buttonText}>OK. Got it!</Text>
-          //     </TouchableOpacity>
-          //   }
+          bottomContent={
+            <TouchableOpacity style={styles.buttonTouchable}>
+              <Text style={styles.buttonText}>OK. Got it!</Text>
+            </TouchableOpacity>
+          }
         />
       </RNCamera>
     </View>

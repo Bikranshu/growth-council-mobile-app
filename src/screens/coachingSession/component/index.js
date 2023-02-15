@@ -39,11 +39,11 @@ const CoachingSession = props => {
     sessionError,
     fetchSessionByIdentifier,
     cleanSession,
-    sessionRegisters,
-    sessionRegisterLoading,
-    sessionRegisterError,
-    registerSessionByIdentifier,
-    cleanSessionRegister,
+    // sessionRegisters,
+    // sessionRegisterLoading,
+    // sessionRegisterError,
+    // registerSessionByIdentifier,
+    // cleanSessionRegister,
 
     profile,
     profileLoading,
@@ -53,6 +53,7 @@ const CoachingSession = props => {
   } = props;
 
   const scrollRef = useRef();
+  console.log(route?.params?.count);
   const [value, setValue] = useState('About');
   const [count, setCount] = useState(0);
 
@@ -80,6 +81,9 @@ const CoachingSession = props => {
       return answers.questions.innovativeIndex[subTraitIndex];
     }
   };
+
+  console.log(traits[0]);
+  let Traits = traits[route?.params?.count];
 
   useEffect(() => {
     const fetchProfileAsync = async () => {
@@ -122,42 +126,42 @@ const CoachingSession = props => {
     );
     if (isNaN(num)) num = 0.0;
   }
-  let previousSession =
-    profile?.session_score !== false && profile?.session_score !== null
-      ? profile?.session_score?.map(item => item?.session)
-      : [0];
+  //   let previousSession =
+  //     profile?.session_score !== false && profile?.session_score !== null
+  //       ? profile?.session_score?.map(item => item?.session)
+  //       : [0];
 
-  let Growth =
-    profile?.session_score !== false && profile?.session_score !== null
-      ? profile?.session_score?.map(item => {
-          let grow = item?.session === sessions.ID ? item?.growth_index : null;
-          return grow;
-        })
-      : 0;
+  //   let Growth =
+  //     profile?.session_score !== false && profile?.session_score !== null
+  //       ? profile?.session_score?.map(item => {
+  //           let grow = item?.session === sessions.ID ? item?.growth_index : null;
+  //           return grow;
+  //         })
+  //       : 0;
 
-  let Innovation =
-    profile?.session_score !== false && profile?.session_score !== null
-      ? profile?.session_score?.map(item => {
-          let inn =
-            item?.session === sessions.ID ? item?.innovative_index : null;
+  //   let Innovation =
+  //     profile?.session_score !== false && profile?.session_score !== null
+  //       ? profile?.session_score?.map(item => {
+  //           let inn =
+  //             item?.session === sessions.ID ? item?.innovative_index : null;
 
-          return inn;
-        })
-      : 0;
+  //           return inn;
+  //         })
+  //       : 0;
 
-  const previousSessionID = route.params.previousSessionID;
+  //   const previousSessionID = route.params.previousSessionID;
 
   let growth = 0.0;
   let innovation = 0.0;
-  if (previousSession.indexOf(sessions.ID) > -1 === true) {
-    growth = Growth;
-    innovation = Innovation;
-  } else {
-    growth = score.growthIndexScore.toFixed(1);
-    innovation = score.innovativeIndexScore.toFixed(1);
-    if (isNaN(growth)) growth = 0.0;
-    if (isNaN(innovation)) innovation = 0.0;
-  }
+  //   if (previousSession.indexOf(sessions.ID) > -1 === true) {
+  //     growth = Growth;
+  //     innovation = Innovation;
+  //   } else {
+  growth = score.growthIndexScore.toFixed(1);
+  innovation = score.innovativeIndexScore.toFixed(1);
+  if (isNaN(growth)) growth = 0.0;
+  if (isNaN(innovation)) innovation = 0.0;
+  //   }
 
   const _renderItem = ({item, index}) => {
     // switch (item?.score_range) {
@@ -246,10 +250,14 @@ const CoachingSession = props => {
           <View style={[styles.content, {height: 'auto'}]}>
             <View
               style={{
-                flexDirection: 'row',
                 alignItems: 'center',
+                // backgroundColor: 'red',
+                position: 'absolute',
+                right: 15,
+                top: 40,
+                zIndex: 10,
               }}>
-              <View style={styles.buttonWrapper}>
+              {/* <View style={styles.buttonWrapper}>
                 <ButtonToggleGroup
                   highlightBackgroundColor={'white'}
                   highlightTextColor={'#0B0B45'}
@@ -258,26 +266,26 @@ const CoachingSession = props => {
                   values={['About', 'Self-Assessment']}
                   value={value}
                   onSelect={val => {
-                    if (moment(sessions?.event_end).isBefore()) {
-                      if (sessions?.completed_status) {
-                        ToastMessage.show('You have completed this assessment');
-                      } else if (
-                        previousSession.indexOf(previousSessionID) > -1 !==
-                        true
-                      ) {
-                        if (previousSessionID === undefined) {
-                          return setValue(val);
-                        } else {
-                          ToastMessage.show(
-                            'Please complete the previous session to access the next sessions',
-                          );
-                        }
-                      } else {
+                    // if (moment(sessions?.event_end).isBefore()) {
+                    //   if (sessions?.completed_status) {
+                    //     ToastMessage.show('You have completed this assessment');
+                    //   } else if (
+                    //     previousSession.indexOf(previousSessionID) > -1 !==
+                    //     true
+                    //   ) {
+                    //     if (previousSessionID === undefined) {
+                    //       return setValue(val);
+                    //     } else {
+                    //       ToastMessage.show(
+                    //         'Please complete the previous session to access the next sessions',
+                    //       );
+                    //     }
+                    //   } else {
                         return setValue(val);
-                      }
-                    } else {
+                    //   }
+                    // } else {
                       ToastMessage.show('Session has not ended');
-                    }
+                    // }
                   }}
                   style={{
                     paddingLeft: 5,
@@ -293,7 +301,7 @@ const CoachingSession = props => {
                     textAlign: 'center',
                   }}
                 />
-              </View>
+              </View> */}
               <TouchableOpacity onPress={() => setModalVisible(!modalVisible)}>
                 <Ionicons
                   name={modalVisible ? 'close' : 'menu'}
@@ -366,7 +374,7 @@ const CoachingSession = props => {
                                   color: '#8DC182',
                                   fontWeight: '700',
                                 }}>
-                                {traits[count]?.title}
+                                {Traits?.title}
                               </Text>
                             </View>
                           </View>
@@ -374,7 +382,7 @@ const CoachingSession = props => {
                             <FlatList
                               vertical
                               showsHorizontalScrollIndicator={false}
-                              data={traits[count]?.score_description}
+                              data={Traits?.score_description}
                               renderItem={_renderItem}
                             />
                           </View>
@@ -419,9 +427,10 @@ const CoachingSession = props => {
                                   onPress={() => {
                                     setScoreVisible(true);
                                   }}
-                                  onPressIn={() => {
-                                    setCount(index1 === 0 ? 0 : 1);
-                                  }}>
+                                  //   onPressIn={() => {
+                                  //     setCount(index1 === 0 ? 0 : 1);
+                                  //   }}
+                                >
                                   <View
                                     style={{
                                       width: 40,
@@ -479,7 +488,7 @@ const CoachingSession = props => {
             </View>
 
             <View style={{marginTop: 32}}>
-              {value === 'About' && (
+              {/* {value === 'About' && (
                 <SessionAbout
                   {...props}
                   traits={traits}
@@ -500,24 +509,24 @@ const CoachingSession = props => {
                   cleanSessionRegister={cleanSessionRegister}
                 />
               )}
-              {value === 'Self-Assessment' && (
-                <SelfAssessment
-                  {...props}
-                  score={score}
-                  sessions={sessions}
-                  traits={traits}
-                  traitsLoading={traitsLoading}
-                  traitsError={traitsError}
-                  fetchAllTraitBySession={fetchAllTraitBySession}
-                  cleanTraits={cleanTraits}
-                  answers={answers}
-                  setAnswers={setAnswers}
-                  selectedId={selectedId}
-                  setSelectedId={setSelectedId}
-                  scrollRef={scrollRef}
-                />
-                // <SessionCompleted />
-              )}
+              {value === 'Self-Assessment' && ( */}
+              <SelfAssessment
+                {...props}
+                score={score}
+                sessions={sessions}
+                // traits={Traits}
+                traitsLoading={traitsLoading}
+                traitsError={traitsError}
+                fetchAllTraitBySession={fetchAllTraitBySession}
+                cleanTraits={cleanTraits}
+                answers={answers}
+                setAnswers={setAnswers}
+                selectedId={selectedId}
+                setSelectedId={setSelectedId}
+                scrollRef={scrollRef}
+              />
+              {/* // <SessionCompleted />
+              )} */}
             </View>
           </View>
         </View>

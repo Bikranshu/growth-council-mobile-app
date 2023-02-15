@@ -103,8 +103,8 @@ const SelfAssessment = props => {
     });
 
     if (
-      index.traitIndex === traitLength - 1 &&
-      index.subTraitIndex === subTraitLength - 1
+      index?.traitIndex === traitLength - 1 &&
+      index?.subTraitIndex === subTraitLength - 1
     ) {
       store(`jwt-auth/v1/sessions/${route?.params?.id}/score`, {
         score,
@@ -135,8 +135,8 @@ const SelfAssessment = props => {
           toast.closeAll();
           ToastMessage.show('Something is wrong, please contact admin.');
         });
-    } else if (index.subTraitIndex === subTraitLength - 1) {
-      setIndex({...index, subTraitIndex: 0, traitIndex: index.traitIndex + 1});
+    } else if (index?.subTraitIndex === subTraitLength - 1) {
+      setIndex({...index, subTraitIndex: 0, traitIndex: index?.traitIndex + 1});
       onFabPress();
       store(`jwt-auth/v1/sessions/${route?.params?.id}/score`, {
         score,
@@ -151,7 +151,7 @@ const SelfAssessment = props => {
           ToastMessage.show('Something is wrong, please contact admin.');
         });
     } else {
-      setIndex({...index, subTraitIndex: index.subTraitIndex + 1});
+      setIndex({...index, subTraitIndex: index?.subTraitIndex + 1});
       store(`jwt-auth/v1/sessions/${route?.params?.id}/score`, {
         score,
         completedStatus: false,
@@ -240,7 +240,7 @@ const SelfAssessment = props => {
                   // subTraitsError={subTraitsError}
                   fetchAllSubTrait={fetchAllSubTrait}
                   cleanSubTrait={cleanSubTrait}
-                  count={index.subTraitIndex}
+                  count={index?.subTraitIndex}
                   traitIndex={index}
                   answers={answers}
                   setAnswers={setAnswers}
@@ -263,7 +263,7 @@ const SelfAssessment = props => {
                   // subTraitsLoading={subTraitsLoading}
                   // fetchAllSubTrait={fetchAllSubTrait}
 
-                  count={index.subTraitIndex}
+                  count={index?.subTraitIndex}
                   answers={answers}
                   setAnswers={setAnswers}
                   traitsAnswer={traitsAnswer}
@@ -293,15 +293,15 @@ const SelfAssessment = props => {
           <Button
             style={styles.buttonWrapper}
             onPress={handlePreviousButtonClick}
-            disabled={index.traitIndex === 0 && index.subTraitIndex === 0}>
+            disabled={index?.traitIndex === 0 && index?.subTraitIndex === 0}>
             <Text style={{color: '#FFFFFF', marginTop: 2, fontSize: 14}}>
               Previous
             </Text>
           </Button>
           <Button style={styles.buttonWrapper} onPress={handleNextButtonClick}>
             <Text style={{color: '#FFFFFF', marginTop: 2, fontSize: 14}}>
-              {index.traitIndex === traitLength - 1 &&
-              index.subTraitIndex === subTraitLength - 1
+              {index?.traitIndex === traitLength - 1 &&
+              index?.subTraitIndex === subTraitLength - 1
                 ? 'Complete'
                 : 'Next'}
             </Text>
