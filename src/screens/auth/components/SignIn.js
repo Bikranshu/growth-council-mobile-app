@@ -193,6 +193,11 @@ const SignInForm = props => {
                   onPress={() => {
                     handleSubmit();
                     setUserName(values?.username);
+                    const appInstanceId = '123456';
+                    analytics().setUserProperty(
+                      'app_instance_id',
+                      appInstanceId,
+                    );
                   }}
                   disabled={!areAllFieldsFilled || loading}>
                   <Text style={styles.loginButtonText}>Sign In</Text>
