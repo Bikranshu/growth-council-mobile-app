@@ -23,7 +23,7 @@ import {Picker} from '@react-native-picker/picker';
 import {BubblesLoader} from 'react-native-indicator';
 import analytics from '@react-native-firebase/analytics';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import {GoogleAnalyticsTracker} from 'react-native-google-analytics-bridge';
+import TagManager from 'react-native-google-analytics-bridge';
 
 import {useAuthentication} from '../../../context/auth';
 import FlatTextInput from '../../../shared/form/FlatTextInput';
@@ -67,19 +67,17 @@ const SignInForm = props => {
     },
   });
 
-  const tracker = new GoogleAnalyticsTracker('G-4HWSG71L39');
-
   function setUserName(username) {
-    tracker.setUser(username);
-    tracker.trackScreenView('Login-App');
+    const appInstanceId = username; // replace with the actual App Instance ID
+    const streamName = `com.growthcouncil:${appInstanceId}`;
+
+    TagManager.dataLayer({
+      stream_name: streamName,
+    });
+
+    analytics().setUserProperty('stream_name', streamName);
   }
   const areAllFieldsFilled = values.username != '' && values.password != '';
-
-  // const postToAPI = async data => {
-  //   return axios.get(
-  //     `${API_URL}/pd/fcm/subscribe?api_secret_key=s3D6nHoU9AUw%jjTHy0K@UO)&user_email=${data.email}&device_token=${data.token}&subscribed=UserNotification`,
-  //   );
-  // };
 
   useFocusEffect(
     useCallback(() => {
@@ -89,6 +87,13 @@ const SignInForm = props => {
     }, []),
   );
 
+  useEffect(() => {
+    analytics()
+      .getAppInstanceId()
+      .then(appInstanceId => {
+        console.log('App Instance ID:', appInstanceId);
+      });
+  }, []);
   return (
     <ScrollView
       contentContainerStyle={{flexGrow: 1, height: screenHeight + 100}}>
@@ -193,11 +198,6 @@ const SignInForm = props => {
                   onPress={() => {
                     handleSubmit();
                     setUserName(values?.username);
-                    const appInstanceId = '123456';
-                    analytics().setUserProperty(
-                      'app_instance_id',
-                      appInstanceId,
-                    );
                   }}
                   disabled={!areAllFieldsFilled || loading}>
                   <Text style={styles.loginButtonText}>Sign In</Text>
