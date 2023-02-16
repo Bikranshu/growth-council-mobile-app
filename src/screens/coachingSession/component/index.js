@@ -55,7 +55,7 @@ const CoachingSession = props => {
   const scrollRef = useRef();
   console.log(route?.params?.count);
   const [value, setValue] = useState('About');
-  const [count, setCount] = useState(0);
+  const [count, setCount] = useState(route?.params?.count);
 
   const [modalVisible, setModalVisible] = useState(false);
   const [scoreVisible, setScoreVisible] = useState(false);
@@ -81,9 +81,11 @@ const CoachingSession = props => {
       return answers.questions.innovativeIndex[subTraitIndex];
     }
   };
+  useEffect(() => {
+    setCount(route?.params?.count);
+  }, [count]);
 
-  console.log(traits[0]);
-  let Traits = traits[route?.params?.count];
+  let Traits = traits[count];
 
   useEffect(() => {
     const fetchProfileAsync = async () => {
@@ -397,82 +399,83 @@ const CoachingSession = props => {
                         paddingBottom: 10,
                       }}>
                       <View style={styles.modalView}>
-                        {traits?.map((trait, index1) => (
-                          <View key={index1}>
-                            <View style={styles.wrapper}>
-                              <View style={styles.traitWrapper}>
-                                {/* <View style={[styles.traitW, styles.shadowProp]}>
+                        {/* {traits?.map((trait, index1) => ( */}
+                        <View>
+                          <View style={styles.wrapper}>
+                            <View style={styles.traitWrapper}>
+                              {/* <View style={[styles.traitW, styles.shadowProp]}>
                                   <Image
                                     source={{uri: trait?.image}}
                                     style={{width: 20, height: 20}}
                                   />
                                 </View> */}
-                                <Text
-                                  style={{
-                                    fontSize: 12,
-                                    width: '60%',
-                                    marginLeft: 10,
-                                  }}>
-                                  {trait?.title}
-                                </Text>
-                              </View>
-
-                              <View
+                              <Text
                                 style={{
-                                  flexDirection: 'row',
-                                  alignItems: 'center',
+                                  fontSize: 12,
+                                  width: '70%',
+                                  marginLeft: 10,
                                 }}>
-                                <Text style={{fontSize: 12}}>Score</Text>
-                                <Pressable
-                                  onPress={() => {
-                                    setScoreVisible(true);
-                                  }}
-                                  //   onPressIn={() => {
-                                  //     setCount(index1 === 0 ? 0 : 1);
-                                  //   }}
-                                >
-                                  <View
-                                    style={{
-                                      width: 40,
-                                      height: 30,
-                                      marginLeft: 5,
-                                      backgroundColor: 'orange',
-                                      borderRadius: 50,
-                                      padding: 5,
-                                      alignItems: 'center',
-                                    }}>
-                                    <Text
-                                      style={{
-                                        fontSize: 13,
-                                        letterSpacing: 1.5,
-                                      }}>
-                                      {index1 === 0 ? growth : innovation}
-                                    </Text>
-                                  </View>
-                                </Pressable>
-                              </View>
+                                {Traits?.title}
+                              </Text>
                             </View>
-                            <View style={{marginTop: 10, marginLeft: 50}}>
-                              {trait?.sub_traits?.map((subTrait, index2) => (
+
+                            <View
+                              style={{
+                                flexDirection: 'row',
+                                alignItems: 'center',
+                              }}>
+                              <Text style={{fontSize: 12}}>Score</Text>
+                              <Pressable
+                                onPress={() => {
+                                  setScoreVisible(true);
+                                }}
+                                //   onPressIn={() => {
+                                //     setCount(index1 === 0 ? 0 : 1);
+                                //   }}
+                              >
                                 <View
-                                  style={[styles.textStyle, styles.shadowProp]}
-                                  key={index2}>
-                                  <Text style={{fontSize: 12, width: '80%'}}>
-                                    {subTrait?.title}
+                                  style={{
+                                    width: 40,
+                                    height: 30,
+                                    marginLeft: 5,
+                                    backgroundColor: 'orange',
+                                    borderRadius: 50,
+                                    padding: 5,
+                                    alignItems: 'center',
+                                  }}>
+                                  <Text
+                                    style={{
+                                      fontSize: 13,
+                                      letterSpacing: 1.5,
+                                    }}>
+                                    {/* {index1 === 0 ? growth : innovation} */}
+                                    {growth}
                                   </Text>
-                                  {(checkMark(index1, index2) ||
-                                    sessions?.completed_status) && (
-                                    <Ionicons
-                                      name={'checkmark-outline'}
-                                      size={20}
-                                      color={'#A1BA68'}
-                                    />
-                                  )}
                                 </View>
-                              ))}
+                              </Pressable>
                             </View>
                           </View>
-                        ))}
+                          <View style={{marginTop: 10, marginLeft: 50}}>
+                            {Traits?.sub_traits?.map((subTrait, index2) => (
+                              <View
+                                style={[styles.textStyle, styles.shadowProp]}
+                                key={index2}>
+                                <Text style={{fontSize: 12, width: '80%'}}>
+                                  {subTrait?.title}
+                                </Text>
+                                {(checkMark(index2) ||
+                                  sessions?.completed_status) && (
+                                  <Ionicons
+                                    name={'checkmark-outline'}
+                                    size={20}
+                                    color={'#A1BA68'}
+                                  />
+                                )}
+                              </View>
+                            ))}
+                          </View>
+                        </View>
+                        {/* ))} */}
                         <Pressable
                           style={[styles.button, styles.buttonClose]}
                           onPress={() => setModalVisible(false)}>
