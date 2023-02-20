@@ -31,7 +31,7 @@ import ContributeIdeasScreen from '../screens/ideas';
 import HomeCommunityScreen from '../screens/dashboard/HomeCommunity';
 import BestPracticeScreen from '../screens/dashboard/BestPractice';
 import GrowthCoachingScreen from '../screens/dashboard/GrowthCoaching';
-import QRScanner from '../screens/QRcode';
+import QRScanner from '../screens/QRcode/qrcode';
 import SettingScreen from '../screens/setting/index';
 import SubHeader from '../shared/header/SubHeader';
 import ContentLibraryScreen from '../screens/contentLibrary/contentLibrary';

@@ -93,7 +93,8 @@ const AppStack = navigation => (
       options={({route, navigation}) => ({
         header: () => (
           <SubHeader
-            title={route?.params?.title}
+            // title={route?.params?.title}
+            title="Self Assessment"
             image={require('../assets/img/Rectangle.png')}
             navigation={navigation}
             noDrawer={true}
@@ -108,7 +109,7 @@ const AppStack = navigation => (
       options={({route, navigation}) => ({
         header: () => (
           <SubHeader
-            title="Session 10"
+            title="Self Assessment"
             image={require('../assets/img/Rectangle.png')}
             navigation={navigation}
             noDrawer={true}

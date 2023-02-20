@@ -4,7 +4,6 @@ import {StyleSheet, Text, View, TouchableOpacity, Image} from 'react-native';
 import {ScrollView} from 'native-base';
 import {RadioButton} from 'react-native-paper';
 
-
 const SessionCompleted = props => {
   const {navigation} = props;
   return (
@@ -25,7 +24,7 @@ const SessionCompleted = props => {
           }}>
           <Text style={{color: 'white', fontSize: 25}}>Congratulations</Text>
         </View>
-        <View style={{alignItems: 'center'}}>
+        {/* <View style={{alignItems: 'center'}}>
           <Text
             style={{
               color: '#053A68',
@@ -33,7 +32,7 @@ const SessionCompleted = props => {
             }}>
             You have successfully completed
           </Text>
-        </View>
+        </View> */}
       </View>
 
       <View
@@ -44,7 +43,8 @@ const SessionCompleted = props => {
           marginTop: 30,
         }}>
         <Text style={{fontSize: 20, color: '#003061', fontWeight: '600'}}>
-          ALL SESSIONS
+          {/* ALL SESSIONS */}
+          You have successfully completed
         </Text>
 
         <View
@@ -80,10 +80,11 @@ const SessionCompleted = props => {
           width: '90%',
           marginTop: 30,
         }}>
-        <Text style={{fontSize: 12, marginBottom: 10}}>View your Score</Text>
+        {/* <Text style={{fontSize: 12, marginBottom: 10}}>View your Score</Text> */}
         <TouchableOpacity
           onPress={() => {
-            navigation.navigate('Radar');
+            // navigation.navigate('Radar');
+			navigation.navigate('Dashboard');
           }}>
           <View
             style={{
@@ -95,7 +96,8 @@ const SessionCompleted = props => {
               alignItems: 'center',
             }}>
             <Text style={{color: 'white', fontSize: 18, paddingHorizontal: 20}}>
-              View Frost Radar for Leadership
+              {/* View Frost Radar for Leadership */}
+              Dashboard
             </Text>
           </View>
         </TouchableOpacity>

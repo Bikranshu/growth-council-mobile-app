@@ -27,6 +27,7 @@ const SelfAssessment = props => {
     route,
     score,
     traits,
+    Traits,
     traitsLoading,
     traitsError,
     fetchAllTraitBySession,
@@ -57,10 +58,10 @@ const SelfAssessment = props => {
   const [traitLength, setTraitLength] = useState(0);
   const [subTraitLength, setSubTraitLength] = useState(0);
 
-  const [subTraits, setSubTraits] = useState(traits[index.traitIndex]);
+  const [subTraits, setSubTraits] = useState(Traits);
 
   useEffect(() => {
-    setSubTraits(traits[index.traitIndex]);
+    setSubTraits(Traits);
   }, [traits]);
 
   const fetchAllSubTrait = identifier => {
@@ -85,12 +86,12 @@ const SelfAssessment = props => {
 
   useEffect(() => {
     if (traits?.length) {
-      setSub(traits[index.traitIndex].sub_traits[index.subTraitIndex].title);
-      setValue(traits[index.traitIndex].sub_traits[index.subTraitIndex].title);
+      setSub(Traits.sub_traits[index.subTraitIndex].title);
+      setValue(Traits.sub_traits[index.subTraitIndex].title);
       setTraitLength(traits.length);
     }
     if (subTraits?.sub_traits?.length) {
-      setSubTraitLength(traits[index.traitIndex]?.sub_traits?.length);
+      setSubTraitLength(Traits?.sub_traits?.length);
     }
   }, [traits, index]);
 
@@ -103,8 +104,9 @@ const SelfAssessment = props => {
     });
 
     if (
-      index?.traitIndex === traitLength - 1 &&
-      index?.subTraitIndex === subTraitLength - 1
+      //   index?.traitIndex === traitLength - 1 &&
+      //   index?.subTraitIndex === subTraitLength - 1
+      index?.subTraitIndex === 2
     ) {
       store(`jwt-auth/v1/sessions/${route?.params?.id}/score`, {
         score,
@@ -120,12 +122,12 @@ const SelfAssessment = props => {
               },
               yellowQuestions: [],
             });
-            navigation.goBack();
+            // navigation.goBack();
+            navigation.navigate('SessionCompleted');
+            // if (sessions.title === 'Session 10') {
+            //   ToastMessage.show('You score has submitted.');
 
-            if (sessions.title === 'Session 10') {
-              //   ToastMessage.show('You score has submitted.');
-              navigation.navigate('SessionCompleted');
-            }
+            // }
           } else {
             toast.closeAll();
             ToastMessage.show(response?.payload?.response);
@@ -182,6 +184,8 @@ const SelfAssessment = props => {
     }
   };
 
+  console.log('count', index?.subTraitIndex);
+
   return (
     <View>
       <StatusBar
@@ -200,7 +204,7 @@ const SelfAssessment = props => {
                 marginBottom: 20,
                 color: '#0B0B45',
               }}>
-              Traits : {traits[index.traitIndex].title}
+              Traits : {Traits.title}
             </Text>
             <View style={styles.Wrapper}>
               <ButtonToggleGroup
@@ -235,7 +239,7 @@ const SelfAssessment = props => {
               {value === sub && (
                 <Trait
                   {...props}
-                  subTraits={traits[index.traitIndex]}
+                  subTraits={Traits}
                   // subTraitsLoading={subTraitsLoading}
                   // subTraitsError={subTraitsError}
                   fetchAllSubTrait={fetchAllSubTrait}
@@ -258,7 +262,7 @@ const SelfAssessment = props => {
               {value === 'Yellow Benchmark Questions' && (
                 <Question
                   {...props}
-                  subTraits={traits[index.traitIndex]}
+                  subTraits={Traits}
                   traitIndex={index}
                   // subTraitsLoading={subTraitsLoading}
                   // fetchAllSubTrait={fetchAllSubTrait}
@@ -300,10 +304,11 @@ const SelfAssessment = props => {
           </Button>
           <Button style={styles.buttonWrapper} onPress={handleNextButtonClick}>
             <Text style={{color: '#FFFFFF', marginTop: 2, fontSize: 14}}>
-              {index?.traitIndex === traitLength - 1 &&
-              index?.subTraitIndex === subTraitLength - 1
-                ? 'Complete'
-                : 'Next'}
+              {
+                //   index?.traitIndex === traitLength - 1 &&
+                //   index?.subTraitIndex === subTraitLength - 1
+                index?.subTraitIndex === 2 ? 'Complete' : 'Next'
+              }
             </Text>
           </Button>
         </View>

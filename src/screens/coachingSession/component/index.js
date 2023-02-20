@@ -53,7 +53,7 @@ const CoachingSession = props => {
   } = props;
 
   const scrollRef = useRef();
-  console.log(route?.params?.count);
+
   const [value, setValue] = useState('About');
   const [count, setCount] = useState(route?.params?.count);
 
@@ -128,42 +128,42 @@ const CoachingSession = props => {
     );
     if (isNaN(num)) num = 0.0;
   }
-  //   let previousSession =
-  //     profile?.session_score !== false && profile?.session_score !== null
-  //       ? profile?.session_score?.map(item => item?.session)
-  //       : [0];
+  let previousSession =
+    profile?.session_score !== false && profile?.session_score !== null
+      ? profile?.session_score?.map(item => item?.session)
+      : [0];
 
-  //   let Growth =
-  //     profile?.session_score !== false && profile?.session_score !== null
-  //       ? profile?.session_score?.map(item => {
-  //           let grow = item?.session === sessions.ID ? item?.growth_index : null;
-  //           return grow;
-  //         })
-  //       : 0;
+  let Growth =
+    profile?.session_score !== false && profile?.session_score !== null
+      ? profile?.session_score?.map(item => {
+          let grow = item?.session === sessions.ID ? item?.growth_index : null;
+          return grow;
+        })
+      : 0;
 
-  //   let Innovation =
-  //     profile?.session_score !== false && profile?.session_score !== null
-  //       ? profile?.session_score?.map(item => {
-  //           let inn =
-  //             item?.session === sessions.ID ? item?.innovative_index : null;
+  let Innovation =
+    profile?.session_score !== false && profile?.session_score !== null
+      ? profile?.session_score?.map(item => {
+          let inn =
+            item?.session === sessions.ID ? item?.innovative_index : null;
 
-  //           return inn;
-  //         })
-  //       : 0;
+          return inn;
+        })
+      : 0;
 
-  //   const previousSessionID = route.params.previousSessionID;
+  const previousSessionID = route.params.previousSessionID;
 
   let growth = 0.0;
   let innovation = 0.0;
-  //   if (previousSession.indexOf(sessions.ID) > -1 === true) {
-  //     growth = Growth;
-  //     innovation = Innovation;
-  //   } else {
-  growth = score.growthIndexScore.toFixed(1);
-  innovation = score.innovativeIndexScore.toFixed(1);
-  if (isNaN(growth)) growth = 0.0;
-  if (isNaN(innovation)) innovation = 0.0;
-  //   }
+  if (previousSession?.indexOf(sessions.ID) > -1 === true) {
+    growth = Growth;
+    innovation = Innovation;
+  } else {
+    growth = score.growthIndexScore.toFixed(1);
+    innovation = score.innovativeIndexScore.toFixed(1);
+    if (isNaN(growth)) growth = 0.0;
+    if (isNaN(innovation)) innovation = 0.0;
+  }
 
   const _renderItem = ({item, index}) => {
     // switch (item?.score_range) {
@@ -517,7 +517,8 @@ const CoachingSession = props => {
                 {...props}
                 score={score}
                 sessions={sessions}
-                // traits={Traits}
+                traits={traits}
+				Traits={Traits}
                 traitsLoading={traitsLoading}
                 traitsError={traitsError}
                 fetchAllTraitBySession={fetchAllTraitBySession}
