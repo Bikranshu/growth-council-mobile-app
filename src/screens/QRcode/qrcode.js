@@ -22,10 +22,13 @@ const Scan = props => {
   const [result, setResult] = useState(null);
 
   const onSuccess = e => {
-    const check = e.data?.count;
-    console.log('scanned data' + check );
+    const obj = JSON.parse(e?.data);
+    const session = obj?.session.toString();
 
-    navigation.navigate('coachingSession', {id: '6682', count: 1});
+    console.log('scanned data' + obj?.count);
+    console.log(session);
+
+    navigation.navigate('coachingSession', {id: session, count: obj?.count});
     setResult(e);
     setScan(false);
     setScanResult(true);
@@ -102,30 +105,27 @@ const Scan = props => {
         <QRCodeScanner
           reactivate={true}
           showMarker={true}
-          //   ref={node => {
-          //     this.scanner = node;
-          //   }}
           onRead={onSuccess}
           topContent={
             <Text style={styles.centerText}>
               Please move your camera {'\n'} over the QR Code
             </Text>
           }
-          bottomContent={
-            <View>
-              <ImageBackground
-                source={require('../../assets/img/bottom-panel.png')}
-                style={styles.bottomContent}>
-                <TouchableOpacity
-                  style={styles.buttonScan2}
-                  //   onPress={() => reactivate()}
-                  onLongPress={() => setScan(false)}>
-                  <Image
-                    source={require('../../assets/img/camera2.png')}></Image>
-                </TouchableOpacity>
-              </ImageBackground>
-            </View>
-          }
+          //   bottomContent={
+          //     <View>
+          //       <ImageBackground
+          //         source={require('../../assets/img/bottom-panel.png')}
+          //         style={styles.bottomContent}>
+          //         <TouchableOpacity
+          //           style={styles.buttonScan2}
+          //           //   onPress={() => reactivate()}
+          //           onLongPress={() => setScan(false)}>
+          //           <Image
+          //             source={require('../../assets/img/camera2.png')}></Image>
+          //         </TouchableOpacity>
+          //       </ImageBackground>
+          //     </View>
+          //   }
         />
       )}
     </View>
@@ -136,7 +136,7 @@ const styles = StyleSheet.create({
   scrollViewStyle: {
     flex: 1,
     justifyContent: 'flex-start',
-    backgroundColor: '#2196f3',
+    backgroundColor: '#1582c5',
   },
   header: {
     display: 'flex',
@@ -163,7 +163,7 @@ const styles = StyleSheet.create({
   },
   cardView: {
     width: deviceWidth - 32,
-    height: deviceHeight - 350,
+    height: deviceHeight - 300,
     alignSelf: 'center',
     justifyContent: 'flex-start',
     alignItems: 'center',

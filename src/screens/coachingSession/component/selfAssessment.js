@@ -202,6 +202,7 @@ const SelfAssessment = props => {
                 textAlign: 'center',
                 fontSize: 14,
                 marginBottom: 20,
+                width: '80%',
                 color: '#0B0B45',
               }}>
               Traits : {Traits.title}
@@ -322,6 +323,7 @@ const styles = StyleSheet.create({
     height: 40,
     backgroundColor: '#ECECEC',
     borderRadius: 15,
+    marginTop: 20,
   },
   buttonWrapper: {
     width: 147,

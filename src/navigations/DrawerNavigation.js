@@ -365,6 +365,7 @@ const DrawerNavigation = () => {
               title="QR Code"
               image={require('../assets/img/appBG.png')}
               navigation={navigation}
+              noDrawer={true}
             />
           ),
         })}
