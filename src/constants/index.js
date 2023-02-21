@@ -33,3 +33,8 @@ export const GROWTH_COACHING_ID = 171;
 
 //ScreenHeight Value
 export const SCREENHEIGHTVALUE = 50;
+
+//Google Tracker id
+
+export const GA_TRACKER_ID = 'G-4HWSG71L39';
+export const GA_TRACKER_INTERVAL = 20;
