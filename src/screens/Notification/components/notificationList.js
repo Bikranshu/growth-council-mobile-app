@@ -98,17 +98,11 @@ const NotificationList = props => {
     const deviceTimezone = moment?.tz?.guess();
     const Timezone = 'America/New_York'; //dublin is london so we set notification triggered date timezone as 'Europe/london'
 
-    // const sortedDates = item?.triggered_date.sort((a, b) => b - a);
-
-    // const sortedDates = item.triggered_date.map(
-    //   dateString => new Date(dateString),
-    // );
-    // sortedDates.sort((a, b) => b - a);
-    // const latestDate = sortedDates[0];
-    // console.log(item?.triggered_date);
     const triggeredDate = moment?.tz(item?.triggered_date, Timezone);
 
-    const deviceDate = triggeredDate.tz(deviceTimezone).format('ddd HH:mm:ss');
+    const deviceDate = triggeredDate
+      .tz(deviceTimezone)
+      .format('DD ddd MMM HH:mm:ss');
 
     // icon for notification list
     let content = require('../../../assets/img/Content_Icon.png');
@@ -266,7 +260,11 @@ const NotificationList = props => {
             }}>
             Recent Notification
           </Text>
-          <FlatList data={filteredNotifications} renderItem={_renderItem} />
+          <FlatList
+            data={filteredNotifications}
+            renderItem={_renderItem}
+            inverted={true}
+          />
         </ScrollView>
 
         <Modal transparent visible={pickerVisible}>
