@@ -86,9 +86,9 @@ const SelfAssessment = props => {
 
   useEffect(() => {
     if (traits?.length) {
-      setSub(Traits.sub_traits[index.subTraitIndex].title);
-      setValue(Traits.sub_traits[index.subTraitIndex].title);
-      setTraitLength(traits.length);
+      setSub(Traits?.sub_traits[index?.subTraitIndex]?.title);
+      setValue(Traits?.sub_traits[index?.subTraitIndex]?.title);
+      setTraitLength(traits?.length);
     }
     if (subTraits?.sub_traits?.length) {
       setSubTraitLength(Traits?.sub_traits?.length);
