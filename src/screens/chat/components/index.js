@@ -60,13 +60,13 @@ const Chat = props => {
   };
 
   const [messages, setMessages] = useState([]);
-
-  const sendNotificationToDBButton = async (friendID, title, text) => {
+ 
+  const sendNotificationToDBButton = async (friendID, text) => {
     const response = await sendNotificationToDB({
       receiver_user_id: friendID,
-      receiver_user_email: route?.params?.friendEmail,
+      receiver_user_email: route?.params?.friendName,
       notification_type: 'chat_notification',
-      notification_title: title,
+      notification_title: `New Message from ${userName}`,
       notification_content: text,
     });
 
@@ -272,8 +272,7 @@ const Chat = props => {
       userAvatar: friendAvatar,
       userName: friendName,
     });
-    const title = `New Message from ${userName}`;
-    sendNotificationToDBButton(friendID, title, text);
+    sendNotificationToDBButton(friendID, text);
   });
 
   return (

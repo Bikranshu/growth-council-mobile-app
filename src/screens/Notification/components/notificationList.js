@@ -102,7 +102,7 @@ const NotificationList = props => {
 
     const deviceDate = triggeredDate
       .tz(deviceTimezone)
-      .format('DD ddd MMM HH:mm:ss');
+      .format('MMM, DD ddd, HH:mm:ss');
 
     // icon for notification list
     let content = require('../../../assets/img/Content_Icon.png');
@@ -176,8 +176,8 @@ const NotificationList = props => {
                   ? chat
                   : member
               }
-              style={{width: 40, height: 40}}
-              resizeMode="center"
+              style={{width: 30, height: 30}}
+              resizeMode="contain"
             />
           </View>
 
