@@ -12,21 +12,15 @@ import {
   Dimensions,
   RefreshControl,
   FlatList,
+  Modal,
 } from 'react-native';
-import {useDispatch, useSelector} from 'react-redux';
 
-import {Badge} from 'react-native-paper';
 import moment from 'moment-timezone';
-import * as RNLocalize from 'react-native-localize';
+import {Badge} from 'react-native-paper';
+import {Picker} from '@react-native-picker/picker';
+import {useDispatch, useSelector} from 'react-redux';
 import {useIsFocused} from '@react-navigation/native';
-
-import {CommonStyles, Colors, Typography} from '../../../theme';
-import {
-  COMMUNITY_COLOR,
-  PRIMARY_TEXT_COLOR,
-  SECONDARY_TEXT_COLOR,
-} from '../../../theme/colors';
-import ToastMessage from '../../../shared/toast';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 
 const NotificationList = props => {
   const {
@@ -46,36 +40,58 @@ const NotificationList = props => {
     cleanNotificationStatus,
   } = props;
 
-  const isFocused = useIsFocused();
   const dispatch = useDispatch();
-  const [refreshing, setRefreshing] = useState(false);
+  const isFocused = useIsFocused();
 
+  const [filter, setFilter] = useState('All');
+  const [refreshing, setRefreshing] = useState(false);
+  const [pickerVisible, setPickerVisible] = useState(false);
+
+  // data refresh when we scroll up by call the api
   const onRefresh = useCallback(() => {
     setRefreshing(true);
     getNotificationLists({
       id: profile?.ID,
     });
     dispatch(fetchProfileByID());
+
     setTimeout(() => {
       setRefreshing(false);
     }, 2000);
   }, [refreshing]);
 
+  //fetch data of profile list because we are showing notification data according the user so we need profile data
   useEffect(() => {
     dispatch(fetchProfileByID());
   }, [isFocused]);
 
+  //fetch data of notification list using profile id
   useEffect(() => {
     getNotificationLists({
       id: profile?.ID,
     });
   }, [profile, isFocused]);
 
+  // notification status update api when click on unread notification, it change the status to read notification
   const notificationStatusUpdateButton = async (notificationId, index) => {
     const response = await notificationStatusUpdate({
       notification_id: notificationId,
     });
   };
+
+  //function to set the dropdown
+  const handleFilterChange = value => {
+    setFilter(value);
+  };
+
+  // function to sort notification data according to picker value
+  const filteredNotifications =
+    filter === 'All'
+      ? notificationList
+      : notificationList?.filter(
+          notification =>
+            notification.status === (filter === 'Read' ? '1' : '0'),
+        );
 
   const _renderItem = ({item, index}) => {
     // get the device's timezone
@@ -84,8 +100,11 @@ const NotificationList = props => {
 
     const triggeredDate = moment?.tz(item?.triggered_date, Timezone);
 
-    const deviceDate = triggeredDate.tz(deviceTimezone).format('ddd HH:mm:ss');
+    const deviceDate = triggeredDate
+      .tz(deviceTimezone)
+      .format('MMM, DD ddd, HH:mm:ss');
 
+    // icon for notification list
     let content = require('../../../assets/img/Content_Icon.png');
     let chat = require('../../../assets/img/Chat_Message_Icon.png');
     let event = require('../../../assets/img/Event_Calendar_Icon.png');
@@ -96,6 +115,7 @@ const NotificationList = props => {
     let GrowthCoaching = 'Growth Coaching';
     let Executive = 'Executive Coaching Clinic';
 
+    //passing the header value like backgroundImage and pillarname when redirect to respective page when click notification list
     if (
       item?.event_categories?.indexOf(GrowthCoaching) > -1 !== false ||
       item?.event_categories?.indexOf(Executive) > -1 !== false ||
@@ -108,7 +128,6 @@ const NotificationList = props => {
       pillarname = 'Growth Community';
     }
 
-    // console.log(item?.event_categories);
     return (
       <TouchableOpacity
         onPress={() => {
@@ -157,8 +176,8 @@ const NotificationList = props => {
                   ? chat
                   : member
               }
-              style={{width: 40, height: 40}}
-              resizeMode="center"
+              style={{width: 30, height: 30}}
+              resizeMode="contain"
             />
           </View>
 
@@ -188,14 +207,12 @@ const NotificationList = props => {
               style={{
                 fontSize: 8,
                 color: '#A9A9A9',
-                marginTop: 3,
-                // position: 'absolute',
-                // right: 0,
-                // bottom: 0,
               }}>
               {deviceDate}
             </Text>
           </View>
+
+          {/* badge when notification status value is unread */}
           {item?.status === '0' && (
             <View
               style={{
@@ -214,23 +231,86 @@ const NotificationList = props => {
     <>
       <SafeAreaView style={{flex: 1}}>
         <ScrollView
-          style={{marginTop: 5, padding: 5, flex: 1}}
+          style={{marginTop: 5, padding: 5, flex: 1, marginBottom: 10}}
           showsVerticalScrollIndicator={false}
           refreshControl={
             <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
           }>
+          <TouchableOpacity
+            onPress={() => setPickerVisible(true)}
+            style={[styles.picker, styles.shadowProp]}>
+            <Text style={{fontSize: 14, color: 'black'}}>{filter}</Text>
+
+            <Ionicons
+              name="chevron-down-outline"
+              size={20}
+              color="black"
+              style={{position: 'absolute', right: 15, top: 12}}
+            />
+          </TouchableOpacity>
+
           <Text
             style={{
               fontSize: 18,
               fontWeight: '600',
               margin: 5,
+              marginTop: 20,
               marginVertical: 10,
               color: '#222B45',
             }}>
             Recent Notification
           </Text>
-          <FlatList data={notificationList} renderItem={_renderItem} />
+          <FlatList
+            data={filteredNotifications}
+            renderItem={_renderItem}
+            inverted={true}
+          />
         </ScrollView>
+
+        <Modal transparent visible={pickerVisible}>
+          <View
+            style={{
+              flex: 1,
+              backgroundColor: 'rgba(56,56,56,0.3)',
+              justifyContent: 'flex-end',
+            }}>
+            <View
+              style={{
+                height: 300,
+                backgroundColor: 'white',
+                borderTopLeftRadius: 20,
+                borderTopRightRadius: 20,
+                padding: 20,
+              }}>
+              <TouchableOpacity
+                activeOpacity={0.7}
+                onPress={() => setPickerVisible(false)}
+                style={{alignItems: 'flex-end'}}>
+                <Text
+                  style={{
+                    padding: 15,
+                    fontSize: 18,
+                  }}>
+                  Done
+                </Text>
+              </TouchableOpacity>
+
+              <View>
+                <Picker
+                  selectedValue={filter}
+                  onValueChange={handleFilterChange}
+                  style={{
+                    flex: 1,
+                    justifyContent: 'flex-end',
+                  }}>
+                  <Picker.Item label="All" value="All" />
+                  <Picker.Item label="Read" value="Read" />
+                  <Picker.Item label="Unread" value="Unread" />
+                </Picker>
+              </View>
+            </View>
+          </View>
+        </Modal>
       </SafeAreaView>
     </>
   );
@@ -247,7 +327,18 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     padding: 10,
     height: 100,
-    marginBottom: 20,
+    marginBottom: 10,
+  },
+  picker: {
+    flex: 1,
+    alignItems: 'center',
+    backgroundColor: 'white',
+    paddingVertical: 15,
+    marginTop: 20,
+    marginHorizontal: 10,
+    borderColor: 'gray',
+    borderRadius: 10,
+    justifyContent: 'center',
   },
   shadowProp: {
     shadowColor: '#000',
