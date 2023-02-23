@@ -591,7 +591,7 @@ const Event = props => {
                       onPress={async () => {
                         registerEventByEventID(route?.params?.id);
                         let eventName = events?.title;
-                        await analytics().logEvent('Event_Detail', {
+                        await analytics().logEvent('Rsvp', {
                           description: 'Event Register',
                           eventID: eventID,
                           eventName: eventName,

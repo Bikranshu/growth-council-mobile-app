@@ -103,6 +103,9 @@ import deleteDiscussionReducer from '../screens/discussionForum/slice/deleteDisc
 import pastEventReducer from '../screens/discussionForum/slice/pastEventSlice';
 import articleReducer from '../screens/details/slice/articleSlice';
 import GPPReducer from '../screens/GPD/GPDSlice';
+import notificationListReducer from '../screens/Notification/slice/notificationListSlice';
+import notificationStatusReducer from '../screens/Notification/slice/notificationStatusUpdateSlice';
+import insertNotificationReducer from '../screens/Notification/slice/insertNotificationSlice';
 
 const persistConfig = {
   key: 'root',
@@ -189,6 +192,9 @@ const reducers = combineReducers({
   pastEvent: pastEventReducer,
   article: articleReducer,
   GDP: GPPReducer,
+  notificationList: notificationListReducer,
+  notificationStatus: notificationStatusReducer,
+  insertNotification:insertNotificationReducer
 });
 
 const persistedReducer = persistReducer(persistConfig, reducers);

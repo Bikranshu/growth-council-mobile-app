@@ -39,11 +39,11 @@ const CoachingSession = props => {
     sessionError,
     fetchSessionByIdentifier,
     cleanSession,
-    sessionRegisters,
-    sessionRegisterLoading,
-    sessionRegisterError,
-    registerSessionByIdentifier,
-    cleanSessionRegister,
+    // sessionRegisters,
+    // sessionRegisterLoading,
+    // sessionRegisterError,
+    // registerSessionByIdentifier,
+    // cleanSessionRegister,
 
     profile,
     profileLoading,
@@ -53,8 +53,9 @@ const CoachingSession = props => {
   } = props;
 
   const scrollRef = useRef();
+
   const [value, setValue] = useState('About');
-  const [count, setCount] = useState(0);
+  const [count, setCount] = useState(route?.params?.count);
 
   const [modalVisible, setModalVisible] = useState(false);
   const [scoreVisible, setScoreVisible] = useState(false);
@@ -80,6 +81,11 @@ const CoachingSession = props => {
       return answers.questions.innovativeIndex[subTraitIndex];
     }
   };
+  useEffect(() => {
+    setCount(route?.params?.count);
+  }, [count]);
+
+  let Traits = traits[count];
 
   useEffect(() => {
     const fetchProfileAsync = async () => {
@@ -149,7 +155,7 @@ const CoachingSession = props => {
 
   let growth = 0.0;
   let innovation = 0.0;
-  if (previousSession.indexOf(sessions.ID) > -1 === true) {
+  if (previousSession?.indexOf(sessions.ID) > -1 === true) {
     growth = Growth;
     innovation = Innovation;
   } else {
@@ -246,10 +252,14 @@ const CoachingSession = props => {
           <View style={[styles.content, {height: 'auto'}]}>
             <View
               style={{
-                flexDirection: 'row',
                 alignItems: 'center',
+                // backgroundColor: 'red',
+                position: 'absolute',
+                right: 15,
+                top: 40,
+                zIndex: 10,
               }}>
-              <View style={styles.buttonWrapper}>
+              {/* <View style={styles.buttonWrapper}>
                 <ButtonToggleGroup
                   highlightBackgroundColor={'white'}
                   highlightTextColor={'#0B0B45'}
@@ -258,26 +268,26 @@ const CoachingSession = props => {
                   values={['About', 'Self-Assessment']}
                   value={value}
                   onSelect={val => {
-                    if (moment(sessions?.event_end).isBefore()) {
-                      if (sessions?.completed_status) {
-                        ToastMessage.show('You have completed this assessment');
-                      } else if (
-                        previousSession.indexOf(previousSessionID) > -1 !==
-                        true
-                      ) {
-                        if (previousSessionID === undefined) {
-                          return setValue(val);
-                        } else {
-                          ToastMessage.show(
-                            'Please complete the previous session to access the next sessions',
-                          );
-                        }
-                      } else {
+                    // if (moment(sessions?.event_end).isBefore()) {
+                    //   if (sessions?.completed_status) {
+                    //     ToastMessage.show('You have completed this assessment');
+                    //   } else if (
+                    //     previousSession.indexOf(previousSessionID) > -1 !==
+                    //     true
+                    //   ) {
+                    //     if (previousSessionID === undefined) {
+                    //       return setValue(val);
+                    //     } else {
+                    //       ToastMessage.show(
+                    //         'Please complete the previous session to access the next sessions',
+                    //       );
+                    //     }
+                    //   } else {
                         return setValue(val);
-                      }
-                    } else {
+                    //   }
+                    // } else {
                       ToastMessage.show('Session has not ended');
-                    }
+                    // }
                   }}
                   style={{
                     paddingLeft: 5,
@@ -293,7 +303,7 @@ const CoachingSession = props => {
                     textAlign: 'center',
                   }}
                 />
-              </View>
+              </View> */}
               <TouchableOpacity onPress={() => setModalVisible(!modalVisible)}>
                 <Ionicons
                   name={modalVisible ? 'close' : 'menu'}
@@ -366,7 +376,7 @@ const CoachingSession = props => {
                                   color: '#8DC182',
                                   fontWeight: '700',
                                 }}>
-                                {traits[count]?.title}
+                                {Traits?.title}
                               </Text>
                             </View>
                           </View>
@@ -374,7 +384,7 @@ const CoachingSession = props => {
                             <FlatList
                               vertical
                               showsHorizontalScrollIndicator={false}
-                              data={traits[count]?.score_description}
+                              data={Traits?.score_description}
                               renderItem={_renderItem}
                             />
                           </View>
@@ -389,81 +399,83 @@ const CoachingSession = props => {
                         paddingBottom: 10,
                       }}>
                       <View style={styles.modalView}>
-                        {traits?.map((trait, index1) => (
-                          <View key={index1}>
-                            <View style={styles.wrapper}>
-                              <View style={styles.traitWrapper}>
-                                {/* <View style={[styles.traitW, styles.shadowProp]}>
+                        {/* {traits?.map((trait, index1) => ( */}
+                        <View>
+                          <View style={styles.wrapper}>
+                            <View style={styles.traitWrapper}>
+                              {/* <View style={[styles.traitW, styles.shadowProp]}>
                                   <Image
                                     source={{uri: trait?.image}}
                                     style={{width: 20, height: 20}}
                                   />
                                 </View> */}
-                                <Text
-                                  style={{
-                                    fontSize: 12,
-                                    width: '60%',
-                                    marginLeft: 10,
-                                  }}>
-                                  {trait?.title}
-                                </Text>
-                              </View>
-
-                              <View
+                              <Text
                                 style={{
-                                  flexDirection: 'row',
-                                  alignItems: 'center',
+                                  fontSize: 12,
+                                  width: '70%',
+                                  marginLeft: 10,
                                 }}>
-                                <Text style={{fontSize: 12}}>Score</Text>
-                                <Pressable
-                                  onPress={() => {
-                                    setScoreVisible(true);
-                                  }}
-                                  onPressIn={() => {
-                                    setCount(index1 === 0 ? 0 : 1);
-                                  }}>
-                                  <View
-                                    style={{
-                                      width: 40,
-                                      height: 30,
-                                      marginLeft: 5,
-                                      backgroundColor: 'orange',
-                                      borderRadius: 50,
-                                      padding: 5,
-                                      alignItems: 'center',
-                                    }}>
-                                    <Text
-                                      style={{
-                                        fontSize: 13,
-                                        letterSpacing: 1.5,
-                                      }}>
-                                      {index1 === 0 ? growth : innovation}
-                                    </Text>
-                                  </View>
-                                </Pressable>
-                              </View>
+                                {Traits?.title}
+                              </Text>
                             </View>
-                            <View style={{marginTop: 10, marginLeft: 50}}>
-                              {trait?.sub_traits?.map((subTrait, index2) => (
+
+                            <View
+                              style={{
+                                flexDirection: 'row',
+                                alignItems: 'center',
+                              }}>
+                              <Text style={{fontSize: 12}}>Score</Text>
+                              <Pressable
+                                onPress={() => {
+                                  setScoreVisible(true);
+                                }}
+                                //   onPressIn={() => {
+                                //     setCount(index1 === 0 ? 0 : 1);
+                                //   }}
+                              >
                                 <View
-                                  style={[styles.textStyle, styles.shadowProp]}
-                                  key={index2}>
-                                  <Text style={{fontSize: 12, width: '80%'}}>
-                                    {subTrait?.title}
+                                  style={{
+                                    width: 40,
+                                    height: 30,
+                                    marginLeft: 5,
+                                    backgroundColor: 'orange',
+                                    borderRadius: 50,
+                                    padding: 5,
+                                    alignItems: 'center',
+                                  }}>
+                                  <Text
+                                    style={{
+                                      fontSize: 13,
+                                      letterSpacing: 1.5,
+                                    }}>
+                                    {/* {index1 === 0 ? growth : innovation} */}
+                                    {growth}
                                   </Text>
-                                  {(checkMark(index1, index2) ||
-                                    sessions?.completed_status) && (
-                                    <Ionicons
-                                      name={'checkmark-outline'}
-                                      size={20}
-                                      color={'#A1BA68'}
-                                    />
-                                  )}
                                 </View>
-                              ))}
+                              </Pressable>
                             </View>
                           </View>
-                        ))}
+                          <View style={{marginTop: 10, marginLeft: 50}}>
+                            {Traits?.sub_traits?.map((subTrait, index2) => (
+                              <View
+                                style={[styles.textStyle, styles.shadowProp]}
+                                key={index2}>
+                                <Text style={{fontSize: 12, width: '80%'}}>
+                                  {subTrait?.title}
+                                </Text>
+                                {(checkMark(index2) ||
+                                  sessions?.completed_status) && (
+                                  <Ionicons
+                                    name={'checkmark-outline'}
+                                    size={20}
+                                    color={'#A1BA68'}
+                                  />
+                                )}
+                              </View>
+                            ))}
+                          </View>
+                        </View>
+                        {/* ))} */}
                         <Pressable
                           style={[styles.button, styles.buttonClose]}
                           onPress={() => setModalVisible(false)}>
@@ -479,7 +491,7 @@ const CoachingSession = props => {
             </View>
 
             <View style={{marginTop: 32}}>
-              {value === 'About' && (
+              {/* {value === 'About' && (
                 <SessionAbout
                   {...props}
                   traits={traits}
@@ -500,24 +512,25 @@ const CoachingSession = props => {
                   cleanSessionRegister={cleanSessionRegister}
                 />
               )}
-              {value === 'Self-Assessment' && (
-                <SelfAssessment
-                  {...props}
-                  score={score}
-                  sessions={sessions}
-                  traits={traits}
-                  traitsLoading={traitsLoading}
-                  traitsError={traitsError}
-                  fetchAllTraitBySession={fetchAllTraitBySession}
-                  cleanTraits={cleanTraits}
-                  answers={answers}
-                  setAnswers={setAnswers}
-                  selectedId={selectedId}
-                  setSelectedId={setSelectedId}
-                  scrollRef={scrollRef}
-                />
-                // <SessionCompleted />
-              )}
+              {value === 'Self-Assessment' && ( */}
+              <SelfAssessment
+                {...props}
+                score={score}
+                sessions={sessions}
+                traits={traits}
+				Traits={Traits}
+                traitsLoading={traitsLoading}
+                traitsError={traitsError}
+                fetchAllTraitBySession={fetchAllTraitBySession}
+                cleanTraits={cleanTraits}
+                answers={answers}
+                setAnswers={setAnswers}
+                selectedId={selectedId}
+                setSelectedId={setSelectedId}
+                scrollRef={scrollRef}
+              />
+              {/* // <SessionCompleted />
+              )} */}
             </View>
           </View>
         </View>

@@ -15,6 +15,7 @@ import {TouchableOpacity} from 'react-native-gesture-handler';
 import {CommonStyles, Colors} from '../../../theme';
 import {getFCMTOkenForUser} from '../../../utils/httpUtil';
 import {sendNotification} from '../../../utils/sendNotification';
+import ToastMessage from '../../../shared/toast';
 
 const Chat = props => {
   const {
@@ -31,6 +32,11 @@ const Chat = props => {
     profileError,
     fetchProfileByIdentifier,
     cleanProfile,
+
+    insertNotification,
+    insertNotificationLoading,
+    sendNotificationToDB,
+    cleanInsertNotification,
   } = props;
 
   const friendID = route.params.friendID;
@@ -54,7 +60,22 @@ const Chat = props => {
   };
 
   const [messages, setMessages] = useState([]);
+ 
+  const sendNotificationToDBButton = async (friendID, text) => {
+    const response = await sendNotificationToDB({
+      receiver_user_id: friendID,
+      receiver_user_email: route?.params?.friendName,
+      notification_type: 'chat_notification',
+      notification_title: `New Message from ${userName}`,
+      notification_content: text,
+    });
 
+    if (response?.payload?.code === 200) {
+      ToastMessage.show(response?.payload?.message);
+    } else {
+      ToastMessage.show(response?.payload?.message);
+    }
+  };
 
   useEffect(() => {
     {
@@ -66,7 +87,7 @@ const Chat = props => {
             if (token == null) {
               console.log(res.data?.message);
             }
-          
+
             setFriendToken(typeof token == 'string' ? token : token?.[0]);
           })
           .catch(error => {
@@ -251,6 +272,7 @@ const Chat = props => {
       userAvatar: friendAvatar,
       userName: friendName,
     });
+    sendNotificationToDBButton(friendID, text);
   });
 
   return (

@@ -34,8 +34,7 @@ const Traits = props => {
 
   useEffect(() => {}, [count, answers]);
 
-  
- return (
+  return (
     <ScrollView style={styles.scrollBox}>
       <View>
         {subTraits?.sub_traits[count]?.questions !== '' &&

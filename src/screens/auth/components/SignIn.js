@@ -23,6 +23,7 @@ import {Picker} from '@react-native-picker/picker';
 import {BubblesLoader} from 'react-native-indicator';
 import analytics from '@react-native-firebase/analytics';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import TagManager from 'react-native-google-analytics-bridge';
 
 import {useAuthentication} from '../../../context/auth';
 import FlatTextInput from '../../../shared/form/FlatTextInput';
@@ -36,29 +37,12 @@ const signInSchema = Yup.object().shape({
 });
 
 const SignInForm = props => {
-  const {
-    navigation,
-    profile,
-    profileLoading,
-    profileError,
-    fetchProfile,
-    cleanProfile,
-    userLoading,
-    updateUser,
-  } = props;
+  const {navigation} = props;
 
   const [hidePass, setHidePass] = useState(true);
-  const [userProfile, setUserProfile] = useState(false);
 
   const {loading, setLoading, message, setMessage, signIn, userCountry} =
     useAuthentication();
-
-  useEffect(() => {
-    const fetchProfileAsync = async () => {
-      await fetchProfile();
-    };
-    fetchProfileAsync();
-  }, []);
 
   const {
     handleChange,
@@ -73,16 +57,27 @@ const SignInForm = props => {
     initialValues: {username: '', password: ''},
     onSubmit: async values => {
       await signIn(values);
+      analytics()
+        .logEvent('Login', {
+          username: values?.username,
+          eventName: 'hello event 2/14/2023',
+          sessionName: 'R S',
+        })
+        .setUserProperty('user_name', values?.username);
     },
   });
 
-  const areAllFieldsFilled = values.username != '' && values.password != '';
+  function setUserName(username) {
+    const appInstanceId = username; // replace with the actual App Instance ID
+    const streamName = `com.growthcouncil:${appInstanceId}`;
 
-  // const postToAPI = async data => {
-  //   return axios.get(
-  //     `${API_URL}/pd/fcm/subscribe?api_secret_key=s3D6nHoU9AUw%jjTHy0K@UO)&user_email=${data.email}&device_token=${data.token}&subscribed=UserNotification`,
-  //   );
-  // };
+    TagManager.dataLayer({
+      stream_name: streamName,
+    });
+
+    analytics().setUserProperty('stream_name', streamName);
+  }
+  const areAllFieldsFilled = values.username != '' && values.password != '';
 
   useFocusEffect(
     useCallback(() => {
@@ -92,6 +87,13 @@ const SignInForm = props => {
     }, []),
   );
 
+  useEffect(() => {
+    analytics()
+      .getAppInstanceId()
+      .then(appInstanceId => {
+        console.log('App Instance ID:', appInstanceId);
+      });
+  }, []);
   return (
     <ScrollView
       contentContainerStyle={{flexGrow: 1, height: screenHeight + 100}}>
@@ -193,11 +195,9 @@ const SignInForm = props => {
                       : styles.loginButton,
                     loading && {backgroundColor: 'grey'},
                   ]}
-                  onPress={async () => {
+                  onPress={() => {
                     handleSubmit();
-                    await analytics().logEvent('Login', {
-                      username: values.username,
-                    });
+                    analytics().logEvent('Login', values.username);
                   }}
                   disabled={!areAllFieldsFilled || loading}>
                   <Text style={styles.loginButtonText}>Sign In</Text>

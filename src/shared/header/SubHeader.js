@@ -44,28 +44,34 @@ const SubHeader = props => {
             alignItems: 'center',
           }}>
           {props?.noDrawer || props?.name ? (
-            <TouchableOpacity
-              onPress={() => {
-                if (props?.id == undefined) {
-                  navigation.goBack();
-                } else if (props.subtitle == 'Growth Community') {
-                  navigation.navigate(props.subtitle, {
-                    pillarId: props.id,
-                    title: 'Growth Community',
-                    image: require('../../assets/img/Rectangle2.png'),
-                  });
-                } else if (props.id == 'Growth Content') {
-                  navigation.navigate('Dashboard');
-                } else {
-                  navigation.navigate(props.subtitle, {
-                    poeId: props.id,
-                    title: 'Growth Community',
-                    image: require('../../assets/img/Rectangle2.png'),
-                  });
-                }
-              }}>
-              <IonIcon name="arrow-back-sharp" size={30} color="white" />
-            </TouchableOpacity>
+            props?.title === 'Self Assessment' ? (
+              <TouchableOpacity onPress={() => navigation.navigate('QR Code')}>
+                <IonIcon name="arrow-back-sharp" color={'white'} size={30} />
+              </TouchableOpacity>
+            ) : (
+              <TouchableOpacity
+                onPress={() => {
+                  if (props?.id == undefined) {
+                    navigation.goBack();
+                  } else if (props.subtitle == 'Growth Community') {
+                    navigation.navigate(props.subtitle, {
+                      pillarId: props.id,
+                      title: 'Growth Community',
+                      image: require('../../assets/img/Rectangle2.png'),
+                    });
+                  } else if (props.id == 'Growth Content') {
+                    navigation.navigate('Dashboard');
+                  } else {
+                    navigation.navigate(props.subtitle, {
+                      poeId: props.id,
+                      title: 'Growth Community',
+                      image: require('../../assets/img/Rectangle2.png'),
+                    });
+                  }
+                }}>
+                <IonIcon name="arrow-back-sharp" size={30} color="white" />
+              </TouchableOpacity>
+            )
           ) : (
             <TouchableOpacity onPress={() => navigation.openDrawer()}>
               <IonIcon name="menu-outline" color={'white'} size={30} />

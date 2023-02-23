@@ -24,6 +24,8 @@ target 'GrowthCouncil' do
   pod 'FirebaseCoreInternal', :modular_headers => true
   pod 'GoogleUtilities', :modular_headers => true
 
+  pod 'react-native-camera', :path => '../node_modules/react-native-camera'
+
   target 'GrowthCouncilTests' do
     inherit! :complete
     # Pods for testing
