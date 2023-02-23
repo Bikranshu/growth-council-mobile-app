@@ -116,6 +116,12 @@ const pdf = props => {
   const getFileExtention = fileUrl => {
     return /[.]/.exec(fileUrl) ? /[^.]+$/.exec(fileUrl) : undefined;
   };
+  function handleDownloadPDF() {
+    const pdfName = route.params.title;
+    analytics().logEvent('pdf_Download', {
+      pdfName: pdfName,
+    });
+  }
 
   return (
     <View style={styles.container}>
@@ -127,13 +133,9 @@ const pdf = props => {
 
       <TouchableOpacity
         style={styles.buttonWrapper}
-        onPress={async () => {
+        onPress={() => {
           checkPermission();
-
-          const pdfName = route.params.title;
-          await analytics().logEvent('pdf_Download', {
-            pdfName: pdfName,
-          });
+          handleDownloadPDF();
         }}>
         <Text style={styles.text}>Download File</Text>
       </TouchableOpacity>

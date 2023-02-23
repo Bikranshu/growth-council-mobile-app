@@ -612,6 +612,7 @@ const SignUpForm = props => {
                   handleSubmit();
                   await analytics().logEvent('Register', {
                     username: values.username,
+                    item: 'Register',
                   });
                 }}
                 disabled={!areAllFieldsFilled || loading}>
