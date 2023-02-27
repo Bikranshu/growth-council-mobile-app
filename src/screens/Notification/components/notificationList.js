@@ -82,6 +82,7 @@ const NotificationList = props => {
   //function to set the dropdown
   const handleFilterChange = value => {
     setFilter(value);
+    setPickerVisible(false);
   };
 
   // function to sort notification data according to picker value
@@ -282,13 +283,13 @@ const NotificationList = props => {
             }}>
             <View
               style={{
-                height: 300,
+                height: 250,
                 backgroundColor: 'white',
                 borderTopLeftRadius: 20,
                 borderTopRightRadius: 20,
                 padding: 20,
               }}>
-              <TouchableOpacity
+              {/* <TouchableOpacity
                 activeOpacity={0.7}
                 onPress={() => setPickerVisible(false)}
                 style={{alignItems: 'flex-end'}}>
@@ -299,9 +300,13 @@ const NotificationList = props => {
                   }}>
                   Done
                 </Text>
-              </TouchableOpacity>
+              </TouchableOpacity> */}
 
-              <View>
+              <View
+                style={{
+                  justifyContent: 'center',
+                  marginTop: 30,
+                }}>
                 <Picker
                   selectedValue={filter}
                   mode="dropdown"
