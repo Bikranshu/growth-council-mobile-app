@@ -230,42 +230,48 @@ const NotificationList = props => {
   return (
     <>
       <SafeAreaView style={{flex: 1}}>
-        <ScrollView
-          style={{marginTop: 5, padding: 5, flex: 1, marginBottom: 10}}
-          showsVerticalScrollIndicator={false}
-          refreshControl={
-            <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-          }>
-          <TouchableOpacity
-            onPress={() => setPickerVisible(true)}
-            style={[styles.picker, styles.shadowProp]}>
-            <Text style={{fontSize: 14, color: 'black'}}>{filter}</Text>
+        <View
+          style={{
+            backgroundColor: '#FFFFFF',
+            flex: 1,
+          }}>
+          <ScrollView
+            style={{marginTop: 5, padding: 5, flex: 1}}
+            showsVerticalScrollIndicator={false}
+            refreshControl={
+              <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+            }>
+            <TouchableOpacity
+              onPress={() => setPickerVisible(true)}
+              style={[styles.picker, styles.shadowProp]}>
+              <Text style={{fontSize: 14, color: 'black'}}>{filter}</Text>
 
-            <Ionicons
-              name="chevron-down-outline"
-              size={20}
-              color="black"
-              style={{position: 'absolute', right: 15, top: 12}}
+              <Ionicons
+                name="chevron-down-outline"
+                size={20}
+                color="black"
+                style={{position: 'absolute', right: 15, top: 12}}
+              />
+            </TouchableOpacity>
+
+            <Text
+              style={{
+                fontSize: 18,
+                fontWeight: '600',
+                margin: 5,
+                marginTop: 20,
+                marginVertical: 10,
+                color: '#222B45',
+              }}>
+              Recent Notification
+            </Text>
+            <FlatList
+              data={filteredNotifications}
+              renderItem={_renderItem}
+              inverted={true}
             />
-          </TouchableOpacity>
-
-          <Text
-            style={{
-              fontSize: 18,
-              fontWeight: '600',
-              margin: 5,
-              marginTop: 20,
-              marginVertical: 10,
-              color: '#222B45',
-            }}>
-            Recent Notification
-          </Text>
-          <FlatList
-            data={filteredNotifications}
-            renderItem={_renderItem}
-            inverted={true}
-          />
-        </ScrollView>
+          </ScrollView>
+        </View>
 
         <Modal transparent visible={pickerVisible}>
           <View
@@ -298,14 +304,20 @@ const NotificationList = props => {
               <View>
                 <Picker
                   selectedValue={filter}
-                  onValueChange={handleFilterChange}
-                  style={{
-                    flex: 1,
-                    justifyContent: 'flex-end',
-                  }}>
-                  <Picker.Item label="All" value="All" />
-                  <Picker.Item label="Read" value="Read" />
-                  <Picker.Item label="Unread" value="Unread" />
+                  mode="dropdown"
+                  itemTextStyle={{fontSize: 14}}
+                  onValueChange={handleFilterChange}>
+                  <Picker.Item label="All" value="All" style={{fontSize: 14}} />
+                  <Picker.Item
+                    label="Read"
+                    value="Read"
+                    style={{fontSize: 14}}
+                  />
+                  <Picker.Item
+                    label="Unread"
+                    value="Unread"
+                    style={{fontSize: 14}}
+                  />
                 </Picker>
               </View>
             </View>
