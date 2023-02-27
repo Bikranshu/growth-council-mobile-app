@@ -3739,6 +3739,18 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@react-native-community/async-storage@npm:^1.6.1":
+  version: 1.12.1
+  resolution: "@react-native-community/async-storage@npm:1.12.1"
+  dependencies:
+    deep-assign: ^3.0.0
+  peerDependencies:
+    react: ^16.8
+    react-native: ">=0.59"
+  checksum: 68b519eb9fc50899257878440fd49a500d4b35c3899311c56c672e779df6516f0760204f6c8edcb3e83398c61a775822996aac6974be4b55a04ad30448d8662d
+  languageName: node
+  linkType: hard
+
 "@react-native-community/blur@npm:^4.3.0":
   version: 4.3.0
   resolution: "@react-native-community/blur@npm:4.3.0"
@@ -6738,6 +6750,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"deep-assign@npm:^3.0.0":
+  version: 3.0.0
+  resolution: "deep-assign@npm:3.0.0"
+  dependencies:
+    is-obj: ^1.0.0
+  checksum: 9041ccc72ae1980f014d4b745d6135d8f0e71d60ac433397550789c27e6b4d14bc0de2af69777e09f97e1d0da3007a8d78de36f7bf9df931c9968b68fc9546ab
+  languageName: node
+  linkType: hard
+
 "deep-is@npm:^0.1.3, deep-is@npm:~0.1.3":
   version: 0.1.4
   resolution: "deep-is@npm:0.1.4"
@@ -8440,6 +8461,7 @@ __metadata:
     react-native-bootsplash: ^4.0.2
     react-native-button-toggle-group: ^1.1.2
     react-native-calendars: ^1.1274.0
+    react-native-camera: ^4.2.1
     react-native-countdown-component: ^2.7.1
     react-native-datepicker: ^1.7.2
     react-native-device-info: ^10.2.0
@@ -8447,6 +8469,7 @@ __metadata:
     react-native-flipper: ^0.127.0
     react-native-gesture-handler: ^2.1.1
     react-native-gifted-chat: ^0.16.3
+    react-native-google-analytics-bridge: ^7.1.0
     react-native-htmlview: ^0.16.0
     react-native-image-crop-picker: ^0.37.2
     react-native-image-picker: ^4.7.1
@@ -8460,6 +8483,7 @@ __metadata:
     react-native-phone-number-input: ^2.1.0
     react-native-picker-select: ^8.0.4
     react-native-push-notification: ^8.1.1
+    react-native-qrcode-scanner: ^1.5.5
     react-native-radio-buttons-group: ^2.2.10
     react-native-reanimated: ^2.3.1
     react-native-rounded-checkbox: ^0.3.3
@@ -9217,6 +9241,13 @@ __metadata:
   version: 7.0.0
   resolution: "is-number@npm:7.0.0"
   checksum: 456ac6f8e0f3111ed34668a624e45315201dff921e5ac181f8ec24923b99e9f32ca1a194912dc79d539c97d33dba17dc635202ff0b2cf98326f608323276d27a
+  languageName: node
+  linkType: hard
+
+"is-obj@npm:^1.0.0":
+  version: 1.0.1
+  resolution: "is-obj@npm:1.0.1"
+  checksum: 3ccf0efdea12951e0b9c784e2b00e77e87b2f8bd30b42a498548a8afcc11b3287342a2030c308e473e93a7a19c9ea7854c99a8832a476591c727df2a9c79796c
   languageName: node
   linkType: hard
 
@@ -12574,6 +12605,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"react-native-camera@npm:^4.2.1":
+  version: 4.2.1
+  resolution: "react-native-camera@npm:4.2.1"
+  dependencies:
+    prop-types: ^15.6.2
+  checksum: 0e84ce657774694d1cc49395c43a8f2caabc03df36aa77aacfb5c797ad8cfe0368f4807deccc54e82ff2b193e8c2d1ce7ad504eedf7a9fc4719b38e39958a804
+  languageName: node
+  linkType: hard
+
 "react-native-codegen@npm:^0.0.7":
   version: 0.0.7
   resolution: "react-native-codegen@npm:0.0.7"
@@ -12694,6 +12734,13 @@ __metadata:
     react: "*"
     react-native: "*"
   checksum: 43898375c78ea8dfdfe34f33a5e35bc427ffd17e09f299ad1cf98d0261b28cd25d4ed352d4dc80760ec4834cecd524d4363afc41d90df0a96cc433190d7ebc9e
+  languageName: node
+  linkType: hard
+
+"react-native-google-analytics-bridge@npm:^7.1.0":
+  version: 7.1.0
+  resolution: "react-native-google-analytics-bridge@npm:7.1.0"
+  checksum: e2d3bc4ad54f1577a095c5383fb5c799680c3a1bebfff0a2fa044d40d526396cf02a2f8465a7c0b3ad7140fc6c164276edd439d1dbe438f3cc40ea3433023548
   languageName: node
   linkType: hard
 
@@ -12842,6 +12889,16 @@ __metadata:
   languageName: node
   linkType: hard
 
+"react-native-permissions@npm:^2.0.2":
+  version: 2.2.2
+  resolution: "react-native-permissions@npm:2.2.2"
+  peerDependencies:
+    react: ">=16.8.6"
+    react-native: ">=0.60.0"
+  checksum: cfc2b9d9c1e70a965faea108f546b34909cff36bc453e854ea6f129d3fa41c67d0db2fedd13d6041417276f9fd30c03b1aa44e0e20ffb883be3135a28fc94993
+  languageName: node
+  linkType: hard
+
 "react-native-phone-number-input@npm:^2.1.0":
   version: 2.1.0
   resolution: "react-native-phone-number-input@npm:2.1.0"
@@ -12872,6 +12929,19 @@ __metadata:
     "@react-native-community/push-notification-ios": ^1.10.1
     react-native: ">=0.33"
   checksum: 64d500c1163eaa4eee549e6e2f8204cac643f91ae918a227e9d93f8261afdebbdaa7ba5d12da0039155cbf6a599032dd15be4ebe53737cbeeadec4469893f00d
+  languageName: node
+  linkType: hard
+
+"react-native-qrcode-scanner@npm:^1.5.5":
+  version: 1.6.0
+  resolution: "react-native-qrcode-scanner@npm:1.6.0"
+  dependencies:
+    "@react-native-community/async-storage": ^1.6.1
+    prop-types: ^15.5.10
+    react-native-permissions: ^2.0.2
+  peerDependencies:
+    react-native-camera: ">=1.0.2"
+  checksum: 89fdd8132fa0944949f54d902c7245da96cd488536eae0b2f9923d518a822a4dec606f22001871344b6438149f446639b952fe2be281965d1be91b9af1a47bed
   languageName: node
   linkType: hard
 
