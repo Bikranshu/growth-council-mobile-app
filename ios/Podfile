@@ -20,11 +20,13 @@ target 'GrowthCouncil' do
 
   pod 'RNReanimated', :path => '../node_modules/react-native-reanimated'
 
+  pod 'react-native-camera', :path => '../node_modules/react-native-camera'
+
+  pod 'RNPermissions', :path => '../node_modules/react-native-permissions'
+
   pod 'Firebase', :modular_headers => true
   pod 'FirebaseCoreInternal', :modular_headers => true
   pod 'GoogleUtilities', :modular_headers => true
-
-  pod 'react-native-camera', :path => '../node_modules/react-native-camera'
 
   target 'GrowthCouncilTests' do
     inherit! :complete
