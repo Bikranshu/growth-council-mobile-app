@@ -77,7 +77,6 @@ const NotificationList = props => {
     });
   };
 
-
   // function to sort notification data according to picker value
   const filteredNotifications =
     filter === 'All'
@@ -235,7 +234,6 @@ const NotificationList = props => {
             refreshControl={
               <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
             }>
-
             <View style={styles.buttonWrapper}>
               <ButtonToggleGroup
                 highlightBackgroundColor={'white'}
@@ -279,7 +277,6 @@ const NotificationList = props => {
             />
           </ScrollView>
         </View>
-
       </SafeAreaView>
     </>
   );
@@ -312,7 +309,7 @@ const styles = StyleSheet.create({
   buttonWrapper: {
     width: '90%',
     height: 50,
-    backgroundColor: '#ECECEC',
+    backgroundColor: '#f2f2f2',
     borderRadius: 10,
     margin: 10,
     marginLeft: 15,
