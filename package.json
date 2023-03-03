@@ -14,16 +14,10 @@
 	},
 	"reactNativePermissionsIOS": [
 		"Camera",
-		"Contacts",
-		"LocationAccuracy",
-		"LocationAlways",
-		"LocationWhenInUse",
 		"MediaLibrary",
-		"Microphone",
 		"Notifications",
 		"PhotoLibrary",
-		"PhotoLibraryAddOnly",
-		"StoreKit"
+		"PhotoLibraryAddOnly"
 	],
 	"dependencies": {
 		"@emotion/react": "^11.7.1",
