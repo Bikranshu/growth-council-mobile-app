@@ -273,7 +273,6 @@ const NotificationList = props => {
             <FlatList
               data={filteredNotifications}
               renderItem={_renderItem}
-              inverted={true}
             />
           </ScrollView>
         </View>
@@ -307,12 +306,12 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   buttonWrapper: {
-    width: '90%',
+    width: '95%',
     height: 50,
     backgroundColor: '#f2f2f2',
     borderRadius: 10,
     margin: 10,
-    marginLeft: 15,
+    marginLeft: 10,
     justifyContent: 'center',
     alignContent: 'center',
   },
