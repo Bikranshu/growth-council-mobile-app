@@ -1680,7 +1680,7 @@ SPEC CHECKSUMS:
   RNGestureHandler: 071d7a9ad81e8b83fe7663b303d132406a7d8f39
   RNImageCropPicker: 44e2807bc410741f35d4c45b6586aedfe3da39d2
   RNLocalize: 0df7970cfc60389f00eb62fd7c097dc75af3fb4f
-  RNPermissions: 3d45c6fb418be1af49afd16dfa2cde12f3a792b2
+  RNPermissions: f090bed4550c4fc04be09effbe78ba65f194b0fe
   RNReanimated: f066aa91ef8ef7b2a9baed4c15ec06f5e5fb5d11
   RNScreens: ea4cd3a853063cda19a4e3c28d2e52180c80f4eb
   RNSVG: 6adc5c52d2488a476248413064b7f2832e639057
