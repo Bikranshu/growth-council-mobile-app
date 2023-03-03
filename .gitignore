@@ -60,10 +60,9 @@ buck-out/
 /ios/Pods/
 
 .yarn/*
-.yarn/cache
-.yarn/patches
-.yarn/plugins
-.yarn/releases
-.yarn/sdks
-.yarn/versions
-
+.yarn/cache/*
+.yarn/patches/*
+.yarn/plugins/*
+.yarn/releases/*
+.yarn/sdks/*
+.yarn/versions/*
