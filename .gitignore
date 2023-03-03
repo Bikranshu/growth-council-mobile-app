@@ -58,3 +58,11 @@ buck-out/
 
 # CocoaPods
 /ios/Pods/
+
+.yarn/*
+.yarn/cache/*.zip
+.yarn/patches/*
+.yarn/plugins/*
+.yarn/releases/*
+.yarn/sdks/*
+.yarn/versions/*
