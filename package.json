@@ -10,7 +10,6 @@
 		"lint": "eslint .",
 		"bundle": "react-native bundle --platform android --dev false --entry-file index.js --bundle-output android/app/src/main/assets/index.android.bundle --assets-dest android/app/src/main/res",
 		"build:ios": "react-native bundle --entry-file='index.js' --bundle-output='./ios/GrowthCouncil/main.jsbundle' --dev=false --platform='ios'"
-
 	},
 	"reactNativePermissionsIOS": [
 		"Camera",
@@ -128,8 +127,6 @@
 		"metro-react-native-babel-preset": "^0.66.2",
 		"prettier": "2.5.1",
 		"react-test-renderer": "17.0.2"
-
-	
 	},
 	"jest": {
 		"preset": "react-native"
