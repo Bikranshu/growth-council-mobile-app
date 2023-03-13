@@ -38,7 +38,6 @@ const HeaderRight = props => {
     setUnreadNotifications(filteredNotifications?.length);
   }, [notificationList]);
 
-  console.log({unreadNotifications});
 
   return (
     <View style={{flexDirection: 'row', alignItems: 'center'}}>

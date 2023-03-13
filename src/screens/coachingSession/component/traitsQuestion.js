@@ -16,9 +16,13 @@ const TraitsQuestion = props => {
   const [status, setStatus] = useState(0);
 
   useEffect(() => {
+    console.log('asdasd', traitIndex.traitIndex);
+    console.log('asdasdqweq', traitIndex.subTraitIndex);
     if (traitIndex.traitIndex === 0) {
+      console.log('growth');
       setStatus(answers?.questions?.growthIndex[count]);
     } else {
+      console.log('innovation');
       setStatus(answers?.questions?.innovativeIndex[count]);
     }
   }, [count, answers]);

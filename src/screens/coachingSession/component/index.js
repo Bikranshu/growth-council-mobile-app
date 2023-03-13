@@ -75,6 +75,7 @@ const CoachingSession = props => {
   const [selectedId, setSelectedId] = useState(null);
 
   const checkMark = (traitIndex, subTraitIndex) => {
+
     if (traitIndex === 0) {
       return answers.questions.growthIndex[subTraitIndex];
     } else {
@@ -518,7 +519,7 @@ const CoachingSession = props => {
                 score={score}
                 sessions={sessions}
                 traits={traits}
-				Traits={Traits}
+                Traits={Traits}
                 traitsLoading={traitsLoading}
                 traitsError={traitsError}
                 fetchAllTraitBySession={fetchAllTraitBySession}
