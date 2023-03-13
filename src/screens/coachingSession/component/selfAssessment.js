@@ -53,6 +53,7 @@ const SelfAssessment = props => {
     traitIndex: 0,
     subTraitIndex: 0,
   });
+  console.log({index});
   const [traitLength, setTraitLength] = useState(0);
   const [subTraitLength, setSubTraitLength] = useState(0);
 
