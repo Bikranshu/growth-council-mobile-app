@@ -57,26 +57,10 @@ const SignInForm = props => {
     initialValues: {username: '', password: ''},
     onSubmit: async values => {
       await signIn(values);
-      analytics()
-        .logEvent('Login', {
-          username: values?.username,
-          eventName: 'hello event 2/14/2023',
-          sessionName: 'R S',
-        })
-        .setUserProperty('user_name', values?.username);
     },
   });
 
-  function setUserName(username) {
-    const appInstanceId = username; // replace with the actual App Instance ID
-    const streamName = `com.growthcouncil:${appInstanceId}`;
 
-    TagManager.dataLayer({
-      stream_name: streamName,
-    });
-
-    analytics().setUserProperty('stream_name', streamName);
-  }
   const areAllFieldsFilled = values.username != '' && values.password != '';
 
   useFocusEffect(
@@ -87,13 +71,13 @@ const SignInForm = props => {
     }, []),
   );
 
-  useEffect(() => {
-    analytics()
-      .getAppInstanceId()
-      .then(appInstanceId => {
-        console.log('App Instance ID:', appInstanceId);
-      });
-  }, []);
+//   useEffect(() => {
+//     analytics()
+//       .getAppInstanceId()
+//       .then(appInstanceId => {
+//         console.log('App Instance ID:', appInstanceId);
+//       });
+//   }, []);
   return (
     <ScrollView
       contentContainerStyle={{flexGrow: 1, height: screenHeight + 100}}>
