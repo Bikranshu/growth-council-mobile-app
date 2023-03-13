@@ -5,6 +5,7 @@ import {Platform} from 'react-native';
 
 const isIOS = Platform.OS == 'ios';
 
+// import moment from 'moment';
 const PushNotificationsConfigs = {
   congigurations: () => {
     PushNotification.configure({
@@ -17,35 +18,37 @@ const PushNotificationsConfigs = {
           notification.userInteraction && !notification.foreground;
 
         if (clicked) {
-          //   try {
-          // handle the navigation here
-          const data = notification?.data;
-          if (data) {
-            if (data?.type == 'chat') {
-              navigate('Chat', {
-                friendID: data?.friendID,
-                friendName: data?.friendName,
-                friendAvatar: data?.friendAvatar,
-                userID: data?.userID,
-                userName: data?.userName,
-                userAvatar: data?.userAvatar,
-              });
-            } else if (data?.type == 'event') {
-              navigate('EventDetail', {
-                id: data.post_id,
-              });
+          try {
+            // handle the navigation here
+            const data = notification?.data;
+
+            if (data) {
+              if (data?.type == 'chat') {
+                console.log(notification.data);
+                // navigate('Chat', {
+                //   friendID: data?.friendID,
+                //   friendName: data?.friendName,
+                //   friendAvatar: data?.friendAvatar,
+                //   userID: data?.userID,
+                //   userName: data?.userName,
+                //   userAvatar: data?.userAvatar,
+                // });
+              } else if (data?.type == 'event') {
+                // navigate('EventDetail', {id: data?.post_id});
+              }
             }
+          } catch (error) {
+            console.log(error);
           }
-          //   } catch (error) {
-          //   }
         }
+        console.log('isIOS', isIOS);
         {
           isIOS && notification.finish(PushNotificationIOS.FetchResult.NoData);
         }
       },
-    //   onAction: notification => {
-    //     console.log('NOTIFICATION:', notification);
-    //   },
+      onAction: notification => {
+        console.log('NOTIFICATION:', notification);
+      },
       onRegistrationError: err => {},
       // IOS ONLY (optional): default: all - Permissions to register.
       permissions: {
