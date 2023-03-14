@@ -71,6 +71,7 @@ const CoachingSession = props => {
     innovativeIndexScore: 0,
   });
 
+  console.log({score});
   const [display, setDisplay] = useState(true);
   const [selectedId, setSelectedId] = useState(null);
 
@@ -94,11 +95,40 @@ const CoachingSession = props => {
     fetchProfileAsync();
   }, []);
 
+  let Growth =
+    profile?.session_score !== false && profile?.session_score !== null
+      ? profile?.session_score?.map(item => {
+          let grow = item?.session === sessions.ID ? item?.growth_index : null;
+          return grow;
+        })
+      : 0;
+
+  let Innovation =
+    profile?.session_score !== false && profile?.session_score !== null
+      ? profile?.session_score?.map(item => {
+          let inn =
+            item?.session === sessions.ID ? item?.innovative_index : null;
+
+          return inn;
+        })
+      : 0;
+
   useEffect(() => {
     let traitsLength = traits.length;
     let subtraitsLength = [];
     let growthIndexScore = 0;
     let innovativeIndexScore = 0;
+
+    if (count === 0) {
+      console.log('0');
+      growthIndexScore = 0;
+      innovativeIndexScore = Innovation * 3;
+    } else {
+      console.log('1');
+      growthIndexScore = Growth * 3;
+      innovativeIndexScore = 0;
+    }
+
     traits?.map((trait, index) => {
       subtraitsLength[index] = trait?.sub_traits.length;
     });
@@ -128,39 +158,20 @@ const CoachingSession = props => {
     );
     if (isNaN(num)) num = 0.0;
   }
-  let previousSession =
-    profile?.session_score !== false && profile?.session_score !== null
-      ? profile?.session_score?.map(item => item?.session)
-      : [0];
 
-  let Growth =
-    profile?.session_score !== false && profile?.session_score !== null
-      ? profile?.session_score?.map(item => {
-          let grow = item?.session === sessions.ID ? item?.growth_index : null;
-          return grow;
-        })
-      : 0;
-
-  let Innovation =
-    profile?.session_score !== false && profile?.session_score !== null
-      ? profile?.session_score?.map(item => {
-          let inn =
-            item?.session === sessions.ID ? item?.innovative_index : null;
-
-          return inn;
-        })
-      : 0;
-
-  const previousSessionID = route.params.previousSessionID;
+  //   let previousSession =
+  //     profile?.session_score !== false && profile?.session_score !== null
+  //       ? profile?.session_score?.map(item => item?.session)
+  //       : [0];
 
   let growth = 0.0;
   let innovation = 0.0;
-  if (previousSession?.indexOf(sessions.ID) > -1 === true) {
+  if (score?.growthIndexScore === NaN || score?.innovativeIndexScore === NaN) {
     growth = Growth;
     innovation = Innovation;
   } else {
-    growth = score.growthIndexScore.toFixed(1);
-    innovation = score.innovativeIndexScore.toFixed(1);
+    growth = score?.growthIndexScore?.toFixed(1);
+    innovation = score?.innovativeIndexScore?.toFixed(1);
     if (isNaN(growth)) growth = 0.0;
     if (isNaN(innovation)) innovation = 0.0;
   }
@@ -448,8 +459,8 @@ const CoachingSession = props => {
                                       fontSize: 13,
                                       letterSpacing: 1.5,
                                     }}>
-                                    {/* {index1 === 0 ? growth : innovation} */}
-                                    {growth}
+                                    {count === 0 ? growth : innovation}
+                                    {/* {innovation} */}
                                   </Text>
                                 </View>
                               </Pressable>
@@ -463,8 +474,7 @@ const CoachingSession = props => {
                                 <Text style={{fontSize: 12, width: '80%'}}>
                                   {subTrait?.title}
                                 </Text>
-                                {(checkMark(index2) ||
-                                  sessions?.completed_status) && (
+                                {checkMark(count, index2) && (
                                   <Ionicons
                                     name={'checkmark-outline'}
                                     size={20}
@@ -518,7 +528,8 @@ const CoachingSession = props => {
                 score={score}
                 sessions={sessions}
                 traits={traits}
-				Traits={Traits}
+                count={count}
+                Traits={Traits}
                 traitsLoading={traitsLoading}
                 traitsError={traitsError}
                 fetchAllTraitBySession={fetchAllTraitBySession}

@@ -38,7 +38,7 @@ const SelfAssessment = props => {
     selectedId,
     setSelectedId,
     sessions,
-
+    count,
     scrollRef,
   } = props;
 
@@ -52,7 +52,7 @@ const SelfAssessment = props => {
   const [sub, setSub] = useState('');
 
   const [index, setIndex] = useState({
-    traitIndex: 0,
+    traitIndex: count,
     subTraitIndex: 0,
   });
   const [traitLength, setTraitLength] = useState(0);
@@ -183,8 +183,6 @@ const SelfAssessment = props => {
       setIndex({...index, subTraitIndex: index.subTraitIndex - 1});
     }
   };
-
-  console.log('count', index?.subTraitIndex);
 
   return (
     <View>
