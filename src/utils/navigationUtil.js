@@ -6,12 +6,14 @@
  */
 
 import * as React from 'react';
-import {DrawerActions, StackActions} from '@react-navigation/native';
+import {useNavigation, StackActions} from '@react-navigation/native';
 
 export const navigationRef = React.createRef();
 
 export function navigate(name, params) {
-  navigationRef.current?.navigate(name, params);
+  const navigation = useNavigation();
+  // Perform navigation if the react navigation is ready to handle actions
+  navigation.navigate(name, params);
 }
 
 export function push(...args) {

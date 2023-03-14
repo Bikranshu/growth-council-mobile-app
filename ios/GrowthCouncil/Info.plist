@@ -20,6 +20,19 @@
 	<string>$(MARKETING_VERSION)</string>
 	<key>CFBundleSignature</key>
 	<string>????</string>
+	<key>CFBundleURLTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>CFBundleURLName</key>
+			<string>growthcouncil</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>growthcouncil</string>
+			</array>
+		</dict>
+	</array>
 	<key>CFBundleVersion</key>
 	<string>$(CURRENT_PROJECT_VERSION)</string>
 	<key>ITSAppUsesNonExemptEncryption</key>
@@ -100,6 +113,7 @@
 	<false/>
 	<key>NSCameraUsageDescription</key>
 	<string>Camera access is needed for scanning QR Code.</string>
+	<!-- Include this only if you are planning to use the camera roll -->
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>Needed for accessing Qrcode images</string>
 </dict>

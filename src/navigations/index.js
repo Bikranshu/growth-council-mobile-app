@@ -11,6 +11,7 @@ import {useAuthentication} from '../context/auth';
 import {getAsyncStorage} from '../utils/storageUtil';
 import {navigationRef} from '../utils/navigationUtil';
 import analytics from '@react-native-firebase/analytics';
+import {deepLinkingConfig, deepLinkingPrefix} from './deepLinkingConfig';
 
 const MainNavigation = () => {
 	const {loggedIn} = useAuthentication();
@@ -18,8 +19,14 @@ const MainNavigation = () => {
 	const navigationRef = useRef();
 	const routeNameRef = useRef();
 
+	const deepLinking = {
+		prefixes: deepLinkingPrefix,
+		config: deepLinkingConfig,
+	};
+
 	return (
 		<NavigationContainer
+			linking={deepLinking}
 			ref={navigationRef}
 			onReady={() => {
 				routeNameRef.current = navigationRef.current.getCurrentRoute().name;
