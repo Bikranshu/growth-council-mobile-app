@@ -159,14 +159,15 @@ const CoachingSession = props => {
     if (isNaN(num)) num = 0.0;
   }
 
-  //   let previousSession =
-  //     profile?.session_score !== false && profile?.session_score !== null
-  //       ? profile?.session_score?.map(item => item?.session)
-  //       : [0];
+  let previousSession =
+    profile?.session_score !== false && profile?.session_score !== null
+      ? profile?.session_score?.map(item => item?.session)
+      : [0];
+
 
   let growth = 0.0;
   let innovation = 0.0;
-  if (score?.growthIndexScore === NaN || score?.innovativeIndexScore === NaN) {
+  if (previousSession?.indexOf(sessions.ID) > -1 === true) {
     growth = Growth;
     innovation = Innovation;
   } else {
