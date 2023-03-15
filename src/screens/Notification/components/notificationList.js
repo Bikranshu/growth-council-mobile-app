@@ -5,22 +5,20 @@ import {
   View,
   ScrollView,
   SafeAreaView,
-  ImageBackground,
   Image,
   TouchableOpacity,
-  StatusBar,
   Dimensions,
   RefreshControl,
   FlatList,
-  Modal,
 } from 'react-native';
 
 import moment from 'moment-timezone';
 import {Badge} from 'react-native-paper';
-import {Picker} from '@react-native-picker/picker';
 import {useDispatch, useSelector} from 'react-redux';
 import {useIsFocused} from '@react-navigation/native';
-import Ionicons from 'react-native-vector-icons/Ionicons';
+import ButtonToggleGroup from 'react-native-button-toggle-group';
+
+import {COMMUNITY_COLOR} from '../../../theme/colors';
 
 const NotificationList = props => {
   const {
@@ -77,11 +75,6 @@ const NotificationList = props => {
     const response = await notificationStatusUpdate({
       notification_id: notificationId,
     });
-  };
-
-  //function to set the dropdown
-  const handleFilterChange = value => {
-    setFilter(value);
   };
 
   // function to sort notification data according to picker value
@@ -143,10 +136,10 @@ const NotificationList = props => {
             });
           } else if (item?.notification_type === 'chat_notification') {
             navigation.navigate('Chat', {
-              friendID: item?.receiver_user_id,
-              friendName: item?.receiver_user_email,
-              friendAvatar: item?.avatar,
-              userID: item?.sender_user_id,
+              friendID: item?.sender_user_id,
+              friendName: item?.receiver_fullname,
+              friendAvatar: item?.receiver_profile_image,
+              userID: item?.receiver_user_id,
               userName: profile?.user_login,
               userAvatar: profile?.profile_image,
             });
@@ -230,87 +223,59 @@ const NotificationList = props => {
   return (
     <>
       <SafeAreaView style={{flex: 1}}>
-        <ScrollView
-          style={{marginTop: 5, padding: 5, flex: 1, marginBottom: 10}}
-          showsVerticalScrollIndicator={false}
-          refreshControl={
-            <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-          }>
-          <TouchableOpacity
-            onPress={() => setPickerVisible(true)}
-            style={[styles.picker, styles.shadowProp]}>
-            <Text style={{fontSize: 14, color: 'black'}}>{filter}</Text>
-
-            <Ionicons
-              name="chevron-down-outline"
-              size={20}
-              color="black"
-              style={{position: 'absolute', right: 15, top: 12}}
-            />
-          </TouchableOpacity>
-
-          <Text
-            style={{
-              fontSize: 18,
-              fontWeight: '600',
-              margin: 5,
-              marginTop: 20,
-              marginVertical: 10,
-              color: '#222B45',
-            }}>
-            Recent Notification
-          </Text>
-          <FlatList
-            data={filteredNotifications}
-            renderItem={_renderItem}
-            inverted={true}
-          />
-        </ScrollView>
-
-        <Modal transparent visible={pickerVisible}>
-          <View
-            style={{
-              flex: 1,
-              backgroundColor: 'rgba(56,56,56,0.3)',
-              justifyContent: 'flex-end',
-            }}>
-            <View
-              style={{
-                height: 300,
-                backgroundColor: 'white',
-                borderTopLeftRadius: 20,
-                borderTopRightRadius: 20,
-                padding: 20,
-              }}>
-              <TouchableOpacity
-                activeOpacity={0.7}
-                onPress={() => setPickerVisible(false)}
-                style={{alignItems: 'flex-end'}}>
-                <Text
-                  style={{
-                    padding: 15,
-                    fontSize: 18,
-                  }}>
-                  Done
-                </Text>
-              </TouchableOpacity>
-
-              <View>
-                <Picker
-                  selectedValue={filter}
-                  onValueChange={handleFilterChange}
-                  style={{
-                    flex: 1,
-                    justifyContent: 'flex-end',
-                  }}>
-                  <Picker.Item label="All" value="All" />
-                  <Picker.Item label="Read" value="Read" />
-                  <Picker.Item label="Unread" value="Unread" />
-                </Picker>
-              </View>
+        <View
+          style={{
+            backgroundColor: '#FFFFFF',
+            flex: 1,
+          }}>
+          <ScrollView
+            style={{marginTop: 5, padding: 5, flex: 1}}
+            showsVerticalScrollIndicator={false}
+            refreshControl={
+              <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+            }>
+            <View style={styles.buttonWrapper}>
+              <ButtonToggleGroup
+                highlightBackgroundColor={'white'}
+                highlightTextColor={COMMUNITY_COLOR}
+                inactiveBackgroundColor={'transparent'}
+                inactiveTextColor={'grey'}
+                values={['All', 'Read', 'Unread']}
+                value={filter}
+                onSelect={val => setFilter(val)}
+                style={{
+                  paddingLeft: 5,
+                  paddingRight: 5,
+                  height: 40,
+                }}
+                textStyle={{
+                  paddingHorizontal: 0,
+                  fontSize: 14,
+                  fontWeight: '500',
+                  width: '100%',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  textAlign: 'center',
+                }}
+              />
             </View>
-          </View>
-        </Modal>
+            <Text
+              style={{
+                fontSize: 18,
+                fontWeight: '600',
+                margin: 5,
+                marginTop: 10,
+                marginVertical: 10,
+                color: '#222B45',
+              }}>
+              Recent Notification
+            </Text>
+            <FlatList
+              data={filteredNotifications}
+              renderItem={_renderItem}
+            />
+          </ScrollView>
+        </View>
       </SafeAreaView>
     </>
   );
@@ -339,6 +304,16 @@ const styles = StyleSheet.create({
     borderColor: 'gray',
     borderRadius: 10,
     justifyContent: 'center',
+  },
+  buttonWrapper: {
+    width: '95%',
+    height: 50,
+    backgroundColor: '#f2f2f2',
+    borderRadius: 10,
+    margin: 10,
+    marginLeft: 10,
+    justifyContent: 'center',
+    alignContent: 'center',
   },
   shadowProp: {
     shadowColor: '#000',

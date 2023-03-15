@@ -45,19 +45,21 @@ const HeaderRight = props => {
         style={{marginRight: 8}}
         onPress={() => navigation.navigate('NotificationList')}>
         <Ionicons name="notifications" color="white" size={28} />
-        <Badge
-          visible={true}
-          size={18}
-          style={{
-            top: -5,
-            right: -4,
-            position: 'absolute',
-            // backgroundColor: 'white',
-            // color: 'black',
-            borderWidth: 0.8,
-          }}>
-          {unreadNotifications}
-        </Badge>
+        {unreadNotifications !== 0 && (
+          <Badge
+            visible={true}
+            size={18}
+            style={{
+              top: -5,
+              right: -4,
+              position: 'absolute',
+              // backgroundColor: 'white',
+              // color: 'black',
+              borderWidth: 0.8,
+            }}>
+            {unreadNotifications}
+          </Badge>
+        )}
       </TouchableOpacity>
       <TouchableOpacity
         style={{marginRight: 8}}

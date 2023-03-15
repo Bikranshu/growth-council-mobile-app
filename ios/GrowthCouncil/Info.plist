@@ -98,5 +98,9 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
+	<key>NSCameraUsageDescription</key>
+	<string>Camera access is needed for scanning QR Code.</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>Needed for accessing Qrcode images</string>
 </dict>
 </plist>

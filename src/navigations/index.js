@@ -12,35 +12,35 @@ import {getAsyncStorage} from '../utils/storageUtil';
 import {navigationRef} from '../utils/navigationUtil';
 import analytics from '@react-native-firebase/analytics';
 
+// export const navigationRef = useRef();
+
 const MainNavigation = () => {
-	const {loggedIn} = useAuthentication();
-	// console.log('loggedin bool', loggedIn);
-	const navigationRef = useRef();
-	const routeNameRef = useRef();
+  const {loggedIn} = useAuthentication();
+  // console.log('loggedin bool', loggedIn);
+  const routeNameRef = useRef();
 
-	return (
-		<NavigationContainer
-			ref={navigationRef}
-			onReady={() => {
-				routeNameRef.current = navigationRef.current.getCurrentRoute().name;
-			}}
-			onStateChange={async () => {
-				const previousRouteName = routeNameRef.current;
-				const currentRouteName = navigationRef.current.getCurrentRoute().name;
+  return (
+    <NavigationContainer
+      ref={navigationRef}
+      onReady={() => {
+        routeNameRef.current = navigationRef.current.getCurrentRoute().name;
+      }}
+      onStateChange={async () => {
+        const previousRouteName = routeNameRef.current;
+        const currentRouteName = navigationRef.current.getCurrentRoute().name;
 
-				if (previousRouteName !== currentRouteName) {
-					await analytics().logScreenView({
-						screen_name: currentRouteName,
-						screen_class: currentRouteName,
-					});
-				}
-				routeNameRef.current = currentRouteName;
-			}}
-			independent={true}
-		>
-			{loggedIn ? <AppStack /> : <AuthStack />}
-		</NavigationContainer>
-	);
+        if (previousRouteName !== currentRouteName) {
+          await analytics().logScreenView({
+            screen_name: currentRouteName,
+            screen_class: currentRouteName,
+          });
+        }
+        routeNameRef.current = currentRouteName;
+      }}
+      independent={true}>
+      {loggedIn ? <AppStack /> : <AuthStack />}
+    </NavigationContainer>
+  );
 };
 
 export default MainNavigation;

@@ -464,7 +464,6 @@ const Dashboard = props => {
     }, [isFocused]),
   );
 
-
   const date = new Date();
   let localTime = date.getTime();
   let localOffset = date.getTimezoneOffset() * 60000;

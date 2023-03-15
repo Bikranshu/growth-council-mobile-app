@@ -11,6 +11,12 @@
 		"bundle": "react-native bundle --platform android --dev false --entry-file index.js --bundle-output android/app/src/main/assets/index.android.bundle --assets-dest android/app/src/main/res",
 		"build:ios": "react-native bundle --entry-file='index.js' --bundle-output='./ios/GrowthCouncil/main.jsbundle' --dev=false --platform='ios'"
 	},
+	"reactNativePermissionsIOS": [
+		"Camera",
+		"Notifications",
+		"PhotoLibrary",
+		"PhotoLibraryAddOnly"
+	],
 	"dependencies": {
 		"@emotion/react": "^11.7.1",
 		"@emotion/styled": "^11.6.0",
@@ -78,6 +84,7 @@
 		"react-native-modal": "^13.0.0",
 		"react-native-paper": "^4.11.2",
 		"react-native-pdf": "^6.4.0",
+		"react-native-permissions": "^3.7.3",
 		"react-native-phone-number-input": "^2.1.0",
 		"react-native-picker-select": "^8.0.4",
 		"react-native-push-notification": "^8.1.1",

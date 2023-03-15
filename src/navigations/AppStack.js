@@ -54,6 +54,7 @@ import SessionCompleted from '../screens/coachingSession/component/sessionComple
 import {GROWTH_COMMUNITY_ID} from '../constants';
 
 const {Navigator, Screen} = createStackNavigator();
+
 const AppStack = navigation => (
   <Navigator>
     {/*    */}

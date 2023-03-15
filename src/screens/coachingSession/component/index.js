@@ -76,6 +76,7 @@ const CoachingSession = props => {
   const [selectedId, setSelectedId] = useState(null);
 
   const checkMark = (traitIndex, subTraitIndex) => {
+
     if (traitIndex === 0) {
       return answers.questions.growthIndex[subTraitIndex];
     } else {
