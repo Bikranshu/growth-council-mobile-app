@@ -164,7 +164,6 @@ const CoachingSession = props => {
       ? profile?.session_score?.map(item => item?.session)
       : [0];
 
-
   let growth = 0.0;
   let innovation = 0.0;
   if (previousSession?.indexOf(sessions.ID) > -1 === true) {
@@ -176,7 +175,7 @@ const CoachingSession = props => {
     if (isNaN(growth)) growth = 0.0;
     if (isNaN(innovation)) innovation = 0.0;
   }
-
+  console.log(count === 0 ? growth > 0 : innovation > 0);
   const _renderItem = ({item, index}) => {
     // switch (item?.score_range) {
     //   case '1 - 2.5':
@@ -475,7 +474,9 @@ const CoachingSession = props => {
                                 <Text style={{fontSize: 12, width: '80%'}}>
                                   {subTrait?.title}
                                 </Text>
-                                {checkMark(count, index2) && (
+                                {(checkMark(count, index2) || count === 0
+                                  ? growth > 0
+                                  : innovation > 0) && (
                                   <Ionicons
                                     name={'checkmark-outline'}
                                     size={20}
