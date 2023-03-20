@@ -17,14 +17,27 @@ const PushNotificationsConfigs = {
 
         // const clicked = notification.userInteraction && notification.foreground;
 
-        console.log({notification});
-        if (
-          notification?.foreground === true &&
-          notification.userInteraction === true
-        ) {
+        if (notification.userInteraction === true) {
+          console.log({notification});
           try {
             // handle the navigation here
             const data = notification?.data;
+            let backgroundImage = '';
+            let pillarname = '';
+            let GrowthCoaching = 'Growth Coaching';
+            let Executive = 'Executive Coaching Clinic';
+            if (
+              data?.event_categories?.indexOf(GrowthCoaching) > -1 !== false ||
+              data?.event_categories?.indexOf(Executive) > -1 !== false ||
+              data?.event_categories === '[]'
+            ) {
+              backgroundImage = require('./assets/img/Rectangle.png');
+              pillarname = 'Growth Coaching';
+            } else {
+              backgroundImage = require('./assets/img/Rectangle2.png');
+              pillarname = 'Growth Community';
+            }
+
             if (data) {
               if (data?.type === 'chat') {
                 navigateToScreen('Chat', {
@@ -38,12 +51,12 @@ const PushNotificationsConfigs = {
               } else if (data?.type === 'event') {
                 navigateToScreen('EventDetail', {
                   id: data?.post_id,
-                  title: 'Growth Coaching',
-                  image: require('./assets/img/Rectangle.png'),
+				  title: pillarname,
+				  image: backgroundImage,
                 });
-              } else if (data?.notification_type === 'content') {
+              } else if (data?.type === 'content') {
                 navigateToScreen('ContentLibraryDetail', {
-                  id: data?.content_id,
+                  id: data?.post_id,
                 });
               } else {
                 navigateToScreen('People');

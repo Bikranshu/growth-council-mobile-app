@@ -60,7 +60,7 @@ const App = () => {
     name: 'Dashboard',
     params: {},
   });
-
+  const [pillardata, setPillarData] = useState();
   const {message, setMessage, signOut} = useAuthentication();
 
   useEffect(() => {
@@ -105,6 +105,21 @@ const App = () => {
   };
 
   const getNotifications = async () => {
+    let backgroundImage = '';
+    let pillarname = '';
+    let GrowthCoaching = 'Growth Coaching';
+    let Executive = 'Executive Coaching Clinic';
+    if (
+      pillardata?.event_categories?.indexOf(GrowthCoaching) > -1 !== true ||
+      pillardata?.event_categories?.indexOf(Executive) > -1 !== true ||
+      pillardata?.event_categories === '[]'
+    ) {
+      backgroundImage = require('./assets/img/Rectangle.png');
+      pillarname = 'Growth Coaching';
+    } else {
+      backgroundImage = require('./assets/img/Rectangle2.png');
+      pillarname = 'Growth Community';
+    }
     // Assume a message-notification contains a "type" property in the data payload of the screen to open
     const unSubscribe = await messaging().onNotificationOpenedApp(
       remoteMessage => {
@@ -112,15 +127,21 @@ const App = () => {
           'Notification caused app to open from background state:',
           remoteMessage.notification,
         );
+
+        //Navigation when we have data in remoteMessage
         if (remoteMessage?.data?.type === 'event') {
           setInitialRoute({
             name: 'EventDetail',
-            params: {id: remoteMessage?.data?.post_id},
+            params: {
+              id: remoteMessage?.data?.post_id,
+              title: pillarname,
+              image: backgroundImage,
+            },
           });
-        } else if (remoteMessage?.data?.notification_type === 'content') {
+        } else if (remoteMessage?.data?.type === 'content') {
           setInitialRoute({
             name: 'ContentLibraryDetail',
-            params: {id: remoteMessage?.data?.content_id},
+            params: {id: remoteMessage?.data?.post_id},
           });
         }
       },
@@ -131,7 +152,9 @@ const App = () => {
       .getInitialNotification()
       .then(remoteMessage => {
         console.log('remoteMessage', remoteMessage);
+        setPillarData(remoteMessage?.data);
 
+        //Navigation when we have data in remoteMessage
         if (remoteMessage) {
           console.log(
             'Notification caused app to open from quit state:',
@@ -140,12 +163,16 @@ const App = () => {
           if (remoteMessage?.data?.type === 'event') {
             setInitialRoute({
               name: 'EventDetail',
-              params: {id: remoteMessage?.data?.post_id},
+              params: {
+                id: remoteMessage?.data?.post_id,
+                title: pillarname,
+                image: backgroundImage,
+              },
             });
-          } else if (remoteMessage?.data?.notification_type === 'content') {
+          } else if (remoteMessage?.data?.type === 'content') {
             setInitialRoute({
               name: 'ContentLibraryDetail',
-              params: {id: remoteMessage?.data?.content_id},
+              params: {id: remoteMessage?.data?.post_id},
             });
             //   } else if (remoteMessage?.data?.type === 'chat') {
             //     setInitialRoute('Chat', {
