@@ -2,6 +2,8 @@
 // export const HOME_URL = 'https://www.gilcouncil.com';
 export const HOME_URL = 'https://staging.gilcouncil.com';
 export const API_URL = 'https://staging.gilcouncil.com/wp-json';
+// export const HOME_URL = 'https://staging.frostdigi.ai';
+// export const API_URL = 'https://staging.frostdigi.ai/wp-json';
 
 export const JWT_TOKEN = 'growth-council-token';
 export const USER_NAME = 'user-name';
@@ -30,6 +32,9 @@ export const GROWTH_CONTENT_FALLBACK_IMAGE = '../img/best-practice-bg.png';
 export const GROWTH_COMMUNITY_ID = 169;
 export const GROWTH_CONTENT_ID = 170;
 export const GROWTH_COACHING_ID = 171;
+// export const GROWTH_COMMUNITY_ID = 194;
+// export const GROWTH_CONTENT_ID = 171;
+// export const GROWTH_COACHING_ID = 172;
 
 //ScreenHeight Value
 export const SCREENHEIGHTVALUE = 50;

@@ -14,10 +14,11 @@ import analytics from '@react-native-firebase/analytics';
 
 // export const navigationRef = useRef();
 
-const MainNavigation = () => {
+const MainNavigation = ({initialRouteName, setInitialRoute}) => {
   const {loggedIn} = useAuthentication();
   // console.log('loggedin bool', loggedIn);
   const routeNameRef = useRef();
+
 
   return (
     <NavigationContainer
@@ -38,7 +39,14 @@ const MainNavigation = () => {
         routeNameRef.current = currentRouteName;
       }}
       independent={true}>
-      {loggedIn ? <AppStack /> : <AuthStack />}
+      {loggedIn ? (
+        <AppStack
+          initialRouteName={initialRouteName}
+          setInitialRoute={setInitialRoute}
+        />
+      ) : (
+        <AuthStack />
+      )}
     </NavigationContainer>
   );
 };

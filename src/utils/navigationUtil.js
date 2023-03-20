@@ -10,14 +10,29 @@ import {DrawerActions, StackActions} from '@react-navigation/native';
 
 export const navigationRef = React.createRef();
 
-export function navigate(name, params) {
-  navigationRef.current?.navigate(name, params);
-}
-export const navigateToScreen = screenName => {
+// export function navigate(name, params) {
+//   navigationRef.current?.navigate(name, params);
+// }
+
+export const navigateToScreen = (screenName, params) => {
   if (navigationRef.current) {
-    navigationRef.current.navigate(screenName);
+    navigationRef.current.navigate(screenName, params);
   }
 };
-export function push(...args) {
-  navigationRef.current?.dispatch(StackActions.push(...args));
-}
+// export function push(...args) {
+//   navigationRef.current?.dispatch(StackActions.push(...args));
+// }
+
+// export const navigateData = notificationData => {
+//   const navigation = notificationData;
+
+//   if (
+//     navigation?.foreground === false &&
+//     notification.userInteraction === true
+//   ) {
+//     // console.log('Reshika');
+//   }
+
+// };
+
+// export const notification = navigateData();

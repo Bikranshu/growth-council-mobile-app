@@ -18,7 +18,6 @@ import SplashScreen from './screens/splash';
 import {Platform} from 'react-native';
 import Modal from 'react-native-modal';
 import {useAuthentication} from './context/auth';
-import {navigateToScreen} from './utils/navigationUtil';
 
 // import {
 // 	setAsyncStorage,
@@ -52,14 +51,23 @@ const App = () => {
   let init = async () => {
     await RNBootSplash.hide();
   };
-
+  //   const navigation = useNavigation();
   const netInfo = useNetInfo();
+
   const [loading, setLoading] = useState(true);
-  const [initialRoute, setInitialRoute] = useState('Dashboard');
+
+  const [initialRoute, setInitialRoute] = useState({
+    name: 'Dashboard',
+    params: {},
+  });
 
   const {message, setMessage, signOut} = useAuthentication();
 
   useEffect(() => {
+    setInitialRoute({
+      name: 'Dashboard',
+      params: {},
+    });
     getNotifications();
 
     (async () => {
@@ -86,9 +94,9 @@ const App = () => {
     });
     return unsubscribe;
   }, []);
+
   useEffect(() => {
     getToken();
-    // isTokenExpired();
   }, []);
 
   const getToken = async () => {
@@ -96,40 +104,65 @@ const App = () => {
     console.log(token);
   };
 
-  //   const isTokenExpired = async () => {
-  //     const token = await getAsyncStorage(JWT_TOKEN);
-  //     const decoded = jwt_decode(token);
-  //     if (decoded.exp < Date.now() / 1000) {
-  //       // Checking if token is expired.
-  //       //   return true;
-  //       await signOut();
-  //     }
-  //   };
-
   const getNotifications = async () => {
     // Assume a message-notification contains a "type" property in the data payload of the screen to open
-    await messaging().onNotificationOpenedApp(remoteMessage => {
-      console.log(
-        'Notification caused app to open from background state:',
-        remoteMessage.notification,
-      );
-      navigateToScreen('About');
-    });
+    const unSubscribe = await messaging().onNotificationOpenedApp(
+      remoteMessage => {
+        console.log(
+          'Notification caused app to open from background state:',
+          remoteMessage.notification,
+        );
+        if (remoteMessage?.data?.type === 'event') {
+          setInitialRoute({
+            name: 'EventDetail',
+            params: {id: remoteMessage?.data?.post_id},
+          });
+        } else if (remoteMessage?.data?.notification_type === 'content') {
+          setInitialRoute({
+            name: 'ContentLibraryDetail',
+            params: {id: remoteMessage?.data?.content_id},
+          });
+        }
+      },
+    );
 
     // Check whether an initial notification is available
     await messaging()
       .getInitialNotification()
       .then(remoteMessage => {
+        console.log('remoteMessage', remoteMessage);
+
         if (remoteMessage) {
           console.log(
             'Notification caused app to open from quit state:',
             remoteMessage.notification,
           );
-          setInitialRoute(remoteMessage.data.type); // e.g. "chat"
-          navigateToScreen('About');
+          if (remoteMessage?.data?.type === 'event') {
+            setInitialRoute({
+              name: 'EventDetail',
+              params: {id: remoteMessage?.data?.post_id},
+            });
+          } else if (remoteMessage?.data?.notification_type === 'content') {
+            setInitialRoute({
+              name: 'ContentLibraryDetail',
+              params: {id: remoteMessage?.data?.content_id},
+            });
+            //   } else if (remoteMessage?.data?.type === 'chat') {
+            //     setInitialRoute('Chat', {
+            //       friendID: item?.sender_user_id,
+            //       friendName: item?.receiver_fullname,
+            //       friendAvatar: item?.receiver_profile_image,
+            //       userID: item?.receiver_user_id,
+            //       userName: profile?.user_login,
+            //       userAvatar: profile?.profile_image,
+            //     });
+            //   } else {
+            //     setInitialRoute('People');
+          }
         }
         setLoading(false);
       });
+    return unSubscribe;
   };
 
   const _createChannel = () => {
@@ -163,7 +196,10 @@ const App = () => {
             <NativeBaseProvider>
               <PaperProvider>
                 <AuthProvider>
-                  <MainNavigation />
+                  <MainNavigation
+                    initialRouteName={initialRoute}
+                    setInitialRoute={setInitialRoute}
+                  />
                 </AuthProvider>
               </PaperProvider>
             </NativeBaseProvider>

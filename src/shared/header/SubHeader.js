@@ -14,17 +14,23 @@ import IonIcon from 'react-native-vector-icons/Ionicons';
 import HeaderRight from './HeaderRight';
 import {navigationRef, toggleDrawer} from '../../utils/navigationUtil';
 import {fetchProfileByID} from '../../screens/account/slice/profileSlice';
+import {useNavigation} from '@react-navigation/native';
 
 const SubHeader = props => {
   const dispatch = useDispatch();
   const {profile, profileLoading, profileError} = useSelector(
     state => state.profile,
   );
-  const {navigation, route} = props;
+  const {route, setInitialRoute} = props;
 
   const fetchProfileByIdentifier = () => {
     dispatch(fetchProfileByID());
   };
+
+  const navigation = useNavigation();
+
+  //   const navigationRef = React.createRef();
+
 
   return (
     <ImageBackground source={props.image} style={{width: '100%'}}>
@@ -48,10 +54,14 @@ const SubHeader = props => {
               <TouchableOpacity onPress={() => navigation.navigate('QR Code')}>
                 <IonIcon name="arrow-back-sharp" color={'white'} size={30} />
               </TouchableOpacity>
+            ) : props?.params !== undefined && props?.id === undefined ? (
+              <TouchableOpacity onPress={() => navigation.navigate('Drawer')}>
+                <IonIcon name="arrow-back-sharp" color={'white'} size={30} />
+              </TouchableOpacity>
             ) : (
               <TouchableOpacity
                 onPress={() => {
-                  if (props?.id == undefined) {
+                  if (props?.id == undefined && props.params === undefined) {
                     navigation.goBack();
                   } else if (props.subtitle == 'Growth Community') {
                     navigation.navigate(props.subtitle, {
