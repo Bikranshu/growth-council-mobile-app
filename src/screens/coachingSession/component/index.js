@@ -75,7 +75,6 @@ const CoachingSession = props => {
   const [selectedId, setSelectedId] = useState(null);
 
   const checkMark = (traitIndex, subTraitIndex) => {
-
     if (traitIndex === 0) {
       return answers.questions.growthIndex[subTraitIndex];
     } else {
@@ -268,6 +267,7 @@ const CoachingSession = props => {
                 top: 40,
                 zIndex: 10,
               }}>
+              {/* TODO */}
               {/* <View style={styles.buttonWrapper}>
                 <ButtonToggleGroup
                   highlightBackgroundColor={'white'}
@@ -313,6 +313,7 @@ const CoachingSession = props => {
                   }}
                 />
               </View> */}
+              {/* TODO */}
               {/* <TouchableOpacity onPress={() => setModalVisible(!modalVisible)}>
                 <Ionicons
                   name={modalVisible ? 'close' : 'menu'}
@@ -502,6 +503,7 @@ const CoachingSession = props => {
             </View>
 
             <View style={{marginTop: 32}}>
+              {/* TODO */}
               {/* {value === 'About' && (
                 <SessionAbout
                   {...props}
