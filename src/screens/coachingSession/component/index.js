@@ -71,7 +71,6 @@ const CoachingSession = props => {
     innovativeIndexScore: 0,
   });
 
-  console.log({score});
   const [display, setDisplay] = useState(true);
   const [selectedId, setSelectedId] = useState(null);
 
@@ -121,11 +120,9 @@ const CoachingSession = props => {
     let innovativeIndexScore = 0;
 
     if (count === 0) {
-      console.log('0');
       growthIndexScore = 0;
       innovativeIndexScore = Innovation * 3;
     } else {
-      console.log('1');
       growthIndexScore = Growth * 3;
       innovativeIndexScore = 0;
     }
@@ -176,7 +173,7 @@ const CoachingSession = props => {
     if (isNaN(growth)) growth = 0.0;
     if (isNaN(innovation)) innovation = 0.0;
   }
-  console.log(count === 0 ? growth > 0 : innovation > 0);
+  console.log(Innovation);
   const _renderItem = ({item, index}) => {
     // switch (item?.score_range) {
     //   case '1 - 2.5':
@@ -316,13 +313,13 @@ const CoachingSession = props => {
                   }}
                 />
               </View> */}
-              <TouchableOpacity onPress={() => setModalVisible(!modalVisible)}>
+              {/* <TouchableOpacity onPress={() => setModalVisible(!modalVisible)}>
                 <Ionicons
                   name={modalVisible ? 'close' : 'menu'}
                   size={35}
                   color={'black'}
                 />
-              </TouchableOpacity>
+              </TouchableOpacity> */}
 
               <View style={styles.centeredView}>
                 <Modal
@@ -460,8 +457,9 @@ const CoachingSession = props => {
                                       fontSize: 13,
                                       letterSpacing: 1.5,
                                     }}>
-                                    {count === 0 ? growth : innovation}
+                                    {/* {count === 0 ? growth : innovation} */}
                                     {/* {innovation} */}
+                                    {Innovation}
                                   </Text>
                                 </View>
                               </Pressable>

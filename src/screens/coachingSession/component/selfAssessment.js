@@ -1,7 +1,7 @@
 import React, {useState, useEffect, useRef} from 'react';
 import {StyleSheet, Text, View, Dimensions, StatusBar} from 'react-native';
 
-import {Button} from 'native-base';
+import {Button, useToast} from 'native-base';
 import {useDispatch, useSelector} from 'react-redux';
 import {BubblesLoader} from 'react-native-indicator';
 import ButtonToggleGroup from 'react-native-button-toggle-group';
@@ -43,7 +43,7 @@ const SelfAssessment = props => {
   } = props;
 
   const dispatch = useDispatch();
-
+  const toast = useToast();
   const {traitsAnswer, traitsAnswerLoading, traitsAnswerError} = useSelector(
     state => state.traitsAnswer,
   );
@@ -126,7 +126,7 @@ const SelfAssessment = props => {
             navigation.navigate('SessionCompleted');
             // if (sessions.title === 'Session 10') {
             //   ToastMessage.show('You score has submitted.');
-
+            console.log('a');
             // }
           } else {
             toast.closeAll();
@@ -135,6 +135,7 @@ const SelfAssessment = props => {
         })
         .catch(error => {
           toast.closeAll();
+          console.log('a1');
           ToastMessage.show('Something is wrong, please contact admin.');
         });
     } else if (index?.subTraitIndex === subTraitLength - 1) {
@@ -146,10 +147,13 @@ const SelfAssessment = props => {
       })
         .then(response => {
           toast.closeAll();
+          console.log('b');
+          navigation.navigate('SessionCompleted');
           ToastMessage.show(response?.payload?.response);
         })
         .catch(error => {
           toast.closeAll();
+          console.log('b1');
           ToastMessage.show('Something is wrong, please contact admin.');
         });
     } else {
@@ -160,10 +164,13 @@ const SelfAssessment = props => {
       })
         .then(response => {
           toast.closeAll();
+          console.log('c');
+          //   navigation.navigate('SessionCompleted');
           ToastMessage.show(response?.payload?.response);
         })
         .catch(error => {
           toast.closeAll();
+          console.log('c1');
           ToastMessage.show('Something is wrong, please contact admin.');
         });
     }

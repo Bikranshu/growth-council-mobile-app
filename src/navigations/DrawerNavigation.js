@@ -35,7 +35,8 @@ import QRScanner from '../screens/QRcode/qrcode';
 import SettingScreen from '../screens/setting/index';
 import SubHeader from '../shared/header/SubHeader';
 import ContentLibraryScreen from '../screens/contentLibrary/contentLibrary';
-import EventForumScreen from '../screens/discussionForum/eventForum';
+import SessionCompleted from '../screens/coachingSession/component/sessionCompleted';
+
 import GPDScreen from '../screens/GPD';
 
 import {fetchProfileByID} from '../screens/account/slice/profileSlice';

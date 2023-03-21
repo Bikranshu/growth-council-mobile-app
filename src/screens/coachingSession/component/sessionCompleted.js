@@ -1,11 +1,27 @@
 import React, {useState, useEffect} from 'react';
-import {StyleSheet, Text, View, TouchableOpacity, Image} from 'react-native';
+import {
+  StyleSheet,
+  Text,
+  View,
+  TouchableOpacity,
+  Image,
+  ScrollView,
+} from 'react-native';
 
-import {ScrollView} from 'native-base';
-import {RadioButton} from 'react-native-paper';
+import {useDispatch, useSelector} from 'react-redux';
+import {DataTable} from 'react-native-paper';
+import {fetchProfileByID} from '../../account/slice/profileSlice';
+import Loading from '../../../shared/loading';
 
 const SessionCompleted = props => {
   const {navigation} = props;
+  const dispatch = useDispatch();
+  const {profile, profileLoading, profileError} = useSelector(
+    state => state.profile,
+  );
+  useEffect(() => {
+    dispatch(fetchProfileByID());
+  }, []);
   return (
     <View
       style={{justifyContent: 'center', alignItems: 'center', paddingTop: 50}}>
@@ -42,9 +58,26 @@ const SessionCompleted = props => {
 
           marginTop: 30,
         }}>
-        <Text style={{fontSize: 20, color: '#003061', fontWeight: '600'}}>
+        <Text
+          style={{
+            fontSize: 20,
+            color: '#003061',
+            fontWeight: '600',
+            justifyContent: 'center',
+          }}>
           {/* ALL SESSIONS */}
           You have successfully completed
+        </Text>
+        <Text
+          style={{
+            fontSize: 20,
+            color: '#003061',
+            marginTop: 20,
+            fontWeight: '600',
+            justifyContent: 'center',
+          }}>
+          {/* ALL SESSIONS */}
+          Your's Score
         </Text>
 
         <View
@@ -53,11 +86,11 @@ const SessionCompleted = props => {
             height: 2,
             width: 40,
             backgroundColor: '#386488',
-            marginTop: 10,
+            marginTop: 20,
           }}
         />
       </View>
-      <View
+      {/* <View
         style={{
           alignContent: 'center',
           alignItems: 'center',
@@ -72,7 +105,22 @@ const SessionCompleted = props => {
           }}
           resizeMode="contain"
         />
-      </View>
+      </View> */}
+      {profileLoading && <Loading />}
+      <DataTable style={styles.container}>
+        <DataTable.Header style={styles.tableHeader}>
+          <DataTable.Title>Session</DataTable.Title>
+          <DataTable.Title>Traits Name </DataTable.Title>
+          <DataTable.Title>Score</DataTable.Title>
+        </DataTable.Header>
+        {profile.session_score.map(item => (
+          <DataTable.Row>
+            <DataTable.Cell>{item?.session}</DataTable.Cell>
+            <DataTable.Cell>{item?.growth_index}</DataTable.Cell>
+            <DataTable.Cell>{item?.innovative_index}</DataTable.Cell>
+          </DataTable.Row>
+        ))}
+      </DataTable>
       <View
         style={{
           alignContent: 'center',
@@ -84,7 +132,7 @@ const SessionCompleted = props => {
         <TouchableOpacity
           onPress={() => {
             // navigation.navigate('Radar');
-			navigation.navigate('Dashboard');
+            navigation.navigate('Dashboard');
           }}>
           <View
             style={{
@@ -105,6 +153,13 @@ const SessionCompleted = props => {
     </View>
   );
 };
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  container: {
+    padding: 15,
+  },
+  tableHeader: {
+    backgroundColor: '#DCDCDC',
+  },
+});
 
 export default SessionCompleted;
