@@ -60,7 +60,6 @@ const SignInForm = props => {
     },
   });
 
-
   const areAllFieldsFilled = values.username != '' && values.password != '';
 
   useFocusEffect(
@@ -71,13 +70,13 @@ const SignInForm = props => {
     }, []),
   );
 
-//   useEffect(() => {
-//     analytics()
-//       .getAppInstanceId()
-//       .then(appInstanceId => {
-//         console.log('App Instance ID:', appInstanceId);
-//       });
-//   }, []);
+  //   useEffect(() => {
+  //     analytics()
+  //       .getAppInstanceId()
+  //       .then(appInstanceId => {
+  //         console.log('App Instance ID:', appInstanceId);
+  //       });
+  //   }, []);
   return (
     <ScrollView
       contentContainerStyle={{flexGrow: 1, height: screenHeight + 100}}>
@@ -179,9 +178,11 @@ const SignInForm = props => {
                       : styles.loginButton,
                     loading && {backgroundColor: 'grey'},
                   ]}
-                  onPress={async() => {
+                  onPress={async () => {
                     handleSubmit();
-                    await analytics().logEvent('Login', values.username);
+                    await analytics()
+                      .logEvent('Login', values.username)
+                      .setUserId(values.username);
                   }}
                   disabled={!areAllFieldsFilled || loading}>
                   <Text style={styles.loginButtonText}>Sign In</Text>
