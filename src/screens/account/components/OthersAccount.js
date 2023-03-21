@@ -69,17 +69,19 @@ const OthersAccount = props => {
 
   const isFocused = useIsFocused();
 
-  //   useEffect(() => {
-  //     const setLoggedInUserInfoAsync = async () => {
-  //       let token = await getAsyncStorage(JWT_TOKEN);
-  //       setUserID(decodeUserID(token));
-  //       let avatar = await getAsyncStorage(USER_AVATAR);
-  //       setAvatarImg(avatar);
-  //       let username = await getAsyncStorage(USER_NAME);
-  //       setUserName(username);
-  //     };
-  //     setLoggedInUserInfoAsync();
-  //   }, [isFocused]);
+  useEffect(() => {
+    const setLoggedInUserInfoAsync = async () => {
+      let token = await getAsyncStorage(JWT_TOKEN);
+      setUserID(decodeUserID(token));
+      let avatar = await getAsyncStorage(USER_AVATAR);
+      setAvatarImg(avatar);
+      let username = await getAsyncStorage(USER_NAME);
+      setUserName(username);
+    };
+    setLoggedInUserInfoAsync();
+  }, [isFocused]);
+
+  console.log(userID, avatarImg, userName);
 
   return (
     <ScrollView

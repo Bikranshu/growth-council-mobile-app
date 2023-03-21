@@ -21,7 +21,7 @@ const SubHeader = props => {
   const {profile, profileLoading, profileError} = useSelector(
     state => state.profile,
   );
-  const {route, setInitialRoute} = props;
+  const {route,} = props;
 
   const fetchProfileByIdentifier = () => {
     dispatch(fetchProfileByID());

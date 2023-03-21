@@ -79,7 +79,7 @@ const People = props => {
     profileRegion === null ||
     profileRegion === ''
   ) {
-    profileRegion = 'ALL REGION';
+    profileRegion = 'ALL REGIONS';
   } else {
     profileRegion = profile?.user_meta?.region[0];
   }
@@ -128,7 +128,7 @@ const People = props => {
       fetchAllRegions();
     }, [isFocused]),
   );
-
+  
   useEffect(() => {
     setMobileRegion(mobileRegion);
   }, [region]);

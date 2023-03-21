@@ -40,6 +40,7 @@ const PushNotificationsConfigs = {
 
             if (data) {
               if (data?.type === 'chat') {
+                console.log('chat');
                 navigateToScreen('Chat', {
                   friendID: data?.friendID,
                   friendName: data?.friendName,
@@ -58,8 +59,10 @@ const PushNotificationsConfigs = {
                 navigateToScreen('ContentLibraryDetail', {
                   id: data?.post_id,
                 });
-              } else {
-                navigateToScreen('People');
+              } else if (data?.type === 'connection') {
+                navigateToScreen('Connection', {
+                  id: data?.post_id,
+                });
               }
             }
           } catch (error) {

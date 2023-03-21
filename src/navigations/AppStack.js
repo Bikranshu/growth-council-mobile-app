@@ -26,13 +26,13 @@ import OtherAccountScreen from '../screens/account/OthersAccount';
 import ManageAccountScreen from '../screens/account/ManageAccount';
 
 import ChatScreen from '../screens/chat';
-import PeopleScreen from '../screens/people';
+// import PeopleScreen from '../screens/people';
 import Header from '../shared/header/header';
 import RadarScreen from '../screens/details/Radar';
 import SubHeader from '../shared/header/SubHeader';
 import DashboardScreen from '../screens/dashboard';
 import MainHeader from '../shared/header/MainHeader';
-import UserListScreen from '../screens/chat/UserList';
+// import UserListScreen from '../screens/chat/UserList';
 import PDFDetailScreen from '../screens/selfLearn/pdf';
 import SelfLearnDetailScreen from '../screens/selfLearn';
 import OptionHeader from '../shared/header/optionHeader';
@@ -51,6 +51,8 @@ import NotificationListScreen from '../screens/Notification/notificationList';
 import SelfAssessment from '../screens/coachingSession/component/selfAssessment';
 import SessionCompleted from '../screens/coachingSession/component/sessionCompleted';
 
+import PeopleScreen from '../screens/people';
+
 import {GROWTH_COMMUNITY_ID} from '../constants';
 
 const {Navigator, Screen} = createStackNavigator();
@@ -61,7 +63,7 @@ const AppStack = ({initialRouteName, setInitialRoute}) => (
     <Navigator
       initialRouteName={initialRouteName?.name}
       initialParams={initialRouteName?.params}>
-      {/*    */}
+
       <Screen
         name="Drawer"
         component={DrawerNavigation}
@@ -72,7 +74,6 @@ const AppStack = ({initialRouteName, setInitialRoute}) => (
           headerLeft: () => null,
         })}
       />
-
       <Screen
         name="Journey"
         component={JourneyScreen}
@@ -107,7 +108,6 @@ const AppStack = ({initialRouteName, setInitialRoute}) => (
           ),
         })}
       />
-
       <Screen
         name="SessionCompleted"
         component={SessionCompleted}
@@ -122,7 +122,6 @@ const AppStack = ({initialRouteName, setInitialRoute}) => (
           ),
         })}
       />
-
       <Screen
         name="selfAssessment"
         component={SelfAssessment}
@@ -151,7 +150,6 @@ const AppStack = ({initialRouteName, setInitialRoute}) => (
           ),
         })}
       />
-
       <Screen
         name="pdf"
         component={PDFDetailScreen}
@@ -166,7 +164,6 @@ const AppStack = ({initialRouteName, setInitialRoute}) => (
           ),
         })}
       />
-
       <Screen
         name="SubPoe"
         component={SubPOEDetailScreen}
@@ -181,7 +178,6 @@ const AppStack = ({initialRouteName, setInitialRoute}) => (
           ),
         })}
       />
-
       <Screen
         name="SubPoeList"
         component={SubPOEListDetailScreen}
@@ -239,7 +235,6 @@ const AppStack = ({initialRouteName, setInitialRoute}) => (
           ),
         })}
       />
-
       {/* <Screen
       name="Notification"
       component={NotificationScreen}
@@ -254,7 +249,6 @@ const AppStack = ({initialRouteName, setInitialRoute}) => (
         ),
       })}
     /> */}
-
       <Screen
         name="NotificationList"
         component={NotificationListScreen}
@@ -269,7 +263,6 @@ const AppStack = ({initialRouteName, setInitialRoute}) => (
           ),
         })}
       />
-
       <Screen
         name="Discussion"
         component={DiscussionScreen}
@@ -359,6 +352,7 @@ const AppStack = ({initialRouteName, setInitialRoute}) => (
           ),
         })}
       />
+
       <Screen
         name="ContentTags"
         component={ContentTagsScreen}
@@ -420,12 +414,31 @@ const AppStack = ({initialRouteName, setInitialRoute}) => (
               image={route?.params?.image}
               navigation={navigation}
               noDrawer
-              setInitialRoute={setInitialRoute}
               params={initialRouteName?.params}
             />
           ),
         })}
       />
+
+      <Screen
+        name="Connection"
+        component={PeopleScreen}
+        options={({route, navigation}) => ({
+          header: () => (
+            <SubHeader
+              title="Growth Council Members"
+              //   name={route?.params?.name}
+              //   id={route?.params?.id}
+              subtitle="CommunityDetail"
+              image={require('../assets/img/appBG.png')}
+              navigation={navigation}
+              noDrawer
+              params={initialRouteName?.params}
+            />
+          ),
+        })}
+      />
+
       <Screen
         name="SessionDetail"
         component={SessionDetailScreen}
@@ -439,7 +452,6 @@ const AppStack = ({initialRouteName, setInitialRoute}) => (
         component={SearchScreen}
         options={{headerShown: false}}
       />
-
       <Screen
         name="Gmail"
         component={GmailScreen}
@@ -463,7 +475,6 @@ const AppStack = ({initialRouteName, setInitialRoute}) => (
         })}
         // options={{headerShown: false}}
       />
-
       <Screen
         name="Chat"
         component={ChatScreen}
@@ -488,7 +499,6 @@ const AppStack = ({initialRouteName, setInitialRoute}) => (
           ),
         })}
       />
-
       <Screen
         name="CommunityDetail"
         component={CommunityDetailScreen}
@@ -507,7 +517,6 @@ const AppStack = ({initialRouteName, setInitialRoute}) => (
           ),
         })}
       />
-
       <Screen
         name="GrowthDetail"
         component={GrowthDetailScreen}
@@ -522,7 +531,6 @@ const AppStack = ({initialRouteName, setInitialRoute}) => (
           ),
         })}
       />
-
       <Screen
         name="Radar"
         component={RadarScreen}

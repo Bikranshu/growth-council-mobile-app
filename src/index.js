@@ -144,6 +144,7 @@ const App = () => {
             params: {id: remoteMessage?.data?.post_id},
           });
         } else if (remoteMessage?.data?.type === 'chat') {
+          console.log('chat123456677');
           setInitialRoute({
             name: 'Chat',
             params: {
@@ -155,10 +156,10 @@ const App = () => {
               userAvatar: remoteMessage?.data?.userAvatar,
             },
           });
-        } else {
+        } else if (remoteMessage?.data?.type === 'connection') {
           setInitialRoute({
-            name: 'People',
-            params: {},
+            name: 'Connection',
+            params: {id: remoteMessage?.data?.post_id},
           });
         }
       },
@@ -192,6 +193,7 @@ const App = () => {
               params: {id: remoteMessage?.data?.post_id},
             });
           } else if (remoteMessage?.data?.type === 'chat') {
+            console.log('chat987654321');
             setInitialRoute({
               name: 'Chat',
               params: {
@@ -203,10 +205,10 @@ const App = () => {
                 userAvatar: remoteMessage?.data?.userAvatar,
               },
             });
-          } else {
+          } else if (remoteMessage?.data?.type === 'connection') {
             setInitialRoute({
-              name: 'People',
-              params: {},
+              name: 'Connection',
+              params: {id: remoteMessage?.data?.post_id},
             });
           }
         }
