@@ -143,6 +143,23 @@ const App = () => {
             name: 'ContentLibraryDetail',
             params: {id: remoteMessage?.data?.post_id},
           });
+        } else if (remoteMessage?.data?.type === 'chat') {
+          setInitialRoute({
+            name: 'Chat',
+            params: {
+              friendID: remoteMessage?.data?.friendID,
+              friendName: remoteMessage?.data?.friendName,
+              friendAvatar: remoteMessage?.data?.friendAvatar,
+              userID: remoteMessage?.data?.userID,
+              userName: remoteMessage?.data?.userName,
+              userAvatar: remoteMessage?.data?.userAvatar,
+            },
+          });
+        } else {
+          setInitialRoute({
+            name: 'People',
+            params: {},
+          });
         }
       },
     );
@@ -174,17 +191,23 @@ const App = () => {
               name: 'ContentLibraryDetail',
               params: {id: remoteMessage?.data?.post_id},
             });
-            //   } else if (remoteMessage?.data?.type === 'chat') {
-            //     setInitialRoute('Chat', {
-            //       friendID: item?.sender_user_id,
-            //       friendName: item?.receiver_fullname,
-            //       friendAvatar: item?.receiver_profile_image,
-            //       userID: item?.receiver_user_id,
-            //       userName: profile?.user_login,
-            //       userAvatar: profile?.profile_image,
-            //     });
-            //   } else {
-            //     setInitialRoute('People');
+          } else if (remoteMessage?.data?.type === 'chat') {
+            setInitialRoute({
+              name: 'Chat',
+              params: {
+                friendID: remoteMessage?.data?.friendID,
+                friendName: remoteMessage?.data?.friendName,
+                friendAvatar: remoteMessage?.data?.friendAvatar,
+                userID: remoteMessage?.data?.userID,
+                userName: remoteMessage?.data?.userName,
+                userAvatar: remoteMessage?.data?.userAvatar,
+              },
+            });
+          } else {
+            setInitialRoute({
+              name: 'People',
+              params: {},
+            });
           }
         }
         setLoading(false);

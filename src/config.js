@@ -27,8 +27,8 @@ const PushNotificationsConfigs = {
             let GrowthCoaching = 'Growth Coaching';
             let Executive = 'Executive Coaching Clinic';
             if (
-              data?.event_categories?.indexOf(GrowthCoaching) > -1 !== false ||
-              data?.event_categories?.indexOf(Executive) > -1 !== false ||
+              data?.event_categories?.indexOf(GrowthCoaching) > -1 !== true ||
+              data?.event_categories?.indexOf(Executive) > -1 !== true ||
               data?.event_categories === '[]'
             ) {
               backgroundImage = require('./assets/img/Rectangle.png');
@@ -51,8 +51,8 @@ const PushNotificationsConfigs = {
               } else if (data?.type === 'event') {
                 navigateToScreen('EventDetail', {
                   id: data?.post_id,
-				  title: pillarname,
-				  image: backgroundImage,
+                  title: pillarname,
+                  image: backgroundImage,
                 });
               } else if (data?.type === 'content') {
                 navigateToScreen('ContentLibraryDetail', {
