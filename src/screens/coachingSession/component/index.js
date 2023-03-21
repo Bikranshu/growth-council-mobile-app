@@ -56,6 +56,7 @@ const CoachingSession = props => {
 
   const [value, setValue] = useState('About');
   const [count, setCount] = useState(route?.params?.count);
+  const [sessionNo, setSessioNo] = useState(route?.params?.sessionNo);
 
   const [modalVisible, setModalVisible] = useState(false);
   const [scoreVisible, setScoreVisible] = useState(false);
@@ -76,7 +77,6 @@ const CoachingSession = props => {
   const [selectedId, setSelectedId] = useState(null);
 
   const checkMark = (traitIndex, subTraitIndex) => {
-
     if (traitIndex === 0) {
       return answers.questions.growthIndex[subTraitIndex];
     } else {
@@ -85,6 +85,7 @@ const CoachingSession = props => {
   };
   useEffect(() => {
     setCount(route?.params?.count);
+	setSessioNo(route?.params?.sessionNo)
   }, [count]);
 
   let Traits = traits[count];
@@ -532,6 +533,7 @@ const CoachingSession = props => {
                 sessions={sessions}
                 traits={traits}
                 count={count}
+				sessionNo={sessionNo}
                 Traits={Traits}
                 traitsLoading={traitsLoading}
                 traitsError={traitsError}

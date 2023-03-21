@@ -159,7 +159,7 @@ const App = () => {
         } else if (remoteMessage?.data?.type === 'connection') {
           setInitialRoute({
             name: 'Connection',
-            params: {id: remoteMessage?.data?.post_id},
+            params: {type: 'Connection'},
           });
         }
       },
@@ -208,7 +208,7 @@ const App = () => {
           } else if (remoteMessage?.data?.type === 'connection') {
             setInitialRoute({
               name: 'Connection',
-              params: {id: remoteMessage?.data?.post_id},
+              params: {type: 'Connection'},
             });
           }
         }

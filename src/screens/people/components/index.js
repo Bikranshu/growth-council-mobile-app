@@ -128,7 +128,7 @@ const People = props => {
       fetchAllRegions();
     }, [isFocused]),
   );
-  
+
   useEffect(() => {
     setMobileRegion(mobileRegion);
   }, [region]);
@@ -183,6 +183,7 @@ const People = props => {
   } else {
     memberExpertise = expertise?.data?.choices;
   }
+  let type = route?.params?.type === 'Connection';
 
   const _renderItem = ({item, index}) => {
     return (
@@ -281,7 +282,7 @@ const People = props => {
         translucent={false}
       />
       <View style={styles.container}>
-        <View style={{marginBottom: 20}}>
+        <View>
           <View style={{display: 'flex', flexDirection: 'row', marginTop: 10}}>
             <Searchbar
               style={styles.input}
@@ -620,10 +621,8 @@ const People = props => {
           </View>
         </View>
       </Modal>
-
+      {type === true ? <></> : <BottomNav {...props} navigation={navigation} />}
       <FloatingButton {...props} navigation={navigation} />
-
-      <BottomNav {...props} navigation={navigation} />
     </SafeAreaView>
   );
 };
@@ -633,7 +632,7 @@ const styles = StyleSheet.create({
     // ...CommonStyles.container,
     backgroundColor: Colors.PRIMARY_BACKGROUND_COLOR,
     flex: 1,
-    marginBottom: 20,
+    // marginBottom: 20,
   },
   input: {
     height: 45,

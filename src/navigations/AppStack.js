@@ -422,6 +422,7 @@ const AppStack = ({initialRouteName, setInitialRoute}) => (
       <Screen
         name="Connection"
         component={PeopleScreen}
+        initialParams={initialRouteName?.params}
         options={({route, navigation}) => ({
           header: () => (
             <SubHeader

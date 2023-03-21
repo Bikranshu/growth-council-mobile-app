@@ -39,6 +39,7 @@ const SelfAssessment = props => {
     setSelectedId,
     sessions,
     count,
+    sessionNo,
     scrollRef,
   } = props;
 
@@ -123,11 +124,14 @@ const SelfAssessment = props => {
               yellowQuestions: [],
             });
             // navigation.goBack();
+            ToastMessage.show('You score has submitted.');
             navigation.navigate('SessionCompleted');
-            // if (sessions.title === 'Session 10') {
-            //   ToastMessage.show('You score has submitted.');
 
-            // }
+            // if all the 20 traits is completed
+            if (sessionNo === 10 && count === 1) {
+              ToastMessage.show('You score has submitted.');
+              navigation.navigate('SessionCompleted');
+            }
           } else {
             toast.closeAll();
             ToastMessage.show(response?.payload?.response);

@@ -61,7 +61,7 @@ const PushNotificationsConfigs = {
                 });
               } else if (data?.type === 'connection') {
                 navigateToScreen('Connection', {
-                  id: data?.post_id,
+                  type: 'Connection',
                 });
               }
             }
