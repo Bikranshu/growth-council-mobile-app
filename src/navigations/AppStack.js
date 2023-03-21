@@ -63,7 +63,6 @@ const AppStack = ({initialRouteName, setInitialRoute}) => (
     <Navigator
       initialRouteName={initialRouteName?.name}
       initialParams={initialRouteName?.params}>
-
       <Screen
         name="Drawer"
         component={DrawerNavigation}
@@ -478,6 +477,7 @@ const AppStack = ({initialRouteName, setInitialRoute}) => (
       <Screen
         name="Chat"
         component={ChatScreen}
+        initialParams={initialRouteName?.params}
         options={({route}) => ({
           userID: route?.params?.userID,
           friendID: route?.params?.friendID,

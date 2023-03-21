@@ -39,12 +39,12 @@ const Chat = props => {
     cleanInsertNotification,
   } = props;
 
-  const friendID = route.params.friendID;
-  const friendName = route.params.friendName;
-  const friendAvatar = route.params.friendAvatar;
-  const userID = route.params.userID;
-  const userAvatar = route.params.userAvatar;
-  const userName = route.params.userName;
+  const friendID = route?.params?.friendID;
+  const friendName = route?.params?.friendName;
+  const friendAvatar = route?.params?.friendAvatar;
+  const userID = route?.params?.userID;
+  const userAvatar = route?.params?.userAvatar;
+  const userName = route?.params?.userName;
   const userChat = route?.params?.userChat;
 
   const [userScreen, setUserScreen] = useState(false);
@@ -60,7 +60,8 @@ const Chat = props => {
   };
 
   const [messages, setMessages] = useState([]);
-  console.log({userAvatar});
+
+  let type = route?.params?.type === 'Chat';
 
   const sendNotificationToDBButton = async (friendID, text) => {
     const response = await sendNotificationToDB({
@@ -289,14 +290,31 @@ const Chat = props => {
       <View style={styles.container}>
         <SafeAreaView style={{top: -20, backgroundColor: 'white'}}>
           <View style={styles.wrapper}>
-            <TouchableOpacity onPress={() => navigation.goBack()}>
-              <Ionicons
-                name="chevron-back-outline"
-                size={40}
-                color="#02B0F0"
-                style={{marginTop: 15}}
-              />
-            </TouchableOpacity>
+            {type == true ? (
+              <TouchableOpacity
+                onPress={() => {
+                  navigation.navigate('Drawer');
+                }}>
+                <Ionicons
+                  name="chevron-back-outline"
+                  size={40}
+                  color="#02B0F0"
+                  style={{marginTop: 15}}
+                />
+              </TouchableOpacity>
+            ) : (
+              <TouchableOpacity
+                onPress={() => {
+                  navigation.goBack();
+                }}>
+                <Ionicons
+                  name="chevron-back-outline"
+                  size={40}
+                  color="#02B0F0"
+                  style={{marginTop: 15}}
+                />
+              </TouchableOpacity>
+            )}
             <View style={{flexDirection: 'row', marginTop: 10}}>
               <Image
                 source={{

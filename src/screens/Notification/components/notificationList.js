@@ -83,7 +83,7 @@ const NotificationList = props => {
       ? notificationList
       : notificationList?.filter(
           notification =>
-            notification.status === (filter === 'Read' ? '1' : '0'),
+            notification?.status === (filter === 'Read' ? '1' : '0'),
         );
 
   const _renderItem = ({item, index}) => {
