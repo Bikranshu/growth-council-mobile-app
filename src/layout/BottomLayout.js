@@ -14,12 +14,16 @@ const BottomLayout = ({focused, navigation}) => {
   return (
     <View style={[styles.NavContainer, styles.shadow]}>
       <View style={styles.NavBar}>
-        <Pressable style={styles.button} onPress={() => navigation.navigate('Dashboard')}>
+        <Pressable
+          style={styles.button}
+          onPress={() => navigation.navigate('Dashboard')}>
           <View>
             <View
-              style={{
-                // top: Platform.OS === 'ios' ? 8 : 0,
-              }}>
+              style={
+                {
+                  // top: Platform.OS === 'ios' ? 8 : 0,
+                }
+              }>
               <Ionicons
                 name="home-outline"
                 color={'#000'}
@@ -30,12 +34,16 @@ const BottomLayout = ({focused, navigation}) => {
           </View>
         </Pressable>
 
-        <Pressable style={styles.button} onPress={() => navigation.navigate('Calendar')}>
+        <Pressable
+          style={styles.button}
+          onPress={() => navigation.navigate('Calendar')}>
           <View>
             <View
-              style={{
-                // top: Platform.OS === 'ios' ? 8 : 0,
-              }}>
+              style={
+                {
+                  // top: Platform.OS === 'ios' ? 8 : 0,
+                }
+              }>
               <Ionicons
                 name="calendar-outline"
                 color={focused ? 'black' : 'red'}
@@ -46,12 +54,16 @@ const BottomLayout = ({focused, navigation}) => {
           </View>
         </Pressable>
 
-        <Pressable style={styles.button} onPress={() => navigation.navigate('UserList')}>
+        <Pressable
+          style={styles.button}
+          onPress={() => navigation.navigate('SessionCompleted')}>
           <View>
             <View
-              style={{
-                // top: Platform.OS === 'ios' ? 8 : 0,
-              }}>
+              style={
+                {
+                  // top: Platform.OS === 'ios' ? 8 : 0,
+                }
+              }>
               <Ionicons
                 name="chatbox-outline"
                 color={'#000'}
@@ -62,12 +74,16 @@ const BottomLayout = ({focused, navigation}) => {
           </View>
         </Pressable>
 
-        <Pressable style={styles.button} onPress={() => navigation.navigate('People')}>
+        <Pressable
+          style={styles.button}
+          onPress={() => navigation.navigate('People')}>
           <View>
             <View
-              style={{
-                // top: Platform.OS === 'ios' ? 8 : 0,
-              }}>
+              style={
+                {
+                  // top: Platform.OS === 'ios' ? 8 : 0,
+                }
+              }>
               <Ionicons
                 name="people-outline"
                 color={'#000'}
@@ -78,12 +94,16 @@ const BottomLayout = ({focused, navigation}) => {
           </View>
         </Pressable>
 
-        <Pressable style={styles.button} onPress={() => navigation.navigate('Account')}>
+        <Pressable
+          style={styles.button}
+          onPress={() => navigation.navigate('Account')}>
           <View>
             <View
-              style={{
-                // top: Platform.OS === 'ios' ? 10 : 3,
-              }}>
+              style={
+                {
+                  // top: Platform.OS === 'ios' ? 10 : 3,
+                }
+              }>
               <Ionicons
                 name="person-outline"
                 color={'#000'}
@@ -136,7 +156,7 @@ const styles = StyleSheet.create({
     height: 50,
     justifyContent: 'center',
     alignItems: 'center',
-  }
+  },
 });
 
 export default BottomLayout;

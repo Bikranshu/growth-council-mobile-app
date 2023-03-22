@@ -568,6 +568,7 @@ const CoachingSession = props => {
                 selectedId={selectedId}
                 setSelectedId={setSelectedId}
                 scrollRef={scrollRef}
+				profile={profile}
               />
               {/* // <SessionCompleted />
               )} */}

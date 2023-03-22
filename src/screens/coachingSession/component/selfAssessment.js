@@ -40,6 +40,7 @@ const SelfAssessment = props => {
     count,
     sessionNo,
     scrollRef,
+    profile,
   } = props;
 
   const dispatch = useDispatch();
@@ -98,7 +99,6 @@ const SelfAssessment = props => {
   useEffect(() => {}, [traitLength, subTraitLength]);
 
   console.log({score});
-  console.log(index?.subTraitIndex);
 
   const handleNextButtonClick = async () => {
     scrollRef.current?.scrollTo({
@@ -117,6 +117,7 @@ const SelfAssessment = props => {
       })
         .then(response => {
           if (response?.data?.code === 200) {
+            console.log({response});
             ToastMessage.show('Your score has been submitted.');
             setAnswers({
               questions: {
@@ -125,14 +126,27 @@ const SelfAssessment = props => {
               },
               yellowQuestions: [],
             });
-            // navigation.goBack();
             navigation.navigate('SessionCompleted');
 
-            if (sessionNo === 5 && count === 1) {
-              navigation.navigate('SessionCompleted');
+            // if (sessionNo === 5 && count === 1) {
+            //   navigation.navigate('SessionCompleted');
+            // }
+
+            // Check if trait_1 and trait_2 are not empty
+            if (
+              profile?.session_score.trait_1 &&
+              profile?.session_score.trait_2
+            ) {
+              // Check if growth_index and innovative_index are greater than 0
+              if (
+                parseFloat(profile?.session_score.growth_index) > 0 &&
+                parseFloat(profile?.session_score.innovative_index) > 0
+              ) {
+                // navigate to SessionCompleted
+                console.log('SessionCompleted');
+              }
             }
-            // if (sessions.title === 'Session 10') {
-            //   ToastMessage.show('You score has submitted.');
+
             console.log('a');
             // }
           } else {
@@ -172,9 +186,8 @@ const SelfAssessment = props => {
         .then(response => {
           toast.closeAll();
           console.log('c');
-          if (index?.subTraitIndex == 2) {
-            navigation.navigate('SessionCompleted');
-          }
+
+          // navigation.navigate('SessionCompleted');
         })
         .catch(error => {
           toast.closeAll();
