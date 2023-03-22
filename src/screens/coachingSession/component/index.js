@@ -71,11 +71,13 @@ const CoachingSession = props => {
     yellowQuestions: [],
   });
   const [score, setScore] = useState({
+    trait1: '',
     growthIndexScore: 0,
+    trait2: '',
     innovativeIndexScore: 0,
   });
 
-//   const [display, setDisplay] = useState(true);
+  //   const [display, setDisplay] = useState(true);
   const [selectedId, setSelectedId] = useState(null);
 
   const checkMark = (traitIndex, subTraitIndex) => {
@@ -102,16 +104,18 @@ const CoachingSession = props => {
   let Growth = profile?.session_score?.find(
     session => session?.session === SessionId,
   )?.growth_index;
-  // profile?.session_score !== false && profile?.session_score !== null
-  //   ? profile?.session_score?.map(item => {
-  //       let grow = item?.session === SessionId ? item?.growth_index : 0;
-  //       return grow;
-  //     })
-  //   : 0;
+
+  let Trait1 = profile?.session_score?.find(
+    session => session?.session === SessionId,
+  )?.trait_1;
 
   let Innovation = profile?.session_score?.find(
     session => session?.session === SessionId,
   )?.innovative_index;
+
+  let Trait2 = profile?.session_score?.find(
+    session => session?.session === SessionId,
+  )?.trait_2;
   // profile?.session_score !== false && profile?.session_score !== null
   //   ? profile?.session_score?.map(item => {
 
@@ -121,20 +125,26 @@ const CoachingSession = props => {
   //     })
   //   : 0;
 
-  console.log({score});
+
   console.log({Growth});
-  console.log({Innovation});
+  console.log(traits[count]?.title);
 
   useEffect(() => {
     let traitsLength = traits.length;
     let subtraitsLength = [];
+    let traitFirst = '';
+    let traitSecond = '';
     let growthIndexScore = 0;
     let innovativeIndexScore = 0;
 
     if (count === 0) {
+      traitFirst = traits[0]?.title;
+      traitSecond = Trait2;
       growthIndexScore = 0;
       innovativeIndexScore = Innovation * 3;
     } else {
+      traitFirst = Trait1;
+      traitSecond = traits[1]?.title;
       growthIndexScore = Growth * 3;
       innovativeIndexScore = 0;
     }
@@ -153,7 +163,9 @@ const CoachingSession = props => {
       }
     });
     setScore({
+      trait1: traitFirst,
       growthIndexScore: growthIndexScore / subtraitsLength[0],
+      trait2: traitSecond,
       innovativeIndexScore: innovativeIndexScore / subtraitsLength[1],
     });
   }, [answers]);

@@ -97,6 +97,9 @@ const SelfAssessment = props => {
 
   useEffect(() => {}, [traitLength, subTraitLength]);
 
+  console.log({score});
+  console.log(index?.subTraitIndex);
+
   const handleNextButtonClick = async () => {
     scrollRef.current?.scrollTo({
       y: 0,
@@ -169,7 +172,9 @@ const SelfAssessment = props => {
         .then(response => {
           toast.closeAll();
           console.log('c');
-          //   navigation.navigate('SessionCompleted');
+          if (index?.subTraitIndex == 2) {
+            navigation.navigate('SessionCompleted');
+          }
         })
         .catch(error => {
           toast.closeAll();
