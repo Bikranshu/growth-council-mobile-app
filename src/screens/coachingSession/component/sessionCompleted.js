@@ -110,8 +110,8 @@ const SessionCompleted = props => {
       <DataTable style={styles.container}>
         <DataTable.Header style={styles.tableHeader}>
           <DataTable.Title>Session</DataTable.Title>
-          <DataTable.Title>Traits Name </DataTable.Title>
-          <DataTable.Title>Score</DataTable.Title>
+          <DataTable.Title>Growth Score </DataTable.Title>
+          <DataTable.Title>Innovation Score</DataTable.Title>
         </DataTable.Header>
         {profile.session_score.map(item => (
           <DataTable.Row>

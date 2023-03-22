@@ -16,7 +16,6 @@ import {
 } from '../slice/traitAnswerbyUserId';
 import {store} from '../../../utils/httpUtil';
 import ToastMessage from '../../../shared/toast';
-import SessionCompleted from './sessionCompleted';
 import {submitSessionScores} from '../slice/sessionScoreSlice';
 import {fetchAllSubTraits, resetSubTraits} from '../slice/subTraitsSlice';
 
@@ -39,6 +38,7 @@ const SelfAssessment = props => {
     setSelectedId,
     sessions,
     count,
+    sessionNo,
     scrollRef,
   } = props;
 
@@ -124,6 +124,10 @@ const SelfAssessment = props => {
             });
             // navigation.goBack();
             navigation.navigate('SessionCompleted');
+
+            if (sessionNo === 5 && count === 1) {
+              navigation.navigate('SessionCompleted');
+            }
             // if (sessions.title === 'Session 10') {
             //   ToastMessage.show('You score has submitted.');
             console.log('a');
@@ -148,7 +152,7 @@ const SelfAssessment = props => {
         .then(response => {
           toast.closeAll();
           console.log('b');
-          navigation.navigate('SessionCompleted');
+          //   navigation.navigate('SessionCompleted');
           ToastMessage.show(response?.payload?.response);
         })
         .catch(error => {
@@ -166,12 +170,10 @@ const SelfAssessment = props => {
           toast.closeAll();
           console.log('c');
           //   navigation.navigate('SessionCompleted');
-          ToastMessage.show(response?.payload?.response);
         })
         .catch(error => {
           toast.closeAll();
           console.log('c1');
-          ToastMessage.show('Something is wrong, please contact admin.');
         });
     }
   };

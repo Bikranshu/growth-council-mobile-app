@@ -25,10 +25,14 @@ const Scan = props => {
     const obj = JSON.parse(e?.data);
     const session = obj?.session.toString();
 
-    console.log('scanned data' + obj?.count);
-    console.log(session);
+    console.log('scanned data' + obj);
 
-    navigation.navigate('coachingSession', {id: session, count: obj?.count});
+    navigation.navigate('coachingSession', {
+      id: session,
+      count: obj?.count,
+      sessionNo: obj?.sessionNo,
+
+    });
     setResult(e);
     setScan(false);
     setScanResult(true);
