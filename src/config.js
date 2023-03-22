@@ -1,7 +1,9 @@
-import PushNotification from 'react-native-push-notification';
+import PushNotification, {
+  PushNotificationAndroid,
+} from 'react-native-push-notification';
 import PushNotificationIOS from '@react-native-community/push-notification-ios';
 import {navigateToScreen, navigateData} from './utils/navigationUtil';
-import {Platform} from 'react-native';
+import {Platform, NativeModules} from 'react-native';
 import {useNavigation, StackActions} from '@react-navigation/native';
 
 const isIOS = Platform.OS == 'ios';
@@ -65,14 +67,19 @@ const PushNotificationsConfigs = {
                 });
               }
             }
+
+            PushNotification.cancelLocalNotification(notification?.id);
           } catch (error) {
             console.log(error);
           }
         }
+
+        // for ios device
         {
           isIOS && notification.finish(PushNotificationIOS.FetchResult.NoData);
         }
       },
+
       onAction: notification => {
         console.log('NOTIFICATION:', notification);
       },
