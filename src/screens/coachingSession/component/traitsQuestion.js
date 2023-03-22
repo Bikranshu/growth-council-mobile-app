@@ -16,7 +16,7 @@ const TraitsQuestion = props => {
   const [status, setStatus] = useState(0);
 
   useEffect(() => {
-    if (traitIndex.traitIndex === 0) {
+    if (traitIndex?.traitIndex === 0) {
       setStatus(answers?.questions?.growthIndex[count]);
     } else {
       setStatus(answers?.questions?.innovativeIndex[count]);
@@ -36,33 +36,33 @@ const TraitsQuestion = props => {
                 style={styles.rbStyle}
                 onPress={() => {
                   let newAnswers = answers;
-                  if (traitIndex.traitIndex === 0) {
+                  if (traitIndex?.traitIndex === 0) {
                     scrollRef.current?.scrollToEnd({animated: true});
 
-                    let newGrowthIndex = answers.questions.growthIndex;
-                    newGrowthIndex[count] = option1.score;
+                    let newGrowthIndex = answers?.questions?.growthIndex;
+                    newGrowthIndex[count] = option1?.score;
                     setAnswers({
                       ...newAnswers,
                       questions: {
-                        ...newAnswers.questions,
+                        ...newAnswers?.questions,
                         growthIndex: newGrowthIndex,
                       },
                     });
                   } else {
                     scrollRef.current?.scrollToEnd({animated: true});
 
-                    let newInnovativeIndex = answers.questions.innovativeIndex;
-                    newInnovativeIndex[count] = option1.score;
+                    let newInnovativeIndex = answers?.questions?.innovativeIndex;
+                    newInnovativeIndex[count] = option1?.score;
                     setAnswers({
                       ...newAnswers,
                       questions: {
-                        ...newAnswers.questions,
+                        ...newAnswers?.questions,
                         innovativeIndex: newInnovativeIndex,
                       },
                     });
                   }
                 }}>
-                {status === option1.score && <View style={styles.selected} />}
+                {status === option1?.score && <View style={styles.selected} />}
               </TouchableOpacity>
               <Text style={{fontSize: 12, marginTop: 10}}>
                 {' '}

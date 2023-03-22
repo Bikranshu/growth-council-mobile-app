@@ -59,7 +59,7 @@ const CoachingSession = props => {
   const [count, setCount] = useState(route?.params?.count);
   const [sessionNo, setSessioNo] = useState(route?.params?.sessionNo);
 
-  const SessionId = parseInt(route.params.id);
+  const SessionId = parseInt(route?.params?.id);
 
   const [modalVisible, setModalVisible] = useState(false);
   const [scoreVisible, setScoreVisible] = useState(false);
@@ -75,14 +75,14 @@ const CoachingSession = props => {
     innovativeIndexScore: 0,
   });
 
-  const [display, setDisplay] = useState(true);
+//   const [display, setDisplay] = useState(true);
   const [selectedId, setSelectedId] = useState(null);
 
   const checkMark = (traitIndex, subTraitIndex) => {
     if (traitIndex === 0) {
-      return answers.questions.growthIndex[subTraitIndex];
+      return answers?.questions?.growthIndex[subTraitIndex];
     } else {
-      return answers.questions.innovativeIndex[subTraitIndex];
+      return answers?.questions?.innovativeIndex[subTraitIndex];
     }
   };
   useEffect(() => {
@@ -99,8 +99,8 @@ const CoachingSession = props => {
     fetchProfileAsync();
   }, []);
 
-  let Growth = profile?.session_score.find(
-    session => session.session === SessionId,
+  let Growth = profile?.session_score?.find(
+    session => session?.session === SessionId,
   )?.growth_index;
   // profile?.session_score !== false && profile?.session_score !== null
   //   ? profile?.session_score?.map(item => {
@@ -109,8 +109,8 @@ const CoachingSession = props => {
   //     })
   //   : 0;
 
-  let Innovation = profile?.session_score.find(
-    session => session.session === SessionId,
+  let Innovation = profile?.session_score?.find(
+    session => session?.session === SessionId,
   )?.innovative_index;
   // profile?.session_score !== false && profile?.session_score !== null
   //   ? profile?.session_score?.map(item => {
@@ -140,7 +140,7 @@ const CoachingSession = props => {
     }
 
     traits?.map((trait, index) => {
-      subtraitsLength[index] = trait?.sub_traits.length;
+      subtraitsLength[index] = trait?.sub_traits?.length;
     });
     answers?.questions?.growthIndex?.map(value => {
       if (value) {
@@ -161,9 +161,9 @@ const CoachingSession = props => {
   // score
   let num = 0.0;
   if (sessions?.session_score) {
-    num = sessions.session_score.toFixed(2);
+    num = sessions?.session_score?.toFixed(2);
   } else {
-    num = ((score.growthIndexScore + score.innovativeIndexScore) / 2).toFixed(
+    num = ((score?.growthIndexScore + score?.innovativeIndexScore) / 2).toFixed(
       2,
     );
     if (isNaN(num)) num = 0.0;

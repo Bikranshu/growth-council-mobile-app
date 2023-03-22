@@ -45,7 +45,7 @@ const SelfAssessment = props => {
   const dispatch = useDispatch();
   const toast = useToast();
   const {traitsAnswer, traitsAnswerLoading, traitsAnswerError} = useSelector(
-    state => state.traitsAnswer,
+    state => state?.traitsAnswer,
   );
 
   const [value, setValue] = useState();
@@ -178,18 +178,18 @@ const SelfAssessment = props => {
     }
   };
   const handlePreviousButtonClick = () => {
-    scrollRef.current?.scrollTo({
+    scrollRef?.current?.scrollTo({
       y: 0,
       animated: true,
     });
-    if (index.subTraitIndex === 0 && index.traitIndex > 0) {
+    if (index?.subTraitIndex === 0 && index?.traitIndex > 0) {
       setIndex({
         ...index,
-        traitIndex: index.traitIndex - 1,
-        subTraitIndex: traits[index.traitIndex - 1]?.sub_traits?.length - 1,
+        traitIndex: index?.traitIndex - 1,
+        subTraitIndex: traits[index?.traitIndex - 1]?.sub_traits?.length - 1,
       });
-    } else if (index.subTraitIndex > 0) {
-      setIndex({...index, subTraitIndex: index.subTraitIndex - 1});
+    } else if (index?.subTraitIndex > 0) {
+      setIndex({...index, subTraitIndex: index?.subTraitIndex - 1});
     }
   };
 
@@ -212,7 +212,7 @@ const SelfAssessment = props => {
                 width: '80%',
                 color: '#0B0B45',
               }}>
-              Traits : {Traits.title}
+              Traits : {Traits?.title}
             </Text>
             <View style={styles.Wrapper}>
               <ButtonToggleGroup

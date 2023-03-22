@@ -325,7 +325,7 @@ const GrowthDetail = props => {
               {coachingSessionLoading && <Loading />}
 
               {/* {check[0] && ( */}
-              <View>
+              {/* <View>
                 {coachingSession?.length !== 0 &&
                   coachingSession !== null &&
                   coachingSession !== false && (
@@ -345,7 +345,7 @@ const GrowthDetail = props => {
                       </View>
                     </View>
                   )}
-              </View>
+              </View> */}
               {/* )} */}
 
               {/* 

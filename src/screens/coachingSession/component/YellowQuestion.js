@@ -12,12 +12,12 @@ const YellowQuestion = props => {
 
   useEffect(() => {
     if (
-      answers.yellowQuestions.length &&
-      answers.yellowQuestions[traitIndex.traitIndex] !== undefined &&
-      answers.yellowQuestions[traitIndex.traitIndex][count]
+      answers?.yellowQuestions?.length &&
+      answers?.yellowQuestions[traitIndex?.traitIndex] !== undefined &&
+      answers?.yellowQuestions[traitIndex?.traitIndex][count]
     ) {
-      answers.yellowQuestions[traitIndex.traitIndex][count] !== undefined
-        ? setStatus(answers.yellowQuestions[traitIndex.traitIndex][count])
+      answers?.yellowQuestions[traitIndex?.traitIndex][count] !== undefined
+        ? setStatus(answers?.yellowQuestions[traitIndex?.traitIndex][count])
         : setStatus([]);
     } else {
       setStatus([]);
@@ -38,7 +38,7 @@ const YellowQuestion = props => {
         {name: 'Yes', value: true},
         {name: 'No', value: false},
       ].map(option => (
-        <View style={styles.wrapper} key={option.name}>
+        <View style={styles.wrapper} key={option?.name}>
           <View style={{flexDirection: 'row'}}>
             {/* <RadioButton
               value={option?.value}
@@ -68,25 +68,25 @@ const YellowQuestion = props => {
                 style={styles.rbStyle}
                 onPress={() => {
                   let newAnswers = answers;
-                  let newYellowAnswers = answers.yellowQuestions;
-                  let newTraitAnswers = newYellowAnswers[traitIndex.traitIndex]
-                    ? newYellowAnswers[traitIndex.traitIndex]
+                  let newYellowAnswers = answers?.yellowQuestions;
+                  let newTraitAnswers = newYellowAnswers[traitIndex?.traitIndex]
+                    ? newYellowAnswers[traitIndex?.traitIndex]
                     : [];
                   let newSubtraitAnswers = newTraitAnswers[count]
                     ? newTraitAnswers[count]
                     : [];
-                  newSubtraitAnswers[questionIndex] = option.value;
+                  newSubtraitAnswers[questionIndex] = option?.value;
                   newTraitAnswers[count] = newSubtraitAnswers;
-                  newYellowAnswers[traitIndex.traitIndex] = newTraitAnswers;
+                  newYellowAnswers[traitIndex?.traitIndex] = newTraitAnswers;
                   setAnswers({
                     ...newAnswers,
                     yellowQuestions: newYellowAnswers,
                   });
                 }}>
-                {status[questionIndex] === option.value  && <View style={styles.selected} />}
+                {status[questionIndex] === option?.value  && <View style={styles.selected} />}
               </TouchableOpacity>
-              <Text style={{fontSize: 14, marginTop: 10, marginLeft: 10}} key={option.name}>
-                {option.name}
+              <Text style={{fontSize: 14, marginTop: 10, marginLeft: 10}} key={option?.name}>
+                {option?.name}
               </Text>
             </View>
           </View>
