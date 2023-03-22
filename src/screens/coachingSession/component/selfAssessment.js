@@ -172,6 +172,7 @@ const SelfAssessment = props => {
         });
     }
   };
+  
   const handlePreviousButtonClick = () => {
     scrollRef.current?.scrollTo({
       y: 0,
