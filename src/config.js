@@ -67,13 +67,14 @@ const PushNotificationsConfigs = {
                 });
               }
             }
-
-            PushNotification.cancelLocalNotification(notification?.id);
+            {
+              !isIOS &&
+                PushNotification.cancelLocalNotification(notification?.id);
+            }
           } catch (error) {
             console.log(error);
           }
         }
-
         // for ios device
         {
           isIOS && notification.finish(PushNotificationIOS.FetchResult.NoData);
