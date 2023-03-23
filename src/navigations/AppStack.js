@@ -500,6 +500,7 @@ const AppStack = ({initialRouteName, setInitialRoute}) => (
           ),
         })}
       />
+	  
       <Screen
         name="CommunityDetail"
         component={CommunityDetailScreen}
