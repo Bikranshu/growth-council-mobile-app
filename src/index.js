@@ -171,6 +171,12 @@ const App = () => {
       .then(remoteMessage => {
         console.log('remoteMessage', remoteMessage);
         setPillarData(remoteMessage?.data);
+        if (remoteMessage === null) {
+          setInitialRoute({
+            name: 'NotificationList',
+            params: {},
+          });
+        }
 
         //Navigation when we have data in remoteMessage
         if (remoteMessage) {

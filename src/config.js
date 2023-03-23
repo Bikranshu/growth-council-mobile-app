@@ -20,7 +20,7 @@ const PushNotificationsConfigs = {
         // const clicked = notification.userInteraction && notification.foreground;
 
         if (notification.userInteraction === true) {
-          console.log({notification});
+          console.log('abcd', notification);
           try {
             // handle the navigation here
             const data = notification?.data;
@@ -67,8 +67,10 @@ const PushNotificationsConfigs = {
                 });
               }
             }
-
-            PushNotification.cancelLocalNotification(notification?.id);
+            {
+              !isIOS &&
+                PushNotification.cancelLocalNotification(notification?.id);
+            }
           } catch (error) {
             console.log(error);
           }

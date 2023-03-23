@@ -110,8 +110,8 @@ const NotificationList = props => {
 
     //passing the header value like backgroundImage and pillarname when redirect to respective page when click notification list
     if (
-      item?.event_categories?.indexOf(GrowthCoaching) > -1 !== false ||
-      item?.event_categories?.indexOf(Executive) > -1 !== false ||
+      item?.event_categories?.indexOf(GrowthCoaching) > -1 !== true ||
+      item?.event_categories?.indexOf(Executive) > -1 !== true ||
       item?.event_categories === '[]'
     ) {
       backgroundImage = require('../../../assets/img/Rectangle.png');
@@ -270,10 +270,7 @@ const NotificationList = props => {
               }}>
               Recent Notification
             </Text>
-            <FlatList
-              data={filteredNotifications}
-              renderItem={_renderItem}
-            />
+            <FlatList data={filteredNotifications} renderItem={_renderItem} />
           </ScrollView>
         </View>
       </SafeAreaView>
