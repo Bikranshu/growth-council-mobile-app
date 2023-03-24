@@ -67,16 +67,16 @@ const ContentLibraryDetail = props => {
     ),
   );
 
-//   useEffect(() => {
-//     const ARTICLE_LIKEAsync = async () => {
-//       await AsyncStorage.setItem('ARTICLE_LIKE', contentLibraryDetails.likes);
-//       await AsyncStorage.setItem(
-//         'ARTICLE_DISLIKE',
-//         contentLibraryDetails.dislikes,
-//       );
-//     };
-//     ARTICLE_LIKEAsync();
-//   }, [isFocused, contentLibraryDetails]);
+  //   useEffect(() => {
+  //     const ARTICLE_LIKEAsync = async () => {
+  //       await AsyncStorage.setItem('ARTICLE_LIKE', contentLibraryDetails.likes);
+  //       await AsyncStorage.setItem(
+  //         'ARTICLE_DISLIKE',
+  //         contentLibraryDetails.dislikes,
+  //       );
+  //     };
+  //     ARTICLE_LIKEAsync();
+  //   }, [isFocused, contentLibraryDetails]);
 
   //   const [emailStatus, setEmailStatus] = useState(false);
 
@@ -521,7 +521,7 @@ const ContentLibraryDetail = props => {
       <FloatingButton {...props} navigation={navigation} />
 
       {/* Bottom Navigation Section */}
-      <BottomNav {...props} navigation={navigation} />
+      {/* <BottomNav {...props} navigation={navigation} /> */}
     </View>
   );
 };

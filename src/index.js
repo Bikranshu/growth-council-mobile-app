@@ -64,10 +64,6 @@ const App = () => {
   const {message, setMessage, signOut} = useAuthentication();
 
   useEffect(() => {
-    setInitialRoute({
-      name: 'Dashboard',
-      params: {},
-    });
     getNotifications();
 
     (async () => {
@@ -97,6 +93,10 @@ const App = () => {
 
   useEffect(() => {
     getToken();
+    setInitialRoute({
+      name: 'Dashboard',
+      params: {},
+    });
   }, []);
 
   const getToken = async () => {
@@ -109,6 +109,11 @@ const App = () => {
     let pillarname = '';
     let GrowthCoaching = 'Growth Coaching';
     let Executive = 'Executive Coaching Clinic';
+
+    console.log(
+      'categories',
+      pillardata?.event_categories?.indexOf(GrowthCoaching) > -1 !== true,
+    );
     if (
       pillardata?.event_categories?.indexOf(GrowthCoaching) > -1 !== true ||
       pillardata?.event_categories?.indexOf(Executive) > -1 !== true ||
@@ -116,9 +121,15 @@ const App = () => {
     ) {
       backgroundImage = require('./assets/img/Rectangle.png');
       pillarname = 'Growth Coaching';
-    } else {
+    } else if (
+      pillardata?.event_categories?.indexOf(GrowthCoaching) > -1 !== false ||
+      pillardata?.event_categories?.indexOf(Executive) > -1 !== false
+    ) {
       backgroundImage = require('./assets/img/Rectangle2.png');
       pillarname = 'Growth Community';
+    } else {
+      backgroundImage = require('./assets/img/Rectangle.png');
+      pillarname = 'Growth Coaching';
     }
     // Assume a message-notification contains a "type" property in the data payload of the screen to open
     const unSubscribe = await messaging().onNotificationOpenedApp(
@@ -171,12 +182,12 @@ const App = () => {
       .then(remoteMessage => {
         console.log('remoteMessage', remoteMessage);
         setPillarData(remoteMessage?.data);
-        if (remoteMessage === null) {
-          setInitialRoute({
-            name: 'NotificationList',
-            params: {},
-          });
-        }
+        // if (remoteMessage === null) {
+        //   setInitialRoute({
+        //     name: 'NotificationList',
+        //     params: {},
+        //   });
+        // }
 
         //Navigation when we have data in remoteMessage
         if (remoteMessage) {

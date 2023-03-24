@@ -35,9 +35,15 @@ const PushNotificationsConfigs = {
             ) {
               backgroundImage = require('./assets/img/Rectangle.png');
               pillarname = 'Growth Coaching';
-            } else {
+            } else if (
+              data?.event_categories?.indexOf(GrowthCoaching) > -1 !== false ||
+              data?.event_categories?.indexOf(Executive) > -1 !== false
+            ) {
               backgroundImage = require('./assets/img/Rectangle2.png');
               pillarname = 'Growth Community';
+            } else {
+              backgroundImage = require('./assets/img/Rectangle.png');
+              pillarname = 'Growth Coaching';
             }
 
             if (data) {
